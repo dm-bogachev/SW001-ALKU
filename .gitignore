@@ -1,0 +1,17 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Виртуальное окружение
+.venv/
+
+# Кадры
+data/captured_frames/*
+
+# Архивы
+*.zip
+
+# VSCode
+.vscode/*
