@@ -1,0 +1,207 @@
+services:
+  streaming-service:
+    build:
+      context: .
+      dockerfile: ./streaming-service/Dockerfile
+    restart: unless-stopped
+    networks:
+      - alku-network
+    container_name: alku-streaming
+    volumes:
+      - common:/common:ro
+      - data:/data
+    environment:
+      - REDIS_HOST=redis
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 1m30s
+      timeout: 30s
+      retries: 5
+      start_period: 30s
+
+  webui-service:
+    build:
+      context: .
+      dockerfile: ./webui-service/Dockerfile
+    restart: unless-stopped
+    networks:
+      - alku-network
+    container_name: alku-webui
+    volumes:
+      - common:/common:ro
+      - data:/data
+    environment:
+      - REDIS_HOST=redis
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 1m30s
+      timeout: 30s
+      retries: 5
+      start_period: 30s
+    depends_on:
+      - streaming-service
+      - io-service
+      - cv-service
+      - rs0013n-service
+      - rs007l-service
+      - master-service
+  
+  robot-service:
+    build:
+      context: .
+      dockerfile: ./robot-service/Dockerfile
+    restart: unless-stopped
+    networks:
+      - alku-network
+    container_name: alku-robot
+    volumes:
+      - common:/common:ro
+      - data:/data
+    environment:
+      - REDIS_HOST=redis
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 1m30s
+      timeout: 30s
+      retries: 5
+      start_period: 30s
+  
+  rs0013n-service:
+    build:
+      context: .
+      dockerfile: ./rs0013n-service/Dockerfile
+    restart: unless-stopped
+    networks:
+      - alku-network
+    container_name: alku-rs0013n
+    volumes:
+      - common:/common:ro
+      - data:/data
+    environment:
+      - REDIS_HOST=redis
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 1m30s
+      timeout: 30s
+      retries: 5
+      start_period: 30s
+
+  rs007l-service:
+    build:
+      context: .
+      dockerfile: ./rs007l-service/Dockerfile
+    restart: unless-stopped
+    networks:
+      - alku-network
+    container_name: alku-rs007l
+    volumes:
+      - common:/common:ro
+      - data:/data
+    environment:
+      - REDIS_HOST=redis
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 1m30s
+      timeout: 30s
+      retries: 5
+      start_period: 30s
+
+  cv-service:
+    build:
+      context: .
+      dockerfile: ./cv-service/Dockerfile
+    restart: unless-stopped
+    networks:
+      - alku-network
+    container_name: alku-cv
+    volumes:
+      - common:/common:ro
+      - data:/data
+    environment:
+      - REDIS_HOST=redis
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 1m30s
+      timeout: 30s
+      retries: 5
+      start_period: 30s
+
+  io-service:
+    build:
+      context: .
+      dockerfile: ./io-service/Dockerfile
+    restart: unless-stopped
+    networks:
+      - alku-network
+    container_name: alku-io
+    volumes:
+      - common:/common:ro
+      - data:/data
+    environment:
+      - REDIS_HOST=redis
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 1m30s
+      timeout: 30s
+      retries: 5
+      start_period: 30s
+
+  master-service:
+    build:
+      context: .
+      dockerfile: ./master-service/Dockerfile
+    restart: unless-stopped
+    networks:
+      - alku-network
+    container_name: alku-master
+    volumes:
+      - common:/common:ro
+      - data:/data
+    environment:
+      - REDIS_HOST=redis
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 1m30s
+      timeout: 30s
+      retries: 5
+      start_period: 30s
+
+  nginx:
+    image: nginx:latest
+    restart: unless-stopped
+    networks:
+      - alku-network
+    container_name: alku-nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - streaming-service
+      - io-service
+
+  redis:
+    image: redis:latest
+    restart: unless-stopped
+    networks:
+      - alku-network
+    container_name: alku-redis
+    ports:
+      - "6379:6379"
+
+volumes:
+  common:
+    driver: local
+    driver_opts:
+      type: none
+      device: ./common
+      o: bind
+  data:
+    driver: local
+    driver_opts:
+      type: none
+      device: ./data
+      o: bind
+
+networks:
+  alku-network:

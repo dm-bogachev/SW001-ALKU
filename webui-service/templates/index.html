@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Интерфейс АЛКУ</title>
+    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="css/header.css">
+    <link rel="stylesheet" href="css/footer.css">
+    <link rel="icon" type="image/x-icon" href="img/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+    <header class="header">
+        <div class="header-logo">
+            <img src="img/loadwizard_logo.svg" alt="Робовизард">
+        </div>
+        <div class="header-title">
+            Интерфейс АЛКУ 1.0
+        </div>
+        <!-- <div class="header-mode" id="mode-block">
+            <img id="mode-icon" src="img/repeat_mode.png" alt="Режим" class="mode-icon">
+        </div> -->
+    </header>
+    
+    <!-- Easter Egg Animation -->
+    <div id="easter-egg" class="easter-egg">
+        <img src="img/easter.gif" alt="Easter Egg" class="easter-gif">
+    </div>
+    
+    <!-- ... -->
+    <nav class="tabs">
+        <div class="tab active" data-tab="control">Просмотр</div>
+        <div class="tab" data-tab="settings">Настройки</div>
+        <div class="tab" data-tab="io">IO</div>
+        <!-- Можно добавлять новые вкладки здесь -->
+    </nav>
+
+    <main class="content">
+        <section class="tab-content active" id="control">
+
+            <div class="video-and-panels">
+                <div class="video-wrapper">
+                    <img id="stream-image" src="" alt="Видео поток" class="stream-image">
+                    <button class="fullscreen-btn" onclick="openFullscreen()">
+                        <img src="img/zoom.png" alt="На весь экран">
+                    </button>
+                    <button class="save-btn" onclick="saveSnapshot()">
+                        <img src="img/save.png" alt="Сохранить снимок">
+                    </button>
+                    <button id="change-display-btn" class="change-display-btn" onclick="changeDisplayMode()">
+                        <img src="img/switch_left.png" alt="Изменить режим отображения">
+                    </button>
+                </div>
+                <div class="right-panels">
+                    <div class="model-selector-container">
+                        <div class="model-selector-group">
+                            <label for="model-select">Модель:</label>
+                            <select id="model-select" class="model-select">
+                                <!-- Модели будут добавлены динамически -->
+                            </select>
+                            <button id="change-model-btn" class="change-model-btn"
+                                onclick="changeModel()">Применить</button>
+                        </div>
+                        <div class="confidence-group">
+                            <label for="confidence-input">Confidence:</label>
+                            <input type="number" id="confidence-input" class="confidence-input" min="0" max="1"
+                                step="0.1" value="0.5">
+                            <button id="set-confidence-btn" class="set-confidence-btn"
+                                onclick="setConfidence()">Установить</button>
+                        </div>
+                    </div>
+                    <div class="vertical-panels">
+                        <div class="objects-list-container">
+                            <h3>Обнаруженные объекты</h3>
+                            <div id="objects-list" class="objects-list">
+                                <!-- Объекты будут добавлены динамически через JavaScript -->
+                            </div>
+                        </div>
+                        <div class="display-settings-container">
+                            <h3>Настройки отображения</h3>
+                            <div class="display-settings-grid">
+                                <div class="display-setting-item">
+                                    <label class="switch">
+                                        <input type="checkbox" id="display-bbox"
+                                            onchange="changeDisplaySetting('bbox', this.checked)">
+                                        <span class="slider"></span>
+                                    </label>
+                                    <div class="display-label">Рамка</div>
+                                </div>
+                                <div class="display-setting-item">
+                                    <label class="switch">
+                                        <input type="checkbox" id="display-coordinates"
+                                            onchange="changeDisplaySetting('coordinates', this.checked)">
+                                        <span class="slider"></span>
+                                    </label>
+                                    <div class="display-label">Координаты точки захвата</div>
+                                </div>
+                                <div class="display-setting-item">
+                                    <label class="switch">
+                                        <input type="checkbox" id="display-pick-angle"
+                                            onchange="changeDisplaySetting('pick_angle', this.checked)">
+                                        <span class="slider"></span>
+                                    </label>
+                                    <div class="display-label">Угол захвата</div>
+                                </div>  
+                                <div class="display-setting-item">
+                                    <label class="switch">
+                                        <input type="checkbox" id="display-keypoints"
+                                            onchange="changeDisplaySetting('keypoints', this.checked)">
+                                        <span class="slider"></span>
+                                    </label>
+                                    <div class="display-label">Ключевые точки</div>
+                                </div>
+                                <div class="display-setting-item">
+                                    <label class="switch">
+                                        <input type="checkbox" id="display-labels"
+                                            onchange="changeDisplaySetting('labels', this.checked)">
+                                        <span class="slider"></span>
+                                    </label>
+                                    <div class="display-label">Названия объектов</div>
+                                </div>
+                                <div class="display-setting-item">
+                                    <label class="switch">
+                                        <input type="checkbox" id="display-scores"
+                                            onchange="changeDisplaySetting('scores', this.checked)">
+                                        <span class="slider"></span>
+                                    </label>
+                                    <div class="display-label">Оценка</div>
+                                </div>
+                                <div class="display-setting-item">
+                                    <label class="switch">
+                                        <input type="checkbox" id="display-points"
+                                            onchange="changeDisplaySetting('points', this.checked)">
+                                        <span class="slider"></span>
+                                    </label>
+                                    <div class="display-label">Точки захвата</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="tab-content" id="settings">
+            <div class="settings-container">
+                <h2>Настройки</h2>
+
+            </div>
+        </section>
+
+        <section class="tab-content" id="io">
+            <div class="io-container">
+                <h2>Управление IO</h2>
+
+                <div class="io-section">
+                    <h3>Входы (Inputs)</h3>
+                    <div class="io-grid">
+                        <div class="io-item">
+                            <div class="status-light status-off" id="input-light-0"></div>
+                            <div class="io-label">Вход 0</div>
+                        </div>
+                        <div class="io-item">
+                            <div class="status-light status-off" id="input-light-1"></div>
+                            <div class="io-label">Вход 1</div>
+                        </div>
+                        <div class="io-item">
+                            <div class="status-light status-off" id="input-light-2"></div>
+                            <div class="io-label">Вход 2</div>
+                        </div>
+                        <div class="io-item">
+                            <div class="status-light status-off" id="input-light-3"></div>
+                            <div class="io-label">Вход 3</div>
+                        </div>
+                        <div class="io-item">
+                            <div class="status-light status-off" id="input-light-4"></div>
+                            <div class="io-label">Вход 4</div>
+                        </div>
+                        <div class="io-item">
+                            <div class="status-light status-off" id="input-light-5"></div>
+                            <div class="io-label">Вход 5</div>
+                        </div>
+                        <div class="io-item">
+                            <div class="status-light status-off" id="input-light-6"></div>
+                            <div class="io-label">Вход 6</div>
+                        </div>
+                        <div class="io-item">
+                            <div class="status-light status-off" id="input-light-7"></div>
+                            <div class="io-label">Вход 7</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="io-section">
+                    <h3>Выходы (Outputs)</h3>
+                    <div class="io-grid">
+                        <div class="io-item">
+                            <label class="switch">
+                                <input type="checkbox" id="output-switch-0" onchange="setOutput(0, this.checked)">
+                                <span class="slider"></span>
+                            </label>
+                            <div class="io-label">Выход 0</div>
+                        </div>
+                        <div class="io-item">
+                            <label class="switch">
+                                <input type="checkbox" id="output-switch-1" onchange="setOutput(1, this.checked)">
+                                <span class="slider"></span>
+                            </label>
+                            <div class="io-label">Выход 1</div>
+                        </div>
+                        <div class="io-item">
+                            <label class="switch">
+                                <input type="checkbox" id="output-switch-2" onchange="setOutput(2, this.checked)">
+                                <span class="slider"></span>
+                            </label>
+                            <div class="io-label">Выход 2</div>
+                        </div>
+                        <div class="io-item">
+                            <label class="switch">
+                                <input type="checkbox" id="output-switch-3" onchange="setOutput(3, this.checked)">
+                                <span class="slider"></span>
+                            </label>
+                            <div class="io-label">Выход 3</div>
+                        </div>
+                        <div class="io-item">
+                            <label class="switch">
+                                <input type="checkbox" id="output-switch-4" onchange="setOutput(4, this.checked)">
+                                <span class="slider"></span>
+                            </label>
+                            <div class="io-label">Выход 4</div>
+                        </div>
+                        <div class="io-item">
+                            <label class="switch">
+                                <input type="checkbox" id="output-switch-5" onchange="setOutput(5, this.checked)">
+                                <span class="slider"></span>
+                            </label>
+                            <div class="io-label">Выход 5</div>
+                        </div>
+                        <div class="io-item">
+                            <label class="switch">
+                                <input type="checkbox" id="output-switch-6" onchange="setOutput(6, this.checked)">
+                                <span class="slider"></span>
+                            </label>
+                            <div class="io-label">Выход 6</div>
+                        </div>
+                        <div class="io-item">
+                            <label class="switch">
+                                <input type="checkbox" id="output-switch-7" onchange="setOutput(7, this.checked)">
+                                <span class="slider"></span>
+                            </label>
+                            <div class="io-label">Выход 7</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer class="footer">
+        <div class="status-container">
+            <a href="/api/master/docs" target="_blank">
+                <div class="status-item">
+                    <div class="status-light status-off" id="master-health"></div>
+                    <div class="status-label">Дирижёр</div>
+                </div>
+            </a>
+            <a href="/api/camera/docs" target="_blank">
+                <div class="status-item">
+                    <div class="status-light status-off" id="camera-health"></div>
+                    <div class="status-label">Камера</div>
+                </div>
+            </a>
+            <a href="/api/streaming/docs" target="_blank">
+                <div class="status-item">
+                    <div class="status-light status-off" id="streaming-health"></div>
+                    <div class="status-label">Трансляция</div>
+                </div>
+            </a>
+            <a href="/docs" target="_blank">
+                <div class="status-item">
+                    <div class="status-light status-off" id="webui-health"></div>
+                    <div class="status-label">Интерфейс</div>
+                </div>
+            </a>
+            <a href="/api/cv/docs" target="_blank">
+                <div class="status-item">
+                    <div class="status-light status-off" id="cv-health"></div>
+                    <div class="status-label">CV</div>
+                </div>
+            </a>
+            <a href="/api/io/docs" target="_blank">
+                <div class="status-item">
+                    <div class="status-light status-off" id="io-health"></div>
+                    <div class="status-label">IO</div>
+                </div>
+            </a>
+            <a href="/api/rs0013n/docs" target="_blank">
+                <div class="status-item">
+                    <div class="status-light status-off" id="rs0013n-health"></div>
+                    <div class="status-label">RS0013N</div>
+                </div>
+            </a>
+            <a href="/api/rs007l/docs" target="_blank">
+                <div class="status-item">
+                    <div class="status-light status-off" id="rs007l-health"></div>
+                    <div class="status-label">RS007L</div>
+                </div>
+            </a>
+        </div>
+    </footer>
+    <script src="js/index.js"></script>
+</body>
+
+</html>

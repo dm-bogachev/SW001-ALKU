@@ -1,0 +1,53 @@
+.footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background: #222;
+    padding: 16px 0 8px 0;
+    box-shadow: 0 -2px 8px rgba(0,0,0,0.1);
+    z-index: 100;
+}
+
+.status-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 48px;
+}
+
+.status-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.status-light {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #888;
+    border: 2px solid #444;
+    margin-bottom: 6px;
+    box-shadow: 0 0 8px #0002;
+    transition: background 0.3s;
+}
+
+.status-label {
+    color: #eee;
+    font-size: 14px;
+    text-align: center;
+}
+
+.status-on {
+    background: #4caf50;
+}
+
+.status-off {
+    background: #e53935;
+}
+
+.status-error {
+    background: #ffff00;
+}
+

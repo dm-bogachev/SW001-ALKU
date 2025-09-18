@@ -1,0 +1,117 @@
+{
+    "Streaming": {
+        "FPS": 24.0,
+        "DisplayedFrame": "REDIS_PROCESSED_FRAME_KEY"
+    },
+    "Models": {
+        "LongDetails": {
+            "ModelName": "LongDetails",
+            "ModelFileName": "details_long_test.pt",
+            "ConfidenceThreshold": 0.8,
+            "ModelType": "yolo-pose",
+            "ModelProcessor": "LongDetailsProcessor.py"
+        },
+        "RoundDetails": {
+            "ModelName": "RoundDetails",
+            "ModelFileName": "rounds.pt",
+            "ConfidenceThreshold": 0.8,
+            "ModelType": "yolo-detect",
+            "ModelProcessor": "RoundDetailsProcessor.py"
+        }
+    },
+    "Display": {
+        "BBOX": true,
+        "COORDINATES": false,
+        "KEYPOINTS": false,
+        "LABELS": false,
+        "SCORES": false,
+        "POINTS": false,
+        "PICK_ANGLE": false
+    },
+    "Markers": {
+        "MarkersXDistance": 410.0,
+        "MarkersYDistance": 286.0,
+        "Marker00ID": 0,
+        "Marker00Point": 0,
+        "MarkerX0ID": 1,
+        "MarkerX0Point": 1,
+        "MarkerXYID": 2,
+        "MarkerXYPoint": 2,
+        "Marker0YID": 3,
+        "Marker0YPoint": 3
+    },
+    "HikCamera": {
+        "IPAddress": "10.64.104.125",
+        "DeviceName": "MV-CA050-10GC",
+        "FrameInterval": 2.0,
+        "ExposureValue": 50000
+    },
+    "CalibrationData": {
+        "Theta": "0.09052927792072296",
+        "Origin": "[215.0, 43.0]",
+        "Size": "[2080.0, 1646.0]",
+        "Calibrated": "true",
+        "RST": "[[0.19635393465948248, 0.017824500152521683, -42.98255072165807], [-0.01571495024829561, 0.1731152227454924, -4.065240383462054], [0.0, 0.0, 1.0]]",
+        "ScaleY": 0.17382703721523285,
+        "ScaleX": 0.19716130197048187
+    },
+    "Process": {
+        "ProcessingDelay": 1,
+        "LastModel": "LongDetails",
+        "FirstObjectCriteria": "Probability"
+    },
+    "IO": {
+        "RefreshRateMS": 10,
+        "Modules": {
+            "1": "822-1BF",
+            "2": "821-1BF"
+        },
+        "IPAddress": "192.168.1.253",
+        "Variables": {
+            "DI0": 1000,
+            "DI1": 1001,
+            "DI2": 1002,
+            "DI3": 1003,
+            "DI4": 1004,
+            "DI5": 1005,
+            "DI6": 1006,
+            "DI7": 1007,
+            "DO0": 0,
+            "DO1": 1,
+            "DO2": 2,
+            "DO3": 3,
+            "DO4": 4,
+            "DO5": 5,
+            "DO6": 6,
+            "DO7": 7
+        }
+    },
+    "RS007L": {
+        "Host": "0.0.0.0",
+        "Port": 9001,
+        "Timeout": 5,
+        "MaxTCPAttempts": 5,
+        "PingIntervalMS": 10,
+        "InputSize": 256,
+        "InputOffset": 1,
+        "OutputSize": 256,
+        "OutputOffset": 301,
+        "InternalSize": 256,
+        "InternalOffset": 601,
+        "RobotIP": "127.0.0.1"
+    },
+    "RS013N": {
+        "Host": "0.0.0.0",
+        "Port": 9002,
+        "Timeout": 5,
+        "MaxTCPAttempts": 5,
+        "PingIntervalMS": 10,
+        "InputSize": 256,
+        "InputOffset": 1,
+        "OutputSize": 256,
+        "OutputOffset": 301,
+        "InternalSize": 256,
+        "InternalOffset": 601,
+        "RobotIP": "127.0.0.1"
+    }
+}
