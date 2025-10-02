@@ -1,10 +1,11 @@
 # Системные импорты
 import os, time, sys, threading
 # Добавляем директорию проекта в sys.path
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 # Внешние модули
 from fastapi import FastAPI
+from fastapi_offline import FastAPIOffline
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.concurrency import asynccontextmanager
 from fastapi.responses import StreamingResponse
@@ -50,14 +51,14 @@ CURRENT_REDIS_KEY = get_redis_key()
 logger.debug(f"INITIAL CURRENT_REDIS_KEY установлен на {CURRENT_REDIS_KEY}")
 
 @asynccontextmanager
-async def lifespan(app: FastAPI):
+async def lifespan(app: FastAPIOffline):
     logger.info("Сервис стриминга кадров запущен")
     try:
         yield
     finally:
         logger.info("Сервис стриминга кадров остановлен")
 
-app = FastAPI(
+app = FastAPIOffline(
     root_path="/api/streaming",
     openapi_url="/openapi.json",
     docs_url="/docs",

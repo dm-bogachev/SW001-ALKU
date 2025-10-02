@@ -1,6 +1,6 @@
 const BASE_URL = window.location.origin;
 const WEBUI_API_URL = `${BASE_URL}`;
-const CAMERA_API_URL = "http://127.0.0.1:8001/api/camera" //`${BASE_URL}/api/camera`;
+const CAMERA_API_URL = `${BASE_URL}/api/camera`;
 const STREAMING_API_URL = `${BASE_URL}/api/streaming`;
 const ROBOT_API_URL = `${BASE_URL}/api/robot`;
 const CV_API_URL = `${BASE_URL}/api/cv`;
@@ -22,13 +22,12 @@ function checkServiceHealth(apiUrl, serviceName) {
             }
             return response.json();
         })
-        .then(() => {
-            setStatusLight(`${serviceName}-health`, "ok");
-        })
         .catch(() => {
             console.log(`Сервис ${serviceName} не доступен`);
             setStatusLight(`${serviceName}-health`, 'offline');
+            return response.json();
         });
+        setStatusLight(`${serviceName}-health`, "ok");
 };
 
 function setStatusLight(id, status) {

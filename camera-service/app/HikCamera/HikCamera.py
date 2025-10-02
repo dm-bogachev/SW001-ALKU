@@ -301,8 +301,8 @@ class HikCamera(MvCameraControl.MvCamera):
         self.__set_item("TriggerMode", MvCameraControl.MV_TRIGGER_MODE_ON)
         self.__set_item("TriggerSource", MvCameraControl.MV_TRIGGER_SOURCE_SOFTWARE)
         self.__set_item("AcquisitionFrameRateEnable", False)
-        self.__set_item("PixelFormat", "RGB8Packed")
-        self.__set_item("ExposureAuto", "Continuous")
+        self.__set_item("PixelFormat", "Mono8")
+        self.__set_item("ExposureAuto", "Off")
 
         stParam = MvCameraControl.MVCC_INTVALUE()
         memset(byref(stParam), 0, sizeof(MvCameraControl.MVCC_INTVALUE))
@@ -433,7 +433,7 @@ class HikCamera(MvCameraControl.MvCamera):
 
     def set_exposure(self, exposure_value):
         """Установка значения экспозиции камеры Hikvision."""
-        self.MV_CC_SetIntValue("ExposureValue", exposure_value)
+        self.MV_CC_SetFloatValue("ExposureTime", exposure_value)
 
     def reboot(self):
         """Перезагрузка камеры Hikvision."""

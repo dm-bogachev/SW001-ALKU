@@ -1,12 +1,15 @@
+from ultralytics import YOLO
+
 # Системные импорты
 import os, time, sys, threading
 # Добавляем директорию проекта в sys.path
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 # Внешние модули
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.concurrency import asynccontextmanager
+
 
 # Внутренние модули
 import configuration

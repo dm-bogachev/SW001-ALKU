@@ -95,15 +95,16 @@ class FrameProcessor:
         ''' Обрабатывает откалиброванный кадр '''
         frame = self.__prepare_frame(frame)
         predictions = self.detector.detect(frame)
-        frame, predictions = self.function.process(frame, predictions)
+        if predictions and len(predictions) > 0:
+            frame, predictions = self.function.process(frame, predictions)
         if predictions and len(predictions) > 0:
             logger.debug(f"0 элемент до масштабирования: {predictions[0].xyxy}")
-        frame = self.drawer.draw(frame, predictions)
-        predictions = self.__scale_predictions(predictions)
-        if predictions and len(predictions) > 0:
+            frame = self.drawer.draw(frame, predictions)
+            predictions = self.__scale_predictions(predictions)
             logger.debug(f"0 элемент после масштабирования: {predictions[0].xyxy}")
 
-        self.__objects = predictions
+            self.__objects = predictions
+            
         self.__put_frame_to_redis(frame)
 
     def __prepare_frame(self, frame):

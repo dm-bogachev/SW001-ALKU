@@ -1,10 +1,11 @@
 # Системные импорты
 import os, time, sys, threading
 # Добавляем директорию проекта в sys.path
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 # Внешние модули
 from fastapi import FastAPI, Request
+from fastapi_offline import FastAPIOffline
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.concurrency import asynccontextmanager
 from fastapi.responses import HTMLResponse
@@ -18,11 +19,11 @@ from common.Config import Config
 logger = config_logger("webui-service/main.py")
 
 @asynccontextmanager
-async def lifespan(app: FastAPI):
+async def lifespan(app: FastAPIOffline):
     yield
 
-app = FastAPI(
-    root_path="/",
+app = FastAPIOffline(
+    root_path="",
     openapi_url="/openapi.json",
     docs_url="/docs",
     redoc_url="/redoc",
@@ -73,8 +74,6 @@ async def get_config():
     config.init()
     logger.debug("Получение конфигурации через /config")
     return config.get_config()
-
-
 
 if __name__ == "__main__":
     import uvicorn

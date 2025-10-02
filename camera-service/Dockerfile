@@ -1,4 +1,4 @@
-FROM python:3.9-slim
+FROM python:3.13
 RUN apt-get update && apt-get install -y curl ffmpeg libsm6 libxext6
 WORKDIR /camera
 
@@ -8,6 +8,5 @@ ENV MVCAM_COMMON_RUNENV=/opt/MVS/lib LD_LIBRARY_PATH=/opt/MVS/lib/64:/opt/MVS/li
 
 COPY ./camera-service/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
-COPY ./camera-service .
 
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "6500"]

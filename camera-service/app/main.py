@@ -1,12 +1,13 @@
 # Системные импорты
 import os, time, sys, threading
 # Добавляем директорию проекта в sys.path
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 # Внешние модули
-from fastapi import FastAPI
+from fastapi_offline import FastAPIOffline
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.concurrency import asynccontextmanager
+
 import cv2
 
 # Внутренние модули
@@ -49,6 +50,7 @@ while True:
         Config.set("HikCamera.DeviceName", hik_camera.get_device_name())
         Config.save() 
         hik_camera.open()
+        hik_camera.set_exposure(Config.get("HikCamera.ExposureValue"))
         if hik_camera.is_opened():
             logger.info("Камера успешно подключена")
             break
@@ -60,7 +62,7 @@ while True:
 threading.Thread(target=background_frame_sender, daemon=True).start()
 
 @asynccontextmanager
-async def lifespan(app: FastAPI):
+async def lifespan(app: FastAPIOffline):
     logger.info("Сервис получения кадров камеры Hikvision запущен")
     try:
         yield
@@ -73,7 +75,7 @@ async def lifespan(app: FastAPI):
             logger.error(f"Ошибка при закрытии камеры при остановке: {e}")
         logger.info("Сервис получения кадров камеры Hikvision остановлен")
     
-app = FastAPI(
+app = FastAPIOffline(
     root_path="/api/camera",
     openapi_url="/openapi.json",
     docs_url="/docs",
@@ -149,4 +151,4 @@ def save_frame():
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="127.0.0.1", port=8000)
+    uvicorn.run(app, host="127.0.0.1", port=6500)
