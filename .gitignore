@@ -15,3 +15,6 @@ data/captured_frames/*
 
 # VSCode
 .vscode/*
+
+yolo-trainer/datasets/*
+yolo-trainer/runs/*

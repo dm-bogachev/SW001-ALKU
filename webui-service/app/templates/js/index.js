@@ -339,7 +339,6 @@ function setOutput(bit, value) {
     });
 }
 
-
 function updateIOState()
 {
     fetch(`${IO_API_URL}/inputs/all`)
