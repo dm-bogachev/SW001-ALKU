@@ -1,7 +1,7 @@
 {
     "Streaming": {
         "FPS": 30.0,
-        "DisplayedFrame": "REDIS_CAMERA_FRAME_KEY"
+        "DisplayedFrame": "REDIS_PROCESSED_FRAME_KEY"
     },
     "Models": {
         "LongDetails": {
@@ -14,7 +14,7 @@
         "RoundDetails": {
             "ModelName": "RoundDetails",
             "ModelFileName": "rounds.pt",
-            "ConfidenceThreshold": 0.8,
+            "ConfidenceThreshold": 0.2,
             "ModelType": "yolo-detect",
             "ModelProcessor": "RoundDetailsProcessor.py"
         }
@@ -57,7 +57,7 @@
     },
     "Process": {
         "ProcessingDelay": 0.0,
-        "LastModel": "LongDetails",
+        "LastModel": "RoundDetails",
         "FirstObjectCriteria": "Probability"
     },
     "IO": {
