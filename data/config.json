@@ -1,7 +1,7 @@
 {
     "Streaming": {
-        "FPS": 24.0,
-        "DisplayedFrame": "REDIS_PROCESSED_FRAME_KEY"
+        "FPS": 30.0,
+        "DisplayedFrame": "REDIS_CAMERA_FRAME_KEY"
     },
     "Models": {
         "LongDetails": {
@@ -41,10 +41,10 @@
         "Marker0YPoint": 3
     },
     "HikCamera": {
-        "IPAddress": "10.64.104.125",
-        "DeviceName": "MV-CA050-10GC",
-        "FrameInterval": 2.0,
-        "ExposureValue": 50000
+        "IPAddress": "192.168.7.101",
+        "DeviceName": "MV-CH120-20GM",
+        "FrameInterval": 0.0,
+        "ExposureValue": 10000
     },
     "CalibrationData": {
         "Theta": "0.09052927792072296",
@@ -56,7 +56,7 @@
         "ScaleX": 0.19716130197048187
     },
     "Process": {
-        "ProcessingDelay": 1,
+        "ProcessingDelay": 0.0,
         "LastModel": "LongDetails",
         "FirstObjectCriteria": "Probability"
     },
