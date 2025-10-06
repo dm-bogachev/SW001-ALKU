@@ -49,9 +49,9 @@ function checkServicesHealth() {
     // checkServiceHealth(ROBOT_API_URL, 'robot');
     checkServiceHealth(CV_API_URL, 'cv');
     checkServiceHealth(IO_API_URL, 'io');
-    checkServiceHealth(RS0013N_API_URL, 'rs0013n');
-    checkServiceHealth(RS007L_API_URL, 'rs007l');
-    checkServiceHealth(MASTER_API_URL, 'master');
+    //checkServiceHealth(RS0013N_API_URL, 'rs0013n');
+    //checkServiceHealth(RS007L_API_URL, 'rs007l');
+    //checkServiceHealth(MASTER_API_URL, 'master');
 
 };
 
@@ -78,6 +78,38 @@ function setDocsUrls() {
     
 }
 
+function tare_on()
+{
+    console.log('Поднимаем тару');
+    fetch(`${IO_API_URL}/tare_on`, { method: 'POST' })
+        .then(response => response.json())
+        .then(data => {
+            if (data.Status === "OK") {
+                // alert(`Снимок сохранен: ${data.Filename}`);
+            } else {
+                alert(`Не удалось сохранить снимок`);
+            }
+        })
+        .catch(() => {
+            alert('Не удалось сохранить снимок');
+        });
+}
+
+function tare_off()
+{
+    fetch(`${IO_API_URL}/tare_off`, { method: 'POST' })
+        .then(response => response.json())
+        .then(data => {
+            if (data.Status === "OK") {
+                // alert(`Снимок сохранен: ${data.Filename}`);
+            } else {
+                alert(`Не удалось сохранить снимок`);
+            }
+        })
+        .catch(() => {
+            alert('Не удалось сохранить снимок');
+        });
+}
 
 function openFullscreen() {
     console.log('Открываем видео на весь экран');

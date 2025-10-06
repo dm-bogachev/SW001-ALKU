@@ -16,5 +16,9 @@ data/captured_frames/*
 # VSCode
 .vscode/*
 
+# Логи
+**.log
+
+# Обучение YOLO
 yolo-trainer/datasets/*
 yolo-trainer/runs/*

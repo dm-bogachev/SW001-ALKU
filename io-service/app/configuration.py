@@ -9,7 +9,7 @@ from common.Config import Config
 
 base_settings = {
     "IO": {
-        "IPAddress": "192.168.1.253",
+        "IPAddress": "192.168.7.104",
         "RefreshRateMS": 10,
         "Modules": {
             "1": "822-1BF",

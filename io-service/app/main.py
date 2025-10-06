@@ -123,6 +123,24 @@ def get_all_inputs():
     inputs = [io.get_input(i) for i in range(16)]
     return {"Status": "OK", "Inputs": inputs}
 
+@app.post("/tare_on")
+def tare_on():
+    io.set_output(0, True)
+    time.sleep(1)
+    io.set_output(1, True)
+    time.sleep(1)
+    io.set_output(2, True)
+    return {"Status": "OK"}
+
+@app.post("/tare_off")
+def tare_off():
+    io.set_output(2, False)
+    time.sleep(1)
+    io.set_output(1, False)
+    time.sleep(1)
+    io.set_output(0, False)
+    return {"Status": "OK"}
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="127.0.0.1", port=8000)

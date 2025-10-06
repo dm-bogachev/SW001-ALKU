@@ -7,26 +7,26 @@
         "LongDetails": {
             "ModelName": "LongDetails",
             "ModelFileName": "details_long_test.pt",
-            "ConfidenceThreshold": 0.8,
+            "ConfidenceThreshold": 0.6,
             "ModelType": "yolo-pose",
             "ModelProcessor": "LongDetailsProcessor.py"
         },
         "RoundDetails": {
             "ModelName": "RoundDetails",
             "ModelFileName": "rounds.pt",
-            "ConfidenceThreshold": 0.2,
+            "ConfidenceThreshold": 0.6,
             "ModelType": "yolo-detect",
             "ModelProcessor": "RoundDetailsProcessor.py"
         }
     },
     "Display": {
         "BBOX": true,
-        "COORDINATES": false,
-        "KEYPOINTS": false,
-        "LABELS": false,
-        "SCORES": false,
+        "COORDINATES": true,
+        "KEYPOINTS": true,
+        "LABELS": true,
+        "SCORES": true,
         "POINTS": false,
-        "PICK_ANGLE": false
+        "PICK_ANGLE": true
     },
     "Markers": {
         "MarkersXDistance": 410.0,
@@ -47,11 +47,11 @@
         "ExposureValue": 10000
     },
     "CalibrationData": {
-        "Theta": "0.09052927792072296",
-        "Origin": "[215.0, 43.0]",
-        "Size": "[2080.0, 1646.0]",
+        "Theta": "0",
+        "Origin": "[550.0, 700.0]",
+        "Size": "[2800.0, 1800.0]",
         "Calibrated": "true",
-        "RST": "[[0.19635393465948248, 0.017824500152521683, -42.98255072165807], [-0.01571495024829561, 0.1731152227454924, -4.065240383462054], [0.0, 0.0, 1.0]]",
+        "RST": "[[1, 0, 0], [0, 1, 0], [0.0, 0.0, 1.0]]",
         "ScaleY": 0.17382703721523285,
         "ScaleX": 0.19716130197048187
     },
@@ -66,7 +66,7 @@
             "1": "822-1BF",
             "2": "821-1BF"
         },
-        "IPAddress": "192.168.1.253",
+        "IPAddress": "192.168.7.104",
         "Variables": {
             "DI0": 1000,
             "DI1": 1001,

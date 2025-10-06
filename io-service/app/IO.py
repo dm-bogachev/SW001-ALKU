@@ -33,7 +33,7 @@ class IO:
             try:
                 # Чтение данных
                 register = self.__client.read_holding_registers(0, 1).registers[0]
-                array = [int(bit) for bit in bin(register)[2:].zfill(8)]
+                array = [int(bit) for bit in bin(register)[2:].zfill(16)]
                 self.__inputs = array[::-1]
                 # Запись данных
                 self.__client.write_coils(0, self.__outputs)
