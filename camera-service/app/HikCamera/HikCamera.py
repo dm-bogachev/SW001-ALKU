@@ -331,20 +331,25 @@ class HikCamera(MvCameraControl.MvCamera):
         """Закрытие камеры Hikvision и освобождение ресурсов."""
 
         logger.debug("Закрытие камеры Hikvision")
-
-        self.__set_item("TriggerMode", MvCameraControl.MV_TRIGGER_MODE_OFF)
-        self.__set_item("AcquisitionFrameRateEnable", True)
+        try:    
+            self.__set_item("TriggerMode", MvCameraControl.MV_TRIGGER_MODE_OFF)
+            self.__set_item("AcquisitionFrameRateEnable", True)
+        except Exception as e:
+            logger.error(f"Ошибка при закрытии камеры: {e}")
 
         ret = self.MV_CC_StopGrabbing()
         if ret != 0:
             logger.error(f"Остановка захвата кадров не удалась! ret[0x{ret}]")
-            raise HikCameraException(
-                f"Остановка захвата кадров не удалась! ret[0x{ret}]"
-            )
+            # raise HikCameraException(
+            #     f"Остановка захвата кадров не удалась! ret[0x{ret}]"
+            # )
 
         self.MV_CC_CloseDevice()
         self.__is_opened = False
         logger.debug("Камера Hikvision успешно закрыта")
+
+    def is_connected(self):
+        return self.__is_opened
 
     def get_frame(self):
         """Получение кадра с камеры."""

@@ -11,10 +11,6 @@ base_settings = {
     "IO": {
         "IPAddress": "192.168.7.104",
         "RefreshRateMS": 10,
-        "Modules": {
-            "1": "822-1BF",
-            "2": "821-1BF"
-        },
         "Variables": {
             "DI0": 1000,
             "DI1": 1001,

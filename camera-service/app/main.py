@@ -28,6 +28,10 @@ logger = config_logger("camera-service/main.py")
 
 def background_frame_sender():
     """Бесконечно получает кадры с камеры и отправляет их в Redis."""
+    global hik_camera
+    hik_camera = initialize_camera()
+    retry_attempts = 0
+    max_bad_frames = Config.get("HikCamera.MaxBadFrames", 10)
     while True:
         try:
             if hik_camera.is_opened():
@@ -39,10 +43,26 @@ def background_frame_sender():
                 logger.warning("Камера не подключена, повторная попытка через 2 секунды")
         except Exception as e:
             logger.error(f"Ошибка при получении/отправке кадра: {e}")
+
+            retry_attempts = retry_attempts + 1
+            if retry_attempts >= max_bad_frames:
+                logger.error(f"Слишком много неудачных попыток подряд, выполняется реинициализация камеры")
+                try:
+                    hik_camera.close()
+                    hik_camera = None
+                except Exception as e:
+                    logger.error(f"Ошибка при закрытии камеры при реинициализации: {e}")
+                while True:
+                    try:
+                        hik_camera = initialize_camera()
+                        break
+                    except Exception as e:
+                        logger.error(f"Ошибка при подключении к камере: {e}. Попытка повторного подключения через 10 секунд.")
+                        time.sleep(10)
+                retry_attempts = 0
         time.sleep(Config.get("HikCamera.FrameInterval", 0.1))  # интервал между кадрами, можно уменьшить
 
-
-while True:
+def initialize_camera():
     """Попытка подключения к камере Hikvision."""
     try:
         hik_camera = HikCamera()
@@ -53,10 +73,12 @@ while True:
         hik_camera.set_exposure(Config.get("HikCamera.ExposureValue"))
         if hik_camera.is_opened():
             logger.info("Камера успешно подключена")
-            break
+            return hik_camera
     except Exception as e:
         logger.error(f"Ошибка при подключении к камере: {e}. Попытка повторного подключения через 10 секунд.")
         time.sleep(10)
+
+hik_camera = None
 
 # Запуск фонового потока при старте приложения
 threading.Thread(target=background_frame_sender, daemon=True).start()
@@ -65,7 +87,7 @@ threading.Thread(target=background_frame_sender, daemon=True).start()
 async def lifespan(app: FastAPIOffline):
     logger.info("Сервис получения кадров камеры Hikvision запущен")
     try:
-        yield
+        yield 
     finally:
         try:
             if hik_camera.is_opened():
@@ -112,11 +134,36 @@ def reboot():
 def set_exposure(exposure_value: int):
     """ Установка значения экспозиции камеры Hikvision """
     logger.debug(f"Запрос /set_exposure: {exposure_value}")
+
+    if hik_camera is None or not hik_camera.is_connected():
+        return {"Status": "ERROR",
+                "Reason": "Not connected"}, 503
+
     hik_camera.set_exposure(exposure_value)
     Config.set("HikCamera.ExposureValue", exposure_value)
     Config.save()
     return {"Status": "OK",
             "ExposureValue": exposure_value}
+
+@app.get("/get_exposure")
+def get_exposure():
+    "Получкние значения экспозиции"
+    logger.debug(f"Запрос /get_exposure")
+    exposure_value = Config.get("HikCamera.ExposureValue")
+    return {"Status": "OK",
+            "ExposureValue": exposure_value}
+
+@app.get("/camera_state")
+def get_camera_state():
+    "Получение информации о статусе подключения к камере"
+
+    if not hik_camera:
+        return {"Status": "OK",
+                "ConnectionState": False}
+
+    return {"Status": "OK",
+            "ConnectionState": hik_camera.is_connected()}
+
 
 @app.post("/set_frame_interval")
 def set_frame_interval(frame_interval: float):
@@ -130,15 +177,18 @@ def set_frame_interval(frame_interval: float):
 @app.post("/save_frame")
 def save_frame():
     """ Сохранение текущего кадра камеры Hikvision"""
+    
     logger.debug("Запрос /save_frame")
-    if not hik_camera.is_opened():
+    if hik_camera is None or not hik_camera.is_connected():
         logger.error("Камера не подключена")
-        return {"Error": "Камера не подключена"}, 503
+        return {"Status": "ERROR",
+                "Reason": "Not connected"}, 503
 
     frame = hik_camera.last_frame
     if frame is None:
         logger.error("Не удалось получить кадр с камеры")
-        return {"Error": "Не удалось получить кадр с камеры"}, 500
+        return {"Status": "ERROR",
+                "Reason": "Failed to get frame"}, 503
 
     timestamp = time.strftime("%Y_%d_%m_%H_%M_%S")
     filename = f"{FRAMES_DIR}/frame_{timestamp}.png"

@@ -7,7 +7,7 @@
         "LongDetails": {
             "ModelName": "LongDetails",
             "ModelFileName": "details_long_test.pt",
-            "ConfidenceThreshold": 0.49,
+            "ConfidenceThreshold": 0.6,
             "ModelType": "yolo-pose",
             "ModelProcessor": "LongDetailsProcessor.py"
         },
@@ -24,7 +24,7 @@
         "COORDINATES": false,
         "KEYPOINTS": false,
         "LABELS": false,
-        "SCORES": true,
+        "SCORES": false,
         "POINTS": false,
         "PICK_ANGLE": false
     },
@@ -44,7 +44,7 @@
         "IPAddress": "192.168.7.101",
         "DeviceName": "MV-CH120-20GM",
         "FrameInterval": 0.0,
-        "ExposureValue": 2500
+        "ExposureValue": 5500
     },
     "CalibrationData": {
         "Theta": "0",
@@ -62,10 +62,6 @@
     },
     "IO": {
         "RefreshRateMS": 10,
-        "Modules": {
-            "1": "822-1BF",
-            "2": "821-1BF"
-        },
         "IPAddress": "192.168.7.104",
         "Variables": {
             "DI0": 1000,

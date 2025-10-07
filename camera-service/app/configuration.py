@@ -12,6 +12,7 @@ base_settings = {
         "DeviceName": "HikVision Camera",
         "ExposureValue": 50000,
         "FrameInterval": 0.5,
+        "MaxBadFrames": 10,
     },
 }
 
