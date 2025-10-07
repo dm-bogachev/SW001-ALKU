@@ -23,12 +23,14 @@ class IO:
         for variable_name, variable_id in variables_config.items():
             self.__variables[variable_name] = int(variable_id)
 
+    def is_connected(self):
+        return self.__connected
 
     def __process_loop(self):
         logger.info("Запуск цикла обработки IO")
         self.__client = ModbusTcpClient(Config.get("IO.IPAddress"))
         self.__client.connect()
-        connected = False
+        self.__connected = False
         while True:
             try:
                 # Чтение данных
@@ -37,17 +39,18 @@ class IO:
                 self.__inputs = array[::-1]
                 # Запись данных
                 self.__client.write_coils(0, self.__outputs)
-                if not connected:
+                if not self.__connected:
                     logger.info("Устройство подключено")
-                    connected = True
+                    self.__connected = True
                 time.sleep(Config.get("IO.RefreshRateMS", 10) / 1000)
             except Exception as e:
-                logger.warning("Не удалось подключиться к устройству, попытка переподключения через 5 секунд")
-                time.sleep(5)
-                connected = False
+                logger.warning("Не удалось подключиться к устройству, попытка переподключения через 3 секунды")
+                time.sleep(3)
+                self.__connected = False
                 self.__client.connect()
 
     def __init__(self):
+        self.__connected = False
         self.load_variables()
         self.__inputs = [0] * 16
         self.__outputs = [0] * 16

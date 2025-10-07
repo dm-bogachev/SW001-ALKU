@@ -29,7 +29,7 @@ def extract_zip_to_named_folder(zip_path, extract_root, folder_name):
 
 
 if __name__ == '__main__':
-    if len(sys.argv) < 2:
+    if len(sys.argv) < 2:   
         print("Usage: python trainer.py <dataset_zip_file>")
         sys.exit(1)
 
@@ -55,7 +55,7 @@ if __name__ == '__main__':
         epochs=800,
         model=YOLO_BASE_MODEL,
         project=RUNS_DIR,
-        batch=12,
+        batch=0.9,
     )
     print(results)
     results = model.val(

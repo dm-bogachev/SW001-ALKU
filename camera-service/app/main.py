@@ -40,7 +40,8 @@ def background_frame_sender():
                     _, buffer = cv2.imencode(".jpg", frame, [cv2.IMWRITE_JPEG_QUALITY, 100])
                     redis_client.set(REDIS_CAMERA_FRAME_KEY, buffer.tobytes())
             else:
-                logger.warning("Камера не подключена, повторная попытка через 2 секунды")
+                logger.warning("Камера не подключена, повторная попытка через 3 секунды")
+                time.sleep(3)
         except Exception as e:
             logger.error(f"Ошибка при получении/отправке кадра: {e}")
 
@@ -57,8 +58,8 @@ def background_frame_sender():
                         hik_camera = initialize_camera()
                         break
                     except Exception as e:
-                        logger.error(f"Ошибка при подключении к камере: {e}. Попытка повторного подключения через 10 секунд.")
-                        time.sleep(10)
+                        logger.error(f"Ошибка при подключении к камере: {e}. Попытка повторного подключения через 3 секунды.")
+                        time.sleep(3)
                 retry_attempts = 0
         time.sleep(Config.get("HikCamera.FrameInterval", 0.1))  # интервал между кадрами, можно уменьшить
 
@@ -75,8 +76,8 @@ def initialize_camera():
             logger.info("Камера успешно подключена")
             return hik_camera
     except Exception as e:
-        logger.error(f"Ошибка при подключении к камере: {e}. Попытка повторного подключения через 10 секунд.")
-        time.sleep(10)
+        logger.error(f"Ошибка при подключении к камере: {e}. Попытка повторного подключения через 3 секунды.")
+        time.sleep(3)
 
 hik_camera = None
 
@@ -157,7 +158,7 @@ def get_exposure():
 def get_camera_state():
     "Получение информации о статусе подключения к камере"
 
-    if not hik_camera:
+    if hik_camera is None:
         return {"Status": "OK",
                 "ConnectionState": False}
 

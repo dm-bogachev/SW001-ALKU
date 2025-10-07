@@ -13,23 +13,6 @@ const DISPLAY_MODES = ["REDIS_CAMERA_FRAME_KEY", "REDIS_PROCESSED_FRAME_KEY"];
 var displayModeSelect = 0;
 var activeTab = 'control';
 
-function checkServiceHealth(apiUrl, serviceName) {
-    fetch(`${apiUrl}/health`)
-        .then(response => {
-            if (!response.ok) {
-                console.log(`Сервис ${serviceName} не доступен`);
-                setStatusLight(`${serviceName}-health`, 'offline');
-            }
-            return response.json();
-        })
-        .catch(() => {
-            console.log(`Сервис ${serviceName} не доступен`);
-            setStatusLight(`${serviceName}-health`, 'offline');
-            return response.json();
-        });
-        setStatusLight(`${serviceName}-health`, "ok");
-};
-
 function setStatusLight(id, status) {
     const el = document.getElementById(id);
     el.classList.remove('status-on', 'status-off', 'status-error');
@@ -42,6 +25,48 @@ function setStatusLight(id, status) {
     }
 };
 
+function checkServiceHealth(apiUrl, serviceName) {
+    fetch(`${apiUrl}/health`)
+        .then(response => {
+            if (!response.ok) {
+                console.log(`Сервис ${serviceName} не доступен`);
+                setStatusLight(`${serviceName}-health`, 'error');
+            }
+            return response.json();
+        })
+        .catch(() => {
+            console.log(`Сервис ${serviceName} не доступен`);
+            setStatusLight(`${serviceName}-health`, 'error');
+        });
+        setStatusLight(`${serviceName}-health`, "ok");
+};
+
+function checkPhysicalState(apiUrl, stateName) {
+    console.log(apiUrl)
+    fetch(`${apiUrl}`)
+        .then(response => {
+            if (!response.ok) {
+                console.log(`Объект ${stateName} не подключен`);
+                setStatusLight(`${stateName}-state`, 'error');
+                return null;
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data && data.Status === "OK" && data.ConnectionState === true) {
+                console.log(`Объект ${stateName} подключен`);
+                setStatusLight(`${stateName}-state`, "ok");
+            } else if (data && data.Status === "OK" && data.ConnectionState === false) {
+                console.log(`Объект ${stateName} не подключен (ConnectionState: false)`);
+                setStatusLight(`${stateName}-state`, 'off');
+            }
+        })
+        .catch(() => {
+            console.log(`Объект ${stateName} не подключен`);
+            setStatusLight(`${stateName}-state`, 'error');
+        });
+};
+
 function checkServicesHealth() {
     checkServiceHealth(WEBUI_API_URL, 'webui');
     checkServiceHealth(CAMERA_API_URL, 'camera');
@@ -52,8 +77,15 @@ function checkServicesHealth() {
     //checkServiceHealth(RS0013N_API_URL, 'rs0013n');
     //checkServiceHealth(RS007L_API_URL, 'rs007l');
     //checkServiceHealth(MASTER_API_URL, 'master');
-
 };
+
+function checkPhysicalStates() {
+    // Здесь можно добавить проверку физических состояний, если необходимо
+    checkPhysicalState(`${CAMERA_API_URL}/camera_state`, 'camera');
+    checkPhysicalState(`${IO_API_URL}/io_state`, 'io');
+    // checkPhysicalState(RS0013N_API_URL, 'rs0013n');
+    // checkPhysicalState(RS007L_API_URL, 'rs007l');
+}
 
 function switchTab(tabId) {
     console.log('Переключаем вкладку на:', tabId);
@@ -73,10 +105,6 @@ function setStreamImage() {
         streamImage.src = `${STREAMING_API_URL}/stream`;
     }
 };
-
-function setDocsUrls() {
-    
-}
 
 function tare_on()
 {
@@ -512,6 +540,7 @@ function showEasterEgg() {
 
 document.addEventListener('DOMContentLoaded', () => {
     checkServicesHealth();
+    checkPhysicalStates();
     loadSettings();
     setStreamImage();
     document.querySelectorAll('.tab').forEach(tab => {
@@ -541,3 +570,4 @@ setInterval(() => {
 }, 1000); // Обновляем объекты каждую секунду
 
 setInterval(checkServicesHealth, 5000);
+setInterval(checkPhysicalStates, 2000);

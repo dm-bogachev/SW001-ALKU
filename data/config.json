@@ -7,7 +7,7 @@
         "LongDetails": {
             "ModelName": "LongDetails",
             "ModelFileName": "details_long_test.pt",
-            "ConfidenceThreshold": 0.6,
+            "ConfidenceThreshold": 0.75,
             "ModelType": "yolo-pose",
             "ModelProcessor": "LongDetailsProcessor.py"
         },
@@ -17,14 +17,35 @@
             "ConfidenceThreshold": 0.6,
             "ModelType": "yolo-detect",
             "ModelProcessor": "RoundDetailsProcessor.py"
+        },
+        "Smalls_vn": {
+            "ModelName": "Smalls_vn",
+            "ModelFileName": "smalls_vn.pt",
+            "ConfidenceThreshold": 0.7,
+            "ModelType": "yolo-pose",
+            "ModelProcessor": "dummy_pose.py"
+        },
+        "Smalls_vs": {
+            "ModelName": "Smalls_vs",
+            "ModelFileName": "smalls_vs.pt",
+            "ConfidenceThreshold": 0.7,
+            "ModelType": "yolo-pose",
+            "ModelProcessor": "dummy_pose.py"
+        },
+        "Smalls_vm": {
+            "ModelName": "Smalls_vm",
+            "ModelFileName": "smalls_vm.pt",
+            "ConfidenceThreshold": 0.5,
+            "ModelType": "yolo-pose",
+            "ModelProcessor": "dummy_pose.py"
         }
     },
     "Display": {
         "BBOX": true,
         "COORDINATES": false,
-        "KEYPOINTS": false,
+        "KEYPOINTS": true,
         "LABELS": false,
-        "SCORES": false,
+        "SCORES": true,
         "POINTS": false,
         "PICK_ANGLE": false
     },
@@ -44,12 +65,12 @@
         "IPAddress": "192.168.7.101",
         "DeviceName": "MV-CH120-20GM",
         "FrameInterval": 0.0,
-        "ExposureValue": 5500
+        "ExposureValue": 8000
     },
     "CalibrationData": {
         "Theta": "0",
-        "Origin": "[550.0, 700.0]",
-        "Size": "[2800.0, 1800.0]",
+        "Origin": "[200.0, 600.0]",
+        "Size": "[3500.0, 2150.0]",
         "Calibrated": "true",
         "RST": "[[1, 0, 0], [0, 1, 0], [0.0, 0.0, 1.0]]",
         "ScaleY": 0.17382703721523285,

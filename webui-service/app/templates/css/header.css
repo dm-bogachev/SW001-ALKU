@@ -56,3 +56,50 @@ header {
     display: block;
 }
 
+.physical-states {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 16px;
+}
+
+.physical-states .status-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+.physical-states .status-light {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #888;
+    border: 1px solid #444;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
+    transition: background 0.3s;
+}
+
+.physical-states .status-label {
+    color: #222;
+    font-size: 13px;
+    white-space: nowrap;
+}
+
+.physical-states .status-light.status-on {
+    background: #4caf50 !important;
+    border-color: #4caf50;
+    box-shadow: 0 0 10px rgba(76, 175, 80, 0.5);
+}
+
+.physical-states .status-light.status-off {
+    background: #e53935 !important;
+    border-color: #e53935;
+}
+
+.physical-states .status-light.status-error {
+    background: #ffff00 !important;
+    border-color: #ffff00;
+    box-shadow: 0 0 10px rgba(255, 255, 0, 0.5);
+}
+

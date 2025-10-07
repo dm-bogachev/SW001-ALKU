@@ -16,7 +16,14 @@ from typing import Annotated, List, Literal
 
 logger = config_logger("io-service/main.py")
 
-io = IO()
+def background_io_starter():
+    global io
+    io = IO()
+
+io = None
+
+# Запуск фонового потока при старте приложения
+threading.Thread(target=background_io_starter, daemon=True).start()
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -55,6 +62,19 @@ def reboot():
     threading.Thread(target=delayed_exit).start()
     return {"Status": "Reboot"}
 
+
+
+@app.get("/io_state")
+def get_camera_state():
+    "Получение информации о статусе подключения к камере"
+
+    if io is None:
+        return {"Status": "OK",
+                "ConnectionState": False}
+
+    return {"Status": "OK",
+            "ConnectionState": io.is_connected()}
+
 # API endpoints для IO операций
 
 # Одиночные сигналы
@@ -62,6 +82,12 @@ def reboot():
 def set_output(bit: int, value: int):
     """ Установить значение выхода """
     logger.debug(f"Запрос /output/ с параметрами: bit={bit}, value={value}")
+
+    if io is None or not io.is_connected():
+        logger.error("Модуль I/O не подключен")
+        return {"Status": "ERROR",
+                "Reason": "Not connected"}, 503
+
     io.set_output(bit, value)
     return {"Status": "OK", "Bit": bit, "Value": value}
 
@@ -69,6 +95,12 @@ def set_output(bit: int, value: int):
 def get_output(bit: int):
     """ Получить значение выхода """
     logger.debug(f"Запрос /output/ с параметрами: bit={bit}")
+
+    if io is None or not io.is_connected():
+        logger.error("Модуль I/O не подключен")
+        return {"Status": "ERROR",
+                "Reason": "Not connected"}, 503
+
     value = io.get_output(bit)
     return {"Status": "OK", "Bit": bit, "Value": value}
 
@@ -76,6 +108,12 @@ def get_output(bit: int):
 def get_input(bit: int):
     """ Получить значение входа """
     logger.debug(f"Запрос /input/ с параметрами: bit={bit}")
+
+    if io is None or not io.is_connected():
+        logger.error("Модуль I/O не подключен")
+        return {"Status": "ERROR",
+                "Reason": "Not connected"}, 503    
+
     value = io.get_input(bit)
     return {"Status": "OK", "Bit": bit, "Value": value}
 
@@ -84,6 +122,12 @@ def get_input(bit: int):
 def get_variable_list():
     """ Получить список переменных """
     logger.debug("Запрос /variables")
+
+    if io is None or not io.is_connected():
+        logger.error("Модуль I/O не подключен")
+        return {"Status": "ERROR",
+                "Reason": "Not connected"}, 503
+
     variables = io.get_variable_list()
     return {"Status": "OK", "Variables": variables}
 
@@ -91,6 +135,12 @@ def get_variable_list():
 def set_variable(variable_name: str, value: int):
     """ Установить значение переменной """
     logger.debug(f"Запрос /variable с параметрами: variable_name={variable_name}, value={value}")
+
+    if io is None or not io.is_connected():
+        logger.error("Модуль I/O не подключен")
+        return {"Status": "ERROR",
+                "Reason": "Not connected"}, 503
+
     io.set_variable(variable_name, value)
     return {"Status": "OK", "Variable": variable_name, "Value": value}
 
@@ -98,6 +148,12 @@ def set_variable(variable_name: str, value: int):
 def get_variable(variable_name: str):
     """ Получить значение переменной """
     logger.debug(f"Запрос /variable/ с параметрами: variable_name={variable_name}")
+
+    if io is None or not io.is_connected():
+        logger.error("Модуль I/O не подключен")
+        return {"Status": "ERROR",
+                "Reason": "Not connected"}, 503
+
     value = io.get_variable(variable_name)
     return {"Status": "OK", "Variable": variable_name, "Value": value}
 
@@ -106,6 +162,12 @@ def get_variable(variable_name: str):
 def set_all_outputs(outputs: Annotated[List[int], Literal[16]]):
     """ Установить все выходы """
     logger.debug("Запрос /outputs")
+
+    if io is None or not io.is_connected():
+        logger.error("Модуль I/O не подключен")
+        return {"Status": "ERROR",
+                "Reason": "Not connected"}, 503
+
     io.set_outputs(outputs)
     return {"Status": "OK", "Outputs": outputs}
 
@@ -113,6 +175,12 @@ def set_all_outputs(outputs: Annotated[List[int], Literal[16]]):
 def get_all_outputs():
     """ Получить все выходы """
     logger.debug("Запрос /outputs")
+
+    if io is None or not io.is_connected():
+        logger.error("Модуль I/O не подключен")
+        return {"Status": "ERROR",
+                "Reason": "Not connected"}, 503
+
     outputs = [io.get_output(i) for i in range(16)]
     return {"Status": "OK", "Outputs": outputs}
 
@@ -120,11 +188,23 @@ def get_all_outputs():
 def get_all_inputs():
     """ Получить все входы """
     logger.debug("Запрос /inputs")
+
+    if io is None or not io.is_connected():
+        logger.error("Модуль I/O не подключен")
+        return {"Status": "ERROR",
+                "Reason": "Not connected"}, 503
+
     inputs = [io.get_input(i) for i in range(16)]
     return {"Status": "OK", "Inputs": inputs}
 
 @app.post("/tare_on")
 def tare_on():
+
+    if io is None or not io.is_connected():
+        logger.error("Модуль I/O не подключен")
+        return {"Status": "ERROR",
+                "Reason": "Not connected"}, 503
+
     io.set_output(0, True)
     time.sleep(1)
     io.set_output(1, True)
@@ -134,6 +214,12 @@ def tare_on():
 
 @app.post("/tare_off")
 def tare_off():
+
+    if io is None or not io.is_connected():
+        logger.error("Модуль I/O не подключен")
+        return {"Status": "ERROR",
+                "Reason": "Not connected"}, 503
+
     io.set_output(2, False)
     time.sleep(1)
     io.set_output(1, False)
