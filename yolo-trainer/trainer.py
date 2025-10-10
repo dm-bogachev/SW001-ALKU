@@ -5,7 +5,7 @@ import shutil
 from datetime import datetime
 from ultralytics import YOLO
 
-YOLO_BASE_MODEL = 'yolo11m-pose.pt'
+YOLO_BASE_MODEL = 'yolo11x-pose.pt'
 PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
 DATASETS_DIR = os.path.join(PROJECT_DIR, 'datasets')
 RUNS_DIR = os.path.join(PROJECT_DIR, 'runs')
@@ -52,7 +52,7 @@ if __name__ == '__main__':
     model.to("cuda")
     results = model.train(
         data=data_yaml_path,
-        epochs=800,
+        epochs=2000,
         model=YOLO_BASE_MODEL,
         project=RUNS_DIR,
         batch=0.9,

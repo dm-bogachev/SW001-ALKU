@@ -25,6 +25,7 @@ REDIS_CAMERA_FRAME_KEY = os.getenv("REDIS_CAMERA_FRAME_KEY", "camera_frame")
 
 redis_client = get_redis_client()
 logger = config_logger("camera-service/main.py")
+camera_released = False
 
 def background_frame_sender():
     """Бесконечно получает кадры с камеры и отправляет их в Redis."""
@@ -42,6 +43,7 @@ def background_frame_sender():
             else:
                 logger.warning("Камера не подключена, повторная попытка через 3 секунды")
                 time.sleep(3)
+                
         except Exception as e:
             logger.error(f"Ошибка при получении/отправке кадра: {e}")
 
@@ -55,6 +57,10 @@ def background_frame_sender():
                     logger.error(f"Ошибка при закрытии камеры при реинициализации: {e}")
                 while True:
                     try:
+                        while camera_released:
+                            logger.warning("Камера заблокирована по запросу")
+                            time.sleep(3)
+
                         hik_camera = initialize_camera()
                         break
                     except Exception as e:
@@ -199,6 +205,29 @@ def save_frame():
 
     return {"Status": "OK",
             "Filename": filename}
+
+@app.post("/release")
+def release_camera():
+    global camera_released, hik_camera
+    if hik_camera is None or not hik_camera.is_connected():
+        logger.error("Камера не подключена")
+        return {"Status": "ERROR",
+                "Reason": "Not connected"}, 503
+    camera_released = True
+    try:
+        hik_camera.close()
+        hik_camera = None
+    except Exception as e:
+            logger.error(f"Ошибка при закрытии камеры при реинициализации: {e}")
+    except Exception as e:
+        logger.error(f"Ошибка при закрытии камеры при релизе: {e}")
+    return {"Status": "OK"}
+
+@app.post("/capture")
+def capture_camera():
+    global camera_released
+    camera_released = False
+    return {"Status": "OK"}
 
 if __name__ == "__main__":
     import uvicorn

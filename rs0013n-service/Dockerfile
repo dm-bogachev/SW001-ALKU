@@ -4,7 +4,7 @@ WORKDIR /rs0013n
 
 COPY ./rs0013n-service/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
-COPY ./rs0013n-service .
 
-# EXPOSE 8080
+EXPOSE 9013
+
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]

@@ -2,7 +2,7 @@
 import os, time, sys
 from threading import Thread, Event
 # Добавляем директорию проекта в sys.path
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 # Внешние модули
 from fastapi import FastAPI
@@ -14,7 +14,7 @@ from common.Logger import config_logger
 from common.Config import Config
 from RobotConnection import RobotConnection
 
-logger = config_logger("rs007l-service/Robot.py")
+logger = config_logger("rs0013n-service/Robot.py")
 
 class Robot(Thread):
     
@@ -24,8 +24,8 @@ class Robot(Thread):
         self._request_pending = False
         
         self.stop_event = Event()
-        self.ping_interval = Config.get("RS007L.PingInterval")
-        logger.info(f'Инициализация TCP/IP handler класса робота с хостом {Config.get("RS007L.Host")} и портом {Config.get("RS007L.Port")}')
+        self.ping_interval = Config.get("RS0013N.PingInterval")
+        logger.info(f'Инициализация TCP/IP handler класса робота с хостом {Config.get("RS0013N.Host")} и портом {Config.get("RS0013N.Port")}')
 
     def run(self):
         while not self.stop_event.is_set():
@@ -85,17 +85,17 @@ class Robot(Thread):
     def send_pick(self, model, coordinates):
         if len(coordinates) == 2:
             x, y = coordinates
-            return self.__send_command(f'PICK,{model},{2},{x},{y}')
+            return self.__send_command(f'PICK,{model},{2},{x},{y}', True)
         else:
             x, y, a = coordinates
-            return self.__send_command(f'PICK,{model},{3},{x},{y},{a}')
+            return self.__send_command(f'PICK,{model},{3},{x},{y},{a}', True)
 
     def send_measurement_request(self, measurement_result):
         if measurement_result:
             result = 'OK'
         else:
             result = 'NG'
-        return self.__send_command(f'MEASUREMENT, {result}')
+        return self.__send_command(f'MEASUREMENT, {result}', True)
 
 if __name__ == '__main__':
     import time
@@ -106,7 +106,7 @@ if __name__ == '__main__':
             logger.info('Waiting for robot to connect...')
             time.sleep(1)
         logger.info('Robot connected')
-        logger.info(robot_handler.send_pick((1, 2), 3))
+        logger.info(robot_handler.send_pick(3, (1, 2)))
         logger.info(robot_handler.send_measurement_request(True))
         time.sleep(5)
 

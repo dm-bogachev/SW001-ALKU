@@ -7,7 +7,7 @@
         "LongDetails": {
             "ModelName": "LongDetails",
             "ModelFileName": "details_long_test.pt",
-            "ConfidenceThreshold": 0.75,
+            "ConfidenceThreshold": 0.5,
             "ModelType": "yolo-pose",
             "ModelProcessor": "LongDetailsProcessor.py"
         },
@@ -65,7 +65,7 @@
         "IPAddress": "192.168.7.101",
         "DeviceName": "MV-CH120-20GM",
         "FrameInterval": 0.0,
-        "ExposureValue": 8000
+        "ExposureValue": 5000
     },
     "CalibrationData": {
         "Theta": "0",
@@ -102,33 +102,5 @@
             "DO6": 6,
             "DO7": 7
         }
-    },
-    "RS007L": {
-        "Host": "0.0.0.0",
-        "Port": 9001,
-        "Timeout": 5,
-        "MaxTCPAttempts": 5,
-        "PingIntervalMS": 10,
-        "InputSize": 256,
-        "InputOffset": 1,
-        "OutputSize": 256,
-        "OutputOffset": 301,
-        "InternalSize": 256,
-        "InternalOffset": 601,
-        "RobotIP": "127.0.0.1"
-    },
-    "RS013N": {
-        "Host": "0.0.0.0",
-        "Port": 9002,
-        "Timeout": 5,
-        "MaxTCPAttempts": 5,
-        "PingIntervalMS": 10,
-        "InputSize": 256,
-        "InputOffset": 1,
-        "OutputSize": 256,
-        "OutputOffset": 301,
-        "InternalSize": 256,
-        "InternalOffset": 601,
-        "RobotIP": "127.0.0.1"
     }
 }
