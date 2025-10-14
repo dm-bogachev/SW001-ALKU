@@ -9,12 +9,12 @@ __pycache__/
 
 # Кадры
 data/captured_frames/*
-data/models/*
 # Архивы
 *.zip
 
 # Модели PyTorch и YOLO (большие файлы)
 *.pt
+*.pt2
 *.pth
 *.onnx
 *.weights
