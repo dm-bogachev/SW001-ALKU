@@ -9,7 +9,7 @@ __pycache__/
 
 # Кадры
 data/captured_frames/*
-
+data/models/*
 # Архивы
 *.zip
 
@@ -21,4 +21,4 @@ data/captured_frames/*
 
 # Обучение YOLO
 yolo-trainer/datasets/*
-yolo-trainer/runs/*
+yolo-trainer/runs/* 
