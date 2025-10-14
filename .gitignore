@@ -13,6 +13,12 @@ data/models/*
 # Архивы
 *.zip
 
+# Модели PyTorch и YOLO (большие файлы)
+*.pt
+*.pth
+*.onnx
+*.weights
+
 # VSCode
 .vscode/*
 
