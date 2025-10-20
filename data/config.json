@@ -14,7 +14,7 @@
         "RoundDetails": {
             "ModelName": "RoundDetails",
             "ModelFileName": "rounds.pt",
-            "ConfidenceThreshold": 0.6,
+            "ConfidenceThreshold": 0.1,
             "ModelType": "yolo-detect",
             "ModelProcessor": "RoundDetailsProcessor.py"
         },
@@ -50,8 +50,8 @@
         "PICK_ANGLE": false
     },
     "Markers": {
-        "MarkersXDistance": 410.0,
-        "MarkersYDistance": 286.0,
+        "MarkersXDistance": 492.0,
+        "MarkersYDistance": 296.0,
         "Marker00ID": 0,
         "Marker00Point": 0,
         "MarkerX0ID": 1,
@@ -68,17 +68,17 @@
         "ExposureValue": 5000
     },
     "CalibrationData": {
-        "Theta": "0",
-        "Origin": "[200.0, 600.0]",
-        "Size": "[3500.0, 2150.0]",
+        "Theta": "0.01627962477505207",
+        "Origin": "[386.0, 344.0]",
+        "Size": "[3502.0, 2089.0]",
         "Calibrated": "true",
-        "RST": "[[1, 0, 0], [0, 1, 0], [0.0, 0.0, 1.0]]",
-        "ScaleY": 0.17382703721523285,
-        "ScaleX": 0.19716130197048187
+        "RST": "[[0.11707836838347196, 0.0019061602978171638, -45.847969273910394], [-0.0022296261274533935, 0.13694597952036514, -46.24877906101801], [0.0, 0.0, 1.0]]",
+        "ScaleY": 0.1369641274213791,
+        "ScaleX": 0.11709388345479965
     },
     "Process": {
         "ProcessingDelay": 0.0,
-        "LastModel": "LongDetails",
+        "LastModel": "RoundDetails",
         "FirstObjectCriteria": "Probability"
     },
     "IO": {

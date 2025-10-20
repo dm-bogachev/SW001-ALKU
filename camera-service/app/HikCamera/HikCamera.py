@@ -303,6 +303,9 @@ class HikCamera(MvCameraControl.MvCamera):
         self.__set_item("AcquisitionFrameRateEnable", False)
         self.__set_item("PixelFormat", "Mono8")
         self.__set_item("ExposureAuto", "Off")
+        # Добавть загрузку из настроек
+        self.__set_item("ReverseX", True)
+        self.__set_item("ReverseY", True)
 
         stParam = MvCameraControl.MVCC_INTVALUE()
         memset(byref(stParam), 0, sizeof(MvCameraControl.MVCC_INTVALUE))

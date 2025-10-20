@@ -1,7 +1,7 @@
 # Системные импорты
 import os, time, sys, threading
 # Добавляем директорию проекта в sys.path
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 # Внешние модули
 from fastapi import FastAPI
@@ -50,6 +50,13 @@ def reboot():
     threading.Thread(target=delayed_exit).start()
     return {"Status": "Reboot"}
 
+@app.post("/process/start")
+def start_process(model_type: str, details_count: int):
+    """ Запуск процесса """
+    logger.debug("Запрос /process/start")
+    return {"Status": "Process started"}
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="127.0.0.1", port=8000)
+
