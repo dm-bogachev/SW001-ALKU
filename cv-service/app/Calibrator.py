@@ -11,6 +11,7 @@ import cv2
 from common.Config import Config
 from common.Logger import config_logger
 from common.Redis import get_redis_client
+from common.Utils import is_docker
 
 from Aruco import Aruco
 
@@ -21,66 +22,35 @@ REDIS_CAMERA_FRAME_KEY = os.getenv("REDIS_CAMERA_FRAME_KEY", "camera_frame")
 REDIS_PROCESSED_FRAME_KEY = os.getenv(
     "REDIS_PROCESSED_FRAME_KEY", "processed_frame")
 
+if is_docker():
+   MAT_DIR = "/data"
+else:
+   MAT_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data")
+
 
 class Calibrator:
 
     def __init__(self):
         logger.debug("Инициализация калибратора")
+        self.Calibrated = False
         self.__load_calibration_data()
 
     def __load_calibration_data(self):
-        self.Calibrated = Config.get("CalibrationData.Calibrated", "null")
-        self.Calibrated = json.loads(Config.get(
-            "CalibrationData.Calibrated", "null"))
-        theta = Config.get("CalibrationData.Theta", "null")
-        self.Theta = np.array(json.loads(theta)) if theta != "null" else None
-        origin = Config.get("CalibrationData.Origin", "null")
-        self.Origin = np.array(json.loads(
-            origin)) if origin != "null" else None
-        size = Config.get("CalibrationData.Size", "null")
-        self.Size = np.array(json.loads(size)) if size != "null" else None
-        rst = Config.get("CalibrationData.RST", "null")
-        self.RST = np.array(json.loads(rst)) if rst != "null" else None
-        self.ScaleX = Config.get("CalibrationData.ScaleX", "null")
-        self.ScaleY = Config.get("CalibrationData.ScaleY", "null")
+        self.M = np.load(os.path.join(MAT_DIR, "calibration_matrix.npy")) if os.path.exists(os.path.join(MAT_DIR, "calibration_matrix.npy")) else None
+        if self.M is not None:
+            self.Calibrated = True
 
     def __save_calibration_data(self):
-        Config.set(
-            "CalibrationData.Calibrated",
-            json.dumps(
-                self.Calibrated if self.Calibrated is not None else None),
-        )
-        Config.set(
-            "CalibrationData.Theta",
-            json.dumps(self.Theta.tolist()
-                       if self.Theta is not None else None),
-        )
-        Config.set(
-            "CalibrationData.Origin",
-            json.dumps(self.Origin.tolist()
-                       if self.Origin is not None else None),
-        )
-        Config.set(
-            "CalibrationData.Size",
-            json.dumps(self.Size.tolist() if self.Size is not None else None),
-        )
-        Config.set(
-            "CalibrationData.RST",
-            json.dumps(self.RST.tolist() if self.RST is not None else None),
-        )
-        Config.set("CalibrationData.ScaleX", float(self.ScaleX) if self.ScaleX is not None else None)
-        Config.set("CalibrationData.ScaleY", float(self.ScaleY) if self.ScaleY is not None else None)
-        Config.save()
+        if self.M is not None:
+            np.save(os.path.join(MAT_DIR, "calibration_matrix.npy"), self.M)
+            logger.info(f"Матрица калибровки сохранена в {os.path.join(MAT_DIR, 'calibration_matrix.npy')}")
 
     def uncalibrate(self):
         self.Calibrated = False
-        self.Theta = None
-        self.Origin = None
-        self.Size = None
-        self.RST = None
-        self.ScaleX = None
-        self.ScaleY = None
-        self.__save_calibration_data()
+        self.M = None
+        if os.path.exists(os.path.join(MAT_DIR, "calibration_matrix.npy")):
+            os.remove(os.path.join(MAT_DIR, "calibration_matrix.npy"))
+            logger.info(f"Файл матрицы калибровки удален из {os.path.join(MAT_DIR, 'calibration_matrix.npy')}")
 
     def calibrate(self, markers):
 
@@ -101,73 +71,29 @@ class Calibrator:
             marker0y_id = Config.get("Markers.Marker0YID")
             marker0y_point = Config.get("Markers.Marker0YPoint")
             # Реальные расстояния между маркерами
-            realDX = Config.get("Markers.MarkersXDistance")
-            realDY = Config.get("Markers.MarkersYDistance")
+            realDX = Config.get("Markers.MarkersXDistance")*10
+            realDY = Config.get("Markers.MarkersYDistance")*10
 
-            pp = np.float32(
-                [
-                    markers[marker00_id].corners[marker00_point],
-                    markers[markerx0_id].corners[markerx0_point],
-                    markers[markerxy_id].corners[markerxy_point],
-                    markers[marker0y_id].corners[marker0y_point],
-                ]
-            )
+            # Извлечение координат углов маркеров
+            src_pts = np.float32([
+                markers[marker00_id].corners[marker00_point],
+                markers[markerx0_id].corners[markerx0_point],
+                markers[markerxy_id].corners[markerxy_point],
+                markers[marker0y_id].corners[marker0y_point],
+            ])
 
-            self.Size = np.array(
-                [
-                    np.ceil(np.linalg.norm(pp[1] - pp[0])),
-                    np.ceil(np.linalg.norm(pp[3] - pp[0])),
-                ]
-            )
-
-            # Начальная точка (координаты первого маркера)
-            T = np.array(pp[0])
-            self.Origin = T
-
-            # Вычисление матрицы поворота
-            self.Theta = np.arctan2(pp[1][1] - pp[0][1], pp[1][0] - pp[0][0])
-            R = np.array(
-                [
-                    [np.cos(self.Theta), -np.sin(self.Theta)],
-                    [np.sin(self.Theta), np.cos(self.Theta)],
-                ]
-            )
-
-            # Матрица поворота и трансляции
-            RT = np.eye(3)
-            RT[:2, :2] = R.T
-            RT[:2, 2] = -R.T @ T
-
-            # Вычисление масштабных коэффициентов
-            scale_x = realDX / np.linalg.norm(pp[1] - pp[0])
-            scale_y = realDY / np.linalg.norm(pp[3] - pp[0])
-
-            # Матрица масштаба
-            S = np.eye(3)
-            S[0, 0] = scale_x
-            S[1, 1] = scale_y
-            self.ScaleX = scale_x
-            self.ScaleY = scale_y
-
-            # Обратная матрица преобразования
-            RST = S @ RT
-            # np.save(os.path.join(MAT_DIR, "calibration_matrix.npy"), RST)
-            logger.info(
-                f"Калибровка завершена. Матрица преобразования сохранена")
-
-            self.RST = RST
+            # Целевые координаты — идеальный прямоугольник
+            dst_pts = np.float32([
+                [0, 0],
+                [realDX, 0],
+                [realDX, realDY],
+                [0, realDY],
+            ])
+            # Вычисление перспективной матрицы
+            self.M = cv2.getPerspectiveTransform(src_pts, dst_pts)
+            self.Size = np.array([realDX, realDY])
             self.Calibrated = True
             self.__save_calibration_data()
-
-            logger.info(
-                f"\n📐 Результаты калибровки:\n"
-                f"   ✅ Статус: {'Калибровано' if self.Calibrated else 'Не калибровано'}\n"
-                f"   🔄 Угол поворота (Theta): {np.degrees(self.Theta):.2f}°\n"
-                f"   🎯 Начальная точка (Origin): ({self.Origin[0]:.2f}, {self.Origin[1]:.2f})\n"
-                f"   📏 Размеры (Size): ширина={self.Size[0]:.2f}, высота={self.Size[1]:.2f}\n"
-                f"   🧮 Матрица преобразования (RST):\n{np.array2string(self.RST, precision=4, suppress_small=True)}"
-                f"   📊 Масштабы (ScaleX, ScaleY): {self.ScaleX:.2f}, {self.ScaleY:.2f}\n"
-            )
 
             return True
 

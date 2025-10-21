@@ -6,6 +6,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 # Внешние модули
 import numpy as np
 import cv2
+import torch
 
 # Внутренние модули
 from common.Config import Config
@@ -80,15 +81,12 @@ class FrameProcessor:
 
     def __scale_predictions(self, predictions):
         ''' Масштабирует координаты объектов '''
-
-        scale_x = Config.get("CalibrationData.ScaleX", 1.0)
-        scale_y = Config.get("CalibrationData.ScaleY", 1.0)
             
         for prediction in predictions:
-            prediction.xyxy = (prediction.xyxy[0] * scale_x, prediction.xyxy[1] * scale_y, prediction.xyxy[2] * scale_x, prediction.xyxy[3] * scale_y)
-            prediction.pick_point = (prediction.pick_point[0] * scale_x, prediction.pick_point[1] * scale_y)
+            prediction.xyxy = (prediction.xyxy[0] / 10, prediction.xyxy[1] / 10, prediction.xyxy[2] / 10, prediction.xyxy[3] / 10)
+            prediction.pick_point = (prediction.pick_point[0] / 10, prediction.pick_point[1] / 10)
             if prediction.keypoints:
-                prediction.keypoints = [(point[0] * scale_x, point[1] * scale_y) for point in prediction.keypoints]
+                prediction.keypoints = [(point[0] / 10, point[1] / 10) for point in prediction.keypoints]
         return predictions
 
     def __process_calibrated(self, frame):
@@ -103,26 +101,45 @@ class FrameProcessor:
             predictions = self.__scale_predictions(predictions)
             logger.debug(f"0 элемент после масштабирования: {predictions[0].xyxy}")
             self.__objects = predictions
-            
-        scale_x = Config.get("CalibrationData.ScaleX", 1.0)
-        scale_y = Config.get("CalibrationData.ScaleY", 1.0)
-        frame = cv2.drawMarker(frame, (int(100/scale_x), int(100/scale_y)), (0,0,255), cv2.MARKER_CROSS, 5, 8)
-        frame = cv2.drawMarker(frame, (int(250/scale_x), int(148/scale_y)), (0,0,255), cv2.MARKER_CROSS, 5, 8)
-        frame = cv2.drawMarker(frame, (int(300/scale_x), int(248/scale_y)), (0,0,255), cv2.MARKER_CROSS, 5, 8)
-        frame = cv2.drawMarker(frame, (int(450/scale_x), int(148/scale_y)), (0,0,255), cv2.MARKER_CROSS, 5, 8)
+
+        frame = cv2.drawMarker(frame, (int(1000), int(1000)), (0,0,255), cv2.MARKER_CROSS, 5, 8)
+        frame = cv2.drawMarker(frame, (int(2500), int(1480)), (0,0,255), cv2.MARKER_CROSS, 5, 8)
+        frame = cv2.drawMarker(frame, (int(3000), int(2480)), (0,0,255), cv2.MARKER_CROSS, 5, 8)
+        frame = cv2.drawMarker(frame, (int(4500), int(1480)), (0,0,255), cv2.MARKER_CROSS, 5, 8)
         self.__put_frame_to_redis(frame)
 
     def __prepare_frame(self, frame):
-        ''' Подготавливает кадр для обработки '''
-        temp_frame = frame.copy()
-        (h, w) = temp_frame.shape[:2]
-        center = self.calibrator.Origin
-        angle_deg = np.degrees(self.calibrator.Theta)
-        M = cv2.getRotationMatrix2D(center, angle_deg, 1.0)
-        temp_frame = cv2.warpAffine(temp_frame, M, (w, h))
-        x, y = map(int, self.calibrator.Origin)
-        width, height = map(int, self.calibrator.Size)
-        return temp_frame[y:y+height, x:x+width]
+        ''' Подготавливает кадр для обработки с учётом перспективной калибровки и CUDA '''
+
+        if not self.Calibrated:
+            logger.warning("Калибровка не выполнена — кадр не обработан")
+            return frame
+
+        try:
+            # Размер целевого прямоугольника
+            width, height = map(int, self.Size)
+            target_size = (width, height)
+
+            # Преобразование с CUDA, если доступно
+            if torch.cuda.is_available():
+                try:
+                    gpu_frame = cv2.cuda_GpuMat()
+                    gpu_frame.upload(frame)
+
+                    gpu_warped = cv2.cuda.warpPerspective(gpu_frame, self.M, target_size)
+                    result = gpu_warped.download()
+                except Exception as e:
+                    logger.error(f"Ошибка CUDA-преобразования: {e}")
+                    result = cv2.warpPerspective(frame, self.M, target_size)
+            else:
+                result = cv2.warpPerspective(frame, self.M, target_size)
+
+            return result
+
+        except Exception as e:
+            logger.error(f"Ошибка при подготовке кадра: {e}")
+            return frame
+
 
     def __process_loop(self):
         ''' Запускает цикл обработки кадров '''
