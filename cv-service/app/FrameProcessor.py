@@ -102,9 +102,14 @@ class FrameProcessor:
             frame = self.drawer.draw(frame, predictions)
             predictions = self.__scale_predictions(predictions)
             logger.debug(f"0 элемент после масштабирования: {predictions[0].xyxy}")
-
             self.__objects = predictions
             
+        scale_x = Config.get("CalibrationData.ScaleX", 1.0)
+        scale_y = Config.get("CalibrationData.ScaleY", 1.0)
+        frame = cv2.drawMarker(frame, (int(100/scale_x), int(100/scale_y)), (0,0,255), cv2.MARKER_CROSS, 5, 8)
+        frame = cv2.drawMarker(frame, (int(250/scale_x), int(148/scale_y)), (0,0,255), cv2.MARKER_CROSS, 5, 8)
+        frame = cv2.drawMarker(frame, (int(300/scale_x), int(248/scale_y)), (0,0,255), cv2.MARKER_CROSS, 5, 8)
+        frame = cv2.drawMarker(frame, (int(450/scale_x), int(148/scale_y)), (0,0,255), cv2.MARKER_CROSS, 5, 8)
         self.__put_frame_to_redis(frame)
 
     def __prepare_frame(self, frame):
