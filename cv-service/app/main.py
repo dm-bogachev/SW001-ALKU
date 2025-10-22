@@ -154,6 +154,38 @@ def get_first_object():
     else:
         return {"Status": "Failed"}
 
+@app.post("/setscalepx")
+def set_scalepx(scalepx: float):
+    """Установка масштаба по оси X."""
+    processor.scalepx = scalepx
+    Config.set("Distortions.ScalePX", scalepx)
+    Config.save()
+    return {"Status": "OK", "ScalePX": scalepx}
+
+@app.post("/setscalenx")
+def set_scalenx(scalenx: float):
+    """Установка масштаба по оси X."""
+    processor.scalenx = scalenx
+    Config.set("Distortions.ScaleNX", scalenx)
+    Config.save()
+    return {"Status": "OK", "ScaleNX": scalenx}
+
+@app.post("/setscalepy")
+def set_scalepy(scalepy: float):
+    """Установка масштаба по оси Y."""
+    processor.scalepy = scalepy
+    Config.set("Distortions.ScalePY", scalepy)
+    Config.save()
+    return {"Status": "OK", "ScalePY": scalepy}
+
+@app.post("/setscaleny")
+def set_scaleny(scaleny: float):
+    """Установка масштаба по оси Y."""
+    processor.scaleny = scaleny
+    Config.set("Distortions.ScaleNY", scaleny)
+    Config.save()
+    return {"Status": "OK", "ScaleNY": scaleny}
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="127.0.0.1", port=8000)

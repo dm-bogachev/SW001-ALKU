@@ -33,6 +33,9 @@ class Calibrator:
     def __init__(self):
         logger.debug("Инициализация калибратора")
         self.Calibrated = False
+        realDX = Config.get("Markers.MarkersXDistance")*10
+        realDY = Config.get("Markers.MarkersYDistance")*10
+        self.Size = np.array([realDX, realDY])
         self.__load_calibration_data()
 
     def __load_calibration_data(self):
@@ -73,7 +76,7 @@ class Calibrator:
             # Реальные расстояния между маркерами
             realDX = Config.get("Markers.MarkersXDistance")*10
             realDY = Config.get("Markers.MarkersYDistance")*10
-
+            self.Size = np.array([realDX, realDY])
             # Извлечение координат углов маркеров
             src_pts = np.float32([
                 markers[marker00_id].corners[marker00_point],
@@ -90,7 +93,8 @@ class Calibrator:
                 [0, realDY],
             ])
             # Вычисление перспективной матрицы
-            self.M = cv2.getPerspectiveTransform(src_pts, dst_pts)
+            # self.M = cv2.getPerspectiveTransform(src_pts, dst_pts)
+            self.M = cv2.findHomography(src_pts, dst_pts, method=cv2.RANSAC)[0]
             self.Size = np.array([realDX, realDY])
             self.Calibrated = True
             self.__save_calibration_data()

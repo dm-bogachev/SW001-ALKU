@@ -19,7 +19,13 @@ def process(frame, yolo_data):
         center = (x1 + x2) / 2, (y1 + y2) / 2
         data.pick_point = center
         result.append(data)
-        data.pick_angle = 0
+        # if data.keypoints[0].y > data.keypoints[1].y:
+        #     data.pick_angle = 180
+            
+        # else:
+        #     data.pick_angle = 0
+        
+
         # draw_frame = cv2.circle(draw_frame, (int(center[0]), int(center[1])), int(abs(x1-x2)), (0, 255, 0), 2)
         
 

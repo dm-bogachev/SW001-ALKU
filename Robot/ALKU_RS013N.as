@@ -3,6 +3,10 @@
 1,8,"hmi.stnew.j","New","stocker j",10,15,4,2,0
 7,8,"hmi.strdy.i","Final","stocker i",10,15,4,2,0
 8,8,"hmi.strdy.j","Final","stocker j",10,15,4,2,0
+21,8,"hmi.x","CoordX","",10,15,4,2,0
+22,8,"hmi.y","CoordY","",10,15,4,2,0
+24,8,"hmi.gx","GripShiftX","",10,15,4,2,0
+25,8,"hmi.gy","GripShiftY","",10,15,4,2,0
 .END
 .INTER_PANEL_TITLE
 "",0
@@ -23,7 +27,7 @@
 "",0
 .END
 .INTER_PANEL_COLOR_D
-182,3,224,244,28,159,252,255,251,255,0,31,2,241,52,219,
+182,3,224,244,28,159,252,255,251,255,0,31,2,241,52,255,
 .END
 .PROGRAM a.main ()
   ;
@@ -150,6 +154,51 @@
   ;;
   JMOVE #post.tare.new
 .END
+.PROGRAM a.teach.stz()@25/10/21 15:36 #0
+  SPEED 250 MM/S ALWAYS
+  ACCURACY 0 ALWAYS
+  TOOL tool.pin
+  ;
+  LMOVE #plb ; Left bottom
+  LMOVE #plt ; Left top
+  LMOVE #prt ; Right top
+  LMOVE #prb ; Right bottom
+  ;
+  POINT .plb = #plb
+  POINT .plt = #plt
+  POINT .prt = #prt
+  POINT .prb = #prb
+  ;
+  .dx1 = DISTANCE(.plt, .plb) ; DX1
+  .dx2 = DISTANCE(.prt, .prb) ; DX2
+  .dy1 = DISTANCE(.plt, .prt) ; DY1
+  .dy2 = DISTANCE(.plb, .prb) ; DY2
+  ;
+  PRINT 0: "DX1 =", .dx1
+  PRINT 0: "DX2 =", .dx2 
+  PRINT 0: "DY1 =", .dy1
+  PRINT 0: "DY2 =", .dy2
+  PRINT 0: "AVEX =", (.dx1+.dx2)/2
+  PRINT 0: "AVEY =", (.dy1+.dy2)/2
+  ;
+  BREAK
+  POINT f = FRAME (.plb, .prb, .prt, .plt)
+  POINT f = f + RZ (-90)
+  ; CIR1 = 100, 100
+  ; CIR2 = 148, 250
+  ; CIR3 = 248, 300
+  ; CIR4 = 148; 450
+  BREAK
+  LMOVE f + TRANS (hmi.x, hmi.y, 10)
+.END
+.PROGRAM a.test.pick()@25/10/21 16:43 #0
+  SPEED 250 MM/S ALWAYS
+  ACCURACY 0 ALWAYS
+  TOOL tool.grip
+  ;
+  BREAK
+  LMOVE f + TRANS (hmi.x + hmi.gx, hmi.y + hmi.gy, 40)
+.END
 .PROGRAM a.tch.stock.new ()
   ; Use this for first teach
   IF FALSE THEN
@@ -194,7 +243,7 @@
   LMOVE stocker.fin[.i, .j]
   LMOVE stocker.fin[.i, .j] + TRANS (0, 0, -50)
 .END
-.PROGRAM autostart.pc ()
+.PROGRAM autostart.pc()@25/10/10 14:59 #0
   ; System switches
   CP ON
   PREFETCH.SIGINS OFF
@@ -212,7 +261,7 @@
   ;o.grip.obj.op   = 4
   ;o.grip.lock     = 5
   ;o.grip.unlock   = 6
-  POINT #homep1 = #PPOINT(0,0,90,0,90,0)
+  POINT #homep1 = #PPOINT (0, 0, 90, 0, 90, 0)
   SETHOME 10, #homep1
 .END
 .PROGRAM Comment___ () ; Comments for IDE. Do not use.
@@ -222,9 +271,9 @@
 	; @@@ HISTORY @@@
 	; @@@ INSPECTION @@@
 	; @@@ CONNECTION @@@
-	; KROSET R01
-	; 127.0.0.1
-	; 9105
+	; BiPitronRS013N
+	; 192.168.7.102
+	; 23
 	; @@@ PROGRAM @@@
 	; 0:a.main:F
 	; 0:stock.fin.pick:F
@@ -244,6 +293,16 @@
 	; .temp2 
 	; .temp3 
 	; Group:Teach:1
+	; 1:a.teach.stz:F
+	; .plb 
+	; .plt 
+	; .prt 
+	; .prb 
+	; .dx1 
+	; .dx2 
+	; .dy1 
+	; .dy2 
+	; 1:a.test.pick:F
 	; 1:a.tch.stock.new:F
 	; .i 
 	; .j 

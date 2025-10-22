@@ -43,15 +43,15 @@
     "Display": {
         "BBOX": true,
         "COORDINATES": false,
-        "KEYPOINTS": true,
+        "KEYPOINTS": false,
         "LABELS": false,
         "SCORES": true,
-        "POINTS": false,
+        "POINTS": true,
         "PICK_ANGLE": false
     },
     "Markers": {
-        "MarkersXDistance": 497.33,
-        "MarkersYDistance": 296.73,
+        "MarkersXDistance": 491.1,
+        "MarkersYDistance": 296,
         "Marker00ID": 0,
         "Marker00Point": 0,
         "MarkerX0ID": 1,
@@ -64,8 +64,8 @@
     "HikCamera": {
         "IPAddress": "192.168.7.101",
         "DeviceName": "MV-CH120-20GM",
-        "FrameInterval": 0.0,
-        "ExposureValue": 6000
+        "FrameInterval": 1.0,
+        "ExposureValue": 10000
     },
     "CalibrationData": {
         "Theta": "-0.013309890404343605",
@@ -102,5 +102,11 @@
             "DO6": 6,
             "DO7": 7
         }
+    },
+    "Distortions": {
+        "ScalePX": 0.014,
+        "ScalePY": 0.015,
+        "ScaleNX": 0.007,
+        "ScaleNY": 0.013
     }
 }

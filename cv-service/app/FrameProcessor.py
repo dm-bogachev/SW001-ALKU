@@ -1,5 +1,7 @@
 # Системные импорты
-import os, sys, json, threading, time
+import os, sys, json, threading, time, math
+
+from sympy.geometry.entity import scale
 # Добавляем директорию проекта в sys.path
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -51,8 +53,14 @@ class FrameProcessor:
         self.process_started = False
         self.__objects = None
 
+        self.scalepx = Config.get("Distortions.ScalePX", 0)
+        self.scalepy = Config.get("Distortions.ScalePY", 0)
+        self.scalenx = Config.get("Distortions.ScaleNX", 0)
+        self.scaleny = Config.get("Distortions.ScaleNY", 0)
+
         #self.detector.change_model("LongDetails")
         self.__process_thread = threading.Thread(target=self.__process_loop).start()
+
         
     def __get_frame_from_redis(self):
         ''' Получает кадр из Redis '''
@@ -77,62 +85,130 @@ class FrameProcessor:
             logger.debug(f"Обнаружено {len(markers)} маркерa(ов) ArUco")
             self.__draw_markers(frame, markers)
         self.__objects = None
+        # self.__find_circles(frame)
         self.__put_frame_to_redis(frame)
 
     def __scale_predictions(self, predictions):
         ''' Масштабирует координаты объектов '''
-            
+        
         for prediction in predictions:
-            prediction.xyxy = (prediction.xyxy[0] / 10, prediction.xyxy[1] / 10, prediction.xyxy[2] / 10, prediction.xyxy[3] / 10)
-            prediction.pick_point = (prediction.pick_point[0] / 10, prediction.pick_point[1] / 10)
-            if prediction.keypoints:
-                prediction.keypoints = [(point[0] / 10, point[1] / 10) for point in prediction.keypoints]
+            prediction.pick_point = self.__inverse_scale_point(prediction.pick_point)
+
+            # prediction.xyxy = (prediction.xyxy[0] / 10, 
+            # prediction.xyxy[1] / 10, 
+            # prediction.xyxy[2] / 10, 
+            # prediction.xyxy[3] / 10)
+            # prediction.pick_point = (prediction.pick_point[0] / 10, 
+            # prediction.pick_point[1] / 10)
+            # if prediction.keypoints:
+            #     prediction.keypoints = [(point[0] / 10, point[1] / 10) for point in prediction.keypoints]
         return predictions
+
+    def __inverse_scale_point(self, point):
+        x, y = point
+        xc, yc = self.center
+        
+        if x < xc:
+            x = x + self.scalenx*(xc-x)
+        else:
+            x = x - self.scalepx*(x-xc)
+        if y < yc:
+            y = y + self.scaleny*(yc-y)
+        else:
+            y = y - self.scalepy*(y-yc)
+        if x > 4*xc:
+            x = 4*xc
+        if y > 4*yc:
+            y = 4*yc
+        
+        return (int(x), int(y))
+
+    def __scale_point(self, point):
+        x, y = point
+        xc, yc = self.center
+
+        # x^2 + y^2 = r^2
+        # (x - xc)^2 + (y - yc)^2 = r^2
+        # logger.debug(f"{self.scalepx}, {self.scalepy}, {self.scalenx}, {self.scaleny}")
+        if x < xc:
+            x = x - self.scalenx*(xc-x)
+        else:
+            x = x + self.scalepx*(x-xc)
+        if y < yc:
+            y = y - self.scaleny*(yc-y)
+        else:
+            y = y + self.scalepy*(y-yc)
+        if x > 4*xc:
+            x = 4*xc
+        if y > 4*yc:
+            y = 4*yc
+        
+        return (int(x), int(y))
+        
 
     def __process_calibrated(self, frame):
         ''' Обрабатывает откалиброванный кадр '''
         frame = self.__prepare_frame(frame)
+
+
+        # frame = self.test(frame)
+        transformed_center = self.transform_point(self.center, self.calibrator.M)
+        cv2.drawMarker(frame, transformed_center, (255, 0, 255), cv2.MARKER_CROSS, 5, 8)
+
+
+
         predictions = self.detector.detect(frame)
         if predictions and len(predictions) > 0:
             frame, predictions = self.function.process(frame, predictions)
         if predictions and len(predictions) > 0:
-            logger.debug(f"0 элемент до масштабирования: {predictions[0].xyxy}")
+            logger.debug(f"0 элемент до масштабирования: {predictions[0].pick_point}")
             frame = self.drawer.draw(frame, predictions)
             predictions = self.__scale_predictions(predictions)
-            logger.debug(f"0 элемент после масштабирования: {predictions[0].xyxy}")
+            logger.debug(f"0 элемент после масштабирования: {predictions[0].pick_point}")
             self.__objects = predictions
 
-        frame = cv2.drawMarker(frame, (int(1000), int(1000)), (0,0,255), cv2.MARKER_CROSS, 5, 8)
-        frame = cv2.drawMarker(frame, (int(2500), int(1480)), (0,0,255), cv2.MARKER_CROSS, 5, 8)
-        frame = cv2.drawMarker(frame, (int(3000), int(2480)), (0,0,255), cv2.MARKER_CROSS, 5, 8)
-        frame = cv2.drawMarker(frame, (int(4500), int(1480)), (0,0,255), cv2.MARKER_CROSS, 5, 8)
+        frame = cv2.drawMarker(frame, self.__scale_point((1000, 1000)), (0,0,255), cv2.MARKER_CROSS, 5, 8)
+        frame = cv2.drawMarker(frame, self.__scale_point((2500, 1500)), (0,0,255), cv2.MARKER_CROSS, 5, 8)
+        frame = cv2.drawMarker(frame, self.__scale_point((3000, 2500)), (0,0,255), cv2.MARKER_CROSS, 5, 8)
+        frame = cv2.drawMarker(frame, self.__scale_point((4500, 1500)), (0,0,255), cv2.MARKER_CROSS, 5, 8)
+        for x in range(0, frame.shape[1], 500):
+            for y in range(0, frame.shape[0], 500):
+                cv2.drawMarker(frame, self.__scale_point((x, y)), (0, 255, 0), cv2.MARKER_CROSS, 5, 8)
+            # for x in range(0, frame.shape[1], 500):
+            #     cv2.line(frame, (x, 0), (x, frame.shape[0]), (0, 255, 0), 3)
+            # for y in range(0, frame.shape[0], 500):
+            #     cv2.line(frame, (0, y), (frame.shape[1], y), (0, 255, 0), 3)
+
+
+
         self.__put_frame_to_redis(frame)
 
     def __prepare_frame(self, frame):
         ''' Подготавливает кадр для обработки с учётом перспективной калибровки и CUDA '''
 
-        if not self.Calibrated:
+        if not self.calibrator.Calibrated:
             logger.warning("Калибровка не выполнена — кадр не обработан")
             return frame
 
         try:
+            self.center = (frame.shape[1] // 2, frame.shape[0] // 2)
             # Размер целевого прямоугольника
-            width, height = map(int, self.Size)
+            width, height = map(int, self.calibrator.Size)
             target_size = (width, height)
 
             # Преобразование с CUDA, если доступно
-            if torch.cuda.is_available():
+            if False:#torch.cuda.is_available():
                 try:
                     gpu_frame = cv2.cuda_GpuMat()
                     gpu_frame.upload(frame)
 
-                    gpu_warped = cv2.cuda.warpPerspective(gpu_frame, self.M, target_size)
+                    gpu_warped = cv2.cuda.warpPerspective(gpu_frame, self.calibrator.M, target_size)
                     result = gpu_warped.download()
                 except Exception as e:
                     logger.error(f"Ошибка CUDA-преобразования: {e}")
-                    result = cv2.warpPerspective(frame, self.M, target_size)
+                    result = cv2.warpPerspective(frame, self.calibrator.M, target_size)
             else:
-                result = cv2.warpPerspective(frame, self.M, target_size)
+                result = cv2.warpPerspective(frame, self.calibrator.M, target_size)
 
             return result
 
@@ -231,6 +307,19 @@ class FrameProcessor:
         if self.__objects:
             return self.__objects[0]
         return None
+
+    def transform_point(self, point, M):
+        # Преобразуем точку в однородные координаты
+        point_homogeneous = np.array([point[0], point[1], 1])
+        
+        # Умножаем на матрицу преобразования
+        transformed = np.dot(M, point_homogeneous)
+        
+        # Нормализуем координаты
+        x = int(transformed[0] / transformed[2])
+        y = int(transformed[1] / transformed[2])
+        
+        return (x, y)
 
 if __name__ == "__main__":
     processor = FrameProcessor()

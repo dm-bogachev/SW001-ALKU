@@ -571,3 +571,35 @@ setInterval(() => {
 
 setInterval(checkServicesHealth, 5000);
 setInterval(checkPhysicalStates, 2000);
+
+function calibrate() {
+    console.log('Калибровка');
+    fetch(`${CV_API_URL}/calibrate`, { method: 'POST' })
+        .then(response => response.json())
+        .then(data => {
+            if (data.Status === "OK") {
+                alert(`Калибровка выполнена`);
+            } else {
+                alert(`Не удалось выполнить калибровку`);
+            }
+        })
+        .catch(() => {
+            alert('Не удалось выполнить калибровку');
+        });
+}
+    
+function uncalibrate() {
+    console.log('Откалибровка');
+    fetch(`${CV_API_URL}/uncalibrate`, { method: 'POST' })
+        .then(response => response.json())
+        .then(data => {
+            if (data.Status === "OK") {
+                alert(`Откалибровка выполнена`);
+            } else {
+                alert(`Не удалось выполнить откалибровку`);
+            }
+        })
+        .catch(() => {
+            alert('Не удалось выполнить откалибровку');
+        });
+}
