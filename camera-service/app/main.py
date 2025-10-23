@@ -27,16 +27,36 @@ redis_client = get_redis_client()
 logger = config_logger("camera-service/main.py")
 camera_released = False
 
+def load_coefficients(path):
+    """Загружает матрицу камеры и коэффициенты настроечного оптического дефекта."""
+    cv_file = cv2.FileStorage(path, cv2.FILE_STORAGE_READ)
+    camera_matrix = cv_file.getNode("mtx").mat()
+    dist_coeffs = cv_file.getNode("dist").mat()
+
+    cv_file.release()
+    return camera_matrix, dist_coeffs
+
 def background_frame_sender():
     """Бесконечно получает кадры с камеры и отправляет их в Redis."""
     global hik_camera
     hik_camera = initialize_camera()
     retry_attempts = 0
     max_bad_frames = Config.get("HikCamera.MaxBadFrames", 10)
+
+    try:
+        camera_matrix, dist_coeffs = load_coefficients("/data/camera_matrix.yml")
+    except Exception as e:
+        logger.error(f"Ошибка при загрузке коэффициентов камеры: {e}")
+        camera_matrix = None
+        dist_coeffs = None
+
     while True:
         try:
             if hik_camera.is_opened():
                 frame = hik_camera.get_frame()
+                if camera_matrix is not None and dist_coeffs is not None:
+                    logger.debug("Корректировка кадра камеры")
+                    frame = cv2.undistort(frame, camera_matrix, dist_coeffs)
                 if frame is not None:
                     _, buffer = cv2.imencode(".jpg", frame, [cv2.IMWRITE_JPEG_QUALITY, 100])
                     redis_client.set(REDIS_CAMERA_FRAME_KEY, buffer.tobytes())

@@ -109,13 +109,13 @@ class FrameProcessor:
         xc, yc = self.center
         
         if x < xc:
-            x = x + self.scalenx*(xc-x)
+            x = (x + self.scalenx * xc) / (1 + self.scalenx)
         else:
-            x = x - self.scalepx*(x-xc)
+            x = (x + self.scalepx * xc) / (1 + self.scalepx)
         if y < yc:
-            y = y + self.scaleny*(yc-y)
+            y = (y + self.scaleny * yc) / (1 + self.scaleny)
         else:
-            y = y - self.scalepy*(y-yc)
+            y = (y + self.scalepy * yc) / (1 + self.scalepy)
         if x > 4*xc:
             x = 4*xc
         if y > 4*yc:
@@ -127,9 +127,6 @@ class FrameProcessor:
         x, y = point
         xc, yc = self.center
 
-        # x^2 + y^2 = r^2
-        # (x - xc)^2 + (y - yc)^2 = r^2
-        # logger.debug(f"{self.scalepx}, {self.scalepy}, {self.scalenx}, {self.scaleny}")
         if x < xc:
             x = x - self.scalenx*(xc-x)
         else:
@@ -138,10 +135,15 @@ class FrameProcessor:
             y = y - self.scaleny*(yc-y)
         else:
             y = y + self.scalepy*(y-yc)
-        if x > 4*xc:
-            x = 4*xc
-        if y > 4*yc:
-            y = 4*yc
+
+        if x < 0: 
+            x = 0
+        if x > 5000: 
+            x = 5000
+        if y < 0: 
+            y = 0
+        if y > 5000: 
+            y = 5000
         
         return (int(x), int(y))
         
@@ -164,6 +166,7 @@ class FrameProcessor:
             logger.debug(f"0 элемент до масштабирования: {predictions[0].pick_point}")
             frame = self.drawer.draw(frame, predictions)
             predictions = self.__scale_predictions(predictions)
+            frame = self.drawer.draw(frame, predictions)
             logger.debug(f"0 элемент после масштабирования: {predictions[0].pick_point}")
             self.__objects = predictions
 
@@ -173,11 +176,15 @@ class FrameProcessor:
         frame = cv2.drawMarker(frame, self.__scale_point((4500, 1500)), (0,0,255), cv2.MARKER_CROSS, 5, 8)
         for x in range(0, frame.shape[1], 500):
             for y in range(0, frame.shape[0], 500):
-                cv2.drawMarker(frame, self.__scale_point((x, y)), (0, 255, 0), cv2.MARKER_CROSS, 5, 8)
-            # for x in range(0, frame.shape[1], 500):
-            #     cv2.line(frame, (x, 0), (x, frame.shape[0]), (0, 255, 0), 3)
-            # for y in range(0, frame.shape[0], 500):
-            #     cv2.line(frame, (0, y), (frame.shape[1], y), (0, 255, 0), 3)
+                cv2.drawMarker(frame, self.__scale_point((x, y)), (0, 0, 255), cv2.MARKER_CROSS, 8, 8)
+            for x in range(0, frame.shape[1], 500):
+                cv2.line(frame, (x, 0), (x, frame.shape[0]), (0, 255, 0), 3)
+            for y in range(0, frame.shape[0], 500):
+                cv2.line(frame, (0, y), (frame.shape[1], y), (0, 255, 0), 3)
+            for x in range(0, frame.shape[1], 100):
+                cv2.line(frame, (x, 0), (x, frame.shape[0]), (0, 255, 0), 1)
+            for y in range(0, frame.shape[0], 100):
+                cv2.line(frame, (0, y), (frame.shape[1], y), (0, 255, 0), 1)
 
 
 

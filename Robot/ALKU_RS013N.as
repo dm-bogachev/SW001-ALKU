@@ -1,12 +1,25 @@
 .INTER_PANEL_D
 0,8,"hmi.stnew.i","New","stocker i",10,15,4,2,0
 1,8,"hmi.stnew.j","New","stocker j",10,15,4,2,0
+5,8,"hmi.tool.no","Tool No","",10,15,2,1,0
+6,8,"hmi.pos","Tool Pos","",10,15,2,1,0
 7,8,"hmi.strdy.i","Final","stocker i",10,15,4,2,0
 8,8,"hmi.strdy.j","Final","stocker j",10,15,4,2,0
 21,8,"hmi.x","CoordX","",10,15,4,2,0
 22,8,"hmi.y","CoordY","",10,15,4,2,0
 24,8,"hmi.gx","GripShiftX","",10,15,4,2,0
 25,8,"hmi.gy","GripShiftY","",10,15,4,2,0
+26,8,"hmi.gz","GripShiftZ","",10,15,4,2,0
+28,8,"hmi.stnew.i","New","stocker i",10,15,4,2,0
+29,8,"hmi.stnew.j","New","stocker j",10,15,4,2,0
+33,8,"hmi.tool.no","Tool No","",10,15,2,1,0
+34,8,"hmi.pos","Tool Pos","",10,15,2,1,0
+35,8,"hmi.strdy.i","Final","stocker i",10,15,4,2,0
+36,8,"hmi.strdy.j","Final","stocker j",10,15,4,2,0
+49,8,"hmi.x","CoordX","",10,15,4,2,0
+50,8,"hmi.y","CoordY","",10,15,4,2,0
+52,8,"hmi.gx","GripShiftX","",10,15,4,2,0
+53,8,"hmi.gy","GripShiftY","",10,15,4,2,0
 .END
 .INTER_PANEL_TITLE
 "",0
@@ -35,30 +48,122 @@
   SPEED 100 ALWAYS
   ACCURACY 100 ALWAYS
   JMOVE #homep1
-  CALL stock.new.pick(1, 1)
-  CALL stock.new.pick(1, 10)
-  CALL stock.new.pick(3, 1)
-  CALL stock.new.pick(3, 10)
-    JMOVE #homep1
-  CALL stock.fin.pick (1, 1)
-  CALL stock.fin.pick (2, 12)
-  CALL stock.fin.pick (3, 12)
-  CALL stock.fin.pick (1, 12)
-  CALL stock.fin.pick (4, 1)
-  CALL stock.fin.pick (4, 12)
+  ;CALL gripper.put(1,1)
+  ;JMOVE #wait.pick
+  JMOVE #homep1
+  CALL stock.new.pick (1, 1)
+  CALL gripper.pick(1,1)
+  CALL gripper.put(1,1)
+  CALL stock.new.back (1, 1)
+  ;CALL stock.new.pick(1, 10)
+  ;CALL stock.new.pick(3, 1)
+  ;CALL stock.new.pick(3, 10)
+  ;  JMOVE #homep1
+  ;CALL stock.fin.pick (1, 1)
+  ;CALL stock.fin.pick (2, 12)
+  ;CALL stock.fin.pick (3, 12)
+  ;CALL stock.fin.pick (1, 12)
+  ;CALL stock.fin.pick (4, 1)
+  ;CALL stock.fin.pick (4, 12)
+.END
+.PROGRAM stock.new.back (.i,.j)
+  TOOL tool.pin
+  ;
+  POINT .temp1 = #post.tare.new
+  DECOMPOSE .ct1[1] = .temp1
+  DECOMPOSE .ct2[1] = stocker.new[.i, .j]
+  POINT .temp2 = TRANS (.ct2[1], .ct1[2], .ct2[3], .ct1[4], .ct1[5], .ct1[6])
+  POINT .temp3 = #put.stz
+  ;
+  ACCURACY 20 ALWAYS
+  SPEED 100 ALWAYS
+  JMOVE #before.stz
+  ;  JMOVE stocker.new[.i,.j]+TRANS(0,0,200)
+  ACCURACY 5
+  LMOVE .temp3 + TRANS (, , 50)
+  ;
+  ACCURACY 0
+  LMOVE #put.stz
+  BREAK
+  PULSE capture.tare
+  TWAIT 0.5
+  ;
+  ACCURACY 0
+  SPEED 20
+  LMOVE .temp3 + TRANS (50)
+  ;
+  SPEED 50 ALWAYS
+  ACCURACY 5
+  LMOVE #before.stz
+  LMOVE #post.tare.new
+  LMOVE stocker.new[.i, .j] + TRANS (20, 0, 500)
+  ;
+  ACCURACY 0
+  SPEED 20
+  LMOVE stocker.new[.i, .j] + TRANS (20)
+  BREAK
+  ;
+  ACCURACY 0
+  SPEED 10
+  LMOVE stocker.new[.i, .j]
+  BREAK
+  PULSE release.tare
+  TWAIT 0.5
+  ;
+  LMOVE stocker.new[.i, .j] + TRANS (0, 0, 50)
+  LMOVE stocker.new[.i, .j] + TRANS (0, 0, 200)
+  ;  JMOVE stocker.new[.i,.j]+TRANS(0,0,50)
+  ;;
+  ;  ACCURACY 0
+  ;  SPEED 10
+  ;  LMOVE stocker.new[.i,.j]
+  ;  BREAK
+  ;  PULSE capture.tare
+  ;  TWAIT 0.5
+  ;;
+  ;  ACCURACY 0
+  ;  SPEED 20
+  ;  LMOVE stocker.new[.i,.j]+TRANS(20)
+  ;;
+  ;  SPEED 50 ALWAYS
+  ;  ACCURACY 5
+  ;  LMOVE stocker.new[.i,.j]+TRANS(20,0,500)
+  ;  ACCURACY 5
+  ;  LMOVE .temp2
+  ;  ACCURACY 5
+  ;  LMOVE #post.tare.new
+  ;; Put to stz
+  ;  LMOVE #before.stz
+  ;  ACCURACY 1
+  ;  LMOVE .temp3+TRANS(50)
+  ;;LAPPRO #put.stz, 50
+  ;  ACCURACY 0
+  ;  LMOVE #put.stz
+  ;  BREAK
+  ;  PULSE release.tare
+  ;  TWAIT 0.5
+  ;; Go back
+  ;  LMOVE .temp3+TRANS(,,50)
+  ;;LAPPRO #put.stz, 50
+  ;  LMOVE #before.stz
+  ;;
+  ;  LMOVE #wait.pick
+  ;;
 .END
 .PROGRAM stock.fin.pick (.i,.j)
+  TOOL tool.pin
+  ;
   POINT .temp1 = #post.tare.fin
   DECOMPOSE .ct1[1] = .temp1
   DECOMPOSE .ct2[1] = stocker.fin[.i, .j]
-  POINT .temp2 = TRANS(.ct1[1],.ct2[2],.ct2[3],.ct1[4],.ct1[5],.ct1[6])
+  POINT .temp2 = TRANS (.ct1[1], .ct2[2], .ct2[3], .ct1[4], .ct1[5], .ct1[6])
   POINT .temp3 = #put.fin
   ;
   ACCURACY 20 ALWAYS
   SPEED 100 ALWAYS
-  JMOVE stocker.fin[.i, .j] + TRANS(0, 0, -200)
+  JMOVE stocker.fin[.i, .j] + TRANS (0, 0, 200)
   ACCURACY 5
-  JMOVE stocker.fin[.i, .j] + TRANS(0, 0, -50)
+  JMOVE stocker.fin[.i, .j] + TRANS (0, 0, 50)
   ;
   ACCURACY 0
   SPEED 10
@@ -70,11 +175,11 @@
   ;
   ACCURACY 0
   SPEED 20
-  LMOVE stocker.fin[.i, .j] + TRANS(20)
+  LMOVE stocker.fin[.i, .j] + TRANS (20)
   ;
   SPEED 50 ALWAYS
   ACCURACY 5
-  LMOVE stocker.fin[.i, .j] + TRANS(20, 0, -500)
+  LMOVE stocker.fin[.i, .j] + TRANS (20, 0, 500)
   ACCURACY 5
   LMOVE .temp2
   ACCURACY 5
@@ -83,7 +188,7 @@
   LMOVE #before.fin
   ACCURACY 1
   
-  LMOVE .temp3 + TRANS(50)
+  LMOVE .temp3 + TRANS (50)
   ;LAPPRO #put.fin, 50
   ACCURACY 0
   LMOVE #put.fin
@@ -92,7 +197,7 @@
   ;
   TWAIT 0.5
   ; Go back
-  LMOVE .temp3 + TRANS(50)
+  LMOVE .temp3 + TRANS (50)
   LMOVE #before.fin
   LMOVE #post.tare.fin
   ;
@@ -101,7 +206,23 @@
   ;;;
   ;JMOVE #post.tare
 .END
+.PROGRAM gripper.pick (.pos,.tool.no)
+  TOOL tool.pick[.tool.no]
+  ;
+  POINT .temp = #tool.pos[.pos]
+  JMOVE .temp + TRANS(0, 0, 50)
+  BREAK
+  ;
+  LMOVE #tool.pos[.pos]
+  BREAK
+  PULSE capture.grip
+  TWAIT 0.5
+  ;
+  LMOVE .temp + TRANS(0, 0, 200)
+.END
 .PROGRAM stock.new.pick (.i,.j)
+  ;
+  TOOL tool.pin
   ;
   POINT .temp1 = #post.tare.new
   DECOMPOSE .ct1[1] = .temp1
@@ -111,17 +232,16 @@
   ;
   ACCURACY 20 ALWAYS
   SPEED 100 ALWAYS
-  JMOVE stocker.new[.i, .j] + TRANS (0, 0,  -200)
+  JMOVE stocker.new[.i, .j] + TRANS (0, 0, 200)
   ACCURACY 5
-  JMOVE stocker.new[.i, .j] + TRANS (0, 0, -50)
+  JMOVE stocker.new[.i, .j] + TRANS (0, 0, 50)
   ;
   ACCURACY 0
   SPEED 10
   LMOVE stocker.new[.i, .j]
   BREAK
-  ;CALL pick.tare
-  ; 1
-  TWAIT 0.5;
+  PULSE capture.tare
+  TWAIT 0.5
   ;
   ACCURACY 0
   SPEED 20
@@ -129,7 +249,7 @@
   ;
   SPEED 50 ALWAYS
   ACCURACY 5
-  LMOVE stocker.new[.i, .j] + TRANS (20, 0, -500)
+  LMOVE stocker.new[.i, .j] + TRANS (20, 0, 500)
   ACCURACY 5
   LMOVE .temp2
   ACCURACY 5
@@ -138,21 +258,20 @@
   LMOVE #before.stz
   ACCURACY 1
   LMOVE .temp3 + TRANS (50)
+  BREAK
   ;LAPPRO #put.stz, 50
   ACCURACY 0
   LMOVE #put.stz
   BREAK
-  ;
-  ;
+  PULSE release.tare
   TWAIT 0.5
   ; Go back
-  LMOVE .temp3 + TRANS (50)
+  LMOVE .temp3 + TRANS (, , 50)
   ;LAPPRO #put.stz, 50
   LMOVE #before.stz
   ;
   LMOVE #wait.pick
   ;;
-  JMOVE #post.tare.new
 .END
 .PROGRAM a.teach.stz()@25/10/21 15:36 #0
   SPEED 250 MM/S ALWAYS
@@ -202,46 +321,106 @@
 .PROGRAM a.tch.stock.new ()
   ; Use this for first teach
   IF FALSE THEN
-    JMOVE stocker.new[1, 1] + TRANS (0, 0, -50)
+    TOOL tool.pin
+    JMOVE stocker.new[1, 1] + TRANS (0, 0, 50)
     LMOVE stocker.new[1, 1]
     FOR .i = 0 TO 3
       FOR .j = 0 TO 10
         PRINT 0: .i, .j
-        POINT stocker.new[.i + 1, .j + 1] = stocker.new[1, 1] + TRANS (-80 * .j, 610 * .i)
+        POINT stocker.new[.i + 1, .j + 1] = stocker.new[1, 1] + TRANS (-80 * .j, -610 * .i)
       END
     END
   END
   ; Correct point
+  TOOL tool.pin
   .i = hmi.stnew.i
   .j = hmi.stnew.j
-  JMOVE stocker.new[.i, .j] + TRANS (0, 0, -50)
+  JMOVE stocker.new[.i, .j] + TRANS (0, 0, 50)
   LMOVE stocker.new[.i, .j] ; *** TEACH POINT ***
-  LMOVE stocker.new[.i, .j] + TRANS (0, 0, -50)
+  LMOVE stocker.new[.i, .j] + TRANS (0, 0, 50)
   LMOVE stocker.new[.i, .j]
-  LMOVE stocker.new[.i, .j] + TRANS (0, 0, -50)
+  LMOVE stocker.new[.i, .j] + TRANS (0, 0, 50)
   ;
   
 .END
 .PROGRAM a.tch.stock.fin ()
   ; Use this for first teach
   IF FALSE THEN
-    JMOVE stocker.fin[1, 1] + TRANS (0, 0, -50)
+    JMOVE stocker.fin[1, 1] + TRANS (0, 0, 50)
     LMOVE stocker.fin[1, 1]
     FOR .i = 0 TO 4
       FOR .j = 0 TO 12
         PRINT 0: .i, .j
-        POINT stocker.fin[.i + 1, .j + 1] = stocker.fin[1, 1] + TRANS (-100 * .j, 490 * .i)
+        POINT stocker.fin[.i + 1, .j + 1] = stocker.fin[1, 1] + TRANS (-100 * .j, -490 * .i)
       END
     END
   END
   ; Correct point
   .i = hmi.strdy.i
   .j = hmi.strdy.j
-  JMOVE stocker.fin[.i, .j] + TRANS (0, 0, -50)
+  JMOVE stocker.fin[.i, .j] + TRANS (0, 0, 50)
   LMOVE stocker.fin[.i, .j] ; *** TEACH POINT ***
-  LMOVE stocker.fin[.i, .j] + TRANS (0, 0, -50)
+  LMOVE stocker.fin[.i, .j] + TRANS (0, 0, 50)
   LMOVE stocker.fin[.i, .j]
-  LMOVE stocker.fin[.i, .j] + TRANS (0, 0, -50)
+  LMOVE stocker.fin[.i, .j] + TRANS (0, 0, 50)
+.END
+.PROGRAM a.teach.gripper ()
+  TOOL tool.pick[hmi.tool.no]
+  ;
+  POINT .temp = #tool.pos[hmi.pos]
+  JMOVE .temp + TRANS (0, 0, 50)
+  BREAK
+  ;
+  LMOVE #tool.pos[hmi.pos]
+  BREAK
+  PULSE capture.grip
+  TWAIT 0.5
+  ;
+  LMOVE .temp + TRANS (0, 0, 200)
+  BREAK
+  JMOVE #wait.pick
+  ;
+  LMOVE .temp + TRANS (0, 0, 200)
+  LMOVE .temp + TRANS (0, 0, 50)
+  BREAK
+  LMOVE #tool.pos[hmi.pos]
+  BREAK
+  PULSE release.grip
+  TWAIT 0.5
+  ;
+  LMOVE .temp + TRANS (0, 0, 50)
+.END
+.PROGRAM gripper.put (.pos,.tool.no)
+  TOOL tool.pick[.tool.no]
+  ;
+  POINT .temp = #tool.pos[.pos]
+  JMOVE .temp + TRANS(0, 0, 50)
+  BREAK
+  ;
+  LMOVE #tool.pos[.pos]
+  BREAK
+  PULSE release.grip
+  TWAIT 0.5
+  ;
+  LMOVE .temp + TRANS(0, 0, 200)
+.END
+.PROGRAM stz.pick ()
+  SPEED 250 MM/S ALWAYS
+  ACCURACY 0 ALWAYS
+  TOOL tool.grip
+  SIGNAL grip.unclamp, -grip.clamp
+  ;
+  JMOVE #wait.pick
+  BREAK
+  LMOVE f + TRANS (hmi.x + hmi.gx, hmi.y + hmi.gy, 40 + hmi.gz)
+  LMOVE f + TRANS (hmi.x + hmi.gx, hmi.y + hmi.gy, hmi.gz)
+  BREAK
+  SIGNAL grip.clamp, -grip.unclamp
+  TWAIT 0.5
+  LMOVE f + TRANS (hmi.x + hmi.gx, hmi.y + hmi.gy, 40 + hmi.gz)
+  LMOVE #wait.pick
+  LMOVE #before.pos
+  
 .END
 .PROGRAM autostart.pc()@25/10/10 14:59 #0
   ; System switches
@@ -255,14 +434,21 @@
   autostart.pc ON
   ;AUTOSTART2.PC ON
   ;
-  ;o.grip.tare.cl  = 1
+  release.tare = 1
+  capture.tare = 2
+  ;
+  release.grip = 5
+  capture.grip = 6
+  ;
+  grip.unclamp = 3
+  grip.clamp = 4
   ;o.grip.tare.op  = 2
   ;o.grip.obj.cl   = 3
   ;o.grip.obj.op   = 4
   ;o.grip.lock     = 5
   ;o.grip.unlock   = 6
-  POINT #homep1 = #PPOINT (0, 0, 90, 0, 90, 0)
-  SETHOME 10, #homep1
+  ;POINT #homep1 = #PPOINT (0, 0, 90, 0, 90, 0)
+  ;SETHOME 10, #homep1
 .END
 .PROGRAM Comment___ () ; Comments for IDE. Do not use.
 	; @@@ PROJECT @@@
@@ -276,6 +462,9 @@
 	; 23
 	; @@@ PROGRAM @@@
 	; 0:a.main:F
+	; 0:stock.new.back:F
+	; .i 
+	; .j 
 	; 0:stock.fin.pick:F
 	; .i 
 	; .j 
@@ -284,14 +473,12 @@
 	; .ct2 
 	; .temp2 
 	; .temp3 
+	; 0:gripper.pick:F
+	; .pos 
+	; .tool.no 
 	; 0:stock.new.pick:F
 	; .i 
 	; .j 
-	; .temp1 
-	; .ct1 
-	; .ct2 
-	; .temp2 
-	; .temp3 
 	; Group:Teach:1
 	; 1:a.teach.stz:F
 	; .plb 
@@ -309,6 +496,11 @@
 	; 1:a.tch.stock.fin:F
 	; .i 
 	; .j 
+	; 1:a.teach.gripper:F
+	; 0:gripper.put:F
+	; .pos 
+	; .tool.no 
+	; 0:stz.pick:F
 	; 0:autostart.pc:B
 	; @@@ TRANS @@@
 	; @@@ JOINTS @@@
@@ -318,6 +510,7 @@
 	; @@@ SIGNALS @@@
 	; @@@ TOOLS @@@
 	; tool.pin 
+	; tool.pick[] 
 	; @@@ BASE @@@
 	; @@@ FRAME @@@
 	; @@@ BOOL @@@
@@ -333,50 +526,50 @@ new.tare[1] 604.930725 1195.423706 -358.174500 75.191704 179.999496 74.734802
 new.tare[2] -615.068176 1195.371338 -358.166412 154.422699 179.999298 153.954895
 new.tare[3] -615.079712 1195.414062 281.856812 114.617409 179.995193 114.147507
 new.tare[4] 604.951111 1195.444946 281.842712 87.434402 179.999603 86.982697
-stocker.new[1,1] -607.980225 1222.207275 365.459198 90.001205 90.001007 -179.999893
-stocker.new[1,2] -607.980347 1222.205933 285.459198 90.001205 90.001007 -179.999893
-stocker.new[1,3] -607.980530 1222.204468 205.459198 90.001205 90.001007 -179.999893
-stocker.new[1,4] -607.980652 1222.203125 125.459198 90.001205 90.001007 -179.999893
-stocker.new[1,5] -607.980835 1222.201660 45.459198 90.001205 90.001007 -179.999893
-stocker.new[1,6] -607.980957 1222.200317 -34.540802 90.001205 90.001007 -179.999893
-stocker.new[1,7] -607.981079 1222.198853 -114.540802 90.001205 90.001007 -179.999893
-stocker.new[1,8] -607.981262 1222.197510 -194.540802 90.001205 90.001007 -179.999893
-stocker.new[1,9] -607.981384 1222.196167 -274.540802 90.001205 90.001007 -179.999893
-stocker.new[1,10] -607.981506 1222.194702 -354.540802 90.001205 90.001007 -179.999893
-stocker.new[1,11] -607.981689 1222.193359 -434.540802 90.001205 90.001007 -179.999893
-stocker.new[2,1] 2.019775 1222.219971 365.458099 90.001205 90.001007 -179.999893
-stocker.new[2,2] 2.019653 1222.218628 285.458069 90.001205 90.001007 -179.999893
-stocker.new[2,3] 2.019470 1222.217285 205.458084 90.001205 90.001007 -179.999893
-stocker.new[2,4] 2.019348 1222.215820 125.458084 90.001205 90.001007 -179.999893
-stocker.new[2,5] 2.019165 1222.214478 45.458099 90.001205 90.001007 -179.999893
-stocker.new[2,6] 2.019043 1222.213013 -34.541901 90.001205 90.001007 -179.999893
-stocker.new[2,7] 2.018921 1222.211670 -114.541901 90.001205 90.001007 -179.999893
-stocker.new[2,8] 2.018738 1222.210205 -194.541901 90.001205 90.001007 -179.999893
-stocker.new[2,9] 2.018616 1222.208862 -274.541901 90.001205 90.001007 -179.999893
-stocker.new[2,10] 2.018494 1222.207520 -354.541901 90.001205 90.001007 -179.999893
-stocker.new[2,11] 2.018311 1222.206055 -434.541901 90.001205 90.001007 -179.999893
-stocker.new[3,1] 612.019775 1222.232788 365.456970 90.001205 90.001007 -179.999893
-stocker.new[3,2] 612.019653 1222.231323 285.456970 90.001205 90.001007 -179.999893
-stocker.new[3,3] 612.019531 1222.229980 205.456970 90.001205 90.001007 -179.999893
-stocker.new[3,4] 612.019287 1222.228638 125.456970 90.001205 90.001007 -179.999893
-stocker.new[3,5] 612.019165 1222.227173 45.456970 90.001205 90.001007 -179.999893
-stocker.new[3,6] 612.019043 1222.225830 -34.543030 90.001205 90.001007 -179.999893
-stocker.new[3,7] 612.018921 1222.224365 -114.543030 90.001205 90.001007 -179.999893
-stocker.new[3,8] 612.018799 1222.223022 -194.542999 90.001205 90.001007 -179.999893
-stocker.new[3,9] 612.018555 1222.221558 -274.542999 90.001205 90.001007 -179.999893
-stocker.new[3,10] 612.018433 1222.220215 -354.542999 90.001205 90.001007 -179.999893
-stocker.new[3,11] 612.018311 1222.218872 -434.542999 90.001205 90.001007 -179.999893
-stocker.new[4,1] 1222.019775 1222.245483 365.455872 90.001205 90.001007 -179.999893
-stocker.new[4,2] 1222.019653 1222.244141 285.455872 90.001205 90.001007 -179.999893
-stocker.new[4,3] 1222.019531 1222.242798 205.455872 90.001205 90.001007 -179.999893
-stocker.new[4,4] 1222.019287 1222.241333 125.455872 90.001205 90.001007 -179.999893
-stocker.new[4,5] 1222.019165 1222.239990 45.455872 90.001205 90.001007 -179.999893
-stocker.new[4,6] 1222.019043 1222.238525 -34.544128 90.001205 90.001007 -179.999893
-stocker.new[4,7] 1222.018921 1222.237183 -114.544128 90.001205 90.001007 -179.999893
-stocker.new[4,8] 1222.018799 1222.235718 -194.544159 90.001205 90.001007 -179.999893
-stocker.new[4,9] 1222.018555 1222.234375 -274.544159 90.001205 90.001007 -179.999893
-stocker.new[4,10] 1222.018433 1222.232910 -354.544159 90.001205 90.001007 -179.999893
-stocker.new[4,11] 1222.018311 1222.231567 -434.544159 90.001205 90.001007 -179.999893
+stocker.new[1,1] -466.552246 1167.948242 35.962097 -88.510201 89.391075 -179.934814
+stocker.new[1,2] -466.439148 1167.100708 -44.033333 -88.510201 89.391075 -179.934814
+stocker.new[1,3] -466.326080 1166.253174 -124.028763 -88.510201 89.391075 -179.934814
+stocker.new[1,4] -466.212982 1165.405640 -204.024200 -88.510201 89.391075 -179.934814
+stocker.new[1,5] -466.099915 1164.557983 -284.019623 -88.510201 89.391075 -179.934814
+stocker.new[1,6] -465.986816 1163.710449 -364.015076 -88.510201 89.391075 -179.934814
+stocker.new[1,7] -465.873749 1162.862915 -444.010498 -88.510201 89.391075 -179.934814
+stocker.new[1,8] -465.760651 1162.015381 -524.005920 -88.510201 89.391075 -179.934814
+stocker.new[1,9] -465.647552 1161.167847 -604.001343 -88.510201 89.391075 -179.934814
+stocker.new[1,10] -465.534485 1160.320312 -683.996765 -88.510201 89.391075 -179.934814
+stocker.new[1,11] -465.421387 1159.472656 -763.992249 -88.510201 89.391075 -179.934814
+stocker.new[2,1] 143.240967 1183.814941 36.656136 -88.510201 89.391075 -179.934814
+stocker.new[2,2] 143.354065 1182.967407 -43.339294 -88.510201 89.391075 -179.934814
+stocker.new[2,3] 143.467163 1182.119873 -123.334717 -88.510201 89.391075 -179.934814
+stocker.new[2,4] 143.580200 1181.272339 -203.330154 -88.510201 89.391075 -179.934814
+stocker.new[2,5] 143.693298 1180.424805 -283.325592 -88.510201 89.391075 -179.934814
+stocker.new[2,6] 143.806396 1179.577271 -363.321045 -88.510201 89.391075 -179.934814
+stocker.new[2,7] 143.919495 1178.729614 -443.316467 -88.510201 89.391075 -179.934814
+stocker.new[2,8] 144.032593 1177.882080 -523.311890 -88.510201 89.391075 -179.934814
+stocker.new[2,9] 144.145630 1177.034546 -603.307312 -88.510201 89.391075 -179.934814
+stocker.new[2,10] 144.258728 1176.187012 -683.302734 -88.510201 89.391075 -179.934814
+stocker.new[2,11] 144.371826 1175.339478 -763.298218 -88.510201 89.391075 -179.934814
+stocker.new[3,1] 753.034180 1199.681763 37.350178 -88.510201 89.391075 -179.934814
+stocker.new[3,2] 753.147217 1198.834106 -42.645256 -88.510201 89.391075 -179.934814
+stocker.new[3,3] 753.260376 1197.986572 -122.640686 -88.510201 89.391075 -179.934814
+stocker.new[3,4] 753.373413 1197.139038 -202.636124 -88.510201 89.391075 -179.934814
+stocker.new[3,5] 753.486572 1196.291504 -282.631531 -88.510201 89.391075 -179.934814
+stocker.new[3,6] 753.599609 1195.443970 -362.626984 -88.510201 89.391075 -179.934814
+stocker.new[3,7] 753.712646 1194.596436 -442.622406 -88.510201 89.391075 -179.934814
+stocker.new[3,8] 753.825806 1193.748901 -522.617859 -88.510201 89.391075 -179.934814
+stocker.new[3,9] 753.938843 1192.901245 -602.613281 -88.510201 89.391075 -179.934814
+stocker.new[3,10] 754.052002 1192.053711 -682.608704 -88.510201 89.391075 -179.934814
+stocker.new[3,11] 754.165039 1191.206177 -762.604187 -88.510201 89.391075 -179.934814
+stocker.new[4,1] 1362.827393 1215.548462 38.044216 -88.510201 89.391075 -179.934814
+stocker.new[4,2] 1362.940430 1214.700928 -41.951210 -88.510201 89.391075 -179.934814
+stocker.new[4,3] 1363.053589 1213.853394 -121.946640 -88.510201 89.391075 -179.934814
+stocker.new[4,4] 1363.166626 1213.005859 -201.942078 -88.510201 89.391075 -179.934814
+stocker.new[4,5] 1363.279785 1212.158203 -281.937500 -88.510201 89.391075 -179.934814
+stocker.new[4,6] 1363.392822 1211.310669 -361.932953 -88.510201 89.391075 -179.934814
+stocker.new[4,7] 1363.505859 1210.463135 -441.928375 -88.510201 89.391075 -179.934814
+stocker.new[4,8] 1363.619019 1209.615601 -521.923828 -88.510201 89.391075 -179.934814
+stocker.new[4,9] 1363.732056 1208.768066 -601.919250 -88.510201 89.391075 -179.934814
+stocker.new[4,10] 1363.845215 1207.920532 -681.914673 -88.510201 89.391075 -179.934814
+stocker.new[4,11] 1363.958252 1207.072876 -761.910156 -88.510201 89.391075 -179.934814
 stocker.fin[1,1] -1160.959351 -736.008118 344.362915 -179.998795 89.999100 180.000000
 stocker.fin[1,2] -1160.960815 -736.008179 244.362900 -179.998795 89.999100 180.000000
 stocker.fin[1,3] -1160.962402 -736.008179 144.362900 -179.998795 89.999100 180.000000
@@ -443,23 +636,71 @@ stocker.fin[5,11] -1161.015625 1223.991455 -655.637695 -179.998795 89.999100 180
 stocker.fin[5,12] -1161.017090 1223.991455 -755.637695 -179.998795 89.999100 180.000000
 stocker.fin[5,13] -1161.018677 1223.991455 -855.637695 -179.998795 89.999100 180.000000
 stocker.rdy[4,7] -1160.999268 733.991577 -255.637497 -179.998795 89.999100 180.000000
-tool.pin -85.070000 -205.370000 -19.860000 67.500000 70.000000 0.000000
+tool.pin -85.070000 -205.369995 -19.860001 67.500000 70.000000 0.000000
+tool.pick[1] 5.960000 6.028000 171.199997 67.500000 180.000000 0.000000
+tool.pick[2] 5.960000 6.028000 171.199997 -136.000000 180.000000 0.000000
+tool.pick[3] 5.960000 6.028000 171.199997 -136.000000 180.000000 0.000000
+tool.pick[4] 5.960000 6.028000 171.199997 -136.000000 180.000000 0.000000
+tool.pick[5] 5.960000 6.028000 171.199997 -136.000000 180.000000 0.000000
+a 982.362183 -343.334839 107.155487 -172.662949 1.597521 -8.384374
+cp0 990.319214 -340.757324 95.727997 0.001179 90.002541 -89.304375
+cp1 979.957458 -831.855957 95.066269 -0.000116 90.001884 -89.302742
+cp2 685.078857 -824.727844 87.384598 0.000876 90.000290 -89.304863
+f 981.726501 -343.283051 106.497421 -174.892441 1.699348 -6.076681
+p0 1075.403442 -342.983490 391.449371 178.863785 111.580276 179.749527
+p1 1074.441040 -835.289063 386.592712 179.072311 109.931236 179.372757
+pin_tool1 -88.661003 -214.048004 -23.250000 -112.500008 110.000008 -90.000008
+tool.grip 5.960000 6.028000 171.199997 -112.500008 180.000000 0.000000
 .END
 .JOINTS
-#before.stz 151.008484 9.262982 -108.479706 -17.224102 -74.525078 -32.091824
-#put.stz 137.358109 31.315580 -101.055832 -15.009257 -63.579254 -16.266825
-#wait.pick 151.008484 9.262982 -108.479706 -17.224102 -74.525078 -32.091824
-#post.tare.new 31.453018 25.041588 -119.055351 24.540468 -47.885971 62.553146
+#before.stz 156.298325 -5.104897 -119.705116 -18.823097 -74.563522 -35.173157
+#put.stz 136.599869 15.593916 -110.148460 -13.834775 -68.366547 -16.208761
+#wait.pick 153.260971 -5.244692 -116.123528 -0.757969 -68.765495 -38.446480
+#post.tare.new 30.800823 -12.718077 -134.300644 0.302695 -78.852997 24.346281
 #put.fin 66.769150 56.143642 -109.106346 13.947364 -34.032902 32.835331
 #before.fin 37.101517 44.907837 -88.343483 18.279228 -60.421379 64.408524
 #post.tare 38.756599 5.938200 -85.286201 15.775799 -101.184799 75.128899
 #post.tare.fin -37.716774 22.508850 -105.851593 -4.406924 -71.267632 12.353700
 #home1 0.000000 0.000000 90.000000 0.000000 90.000000 0.000000
-#homep1 -59.999763 -44.999809 -134.999954 0.000000 -90.000000 29.999929
+#homep1 0.000000 0.000000 90.000000 0.000000 90.000000 0.000000
+#cp0 113.545128 22.599735 -94.875786 136.835510 -61.090168 62.719730
+#cp4 135.463104 44.074173 -61.770443 118.713783 -70.313873 86.358009
+#cpx 135.461502 44.075268 -61.771420 118.713783 -70.309067 86.358109
+#cpy 123.052757 3.329534 -119.476036 131.188889 -70.686035 64.788795
+#p0 111.971039 20.483826 -97.986504 -24.115957 54.042439 225.470032
+#p1 134.716766 41.293598 -66.350815 -50.732227 57.166672 254.816574
+#p2 133.473557 43.639095 -62.388935 -50.699005 55.230335 255.409546
+#plb 121.270554 1.004116 -121.931114 -33.196815 60.492096 -127.758659
+#plt 111.962700 20.715967 -97.409065 -25.353193 52.390369 -133.332581
+#prb 146.554352 26.605249 -90.002472 -55.019180 71.421440 -105.830002
+#prt 134.708038 41.317688 -66.394478 -50.719925 57.330093 -105.348274
+#tool.pos[1] 138.564392 26.336611 -133.157196 1.993359 -19.850922 -27.701340
 .END
 .REALS
 hmi.stnew.i = 1
-hmi.stnew.j = 3
+hmi.stnew.j = 1
 hmi.strdy.i = 2
 hmi.strdy.j = 11
+capture.tare = 2
+hmi.gx = 0
+hmi.gy = 0
+hmi.x = 56.2
+hmi.y = 57.6
+ip[1] = 192
+ip[2] = 168
+ip[3] = 7
+ip[4] = 137
+release.tare = 1
+tcp.connect.tmo = 5
+tcp.port = 9013
+tcp.receive.tmo = 5
+tcp.send.tmo = 5
+tcp.socket = -34024
+tyterm = -1
+capture.grip = 6
+hmi.pos = 1
+hmi.tool.no = 1
+release.grip = 5
+grip.clamp = 4
+grip.unclamp = 3
 .END

@@ -28,3 +28,7 @@ data/captured_frames/*
 # Обучение YOLO
 yolo-trainer/datasets/*
 yolo-trainer/runs/* 
+
+# Калибровка
+Calibration/data/*
+Robot/KROSET/ALKU/temporary/*/cm*_conf.txt

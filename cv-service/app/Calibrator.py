@@ -55,6 +55,7 @@ class Calibrator:
             os.remove(os.path.join(MAT_DIR, "calibration_matrix.npy"))
             logger.info(f"Файл матрицы калибровки удален из {os.path.join(MAT_DIR, 'calibration_matrix.npy')}")
 
+
     def calibrate(self, markers):
 
         if markers and len(markers) < 4:
@@ -93,8 +94,8 @@ class Calibrator:
                 [0, realDY],
             ])
             # Вычисление перспективной матрицы
-            # self.M = cv2.getPerspectiveTransform(src_pts, dst_pts)
-            self.M = cv2.findHomography(src_pts, dst_pts, method=cv2.RANSAC)[0]
+            self.M = cv2.getPerspectiveTransform(src_pts, dst_pts)
+            # self.M = cv2.findHomography(src_pts, dst_pts, method=cv2.RANSAC)[0]
             self.Size = np.array([realDX, realDY])
             self.Calibrated = True
             self.__save_calibration_data()
