@@ -106,89 +106,85 @@ class FrameProcessor:
 
     def __inverse_scale_point(self, point):
         x, y = point
-        xc, yc = self.center
+        # xc, yc = self.center
         
-        if x < xc:
-            x = (x + self.scalenx * xc) / (1 + self.scalenx)
-        else:
-            x = (x + self.scalepx * xc) / (1 + self.scalepx)
-        if y < yc:
-            y = (y + self.scaleny * yc) / (1 + self.scaleny)
-        else:
-            y = (y + self.scalepy * yc) / (1 + self.scalepy)
-        if x > 4*xc:
-            x = 4*xc
-        if y > 4*yc:
-            y = 4*yc
+        # if x < xc:
+        #     x = (x + self.scalenx * xc) / (1 + self.scalenx)
+        # else:
+        #     x = (x + self.scalepx * xc) / (1 + self.scalepx)
+        # if y < yc:
+        #     y = (y + self.scaleny * yc) / (1 + self.scaleny)
+        # else:
+        #     y = (y + self.scalepy * yc) / (1 + self.scalepy)
+        # if x > 4*xc:
+        #     x = 4*xc
+        # if y > 4*yc:
+        #     y = 4*yc
         
         return (int(x), int(y))
 
     def __scale_point(self, point):
         x, y = point
-        xc, yc = self.center
+        # xc, yc = self.center
 
-        if x < xc:
-            x = x - self.scalenx*(xc-x)
-        else:
-            x = x + self.scalepx*(x-xc)
-        if y < yc:
-            y = y - self.scaleny*(yc-y)
-        else:
-            y = y + self.scalepy*(y-yc)
+        # if x < xc:
+        #     x = x - self.scalenx*(xc-x)
+        # else:
+        #     x = x + self.scalepx*(x-xc)
+        # if y < yc:
+        #     y = y - self.scaleny*(yc-y)
+        # else:
+        #     y = y + self.scalepy*(y-yc)
 
-        if x < 0: 
-            x = 0
-        if x > 5000: 
-            x = 5000
-        if y < 0: 
-            y = 0
-        if y > 5000: 
-            y = 5000
+        # if x < 0: 
+        #     x = 0
+        # if x > 5000: 
+        #     x = 5000
+        # if y < 0: 
+        #     y = 0
+        # if y > 5000: 
+        #     y = 5000
         
         return (int(x), int(y))
         
 
     def __process_calibrated(self, frame):
         ''' Обрабатывает откалиброванный кадр '''
-        frame = self.__prepare_frame(frame)
+        try:
+            frame = self.__prepare_frame(frame)
 
+            predictions = self.detector.detect(frame)
+            if predictions and len(predictions) > 0:
+                frame, predictions = self.function.process(frame, predictions)
+            if predictions and len(predictions) > 0:
+                logger.debug(f"0 элемент до масштабирования: {predictions[0].pick_point}")
+                frame = self.drawer.draw(frame, predictions)
+                # predictions = self.__scale_predictions(predictions)
+                # frame = self.drawer.draw(frame, predictions)
+                logger.debug(f"0 элемент после масштабирования: {predictions[0].pick_point}")
+                self.__objects = predictions
 
-        # frame = self.test(frame)
-        transformed_center = self.transform_point(self.center, self.calibrator.M)
-        cv2.drawMarker(frame, transformed_center, (255, 0, 255), cv2.MARKER_CROSS, 5, 8)
-
-
-
-        predictions = self.detector.detect(frame)
-        if predictions and len(predictions) > 0:
-            frame, predictions = self.function.process(frame, predictions)
-        if predictions and len(predictions) > 0:
-            logger.debug(f"0 элемент до масштабирования: {predictions[0].pick_point}")
-            frame = self.drawer.draw(frame, predictions)
-            predictions = self.__scale_predictions(predictions)
-            frame = self.drawer.draw(frame, predictions)
-            logger.debug(f"0 элемент после масштабирования: {predictions[0].pick_point}")
-            self.__objects = predictions
-
-        frame = cv2.drawMarker(frame, self.__scale_point((1000, 1000)), (0,0,255), cv2.MARKER_CROSS, 5, 8)
-        frame = cv2.drawMarker(frame, self.__scale_point((2500, 1500)), (0,0,255), cv2.MARKER_CROSS, 5, 8)
-        frame = cv2.drawMarker(frame, self.__scale_point((3000, 2500)), (0,0,255), cv2.MARKER_CROSS, 5, 8)
-        frame = cv2.drawMarker(frame, self.__scale_point((4500, 1500)), (0,0,255), cv2.MARKER_CROSS, 5, 8)
-        for x in range(0, frame.shape[1], 500):
-            for y in range(0, frame.shape[0], 500):
-                cv2.drawMarker(frame, self.__scale_point((x, y)), (0, 0, 255), cv2.MARKER_CROSS, 8, 8)
             for x in range(0, frame.shape[1], 500):
-                cv2.line(frame, (x, 0), (x, frame.shape[0]), (0, 255, 0), 3)
-            for y in range(0, frame.shape[0], 500):
-                cv2.line(frame, (0, y), (frame.shape[1], y), (0, 255, 0), 3)
-            for x in range(0, frame.shape[1], 100):
-                cv2.line(frame, (x, 0), (x, frame.shape[0]), (0, 255, 0), 1)
-            for y in range(0, frame.shape[0], 100):
-                cv2.line(frame, (0, y), (frame.shape[1], y), (0, 255, 0), 1)
+                for x in range(0, frame.shape[1], 500):
+                    cv2.line(frame, (x, 0), (x, frame.shape[0]), (0, 255, 0), 3)
+                for y in range(0, frame.shape[0], 500):
+                    cv2.line(frame, (0, y), (frame.shape[1], y), (0, 255, 0), 3)
+                for x in range(0, frame.shape[1], 100):
+                    cv2.line(frame, (x, 0), (x, frame.shape[0]), (0, 255, 0), 1)
+                for y in range(0, frame.shape[0], 100):
+                    cv2.line(frame, (0, y), (frame.shape[1], y), (0, 255, 0), 1)
+                for y in range(0, frame.shape[0], 500):
+                    cv2.drawMarker(frame, self.__scale_point((x, y)), (0, 0, 255), cv2.MARKER_CROSS, 8, 8)
+
+            frame = cv2.drawMarker(frame, self.__scale_point((1000, 1000)), (0,0,255), cv2.MARKER_CROSS, 5, 8)
+            frame = cv2.drawMarker(frame, self.__scale_point((2500, 1500)), (0,0,255), cv2.MARKER_CROSS, 5, 8)
+            frame = cv2.drawMarker(frame, self.__scale_point((3000, 2500)), (0,0,255), cv2.MARKER_CROSS, 5, 8)
+            frame = cv2.drawMarker(frame, self.__scale_point((4500, 1500)), (0,0,255), cv2.MARKER_CROSS, 5, 8)
 
 
-
-        self.__put_frame_to_redis(frame)
+            self.__put_frame_to_redis(frame)
+        except Exception as e:
+            logger.error(f"Ошибка при обработке кадра: {e}")
 
     def __prepare_frame(self, frame):
         ''' Подготавливает кадр для обработки с учётом перспективной калибровки и CUDA '''

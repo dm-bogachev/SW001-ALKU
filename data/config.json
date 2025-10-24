@@ -50,8 +50,8 @@
         "PICK_ANGLE": false
     },
     "Markers": {
-        "MarkersXDistance": 490,
-        "MarkersYDistance": 295,
+        "MarkersXDistance": 489.5,
+        "MarkersYDistance": 296,
         "Marker00ID": 0,
         "Marker00Point": 0,
         "MarkerX0ID": 1,
@@ -64,8 +64,8 @@
     "HikCamera": {
         "IPAddress": "192.168.7.101",
         "DeviceName": "MV-CH120-20GM",
-        "FrameInterval": 1.0,
-        "ExposureValue": 40000
+        "FrameInterval": 0.0,
+        "ExposureValue": 8000
     },
     "CalibrationData": {
         "Theta": "null",

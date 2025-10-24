@@ -1,10 +1,16 @@
 .INTER_PANEL_D
 0,8,"hmi.stnew.i","New","stocker i",10,15,4,2,0
 1,8,"hmi.stnew.j","New","stocker j",10,15,4,2,0
+3,8,"dist.xp","Distortion","X positive",10,15,4,2,0
+4,8,"dist.xn","Distortion","X negative",10,15,4,2,0
 5,8,"hmi.tool.no","Tool No","",10,15,2,1,0
 6,8,"hmi.pos","Tool Pos","",10,15,2,1,0
 7,8,"hmi.strdy.i","Final","stocker i",10,15,4,2,0
 8,8,"hmi.strdy.j","Final","stocker j",10,15,4,2,0
+10,8,"dist.yp","Distortion","Y positive",10,15,4,2,0
+11,8,"dist.yn","Distortion","Y negative",10,15,4,2,0
+17,8,"center.x","CenterX","",10,15,4,2,0
+18,8,"center.y","CenterY","",10,15,4,2,0
 21,8,"hmi.x","CoordX","",10,15,4,2,0
 22,8,"hmi.y","CoordY","",10,15,4,2,0
 24,8,"hmi.gx","GripShiftX","",10,15,4,2,0
@@ -310,13 +316,26 @@
   BREAK
   LMOVE f + TRANS (hmi.x, hmi.y, 10)
 .END
-.PROGRAM a.test.pick()@25/10/21 16:43 #0
+.PROGRAM a.test.pick()@25/10/24 15:48 #0
   SPEED 250 MM/S ALWAYS
   ACCURACY 0 ALWAYS
-  TOOL tool.grip
   ;
   BREAK
-  LMOVE f + TRANS (hmi.x + hmi.gx, hmi.y + hmi.gy, 40)
+  cx = hmi.x
+  cy = hmi.y
+  IF hmi.x > center.x + 50 THEN
+    cx = hmi.x - dist.xp * (hmi.x - center.x)
+  END
+  IF hmi.x < center.x - 50 THEN
+    cx = hmi.x + dist.xn * (-hmi.x + center.x)
+  END
+  IF hmi.y > center.y + 50 THEN
+    cy = hmi.y - dist.yp * (hmi.y - center.y)
+  END
+  IF hmi.y < center.y - 50
+    cy = hmi.y + dist.yn * (-hmi.y + center.y)
+  END
+  LMOVE f + TRANS (cx + hmi.gx, cy + hmi.gy, 40)
 .END
 .PROGRAM a.tch.stock.new ()
   ; Use this for first teach
@@ -412,12 +431,32 @@
   ;
   JMOVE #wait.pick
   BREAK
-  LMOVE f + TRANS (hmi.x + hmi.gx, hmi.y + hmi.gy, 40 + hmi.gz)
-  LMOVE f + TRANS (hmi.x + hmi.gx, hmi.y + hmi.gy, hmi.gz)
+  ;
+  cx = hmi.x
+  cy = hmi.y
+  IF hmi.x > center.x + 50 THEN
+    cx = hmi.x - dist.xp * (hmi.x - center.x)
+  END
+  IF hmi.x < center.x - 50 THEN
+    cx = hmi.x + dist.xn * (-hmi.x + center.x)
+  END
+  IF hmi.y > center.y + 50 THEN
+    cy = hmi.y - dist.yp * (hmi.y - center.y)
+  END
+  IF hmi.y < center.y - 50
+    cy = hmi.y + dist.yn * (-hmi.y + center.y)
+  END
+  ;
+  LMOVE f + TRANS (cx + hmi.gx, cy + hmi.gy, 40 + hmi.gz)
+  LMOVE f + TRANS (cx + hmi.gx, cy + hmi.gy, hmi.gz)
   BREAK
   SIGNAL grip.clamp, -grip.unclamp
   TWAIT 0.5
-  LMOVE f + TRANS (hmi.x + hmi.gx, hmi.y + hmi.gy, 40 + hmi.gz)
+  LMOVE f + TRANS (cx + hmi.gx, cy + hmi.gy, 40 + hmi.gz)
+  ;
+  TWAIT 3
+  ;
+  SIGNAL -grip.clamp, grip.unclamp
   LMOVE #wait.pick
   LMOVE #before.pos
   
@@ -465,6 +504,11 @@
 	; 0:stock.new.back:F
 	; .i 
 	; .j 
+	; .temp1 
+	; .ct1 
+	; .ct2 
+	; .temp2 
+	; .temp3 
 	; 0:stock.fin.pick:F
 	; .i 
 	; .j 
@@ -476,9 +520,15 @@
 	; 0:gripper.pick:F
 	; .pos 
 	; .tool.no 
+	; .temp 
 	; 0:stock.new.pick:F
 	; .i 
 	; .j 
+	; .temp1 
+	; .ct1 
+	; .ct2 
+	; .temp2 
+	; .temp3 
 	; Group:Teach:1
 	; 1:a.teach.stz:F
 	; .plb 
@@ -497,9 +547,11 @@
 	; .i 
 	; .j 
 	; 1:a.teach.gripper:F
+	; .temp 
 	; 0:gripper.put:F
 	; .pos 
 	; .tool.no 
+	; .temp 
 	; 0:stz.pick:F
 	; 0:autostart.pc:B
 	; @@@ TRANS @@@

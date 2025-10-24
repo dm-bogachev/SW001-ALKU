@@ -18,6 +18,14 @@ def process(frame, yolo_data):
         x1, y1, x2, y2 = data.xyxy
         center = (x1 + x2) / 2, (y1 + y2) / 2
         data.pick_point = center
+        logger.debug(f"Ключевые точки: {data.keypoints}")
+        if data.keypoints[0][1] > data.keypoints[1][1]:
+            data.pick_angle = 180
+            data.pick_point = (data.pick_point[0], data.pick_point[1] - 0.8*abs(data.keypoints[0][1] - data.keypoints[1][1]))
+        else:
+            data.pick_angle = 0
+            data.pick_point = (data.pick_point[0], data.pick_point[1] + 0.8*abs(data.keypoints[0][1] - data.keypoints[1][1]))
+        logger.debug(f"Угол забора: {data.pick_angle}")
         result.append(data)
         # if data.keypoints[0].y > data.keypoints[1].y:
         #     data.pick_angle = 180

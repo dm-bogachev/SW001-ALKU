@@ -9,6 +9,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.concurrency import asynccontextmanager
 
 import cv2
+import numpy as np
 
 # Внутренние модули
 from common.Logger import config_logger
@@ -29,12 +30,12 @@ camera_released = False
 
 def load_coefficients(path):
     """Загружает матрицу камеры и коэффициенты настроечного оптического дефекта."""
-    cv_file = cv2.FileStorage(path, cv2.FILE_STORAGE_READ)
-    camera_matrix = cv_file.getNode("mtx").mat()
-    dist_coeffs = cv_file.getNode("dist").mat()
-
-    cv_file.release()
-    return camera_matrix, dist_coeffs
+    data = np.load(path)
+    cameraMatrix = data["cameraMatrix"]
+    distCoeffs = data["distCoeffs"]
+    logger.debug(f"📸 Матрица камеры:\n{cameraMatrix}")
+    logger.debug(f"🎯 Коэффициенты дисторсии:\n{distCoeffs.ravel()}")
+    return cameraMatrix, distCoeffs
 
 def background_frame_sender():
     """Бесконечно получает кадры с камеры и отправляет их в Redis."""
@@ -44,7 +45,7 @@ def background_frame_sender():
     max_bad_frames = Config.get("HikCamera.MaxBadFrames", 10)
 
     try:
-        camera_matrix, dist_coeffs = load_coefficients("/data/camera_matrix.yml")
+        camera_matrix, dist_coeffs = load_coefficients("/data/distortion_coeffs.npz")
     except Exception as e:
         logger.error(f"Ошибка при загрузке коэффициентов камеры: {e}")
         camera_matrix = None
@@ -54,11 +55,11 @@ def background_frame_sender():
         try:
             if hik_camera.is_opened():
                 frame = hik_camera.get_frame()
-                if camera_matrix is not None and dist_coeffs is not None:
-                    logger.debug("Корректировка кадра камеры")
-                    frame = cv2.undistort(frame, camera_matrix, dist_coeffs)
                 if frame is not None:
-                    _, buffer = cv2.imencode(".jpg", frame, [cv2.IMWRITE_JPEG_QUALITY, 100])
+                    if camera_matrix is not None and dist_coeffs is not None:
+                        logger.debug("Корректировка кадра камеры")
+                        undistorted = cv2.undistort(frame, camera_matrix, dist_coeffs)
+                    _, buffer = cv2.imencode(".jpg", undistorted, [cv2.IMWRITE_JPEG_QUALITY, 100])
                     redis_client.set(REDIS_CAMERA_FRAME_KEY, buffer.tobytes())
             else:
                 logger.warning("Камера не подключена, повторная попытка через 3 секунды")
