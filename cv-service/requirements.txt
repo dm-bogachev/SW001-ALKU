@@ -3,4 +3,4 @@ uvicorn[standard]
 redis
 numpy
 pandas
-opencv-python
+
