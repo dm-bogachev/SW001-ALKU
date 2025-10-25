@@ -31,4 +31,6 @@ yolo-trainer/runs/*
 
 # Калибровка
 Calibration/data/*
-Robot/KROSET/ALKU/temporary/*/cm*_conf.txt
+
+# K-ROSET
+Robot/KROSET/ALKU/temporary/**/*.txt
