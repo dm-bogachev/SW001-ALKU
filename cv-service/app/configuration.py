@@ -7,7 +7,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from common.Config import Config
 
 base_settings = {
-
+    "CameraDistortionCoeffsName": "distortion_coeffs.npz",
     "Process":{
         "ProcessingDelay": 1,
         "LastModel": "LongDetails",
@@ -27,13 +27,6 @@ base_settings = {
         "Marker0YPoint": 3,  # Bottom Left
     },
     
-    "Distortions": {
-        "ScalePX": 1,
-        "ScalePY": 1,
-        "ScaleNX": 1,
-        "ScaleNY": 1,
-    },
-
     "Models": {
         "LongDetails": {
             "ModelName": "LongDetails",

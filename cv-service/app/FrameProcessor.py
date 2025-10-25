@@ -31,19 +31,25 @@ REDIS_CAMERA_FRAME_KEY = os.getenv("REDIS_CAMERA_FRAME_KEY", "camera_frame")
 REDIS_PROCESSED_FRAME_KEY = os.getenv("REDIS_PROCESSED_FRAME_KEY", "processed_frame")
 
 if is_docker():
-   MAT_DIR = "/data"
+   DATA_DIR = "/data"
 else:
-   MAT_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data")
+   DATA_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data")
 
 
 class FrameProcessor:
 
     def __init__(self):
         logger.debug("Инициализация обработчика кадров")
+        self.__cuda_available = torch.cuda.is_available()
+        if self.__cuda_available:
+            logger.debug("Для подготовки изображения доступна CUDA")
+        else:
+            logger.debug("CUDA недоступна")
         self.__aruco = Aruco()
         self.calibrator = Calibrator()
         self.detector = Detector()
         self.drawer = Drawer()
+        self.__load_coefficients()
         model = self.detector.get_current_yolo_model()
         self.function = ProcessFunction()
         self.function.load_function(model)
@@ -53,15 +59,35 @@ class FrameProcessor:
         self.process_started = False
         self.__objects = None
 
-        self.scalepx = Config.get("Distortions.ScalePX", 0)
-        self.scalepy = Config.get("Distortions.ScalePY", 0)
-        self.scalenx = Config.get("Distortions.ScaleNX", 0)
-        self.scaleny = Config.get("Distortions.ScaleNY", 0)
-
-        #self.detector.change_model("LongDetails")
         self.__process_thread = threading.Thread(target=self.__process_loop).start()
 
         
+    def __load_coefficients(self):
+        """Загружает матрицу камеры и коэффициенты настроечного оптического дефекта."""
+        try:
+            data = np.load(os.path.join(DATA_DIR, Config.get("CameraDistortionCoeffsName")))
+            self.__cameraMatrix = data["cameraMatrix"]
+            self.__distCoeffs = data["distCoeffs"]
+            logger.debug(f"Матрица камеры:\n{self.__cameraMatrix}")
+            logger.debug(f"Коэффициенты дисторсии:\n{self.__distCoeffs.ravel()}")
+        except Exception as e:
+            logger.error(f"Ошибка загрузки коэффициентов дисторсии: {e}")
+            self.__cameraMatrix = None
+            self.__distCoeffs = None
+
+    def __undistort(self, frame):
+        if self.__cameraMatrix is not None and self.__distCoeffs is not None:
+            logger.debug("Устранение дисторсии выполнено")
+            if self.__cuda_available:
+                gpu_frame = cv2.cuda_GpuMat()
+                gpu_frame.upload(frame)
+                gpu_undistorted = cv2.cuda.undistort(gpu_frame, self.__cameraMatrix, self.__distCoeffs)
+                return gpu_undistorted.download()
+            else:
+                return cv2.undistort(frame, self.__cameraMatrix, self.__distCoeffs)
+        logger.debug("Устранение дисторсии не выполнено")
+        return frame
+
     def __get_frame_from_redis(self):
         ''' Получает кадр из Redis '''
         frame_data = redis_client.get(REDIS_CAMERA_FRAME_KEY)
@@ -88,80 +114,20 @@ class FrameProcessor:
         # self.__find_circles(frame)
         self.__put_frame_to_redis(frame)
 
-    def __scale_predictions(self, predictions):
-        ''' Масштабирует координаты объектов '''
-        
-        for prediction in predictions:
-            prediction.pick_point = self.__inverse_scale_point(prediction.pick_point)
-
-            # prediction.xyxy = (prediction.xyxy[0] / 10, 
-            # prediction.xyxy[1] / 10, 
-            # prediction.xyxy[2] / 10, 
-            # prediction.xyxy[3] / 10)
-            # prediction.pick_point = (prediction.pick_point[0] / 10, 
-            # prediction.pick_point[1] / 10)
-            # if prediction.keypoints:
-            #     prediction.keypoints = [(point[0] / 10, point[1] / 10) for point in prediction.keypoints]
-        return predictions
-
-    def __inverse_scale_point(self, point):
-        x, y = point
-        # xc, yc = self.center
-        
-        # if x < xc:
-        #     x = (x + self.scalenx * xc) / (1 + self.scalenx)
-        # else:
-        #     x = (x + self.scalepx * xc) / (1 + self.scalepx)
-        # if y < yc:
-        #     y = (y + self.scaleny * yc) / (1 + self.scaleny)
-        # else:
-        #     y = (y + self.scalepy * yc) / (1 + self.scalepy)
-        # if x > 4*xc:
-        #     x = 4*xc
-        # if y > 4*yc:
-        #     y = 4*yc
-        
-        return (int(x), int(y))
-
-    def __scale_point(self, point):
-        x, y = point
-        # xc, yc = self.center
-
-        # if x < xc:
-        #     x = x - self.scalenx*(xc-x)
-        # else:
-        #     x = x + self.scalepx*(x-xc)
-        # if y < yc:
-        #     y = y - self.scaleny*(yc-y)
-        # else:
-        #     y = y + self.scalepy*(y-yc)
-
-        # if x < 0: 
-        #     x = 0
-        # if x > 5000: 
-        #     x = 5000
-        # if y < 0: 
-        #     y = 0
-        # if y > 5000: 
-        #     y = 5000
-        
-        return (int(x), int(y))
-        
-
     def __process_calibrated(self, frame):
         ''' Обрабатывает откалиброванный кадр '''
         try:
             frame = self.__prepare_frame(frame)
-
+            
             predictions = self.detector.detect(frame)
             if predictions and len(predictions) > 0:
                 frame, predictions = self.function.process(frame, predictions)
             if predictions and len(predictions) > 0:
-                logger.debug(f"0 элемент до масштабирования: {predictions[0].pick_point}")
+                # logger.debug(f"0 элемент до масштабирования: {predictions[0].pick_point}")
                 frame = self.drawer.draw(frame, predictions)
                 # predictions = self.__scale_predictions(predictions)
                 # frame = self.drawer.draw(frame, predictions)
-                logger.debug(f"0 элемент после масштабирования: {predictions[0].pick_point}")
+                # logger.debug(f"0 элемент после масштабирования: {predictions[0].pick_point}")
                 self.__objects = predictions
 
             for x in range(0, frame.shape[1], 500):
@@ -173,13 +139,11 @@ class FrameProcessor:
                     cv2.line(frame, (x, 0), (x, frame.shape[0]), (0, 255, 0), 1)
                 for y in range(0, frame.shape[0], 100):
                     cv2.line(frame, (0, y), (frame.shape[1], y), (0, 255, 0), 1)
-                for y in range(0, frame.shape[0], 500):
-                    cv2.drawMarker(frame, self.__scale_point((x, y)), (0, 0, 255), cv2.MARKER_CROSS, 8, 8)
 
-            frame = cv2.drawMarker(frame, self.__scale_point((1000, 1000)), (0,0,255), cv2.MARKER_CROSS, 5, 8)
-            frame = cv2.drawMarker(frame, self.__scale_point((2500, 1500)), (0,0,255), cv2.MARKER_CROSS, 5, 8)
-            frame = cv2.drawMarker(frame, self.__scale_point((3000, 2500)), (0,0,255), cv2.MARKER_CROSS, 5, 8)
-            frame = cv2.drawMarker(frame, self.__scale_point((4500, 1500)), (0,0,255), cv2.MARKER_CROSS, 5, 8)
+            # frame = cv2.drawMarker(frame, (1000, 1000), (0,0,255), cv2.MARKER_CROSS, 5, 8)
+            # frame = cv2.drawMarker(frame, (2500, 1500), (0,0,255), cv2.MARKER_CROSS, 5, 8)
+            # frame = cv2.drawMarker(frame, (3000, 2500), (0,0,255), cv2.MARKER_CROSS, 5, 8)
+            # frame = cv2.drawMarker(frame, (4500, 1500), (0,0,255), cv2.MARKER_CROSS, 5, 8)
 
 
             self.__put_frame_to_redis(frame)
@@ -200,7 +164,7 @@ class FrameProcessor:
             target_size = (width, height)
 
             # Преобразование с CUDA, если доступно
-            if False:#torch.cuda.is_available():
+            if self.__cuda_available:
                 try:
                     gpu_frame = cv2.cuda_GpuMat()
                     gpu_frame.upload(frame)
@@ -234,7 +198,9 @@ class FrameProcessor:
                 time.sleep(5)
                 continue
             logger.debug("Кадр успешно получен из Redis, начинаем обработку")
-            # cv2.putText(frame, "Processing...", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 20)
+            
+            frame = self.__undistort(frame)
+
             if not self.calibrator.Calibrated:
                 self.__process_uncalibrated(frame)
             else:

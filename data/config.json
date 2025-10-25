@@ -103,12 +103,5 @@
             "DO7": 7
         }
     },
-    "Distortions": {
-        "ScalePX": 0.01,
-        "ScalePY": 0.01,
-        "ScaleNX": 0.0045,
-        "ScaleNY": 0.004,
-        "APX": 0.0001,
-        "BPX": 0.0
-    }
+    "CameraDistortionCoeffsName": "distortion_coeffs.npz"
 }

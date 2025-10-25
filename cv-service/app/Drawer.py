@@ -1,4 +1,3 @@
-from YoloData import YoloData
 import sys
 import os
 
@@ -77,7 +76,6 @@ class Drawer:
 
     def __draw_points(self, frame, data):
         if self.__points:
-            x1, y1, x2, y2 = data.xyxy
             id = int(data.class_id)
             if data.pick_point:
                 cv2.circle(
@@ -90,7 +88,6 @@ class Drawer:
 
     def __draw_keypoints(self, frame, data):
         if self.__keypoints:
-            x1, y1, x2, y2 = data.xyxy
             color = 2
             if data.keypoints:
                 for point in data.keypoints:
