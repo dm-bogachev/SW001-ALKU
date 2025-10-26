@@ -13,7 +13,6 @@ base_settings = {
         "Port": 9013,
         "Timeout": 5,
         "MaxTCPAttempts": 5,
-        "PingInterval": 15,
     },
 }
 

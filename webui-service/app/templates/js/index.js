@@ -74,17 +74,99 @@ function checkServicesHealth() {
     // checkServiceHealth(ROBOT_API_URL, 'robot');
     checkServiceHealth(CV_API_URL, 'cv');
     checkServiceHealth(IO_API_URL, 'io');
-    //checkServiceHealth(RS0013N_API_URL, 'rs0013n');
-    //checkServiceHealth(RS007L_API_URL, 'rs007l');
+    checkServiceHealth(RS0013N_API_URL, 'rs0013n');
+    checkServiceHealth(RS007L_API_URL, 'rs007l');
     //checkServiceHealth(MASTER_API_URL, 'master');
 };
 
+function updateRobotStatus(robotType, data) {
+    if (!data || !data.RobotStatus) {
+        console.error(`No RobotStatus in data for ${robotType}:`, data);
+        return;
+    }
+    
+    const robotData = data.RobotStatus;
+    console.log(`${robotType} status:`, robotData);
+    
+    const statusMap = {
+        'connected': 'ok',
+        'power': 'ok',
+        'teach': 'ok',
+        'cs': 'ok',
+        'error': 'error',
+        'teachl': 'ok',
+        'tpemg': 'error',
+        'opemg': 'error',
+        'exemg': 'error',
+        'home': 'ok',
+        'batalm': 'error'
+    };
+    
+    // Update status lights
+    Object.keys(statusMap).forEach(key => {
+        const element = document.getElementById(`${robotType}-${key}`);
+        if (element) {
+            const status = robotData[key] ? statusMap[key] : 'off';
+            setStatusLight(`${robotType}-${key}`, status);
+            console.log(`Updating ${robotType}-${key}:`, { value: robotData[key], status });
+        } else {
+            console.error(`Element not found: ${robotType}-${key}`);
+        }
+    });
+    
+    // Update error code if error exists
+    if (robotData.ecode !== undefined) {
+        const ecodeElement = document.getElementById(`${robotType}-ecode`);
+        if (ecodeElement) {
+            ecodeElement.textContent = robotData.ecode;
+        } else {
+            console.error(`Element not found: ${robotType}-ecode`);
+        }
+    }
+    
+    // Update current action
+    const actionElement = document.getElementById(`${robotType}-action`);
+    if (actionElement) {
+        actionElement.textContent = robotData.action || 'Нет данных';
+    } else {
+        console.error(`Element not found: ${robotType}-action`);
+    }
+}
+
+function fetchRobotStatus(robotType) {
+    const apiUrl = robotType === 'rs007l' ? RS007L_API_URL : RS0013N_API_URL;
+    console.log(`Fetching status from: ${apiUrl}/status`);
+    
+    fetch(`${apiUrl}/status`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Failed to fetch ${robotType} status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log(`Received data for ${robotType}:`, data);
+            if (data && data.Status === "OK") {
+                updateRobotStatus(robotType, data);
+                setStatusLight(`${robotType}-state`, 'ok');
+            } else {
+                throw new Error('Invalid response format');
+            }
+        })
+        .catch(error => {
+            console.error(`Error fetching ${robotType} status:`, error);
+            setStatusLight(`${robotType}-state`, 'error');
+        });
+}
+
 function checkPhysicalStates() {
-    // Здесь можно добавить проверку физических состояний, если необходимо
+    // Check camera and IO states
     checkPhysicalState(`${CAMERA_API_URL}/camera_state`, 'camera');
     checkPhysicalState(`${IO_API_URL}/io_state`, 'io');
-    // checkPhysicalState(RS0013N_API_URL, 'rs0013n');
-    // checkPhysicalState(RS007L_API_URL, 'rs007l');
+    
+    // Check robot states
+    fetchRobotStatus('rs007l');
+    fetchRobotStatus('rs013n');
 }
 
 function switchTab(tabId) {
@@ -522,9 +604,49 @@ function renderObjects(objectsData) {
 
 // Функция для обновления списка объектов
 async function updateObjectsList() {
-
     const objectsData = await fetchObjects();
     renderObjects(objectsData);
+    // Обновляем каждые 2 секунды
+    setTimeout(updateObjectsList, 2000);
+}
+
+async function sendRobotCommand(robotType, command) {
+    const apiUrl = robotType === 'rs013n' ? RS0013N_API_URL : RS007L_API_URL;
+    const actionElement = document.getElementById(`${robotType}-action`);
+    
+    try {
+        actionElement.textContent = `Отправка команды ${command}...`;
+        actionElement.className = 'robot-status-action processing';
+        
+        const response = await fetch(`${apiUrl}/${command}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error(`Ошибка HTTP: ${response.status}`);
+        }
+
+        const data = await response.json();
+        actionElement.textContent = `Команда ${command} выполнена: ${data.Status}`;
+        actionElement.className = 'robot-status-action success';
+        
+        // Обновляем статус робота после выполнения команды
+        fetchRobotStatus(robotType);
+        
+    } catch (error) {
+        console.error(`Ошибка при выполнении команды ${command}:`, error);
+        actionElement.textContent = `Ошибка: ${error.message}`;
+        actionElement.className = 'robot-status-action error';
+    } finally {
+        // Через 5 секунд возвращаем стандартный текст
+        setTimeout(() => {
+            actionElement.textContent = 'Ожидание...';
+            actionElement.className = 'robot-status-action';
+        }, 5000);
+    }
 }
 
 // Easter Egg Animation Function
@@ -572,6 +694,14 @@ setInterval(() => {
 setInterval(checkServicesHealth, 5000);
 setInterval(checkPhysicalStates, 2000);
 
+// Update robot status when robots tab is active
+setInterval(() => {
+    if (activeTab === 'robots') {
+        fetchRobotStatus('rs007l');
+        fetchRobotStatus('rs013n');
+    }
+}, 1000);
+
 function calibrate() {
     console.log('Калибровка');
     fetch(`${CV_API_URL}/calibrate`, { method: 'POST' })
@@ -602,4 +732,40 @@ function uncalibrate() {
         .catch(() => {
             alert('Не удалось выполнить откалибровку');
         });
+}
+
+async function sendRobotCommand(robotType, command) {
+    const apiUrl = robotType === 'rs013n' ? RS0013N_API_URL : RS007L_API_URL;
+    const actionElement = document.getElementById(`${robotType}-action`);
+    
+    try {
+        actionElement.textContent = `Отправка команды ${command}...`;
+        actionElement.className = 'robot-status-action processing';
+        
+        const response = await fetch(`${apiUrl}/${command}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error(`Ошибка HTTP: ${response.status}`);
+        }
+
+        const data = await response.json();
+        actionElement.textContent = `Команда ${command} выполнена: ${data.Status}`;
+        actionElement.className = 'robot-status-action success';
+        
+    } catch (error) {
+        console.error(`Ошибка при выполнении команды ${command}:`, error);
+        actionElement.textContent = `Ошибка: ${error.message}`;
+        actionElement.className = 'robot-status-action error';
+    } finally {
+        // Через 5 секунд возвращаем стандартный текст
+        setTimeout(() => {
+            actionElement.textContent = 'Ожидание...';
+            actionElement.className = 'robot-status-action';
+        }, 500);
+    }
 }

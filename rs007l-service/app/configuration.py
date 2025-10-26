@@ -10,7 +10,7 @@ from common.Config import Config
 base_settings = {
     "RS007L": {
         "Host": "0.0.0.0",
-        "Port": 9001,
+        "Port": 9007,
         "Timeout": 5,
         "MaxTCPAttempts": 5,
         "PingInterval": 15,

@@ -103,5 +103,18 @@
             "DO7": 7
         }
     },
-    "CameraDistortionCoeffsName": "distortion_coeffs.npz"
+    "CameraDistortionCoeffsName": "distortion_coeffs.npz",
+    "RS0013N": {
+        "Host": "0.0.0.0",
+        "Port": 9013,
+        "Timeout": 5,
+        "MaxTCPAttempts": 5
+    },
+    "RS007L": {
+        "Host": "0.0.0.0",
+        "Port": 9007,
+        "Timeout": 5,
+        "MaxTCPAttempts": 5,
+        "PingInterval": 15
+    }
 }

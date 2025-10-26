@@ -253,6 +253,126 @@
     box-shadow: none;
 }
 
+/* Robot Status Styles */
+.robot-status-container {
+    display: flex;
+    gap: 2rem;
+    margin-top: 1rem;
+    padding: 1rem;
+    flex-wrap: wrap;
+}
+
+.robot-column {
+    flex: 1;
+    min-width: 300px;
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.robot-column h3 {
+    color: #333;
+    margin-top: 0;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #eee;
+    text-align: center;
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.status-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 1rem;
+}
+
+.status-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    border-radius: 8px;
+    transition: background-color 0.2s;
+}
+
+.status-item:hover {
+    background-color: #f8f9fa;
+}
+
+.status-light {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: #6c757d;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    flex-shrink: 0;
+}
+
+.status-light.status-on {
+    background-color: #28a745;
+    box-shadow: 0 0 10px #28a745;
+}
+
+.status-light.status-warning {
+    background-color: #ffc107;
+    box-shadow: 0 0 10px #ffc107;
+}
+
+.status-light.status-error {
+    background-color: #dc3545;
+    box-shadow: 0 0 10px #dc3545;
+    animation: pulse 1.5s infinite;
+}
+
+.robot-status-label {
+    font-size: 0.9rem;
+    color: #000000;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.status-action {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 0.5rem;
+    background: #f8f9fa;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    color: #6c757d;
+    margin-top: 0.5rem;
+}
+
+.full-width {
+    grid-column: 1 / -1;
+}
+
+@keyframes pulse {
+    0% {
+        opacity: 0.7;
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0.7;
+    }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .robot-column {
+        min-width: 100%;
+    }
+    
+    .status-grid {
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    }
+}
+
 .status-light.status-on {
     background-color: #28a745;
     border-color: #28a745;
@@ -397,6 +517,79 @@ input:checked + .slider:before {
     box-shadow: 0 0 0 3px rgba(255, 179, 71, 0.1);
 }
 
+/* Robot Controls */
+.robot-controls {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+    justify-content: center;
+}
+
+.robot-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.robot-btn .btn-icon {
+    width: 16px;
+    height: 16px;
+    margin-right: 8px;
+}
+
+.start-btn {
+    background-color: #28a745;
+    color: white;
+}
+
+.start-btn:hover {
+    background-color: #218838;
+}
+
+.continue-btn {
+    background-color: #17a2b8;
+    color: white;
+}
+
+.continue-btn:hover {
+    background-color: #138496;
+}
+
+.robot-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.robot-status-action {
+    padding: 8px;
+    text-align: center;
+    border-radius: 4px;
+    margin-top: 5px;
+    font-size: 0.9em;
+}
+
+.robot-status-action.processing {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.robot-status-action.success {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.robot-status-action.error {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
 .confidence-input {
     padding: 8px 12px;
     border: 1px solid #ced4da;
@@ -457,7 +650,7 @@ input:checked + .slider:before {
 
 .object-item {
     background: white;
-    border: 1px solid #e0e0e0;
+    border: 1px solid #0e0e0e;
     border-radius: 8px;
     padding: 12px;
     transition: all 0.3s ease;
@@ -587,4 +780,77 @@ input:checked + .slider:before {
         opacity: 1;
         transform: scale(1);
     }
+}
+
+/* Robot Controls */
+.robot-controls {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+    justify-content: center;
+}
+
+.robot-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.robot-btn .btn-icon {
+    width: 16px;
+    height: 16px;
+    margin-right: 8px;
+}
+
+.start-btn {
+    background-color: #28a745;
+    color: white;
+}
+
+.start-btn:hover {
+    background-color: #218838;
+}
+
+.continue-btn {
+    background-color: #17a2b8;
+    color: white;
+}
+
+.continue-btn:hover {
+    background-color: #138496;
+}
+
+.robot-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.robot-status-action {
+    padding: 8px;
+    text-align: center;
+    border-radius: 4px;
+    margin-top: 5px;
+    font-size: 0.9em;
+}
+
+.robot-status-action.processing {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.robot-status-action.success {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.robot-status-action.error {
+    background-color: #f8d7da;
+    color: #721c24;
 }

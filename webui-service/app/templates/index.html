@@ -49,7 +49,7 @@
     <!-- ... -->
     <nav class="tabs">
         <div class="tab active" data-tab="control">Просмотр</div>
-        <div class="tab" data-tab="settings">Настройки</div>
+        <div class="tab" data-tab="robots">Роботы</div>
         <div class="tab" data-tab="io">IO</div>
         <!-- Можно добавлять новые вкладки здесь -->
     </nav>
@@ -170,10 +170,135 @@
             </div>
         </section>
 
-        <section class="tab-content" id="settings">
-            <div class="settings-container">
-                <h2>Настройки</h2>
+        <section class="tab-content" id="robots">
+            <div class="robots-container">
+                <h2>Роботы</h2>
+                <div class="robot-status-container">
+                    
+                    <!-- RS013N Status -->
+                    <div class="robot-column">
+                        <h3>RS013N</h3>
+                        <div class="robot-controls">
+                            <button class="robot-btn start-btn" onclick="sendRobotCommand('rs013n', 'start')">
+                                Старт
+                            </button>
+                            <button class="robot-btn continue-btn" onclick="sendRobotCommand('rs013n', 'continue')">
+                                Продолжить
+                            </button>
+                        </div>
+                        <div class="status-grid">
+                            <div class="status-item">
+                                <div class="status-light" id="rs013n-connected"></div>
+                                <div class="robot-status-label">Подключен</div>
+                            </div>
+                            <div class="status-item">
+                                <div class="status-light" id="rs013n-power"></div>
+                                <div class="robot-status-label">Моторы</div>
+                            </div>
+                            <div class="status-item">
+                                <div class="status-light" id="rs013n-teach"></div>
+                                <div class="robot-status-label">Режим обучения</div>
+                            </div>
+                            <div class="status-item">
+                                <div class="status-light" id="rs013n-cs"></div>
+                                <div class="robot-status-label">Цикл запущен</div>
+                            </div>
+                            <div class="status-item">
+                                <div class="status-light" id="rs013n-error"></div>
+                                <div class="robot-status-label">Ошибка <span id="rs013n-ecode">0</span></div>
+                            </div>
+                            <div class="status-item">
+                                <div class="status-light" id="rs013n-teachl"></div>
+                                <div class="robot-status-label">Переключатель TEACH LOCK</div>
+                            </div>
+                            <div class="status-item">
+                                <div class="status-light" id="rs013n-tpemg"></div>
+                                <div class="robot-status-label">Кнопка EMG на пульте</div>
+                            </div>
+                            <div class="status-item">
+                                <div class="status-light" id="rs013n-opemg"></div>
+                                <div class="robot-status-label">Кнопка EMG на контроллере</div>
+                            </div>
+                            <div class="status-item">
+                                <div class="status-light" id="rs013n-exemg"></div>
+                                <div class="robot-status-label">Внешняя кнопка EMG</div>
+                            </div>
+                            <div class="status-item">
+                                <div class="status-light" id="rs013n-home"></div>
+                                <div class="robot-status-label">Домашнее положение</div>
+                            </div>
+                            <div class="status-item">
+                                <div class="status-light" id="rs013n-batalm"></div>
+                                <div class="robot-status-label">Ошибка батареи</div>
+                            </div>
+                            <div class="status-item full-width">
+                                <div class="robot-status-action" id="rs013n-action">Ожидание...</div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- RS007L Status -->
+                    <div class="robot-column">
+                        <h3>RS007L</h3>
+                        <div class="robot-controls">
+                            <button class="robot-btn start-btn" onclick="sendRobotCommand('rs007l', 'start')">
+                                Старт
+                            </button>
+                            <button class="robot-btn continue-btn" onclick="sendRobotCommand('rs007l', 'continue')">
+                                Продолжить
+                            </button>
+                        </div>
+                        <div class="status-grid">
+                            <div class="status-item">
+                                <div class="status-light" id="rs007l-connected"></div>
+                                <div class="robot-status-label">Подключен</div>
+                            </div>
+                            <div class="status-item">
+                                <div class="status-light" id="rs007l-power"></div>
+                                <div class="robot-status-label">Моторы</div>
+                            </div>
+                            <div class="status-item">
+                                <div class="status-light" id="rs007l-teach"></div>
+                                <div class="robot-status-label">Режим обучения</div>
+                            </div>
+                            <div class="status-item">
+                                <div class="status-light" id="rs007l-cs"></div>
+                                <div class="robot-status-label">Цикл запущен</div>
+                            </div>
+                            <div class="status-item">
+                                <div class="status-light" id="rs007l-error"></div>
+                                <div class="robot-status-label">Ошибка <span id="rs007l-ecode">0</span></div>
+                            </div>
+                            <div class="status-item">
+                                <div class="status-light" id="rs007l-teachl"></div>
+                                <div class="robot-status-label">Переключатель TEACH LOCK</div>
+                            </div>
+                            <div class="status-item">
+                                <div class="status-light" id="rs007l-tpemg"></div>
+                                <div class="robot-status-label">Кнопка EMG на пульте</div>
+                            </div>
+                            <div class="status-item">
+                                <div class="status-light" id="rs007l-opemg"></div>
+                                <div class="robot-status-label">Кнопка EMG на контроллере</div>
+                            </div>
+                            <div class="status-item">
+                                <div class="status-light" id="rs007l-exemg"></div>
+                                <div class="robot-status-label">Внешняя кнопка EMG</div>
+                            </div>
+                            <div class="status-item">
+                                <div class="status-light" id="rs007l-home"></div>
+                                <div class="robot-status-label">Домашнее положение</div>
+                            </div>
+                            <div class="status-item">
+                                <div class="status-light" id="rs007l-batalm"></div>
+                                <div class="robot-status-label">Ошибка батареи</div>
+                            </div>
+                            <div class="status-item full-width">
+                                <div class="robot-status-action" id="rs007l-action">Ожидание...</div>
+                            </div>
+                        </div>
+                    </div>
 
+                </div>
             </div>
         </section>
 

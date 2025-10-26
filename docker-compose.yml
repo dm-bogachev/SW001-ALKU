@@ -88,48 +88,54 @@ services:
   #     retries: 5
   #     start_period: 30s
   
-  # rs0013n-service:
-  #   build:
-  #     context: .
-  #     dockerfile: ./rs0013n-service/Dockerfile
-  #   restart: unless-stopped
-  #   networks:
-  #     - alku-network
-  #   container_name: alku-rs0013n
-  #   volumes:
-  #     - common:/common:ro
-  #     - data:/data
-  #   environment:
-  #     - REDIS_HOST=redis
-  #   healthcheck:
-  #     test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
-  #     interval: 1m30s
-  #     timeout: 30s
-  #     retries: 5
-  #     start_period: 30s
+  rs0013n-service:
+    build:
+      context: .
+      dockerfile: ./rs0013n-service/Dockerfile
+    restart: unless-stopped
+    networks:
+      - alku-network
+    container_name: alku-rs0013n
+    volumes:
+      - common:/common:ro
+      - data:/data
+      - ./rs0013n-service/app:/rs0013n
+    env_file:
+      - .env
+    ports:
+      - "9013:9013"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 1m30s
+      timeout: 30s
+      retries: 5
+      start_period: 30s
 
-  # rs007l-service:
-  #   build:
-  #     context: .
-  #     dockerfile: ./rs007l-service/Dockerfile
-  #   restart: unless-stopped
-  #   networks:
-  #     - alku-network
-  #   container_name: alku-rs007l
-  #   volumes:
-  #     - common:/common:ro
-  #     - data:/data
-  #   environment:
-  #     - REDIS_HOST=redis
-  #   healthcheck:
-  #     test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
-  #     interval: 1m30s
-  #     timeout: 30s
-  #     retries: 5
-  #     start_period: 30s
+  rs007l-service:
+    build:
+      context: .
+      dockerfile: ./rs007l-service/Dockerfile
+    restart: unless-stopped
+    networks:
+      - alku-network
+    container_name: alku-rs007l
+    volumes:
+      - common:/common:ro
+      - data:/data
+      - ./rs007l-service/app:/rs007l
+    env_file:
+      - .env
+    ports:
+      - "9007:9007"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 1m30s
+      timeout: 30s
+      retries: 5
+      start_period: 30s
 
   cv-service:
-    runtime: nvidia
+    # runtime: nvidia
     build:
       context: .
       dockerfile: ./cv-service/Dockerfile

@@ -1,7 +1,7 @@
 # Системные импорты
 import os, time, sys, threading
 # Добавляем директорию проекта в sys.path
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 # Внешние модули
 from fastapi import FastAPI
@@ -10,8 +10,12 @@ from fastapi.concurrency import asynccontextmanager
 
 # Внутренние модули
 from common.Logger import config_logger
+from Robot import Robot
 
 logger = config_logger("rs007l-service/main.py")
+
+robot = Robot()
+robot.start()
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -50,22 +54,31 @@ def reboot():
     threading.Thread(target=delayed_exit).start()
     return {"Status": "Reboot"}
 
+@app.post("/start")
+def start():
+    """ Запуск робота """
+    logger.debug("Запрос /start")
+    robot.send("START\n")
+    return {"Status": "OK"}
+
+@app.post("/continue")
+def continue_():
+    """ Продолжение работы робота """
+    logger.debug("Запрос /continue")
+    robot.send("CONTINUE\n")
+    return {"Status": "OK"}
+
 @app.get("/status")
 def status():
     """ Получение статуса робота """
     logger.debug("Запрос /status")
-    # Здесь должна быть логика получения реального статуса робота
-    robot_status = {
-        "battery": "85%",
-        "position": {"x": 10, "y": 5},
-        "is_moving": False
-    }
-    return {"Status": "OK", "RobotStatus": robot_status}
+    return {"Status": "OK", "RobotStatus": robot.get_state()}
 
 @app.post("/send_command")
 def send_command(command: str):
     """ Отправка команды на выполнение """
     logger.debug(f"Запрос /send_command: {command}")
+    robot.send(command.upper() + "\n")
     return {"Status": "Command sent", "Command": command}
 
 if __name__ == "__main__":

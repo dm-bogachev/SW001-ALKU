@@ -9,7 +9,7 @@ from common.Logger import config_logger
 from configuration import Config
 from RobotState import RobotState
 
-logger = config_logger("rs0013n-service/Robot.py")
+logger = config_logger("rs007l-service/Robot.py")
 
 class Robot(Thread):
     def __init__(self):
@@ -18,7 +18,7 @@ class Robot(Thread):
         self.__connected = False
         self.__connection = None
         self.__state = RobotState()
-        logger.info(f'Инициализация TCP/IP handler класса робота с хостом {Config.get("RS0013N.Host")} и портом {Config.get("RS0013N.Port")}')  
+        logger.info(f'Инициализация TCP/IP handler класса робота с хостом {Config.get("RS007L.Host")} и портом {Config.get("RS007L.Port")}')  
 
     def is_connected(self):
         return self.__connected
@@ -86,8 +86,8 @@ class Robot(Thread):
         try:
             s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-            host = Config.get("RS0013N.Host", "0.0.0.0")
-            port = Config.get("RS0013N.Port", 9013)
+            host = Config.get("RS007L.Host", "0.0.0.0")
+            port = Config.get("RS007L.Port", 9013)
             s.bind((host, port))
             s.listen()
             logger.info(f'Сокет находится в состоянии прослушивания на {host}:{port}')
@@ -96,8 +96,8 @@ class Robot(Thread):
             except socket.timeout:
                 logger.warning('Превышено время ожидания подключения')
                 return
-            self.__connection.settimeout(Config.get("RS0013N.Timeout"))
-            logger.info(f'Робот с IP {ip_address} подключен, таймаут {Config.get("RS0013N.Timeout")}')
+            self.__connection.settimeout(Config.get("RS007L.Timeout"))
+            logger.info(f'Робот с IP {ip_address} подключен, таймаут {Config.get("RS007L.Timeout")}')
             self.__state.connected = True       
             self.__connected = True
         except Exception as e:
