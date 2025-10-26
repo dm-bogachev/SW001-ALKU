@@ -854,3 +854,58 @@ input:checked + .slider:before {
     background-color: #f8d7da;
     color: #721c24;
 }
+
+/* Debug Buttons */
+.debug-buttons {
+    margin: 20px auto;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-width: 300px;
+}
+
+.debug-buttons button {
+    padding: 8px 16px;
+    background-color: #f0f0f0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s ease;
+    color: #333;
+}
+
+.debug-buttons button:hover {
+    background-color: #e0e0e0;
+    border-color: #ccc;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.debug-buttons button:active {
+    transform: translateY(0);
+    box-shadow: none;
+}
+
+.debug-buttons input[type="text"] {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.debug-buttons .button-group {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.debug-buttons .button-group button {
+    flex: 1;
+}
