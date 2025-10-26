@@ -71,7 +71,7 @@ class Robot(Thread):
 
     def __receive(self):
         try:
-            data = self.__connection.recv(4096)
+            data = self.__connection.recv(1024)
             if not data:
                 self.__disconnect()
                 return

@@ -656,6 +656,20 @@ N_OX6    "capture.grip|"
     END
   END
   ;
+  IF INSTR(.$data[1], "PICK") THEN
+    .$temp = $DECODE(.$data[1], ":", 0)
+    .$temp = $DECODE(.$data[1], ":", 1)
+    .$x = $DECODE(.$data[1], ",", 0)
+    .$temp = $DECODE(.$data[1], ",", 1)
+    .$y = $DECODE(.$data[1], ",", 0)
+    .$temp = $DECODE(.$data[1], ",", 1)
+    .$a = .$data[1]
+    hmi.x = VAL(.$x)
+    hmi.y = VAL(.$y)
+    hmi.a = VAL(.$a)
+    PRINT 0: .$x, .$y, .$a
+  END
+  ;
   IF .$data[1] == "GO\n" THEN
     MC ZPOWER ON
     TWAIT 1

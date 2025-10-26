@@ -74,6 +74,14 @@ def status():
     logger.debug("Запрос /status")
     return {"Status": "OK", "RobotStatus": robot.get_state()}
 
+@app.post("/send_pick_data")
+def send_pick_data(x: float, y: float, angle: float):
+    """ Отправка данных захвата на выполнение """
+    logger.debug("Запрос /send_pick_data")
+    robot.send(f"PICK:{x},{y},{angle}\n")
+    logger.debug(f"Отправлено данные захвата: {x}, {y}, {angle}")
+    return {"Status": "OK"}
+
 @app.post("/send_command")
 def send_command(command: str):
     """ Отправка команды на выполнение """
