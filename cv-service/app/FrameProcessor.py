@@ -79,12 +79,29 @@ class FrameProcessor:
         if self.__cameraMatrix is not None and self.__distCoeffs is not None:
             logger.debug("Устранение дисторсии выполнено")
             if self.__cuda_available:
+                # Use remap for CUDA-based undistortion
+                h, w = frame.shape[:2]
+                map1, map2 = cv2.initUndistortRectifyMap(
+                    self.__cameraMatrix, self.__distCoeffs, None, 
+                    self.__cameraMatrix, (w, h), cv2.CV_32FC1
+                )
                 gpu_frame = cv2.cuda_GpuMat()
+                gpu_map1 = cv2.cuda_GpuMat()
+                gpu_map2 = cv2.cuda_GpuMat()
+                
                 gpu_frame.upload(frame)
-                gpu_undistorted = cv2.cuda.undistort(gpu_frame, self.__cameraMatrix, self.__distCoeffs)
-                return gpu_undistorted.download()
+                gpu_map1.upload(map1)
+                gpu_map2.upload(map2)
+                
+                gpu_undistorted = cv2.cuda.remap(
+                    gpu_frame, gpu_map1, gpu_map2, 
+                    interpolation=cv2.INTER_LINEAR
+                )
+                undistorted = gpu_undistorted.download()
+                return undistorted
             else:
-                return cv2.undistort(frame, self.__cameraMatrix, self.__distCoeffs)
+                undistorted = cv2.undistort(frame, self.__cameraMatrix, self.__distCoeffs)
+                return undistorted
         logger.debug("Устранение дисторсии не выполнено")
         return frame
 
@@ -175,6 +192,7 @@ class FrameProcessor:
                     logger.error(f"Ошибка CUDA-преобразования: {e}")
                     result = cv2.warpPerspective(frame, self.calibrator.M, target_size)
             else:
+                logger.debug("CUDA недоступна, выполняется преобразование без CUDA")
                 result = cv2.warpPerspective(frame, self.calibrator.M, target_size)
 
             return result
@@ -190,8 +208,8 @@ class FrameProcessor:
         logger.debug("Запуск цикла обработки кадров")
         self.process_started = True
         while True:
-            frame = self.__get_frame_from_redis()
-            if frame is None:
+            raw_frame = self.__get_frame_from_redis()
+            if raw_frame is None:
                 logger.warning(
                     "Не удалось получить кадр из Redis, повторная попытка через 5 секунд"
                 )
@@ -199,7 +217,7 @@ class FrameProcessor:
                 continue
             logger.debug("Кадр успешно получен из Redis, начинаем обработку")
             
-            frame = self.__undistort(frame)
+            frame = self.__undistort(raw_frame)
 
             if not self.calibrator.Calibrated:
                 self.__process_uncalibrated(frame)

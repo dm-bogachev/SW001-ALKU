@@ -81,6 +81,64 @@ N_OX6    "capture.grip|"
   ;CALL stock.fin.pick (4, 1)
   ;CALL stock.fin.pick (4, 12)
 .END
+.PROGRAM a.teach.stz()@25/10/21 15:36 #0
+  SPEED 250 MM/S ALWAYS
+  ACCURACY 0 ALWAYS
+  TOOL tool.pin
+  ;
+  LMOVE #plb ; Left bottom
+  LMOVE #plt ; Left top
+  LMOVE #prt ; Right top
+  LMOVE #prb ; Right bottom
+  ;
+  POINT .plb = #plb
+  POINT .plt = #plt
+  POINT .prt = #prt
+  POINT .prb = #prb
+  ;
+  .dx1 = DISTANCE(.plt, .plb) ; DX1
+  .dx2 = DISTANCE(.prt, .prb) ; DX2
+  .dy1 = DISTANCE(.plt, .prt) ; DY1
+  .dy2 = DISTANCE(.plb, .prb) ; DY2
+  ;
+  PRINT 0: "DX1 =", .dx1
+  PRINT 0: "DX2 =", .dx2 
+  PRINT 0: "DY1 =", .dy1
+  PRINT 0: "DY2 =", .dy2
+  PRINT 0: "AVEX =", (.dx1+.dx2)/2
+  PRINT 0: "AVEY =", (.dy1+.dy2)/2
+  ;
+  BREAK
+  POINT f = FRAME (.plb, .prb, .prt, .plt)
+  POINT f = f + RZ (-90)
+  ; CIR1 = 100, 100
+  ; CIR2 = 148, 250
+  ; CIR3 = 248, 300
+  ; CIR4 = 148; 450
+  BREAK
+  LMOVE f + TRANS (hmi.x, hmi.y, 10)
+.END
+.PROGRAM a.test.pick()@25/10/24 15:48 #0
+  SPEED 250 MM/S ALWAYS
+  ACCURACY 0 ALWAYS
+  ;
+  BREAK
+  cx = hmi.x
+  cy = hmi.y
+  IF hmi.x > center.x + 50 THEN
+    cx = hmi.x - dist.xp * (hmi.x - center.x)
+  END
+  IF hmi.x < center.x - 50 THEN
+    cx = hmi.x + dist.xn * (-hmi.x + center.x)
+  END
+  IF hmi.y > center.y + 50 THEN
+    cy = hmi.y - dist.yp * (hmi.y - center.y)
+  END
+  IF hmi.y < center.y - 50
+    cy = hmi.y + dist.yn * (-hmi.y + center.y)
+  END
+  LMOVE f + TRANS (cx + hmi.gx, cy + hmi.gy, 40)
+.END
 .PROGRAM a.tch.stock.in ()
   ; Use this for first teach
   IF FALSE THEN
@@ -153,48 +211,15 @@ N_OX6    "capture.grip|"
   ;
   LMOVE .temp + TRANS (0, 0, 50)
 .END
-.PROGRAM a.teach.stz()@25/10/21 15:36 #0
+.PROGRAM stz.pick ()
   SPEED 250 MM/S ALWAYS
   ACCURACY 0 ALWAYS
-  TOOL tool.pin
+  TOOL tool.grip
+  SIGNAL grip.unclamp, -grip.clamp
   ;
-  LMOVE #plb ; Left bottom
-  LMOVE #plt ; Left top
-  LMOVE #prt ; Right top
-  LMOVE #prb ; Right bottom
-  ;
-  POINT .plb = #plb
-  POINT .plt = #plt
-  POINT .prt = #prt
-  POINT .prb = #prb
-  ;
-  .dx1 = DISTANCE(.plt, .plb) ; DX1
-  .dx2 = DISTANCE(.prt, .prb) ; DX2
-  .dy1 = DISTANCE(.plt, .prt) ; DY1
-  .dy2 = DISTANCE(.plb, .prb) ; DY2
-  ;
-  PRINT 0: "DX1 =", .dx1
-  PRINT 0: "DX2 =", .dx2 
-  PRINT 0: "DY1 =", .dy1
-  PRINT 0: "DY2 =", .dy2
-  PRINT 0: "AVEX =", (.dx1+.dx2)/2
-  PRINT 0: "AVEY =", (.dy1+.dy2)/2
-  ;
+  JMOVE #wait.pick
   BREAK
-  POINT f = FRAME (.plb, .prb, .prt, .plt)
-  POINT f = f + RZ (-90)
-  ; CIR1 = 100, 100
-  ; CIR2 = 148, 250
-  ; CIR3 = 248, 300
-  ; CIR4 = 148; 450
-  BREAK
-  LMOVE f + TRANS (hmi.x, hmi.y, 10)
-.END
-.PROGRAM a.test.pick()@25/10/24 15:48 #0
-  SPEED 250 MM/S ALWAYS
-  ACCURACY 0 ALWAYS
   ;
-  BREAK
   cx = hmi.x
   cy = hmi.y
   IF hmi.x > center.x + 50 THEN
@@ -209,157 +234,20 @@ N_OX6    "capture.grip|"
   IF hmi.y < center.y - 50
     cy = hmi.y + dist.yn * (-hmi.y + center.y)
   END
-  LMOVE f + TRANS (cx + hmi.gx, cy + hmi.gy, 40)
-.END
-.PROGRAM autostart.pc()@25/10/10 14:59 #0
-  ; System switches
-  CP ON
-  PREFETCH.SIGINS OFF
-  QTOOL OFF
-  REP_ONCE ON
-  HOLD.STEP ON
-  DISP.EXESTEP ON
-  PROG.DATE ON
-  AUTOSTART.PC ON
-  ERRSTART.PC ON
-  ;AUTOSTART2.PC ON
   ;
-  ; Variables init
-  release.tare = 1
-  capture.tare = 2
+  LMOVE f + TRANS (cx + hmi.gx, cy + hmi.gy, 40 + hmi.gz)
+  LMOVE f + TRANS (cx + hmi.gx, cy + hmi.gy, hmi.gz)
+  BREAK
+  SIGNAL grip.clamp, -grip.unclamp
+  TWAIT 0.5
+  LMOVE f + TRANS (cx + hmi.gx, cy + hmi.gy, 40 + hmi.gz)
   ;
-  release.grip = 5
-  capture.grip = 6
+  TWAIT 3
   ;
-  grip.unclamp = 3
-  grip.clamp = 4
-  ;
-  ;
-  tcp.socket = 0
-  tcp.connect.tmo = 5
-  tcp.receive.tmo = 5
-  tcp.send.tmo = 5
-  ;
-  tcp.dbg = -1
-  tcp.send.dbg = -1
-  tcp.recv.dbg = -1
-  ;
-  start.task = 2001
-  do.home1 = 2100
-  do.work[1] = 2101
-  do.work[2] = 2102
-  ;...
-  do.bat.alm = 2110
-  ;o.grip.tare.op  = 2
-  ;o.grip.obj.cl   = 3
-  ;o.grip.obj.op   = 4
-  ;o.grip.lock     = 5
-  ;o.grip.unlock   = 6
-  ;POINT #homep1 = #PPOINT (0, 0, 90, 0, 90, 0)
-  ;SETHOME 10, #homep1
-  CALL watchdog.pc
+  SIGNAL -grip.clamp, grip.unclamp
+  LMOVE #wait.pick
+  LMOVE #before.pos
   
-  
-.END
-.PROGRAM errstart.pc ()
- IF ERROR == -34021 OR ERROR == -10100 THEN
-    tcp.socket = -1
-    MC ERESET 
-    TWAIT 1
-    PCABORT 2:
-    PCABORT 3:
-    TWAIT 3
-    PCEXECUTE 2: tcp.client.pc
-    PCEXECUTE 3: sender.pc
-    TWAIT 1
-  END
-  ERRSTART.PC ON
-.END
-.PROGRAM get.state.pc (.$state)
-  .$state = "POWER:"
-  IF SWITCH (POWER) THEN
-    .$state = .$state + "TRUE;"
-  ELSE
-    .$state = .$state + "FALSE;"
-  END
-  ; MAX: 12
-  ;
-  .$state = .$state + "CS:"
-  IF SWITCH (CS) THEN
-    .$state = .$state + "TRUE;"
-  ELSE
-    .$state = .$state + "FALSE;"
-  END
-  ; MAX 9
-  ;
-  .$state = .$state + "TEACH:"
-  IF SWITCH (REPEAT) THEN
-    .$state = .$state + "FALSE;"
-  ELSE
-    .$state = .$state + "TRUE;"
-  END
-  ; MAX 12
-  ;
-  .$state = .$state + "TEACHL:"
-  IF SWITCH (TEACH_LOCK) THEN
-    .$state = .$state + "TRUE;"
-  ELSE
-    .$state = .$state + "FALSE;"
-  END
-  ; MAX 13
-  ;
-  .$state = .$state + "TPEMG:"
-  IF SWITCH (TP_EMG) THEN
-    .$state = .$state + "TRUE;"
-  ELSE
-    .$state = .$state + "FALSE;"
-  END
-  ; MAX 12
-  ;
-  .$state = .$state + "OPEMG:"
-  IF SWITCH (OP_EMG) THEN
-    .$state = .$state + "TRUE;"
-  ELSE
-    .$state = .$state + "FALSE;"
-  END
-  ; MAX 12
-  ;
-  .$state = .$state + "EXEMG:"
-  IF SWITCH (EX_EMG) THEN
-    .$state = .$state + "TRUE;"
-  ELSE
-    .$state = .$state + "FALSE;"
-  END
-  ; MAX 12
-  ;
-  .$state = .$state + "ERROR:"
-  IF SWITCH (ERROR) THEN
-    .$state = .$state + "TRUE;"
-  ELSE
-    .$state = .$state + "FALSE;"
-  END
-  ; MAX 12
-  ;
-  .$state = .$state + "ECODE:"
-  .$state = .$state + $ENCODE (ERROR) + ";"
-  ; MAX 12
-  ;
-  .$state = .$state + "HOME:"
-  IF SIG (2100) THEN
-    .$state = .$state + "TRUE;"
-  ELSE
-    .$state = .$state + "FALSE;"
-  END
-  ; MAX 12
-  ;
-  .$state = .$state + "BATALM:"
-  IF SIG (2110) THEN
-    .$state = .$state + "TRUE;"
-  ELSE
-    .$state = .$state + "FALSE;"
-  END
-  ; MAX 12
-  .$state = .$state + "\n"
 .END
 .PROGRAM gripper.pick (.pos,.tool.no)
   TOOL tool.pick[.tool.no]
@@ -388,69 +276,6 @@ N_OX6    "capture.grip|"
   TWAIT 0.5
   ;
   LMOVE .temp + TRANS(0, 0, 200)
-.END
-.PROGRAM sender.pc ()
-  ;
-  ; 0 - FALSE
-  ; 1 - TRUE
-  ;
-  ; POWER;REPEAT;CS;ERROR;ERRORCODE;TEACH_LOCK;TP_EMG;OP_EMG;EX_EMG;
-  ;
-  WHILE TRUE DO
-
-    CALL get.state.pc(.$data[1])
-    .$data[2] = "action:" + $action + "\n"
-    ;
-    ;
-    CALL tcp.send.pc (.$data[], 2)
-    TWAIT 0.250
-  END
-.END
-.PROGRAM stock.in.back (.i,.j)
-  TOOL tool.pin
-  ;
-  POINT .post.tare.in = #post.tare.in
-  DECOMPOSE .ct1[1] = .post.tare.in
-  DECOMPOSE .ct2[1] = stocker.in[.i, .j]
-  POINT .mid.point = TRANS (.ct2[1], .ct1[2], .ct2[3], .ct1[4], .ct1[5], .ct1[6])
-  POINT .put.stz = #put.stz
-  ;
-  ACCURACY 20 ALWAYS
-  SPEED 100 ALWAYS
-  JMOVE #before.stz
-  ACCURACY 5
-  LMOVE .put.stz + TRANS (, , 50)
-  ;
-  ACCURACY 0
-  LMOVE #put.stz
-  BREAK
-  PULSE capture.tare
-  TWAIT 0.5
-  ;
-  ACCURACY 0
-  SPEED 20
-  LMOVE .put.stz + TRANS (50)
-  ;
-  SPEED 50 ALWAYS
-  ACCURACY 5
-  LMOVE #before.stz
-  LMOVE #post.tare.in
-  LMOVE stocker.in[.i, .j] + TRANS (20, 0, 500)
-  ;
-  ACCURACY 0
-  SPEED 20
-  LMOVE stocker.in[.i, .j] + TRANS (20)
-  BREAK
-  ;
-  ACCURACY 0
-  SPEED 10
-  LMOVE stocker.in[.i, .j]
-  BREAK
-  PULSE release.tare
-  TWAIT 0.5
-  ;
-  LMOVE stocker.in[.i, .j] + TRANS (0, 0, 50)
-  LMOVE stocker.in[.i, .j] + TRANS (0, 0, 200)
 .END
 .PROGRAM stock.in.take (.i,.j)
   $action = "TakingFromInStocker"
@@ -507,51 +332,51 @@ N_OX6    "capture.grip|"
   LMOVE #wait.pick
   ;;
 .END
-.PROGRAM stock.out.back (.i,.j)
+.PROGRAM stock.in.back (.i,.j)
   TOOL tool.pin
   ;
-  POINT .post.tare.out = #post.tare.out
-  DECOMPOSE .ct1[1] = .post.tare.out
-  DECOMPOSE .ct2[1] = stocker.out[.i, .j]
+  POINT .post.tare.in = #post.tare.in
+  DECOMPOSE .ct1[1] = .post.tare.in
+  DECOMPOSE .ct2[1] = stocker.in[.i, .j]
   POINT .mid.point = TRANS (.ct2[1], .ct1[2], .ct2[3], .ct1[4], .ct1[5], .ct1[6])
-  POINT .put.outpal = #put.outpal
+  POINT .put.stz = #put.stz
   ;
   ACCURACY 20 ALWAYS
   SPEED 100 ALWAYS
-  JMOVE #before.outpal
+  JMOVE #before.stz
   ACCURACY 5
-  LMOVE .put.outpal + TRANS (, , 50)
+  LMOVE .put.stz + TRANS (, , 50)
   ;
   ACCURACY 0
-  LMOVE #put.outpal
+  LMOVE #put.stz
   BREAK
   PULSE capture.tare
   TWAIT 0.5
   ;
   ACCURACY 0
   SPEED 20
-  LMOVE .put.outpal + TRANS (50)
+  LMOVE .put.stz + TRANS (50)
   ;
   SPEED 50 ALWAYS
   ACCURACY 5
-  LMOVE #before.outpal
-  LMOVE #post.tare.out
-  LMOVE stocker.out[.i, .j] + TRANS (20, 0, 500)
+  LMOVE #before.stz
+  LMOVE #post.tare.in
+  LMOVE stocker.in[.i, .j] + TRANS (20, 0, 500)
   ;
   ACCURACY 0
   SPEED 20
-  LMOVE stocker.out[.i, .j] + TRANS (20)
+  LMOVE stocker.in[.i, .j] + TRANS (20)
   BREAK
   ;
   ACCURACY 0
   SPEED 10
-  LMOVE stocker.out[.i, .j]
+  LMOVE stocker.in[.i, .j]
   BREAK
   PULSE release.tare
   TWAIT 0.5
   ;
-  LMOVE stocker.out[.i, .j] + TRANS (0, 0, 50)
-  LMOVE stocker.out[.i, .j] + TRANS (0, 0, 200)
+  LMOVE stocker.in[.i, .j] + TRANS (0, 0, 50)
+  LMOVE stocker.in[.i, .j] + TRANS (0, 0, 200)
 .END
 .PROGRAM stock.out.take (.i,.j)
   $action = "TakingFromOutStocker"
@@ -605,43 +430,128 @@ N_OX6    "capture.grip|"
   ;
   LMOVE #homep1
 .END
-.PROGRAM stz.pick ()
-  SPEED 250 MM/S ALWAYS
-  ACCURACY 0 ALWAYS
-  TOOL tool.grip
-  SIGNAL grip.unclamp, -grip.clamp
+.PROGRAM stock.out.back (.i,.j)
+  TOOL tool.pin
   ;
-  JMOVE #wait.pick
+  POINT .post.tare.out = #post.tare.out
+  DECOMPOSE .ct1[1] = .post.tare.out
+  DECOMPOSE .ct2[1] = stocker.out[.i, .j]
+  POINT .mid.point = TRANS (.ct2[1], .ct1[2], .ct2[3], .ct1[4], .ct1[5], .ct1[6])
+  POINT .put.outpal = #put.outpal
+  ;
+  ACCURACY 20 ALWAYS
+  SPEED 100 ALWAYS
+  JMOVE #before.outpal
+  ACCURACY 5
+  LMOVE .put.outpal + TRANS (, , 50)
+  ;
+  ACCURACY 0
+  LMOVE #put.outpal
   BREAK
-  ;
-  cx = hmi.x
-  cy = hmi.y
-  IF hmi.x > center.x + 50 THEN
-    cx = hmi.x - dist.xp * (hmi.x - center.x)
-  END
-  IF hmi.x < center.x - 50 THEN
-    cx = hmi.x + dist.xn * (-hmi.x + center.x)
-  END
-  IF hmi.y > center.y + 50 THEN
-    cy = hmi.y - dist.yp * (hmi.y - center.y)
-  END
-  IF hmi.y < center.y - 50
-    cy = hmi.y + dist.yn * (-hmi.y + center.y)
-  END
-  ;
-  LMOVE f + TRANS (cx + hmi.gx, cy + hmi.gy, 40 + hmi.gz)
-  LMOVE f + TRANS (cx + hmi.gx, cy + hmi.gy, hmi.gz)
-  BREAK
-  SIGNAL grip.clamp, -grip.unclamp
+  PULSE capture.tare
   TWAIT 0.5
-  LMOVE f + TRANS (cx + hmi.gx, cy + hmi.gy, 40 + hmi.gz)
   ;
-  TWAIT 3
+  ACCURACY 0
+  SPEED 20
+  LMOVE .put.outpal + TRANS (50)
   ;
-  SIGNAL -grip.clamp, grip.unclamp
-  LMOVE #wait.pick
-  LMOVE #before.pos
+  SPEED 50 ALWAYS
+  ACCURACY 5
+  LMOVE #before.outpal
+  LMOVE #post.tare.out
+  LMOVE stocker.out[.i, .j] + TRANS (20, 0, 500)
+  ;
+  ACCURACY 0
+  SPEED 20
+  LMOVE stocker.out[.i, .j] + TRANS (20)
+  BREAK
+  ;
+  ACCURACY 0
+  SPEED 10
+  LMOVE stocker.out[.i, .j]
+  BREAK
+  PULSE release.tare
+  TWAIT 0.5
+  ;
+  LMOVE stocker.out[.i, .j] + TRANS (0, 0, 50)
+  LMOVE stocker.out[.i, .j] + TRANS (0, 0, 200)
+.END
+.PROGRAM autostart.pc()@25/10/10 14:59 #0
+  ; System switches
+  CP ON
+  PREFETCH.SIGINS OFF
+  QTOOL OFF
+  REP_ONCE ON
+  HOLD.STEP ON
+  DISP.EXESTEP ON
+  PROG.DATE ON
+  autostart.pc ON
+  errstart.pc ON
+  ;AUTOSTART2.PC ON
+  ;
+  ; Variables init
+  release.tare = 1
+  capture.tare = 2
+  ;
+  release.grip = 5
+  capture.grip = 6
+  ;
+  grip.unclamp = 3
+  grip.clamp = 4
+  ;
+  ;
+  tcp.socket = 0
+  tcp.connect.tmo = 5
+  tcp.receive.tmo = 5
+  tcp.send.tmo = 5
+  ;
+  tcp.dbg = -1
+  tcp.send.dbg = -1
+  tcp.recv.dbg = -1
+  ;
+  start.task = 2001
+  do.home1 = 2100
+  do.work[1] = 2101
+  do.work[2] = 2102
+  ;...
+  do.bat.alm = 2110
+  ;
+  dbg.tcp.send = 2120
+  dbg.tcp = 2121
+  ;o.grip.tare.op  = 2
+  ;o.grip.obj.cl   = 3
+  ;o.grip.obj.op   = 4
+  ;o.grip.lock     = 5
+  ;o.grip.unlock   = 6
+  ;POINT #homep1 = #PPOINT (0, 0, 90, 0, 90, 0)
+  ;SETHOME 10, #homep1
+  CALL watchdog.pc
   
+  
+.END
+.PROGRAM tcp.send.pc(.$data[],.data.length) #114404
+  IF tcp.socket > 0 THEN
+    TCP_SEND .status, tcp.socket, .$data[1], .data.length, tcp.send.tmo
+    IF .status >= 0 THEN
+      PRINT tcp.send.dbg: "Sent ", .data.length, " strings"
+      FOR .i = 1 TO .data.length
+        IF LEN (.$data[.i]) > 127 THEN
+          PRINT tcp.send.dbg: /S, .i, ": "
+          PRINT tcp.send.dbg: /S, $LEFT (.$data[.i], 128)
+          PRINT tcp.send.dbg: $MID (.$data[.i], 129)
+        ELSE
+          PRINT tcp.send.dbg: /S, .i, ": "
+          PRINT tcp.send.dbg: .$data[.i]
+        END
+      END
+    ELSE
+      PRINT tcp.send.dbg: "Failed to send data with error:", .status, ". Error count:", .tcp.error.cnt
+      tcp.socket = -1
+    END
+  ELSE
+    PRINT tcp.send.dbg: "Failed to send data. Socket is not opened"
+  END
+  ;
 .END
 .PROGRAM tcp.callback.pc (.$data[],.data.length)
   PRINT tcp.calb.dbg: "Received ", .data.length, " strings"
@@ -746,29 +656,122 @@ N_OX6    "capture.grip|"
     END
   END
 .END
-.PROGRAM tcp.send.pc(.$data[],.data.length) #114404
-  IF tcp.socket > 0 THEN
-    TCP_SEND .status, tcp.socket, .$data[1], .data.length, tcp.send.tmo
-    IF .status >= 0 THEN
-      PRINT tcp.send.dbg: "Sent ", .data.length, " strings"
-      FOR .i = 1 TO .data.length
-        IF LEN (.$data[.i]) > 127 THEN
-          PRINT tcp.send.dbg: /S, .i, ": "
-          PRINT tcp.send.dbg: /S, $LEFT (.$data[.i], 128)
-          PRINT tcp.send.dbg: $MID (.$data[.i], 129)
-        ELSE
-          PRINT tcp.send.dbg: /S, .i, ": "
-          PRINT tcp.send.dbg: .$data[.i]
-        END
-      END
-    ELSE
-      PRINT tcp.send.dbg: "Failed to send data with error:", .status, ". Error count:", .tcp.error.cnt
-      tcp.socket = -1
-    END
-  ELSE
-    PRINT tcp.send.dbg: "Failed to send data. Socket is not opened"
-  END
+.PROGRAM sender.pc ()
   ;
+  ; 0 - FALSE
+  ; 1 - TRUE
+  ;
+  ; POWER;REPEAT;CS;ERROR;ERRORCODE;TEACH_LOCK;TP_EMG;OP_EMG;EX_EMG;
+  ;
+  WHILE TRUE DO
+
+    CALL get.state.pc(.$data[1])
+    .$data[2] = "action:" + $action + "\n"
+    ;
+    ;
+    CALL tcp.send.pc (.$data[], 2)
+    TWAIT 0.250
+  END
+.END
+.PROGRAM get.state.pc (.$state)
+  .$state = "POWER:"
+  IF SWITCH (POWER) THEN
+    .$state = .$state + "TRUE;"
+  ELSE
+    .$state = .$state + "FALSE;"
+  END
+  ; MAX: 12
+  ;
+  .$state = .$state + "CS:"
+  IF SWITCH (CS) THEN
+    .$state = .$state + "TRUE;"
+  ELSE
+    .$state = .$state + "FALSE;"
+  END
+  ; MAX 9
+  ;
+  .$state = .$state + "TEACH:"
+  IF SWITCH (REPEAT) THEN
+    .$state = .$state + "FALSE;"
+  ELSE
+    .$state = .$state + "TRUE;"
+  END
+  ; MAX 12
+  ;
+  .$state = .$state + "TEACHL:"
+  IF SWITCH (TEACH_LOCK) THEN
+    .$state = .$state + "TRUE;"
+  ELSE
+    .$state = .$state + "FALSE;"
+  END
+  ; MAX 13
+  ;
+  .$state = .$state + "TPEMG:"
+  IF SWITCH (TP_EMG) THEN
+    .$state = .$state + "TRUE;"
+  ELSE
+    .$state = .$state + "FALSE;"
+  END
+  ; MAX 12
+  ;
+  .$state = .$state + "OPEMG:"
+  IF SWITCH (OP_EMG) THEN
+    .$state = .$state + "TRUE;"
+  ELSE
+    .$state = .$state + "FALSE;"
+  END
+  ; MAX 12
+  ;
+  .$state = .$state + "EXEMG:"
+  IF SWITCH (EX_EMG) THEN
+    .$state = .$state + "TRUE;"
+  ELSE
+    .$state = .$state + "FALSE;"
+  END
+  ; MAX 12
+  ;
+  .$state = .$state + "ERROR:"
+  IF SWITCH (ERROR) THEN
+    .$state = .$state + "TRUE;"
+  ELSE
+    .$state = .$state + "FALSE;"
+  END
+  ; MAX 12
+  ;
+  .$state = .$state + "ECODE:"
+  .$state = .$state + $ENCODE (ERROR) + ";"
+  ; MAX 12
+  ;
+  .$state = .$state + "HOME:"
+  IF SIG (2100) THEN
+    .$state = .$state + "TRUE;"
+  ELSE
+    .$state = .$state + "FALSE;"
+  END
+  ; MAX 12
+  ;
+  .$state = .$state + "BATALM:"
+  IF SIG (2110) THEN
+    .$state = .$state + "TRUE;"
+  ELSE
+    .$state = .$state + "FALSE;"
+  END
+  ; MAX 12
+  .$state = .$state + "\n"
+.END
+.PROGRAM errstart.pc ()
+ IF ERROR == -34021 OR ERROR == -10100 THEN
+    tcp.socket = -1
+    MC ERESET 
+    TWAIT 1
+    PCABORT 2:
+    PCABORT 3:
+    TWAIT 3
+    PCEXECUTE 2: tcp.client.pc
+    PCEXECUTE 3: sender.pc
+    TWAIT 1
+  END
+  errstart.pc ON
 .END
 .PROGRAM watchdog.pc ()
   WHILE TRUE DO
@@ -787,148 +790,113 @@ N_OX6    "capture.grip|"
 	; @@@ HISTORY @@@
 	; @@@ INSPECTION @@@
 	; @@@ CONNECTION @@@
-	; KROSET R01
-	; 127.0.0.1
-	; 9105
+	; RS013N
+	; 192.168.7.102
+	; 23
 	; @@@ PROGRAM @@@
-	;   0:a.main:F
-	;   Group:Teach:1
-	;     1:a.teach.stz:F
-	;       .plb 
-	;       .plt 
-	;       .prt 
-	;       .prb 
-	;       .dx1 
-	;       .dx2 
-	;       .dy1 
-	;       .dy2 
-	;     1:a.test.pick:F
-	;     1:a.tch.stock.in:F
-	;       .i 
-	;       .j 
-	;     1:a.tch.stock.out:F
-	;       .i 
-	;       .j 
-	;     1:a.teach.gripper:F
-	;       .temp 
-	;   Group:STZ:2
-	;     2:stz.pick:F
-	;   Group:ToolChange:3
-	;     3:gripper.pick:F
-	;       .pos 
-	;       .tool.no 
-	;       .temp 
-	;     3:gripper.put:F
-	;       .pos 
-	;       .tool.no 
-	;       .temp 
-	;   Group:Stockers:4
-	;     4:stock.in.take:F
-	;       .i 
-	;       .j 
-	;       .post.tare.in 
-	;       .ct1 
-	;       .ct2 
-	;       .mid.point 
-	;       .put.stz 
-	;     4:stock.in.back:F
-	;       .i 
-	;       .j 
-	;       .post.tare.in 
-	;       .ct1 
-	;       .ct2 
-	;       .mid.point 
-	;       .put.stz 
-	;     4:stock.out.take:F
-	;       .i 
-	;       .j 
-	;       .post.tare.out 
-	;       .ct1 
-	;       .ct2 
-	;       .mid.point 
-	;       .put.outpal 
-	;     4:stock.out.back:F
-	;       .i 
-	;       .j 
-	;       .post.tare.out 
-	;       .ct1 
-	;       .ct2 
-	;       .mid.point 
-	;       .put.outpal 
-	;       .put.fin 
-	;   0:autostart.pc:B
-	;   Group:TCPIP:5
-	;     5:tcp.send.pc:B
-	;       .$data 
-	;       .data.length 
-	;       .status 
-	;       .i 
-	;       .tcp.error.cnt 
-	;     5:tcp.callback.pc:B
-	;       .$data 
-	;       .data.length 
-	;       .i 
-	;     5:tcp.client.pc:B
-	;       .tcp.retry.count 
-	;       .number 
-	;       .ports 
-	;       .sockets 
-	;       .errors 
-	;       .suberrors 
-	;       .$ips 
-	;       .i 
-	;       .status 
-	;       .$tcp.ip.copy 
-	;       .$ip 
-	;       .connected 
-	;       .tcp.error.cnt 
-	;       .$tcp.request 
-	;       .request.size 
-	;   0:sender.pc:B
-	;     .$data 
-	;   0:get.state.pc:B
-	;     .$state 
-	;   0:errstart.pc:B
-	;   0:watchdog.pc:B
+	; 0:a.main:F
+	; Group:Teach:1
+	; 1:a.teach.stz:F
+	; .plb 
+	; .plt 
+	; .prt 
+	; .prb 
+	; .dx1 
+	; .dx2 
+	; .dy1 
+	; .dy2 
+	; 1:a.test.pick:F
+	; 1:a.tch.stock.in:F
+	; .i 
+	; .j 
+	; 1:a.tch.stock.out:F
+	; .i 
+	; .j 
+	; 1:a.teach.gripper:F
+	; .temp 
+	; Group:STZ:2
+	; 2:stz.pick:F
+	; Group:ToolChange:3
+	; 3:gripper.pick:F
+	; .pos 
+	; .tool.no 
+	; .temp 
+	; 3:gripper.put:F
+	; .pos 
+	; .tool.no 
+	; .temp 
+	; Group:Stockers:4
+	; 4:stock.in.take:F
+	; .i 
+	; .j 
+	; .post.tare.in 
+	; .ct1 
+	; .ct2 
+	; .mid.point 
+	; .put.stz 
+	; 4:stock.in.back:F
+	; .i 
+	; .j 
+	; .post.tare.in 
+	; .ct1 
+	; .ct2 
+	; .mid.point 
+	; .put.stz 
+	; 4:stock.out.take:F
+	; .i 
+	; .j 
+	; .post.tare.out 
+	; .ct1 
+	; .ct2 
+	; .mid.point 
+	; .put.outpal 
+	; 4:stock.out.back:F
+	; .i 
+	; .j 
+	; .post.tare.out 
+	; .ct1 
+	; .ct2 
+	; .mid.point 
+	; .put.outpal 
+	; .put.fin 
+	; 0:autostart.pc:B
+	; Group:TCPIP:5
+	; 5:tcp.send.pc:B
+	; .$data 
+	; .data.length 
+	; .status 
+	; .i 
+	; .tcp.error.cnt 
+	; 5:tcp.callback.pc:B
+	; .$data 
+	; .data.length 
+	; .i 
+	; 5:tcp.client.pc:B
+	; .tcp.retry.count 
+	; .number 
+	; .ports 
+	; .sockets 
+	; .errors 
+	; .suberrors 
+	; .$ips 
+	; .i 
+	; .status 
+	; .$tcp.ip.copy 
+	; .$ip 
+	; .connected 
+	; .tcp.error.cnt 
+	; .$tcp.request 
+	; .request.size 
+	; 0:sender.pc:B
+	; .$data 
+	; 0:get.state.pc:B
+	; .$state 
+	; 0:errstart.pc:B
+	; 0:watchdog.pc:B
 	; @@@ TRANS @@@
-	; stocker.in[] 
-	; stocker.out[] 
-	; f 
 	; @@@ JOINTS @@@
-	; #before.stz 
-	; #put.stz 
-	; #wait.pick 
-	; #post.tare.in 
-	; #put.outpal 
-	; #before.outpal 
-	; #post.tare.out 
-	; #homep1 
-	; #plb 
-	; #plt 
-	; #prb 
-	; #prt 
-	; #tool.pos[] 
 	; @@@ REALS @@@
-	; hmi.st.in.i 
-	; hmi.st.in.j 
-	; hmi.st.out.i 
-	; hmi.st.out.j 
-	; hmi.gx 
-	; hmi.gy 
-	; hmi.x 
-	; hmi.y 
-	; ip[] 
-	; tcp.connect.tmo 
-	; tcp.port 
-	; tcp.receive.tmo 
-	; tcp.send.tmo 
-	; tcp.socket 
-	; tyterm 
-	; hmi.pos 
-	; hmi.tool.no 
 	; @@@ STRINGS @@@
-	; $tcp.ip 
-	; $action 
 	; @@@ INTEGER @@@
 	; @@@ SIGNALS @@@
 	; capture.tare 

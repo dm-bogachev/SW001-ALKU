@@ -65,7 +65,7 @@
         "IPAddress": "192.168.7.101",
         "DeviceName": "MV-CH120-20GM",
         "FrameInterval": 0.0,
-        "ExposureValue": 8000
+        "ExposureValue": 18000
     },
     "CalibrationData": {
         "Theta": "null",
