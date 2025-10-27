@@ -75,35 +75,38 @@ class FrameProcessor:
             self.__cameraMatrix = None
             self.__distCoeffs = None
 
-    def __undistort(self, frame):
-        if self.__cameraMatrix is not None and self.__distCoeffs is not None:
-            logger.debug("Устранение дисторсии выполнено")
-            if self.__cuda_available:
-                # Use remap for CUDA-based undistortion
-                h, w = frame.shape[:2]
-                map1, map2 = cv2.initUndistortRectifyMap(
-                    self.__cameraMatrix, self.__distCoeffs, None, 
-                    self.__cameraMatrix, (w, h), cv2.CV_32FC1
-                )
-                gpu_frame = cv2.cuda_GpuMat()
-                gpu_map1 = cv2.cuda_GpuMat()
-                gpu_map2 = cv2.cuda_GpuMat()
+    # def __undistort(self, frame):
+    #     distorted = frame.copy()
+    #     if self.__cameraMatrix is not None and self.__distCoeffs is not None:
+            
+    #         if not self.__cuda_available:
+    #             Use remap for CUDA-based undistortion
+    #             h, w = distorted.shape[:2]
+    #             map1, map2 = cv2.initUndistortRectifyMap(
+    #                 self.__cameraMatrix, self.__distCoeffs, None, 
+    #                 self.__cameraMatrix, (w, h), cv2.CV_32FC1
+    #             )
+    #             gpu_frame = cv2.cuda_GpuMat()
+    #             gpu_map1 = cv2.cuda_GpuMat()
+    #             gpu_map2 = cv2.cuda_GpuMat()
                 
-                gpu_frame.upload(frame)
-                gpu_map1.upload(map1)
-                gpu_map2.upload(map2)
+    #             gpu_frame.upload(distorted)
+    #             gpu_map1.upload(map1)
+    #             gpu_map2.upload(map2)
                 
-                gpu_undistorted = cv2.cuda.remap(
-                    gpu_frame, gpu_map1, gpu_map2, 
-                    interpolation=cv2.INTER_LINEAR
-                )
-                undistorted = gpu_undistorted.download()
-                return undistorted
-            else:
-                undistorted = cv2.undistort(frame, self.__cameraMatrix, self.__distCoeffs)
-                return undistorted
-        logger.debug("Устранение дисторсии не выполнено")
-        return frame
+    #             gpu_undistorted = cv2.cuda.remap(
+    #                 gpu_frame, gpu_map1, gpu_map2, 
+    #                 interpolation=cv2.INTER_LINEAR
+    #             )
+    #             undistorted = gpu_undistorted.download()
+    #             logger.debug("Устранение дисторсии выполнено")
+    #             return undistorted
+    #         else:
+    #             undistorted = cv2.undistort(distorted, self.__cameraMatrix, self.__distCoeffs)
+    #             logger.debug("Устранение дисторсии выполнено")
+    #             return undistorted
+    #     logger.debug("Устранение дисторсии не выполнено")
+    #     return distorted
 
     def __get_frame_from_redis(self):
         ''' Получает кадр из Redis '''
@@ -142,9 +145,6 @@ class FrameProcessor:
             if predictions and len(predictions) > 0:
                 # logger.debug(f"0 элемент до масштабирования: {predictions[0].pick_point}")
                 frame = self.drawer.draw(frame, predictions)
-                # predictions = self.__scale_predictions(predictions)
-                # frame = self.drawer.draw(frame, predictions)
-                # logger.debug(f"0 элемент после масштабирования: {predictions[0].pick_point}")
                 self.__objects = predictions
 
             for x in range(0, frame.shape[1], 500):
@@ -208,8 +208,8 @@ class FrameProcessor:
         logger.debug("Запуск цикла обработки кадров")
         self.process_started = True
         while True:
-            raw_frame = self.__get_frame_from_redis()
-            if raw_frame is None:
+            frame = self.__get_frame_from_redis()
+            if frame is None:
                 logger.warning(
                     "Не удалось получить кадр из Redis, повторная попытка через 5 секунд"
                 )
@@ -217,14 +217,11 @@ class FrameProcessor:
                 continue
             logger.debug("Кадр успешно получен из Redis, начинаем обработку")
             
-            frame = self.__undistort(raw_frame)
-
             if not self.calibrator.Calibrated:
                 self.__process_uncalibrated(frame)
             else:
                 self.__process_calibrated(frame)
 
-            # self.__put_frame_to_redis(frame)
             time.sleep(Config.get("Process.ProcessingDelay", 1))
 
     def __find_markers(self, frame):

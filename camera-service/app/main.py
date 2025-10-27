@@ -28,6 +28,22 @@ redis_client = get_redis_client()
 logger = config_logger("camera-service/main.py")
 camera_released = False
 
+def load_coefficients(path):
+    """Загружает матрицу камеры и коэффициенты настроечного оптического дефекта."""
+    data = np.load(path)
+    cameraMatrix = data["cameraMatrix"]
+    distCoeffs = data["distCoeffs"]
+    logger.debug(f"Матрица камеры:\n{cameraMatrix}")
+    logger.debug(f"Коэффициенты дисторсии:\n{distCoeffs.ravel()}")
+    return cameraMatrix, distCoeffs
+
+def undistort(frame):
+    """Устранение дисторсии кадра."""
+    if camera_matrix is not None and dist_coeffs is not None:
+        logger.debug("Корректировка кадра камеры")
+        undistorted = cv2.undistort(frame, camera_matrix, dist_coeffs)
+    return undistorted
+
 def background_frame_sender():
     """Бесконечно получает кадры с камеры и отправляет их в Redis."""
     global hik_camera
@@ -35,12 +51,22 @@ def background_frame_sender():
     retry_attempts = 0
     max_bad_frames = Config.get("HikCamera.MaxBadFrames", 10)
 
+    try:
+        camera_matrix, dist_coeffs = load_coefficients("/data/distortion_coeffs.npz")
+    except Exception as e:
+        logger.error(f"Ошибка при загрузке коэффициентов камеры: {e}")
+        camera_matrix = None
+        dist_coeffs = None
+
     while True:
         try:
             if hik_camera.is_opened():
                 frame = hik_camera.get_frame()
                 if frame is not None:
-                    _, buffer = cv2.imencode(".jpg", frame, [cv2.IMWRITE_JPEG_QUALITY, 100])
+                    if camera_matrix is not None and dist_coeffs is not None:
+                        logger.debug("Корректировка кадра камеры")
+                        undistorted = cv2.undistort(frame, camera_matrix, dist_coeffs)
+                    _, buffer = cv2.imencode(".jpg", undistorted, [cv2.IMWRITE_JPEG_QUALITY, 100])
                     redis_client.set(REDIS_CAMERA_FRAME_KEY, buffer.tobytes())
             else:
                 logger.warning("Камера не подключена, повторная попытка через 3 секунды")

@@ -585,12 +585,17 @@ function renderObjects(objectsData) {
             `(${object.pick_point[0].toFixed(1)}, ${object.pick_point[1].toFixed(1)})` : 
             'N/A';
         
+        const pickAngleStr = object.pick_angle >= 0 ? 
+            `${object.pick_angle.toFixed(1)}°` : 
+            'N/A';
+        
         objectItem.innerHTML = `
             <div class="object-item-header">
                 <span class="object-class">${object.class_name || 'Unknown'}</span>
                 <span class="object-confidence">${confidencePercent}%</span>
             </div>
             <div class="object-pick-point">Pick: ${pickPointStr}</div>
+            <div class="object-pick-angle">Angle: ${pickAngleStr}</div>
         `;
         
         // Добавляем обработчик клика для отладки
@@ -606,6 +611,30 @@ function renderObjects(objectsData) {
 async function updateObjectsList() {
     const objectsData = await fetchObjects();
     renderObjects(objectsData);
+    
+    // Отправляем данные о первом объекте на сервер, если объекты есть
+    if (objectsData.Status === "OK" && objectsData.Objects && objectsData.Objects.length > 0) {
+        const firstObject = objectsData.Objects[0];
+        if (firstObject.pick_point && firstObject.pick_point.length >= 2 && firstObject.pick_angle !== undefined) {
+            const x = firstObject.pick_point[0].toFixed(2);
+            const y = firstObject.pick_point[1].toFixed(2);
+            const angle = firstObject.pick_angle.toFixed(2);
+            console.log(`Отправка данных о точке захвата: x=${x}, y=${y}, angle=${angle}`);
+            // Отправляем POST запрос с данными о точке и угле
+            fetch(`${RS0013N_API_URL}/send_pick_data?x=${x}&y=${y}&angle=${angle}`, {
+                method: 'POST',
+                headers: {
+                    'accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: ''
+                
+            }).catch(error => {
+                console.error('Ошибка при отправке данных о точке захвата:', error);
+            });
+        }
+    }
+    
     // Обновляем каждые 2 секунды
     setTimeout(updateObjectsList, 2000);
 }
@@ -701,6 +730,7 @@ setInterval(() => {
         fetchRobotStatus('rs013n');
     }
 }, 1000);
+
 
 function calibrate() {
     console.log('Калибровка');
