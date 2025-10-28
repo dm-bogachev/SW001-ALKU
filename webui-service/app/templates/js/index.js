@@ -610,6 +610,11 @@ function renderObjects(objectsData) {
 // Функция для обновления списка объектов
 async function updateObjectsList() {
     const objectsData = await fetchObjects();
+    if (!objectsData.Status || !objectsData.Objects || objectsData.Objects.length === 0) {
+        objectsList.innerHTML = '';
+        return;
+    }
+
     renderObjects(objectsData);
     
     // Отправляем данные о первом объекте на сервер, если объекты есть

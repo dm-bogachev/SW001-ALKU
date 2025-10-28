@@ -1,4 +1,10 @@
 .INTER_PANEL_D
+5,2,"","  Release ","  gripper","",10,4,6,5,-1
+6,2,"","  Capture","  gripper","",10,4,6,6,-1
+7,1,"  Gripper","","","  opened",10,15,4,10,1001,0
+8,1,"  Gripper","","","  closed",10,15,4,10,1002,0
+14,2,"","   Open ","  gripper","",10,4,5,3,0
+15,2,"","   Close","  gripper","",10,4,5,4,0
 28,14,"tcp.ip","Server IP","",10,15,0
 29,8,"tcp.port","Server","port",10,15,5,1,0
 34,10,"PCEXECUTE","AUTOSTART","","",10,4,15,1,"PCEXECUTE autostart.pc",0
@@ -39,18 +45,15 @@
   DISP.EXESTEP ON
   PROG.DATE ON
   autostart.pc ON
-  errstart.pc ON
-  ;AUTOSTART2.PC ON
-  ;
+  errstart.pc ON  ;
   ; Variables init
-  release.tare = 1
-  capture.tare = 2
+  release.tare = 3
+  capture.tare = 4
   ;
-  release.grip = 5
-  capture.grip = 6
-  ;
-  grip.unclamp = 3
-  grip.clamp = 4
+  grip.unclamped = 1001
+  grip.clamped = 1002
+  grip.unclamp = 1
+  grip.clamp = 2
   ;
   ;
   tcp.socket = 0
@@ -64,33 +67,37 @@
   ;
   start.task = 2001
   do.home1 = 2100
-  do.work[1] = 2101
-  do.work[2] = 2102
-  ;...
   do.bat.alm = 2110
-  ;o.grip.tare.op  = 2
-  ;o.grip.obj.cl   = 3
-  ;o.grip.obj.op   = 4
-  ;o.grip.lock     = 5
-  ;o.grip.unlock   = 6
-  ;POINT #homep1 = #PPOINT (0, 0, 90, 0, 90, 0)
-  ;SETHOME 10, #homep1
+  ;
   CALL watchdog.pc
-  
+  ;
 .END
-.PROGRAM errstart.pc ()
-	IF ERROR == -34021 OR ERROR == -10100 THEN
-		tcp.socket = -1
-		MC ERESET
-		TWAIT 1
-		PCABORT 2:
-		PCABORT 3:
-		TWAIT 3
-		PCEXECUTE 2: tcp.client.pc
-		PCEXECUTE 3: sender.pc
-		TWAIT 1
+.PROGRAM sender.pc ()
+	;
+	; 0 - FALSE
+	; 1 - TRUE
+	;
+	; POWER;REPEAT;CS;ERROR;ERRORCODE;TEACH_LOCK;TP_EMG;OP_EMG;EX_EMG;
+	;
+	WHILE TRUE DO
+		
+		CALL get.state.pc (.$data[1])
+		.$data[2] = "action:" + $action + "\n"
+		;
+		;
+		CALL tcp.send.pc (.$data[], 2)
+		TWAIT 0.250
 	END
-	ERRSTART.PC ON
+.END
+.PROGRAM watchdog.pc ()
+  WHILE TRUE DO
+    IF TASK (1002) <> 1 THEN
+      PCEXECUTE 2: tcp.client.pc
+    END
+    IF TASK (1003) <> 1 THEN
+      PCEXECUTE 3: sender.pc
+    END
+  END
 .END
 .PROGRAM get.state.pc (.$state)
 	.$state = "POWER:"
@@ -178,22 +185,43 @@
 	; MAX 12
 	.$state = .$state + "\n"
 .END
-.PROGRAM sender.pc ()
-	;
-	; 0 - FALSE
-	; 1 - TRUE
-	;
-	; POWER;REPEAT;CS;ERROR;ERRORCODE;TEACH_LOCK;TP_EMG;OP_EMG;EX_EMG;
-	;
-	WHILE TRUE DO
-		
-		CALL get.state.pc (.$data[1])
-		.$data[2] = "action:" + $action + "\n"
-		;
-		;
-		CALL tcp.send.pc (.$data[], 2)
-		TWAIT 0.250
+.PROGRAM errstart.pc ()
+	IF ERROR == -34021 OR ERROR == -10100 THEN
+		tcp.socket = -1
+		MC ERESET
+		TWAIT 1
+		PCABORT 2:
+		PCABORT 3:
+		TWAIT 3
+		PCEXECUTE 2: tcp.client.pc
+		PCEXECUTE 3: sender.pc
+		TWAIT 1
 	END
+	errstart.pc ON
+.END
+.PROGRAM tcp.send.pc(.$data[],.data.length) #114404
+	IF tcp.socket > 0 THEN
+		TCP_SEND .status, tcp.socket, .$data[1], .data.length, tcp.send.tmo
+		IF .status >= 0 THEN
+			PRINT tcp.send.dbg: "Sent ", .data.length, " strings"
+			FOR .i = 1 TO .data.length
+				IF LEN (.$data[.i]) > 127 THEN
+					PRINT tcp.send.dbg: /S, .i, ": "
+					PRINT tcp.send.dbg: /S, $LEFT (.$data[.i], 128)
+					PRINT tcp.send.dbg: $MID (.$data[.i], 129)
+				ELSE
+					PRINT tcp.send.dbg: /S, .i, ": "
+					PRINT tcp.send.dbg: .$data[.i]
+				END
+			END
+		ELSE
+			PRINT tcp.send.dbg: "Failed to send data with error:", .status, ". Error count:", .tcp.error.cnt
+			tcp.socket = -1
+		END
+	ELSE
+		PRINT tcp.send.dbg: "Failed to send data. Socket is not opened"
+	END
+	;
 .END
 .PROGRAM tcp.callback.pc (.$data[],.data.length)
 	PRINT tcp.calb.dbg: "Received ", .data.length, " strings"
@@ -284,67 +312,41 @@
 		END
 	END
 .END
-.PROGRAM tcp.send.pc(.$data[],.data.length) #114404
-	IF tcp.socket > 0 THEN
-		TCP_SEND .status, tcp.socket, .$data[1], .data.length, tcp.send.tmo
-		IF .status >= 0 THEN
-			PRINT tcp.send.dbg: "Sent ", .data.length, " strings"
-			FOR .i = 1 TO .data.length
-				IF LEN (.$data[.i]) > 127 THEN
-					PRINT tcp.send.dbg: /S, .i, ": "
-					PRINT tcp.send.dbg: /S, $LEFT (.$data[.i], 128)
-					PRINT tcp.send.dbg: $MID (.$data[.i], 129)
-				ELSE
-					PRINT tcp.send.dbg: /S, .i, ": "
-					PRINT tcp.send.dbg: .$data[.i]
-				END
-			END
-		ELSE
-			PRINT tcp.send.dbg: "Failed to send data with error:", .status, ". Error count:", .tcp.error.cnt
-			tcp.socket = -1
-		END
-	ELSE
-		PRINT tcp.send.dbg: "Failed to send data. Socket is not opened"
-	END
-	;
-.END
-.PROGRAM watchdog.pc ()
-  WHILE TRUE DO
-    IF TASK (1002) <> 1 THEN
-      PCEXECUTE 2: tcp.client.pc
-    END
-    IF TASK (1003) <> 1 THEN
-      PCEXECUTE 3: sender.pc
-    END
-  END
-.END
 .PROGRAM Comment___ () ; Comments for IDE. Do not use.
 	; @@@ PROJECT @@@
 	; @@@ PROJECTNAME @@@
 	; ALKU_RS007L
 	; @@@ HISTORY @@@
 	; @@@ INSPECTION @@@
+	; tcp.socket
+	; tcp.port
+	; ip[1]
+	; tcp.connect.tmo
 	; @@@ CONNECTION @@@
-	; KROSET R02
-	; 127.0.0.1
-	; 9205
+	; RS007L
+	; 192.168.7.103
+	; 23
 	; @@@ PROGRAM @@@
-	;   0:a.main:F
-	;   0:autostart.pc:B
-	;   0:sender.pc:B
-	;   0:watchdog.pc:B
-	;   0:get.state.pc:B
-	;   0:errstart.pc:B
-	;   Group:TCPIP:1
-	;     1:tcp.send.pc:B
-	;     1:tcp.callback.pc:B
-	;     1:tcp.client.pc:B
+	; 0:a.main:F
+	; 0:autostart.pc:B
+	; 0:sender.pc:B
+	; 0:watchdog.pc:B
+	; 0:get.state.pc:B
+	; 0:errstart.pc:B
+	; Group:TCPIP:1
+	; 1:tcp.send.pc:B
+	; .data.length 
+	; .status 
+	; .i 
+	; .tcp.error.cnt 
+	; 1:tcp.callback.pc:B
+	; .data.length 
+	; .i 
+	; 1:tcp.client.pc:B
 	; @@@ TRANS @@@
 	; @@@ JOINTS @@@
 	; @@@ REALS @@@
 	; @@@ STRINGS @@@
-	; $tcp.ip 
-	; $action 
 	; @@@ INTEGER @@@
 	; @@@ SIGNALS @@@
 	; @@@ TOOLS @@@
@@ -357,6 +359,25 @@
 	; @@@ WCD @@@
 	; SIGNAME: sig1 sig2 sig3 sig4
 	; SIGDIM: % % % %
+.END
+.REALS
+tcp.socket = -34024
+tcp.port = 9007
+ip[1] = 192
+tcp.connect.tmo = 5
+capture.tare = 4
+do.bat.alm = 2110
+do.home1 = 2100
+ip[2] = 168
+ip[3] = 0
+ip[4] = 4
+release.tare = 3
+start.task = 2001
+tcp.dbg = -1
+tcp.receive.tmo = 5
+tcp.recv.dbg = -1
+tcp.send.dbg = -1
+tcp.send.tmo = 5
 .END
 .STRINGS
 $tcp.ip = "192.168.0.4"
