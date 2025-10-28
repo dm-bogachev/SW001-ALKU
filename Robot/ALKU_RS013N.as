@@ -5,31 +5,41 @@ N_OX3    "grip.unclamp|"
 N_OX4    "grip.clamp|"
 N_OX5    "release.grip|"
 N_OX6    "capture.grip|"
+N_WX1    "grip.unclamped|"
+N_WX2    "grip.clamped|"
 .END
 .INTER_PANEL_D
-0,8,"hmi.st.in.i","IN","stocker i",10,15,4,2,0
-1,8,"hmi.st.in.j","IN","stocker j",10,15,4,2,0
-3,8,"dist.xp","Distortion","X positive",10,15,4,2,0
-4,8,"dist.xn","Distortion","X negative",10,15,4,2,0
-5,8,"hmi.tool.no","Tool No","",10,15,2,1,0
-6,8,"hmi.pos","Tool Pos","",10,15,2,1,0
-7,8,"hmi.st.out.i","OUT","stocker i",10,15,4,2,0
-8,8,"hmi.st.out.j","OUT","stocker j",10,15,4,2,0
-10,8,"dist.yp","Distortion","Y positive",10,15,4,2,0
-11,8,"dist.yn","Distortion","Y negative",10,15,4,2,0
-13,8,"hmi.pospos","Pos Pos","",10,15,2,1,0
-17,8,"center.x","CenterX","",10,15,4,2,0
-18,8,"center.y","CenterY","",10,15,4,2,0
-19,8,"hmi.ext.x","ExtrShiftX","",10,15,4,2,0
-20,8,"hmi.ext.y","ExtrShiftY","",10,15,4,2,0
-21,8,"hmi.x","CoordX","",10,15,4,2,0
-22,8,"hmi.y","CoordY","",10,15,4,2,0
-24,8,"hmi.gx","GripShiftX","",10,15,4,2,0
-25,8,"hmi.gy","GripShiftY","",10,15,4,2,0
-26,8,"hmi.gz","GripShiftZ","",10,15,4,2,0
-28,14,"tcp.ip","Server IP","",10,15,0
-29,8,"tcp.port","Server","port",10,15,5,1,0
-34,10,"PCEXECUTE","AUTOSTART","","",10,4,15,1,"PCEXECUTE autostart.pc",0
+5,2,"","  Release ","  gripper","",10,4,6,5,-1
+6,2,"","  Capture","  gripper","",10,4,6,6,-1
+7,1,"  Gripper","","","  opened",10,15,4,10,1001,0
+8,1,"  Gripper","","","  closed",10,15,4,10,1002,0
+14,2,"","   Open ","  gripper","",10,4,5,3,0
+15,2,"","   Close","  gripper","",10,4,5,4,0
+19,2,"","  Release ","   tare","",10,4,6,1,-1
+20,2,"","  Capture","   tare","",10,4,6,2,-1
+168,14,"tcp.ip","Server IP","",10,15,0
+169,8,"tcp.port","Server","port",10,15,5,1,0
+170,10,"PCEXECUTE","AUTOSTART","","",10,4,15,1,"PCEXECUTE autostart.pc",0
+196,8,"hmi.st.in.i","IN","stocker i",10,15,4,2,0
+197,8,"hmi.st.in.j","IN","stocker j",10,15,4,2,0
+199,8,"dist.xp","Distortion","X positive",10,15,4,2,0
+200,8,"dist.xn","Distortion","X negative",10,15,4,2,0
+201,8,"hmi.tool.no","Tool No","",10,15,2,1,0
+202,8,"hmi.pos","Tool Pos","",10,15,2,1,0
+203,8,"hmi.st.out.i","OUT","stocker i",10,15,4,2,0
+204,8,"hmi.st.out.j","OUT","stocker j",10,15,4,2,0
+206,8,"dist.yp","Distortion","Y positive",10,15,4,2,0
+207,8,"dist.yn","Distortion","Y negative",10,15,4,2,0
+209,8,"hmi.pospos","Pos Pos","",10,15,2,1,0
+213,8,"center.x","CenterX","",10,15,4,2,0
+214,8,"center.y","CenterY","",10,15,4,2,0
+215,8,"hmi.ext.x","ExtrShiftX","",10,15,4,2,0
+216,8,"hmi.ext.y","ExtrShiftY","",10,15,4,2,0
+217,8,"hmi.x","CoordX","",10,15,4,2,0
+218,8,"hmi.y","CoordY","",10,15,4,2,0
+220,8,"hmi.gx","GripShiftX","",10,15,4,2,0
+221,8,"hmi.gy","GripShiftY","",10,15,4,2,0
+222,8,"hmi.gz","GripShiftZ","",10,15,4,2,0
 .END
 .INTER_PANEL_TITLE
 "",0
@@ -246,46 +256,62 @@ N_OX6    "capture.grip|"
   SPEED 100 ALWAYS
   ACCURACY 0.1 ALWAYS
   TOOL tool.grip
-;
-  JMOVE #wait.pick
-  BREAK
-;
+  ;
   cx = hmi.x
   cy = hmi.y
   a = hmi.a
-  IF a==180 THEN
+  IF a == 180 THEN
     .ysh = hmi.ext.y
     .xsh = hmi.ext.x
   ELSE
     .ysh = 0
     .xsh = 0
   END
-  IF hmi.x>center.x+40 THEN
-    cx = hmi.x-dist.xp*(hmi.x-center.x)
+  IF hmi.x > center.x + 40 THEN
+    cx = hmi.x - dist.xp * (hmi.x - center.x)
   END
-  IF hmi.x<center.x-40 THEN
-    cx = hmi.x+dist.xn*(-hmi.x+center.x)
+  IF hmi.x < center.x - 40 THEN
+    cx = hmi.x + dist.xn * (-hmi.x + center.x)
   END
-  IF hmi.y>center.y+20 THEN
-    cy = hmi.y-dist.yp*(hmi.y-center.y)
+  IF hmi.y > center.y + 20 THEN
+    cy = hmi.y - dist.yp * (hmi.y - center.y)
   END
-  IF hmi.y<center.y-20 THEN
-    cy = hmi.y+dist.yn*(-hmi.y+center.y)
+  IF hmi.y < center.y - 20 THEN
+    cy = hmi.y + dist.yn * (-hmi.y + center.y)
   END
-;
+  POINT .pick = f + TRANS (cx + hmi.gx + .xsh, cy + hmi.gy + .ysh, hmi.gz) + RZ (a)
+  DECOMPOSE .c[1] = #pick.in
+  POINT .#pick.in = #PPOINT(.c[1], .c[2],.c[3],.c[4],.c[5],.c[6]-a)
+  ;
+  JMOVE #wait.pick
+  LMOVE .#pick.in
+  IF NOT SIG (grip.unclamped) THEN
+    PULSE grip.unclamp
+    $action = "WaitingGripUnclamped"
+    SWAIT grip.unclamped
+  END
   BREAK
-  LMOVE f+TRANS(cx+hmi.gx+.xsh,cy+hmi.gy+.ysh,30+hmi.gz)+RZ(a)
+  ;
+  
+  ;
+  BREAK
+  LAPPRO .pick, -30
+  ;LMOVE f + TRANS (cx + hmi.gx + .xsh, cy + hmi.gy + .ysh, 30 + hmi.gz) + RZ (a)
   BREAK
   SPEED 30 MM/S
-  LMOVE f+TRANS(cx+hmi.gx+.xsh,cy+hmi.gy+.ysh,hmi.gz)+RZ(a)
+  LMOVE .pick
+  STABLE 1
+  ;LMOVE f + TRANS (cx + hmi.gx + .xsh, cy + hmi.gy + .ysh, hmi.gz) + RZ (a)
   BREAK
   PULSE grip.clamp
   TWAIT 0.5
-  LMOVE f+TRANS(cx+hmi.gx+.xsh,cy+hmi.gy+.ysh,30+hmi.gz)+RZ(a)
-;
-;TWAIT 3
-;
-;PULSE grip.unclamp
+  LAPPRO .pick, -30
+  ;LMOVE f + TRANS (cx + hmi.gx + .xsh, cy + hmi.gy + .ysh, 30 + hmi.gz) + RZ (a)
+  ;
+  ;TWAIT 3
+  ;
+  ;PULSE grip.unclamp
+  LMOVE .#pick.in
   LMOVE #wait.pick
   LMOVE #before.pos
 .END
@@ -574,6 +600,8 @@ N_OX6    "capture.grip|"
   release.grip = 5
   capture.grip = 6
   ;
+  grip.unclamped = 1001
+  grip.clamped = 1002
   grip.unclamp = 3
   grip.clamp = 4
   ;
@@ -875,6 +903,7 @@ N_OX6    "capture.grip|"
 	; 23
 	; @@@ PROGRAM @@@
 	; 0:a.main:F
+	; .i 
 	; Group:Teach:1
 	; 1:a.teach.stz:F
 	; .plb 
@@ -895,12 +924,14 @@ N_OX6    "capture.grip|"
 	; 1:a.teach.gripper:F
 	; .temp 
 	; 1:a.teach.pos:F
+	; .temp 
 	; Group:STZ:2
 	; 2:stz.pick:F
 	; .ysh 
 	; .xsh 
 	; 2:stz.put:F
 	; .pos 
+	; .temp 
 	; Group:ToolChange:3
 	; 3:gripper.pick:F
 	; .pos 
@@ -989,6 +1020,8 @@ N_OX6    "capture.grip|"
 	; release.grip 
 	; grip.clamp 
 	; grip.unclamp 
+	; grip.unclamped 
+	; grip.clamped 
 	; @@@ TOOLS @@@
 	; tool.pin 
 	; tool.pick[] 
@@ -1195,6 +1228,7 @@ tool.grip 5.960000 6.028000 171.199997 -112.500008 180.000000 0.000000
 #p1 134.716766 41.293598 -66.350815 -50.732227 57.166672 254.816574
 #p2 133.473557 43.639095 -62.388935 -50.699005 55.230335 255.409546
 #post.tare.new 30.800823 -12.718077 -134.300644 0.302695 -78.852997 24.346281
+#pick.in 130.503330 12.590690 -97.431880 -0.818260 -69.914940 -15.682720
 .END
 .REALS
 hmi.st.in.i = 1
@@ -1247,6 +1281,8 @@ dbg.tcp = -1
 tcp.calb.dbg = -1
 hmi.ext.x = 0
 hmi.ext.y = 0
+grip.unclamped = 1001
+grip.clamped = 1002
 .END
 .STRINGS
 $tcp.ip = "192.168.0.4"
