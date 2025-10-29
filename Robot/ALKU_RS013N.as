@@ -5,50 +5,84 @@ N_OX3    "grip.unclamp"
 N_OX4    "grip.clamp"
 N_OX5    "release.grip"
 N_OX6    "capture.grip"
+N_OX17    "do.home1"
+N_OX18    "do.work[1]"
 N_WX1    "grip.unclamped"
 N_WX2    "grip.clamped"
-N_INT100    "do.home1"
-N_INT110    "do.bat.alm"
+N_WX17    "rs7.home1"
+N_WX18    "rs7.work[1]"
+N_INT1    "di.ifp.page[1]"
+N_INT2    "di.ifp.page[2]"
+N_INT3    "di.ifp.page[3]"
+N_INT4    "di.ifp.page[4]"
+N_INT5    "di.ifp.page[5]"
+N_INT6    "di.ifp.page[6]"
+N_INT7    "di.ifp.page[7]"
+N_INT8    "di.ifp.page[8]"
+N_INT10    "do.bat.alm"
+N_INT11    "s.tcp.send.ena"
+N_INT12    "s.tcp.recv.ena"
+N_INT13    "s.tcp.ena"
+N_INT14    "s.apply.coord"
 .END
 .INTER_PANEL_D
-5,2,"","  Release ","  gripper","",10,4,6,5,-1
-6,2,"","  Capture","  gripper","",10,4,6,6,-1
-7,1,"  Gripper","","","  opened",10,15,4,10,1001,0
-8,1,"  Gripper","","","  closed",10,15,4,10,1002,0
-14,2,"","   Open ","  gripper","",10,4,5,3,0
-15,2,"","   Close","  gripper","",10,4,5,4,0
-19,2,"","  Release ","   tare","",10,4,6,1,-1
-20,2,"","  Capture","   tare","",10,4,6,2,-1
-168,14,"tcp.ip","Server IP","",10,15,0
-169,8,"tcp.port","Server","port",10,15,5,1,0
-170,10,"PCEXECUTE","AUTOSTART","","",10,4,15,1,"PCEXECUTE autostart.pc",0
-196,8,"hmi.st.in.i","IN","stocker i",10,15,4,2,0
-197,8,"hmi.st.in.j","IN","stocker j",10,15,4,2,0
-199,8,"dist.xp","Distortion","X positive",10,15,4,2,0
-200,8,"dist.xn","Distortion","X negative",10,15,4,2,0
-201,8,"hmi.tool.no","Tool No","",10,15,2,1,0
-202,8,"hmi.pos","Tool Pos","",10,15,2,1,0
-203,8,"hmi.st.out.i","OUT","stocker i",10,15,4,2,0
-204,8,"hmi.st.out.j","OUT","stocker j",10,15,4,2,0
-206,8,"dist.yp","Distortion","Y positive",10,15,4,2,0
-207,8,"dist.yn","Distortion","Y negative",10,15,4,2,0
-209,8,"hmi.pospos","Pos Pos","",10,15,2,1,0
-213,8,"center.x","CenterX","",10,15,4,2,0
-214,8,"center.y","CenterY","",10,15,4,2,0
-215,8,"hmi.ext.x","ExtrShiftX","",10,15,4,2,0
-216,8,"hmi.ext.y","ExtrShiftY","",10,15,4,2,0
-217,8,"hmi.x","CoordX","",10,15,4,2,0
-218,8,"hmi.y","CoordY","",10,15,4,2,0
-220,8,"hmi.gx","GripShiftX","",10,15,4,2,0
-221,8,"hmi.gy","GripShiftY","",10,15,4,2,0
-222,8,"hmi.gz","GripShiftZ","",10,15,4,2,0
+0,9,1,6,15
+6,10,"","PCEXECUTE","AUTOSTART","",10,4,15,1,"PCEXECUTE autostart.pc",0
+7,9,2,6,15
+13,2,""," GRIPPERS","--------->","",10,4,15,2002,0
+14,9,3,6,15
+20,2,""," NETWORK","--------->","",10,4,15,2003,0
+21,9,8,6,15
+27,2,""," TEACH","--------->","",10,4,15,2004,0
+28,1,"  Gripper","","","  opened",10,15,4,10,1001,0
+29,1,"  Gripper","","","  closed",10,15,4,10,1002,0
+33,2,"","  Release ","  gripper","",10,4,6,5,-1
+34,2,"","  Capture","  gripper","",10,4,6,6,0
+35,2,"","   Open ","  gripper","",10,4,5,3,0
+36,2,"","   Close","  gripper","",10,4,5,4,0
+47,2,"","  Release ","   tare","",10,4,6,1,-1
+48,2,"","  Capture","   tare","",10,4,6,2,0
+49,2,"","   MAIN","<---------","",10,4,15,2001,0
+56,14,"tcp.ip","Server IP","",10,15,0
+57,8,"tcp.port","Server","port",10,15,5,1,0
+69,4,1,"OFF     ON","","","TCP COMMON",10,4,4,0,2013,0
+76,4,1,"OFF     ON","",""," TCP SEND",10,4,4,0,2011,0
+77,2,"","   MAIN","<---------","",10,4,15,2001,0
+83,4,1,"OFF     ON","",""," TCP RECV",10,4,4,0,2012,0
+84,8,"hmi.st.in.i","IN STOCKER","SELECT COL",10,15,4,2,0
+85,8,"hmi.st.in.j","IN STOCKER","SELECT ROW",10,15,4,2,0
+88,8,"hmi.tool.no","   TOOL","  NUMBER",10,15,2,1,0
+91,8,"hmi.st.out.i","OUTSTOCKER","SELECT COL",10,15,4,2,0
+92,8,"hmi.st.out.j","OUTSTOCKER","SELECT ROW",10,15,4,2,0
+95,8,"hmi.t.pos","TOOL CHANG"," POSITION",10,15,2,1,0
+102,8,"hmi.pos.pos","POSITIONER"," POSITION",10,15,2,1,0
+105,2,"","   MAIN","<---------","",10,4,15,2001,0
+111,2,"","   STZ","--------->","",10,4,15,2005,0
+112,8,"dist.xp","DISTORTION"," X+ COEFF",10,15,4,2,0
+113,8,"dist.yp","DISTORTION"," Y+ COEFF",10,15,4,2,0
+115,8,"hmi.tool.no","   TOOL","  NUMBER",10,15,2,1,0
+116,8,"hmi.gx","GRIPPER N"," X SHIFT",10,15,4,2,0
+117,8,"hmi.gy","GRIPPER N"," Y SHIFT",10,15,4,2,0
+118,8,"hmi.gz","GRIPPER N"," Z SHIFT",10,15,4,2,0
+119,8,"dist.xn","DISTORTION"," X- COEFF",10,15,4,2,0
+120,8,"dist.yn","DISTORTION"," Y- COEFF",10,15,4,2,0
+123,8,"hmi.g180x","GRIPPER N","180X SHIFT",10,15,4,2,0
+124,8,"hmi.g180y","GRIPPER N","180Y SHIFT",10,15,4,2,0
+125,2,""," APPLY FOR"," N GRIPPER","",10,4,15,2014,0
+126,8,"center.x","CENTER OF","  X AXIS",10,15,4,2,0
+127,8,"center.y","CENTER OF","  Y AXIS",10,15,4,2,0
+133,2,"","   TEACH","<---------","",10,4,15,2004,0
+135,8,"hmi.a","   STZ ","  ANGLE",10,15,4,2,0
+136,8,"hmi.x","   STZ X","COORDINATE",10,15,4,2,0
+137,8,"hmi.y","   STZ Y","COORDINATE",10,15,4,2,0
+139,2,"","   MAIN","<---------","",10,4,15,2001,0
 .END
 .INTER_PANEL_TITLE
-"",0
-"Network",1
-"",0
-"",0
-"",0
+"MAIN",1
+"GRIPPER",1
+"NETWORK",1
+"TEACH",1
+"STZ",1
 "",0
 "",0
 "",0
@@ -63,6 +97,12 @@ N_INT110    "do.bat.alm"
 .END
 .INTER_PANEL_COLOR_D
 182,3,224,244,28,159,252,255,251,255,0,31,2,241,52,255,
+.END
+.PROGRAM a.align ()
+  ALIGN
+.END
+.PROGRAM a.home ()
+  JMOVE #homep1
 .END
 .PROGRAM a.main ()
   ;
@@ -115,10 +155,10 @@ N_INT110    "do.bat.alm"
   ACCURACY 0 ALWAYS
   TOOL tool.pin
   ;
-  LMOVE #plb ; Left bottom
-  LMOVE #plt ; Left top
-  LMOVE #prt ; Right top
-  LMOVE #prb ; Right bottom
+  LMOVE #plb ; *** TEACH POINT *** Left bottom 
+  LMOVE #plt ; *** TEACH POINT *** Left top
+  LMOVE #prt ; *** TEACH POINT *** Right top
+  LMOVE #prb ; *** TEACH POINT *** Right bottom
   ;
   POINT .plb = #plb
   POINT .plt = #plt
@@ -140,33 +180,10 @@ N_INT110    "do.bat.alm"
   BREAK
   POINT f = FRAME (.plb, .prb, .prt, .plt)
   POINT f = f + RZ (-90)
-  ; CIR1 = 100, 100
-  ; CIR2 = 148, 250
-  ; CIR3 = 248, 300
-  ; CIR4 = 148; 450
+  ; CIR1 = 100, 100 CIR2 = 148, 250
+  ; CIR3 = 248, 300 CIR4 = 148; 450
   BREAK
   LMOVE f + TRANS (hmi.x, hmi.y, 10)
-.END
-.PROGRAM a.test.pick()@25/10/24 15:48 #0
-  SPEED 250 MM/S ALWAYS
-  ACCURACY 0 ALWAYS
-  ;
-  BREAK
-  cx = hmi.x
-  cy = hmi.y
-  IF hmi.x > center.x + 50 THEN
-    cx = hmi.x - dist.xp * (hmi.x - center.x)
-  END
-  IF hmi.x < center.x - 50 THEN
-    cx = hmi.x + dist.xn * (-hmi.x + center.x)
-  END
-  IF hmi.y > center.y + 50 THEN
-    cy = hmi.y - dist.yp * (hmi.y - center.y)
-  END
-  IF hmi.y < center.y - 50
-    cy = hmi.y + dist.yn * (-hmi.y + center.y)
-  END
-  LMOVE f + TRANS (cx + hmi.gx, cy + hmi.gy, 40)
 .END
 .PROGRAM a.tch.stock.in ()
   ; Use this for first teach
@@ -214,14 +231,28 @@ N_INT110    "do.bat.alm"
   LMOVE stocker.out[.i, .j]
   LMOVE stocker.out[.i, .j] + TRANS (0, 0, 50)
 .END
+.PROGRAM a.teach.pos ()
+  TOOL tool.pick[hmi.tool.no]
+  ;
+  POINT .temp = #pos.pos[hmi.pos.pos]
+  JMOVE .temp + TRANS (0, 0, 50)
+  BREAK
+  LMOVE #pos.pos[hmi.pos.pos]
+  BREAK
+  TWAIT 0.5
+  LMOVE .temp + TRANS (0, 0, 50)
+  BREAK
+  TWAIT 0.5
+
+.END
 .PROGRAM a.teach.gripper ()
   TOOL tool.pick[hmi.tool.no]
   ;
-  POINT .temp = #tool.pos[hmi.pos]
+  POINT .temp = #tool.pos[hmi.t.pos]
   JMOVE .temp + TRANS (0, 0, 50)
   BREAK
   ;
-  LMOVE #tool.pos[hmi.pos]
+  LMOVE #tool.pos[hmi.t.pos]
   BREAK
   PULSE capture.grip
   TWAIT 0.5
@@ -233,26 +264,62 @@ N_INT110    "do.bat.alm"
   LMOVE .temp + TRANS (0, 0, 200)
   LMOVE .temp + TRANS (0, 0, 50)
   BREAK
-  LMOVE #tool.pos[hmi.pos]
+  LMOVE #tool.pos[hmi.t.pos]
   BREAK
   PULSE release.grip
   TWAIT 0.5
   ;
   LMOVE .temp + TRANS (0, 0, 50)
 .END
-.PROGRAM a.teach.pos ()
+.PROGRAM a.test.pick()@25/10/29 15:55 #0
+  IF FALSE THEN
+    JMOVE #pick.in
+  END
+  SPEED 100 ALWAYS
+  ACCURACY 0.1 ALWAYS
   TOOL tool.pick[hmi.tool.no]
-  ;
-  POINT .temp = #pos.pos[hmi.pospos]
-  JMOVE .temp + TRANS (0, 0, 50)
+;
+  cx = hmi.x
+  cy = hmi.y
+  a = hmi.a
+  .ysh = 0
+  .xsh = 0
+  IF a>=100 THEN
+    .xsh = grip.180xsh[hmi.tool.no]
+    .ysh = grip.180ysh[hmi.tool.no]
+  END
+  IF cx>center.x+1 THEN
+    cx = cx-dist.xp*(cx-center.x)
+  END
+  IF cx<center.x-1 THEN
+    cx = cx+dist.xn*(-cx+center.x)
+  END
+  IF cy>center.y+1 THEN
+    cy = cy-dist.yp*(cy-center.y)
+  END
+  IF cy<center.y-1 THEN
+    cy = cy+dist.yn*(-cy+center.y)
+  END
+  POINT .pick = f+TRANS(cx+grip.xsh[hmi.tool.no]+.xsh,cy+grip.ysh[hmi.tool.no]+.ysh,grip.zsh[hmi.tool.no])+RZ(a)
+  DECOMPOSE .c[1] = #pick.in
+  POINT .#pick.in = #PPOINT(.c[1],.c[2],.c[3],.c[4],.c[5],.c[6] - a)
+;
+  JMOVE #wait.pick
+  LMOVE .#pick.in
+;
   BREAK
-  LMOVE #pos.pos[hmi.pospos]
+  LAPPRO .pick,-30
   BREAK
+  SPEED 30 MM/S
+  LMOVE .pick
+  BREAK
+  PULSE grip.clamp
   TWAIT 0.5
-  LMOVE .temp + TRANS (0, 0, 50)
-  BREAK
-  TWAIT 0.5
-
+  LAPPRO .pick,-30
+;
+  LMOVE .#pick.in
+  LMOVE #wait.pick
+  LMOVE #before.pos
 .END
 .PROGRAM stz.pick()@25/10/27 15:45 #1
   SPEED 100 ALWAYS
@@ -262,12 +329,11 @@ N_INT110    "do.bat.alm"
   cx = hmi.x
   cy = hmi.y
   a = hmi.a
+  .ysh = 0
+  .xsh = 0
   IF a == 180 THEN
-    .ysh = hmi.ext.y
-    .xsh = hmi.ext.x
-  ELSE
-    .ysh = 0
-    .xsh = 0
+    .xsh = grip.180xsh[hmi.tool.no]
+    .ysh = grip.180ysh[hmi.tool.no]
   END
   IF hmi.x > center.x + 40 THEN
     cx = hmi.x - dist.xp * (hmi.x - center.x)
@@ -328,6 +394,11 @@ N_INT110    "do.bat.alm"
   LMOVE #wait.pick
 .END
 .PROGRAM gripper.pick (.pos,.tool.no)
+  IF FALSE THEN
+    .pos = hmi.t.pos
+    .tool.no = hmi.tool.no
+  END
+  ;
   SPEED 100 ALWAYS
   ACCURACY 0 ALWAYS
   TOOL tool.pick[.tool.no]
@@ -347,6 +418,11 @@ N_INT110    "do.bat.alm"
   LMOVE .temp + TRANS (0, 0, 200)
 .END
 .PROGRAM gripper.put(.pos,.tool.no)@25/10/27 15:57 #0
+    IF FALSE THEN
+    .pos = hmi.t.pos
+    .tool.no = hmi.tool.no
+  END
+  ;
   SPEED 100 ALWAYS
   ACCURACY 0 ALWAYS
   TOOL tool.pick[.tool.no]
@@ -584,177 +660,13 @@ N_INT110    "do.bat.alm"
   PROG.DATE ON
   autostart.pc ON
   errstart.pc ON  ;
-  ; Variables init
-  release.tare = 1
-  capture.tare = 2
   ;
-  release.grip = 5
-  capture.grip = 6
+  IFPWPRINT 8, 1, 1, 5, 10 = "Robot: RS013N S/N: C2392", "Controller: F60 S/N: C10632"," ", "Powered by Robowizard Co.Ltd."
   ;
-  grip.unclamped = 1001
-  grip.clamped = 1002
-  grip.unclamp = 3
-  grip.clamp = 4
-  ;
-  ;
-  tcp.socket = 0
-  tcp.connect.tmo = 5
-  tcp.receive.tmo = 5
-  tcp.send.tmo = 5
-  ;
-  tcp.dbg = -1
-  tcp.send.dbg = -1
-  tcp.recv.dbg = -1
-  ;
-  start.task = 2001
-  do.home1 = 2100
-  do.bat.alm = 2110
-  ;
+  CALL set.io.pc
+  CALL set.vars.pc
   CALL watchdog.pc
   ;
-.END
-.PROGRAM tcp.send.pc(.$data[],.data.length) #114404
-  IF tcp.socket > 0 THEN
-    TCP_SEND .status, tcp.socket, .$data[1], .data.length, tcp.send.tmo
-    IF .status >= 0 THEN
-      PRINT tcp.send.dbg: "Sent ", .data.length, " strings"
-      FOR .i = 1 TO .data.length
-        IF LEN (.$data[.i]) > 127 THEN
-          PRINT tcp.send.dbg: /S, .i, ": "
-          PRINT tcp.send.dbg: /S, $LEFT (.$data[.i], 128)
-          PRINT tcp.send.dbg: $MID (.$data[.i], 129)
-        ELSE
-          PRINT tcp.send.dbg: /S, .i, ": "
-          PRINT tcp.send.dbg: .$data[.i]
-        END
-      END
-    ELSE
-      PRINT tcp.send.dbg: "Failed to send data with error:", .status, ". Error count:", .tcp.error.cnt
-      tcp.socket = -1
-    END
-  ELSE
-    PRINT tcp.send.dbg: "Failed to send data. Socket is not opened"
-  END
-  ;
-.END
-.PROGRAM tcp.callback.pc (.$data[],.data.length)
-  PRINT tcp.recv.dbg: "Received ", .data.length, " strings"
-  FOR .i = 1 TO .data.length
-    IF LEN (.$data[.i]) > 127 THEN
-      PRINT tcp.recv.dbg: /S, .i, ": "
-      PRINT tcp.recv.dbg: /S, $LEFT (.$data[.i], 128)
-      PRINT tcp.recv.dbg: $MID (.$data[.i], 129)
-    ELSE
-      PRINT tcp.recv.dbg: /S, .i, ": "
-      PRINT tcp.recv.dbg: .$data[.i]
-    END
-  END
-  ;
-  IF INSTR(.$data[1], "PICK") THEN
-    .$temp = $DECODE(.$data[1], ":", 0)
-    .$temp = $DECODE(.$data[1], ":", 1)
-    .$x = $DECODE(.$data[1], ",", 0)
-    .$temp = $DECODE(.$data[1], ",", 1)
-    .$y = $DECODE(.$data[1], ",", 0)
-    .$temp = $DECODE(.$data[1], ",", 1)
-    .$a = .$data[1]
-    hmi.y = VAL(.$x)/10
-    hmi.x = VAL(.$y)/10
-    hmi.a = VAL(.$a)
-  END
-  ;
-  IF .$data[1] == "GO\n" THEN
-    MC ZPOWER ON
-    TWAIT 1
-    MC EXECUTE a.main
-  END
-  IF .$data[1] == "START\n" THEN
-    PULSE start.task
-  END
-  IF .$data[1] == "CONTINUE\n" THEN
-    PULSE 2002
-  END
-  ;
-  PRINT tcp.recv.dbg: "Unhandled message. Return PING"
-  .$data[1] = "PING\n"
-  CALL tcp.send.pc (.$data[], 1)
-.END
-.PROGRAM tcp.client.pc ()
-  .tcp.retry.count = 10
-  WHILE TRUE DO
-    ; Checking for active sockets and closing them
-    PRINT tcp.dbg: "Checking for active sockets and closing them"
-    TCP_STATUS .number, .ports[0], .sockets[0], .errors[0], .suberrors[0], .$ips[0]
-    IF .number > 0 THEN
-      FOR .i = 0 TO .number - 1
-        IF .sockets[.i] <> 0 THEN
-          PRINT tcp.dbg: "Closing socket with id: ", .sockets[.i]
-          TCP_CLOSE .status, .sockets[.i]
-        END
-      END
-    END
-    ; Get IP from string
-    .$tcp.ip.copy = $tcp.ip
-    FOR .i = 1 TO 4
-      .$ip = $DECODE (.$tcp.ip.copy, ".", 0)
-      ip[.i] = VAL (.$ip)
-      IF .i < 4 THEN
-        .$ip = $DECODE (.$tcp.ip.copy, ".", 1)
-      END
-    END
-    ;
-    ; Connect to server
-    PRINT tcp.dbg: "Connecting to server with ip: " + $tcp.ip
-    TCP_CONNECT tcp.socket, tcp.port, ip[1], tcp.connect.tmo
-    ;
-    ; Start data processing cycle
-    IF tcp.socket >= 0 THEN
-      PRINT tcp.dbg: "Connection established with socket id:", tcp.socket
-      .connected = TRUE
-      ; Start receiving data cycle
-      .tcp.error.cnt = 0
-      WHILE .connected AND .tcp.error.cnt <= .tcp.retry.count DO
-        TCP_RECV .status, tcp.socket, .$tcp.request[1], .request.size, tcp.receive.tmo, 255
-        IF .status >= 0 THEN
-          IF .request.size == 0 THEN
-            .tcp.error.cnt = .tcp.error.cnt + 1
-            PRINT tcp.dbg: "Received data with 0 length. Error count:", .tcp.error.cnt
-          ELSE
-            CALL tcp.callback.pc (.$tcp.request[], .request.size)
-          END
-        ELSE
-          IF .status == -34024 THEN
-            PRINT tcp.dbg: "Timeout in receive, it's ok"
-          ELSE
-            .tcp.error.cnt = .tcp.error.cnt + 1
-            PRINT tcp.dbg: "Failed to receive data with error:", .status, ". Error count:", .tcp.error.cnt
-          END
-        END
-      END
-    ELSE
-      PRINT tcp.dbg: "Connection failed with error:", tcp.socket
-      IF tcp.socket > 0 THEN
-        TCP_CLOSE .status, tcp.socket
-      END
-    END
-  END
-.END
-.PROGRAM sender.pc ()
-  ;
-  ; 0 - FALSE
-  ; 1 - TRUE
-  ;
-  ; POWER;REPEAT;CS;ERROR;ERRORCODE;TEACH_LOCK;TP_EMG;OP_EMG;EX_EMG;
-  ;
-  WHILE TRUE DO
-
-    CALL get.state.pc(.$data[1])
-    .$data[2] = "action:" + $action + "\n"
-    ;
-    ;
-    CALL tcp.send.pc (.$data[], 2)
-    TWAIT 0.250
-  END
 .END
 .PROGRAM get.state.pc (.$state)
   .$state = "POWER:"
@@ -826,7 +738,7 @@ N_INT110    "do.bat.alm"
   ; MAX 12
   ;
   .$state = .$state + "HOME:"
-  IF SIG (2100) THEN
+  IF SIG (do.home1) THEN
     .$state = .$state + "TRUE;"
   ELSE
     .$state = .$state + "FALSE;"
@@ -834,7 +746,7 @@ N_INT110    "do.bat.alm"
   ; MAX 12
   ;
   .$state = .$state + "BATALM:"
-  IF SIG (2110) THEN
+  IF SIG (do.bat.alm) THEN
     .$state = .$state + "TRUE;"
   ELSE
     .$state = .$state + "FALSE;"
@@ -842,30 +754,289 @@ N_INT110    "do.bat.alm"
   ; MAX 12
   .$state = .$state + "\n"
 .END
-.PROGRAM errstart.pc ()
- IF ERROR == -34021 OR ERROR == -10100 THEN
+.PROGRAM sender.pc ()
+  ;
+  ; 0 - FALSE
+  ; 1 - TRUE
+  ;
+  ; POWER;REPEAT;CS;ERROR;ERRORCODE;TEACH_LOCK;TP_EMG;OP_EMG;EX_EMG;
+  ;
+  WHILE TRUE DO
+;
+    CALL get.state.pc(.$data[1])
+    .$data[2] = "action:" + $action + "\n"
+    ;
+    CALL tcp.send3.pc (.$data[], 2)
+    TWAIT 0.250
+  END
+.END
+.PROGRAM tcp.send2.pc (.$data[],.data.length)
+  IF tcp.socket > 0 THEN
+    TCP_SEND .status, tcp.socket, .$data[1], .data.length, tcp.send.tmo
+    IF .status >= 0 THEN
+      .$temp = "Sent "+ $ENCODE(.data.length) + " strings"
+      PRINT tcp.send.ena: .$temp
+      FOR .i = 1 TO .data.length
+        PRINT tcp.send.ena: .$data[.i]
+      END
+    ELSE
+      .$temp = "Failed to send data with error:"+ $ENCODE(.status)
+      PRINT tcp.send.ena: .$temp
+      tcp.socket = -1
+    END
+  ELSE
+    PRINT tcp.send.ena: "Failed to send data. Socket is not opened. Waiting for 5 seconds"
+    TWAIT 5
+  END
+  ;
+.END
+.PROGRAM tcp.callback.pc (.$data[],.data.length)
+  .$temp = "Received "+ $ENCODE (.data.length) + " strings:"
+  PRINT tcp.recv.ena: .$temp
+  FOR .i = 1 TO .data.length
+    PRINT tcp.recv.ena: .$data[.i] 
+  END
+  ;
+  IF INSTR (.$data[1], "PICK") THEN
+    .$temp = $DECODE (.$data[1], ":", 0)
+    .$temp = $DECODE (.$data[1], ":", 1)
+    .$x = $DECODE (.$data[1], ",", 0)
+    .$temp = $DECODE (.$data[1], ",", 1)
+    .$y = $DECODE (.$data[1], ",", 0)
+    .$temp = $DECODE (.$data[1], ",", 1)
+    .$a = .$data[1]
+    hmi.y = VAL (.$x) / 10
+    hmi.x = VAL (.$y) / 10
+    hmi.a = VAL (.$a)
+  END
+  ;
+  IF .$data[1] == "GO\n" THEN
+    MC ZPOWER ON
+    TWAIT 1
+    MC EXECUTE a.main
+  END
+  IF .$data[1] == "START\n" THEN
+    PULSE 2500
+  END
+  IF .$data[1] == "CONTINUE\n" THEN
+    PULSE 2501
+  END
+  ;
+  PRINT tcp.recv.ena: "Unhandled message. Return PING"
+  .$data[1] = "PING\n"
+  CALL tcp.send2.pc (.$data[], 1)
+.END
+.PROGRAM tcp.client.pc ()
+  .tcp.retry.count = 10
+  WHILE TRUE DO
+    ; Checking for active sockets and closing them
+    PRINT tcp.ena: "Checking for active sockets and closing them"
+    TCP_STATUS .number, .ports[0], .sockets[0], .errors[0], .suberrors[0], .$ips[0]
+    IF .number > 0 THEN
+      FOR .i = 0 TO .number - 1
+        IF .sockets[.i] <> 0 THEN
+          .$temp =  "Closing socket with id: " + $ENCODE(.sockets[.i])
+          PRINT tcp.ena: .$temp
+          TCP_CLOSE .status, .sockets[.i]
+        END
+      END
+    END
+    ; Get IP from string
+    .$tcp.ip.copy = $tcp.ip
+    FOR .i = 1 TO 4
+      .$ip = $DECODE (.$tcp.ip.copy, ".")
+      ip[.i] = VAL (.$ip)
+      IF .i < 4 THEN
+        .$ip = $DECODE (.$tcp.ip.copy, ".", 1)
+      END
+    END
+    ;
+    ; Connect to server
+    .$temp = "Connecting to server with ip: " + $tcp.ip
+    PRINT tcp.ena: .$temp
+    TCP_CONNECT tcp.socket, tcp.port, ip[1], tcp.connect.tmo
+    ;
+    ; Start data processing cycle
+    IF tcp.socket >= 0 THEN
+      .$temp =  "Connection established with socket id:"+ $ENCODE(tcp.socket)
+      PRINT tcp.ena: .$temp
+      .connected = TRUE
+      ; Start receiving data cycle
+      .tcp.error.cnt = 0
+      WHILE .connected AND .tcp.error.cnt <= .tcp.retry.count DO
+        TCP_RECV .status, tcp.socket, .$tcp.request[1], .request.size, tcp.receive.tmo, 255
+        IF .status >= 0 THEN
+          IF .request.size == 0 THEN
+            .tcp.error.cnt = .tcp.error.cnt + 1
+            .$temp =  "Received data with 0 length. Error count:"+ $ENCODE(.tcp.error.cnt)
+            PRINT tcp.ena: .$temp
+          ELSE
+            CALL tcp.callback.pc (.$tcp.request[], .request.size)
+          END
+        ELSE
+          IF .status == -34024 THEN
+            PRINT tcp.ena: "Timeout in receive, it's ok"
+          ELSE
+            .tcp.error.cnt = .tcp.error.cnt + 1
+            .$temp =  "Failed to receive data with error:"+ $ENCODE(.status) + ". Error count:" + $ENCODE(.tcp.error.cnt)
+            PRINT tcp.ena: .$temp
+          END
+        END
+      END
+    ELSE
+      .$temp =  "Connection failed with error:"+ $ENCODE(tcp.socket)
+      PRINT tcp.ena: .$temp
+      IF tcp.socket > 0 THEN
+        TCP_CLOSE .status, tcp.socket
+      END
+    END
+  END
+.END
+.PROGRAM tcp.send3.pc (.$data[],.data.length)
+  IF tcp.socket > 0 THEN
+    TCP_SEND .status, tcp.socket, .$data[1], .data.length, tcp.send.tmo
+    IF .status >= 0 THEN
+      .$temp = "Sent "+ $ENCODE(.data.length) + " strings"
+      PRINT tcp.send.ena: .$temp
+      FOR .i = 1 TO .data.length
+        PRINT tcp.send.ena: .$data[.i]
+      END
+    ELSE
+      .$temp = "Failed to send data with error:"+ $ENCODE(.status)
+      PRINT tcp.send.ena: .$temp
+      tcp.socket = -1
+    END
+  ELSE
+    PRINT tcp.send.ena: "Failed to send data. Socket is not opened. Waiting for 5 seconds"
+    TWAIT 5
+  END
+  ;
+.END
+.PROGRAM errstart.pc()
+  IF ERROR == -34021 OR ERROR == -10100 THEN
     tcp.socket = -1
-    MC ERESET 
+    MC ERESET
     TWAIT 1
-    PCABORT 2:
-    PCABORT 3:
-    TWAIT 3
-    PCEXECUTE 2: tcp.client.pc
-    PCEXECUTE 3: sender.pc
-    TWAIT 1
+    ;PCABORT 2:
+    ;PCABORT 3:
+    ;TWAIT 3
+    ;PCEXECUTE 2: tcp.client.pc
+    ;PCEXECUTE 3: sender.pc
+    ;TWAIT 1
   END
   TWAIT 5
   errstart.pc ON
 .END
 .PROGRAM watchdog.pc ()
   WHILE TRUE DO
+    IF SIG (s.tcp.ena) THEN
+      tcp.ena = tyterm
+    ELSE
+      tcp.ena = -1
+    END
+    ;
+    IF SIG (s.tcp.send.ena) THEN
+      tcp.send.ena = tyterm
+    ELSE
+      tcp.send.ena = -1
+    END
+    ;
+    IF SIG (s.tcp.recv.ena) THEN
+      tcp.recv.ena = tyterm
+    ELSE
+      tcp.recv.ena = -1
+    END
+    ; HMI PANEL GRIPPER TEACH DATA
+    IF keep.tool.no <> hmi.tool.no THEN
+      hmi.gx = grip.xsh[hmi.tool.no]
+      hmi.gy = grip.ysh[hmi.tool.no]
+      hmi.gz = grip.zsh[hmi.tool.no]
+      hmi.g180x = grip.180xsh[hmi.tool.no]
+      hmi.g180y = grip.180ysh[hmi.tool.no]
+      keep.tool.no = hmi.tool.no
+    END
+    IF SIG(s.apply.coord) THEN
+      grip.xsh[hmi.tool.no] = hmi.gx
+      grip.ysh[hmi.tool.no] = hmi.gy
+      grip.zsh[hmi.tool.no] = hmi.gz
+      grip.180xsh[hmi.tool.no] = hmi.g180x
+      grip.180ysh[hmi.tool.no] = hmi.g180y
+      
+    END
+    ;
+    ;
+    TWAIT 0.1
     IF TASK (1002) <> 1 THEN
       PCEXECUTE 2: tcp.client.pc
+      TWAIT 2
     END
     IF TASK (1003) <> 1 THEN
       PCEXECUTE 3: sender.pc
+      TWAIT 2
+    END
+    ;
+    
+  END
+.END
+.PROGRAM set.io.pc ()
+  ; Gripper IO
+  release.tare = 1
+  capture.tare = 2
+  ;
+  release.grip = 5
+  capture.grip = 6
+  ;
+  grip.unclamped = 1001
+  grip.clamped = 1002
+  grip.unclamp = 3
+  grip.clamp = 4
+  ;
+  ; Dedicated IO
+  do.home1 = 17 ; EIP
+  do.work[1] = 18 ; EIP
+  do.bat.alm = 2010
+  ;
+  rs7.home1 = 1017
+  rs7.work[1] = 1018
+  di.ifp.page[1] = 2001
+  di.ifp.page[2] = 2002
+  di.ifp.page[3] = 2003
+  di.ifp.page[4] = 2004
+  di.ifp.page[5] = 2005
+  di.ifp.page[6] = 2006
+  di.ifp.page[7] = 2007
+  di.ifp.page[8] = 2008
+  ;
+  ;Internal signals
+  s.tcp.send.ena = 2011
+  s.tcp.recv.ena = 2012
+  s.tcp.ena = 2013
+  s.apply.coord = 2014
+  ;
+.END
+.PROGRAM set.vars.pc ()
+  ;
+  IF NOT EXISTREAL("grip.xsh[8]")  THEN
+    FOR .i = 1 TO 9
+      grip.xsh[.i] = 0
+      grip.ysh[.i] = 0
+      grip.zsh[.i] = 0
+      grip.180xsh[.i] = 0
+      grip.180ysh[.i] = 0
+      ;
+      keep.tool.no = -1
     END
   END
+  ; Variables init
+  ;
+  ;tcp.socket = 0
+  tcp.connect.tmo = 5
+  tcp.receive.tmo = 5
+  tcp.send.tmo = 5
+  ;
+  tyterm = 0
+  
+
 .END
 .PROGRAM Comment___ () ; Comments for IDE. Do not use.
 	; @@@ PROJECT @@@
@@ -878,11 +1049,18 @@ N_INT110    "do.bat.alm"
 	; hmi.a
 	; tcp.recv.dbg
 	; tcp.dbg
+	; $tcp.ip
+	; s.tcp.ena
+	; s.tcp.send.ena
+	; s.tcp.recv.ena
+	; tcp.send.ena
 	; @@@ CONNECTION @@@
 	; RS013N
 	; 192.168.7.102
 	; 23
 	; @@@ PROGRAM @@@
+	; 0:a.align:F
+	; 0:a.home:F
 	; 0:a.main:F
 	; .i 
 	; Group:Teach:1
@@ -895,17 +1073,21 @@ N_INT110    "do.bat.alm"
 	; .dx2 
 	; .dy1 
 	; .dy2 
-	; 1:a.test.pick:F
 	; 1:a.tch.stock.in:F
 	; .i 
 	; .j 
 	; 1:a.tch.stock.out:F
 	; .i 
 	; .j 
-	; 1:a.teach.gripper:F
-	; .temp 
 	; 1:a.teach.pos:F
 	; .temp 
+	; 1:a.teach.gripper:F
+	; .temp 
+	; 1:a.test.pick:F
+	; .ysh 
+	; .xsh 
+	; .pick 
+	; .c 
 	; Group:STZ:2
 	; 2:stz.pick:F
 	; .ysh 
@@ -959,16 +1141,23 @@ N_INT110    "do.bat.alm"
 	; .put.outpal 
 	; 0:autostart.pc:B
 	; Group:TCPIP:5
-	; 5:tcp.send.pc:B
+	; 5:get.state.pc:B
+	; .$state 
+	; 5:sender.pc:B
+	; .$data 
+	; .pc 
+	; 5:tcp.send2.pc:B
 	; .$data 
 	; .data.length 
 	; .status 
 	; .i 
 	; .tcp.error.cnt 
+	; .$data[] 
 	; 5:tcp.callback.pc:B
 	; .$data 
 	; .data.length 
 	; .i 
+	; .pc 
 	; 5:tcp.client.pc:B
 	; .tcp.retry.count 
 	; .number 
@@ -985,12 +1174,19 @@ N_INT110    "do.bat.alm"
 	; .tcp.error.cnt 
 	; .$tcp.request 
 	; .request.size 
-	; 0:sender.pc:B
+	; 5:tcp.send3.pc:B
 	; .$data 
-	; 0:get.state.pc:B
-	; .$state 
+	; .data.length 
+	; .status 
+	; .i 
+	; .tcp.error.cnt 
+	; .$data[] 
 	; 0:errstart.pc:B
 	; 0:watchdog.pc:B
+	; 0:set.io.pc:B
+	; .home1 
+	; .work 
+	; 0:set.vars.pc:B
 	; @@@ TRANS @@@
 	; @@@ JOINTS @@@
 	; @@@ REALS @@@
@@ -1005,8 +1201,16 @@ N_INT110    "do.bat.alm"
 	; grip.unclamp 
 	; do.bat.alm 
 	; do.home1 
+	; do.work[] 
 	; grip.unclamped 
 	; grip.clamped 
+	; rs7.home1 
+	; rs7.work[] 
+	; di.ifp.page[] 
+	; s.tcp.send.ena 
+	; s.tcp.recv.ena 
+	; s.tcp.ena 
+	; s.apply.coord 
 	; @@@ TOOLS @@@
 	; tool.pin 
 	; tool.pick[] 
@@ -1101,11 +1305,11 @@ stocker.out[4,10] -959.109436 669.898315 -636.516968 0.001567 89.998672 -179.684
 stocker.out[4,11] -959.107117 670.448486 -736.515442 0.001567 89.998672 -179.684799
 stocker.out[4,12] -959.104858 670.998535 -836.514038 0.001567 89.998672 -179.684799
 tool.pin -85.070000 -205.369995 -19.860001 67.500000 70.000000 0.000000
-tool.pick[1] 5.960000 6.028000 171.199997 67.500000 180.000000 0.000000
-tool.pick[2] 5.960000 6.028000 171.199997 -136.000000 180.000000 0.000000
-tool.pick[3] 5.960000 6.028000 171.199997 -136.000000 180.000000 0.000000
-tool.pick[4] 5.960000 6.028000 171.199997 -136.000000 180.000000 0.000000
-tool.pick[5] 5.960000 6.028000 171.199997 -136.000000 180.000000 0.000000
+tool.pick[1] -5.960000 -6.028000 171.199997 -113.500000 180.000000 0.000000
+tool.pick[2] -5.960000 -6.028000 171.199997 -113.500000 180.000000 0.000000
+tool.pick[3] -5.960000 -6.028000 171.199997 -113.500000 180.000000 0.000000
+tool.pick[4] -5.960000 -6.028000 171.199997 -113.500000 180.000000 0.000000
+tool.pick[5] -5.960000 -6.028000 171.199997 -113.500000 180.000000 0.000000
 f 964.867126 -329.805145 106.254669 -170.054886 1.975063 -9.030190
 .END
 .JOINTS
@@ -1133,10 +1337,10 @@ hmi.st.in.j = 1
 hmi.st.out.i = 3
 hmi.st.out.j = 12
 capture.tare = 2
-hmi.gx = 18
-hmi.gy = 4
-hmi.x = 34.89
-hmi.y = 439.223
+hmi.gx = 4
+hmi.gy = -2.2
+hmi.x = 206.23
+hmi.y = 90.028
 ip[1] = 192
 ip[2] = 168
 ip[3] = 7
@@ -1146,28 +1350,27 @@ tcp.connect.tmo = 5
 tcp.port = 9013
 tcp.receive.tmo = 5
 tcp.send.tmo = 5
-tcp.socket = 35
-tyterm = -1
+tcp.socket = 36
+tyterm = 0
 capture.grip = 6
-hmi.pos = 1
+hmi.t.pos = 1
 hmi.tool.no = 1
 release.grip = 5
 grip.clamp = 4
 grip.unclamp = 3
 center.x = 147.8
 center.y = 245.4
-cx = 35.1128
-cy = 436.305
+cx = 270.347
+cy = 37.4448
 dist.xn = 0.001
 dist.xp = 0.015
 dist.yn = 0.015
 dist.yp = 0.015
-do.bat.alm = 2110
-do.home1 = 2100
-do.work[1] = 2101
-do.work[2] = 2102
+do.bat.alm = 2010
+do.home1 = 17
+do.work[1] = 18
 hmi.a = 180
-hmi.gz = 8
+hmi.gz = 6
 hmi.stnew.i = 1
 hmi.stnew.j = 1
 start.task = 2001
@@ -1180,10 +1383,80 @@ hmi.ext.x = -38
 hmi.ext.y = -4
 grip.unclamped = 1001
 grip.clamped = 1002
-a = 180
+a = 0
+hmi.pos.pos = 4
+rs7.home1 = 1017
+rs7.work[1] = 1018
+di.ifp.page[1] = 2001
+di.ifp.page[2] = 2002
+di.ifp.page[3] = 2003
+di.ifp.page[4] = 2004
+di.ifp.page[5] = 2005
+di.ifp.page[6] = 2006
+di.ifp.page[7] = 2007
+di.ifp.page[8] = 2008
+tcp.send.ena = -1
+s.tcp.send.ena = 2011
+s.tcp.recv.ena = 2012
+s.tcp.ena = 2013
+tcp.recv.ena = -1
+tcp.ena = -1
+s.apply.coord = 2014
+keep.tool.no = 1
+di.rs7.home1 = 1017
+di.rs7.work[1] = 1018
+do.work[2] = 2102
+grip.180xsh[1] = -8
+grip.180xsh[2] = 0
+grip.180xsh[3] = 0
+grip.180xsh[4] = 0
+grip.180xsh[5] = 0
+grip.180xsh[6] = 0
+grip.180xsh[7] = 0
+grip.180xsh[8] = 0
+grip.180xsh[9] = 0
+grip.180ysh[1] = 7
+grip.180ysh[2] = 0
+grip.180ysh[3] = 0
+grip.180ysh[4] = 0
+grip.180ysh[5] = 0
+grip.180ysh[6] = 0
+grip.180ysh[7] = 0
+grip.180ysh[8] = 0
+grip.180ysh[9] = 0
+grip.xsh[1] = 4
+grip.xsh[2] = 0
+grip.xsh[3] = 0
+grip.xsh[4] = 0
+grip.xsh[5] = 0
+grip.xsh[6] = 0
+grip.xsh[7] = 0
+grip.xsh[8] = 0
+grip.xsh[9] = 0
+grip.ysh[1] = -2.2
+grip.ysh[2] = 0
+grip.ysh[3] = 0
+grip.ysh[4] = 0
+grip.ysh[5] = 0
+grip.ysh[6] = 0
+grip.ysh[7] = 0
+grip.ysh[8] = 0
+grip.ysh[9] = 0
+grip.zsh[1] = 6
+grip.zsh[2] = 0
+grip.zsh[3] = 0
+grip.zsh[4] = 0
+grip.zsh[5] = 0
+grip.zsh[6] = 0
+grip.zsh[7] = 0
+grip.zsh[8] = 0
+grip.zsh[9] = 0
+hmi.g180x = -8
+hmi.g180y = 7
+hmi.pos = 1
 hmi.pospos = 4
 .END
 .STRINGS
-$tcp.ip = "192.168.0.4"
+$tcp.ip = "192.168.7.137"
 $action = "WaitingSensorOut"
 .END
