@@ -45,9 +45,9 @@
         "COORDINATES": false,
         "KEYPOINTS": false,
         "LABELS": false,
-        "SCORES": true,
+        "SCORES": false,
         "POINTS": true,
-        "PICK_ANGLE": false
+        "PICK_ANGLE": true
     },
     "Markers": {
         "MarkersXDistance": 489.5,

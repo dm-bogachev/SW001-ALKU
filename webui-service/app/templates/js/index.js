@@ -5,7 +5,7 @@ const STREAMING_API_URL = `${BASE_URL}/api/streaming`;
 const ROBOT_API_URL = `${BASE_URL}/api/robot`;
 const CV_API_URL = `${BASE_URL}/api/cv`;
 const IO_API_URL = `${BASE_URL}/api/io`;
-const RS0013N_API_URL = `${BASE_URL}/api/rs0013n`;
+const RS013N_API_URL = `${BASE_URL}/api/rs013n`;
 const RS007L_API_URL = `${BASE_URL}/api/rs007l`;
 const MASTER_API_URL = `${BASE_URL}/api/master`;
 
@@ -38,7 +38,7 @@ function checkServiceHealth(apiUrl, serviceName) {
             console.log(`Сервис ${serviceName} не доступен`);
             setStatusLight(`${serviceName}-health`, 'error');
         });
-        setStatusLight(`${serviceName}-health`, "ok");
+    setStatusLight(`${serviceName}-health`, "ok");
 };
 
 function checkPhysicalState(apiUrl, stateName) {
@@ -74,7 +74,7 @@ function checkServicesHealth() {
     // checkServiceHealth(ROBOT_API_URL, 'robot');
     checkServiceHealth(CV_API_URL, 'cv');
     checkServiceHealth(IO_API_URL, 'io');
-    checkServiceHealth(RS0013N_API_URL, 'rs0013n');
+    checkServiceHealth(RS013N_API_URL, 'rs013n');
     checkServiceHealth(RS007L_API_URL, 'rs007l');
     //checkServiceHealth(MASTER_API_URL, 'master');
 };
@@ -84,10 +84,10 @@ function updateRobotStatus(robotType, data) {
         console.error(`No RobotStatus in data for ${robotType}:`, data);
         return;
     }
-    
+
     const robotData = data.RobotStatus;
     console.log(`${robotType} status:`, robotData);
-    
+
     const statusMap = {
         'connected': 'ok',
         'power': 'ok',
@@ -101,7 +101,7 @@ function updateRobotStatus(robotType, data) {
         'home': 'ok',
         'batalm': 'error'
     };
-    
+
     // Update status lights
     Object.keys(statusMap).forEach(key => {
         const element = document.getElementById(`${robotType}-${key}`);
@@ -113,7 +113,7 @@ function updateRobotStatus(robotType, data) {
             console.error(`Element not found: ${robotType}-${key}`);
         }
     });
-    
+
     // Update error code if error exists
     if (robotData.ecode !== undefined) {
         const ecodeElement = document.getElementById(`${robotType}-ecode`);
@@ -123,7 +123,7 @@ function updateRobotStatus(robotType, data) {
             console.error(`Element not found: ${robotType}-ecode`);
         }
     }
-    
+
     // Update current action
     const actionElement = document.getElementById(`${robotType}-action`);
     if (actionElement) {
@@ -136,7 +136,7 @@ function updateRobotStatus(robotType, data) {
 function fetchRobotStatus(robotType) {
     const apiUrl = robotType === 'rs007l' ? RS007L_API_URL : RS0013N_API_URL;
     console.log(`Fetching status from: ${apiUrl}/status`);
-    
+
     fetch(`${apiUrl}/status`)
         .then(response => {
             if (!response.ok) {
@@ -163,7 +163,8 @@ function checkPhysicalStates() {
     // Check camera and IO states
     checkPhysicalState(`${CAMERA_API_URL}/camera_state`, 'camera');
     checkPhysicalState(`${IO_API_URL}/io_state`, 'io');
-    
+    checkPhysicalState(`${RS007L_API_URL}/robot_state`, 'rs007l');
+    checkPhysicalState(`${RS013N_API_URL}/robot_state`, 'rs013n');
     // Check robot states
     fetchRobotStatus('rs007l');
     fetchRobotStatus('rs013n');
@@ -188,8 +189,7 @@ function setStreamImage() {
     }
 };
 
-function tare_on()
-{
+function tare_on() {
     console.log('Поднимаем тару');
     fetch(`${IO_API_URL}/tare_on`, { method: 'POST' })
         .then(response => response.json())
@@ -205,8 +205,7 @@ function tare_on()
         });
 }
 
-function tare_off()
-{
+function tare_off() {
     fetch(`${IO_API_URL}/tare_off`, { method: 'POST' })
         .then(response => response.json())
         .then(data => {
@@ -270,12 +269,12 @@ function loadSettings() {
                 displayModeSelect = DISPLAY_MODES.indexOf(config.Streaming.DisplayedFrame);
                 console.log("Текущий режим отображения:", config.Streaming.DisplayedFrame);
             }
-            
+
             // Загружаем настройки отображения
             if (config.Display) {
                 loadDisplaySettings(config.Display);
             }
-            
+
             // Загружаем настройки моделей
             if (config.Models && config.Process) {
                 loadModelSettings(config.Models, config.Process);
@@ -288,7 +287,7 @@ function loadSettings() {
 
 function loadDisplaySettings(displayConfig) {
     console.log('Загружаем настройки отображения:', displayConfig);
-    
+
     // Устанавливаем значения переключателей отображения
     const settings = ['bbox', 'coordinates', 'keypoints', 'labels', 'scores', 'points', 'pick_angle'];
     settings.forEach(setting => {
@@ -302,12 +301,12 @@ function loadDisplaySettings(displayConfig) {
 
 function loadModelSettings(modelsConfig, processConfig) {
     console.log('Загружаем настройки моделей:', modelsConfig, processConfig);
-    
+
     // Заполняем селектор моделей
     const modelSelect = document.getElementById('model-select');
     if (modelSelect) {
         modelSelect.innerHTML = ''; // Очищаем селектор
-        
+
         Object.keys(modelsConfig).forEach(modelKey => {
             const model = modelsConfig[modelKey];
             const option = document.createElement('option');
@@ -315,12 +314,12 @@ function loadModelSettings(modelsConfig, processConfig) {
             option.textContent = model.ModelName;
             modelSelect.appendChild(option);
         });
-        
+
         // Устанавливаем текущую модель
         if (processConfig.LastModel) {
             modelSelect.value = processConfig.LastModel;
         }
-        
+
         // Устанавливаем confidence для текущей модели
         const currentModel = processConfig.LastModel || modelSelect.value;
         if (modelsConfig[currentModel]) {
@@ -334,56 +333,56 @@ function loadModelSettings(modelsConfig, processConfig) {
 
 function changeDisplaySetting(setting, value) {
     console.log(`Изменяем настройку отображения ${setting} на ${value}`);
-    
+
     fetch(`${CV_API_URL}/change_display_setting?setting=${setting}&value=${value}`, {
         method: 'POST'
     })
-    .then(response => response.json())
-    .then(data => {
-        if (data.Status === "OK") {
-            console.log(`Настройка отображения ${setting} успешно изменена`);
-        } else {
-            console.error(`Ошибка при изменении настройки отображения ${setting}:`, data);
+        .then(response => response.json())
+        .then(data => {
+            if (data.Status === "OK") {
+                console.log(`Настройка отображения ${setting} успешно изменена`);
+            } else {
+                console.error(`Ошибка при изменении настройки отображения ${setting}:`, data);
+                // Возвращаем переключатель в исходное состояние при ошибке
+                const checkbox = document.getElementById(`display-${setting}`);
+                if (checkbox) {
+                    checkbox.checked = !value;
+                }
+            }
+        })
+        .catch(error => {
+            console.error(`Ошибка при изменении настройки отображения ${setting}:`, error);
             // Возвращаем переключатель в исходное состояние при ошибке
             const checkbox = document.getElementById(`display-${setting}`);
             if (checkbox) {
                 checkbox.checked = !value;
             }
-        }
-    })
-    .catch(error => {
-        console.error(`Ошибка при изменении настройки отображения ${setting}:`, error);
-        // Возвращаем переключатель в исходное состояние при ошибке
-        const checkbox = document.getElementById(`display-${setting}`);
-        if (checkbox) {
-            checkbox.checked = !value;
-        }
-    });
+        });
 }
 
 function changeModel() {
     const modelSelect = document.getElementById('model-select');
     const selectedModel = modelSelect.value;
-    
+
     console.log(`Меняем модель на ${selectedModel}`);
-    
+
     fetch(`${CV_API_URL}/change_model?model_name=${selectedModel}`, {
         method: 'POST'
     })
-    .then(response => response.json())
-    .then(data => {
-        if (data.Status === "OK") {
-            console.log(`Модель успешно изменена на ${selectedModel}`);
-            alert(`Модель успешно изменена на ${selectedModel}`);
-        } else {
-            console.error(`Ошибка при изменении модели:`, data);
-            alert(`Ошибка при изменении модели: ${data.Status}`);
-        }
-    })
-    .catch(error => {
-        console.error(`Ошибка при изменении модели:`, error);
-        alert(`Ошибка при изменении модели`);
-    });
+        .then(response => response.json())
+        .then(data => {
+            if (data.Status === "OK") {
+                console.log(`Модель успешно изменена на ${selectedModel}`);
+                alert(`Модель успешно изменена на ${selectedModel}`);
+            } else {
+                console.error(`Ошибка при изменении модели:`, data);
+                alert(`Ошибка при изменении модели: ${data.Status}`);
+            }
+        })
+        .catch(error => {
+            console.error(`Ошибка при изменении модели:`, error);
+            alert(`Ошибка при изменении модели`);
+        });
 }
 
 function setConfidence() {
@@ -391,31 +390,31 @@ function setConfidence() {
     const confidenceInput = document.getElementById('confidence-input');
     const selectedModel = modelSelect.value;
     const confidence = parseFloat(confidenceInput.value);
-    
+
     if (isNaN(confidence) || confidence < 0 || confidence > 1) {
         alert('Пожалуйста, введите корректное значение confidence (от 0 до 1)');
         return;
     }
-    
+
     console.log(`Устанавливаем confidence ${confidence} для модели ${selectedModel}`);
-    
+
     fetch(`${CV_API_URL}/set_model_threshold?model_name=${selectedModel}&new_threshold=${confidence}`, {
         method: 'POST'
     })
-    .then(response => response.json())
-    .then(data => {
-        if (data.Status === "OK") {
-            console.log(`Confidence успешно установлен для модели ${selectedModel}`);
-            alert(`Confidence успешно установлен: ${confidence}`);
-        } else {
-            console.error(`Ошибка при установке confidence:`, data);
-            alert(`Ошибка при установке confidence: ${data.Status}`);
-        }
-    })
-    .catch(error => {
-        console.error(`Ошибка при установке confidence:`, error);
-        alert(`Ошибка при установке confidence`);
-    });
+        .then(response => response.json())
+        .then(data => {
+            if (data.Status === "OK") {
+                console.log(`Confidence успешно установлен для модели ${selectedModel}`);
+                alert(`Confidence успешно установлен: ${confidence}`);
+            } else {
+                console.error(`Ошибка при установке confidence:`, data);
+                alert(`Ошибка при установке confidence: ${data.Status}`);
+            }
+        })
+        .catch(error => {
+            console.error(`Ошибка при установке confidence:`, error);
+            alert(`Ошибка при установке confidence`);
+        });
 }
 
 function changeDisplayMode() {
@@ -447,42 +446,41 @@ function setOutput(bit, value) {
     fetch(`${IO_API_URL}/output?bit=${bit}&value=${value ? 1 : 0}`, {
         method: 'POST'
     })
-    .then(response => response.json())
-    .then(data => {
-        if (data.Status === "OK") {
-            console.log(`Выход ${bit} успешно установлен в ${value ? 1 : 0}`);
-            // Обновляем классы для переключателя
-            let outputSwitch = document.getElementById(`output-switch-${bit}`);
-            if (outputSwitch) {
-                if (value) {
-                    outputSwitch.classList.add('status-on');
-                    outputSwitch.classList.remove('status-off');
-                } else {
-                    outputSwitch.classList.add('status-off');
-                    outputSwitch.classList.remove('status-on');
+        .then(response => response.json())
+        .then(data => {
+            if (data.Status === "OK") {
+                console.log(`Выход ${bit} успешно установлен в ${value ? 1 : 0}`);
+                // Обновляем классы для переключателя
+                let outputSwitch = document.getElementById(`output-switch-${bit}`);
+                if (outputSwitch) {
+                    if (value) {
+                        outputSwitch.classList.add('status-on');
+                        outputSwitch.classList.remove('status-off');
+                    } else {
+                        outputSwitch.classList.add('status-off');
+                        outputSwitch.classList.remove('status-on');
+                    }
+                }
+            } else {
+                console.error(`Ошибка при установке выхода ${bit}: ${data.Message}`);
+                // Возвращаем переключатель в исходное состояние при ошибке
+                let outputSwitch = document.getElementById(`output-switch-${bit}`);
+                if (outputSwitch) {
+                    outputSwitch.checked = !value;
                 }
             }
-        } else {
-            console.error(`Ошибка при установке выхода ${bit}: ${data.Message}`);
+        })
+        .catch(error => {
+            console.error(`Ошибка при установке выхода ${bit}:`, error);
             // Возвращаем переключатель в исходное состояние при ошибке
             let outputSwitch = document.getElementById(`output-switch-${bit}`);
             if (outputSwitch) {
                 outputSwitch.checked = !value;
             }
-        }
-    })
-    .catch(error => {
-        console.error(`Ошибка при установке выхода ${bit}:`, error);
-        // Возвращаем переключатель в исходное состояние при ошибке
-        let outputSwitch = document.getElementById(`output-switch-${bit}`);
-        if (outputSwitch) {
-            outputSwitch.checked = !value;
-        }
-    });
+        });
 }
 
-function updateIOState()
-{
+function updateIOState() {
     fetch(`${IO_API_URL}/inputs/all`)
         .then(response => response.json())
         .then(data => {
@@ -537,7 +535,7 @@ function updateIOState()
         .catch(() => {
             console.log('Не удалось загрузить состояние выходов');
         });
-    
+
 }
 
 // Функция для получения объектов из CV API
@@ -558,37 +556,37 @@ async function fetchObjects() {
 // Функция для отображения объектов в списке
 function renderObjects(objectsData) {
     const objectsList = document.getElementById('objects-list');
-    
+
     if (!objectsList) {
         console.error('Элемент objects-list не найден');
         return;
     }
-    
+
     // Очищаем список
     objectsList.innerHTML = '';
-    
+
     if (objectsData.Status !== "OK" || !objectsData.Objects || objectsData.Objects.length === 0) {
         objectsList.innerHTML = '<div class="object-no-data">Объекты не обнаружены</div>';
         return;
     }
-    
+
     // Отображаем каждый объект
     objectsData.Objects.forEach((object, index) => {
         const objectItem = document.createElement('div');
         objectItem.className = 'object-item';
-        
+
         // Форматируем confidence как процент
         const confidencePercent = (object.conf * 100).toFixed(1);
-        
+
         // Форматируем pick_point
-        const pickPointStr = object.pick_point ? 
-            `(${object.pick_point[0].toFixed(1)}, ${object.pick_point[1].toFixed(1)})` : 
+        const pickPointStr = object.pick_point ?
+            `(${object.pick_point[0].toFixed(1)}, ${object.pick_point[1].toFixed(1)})` :
             'N/A';
-        
-        const pickAngleStr = object.pick_angle >= 0 ? 
-            `${object.pick_angle.toFixed(1)}°` : 
+
+        const pickAngleStr = object.pick_angle >= 0 ?
+            `${object.pick_angle.toFixed(1)}°` :
             'N/A';
-        
+
         objectItem.innerHTML = `
             <div class="object-item-header">
                 <span class="object-class">${object.class_name || 'Unknown'}</span>
@@ -597,12 +595,12 @@ function renderObjects(objectsData) {
             <div class="object-pick-point">Pick: ${pickPointStr}</div>
             <div class="object-pick-angle">Angle: ${pickAngleStr}</div>
         `;
-        
+
         // Добавляем обработчик клика для отладки
         objectItem.addEventListener('click', () => {
             console.log('Клик по объекту:', object);
         });
-        
+
         objectsList.appendChild(objectItem);
     });
 }
@@ -616,7 +614,7 @@ async function updateObjectsList() {
     }
 
     renderObjects(objectsData);
-    
+
     // Отправляем данные о первом объекте на сервер, если объекты есть
     if (objectsData.Status === "OK" && objectsData.Objects && objectsData.Objects.length > 0) {
         const firstObject = objectsData.Objects[0];
@@ -633,13 +631,13 @@ async function updateObjectsList() {
                     'Content-Type': 'application/json'
                 },
                 body: ''
-                
+
             }).catch(error => {
                 console.error('Ошибка при отправке данных о точке захвата:', error);
             });
         }
     }
-    
+
     // Обновляем каждые 2 секунды
     setTimeout(updateObjectsList, 2000);
 }
@@ -647,11 +645,11 @@ async function updateObjectsList() {
 async function sendRobotCommand(robotType, command) {
     const apiUrl = robotType === 'rs013n' ? RS0013N_API_URL : RS007L_API_URL;
     const actionElement = document.getElementById(`${robotType}-action`);
-    
+
     try {
         actionElement.textContent = `Отправка команды ${command}...`;
         actionElement.className = 'robot-status-action processing';
-        
+
         const response = await fetch(`${apiUrl}/${command}`, {
             method: 'POST',
             headers: {
@@ -666,10 +664,10 @@ async function sendRobotCommand(robotType, command) {
         const data = await response.json();
         actionElement.textContent = `Команда ${command} выполнена: ${data.Status}`;
         actionElement.className = 'robot-status-action success';
-        
+
         // Обновляем статус робота после выполнения команды
         fetchRobotStatus(robotType);
-        
+
     } catch (error) {
         console.error(`Ошибка при выполнении команды ${command}:`, error);
         actionElement.textContent = `Ошибка: ${error.message}`;
@@ -687,7 +685,7 @@ async function sendRobotCommand(robotType, command) {
 function showEasterEgg() {
     const easterEgg = document.getElementById('easter-egg');
     easterEgg.classList.add('show');
-    
+
     // Hide the animation after 10 seconds
     setTimeout(() => {
         easterEgg.classList.remove('show');
@@ -695,20 +693,19 @@ function showEasterEgg() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    checkServicesHealth();
-    checkPhysicalStates();
-    loadSettings();
     setStreamImage();
+    loadSettings();
+    
     document.querySelectorAll('.tab').forEach(tab => {
         tab.addEventListener('click', () => switchTab(tab.getAttribute('data-tab')));
     });
-    
+
     // Add click event listener to the logo for Easter egg
     const logoDiv = document.querySelector('.header-logo');
     if (logoDiv) {
         logoDiv.addEventListener('click', showEasterEgg);
     }
-    
+
     // Начальная загрузка объектов
     updateObjectsList();
 });
@@ -752,7 +749,7 @@ function calibrate() {
             alert('Не удалось выполнить калибровку');
         });
 }
-    
+
 function uncalibrate() {
     console.log('Откалибровка');
     fetch(`${CV_API_URL}/uncalibrate`, { method: 'POST' })
@@ -772,11 +769,11 @@ function uncalibrate() {
 async function sendRobotCommand(robotType, command) {
     const apiUrl = robotType === 'rs013n' ? RS0013N_API_URL : RS007L_API_URL;
     const actionElement = document.getElementById(`${robotType}-action`);
-    
+
     try {
         actionElement.textContent = `Отправка команды ${command}...`;
         actionElement.className = 'robot-status-action processing';
-        
+
         const response = await fetch(`${apiUrl}/${command}`, {
             method: 'POST',
             headers: {
@@ -791,7 +788,7 @@ async function sendRobotCommand(robotType, command) {
         const data = await response.json();
         actionElement.textContent = `Команда ${command} выполнена: ${data.Status}`;
         actionElement.className = 'robot-status-action success';
-        
+
     } catch (error) {
         console.error(`Ошибка при выполнении команды ${command}:`, error);
         actionElement.textContent = `Ошибка: ${error.message}`;

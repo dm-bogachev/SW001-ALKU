@@ -81,6 +81,18 @@ def send_command(command: str):
     robot.send(command.upper() + "\n")
     return {"Status": "Command sent", "Command": command}
 
+@app.get("/robot_state")
+def get_robot_state():
+    "Получение информации о статусе подключения к Роботу"
+
+    if robot is None:
+        return {"Status": "OK",
+                "ConnectionState": False}
+
+    return {"Status": "OK",
+            "ConnectionState": robot.is_connected()}
+
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="127.0.0.1", port=8000)

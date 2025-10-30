@@ -88,18 +88,18 @@ services:
   #     retries: 5
   #     start_period: 30s
   
-  rs0013n-service:
-    build:
+  rs013n-service:
+    build:  
       context: .
-      dockerfile: ./rs0013n-service/Dockerfile
+      dockerfile: ./rs013n-service/Dockerfile
     restart: unless-stopped
     networks:
       - alku-network
-    container_name: alku-rs0013n
+    container_name: alku-rs013n
     volumes:
       - common:/common:ro
       - data:/data
-      - ./rs0013n-service/app:/rs0013n
+      - ./rs013n-service/app:/rs013n
     env_file:
       - .env
     ports:

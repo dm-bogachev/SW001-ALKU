@@ -65,8 +65,8 @@ def reboot():
 
 
 @app.get("/io_state")
-def get_camera_state():
-    "Получение информации о статусе подключения к камере"
+def get_io_state():
+    "Получение информации о статусе подключения к I/O модулю"
 
     if io is None:
         return {"Status": "OK",
