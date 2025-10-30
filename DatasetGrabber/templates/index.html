@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Система захвата изображений - Робовизард</title>
+    <meta charset="utf-8">
+    <style>
+        :root {
+            --rw-red: #E31E24;
+            --rw-dark-red: #B31B1F;
+            --rw-light-red: #FF4D4D;
+            --rw-gray: #333333;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .header {
+            text-align: center;
+            color: var(--rw-red);
+            margin-bottom: 20px;
+        }
+
+        .video-container {
+            margin-bottom: 20px;
+            border: 2px solid var(--rw-red);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .video-container img {
+            width: 100%;
+            display: block;
+        }
+
+        .controls {
+            display: grid;
+            gap: 15px;
+        }
+
+        input[type="text"],
+        input[type="number"] {
+            padding: 8px;
+            border: 1px solid var(--rw-red);
+            border-radius: 4px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .exposure-inputs {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .exposure-buttons {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .button {
+            padding: 10px 20px;
+            background: var(--rw-red);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .button:hover {
+            background: var(--rw-dark-red);
+        }
+
+        .numbered-button {
+            padding: 8px;
+            background: var(--rw-light-red);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 40px;
+            font-weight: bold;
+        }
+
+        .numbered-button:hover {
+            background: var(--rw-red);
+        }
+
+        .control-group {
+            background: #f8f8f8;
+            padding: 15px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+
+        .control-label {
+            color: var(--rw-gray);
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Система захвата изображений</h1>
+        </div>
+
+        <div class="video-container">
+            <img src="{{ url_for('video_feed') }}" alt="Изображение с камеры">
+        </div>
+        
+        <div class="controls">
+            <div class="control-group">
+                <div class="control-label">Базовое имя:</div>
+                <input type="text" id="baseName" placeholder="Введите базовое имя">
+            </div>
+            
+            <div class="control-group">
+                <div class="control-label">Значения экспозиции (мс):</div>
+                <div class="exposure-inputs">
+                    <input type="number" class="exposure-value" placeholder="Экспозиция 1">
+                    <input type="number" class="exposure-value" placeholder="Экспозиция 2">
+                    <input type="number" class="exposure-value" placeholder="Экспозиция 3">
+                    <input type="number" class="exposure-value" placeholder="Экспозиция 4">
+                    <input type="number" class="exposure-value" placeholder="Экспозиция 5">
+                </div>
+            </div>
+            
+            <div class="control-group">
+                <div class="control-label">Уровень освещённости:</div>
+                <input type="number" id="lightLevel" placeholder="Введите уровень освещённости">
+            </div>
+            
+            <div class="control-group">
+                <label>
+                    <input type="checkbox" id="auxLight">
+                    <span class="control-label">Дополнительное освещение</span>
+                </label>
+            </div>
+
+            <div class="control-group">
+                <label>
+                    <input type="checkbox" id="autoExposure" onchange="toggleAutoExposure()">
+                    <span class="control-label">Автоматическая экспозиция</span>
+                </label>
+            </div>
+            
+            <div class="control-group">
+                <div class="exposure-buttons">
+                    <input type="number" id="currentExposure" placeholder="Текущая экспозиция">
+                    <button class="button" onclick="applyExposure()">Применить</button>
+                    <button class="numbered-button" onclick="copyToExposure(0)">1</button>
+                    <button class="numbered-button" onclick="copyToExposure(1)">2</button>
+                    <button class="numbered-button" onclick="copyToExposure(2)">3</button>
+                    <button class="numbered-button" onclick="copyToExposure(3)">4</button>
+                    <button class="numbered-button" onclick="copyToExposure(4)">5</button>
+                </div>
+            </div>
+            
+            <button class="button" onclick="saveImages()">Сохранить изображения</button>
+        </div>
+    </div>
+
+    <script>
+        async function applyExposure() {
+            const exposure = document.getElementById('currentExposure').value;
+            const response = await fetch('/apply_exposure', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ exposure: exposure })
+            });
+            const result = await response.json();
+            if (!result.success) {
+                alert('Error applying exposure: ' + result.error);
+            }
+        }
+
+        async function saveImages() {
+            const baseName = document.getElementById('baseName').value.trim();
+            if (!baseName) {
+                alert('Пожалуйста, введите базовое имя');
+                return;
+            }
+
+            const exposureInputs = document.getElementsByClassName('exposure-value');
+            const exposures = Array.from(exposureInputs).map(input => parseInt(input.value) || 0);
+            
+            if (!exposures.some(exp => exp !== 0)) {
+                alert('Пожалуйста, введите хотя бы одно значение экспозиции');
+                return;
+            }
+
+            const data = {
+                baseName: baseName,
+                exposures: exposures,
+                lightLevel: document.getElementById('lightLevel').value,
+                auxLight: document.getElementById('auxLight').checked
+            };
+
+            try {
+                const response = await fetch('/save_images', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                const result = await response.json();
+                if (result.success) {
+                    alert(`Изображения успешно сохранены!\nСохраненные файлы: ${result.saved_files.join(', ')}`);
+                } else {
+                    alert('Ошибка при сохранении изображений: ' + result.error);
+                }
+            } catch (error) {
+                alert('Ошибка при сохранении изображений: ' + error);
+            }
+        }
+
+        let autoExposureInterval = null;
+
+        async function toggleAutoExposure() {
+            const enabled = document.getElementById('autoExposure').checked;
+            const exposureInput = document.getElementById('currentExposure');
+            const applyButton = document.getElementById('applyExposureBtn');
+            
+            const response = await fetch('/toggle_auto_exposure', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ enabled: enabled })
+            });
+            
+            const result = await response.json();
+            if (result.success) {
+                exposureInput.value = result.current_exposure;
+                exposureInput.disabled = enabled;
+                applyButton.disabled = enabled;
+                
+                if (enabled) {
+                    // Start polling current exposure
+                    autoExposureInterval = setInterval(updateCurrentExposure, 1000);
+                } else {
+                    // Stop polling
+                    if (autoExposureInterval) {
+                        clearInterval(autoExposureInterval);
+                        autoExposureInterval = null;
+                    }
+                }
+            } else {
+                alert('Error toggling auto exposure: ' + result.error);
+                document.getElementById('autoExposure').checked = !enabled;
+            }
+        }
+
+        async function updateCurrentExposure() {
+            const response = await fetch('/get_current_exposure');
+            const result = await response.json();
+            if (result.success) {
+                document.getElementById('currentExposure').value = result.exposure;
+            }
+        }
+
+        function copyToExposure(index) {
+            const currentValue = document.getElementById('currentExposure').value;
+            if (currentValue) {
+                const exposureInputs = document.getElementsByClassName('exposure-value');
+                exposureInputs[index].value = currentValue;
+            }
+        }
+    </script>
+</body>
+</html>
