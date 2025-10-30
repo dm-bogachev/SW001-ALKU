@@ -81,7 +81,7 @@ def send_command(command: str):
     robot.send(command.upper() + "\n")
     return {"Status": "Command sent", "Command": command}
 
-@app.get("/robot_state")
+@app.get("/state")
 def get_robot_state():
     "Получение информации о статусе подключения к Роботу"
 

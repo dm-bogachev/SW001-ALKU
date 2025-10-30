@@ -12,7 +12,7 @@ from fastapi.concurrency import asynccontextmanager
 from common.Logger import config_logger
 from Robot import Robot
 
-logger = config_logger("rs0013n-service/main.py")
+logger = config_logger("rs013n-service/main.py")
 
 robot = Robot()
 robot.start()
@@ -22,7 +22,7 @@ async def lifespan(app: FastAPI):
     yield
 
 app = FastAPI(
-    root_path="/api/rs0013n",
+    root_path="/api/rs013n",
     openapi_url="/openapi.json",
     docs_url="/docs",
     redoc_url="/redoc",
@@ -89,7 +89,7 @@ def send_command(command: str):
     robot.send(command.upper() + "\n")
     return {"Status": "Command sent", "Command": command}
 
-@app.get("/robot_state")
+@app.get("/state")
 def get_robot_state():
     "Получение информации о статусе подключения к Роботу"
 

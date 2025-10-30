@@ -76,7 +76,7 @@ function checkServicesHealth() {
     checkServiceHealth(IO_API_URL, 'io');
     checkServiceHealth(RS013N_API_URL, 'rs013n');
     checkServiceHealth(RS007L_API_URL, 'rs007l');
-    //checkServiceHealth(MASTER_API_URL, 'master');
+    checkServiceHealth(MASTER_API_URL, 'master');
 };
 
 function updateRobotStatus(robotType, data) {
@@ -134,7 +134,7 @@ function updateRobotStatus(robotType, data) {
 }
 
 function fetchRobotStatus(robotType) {
-    const apiUrl = robotType === 'rs007l' ? RS007L_API_URL : RS0013N_API_URL;
+    const apiUrl = robotType === 'rs007l' ? RS007L_API_URL : RS013N_API_URL;
     console.log(`Fetching status from: ${apiUrl}/status`);
 
     fetch(`${apiUrl}/status`)
@@ -161,10 +161,10 @@ function fetchRobotStatus(robotType) {
 
 function checkPhysicalStates() {
     // Check camera and IO states
-    checkPhysicalState(`${CAMERA_API_URL}/camera_state`, 'camera');
-    checkPhysicalState(`${IO_API_URL}/io_state`, 'io');
-    checkPhysicalState(`${RS007L_API_URL}/robot_state`, 'rs007l');
-    checkPhysicalState(`${RS013N_API_URL}/robot_state`, 'rs013n');
+    checkPhysicalState(`${CAMERA_API_URL}/state`, 'camera');
+    checkPhysicalState(`${IO_API_URL}/state`, 'io');
+    checkPhysicalState(`${RS007L_API_URL}/state`, 'rs007l');
+    checkPhysicalState(`${RS013N_API_URL}/state`, 'rs013n');
     // Check robot states
     fetchRobotStatus('rs007l');
     fetchRobotStatus('rs013n');
@@ -624,7 +624,7 @@ async function updateObjectsList() {
             const angle = firstObject.pick_angle.toFixed(2);
             console.log(`Отправка данных о точке захвата: x=${x}, y=${y}, angle=${angle}`);
             // Отправляем POST запрос с данными о точке и угле
-            fetch(`${RS0013N_API_URL}/send_pick_data?x=${x}&y=${y}&angle=${angle}`, {
+            fetch(`${RS013N_API_URL}/send_pick_data?x=${x}&y=${y}&angle=${angle}`, {
                 method: 'POST',
                 headers: {
                     'accept': 'application/json',
@@ -707,6 +707,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Начальная загрузка объектов
+    checkPhysicalStates();
+    checkServicesHealth();
     updateObjectsList();
 });
 

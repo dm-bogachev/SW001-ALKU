@@ -10,8 +10,16 @@ from fastapi.concurrency import asynccontextmanager
 
 # Внутренние модули
 from common.Logger import config_logger
+from Master import Master
+from DataCollector import DataCollector
 
 logger = config_logger("master-service/main.py")
+
+dc = DataCollector()
+dc.start()
+
+master = Master(dc)
+master.start()
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -55,6 +63,13 @@ def start_process(model_type: str, details_count: int):
     """ Запуск процесса """
     logger.debug("Запрос /process/start")
     return {"Status": "Process started"}
+
+@app.get("/data")
+def get_data():
+    """ Получение собранных данных """
+    logger.debug("Запрос /data")
+    data = master.collector.get_data()
+    return data
 
 if __name__ == "__main__":
     import uvicorn

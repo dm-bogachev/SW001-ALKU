@@ -188,7 +188,7 @@ def get_exposure():
     return {"Status": "OK",
             "ExposureValue": exposure_value}
 
-@app.get("/camera_state")
+@app.get("/state")
 def get_camera_state():
     "Получение информации о статусе подключения к камере"
 

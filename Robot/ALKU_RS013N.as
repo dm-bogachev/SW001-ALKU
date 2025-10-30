@@ -548,7 +548,7 @@ N_INT102    "do.work[2]"
   ;
   CALL log ("Wait stz pneumatic close. State: WaitPneumaticClose")
   $action = "WaitPneumaticClose"
-  SWAIT 1003
+  SWAIT 2501
   ;
   LMOVE #before.stz
   ;
@@ -578,6 +578,12 @@ N_INT102    "do.work[2]"
   ;JMOVE #before.stz
   ACCURACY 5
   LMOVE .put.stz + TRANS (, , 50)
+  ;
+  ;
+  CALL log ("Wait stz pneumatic open. State: WaitPneumaticOpen")
+  $action = "WaitPneumaticOpen"
+  SWAIT 2501
+  ;
   ;
   ACCURACY 0
   SPEED 50 MM/S
@@ -668,12 +674,6 @@ N_INT102    "do.work[2]"
   LMOVE #before.outpal
   ACCURACY 1
   LMOVE .put.outpal + TRANS (50)
-  BREAK
-  ;
-  CALL log ("Wait stz pneumatic open. State: WaitPneumaticOpen")
-  $action = "WaitPneumaticOpen"
-  SWAIT 1003
-  ;
   ACCURACY 0
   SPEED 50 MM/S
   LMOVE #put.outpal
@@ -766,8 +766,11 @@ N_INT102    "do.work[2]"
 .PROGRAM a.test ()
   ;
   ;
-  CALL stock.out.take (1, 1)
+  ;CALL stock.out.take (1, 1)
   CALL stock.in.take (1, 1)
+  CALL stock.in.back (1, 1)
+  ;
+  BREAK
   JMOVE #wait.pick
   CALL gripper.pick (1, 1)
   JMOVE #wait.pick
@@ -1298,7 +1301,6 @@ N_INT102    "do.work[2]"
 	; .status 
 	; .$temp 
 	; .i 
-	; .tcp.error.cnt 
 	; .$data[] 
 	; 5:tcp.callback.pc:B
 	; .$data 

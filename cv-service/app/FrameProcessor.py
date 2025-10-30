@@ -111,10 +111,14 @@ class FrameProcessor:
             predictions = self.detector.detect(frame)
             if predictions and len(predictions) > 0:
                 frame, predictions = self.function.process(frame, predictions)
+            else:
+                self.__objects = None
             if predictions and len(predictions) > 0:
                 frame = self.drawer.draw(frame, predictions)
                 self.__objects = predictions
-
+            else:
+                self.__objects = None
+                
             for x in range(0, frame.shape[1], 500):
                 for x in range(0, frame.shape[1], 500):
                     cv2.line(frame, (x, 0), (x, frame.shape[0]), (0, 255, 0), 3)
