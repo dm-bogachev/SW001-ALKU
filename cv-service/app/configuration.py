@@ -51,7 +51,8 @@ base_settings = {
         "LABELS": True,
         "SCORES": True,
         "POINTS": True,
-        "PICK_ANGLE": True
+        "PICK_ANGLE": True,
+        "GRID": True
     }
 }
 

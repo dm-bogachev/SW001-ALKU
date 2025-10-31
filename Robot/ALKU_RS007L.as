@@ -69,7 +69,7 @@ N_INT13    "s.tcp.ena"
 .INTER_PANEL_COLOR_D
 182,3,224,244,28,159,252,255,251,255,0,31,2,241,52,255,
 .END
-.PROGRAM a.main ()
+.PROGRAM a.main()@25/10/31 16:24 #0
   SPEED 100 ALWAYS
   ACCURACY 100 ALWAYS
   JMOVE #homep1
@@ -77,28 +77,23 @@ N_INT13    "s.tcp.ena"
     SWAIT rs13.work[1]
     SWAIT -rs13.work[1]
     CALL pos.pick(4)
-    DRIVE 1, -90
-    DRAW 0, 500
-    SPEED 10
-    DRAW 0, 0, -20
-    SPEED 30
-    DRAW 0, -100
-    TWAIT 0.5
-    SPEED 30
-    DRAW 0, 100
-    TWAIT 0.5
-    SPEED 10
-    DRAW 0, 0, -20
-    DRAW 0, -100
-    DRAW 0, -400
-    LMOVE #homep1
-    DRIVE 1, 90
-    JAPPRO test, 50
-    SPEED 10
+    DRIVE 1,-90
+    JOINT SPEED9 ACCU1 TIMER0 TOOL1 WORK0 CLAMP OX= WX= #[-97.059,-38.081,-121,0.062402,39.309,15.375] ;
+    JOINT SPEED9 ACCU1 TIMER0 TOOL1 WORK0 CLAMP OX= WX= #[-132.99,-4.8336,-138.33,51.656,64.386,-19.369] ;
+    LINEAR SPEED9 ACCU1 TIMER0 TOOL1 WORK0 CLAMP OX= WX= #[-118.88,9.6709,-122.91,38.175,56.505,-11.718] ;
+    LINEAR 30.0 ACCU1 TIMER0 TOOL1 WORK0 CLAMP OX= WX= #[-118.88,10.934,-123.38,37.492,57.868,-10.454] ;
+    LINEAR 250. ACCU1 TIMER0 TOOL1 WORK0 CLAMP OX= WX= #[-134.46,-4.8365,-140.36,52.259,66.453,-18.33] ;
+    LINEAR 250. ACCU1 TIMER0 TOOL1 WORK0 CLAMP OX= WX= #[-118.88,10.935,-123.38,37.494,57.868,-10.455] ;
+    LINEAR 30.0 ACCU1 TIMER0 TOOL1 WORK0 CLAMP OX= WX= #[-118.88,7.3949,-121.91,39.602,53.954,-14.222] ;
+    JMOVE #homep15
+    JMOVE #homep1
+    JAPPRO test,50
+    SPEED 40
     LMOVE test
+    BREAK
     PULSE grip.unclamp
-    LAPPRO test, 50
-     LMOVE #homep1
+    LAPPRO test,50
+    LMOVE #homep1
   END
 .END
 .PROGRAM a.align ()
@@ -165,17 +160,7 @@ N_INT13    "s.tcp.ena"
   
 .END
 .PROGRAM a.teach.tare ()
-	; *******************************************************************
-	;
-	; Program:      a.teach.tare
-	; Comment:      
-	; Author:       User
-	;
-	; Date:         10/31/2025
-	;
-	; *******************************************************************
-	;
-	
+  BREAK
 .END
 .PROGRAM log (.$msg)
 	FOR .i = 0 TO 10
@@ -317,9 +302,9 @@ N_INT13    "s.tcp.ena"
     PULSE 2501
   END
   ;
-  PRINT tcp.recv.ena: "Unhandled message. Return PING"
-  .$data[1] = "PING\n"
-  CALL tcp.send2.pc (.$data[], 1)
+  ;PRINT tcp.recv.ena: "Unhandled message. Return PING"
+  ;.$data[1] = "PING\n"
+  ;CALL tcp.send2.pc (.$data[], 1)
 .END
 .PROGRAM tcp.client.pc ()
   .tcp.retry.count = 10

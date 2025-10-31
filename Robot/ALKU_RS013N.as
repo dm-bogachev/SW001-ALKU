@@ -24,6 +24,10 @@ N_INT11    "s.tcp.send.ena"
 N_INT12    "s.tcp.recv.ena"
 N_INT13    "s.tcp.ena"
 N_INT14    "s.apply.coord"
+N_INT15    "s.close.pneumo"
+N_INT16    "s.open.pneumo"
+N_INT17    "s.in1.disable"
+N_INT18    "s.in2.disable"
 N_INT102    "do.work[2]"
 .END
 .INTER_PANEL_D
@@ -41,6 +45,8 @@ N_INT102    "do.work[2]"
 34,2,"","  Capture","  gripper","",10,4,6,6,0
 35,2,"","   Open ","  gripper","",10,4,5,3,0
 36,2,"","   Close","  gripper","",10,4,5,4,0
+42,4,1,"OFF     ON","","","FORCE IN 1",10,4,4,0,2017,0
+43,4,1,"OFF     ON","","","FORCE IN 2",10,4,4,0,2018,0
 47,2,"","  Release ","   tare","",10,4,6,1,-1
 48,2,"","  Capture","   tare","",10,4,6,2,0
 49,2,"","   MAIN","<---------","",10,4,15,2001,0
@@ -53,9 +59,11 @@ N_INT102    "do.work[2]"
 84,8,"hmi.st.in.i","IN STOCKER","SELECT COL",10,15,4,2,0
 85,8,"hmi.st.in.j","IN STOCKER","SELECT ROW",10,15,4,2,0
 88,8,"hmi.tool.no","   TOOL","  NUMBER",10,15,2,1,0
+90,2,"","   CLOSE","PNEUMATICS","",10,4,15,2015,0
 91,8,"hmi.st.out.i","OUTSTOCKER","SELECT COL",10,15,4,2,0
 92,8,"hmi.st.out.j","OUTSTOCKER","SELECT ROW",10,15,4,2,0
 95,8,"hmi.t.pos","TOOL CHANG"," POSITION",10,15,2,1,0
+97,2,"","   OPEN","PNEUMATICS","",10,4,15,2016,0
 102,8,"hmi.pos.pos","POSITIONER"," POSITION",10,15,2,1,0
 105,2,"","   MAIN","<---------","",10,4,15,2001,0
 111,2,"","   STZ","--------->","",10,4,15,2005,0
@@ -212,7 +220,8 @@ N_INT102    "do.work[2]"
   TOOL tool.pick[hmi.tool.no]
   ;
   POINT .temp = #pos.pos[hmi.pos.pos]
-  JMOVE .temp + TRANS (0, 0, 50)
+  JMOVE .temp + TRANS (10, 0, 50)
+  LMOVE .temp + TRANS (10, 0, 20)
   BREAK
   LMOVE #pos.pos[hmi.pos.pos]
   BREAK
@@ -340,7 +349,7 @@ N_INT102    "do.work[2]"
     PULSE grip.unclamp
     CALL log ("Wait for unclamp gripper. State: WaitingGripUnclamped")
     $action = "WaitingGripUnclamped"
-    SWAIT grip.unclamped
+    WAIT SIG(grip.unclamped) OR SIG(s.in1.disable)
   END
   BREAK
   ;
@@ -370,11 +379,12 @@ N_INT102    "do.work[2]"
   ;TOOL tool.pick[.tool.no]
   ;
   POINT .temp = #pos.pos[.pos]
-  JMOVE .temp + TRANS (0, 0, 50)
+  JMOVE .temp + TRANS (10, 0, 50)
+  LMOVE .temp + TRANS (10, 0, 20)
   BREAK
   ;
   SPEED 20 MM/S
-  LMOVE #tool.pos[.pos]
+  LMOVE #pos.pos[.pos]
   BREAK
   PULSE grip.unclamp
   TWAIT 0.5
@@ -730,25 +740,19 @@ N_INT102    "do.work[2]"
 .END
 .PROGRAM a.test ()
   ;
-  ;
-  ;CALL stock.out.take (1, 1)
+  JMOVE #homep1
   CALL stock.in.take (1, 1)
-  CALL stock.in.back (1, 1)
-  ;
-  BREAK
   JMOVE #wait.pick
   CALL gripper.pick (1, 1)
   JMOVE #wait.pick
-  FOR .i = 1 TO 50
+  FOR .i = 1 TO 5
     CALL stz.pick
     CALL stz.put(4)
   END
   LMOVE #wait.pick
   CALL gripper.put (1, 1)
-  LMOVE #wait.pick
-  LMOVE #before.pos
   CALL stock.in.back (1, 1)
-  CALL stock.out.back (1, 1)
+  ;
   JMOVE #homep1
 .END
 .PROGRAM autostart.pc()@25/10/10 14:59 #0
@@ -924,9 +928,9 @@ N_INT102    "do.work[2]"
     PULSE 2501
   END
   ;
-  PRINT tcp.recv.ena: "Unhandled message. Return PING"
-  .$data[1] = "PING\n"
-  CALL tcp.send2.pc (.$data[], 1)
+  ;PRINT tcp.recv.ena: "Unhandled message. Return PING"
+  ;.$data[1] = "PING\n"
+  ;CALL tcp.send2.pc (.$data[], 1)
 .END
 .PROGRAM tcp.client.pc ()
   .tcp.retry.count = 10
@@ -1066,6 +1070,16 @@ N_INT102    "do.work[2]"
       
     END
     ;
+    IF SIG(s.open.pneumo)THEN
+      $action="WaitPneumaticOpen"
+    END
+    ;
+    IF SIG(s.close.pneumo) THEN
+      $action="WaitPneumaticClose"
+      TWAIT 1
+      $action="None"
+    END
+    ;
     ;
     TWAIT 0.1
     IF TASK (1002) <> 1 THEN
@@ -1114,6 +1128,10 @@ N_INT102    "do.work[2]"
   s.tcp.recv.ena = 2012
   s.tcp.ena = 2013
   s.apply.coord = 2014
+  s.close.pneumo = 2015
+  s.open.pneumo = 2016
+  s.in1.disable = 2017
+  s.in2.disable = 2018
   ;
 .END
 .PROGRAM set.vars.pc ()
@@ -1166,7 +1184,6 @@ N_INT102    "do.work[2]"
 	; 0:a.align:F
 	; 0:a.home:F
 	; 0:a.main:F
-	; .i 
 	; Group:Teach:1
 	; 1:a.teach.stz:F
 	; .plb 
@@ -1330,6 +1347,10 @@ N_INT102    "do.work[2]"
 	; s.tcp.recv.ena 
 	; s.tcp.ena 
 	; s.apply.coord 
+	; s.close.pneumo 
+	; s.open.pneumo 
+	; s.in1.disable 
+	; s.in2.disable 
 	; @@@ TOOLS @@@
 	; tool.pin 
 	; tool.pick[] 
@@ -1568,6 +1589,10 @@ hmi.g180x = -8
 hmi.g180y = 7
 hmi.pos = 1
 hmi.pospos = 4
+s.close.pneumo = 2015
+s.open.pneumo = 2016
+s.in1.disable = 2017
+s.in2.disable = 2018
 .END
 .STRINGS
 $tcp.ip = "192.168.7.137"

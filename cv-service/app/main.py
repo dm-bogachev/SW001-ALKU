@@ -127,7 +127,7 @@ def set_model_threshold(model_name: str, new_threshold: float):
 def change_display_setting(setting: str, value: bool):
     """Изменение настроек отображения."""
     
-    valid_settings = ['bbox', 'coordinates', 'keypoints', 'labels', 'scores', 'points', 'pick_angle']
+    valid_settings = ['bbox', 'coordinates', 'keypoints', 'labels', 'scores', 'points', 'pick_angle', 'grid']
     if setting.lower() not in valid_settings:
         return {"Status": "Failed", "Setting": setting, "Value": value, "Valid Settings": valid_settings}
 

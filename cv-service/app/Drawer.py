@@ -22,11 +22,12 @@ class Drawer:
         self.__keypoints = Config.get("Display.KEYPOINTS", True)
         self.__coordinates = Config.get("Display.COORDINATES", True)
         self.__pick_angle = Config.get("Display.PICK_ANGLE", True)
+        self.__grid = Config.get("Display.GRID", True)
 
         self.__itershift = -5
 
         self.__colors = [
-            COLOR_GREEN,
+            COLOR_RED,
             COLOR_YELLOW,
             COLOR_BLUE,
             COLOR_CYAN,
@@ -119,15 +120,12 @@ class Drawer:
     def __draw_coordinates(self, frame, data):
         if self.__coordinates:
 
-            scale_x = Config.get("CalibrationData.ScaleX", 1.0)
-            scale_y = Config.get("CalibrationData.ScaleY", 1.0)
-
             x1, y1, x2, y2 = data.xyxy
             id = int(data.class_id)
             if data.pick_point:
                 cv2.putText(
                     frame,
-                    f"Y: {data.pick_point[1]*scale_y:.2f}",
+                    f"Y: {data.pick_point[1]:.2f}",
                     (int(x1), int(y1) + self.__itershift),
                     cv2.FONT_HERSHEY_SIMPLEX,
                     1,
@@ -137,7 +135,7 @@ class Drawer:
                 self.__itershift -= 30
                 cv2.putText(
                     frame,
-                    f"X: {data.pick_point[0]*scale_x:.2f}",
+                    f"X: {data.pick_point[0]:.2f}",
                     (int(x1), int(y1) + self.__itershift),
                     cv2.FONT_HERSHEY_SIMPLEX,
                     1,
@@ -146,8 +144,21 @@ class Drawer:
                 )
                 self.__itershift -= 30
 
+    def __draw_grid(self, frame):
+        if self.__grid:
+            for x in range(0, frame.shape[1], 500):
+                cv2.line(frame, (x, 0), (x, frame.shape[0]), (0, 255, 0), 3)
+            for y in range(0, frame.shape[0], 500):
+                cv2.line(frame, (0, y), (frame.shape[1], y), (0, 255, 0), 3)
+            for x in range(0, frame.shape[1], 100):
+                cv2.line(frame, (x, 0), (x, frame.shape[0]), (0, 255, 0), 1)
+            for y in range(0, frame.shape[0], 100):
+                cv2.line(frame, (0, y), (frame.shape[1], y), (0, 255, 0), 1)
+
     def draw(self, frame, data_list):
-        
+        if data_list is None:
+            self.__draw_grid(frame)
+            return frame
         for data in data_list:
             self.__itershift = -5
             self.__draw_bbox(frame, data)
@@ -157,6 +168,7 @@ class Drawer:
             self.__draw_coordinates(frame, data)
             self.__draw_pick_angle(frame, data)
             self.__draw_labels(frame, data)
+        self.__draw_grid(frame)
             
         return frame
 
