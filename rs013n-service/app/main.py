@@ -68,6 +68,8 @@ def continue_():
     robot.send("CONTINUE\n")
     return {"Status": "OK"}
 
+
+
 @app.get("/status")
 def status():
     """ Получение статуса робота """

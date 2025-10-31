@@ -211,6 +211,10 @@ def tare_on():
     io.set_output(1, True)
     time.sleep(1)
     io.set_output(2, True)
+    time.sleep(1)
+    io.set_output(2, False)
+    time.sleep(0.1)
+    io.set_output(2, True)
     return {"Status": "OK"}
 
 @app.post("/tare_off")

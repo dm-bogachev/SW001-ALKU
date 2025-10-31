@@ -126,41 +126,6 @@ N_INT102    "do.work[2]"
     END
   END
   ;
-  ;SWAIT 1003
-  ;CALL stock.out.take (1, 1)
-  ;;SWAIT 2001
-  ;CALL stock.in.take (1, 1)
-  ;;JMOVE #homep1
-  ;JMOVE #wait.pick
-  ;CALL gripper.pick (1, 1)
-  ;JMOVE #wait.pick
-  ;;
-  ;FOR .i = 1 TO 4
-  ;  CALL stz.pick
-  ;  CALL stz.put(4)
-  ;END
-  ;;SWAIT 2100
-  ;;LMOVE #before.pos
-  ;LMOVE #wait.pick
-  ;CALL gripper.put (1, 1)
-  ;LMOVE #wait.pick
-  ;LMOVE #before.pos
-  ;;JMOVE #homep1
-  ;SWAIT 2100
-  ;CALL stock.in.back (1, 1)
-  ;;JMOVE #homep1
-  ;CALL stock.out.back (1, 1)
-  ;JMOVE #homep1
-  ;CALL stock.new.pick(1, 10)
-  ;CALL stock.new.pick(3, 1)
-  ;CALL stock.new.pick(3, 10)
-  ;  JMOVE #homep1
-  ;CALL stock.fin.pick (1, 1)
-  ;CALL stock.fin.pick (2, 12)
-  ;CALL stock.fin.pick (3, 12)
-  ;CALL stock.fin.pick (1, 12)
-  ;CALL stock.fin.pick (4, 1)
-  ;CALL stock.fin.pick (4, 12)
 .END
 .PROGRAM a.teach.stz()@25/10/21 15:36 #0
   SPEED 250 MM/S ALWAYS
@@ -190,12 +155,12 @@ N_INT102    "do.work[2]"
   PRINT 0: "AVEY =", (.dy1+.dy2)/2
   ;
   BREAK
-  POINT f = FRAME (.plb, .prb, .prt, .plt)
-  POINT f = f + RZ (-90)
+  POINT stz.frame = FRAME (.plb, .prb, .prt, .plt)
+  POINT stz.frame = stz.frame + RZ (-90)
   ; CIR1 = 100, 100 CIR2 = 148, 250
   ; CIR3 = 248, 300 CIR4 = 148; 450
   BREAK
-  LMOVE f + TRANS (hmi.x, hmi.y, 10)
+  LMOVE stz.frame + TRANS (hmi.x, hmi.y, 10)
 .END
 .PROGRAM a.tch.stock.in ()
   ; Use this for first teach
@@ -312,7 +277,7 @@ N_INT102    "do.work[2]"
   IF cy<center.y-1 THEN
     cy = cy+dist.yn*(-cy+center.y)
   END
-  POINT .pick = f+TRANS(cx+grip.xsh[hmi.tool.no]+.xsh,cy+grip.ysh[hmi.tool.no]+.ysh,grip.zsh[hmi.tool.no])+RZ(a)
+  POINT .pick = stz.frame+TRANS(cx+grip.xsh[hmi.tool.no]+.xsh,cy+grip.ysh[hmi.tool.no]+.ysh,grip.zsh[hmi.tool.no])+RZ(a)
   DECOMPOSE .c[1] = #pick.in
   POINT .#pick.in = #PPOINT(.c[1],.c[2],.c[3],.c[4],.c[5],.c[6] - a)
 ;
@@ -365,7 +330,7 @@ N_INT102    "do.work[2]"
   IF hmi.y < center.y - 20 THEN
     cy = hmi.y + dist.yn * (-hmi.y + center.y)
   END
-  POINT .pick = f + TRANS (cx + hmi.gx + .xsh, cy + hmi.gy + .ysh, hmi.gz) + RZ (a)
+  POINT .pick = stz.frame + TRANS (cx + hmi.gx + .xsh, cy + hmi.gy + .ysh, hmi.gz) + RZ (a)
   DECOMPOSE .c[1] = #pick.in
   POINT .#pick.in = #PPOINT (.c[1], .c[2], .c[3], .c[4], .c[5], .c[6] - a)
   ;
@@ -1188,8 +1153,6 @@ N_INT102    "do.work[2]"
 	; hmi.x
 	; hmi.y
 	; hmi.a
-	; tcp.recv.dbg
-	; tcp.dbg
 	; $tcp.ip
 	; s.tcp.ena
 	; s.tcp.send.ena
@@ -1372,7 +1335,7 @@ N_INT102    "do.work[2]"
 	; tool.pick[] 
 	; @@@ BASE @@@
 	; @@@ FRAME @@@
-	; f 
+	; stz.frame 
 	; @@@ BOOL @@@
 	; @@@ DEFAULTS @@@
 	; BASE: NULL
@@ -1466,7 +1429,7 @@ tool.pick[2] -5.960000 -6.028000 171.199997 -113.500000 180.000000 0.000000
 tool.pick[3] -5.960000 -6.028000 171.199997 -113.500000 180.000000 0.000000
 tool.pick[4] -5.960000 -6.028000 171.199997 -113.500000 180.000000 0.000000
 tool.pick[5] -5.960000 -6.028000 171.199997 -113.500000 180.000000 0.000000
-f 964.867126 -329.805145 106.254669 -170.054886 1.975063 -9.030190
+stz.frame 964.867126 -329.805145 106.254669 -170.054886 1.975063 -9.030190
 .END
 .JOINTS
 #before.stz 156.298325 -5.104897 -119.705116 -18.823097 -74.563522 -35.173157

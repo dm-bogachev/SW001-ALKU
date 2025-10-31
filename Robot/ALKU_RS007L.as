@@ -160,6 +160,23 @@ N_INT13    "s.tcp.ena"
   BREAK
   TWAIT 0.5
 .END
+.PROGRAM a.teach.defect ()
+ BREAK
+  
+.END
+.PROGRAM a.teach.tare ()
+	; *******************************************************************
+	;
+	; Program:      a.teach.tare
+	; Comment:      
+	; Author:       User
+	;
+	; Date:         10/31/2025
+	;
+	; *******************************************************************
+	;
+	
+.END
 .PROGRAM log (.$msg)
 	FOR .i = 0 TO 10
 		$log.entry[.i] = $log.entry[.i + 1]
@@ -576,15 +593,19 @@ N_INT13    "s.tcp.ena"
 	; 23
 	; @@@ PROGRAM @@@
 	; 0:a.main:F
+	; .work 
 	; 0:a.align:F
 	; 0:a.home:F
 	; 0:pos.pick:F
 	; .pos 
+	; .temp 
 	; Group:Teach:1
 	; 1:a.teach.pos:F
 	; .temp 
 	; 1:a.teach.machine:F
 	; .temp 
+	; 1:a.teach.defect:F
+	; 1:a.teach.tare:F
 	; 0:log:F
 	; .i 
 	; 0:safe.home:F
