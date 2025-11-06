@@ -1,6 +1,0 @@
-fastapi
-uvicorn[standard]
-redis
-jinja2
-python-multipart
-fastapi-offline

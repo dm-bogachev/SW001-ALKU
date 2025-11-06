@@ -1,3 +1,0 @@
-fastapi
-uvicorn[standard]
-pymodbus==2.5.3

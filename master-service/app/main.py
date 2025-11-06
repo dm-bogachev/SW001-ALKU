@@ -10,7 +10,7 @@ from fastapi.concurrency import asynccontextmanager
 
 # Внутренние модули
 from common.Logger import config_logger
-from Master import Master
+from Background import Background
 from DataCollector import DataCollector
 
 logger = config_logger("master-service/main.py")
@@ -18,8 +18,8 @@ logger = config_logger("master-service/main.py")
 dc = DataCollector()
 dc.start()
 
-master = Master(dc)
-master.start()
+pc = Background(dc)
+pc.start()
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -58,17 +58,18 @@ def reboot():
     threading.Thread(target=delayed_exit).start()
     return {"Status": "Reboot"}
 
-@app.post("/process/start")
-def start_process(model_type: str, details_count: int):
+@app.post("/master/start")
+def start_process(ProductName: str, ProductCount: int, InTareIDs: list, OutTareIDs: list):
     """ Запуск процесса """
-    logger.debug("Запрос /process/start")
+    logger.debug(f"Запрос /master/start ({ProductName}: {ProductCount}, {InTareIDs}, {OutTareIDs})")
+    pc.start_process(ProductName, ProductCount, InTareIDs, OutTareIDs)
     return {"Status": "Process started"}
 
 @app.get("/data")
 def get_data():
     """ Получение собранных данных """
     logger.debug("Запрос /data")
-    data = master.collector.get_data()
+    data = pc.collector.get_data()
     return data
 
 if __name__ == "__main__":

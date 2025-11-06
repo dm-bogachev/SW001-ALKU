@@ -1,34 +1,36 @@
 .AUXDATA
-N_OX1    "release.tare"
-N_OX2    "capture.tare"
-N_OX3    "grip.unclamp"
-N_OX4    "grip.clamp"
-N_OX5    "release.grip"
-N_OX6    "capture.grip"
-N_OX17    "do.home1"
-N_OX18    "do.work[1]"
-N_WX1    "grip.unclamped"
-N_WX2    "grip.clamped"
-N_WX17    "rs7.home1"
-N_WX18    "rs7.work[1]"
-N_INT1    "di.ifp.page[1]"
-N_INT2    "di.ifp.page[2]"
-N_INT3    "di.ifp.page[3]"
-N_INT4    "di.ifp.page[4]"
-N_INT5    "di.ifp.page[5]"
-N_INT6    "di.ifp.page[6]"
-N_INT7    "di.ifp.page[7]"
-N_INT8    "di.ifp.page[8]"
-N_INT10    "do.bat.alm"
-N_INT11    "s.tcp.send.ena"
-N_INT12    "s.tcp.recv.ena"
-N_INT13    "s.tcp.ena"
-N_INT14    "s.apply.coord"
-N_INT15    "s.close.pneumo"
-N_INT16    "s.open.pneumo"
-N_INT17    "s.in1.disable"
-N_INT18    "s.in2.disable"
-N_INT102    "do.work[2]"
+N_OX1    "release.tare|"
+N_OX2    "capture.tare|"
+N_OX3    "grip.unclamp|"
+N_OX4    "grip.clamp|"
+N_OX5    "release.grip|"
+N_OX6    "capture.grip|"
+N_OX17    "do.home1|"
+N_OX18    "do.work[1]|"
+N_OX19    "rs13.det.put|"
+N_WX1    "grip.unclamped|"
+N_WX2    "grip.clamped|"
+N_WX17    "rs7.home1|"
+N_WX18    "rs7.work[1]|"
+N_WX19    "rs7.det.picked|"
+N_INT1    "di.ifp.page[1]|"
+N_INT2    "di.ifp.page[2]|"
+N_INT3    "di.ifp.page[3]|"
+N_INT4    "di.ifp.page[4]|"
+N_INT5    "di.ifp.page[5]|"
+N_INT6    "di.ifp.page[6]|"
+N_INT7    "di.ifp.page[7]|"
+N_INT8    "di.ifp.page[8]|"
+N_INT10    "do.bat.alm|"
+N_INT11    "s.tcp.send.ena|"
+N_INT12    "s.tcp.recv.ena|"
+N_INT13    "s.tcp.ena|"
+N_INT14    "s.apply.coord|"
+N_INT15    "s.close.pneumo|"
+N_INT16    "s.open.pneumo|"
+N_INT17    "s.in1.disable|"
+N_INT18    "s.in2.disable|"
+N_INT102    "do.work[2]|"
 .END
 .INTER_PANEL_D
 0,9,1,6,15
@@ -117,6 +119,8 @@ N_INT102    "do.work[2]"
   ;
   CALL safe.home
   ;
+  SIGNAL -rs13.det.put
+  ;
   SPEED 100 ALWAYS
   ACCURACY 100 ALWAYS
   ;
@@ -134,41 +138,6 @@ N_INT102    "do.work[2]"
     END
   END
   ;
-.END
-.PROGRAM a.teach.stz()@25/10/21 15:36 #0
-  SPEED 250 MM/S ALWAYS
-  ACCURACY 0 ALWAYS
-  TOOL tool.pin
-  ;
-  LMOVE #plb ; *** TEACH POINT *** Left bottom 
-  LMOVE #plt ; *** TEACH POINT *** Left top
-  LMOVE #prt ; *** TEACH POINT *** Right top
-  LMOVE #prb ; *** TEACH POINT *** Right bottom
-  ;
-  POINT .plb = #plb
-  POINT .plt = #plt
-  POINT .prt = #prt
-  POINT .prb = #prb
-  ;
-  .dx1 = DISTANCE(.plt, .plb) ; DX1
-  .dx2 = DISTANCE(.prt, .prb) ; DX2
-  .dy1 = DISTANCE(.plt, .prt) ; DY1
-  .dy2 = DISTANCE(.plb, .prb) ; DY2
-  ;
-  PRINT 0: "DX1 =", .dx1
-  PRINT 0: "DX2 =", .dx2 
-  PRINT 0: "DY1 =", .dy1
-  PRINT 0: "DY2 =", .dy2
-  PRINT 0: "AVEX =", (.dx1+.dx2)/2
-  PRINT 0: "AVEY =", (.dy1+.dy2)/2
-  ;
-  BREAK
-  POINT stz.frame = FRAME (.plb, .prb, .prt, .plt)
-  POINT stz.frame = stz.frame + RZ (-90)
-  ; CIR1 = 100, 100 CIR2 = 148, 250
-  ; CIR3 = 248, 300 CIR4 = 148; 450
-  BREAK
-  LMOVE stz.frame + TRANS (hmi.x, hmi.y, 10)
 .END
 .PROGRAM a.tch.stock.in ()
   ; Use this for first teach
@@ -216,21 +185,6 @@ N_INT102    "do.work[2]"
   LMOVE stocker.out[.i, .j]
   LMOVE stocker.out[.i, .j] + TRANS (0, 0, 50)
 .END
-.PROGRAM a.teach.pos ()
-  TOOL tool.pick[hmi.tool.no]
-  ;
-  POINT .temp = #pos.pos[hmi.pos.pos]
-  JMOVE .temp + TRANS (10, 0, 50)
-  LMOVE .temp + TRANS (10, 0, 20)
-  BREAK
-  LMOVE #pos.pos[hmi.pos.pos]
-  BREAK
-  TWAIT 0.5
-  LMOVE .temp + TRANS (0, 0, 50)
-  BREAK
-  TWAIT 0.5
-
-.END
 .PROGRAM a.teach.gripper ()
   TOOL tool.pick[hmi.tool.no]
   ;
@@ -256,6 +210,74 @@ N_INT102    "do.work[2]"
   TWAIT 0.5
   ;
   LMOVE .temp + TRANS (0, 0, 50)
+.END
+.PROGRAM a.teach.pos ()
+  TOOL tool.pick[hmi.tool.no]
+  ;
+  POINT .temp = #pos.pos[hmi.pos.pos]
+  JMOVE .temp + TRANS (10, 0, 50)
+  LMOVE .temp + TRANS (10, 0, 20)
+  BREAK
+  LMOVE #pos.pos[hmi.pos.pos]
+  BREAK
+  TWAIT 0.5
+  LMOVE .temp + TRANS (0, 0, 50)
+  BREAK
+  TWAIT 0.5
+
+.END
+.PROGRAM a.teach.stz()@25/10/21 15:36 #0
+  SPEED 250 MM/S ALWAYS
+  ACCURACY 0 ALWAYS
+  TOOL tool.pin
+  ;
+  LMOVE #plb ; *** TEACH POINT *** Left bottom 
+  LMOVE #plt ; *** TEACH POINT *** Left top
+  LMOVE #prt ; *** TEACH POINT *** Right top
+  LMOVE #prb ; *** TEACH POINT *** Right bottom
+  ;
+  POINT .plb = #plb
+  POINT .plt = #plt
+  POINT .prt = #prt
+  POINT .prb = #prb
+  ;
+  .dx1 = DISTANCE(.plt, .plb) ; DX1
+  .dx2 = DISTANCE(.prt, .prb) ; DX2
+  .dy1 = DISTANCE(.plt, .prt) ; DY1
+  .dy2 = DISTANCE(.plb, .prb) ; DY2
+  ;
+  PRINT 0: "DX1 =", .dx1
+  PRINT 0: "DX2 =", .dx2 
+  PRINT 0: "DY1 =", .dy1
+  PRINT 0: "DY2 =", .dy2
+  PRINT 0: "AVEX =", (.dx1+.dx2)/2
+  PRINT 0: "AVEY =", (.dy1+.dy2)/2
+  ;
+  BREAK
+  POINT stz.frame = FRAME (.plb, .prb, .prt, .plt)
+  POINT stz.frame = stz.frame + RZ (-90)
+  ; CIR1 = 100, 100 CIR2 = 148, 250
+  ; CIR3 = 248, 300 CIR4 = 148; 450
+  BREAK
+  LMOVE stz.frame + TRANS (hmi.x, hmi.y, 10)
+.END
+.PROGRAM a.test ()
+  ;
+  SIGNAL -rs13.det.put
+  JMOVE #homep1
+  CALL stock.in.take (1, 1)
+  JMOVE #wait.pick
+  CALL gripper.pick (1, 1)
+  JMOVE #wait.pick
+  FOR .i = 1 TO 50
+    CALL stz.pick
+    CALL stz.put(4)
+  END
+  LMOVE #wait.pick
+  CALL gripper.put (1, 1)
+  CALL stock.in.back (1, 1)
+  ;
+  JMOVE #homep1
 .END
 .PROGRAM a.test.pick()@25/10/29 15:55 #0
   IF FALSE THEN
@@ -307,454 +329,6 @@ N_INT102    "do.work[2]"
   LMOVE #wait.pick
   LMOVE #before.pos
 .END
-.PROGRAM stz.pick()@25/10/27 15:45 #1
-  ;
-  .$temp = "Pick detail from stz (" + $ENCODE (/L, hmi.x) + ", " + $ENCODE(/L, hmi.y) + ", " + $ENCODE(/L, hmi.a) + ")"
-  CALL log (.$temp)
-  CALL log ("State: PickDetail")
-  $action = "PickDetail"
-  ;
-  SPEED 100 ALWAYS
-  ACCURACY 0.1 ALWAYS
-  TOOL tool.pick[hmi.tool.no]
-  ;
-  cx = hmi.x
-  cy = hmi.y
-  a = hmi.a
-  .ysh = 0
-  .xsh = 0
-  IF a == 180 THEN
-    .xsh = grip.180xsh[hmi.tool.no]
-    .ysh = grip.180ysh[hmi.tool.no]
-  END
-  IF hmi.x > center.x + 40 THEN
-    cx = hmi.x - dist.xp * (hmi.x - center.x)
-  END
-  IF hmi.x < center.x - 40 THEN
-    cx = hmi.x + dist.xn * (-hmi.x + center.x)
-  END
-  IF hmi.y > center.y + 20 THEN
-    cy = hmi.y - dist.yp * (hmi.y - center.y)
-  END
-  IF hmi.y < center.y - 20 THEN
-    cy = hmi.y + dist.yn * (-hmi.y + center.y)
-  END
-  POINT .pick = stz.frame + TRANS (cx + hmi.gx + .xsh, cy + hmi.gy + .ysh, hmi.gz) + RZ (a)
-  DECOMPOSE .c[1] = #pick.in
-  POINT .#pick.in = #PPOINT (.c[1], .c[2], .c[3], .c[4], .c[5], .c[6] - a)
-  ;
-  JMOVE #wait.pick
-  LMOVE .#pick.in
-  IF NOT SIG (grip.unclamped) THEN
-    PULSE grip.unclamp
-    CALL log ("Wait for unclamp gripper. State: WaitingGripUnclamped")
-    $action = "WaitingGripUnclamped"
-    WAIT SIG(grip.unclamped) OR SIG(s.in1.disable)
-  END
-  BREAK
-  ;
-  BREAK
-  LAPPRO .pick, -30
-  BREAK
-  SPEED 30 MM/S
-  LMOVE .pick
-  BREAK
-  PULSE grip.clamp
-  TWAIT 0.5
-  LAPPRO .pick, -30
-  ;
-  LMOVE .#pick.in
-  LMOVE #wait.pick
-  LMOVE #before.pos
-.END
-.PROGRAM stz.put (.pos)
-  ;
-  .$temp = "Put detail to positioner" + $ENCODE (.pos)
-  CALL log (.$temp)
-  CALL log ("State: PutToPositioner")
-  $action = "PutToPositioner"
-  ;
-  SPEED 100 ALWAYS
-  ACCURACY 0 ALWAYS
-  ;TOOL tool.pick[.tool.no]
-  ;
-  POINT .temp = #pos.pos[.pos]
-  JMOVE .temp + TRANS (10, 0, 50)
-  LMOVE .temp + TRANS (10, 0, 20)
-  BREAK
-  ;
-  SPEED 20 MM/S
-  LMOVE #pos.pos[.pos]
-  BREAK
-  PULSE grip.unclamp
-  TWAIT 0.5
-  ;
-  LMOVE .temp + TRANS (0, 0, 200)
-  LMOVE #before.pos
-  LMOVE #wait.pick
-.END
-.PROGRAM gripper.pick (.pos,.tool.no)
-  IF FALSE THEN
-    .pos = hmi.t.pos
-    .tool.no = hmi.tool.no
-  END
-  ;
-  .$temp = "Pick tool" + $ENCODE(.pos) + " from" + $ENCODE (.tool.no)
-  CALL log (.$temp)
-  CALL log ("State: PickTool")
-  $action = "PickTool"
-  ;
-  SPEED 100 ALWAYS
-  ACCURACY 0 ALWAYS
-  TOOL tool.pick[.tool.no]
-  ;
-  POINT .temp = #tool.pos[.pos]
-  JMOVE .temp + TRANS (0, 0, 200)
-  LMOVE .temp + TRANS (0, 0, 50)
-  BREAK
-  ;
-  SPEED 50 MM/S ALWAYS
-  LMOVE #tool.pos[.pos]
-  BREAK
-  PULSE capture.grip
-  TWAIT 0.5
-  ;
-  SPEED 100 ALWAYS
-  LMOVE .temp + TRANS (0, 0, 200)
-.END
-.PROGRAM gripper.put(.pos,.tool.no)@25/10/27 15:57 #0
-  IF FALSE THEN
-    .pos = hmi.t.pos
-    .tool.no = hmi.tool.no
-  END
-  ;
-  .$temp = "Put tool" + $ENCODE (.pos) + " to" + $ENCODE (.tool.no)
-  CALL log (.$temp)
-  CALL log ("State: PutTool")
-  $action = "PutTool"
-  ;
-  SPEED 100 ALWAYS
-  ACCURACY 0 ALWAYS
-  TOOL tool.pick[.tool.no]
-  ;
-  POINT .temp = #tool.pos[.pos]
-  JMOVE .temp + TRANS (0, 0, 200)
-  LMOVE .temp + TRANS (0, 0, 50)
-  BREAK
-  ;
-  SPEED 50 MM/S ALWAYS
-  LMOVE #tool.pos[.pos]
-  BREAK
-  PULSE release.grip
-  TWAIT 0.5
-  ;
-  SPEED 100 ALWAYS
-  LMOVE .temp + TRANS (0, 0, 200)
-.END
-.PROGRAM stock.in.take (.i,.j)
-  IF FALSE THEN
-    .i = hmi.st.in.i
-    .j = hmi.st.in.j
-  END
-  .$temp = "Take pallet (" + $ENCODE (/L, .i) + ", " + $ENCODE (/L, .j) + ") from input stocker."
-  CALL log (.$temp)
-  CALL log ("State: TakingFromInStocker")
-  $action = "TakingFromInStocker"
-  ;
-  TOOL tool.pin
-  ;
-  POINT .post.tare.in = #post.tare.in
-  DECOMPOSE .ct1[1] = .post.tare.in
-  DECOMPOSE .ct2[1] = stocker.in[.i, .j]
-  POINT .mid.point = TRANS (.ct2[1], .ct1[2], .ct2[3], .ct1[4], .ct1[5], .ct1[6])
-  POINT .put.stz = #put.stz
-  ;
-  ACCURACY 20 ALWAYS
-  SPEED 100 ALWAYS
-  JMOVE stocker.in[.i, .j] + TRANS (0, 0, 200)
-  ACCURACY 5
-  JMOVE stocker.in[.i, .j] + TRANS (0, 0, 50)
-  ;
-  ACCURACY 0
-  SPEED 50 MM/S
-  LMOVE stocker.in[.i, .j]
-  BREAK
-  PULSE capture.tare
-  TWAIT 0.5
-  ;
-  ACCURACY 0
-  SPEED 20
-  LMOVE stocker.in[.i, .j] + TRANS (20)
-  ;
-  SPEED 20
-  ACCURACY 0
-  LMOVE stocker.in[.i, .j] + TRANS (20, 0, 40)
-  BREAK
-  CALL log ("Wait sensor state. State: WaitInStockerSensor")
-  $action = "WaitInStockerSensor"
-  SWAIT 1003
-  .$temp = "Take pallet (" + $ENCODE (/L, .i) + ", " + $ENCODE (/L, .j) + ") from input stocker."
-  CALL log (.$temp)
-  CALL log ("State: TakingFromInStocker")
-  $action = "TakingFromInStocker"
-  ;
-  SPEED 80 ALWAYS
-  ACCURACY 5
-  LMOVE stocker.in[.i, .j] + TRANS (20, 0, 500)
-  ACCURACY 5
-  LMOVE .mid.point
-  ACCURACY 5
-  LMOVE #post.tare.in
-  ; Put to stz
-  LMOVE #before.stz
-  ACCURACY 1
-  LMOVE .put.stz + TRANS (50)
-  BREAK
-  ACCURACY 0
-  SPEED 50 MM/S
-  LMOVE #put.stz
-  BREAK
-  PULSE release.tare
-  TWAIT 0.5
-  ; Go back
-  SPEED 50 MM/S
-  LMOVE .put.stz + TRANS (, , 50)
-  BREAK
-  ;
-  CALL log ("Wait stz pneumatic close. State: WaitPneumaticClose")
-  $action = "WaitPneumaticClose"
-  SWAIT 2501
-  ;
-  LMOVE #before.stz
-  ;
-  LMOVE #wait.pick
-  ;
-.END
-.PROGRAM stock.in.back (.i,.j)
-  IF FALSE THEN
-    .i = hmi.st.in.i
-    .j = hmi.st.in.j
-  END
-  .$temp = "Return pallet (" + $ENCODE (/L, .i) + ", " + $ENCODE (/L, .j) + ") to input stocker."
-  CALL log (.$temp)
-  CALL log ("State: ReturnToInStocker")
-  $action = "ReturnToInStocker"
-  ;
-  TOOL tool.pin
-  ;
-  POINT .post.tare.in = #post.tare.in
-  DECOMPOSE .ct1[1] = .post.tare.in
-  DECOMPOSE .ct2[1] = stocker.in[.i, .j]
-  POINT .mid.point = TRANS (.ct2[1], .ct1[2], .ct2[3], .ct1[4], .ct1[5], .ct1[6])
-  POINT .put.stz = #put.stz
-  ;
-  ACCURACY 20 ALWAYS
-  SPEED 100 ALWAYS
-  ;JMOVE #before.stz
-  ACCURACY 5
-  LMOVE .put.stz + TRANS (, , 50)
-  ;
-  ;
-  CALL log ("Wait stz pneumatic open. State: WaitPneumaticOpen")
-  $action = "WaitPneumaticOpen"
-  SWAIT 2501
-  ;
-  ;
-  ACCURACY 0
-  SPEED 50 MM/S
-  LMOVE #put.stz
-  BREAK
-  PULSE capture.tare
-  TWAIT 0.5
-  ;
-  ACCURACY 0
-  SPEED 20
-  LMOVE .put.stz + TRANS (50)
-  ;
-  SPEED 80 ALWAYS
-  ACCURACY 5
-  LMOVE #before.stz
-  LMOVE #post.tare.in
-  LMOVE stocker.in[.i, .j] + TRANS (20, 0, 500)
-  ;
-  ACCURACY 0
-  SPEED 20
-  LMOVE stocker.in[.i, .j] + TRANS (20)
-  BREAK
-  ;
-  ACCURACY 0
-  SPEED 10
-  LMOVE stocker.in[.i, .j]
-  BREAK
-  PULSE release.tare
-  TWAIT 0.5
-  ;
-  LMOVE stocker.in[.i, .j] + TRANS (0, 0, 50)
-  LMOVE stocker.in[.i, .j] + TRANS (0, 0, 200)
-.END
-.PROGRAM stock.out.take (.i,.j)
-  IF FALSE THEN
-    .i = hmi.st.out.i
-    .j = hmi.st.out.j
-  END
-  .$temp = "Take pallet (" + $ENCODE (/L, .i) + ", " + $ENCODE (/L, .j) + ") from output stocker."
-  CALL log (.$temp)
-  CALL log ("State: TakingFromOutStocker")
-  $action = "TakingFromOutStocker"
-  ;
-  TOOL tool.pin
-  ;
-  POINT .post.tare.out = #post.tare.out
-  DECOMPOSE .ct1[1] = .post.tare.out
-  DECOMPOSE .ct2[1] = stocker.out[.i, .j]
-  POINT .mid.point = TRANS (.ct1[1], .ct2[2], .ct2[3], .ct1[4], .ct1[5], .ct1[6])
-  POINT .put.outpal = #put.outpal
-  ;
-  ACCURACY 20 ALWAYS
-  SPEED 100 ALWAYS
-  JMOVE stocker.out[.i, .j] + TRANS (0, 0, 200)
-  ACCURACY 5
-  JMOVE stocker.out[.i, .j] + TRANS (0, 0, 50)
-  ;
-  ACCURACY 0
-  SPEED 50 MM/S
-  LMOVE stocker.out[.i, .j]
-  BREAK
-  TWAIT 0.5;
-  ;
-  ACCURACY 0
-  SPEED 20
-  LMOVE stocker.out[.i, .j] + TRANS (20)
-  ;
-  SPEED 20
-  ACCURACY 0
-  LMOVE stocker.out[.i, .j] + TRANS (20, 0, 40)
-  BREAK
-  CALL log ("Wait sensor state. State: WaitOutStockerSensor")
-  $action = "WaitOutStockerSensor"
-  SWAIT 1003
-  .$temp = "Take pallet (" + $ENCODE (/L, .i) + ", " + $ENCODE (/L, .j) + ") from output stocker."
-  CALL log (.$temp)
-  CALL log ("State: TakingFromOutStocker")
-  $action = "TakingFromOutStocker"
-  ;
-  SPEED 80 ALWAYS
-  ACCURACY 5
-  LMOVE stocker.out[.i, .j] + TRANS (20, 0, 500)
-  ACCURACY 5
-  LMOVE .mid.point
-  ACCURACY 5
-  LMOVE #post.tare.out
-  ; Put to output pallet
-  LMOVE #before.outpal
-  ACCURACY 1
-  LMOVE .put.outpal + TRANS (50)
-  ACCURACY 0
-  SPEED 50 MM/S
-  LMOVE #put.outpal
-  BREAK
-  PULSE release.tare
-  TWAIT 0.5
-  ; Go back
-  SPEED 50 MM/S
-  LMOVE .put.outpal + TRANS (50)
-  BREAK
-  LMOVE #before.outpal
-  LMOVE #post.tare.out
-  ;
-  ;LMOVE #homep1
-.END
-.PROGRAM stock.out.back (.i,.j)
-  IF FALSE THEN
-    .i = hmi.st.out.i
-    .j = hmi.st.out.j
-  END
-  .$temp = "Return pallet (" + $ENCODE (/L, .i) + ", " + $ENCODE (/L, .j) + ") to output stocker."
-  CALL log (.$temp)
-  CALL log ("State: ReturnToOutStocker")
-  $action = "ReturnToOutStocker"
-  ;
-  TOOL tool.pin
-  ;
-  POINT .post.tare.out = #post.tare.out
-  DECOMPOSE .ct1[1] = .post.tare.out
-  DECOMPOSE .ct2[1] = stocker.out[.i, .j]
-  POINT .mid.point = TRANS (.ct2[1], .ct1[2], .ct2[3], .ct1[4], .ct1[5], .ct1[6])
-  POINT .put.outpal = #put.outpal
-  ;
-  ACCURACY 20 ALWAYS
-  SPEED 100 ALWAYS
-  JMOVE #before.outpal
-  ACCURACY 5
-  LMOVE .put.outpal + TRANS (, , 50)
-  ;
-  ACCURACY 0
-  SPEED 50 MM/S
-  LMOVE #put.outpal
-  BREAK
-  PULSE capture.tare
-  TWAIT 0.5
-  ;
-  ACCURACY 0
-  SPEED 20
-  LMOVE .put.outpal + TRANS (50)
-  ;
-  SPEED 80 ALWAYS
-  ACCURACY 5
-  LMOVE #before.outpal
-  LMOVE #post.tare.out
-  LMOVE stocker.out[.i, .j] + TRANS (20, 0, 500)
-  ;
-  ACCURACY 0
-  SPEED 20
-  LMOVE stocker.out[.i, .j] + TRANS (20)
-  BREAK
-  ;
-  ACCURACY 0
-  SPEED 10
-  LMOVE stocker.out[.i, .j]
-  BREAK
-  PULSE release.tare
-  TWAIT 0.5
-  ;
-  LMOVE stocker.out[.i, .j] + TRANS (0, 0, 50)
-  LMOVE stocker.out[.i, .j] + TRANS (0, 0, 200)
-.END
-.PROGRAM log (.$msg)
-  FOR .i = 0 TO 10
-    $log.entry[.i] = $log.entry[.i + 1]
-  END
-  $log.entry[11] = $TIME + " " + .$msg
-  ;
-  IFPWPRINT 1, 1, 1, 9, 10 = $log.entry[0], $log.entry[1], $log.entry[2], $log.entry[3]
-  IFPWPRINT 2, 1, 1, 9, 10 = $log.entry[4], $log.entry[5], $log.entry[6], $log.entry[7]
-  IFPWPRINT 3, 1, 1, 9, 10 = $log.entry[8], $log.entry[9], $log.entry[10], $log.entry[11]
-.END
-.PROGRAM safe.home ()
-  ; IMPLEMENT SAFE RETURN TO HOME POSITION
-  CALL log("Moving to home position. State: MoveToHome")
-  $action = "MoveToHome"
-  SPEED 250 MM/S ALWAYS 
-  ACCURACY 10 ALWAYS
-  JMOVE #homep1
-.END
-.PROGRAM a.test ()
-  ;
-  JMOVE #homep1
-  CALL stock.in.take (1, 1)
-  JMOVE #wait.pick
-  CALL gripper.pick (1, 1)
-  JMOVE #wait.pick
-  FOR .i = 1 TO 5
-    CALL stz.pick
-    CALL stz.put(4)
-  END
-  LMOVE #wait.pick
-  CALL gripper.put (1, 1)
-  CALL stock.in.back (1, 1)
-  ;
-  JMOVE #homep1
-.END
 .PROGRAM autostart.pc()@25/10/10 14:59 #0
   ; System switches
   CP ON
@@ -773,6 +347,21 @@ N_INT102    "do.work[2]"
   CALL set.vars.pc
   CALL watchdog.pc
   ;
+.END
+.PROGRAM errstart.pc()
+  IF ERROR == -34021 OR ERROR == -10100 THEN
+    tcp.socket = -1
+    MC ERESET
+    TWAIT 1
+    ;PCABORT 2:
+    ;PCABORT 3:
+    ;TWAIT 3
+    ;PCEXECUTE 2: tcp.client.pc
+    ;PCEXECUTE 3: sender.pc
+    ;TWAIT 1
+  END
+  TWAIT 5
+  errstart.pc ON
 .END
 .PROGRAM get.state.pc (.$state)
   .$state = "POWER:"
@@ -860,6 +449,82 @@ N_INT102    "do.work[2]"
   ; MAX 12
   .$state = .$state + "\n"
 .END
+.PROGRAM gripper.pick (.pos,.tool.no)
+  IF FALSE THEN
+    .pos = hmi.t.pos
+    .tool.no = hmi.tool.no
+  END
+  ;
+  .$temp = "Pick tool" + $ENCODE(.pos) + " from" + $ENCODE (.tool.no)
+  CALL log (.$temp)
+  CALL log ("State: PickTool")
+  $action = "PickTool"
+  ;
+  SPEED 100 ALWAYS
+  ACCURACY 0 ALWAYS
+  TOOL tool.pick[.tool.no]
+  ;
+  POINT .temp = #tool.pos[.pos]
+  JMOVE .temp + TRANS (0, 0, 200)
+  LMOVE .temp + TRANS (0, 0, 50)
+  BREAK
+  ;
+  SPEED 50 MM/S ALWAYS
+  LMOVE #tool.pos[.pos]
+  BREAK
+  PULSE capture.grip
+  TWAIT 0.5
+  ;
+  SPEED 100 ALWAYS
+  LMOVE .temp + TRANS (0, 0, 200)
+.END
+.PROGRAM gripper.put(.pos,.tool.no)@25/10/27 15:57 #0
+  IF FALSE THEN
+    .pos = hmi.t.pos
+    .tool.no = hmi.tool.no
+  END
+  ;
+  .$temp = "Put tool" + $ENCODE (.pos) + " to" + $ENCODE (.tool.no)
+  CALL log (.$temp)
+  CALL log ("State: PutTool")
+  $action = "PutTool"
+  ;
+  SPEED 100 ALWAYS
+  ACCURACY 0 ALWAYS
+  TOOL tool.pick[.tool.no]
+  ;
+  POINT .temp = #tool.pos[.pos]
+  JMOVE .temp + TRANS (0, 0, 200)
+  LMOVE .temp + TRANS (0, 0, 50)
+  BREAK
+  ;
+  SPEED 50 MM/S ALWAYS
+  LMOVE #tool.pos[.pos]
+  BREAK
+  PULSE release.grip
+  TWAIT 0.5
+  ;
+  SPEED 100 ALWAYS
+  LMOVE .temp + TRANS (0, 0, 200)
+.END
+.PROGRAM log (.$msg)
+  FOR .i = 0 TO 10
+    $log.entry[.i] = $log.entry[.i + 1]
+  END
+  $log.entry[11] = $TIME + " " + .$msg
+  ;
+  IFPWPRINT 1, 1, 1, 9, 10 = $log.entry[0], $log.entry[1], $log.entry[2], $log.entry[3]
+  IFPWPRINT 2, 1, 1, 9, 10 = $log.entry[4], $log.entry[5], $log.entry[6], $log.entry[7]
+  IFPWPRINT 3, 1, 1, 9, 10 = $log.entry[8], $log.entry[9], $log.entry[10], $log.entry[11]
+.END
+.PROGRAM safe.home ()
+  ; IMPLEMENT SAFE RETURN TO HOME POSITION
+  CALL log("Moving to home position. State: MoveToHome")
+  $action = "MoveToHome"
+  SPEED 250 MM/S ALWAYS 
+  ACCURACY 10 ALWAYS
+  JMOVE #homep1
+.END
 .PROGRAM sender.pc ()
   ;
   ; 0 - FALSE
@@ -876,25 +541,436 @@ N_INT102    "do.work[2]"
     TWAIT 0.250
   END
 .END
-.PROGRAM tcp.send2.pc (.$data[],.data.length)
-  IF tcp.socket > 0 THEN
-    TCP_SEND .status, tcp.socket, .$data[1], .data.length, tcp.send.tmo
-    IF .status >= 0 THEN
-      .$temp = "Sent "+ $ENCODE(.data.length) + " strings"
-      PRINT tcp.send.ena: .$temp
-      FOR .i = 1 TO .data.length
-        PRINT tcp.send.ena: .$data[.i]
-      END
-    ELSE
-      .$temp = "Failed to send data with error:"+ $ENCODE(.status)
-      PRINT tcp.send.ena: .$temp
-      tcp.socket = -1
-    END
-  ELSE
-    PRINT tcp.send.ena: "Failed to send data. Socket is not opened. Waiting for 5 seconds"
-    TWAIT 5
-  END
+.PROGRAM set.io.pc ()
+  ; Gripper IO
+  release.tare = 1
+  capture.tare = 2
   ;
+  release.grip = 5
+  capture.grip = 6
+  ;
+  grip.unclamped = 1001
+  grip.clamped = 1002
+  grip.unclamp = 3
+  grip.clamp = 4
+  ;
+  ; Dedicated IO
+  do.home1 = 17 ; EIP
+  do.work[1] = 18 ; EIP
+  do.bat.alm = 2010
+  ;
+  rs13.det.put = 19; EIP
+  rs7.det.picked = 1019; EIP
+  ;
+  rs7.home1 = 1017 ; EIP
+  rs7.work[1] = 1018 ; EIP
+  di.ifp.page[1] = 2001
+  di.ifp.page[2] = 2002
+  di.ifp.page[3] = 2003
+  di.ifp.page[4] = 2004
+  di.ifp.page[5] = 2005
+  di.ifp.page[6] = 2006
+  di.ifp.page[7] = 2007
+  di.ifp.page[8] = 2008
+  ;
+  ;Internal signals
+  s.tcp.send.ena = 2011
+  s.tcp.recv.ena = 2012
+  s.tcp.ena = 2013
+  s.apply.coord = 2014
+  s.close.pneumo = 2015
+  s.open.pneumo = 2016
+  s.in1.disable = 2017
+  s.in2.disable = 2018
+  ;
+.END
+.PROGRAM set.vars.pc ()
+  ;
+  IF NOT EXISTREAL("grip.xsh[8]")  THEN
+    FOR .i = 1 TO 9
+      grip.xsh[.i] = 0
+      grip.ysh[.i] = 0
+      grip.zsh[.i] = 0
+      grip.180xsh[.i] = 0
+      grip.180ysh[.i] = 0
+      ;
+      keep.tool.no = -1
+    END
+    FOR .i = 0 TO 12
+      $log.entry[.i] = " "
+    END
+  END
+  ; Variables init
+  ;
+  ;tcp.socket = 0
+  tcp.connect.tmo = 5
+  tcp.receive.tmo = 5
+  tcp.send.tmo = 5
+  ;
+  tyterm = 0
+  ;
+  $command = ""
+
+.END
+.PROGRAM stock.in.back (.i,.j)
+  IF FALSE THEN
+    .i = hmi.st.in.i
+    .j = hmi.st.in.j
+  END
+  .$temp = "Return pallet (" + $ENCODE (/L, .i) + ", " + $ENCODE (/L, .j) + ") to input stocker."
+  CALL log (.$temp)
+  CALL log ("State: ReturnToInStocker")
+  $action = "ReturnToInStocker"
+  ;
+  TOOL tool.pin
+  ;
+  POINT .post.tare.in = #post.tare.in
+  DECOMPOSE .ct1[1] = .post.tare.in
+  DECOMPOSE .ct2[1] = stocker.in[.i, .j]
+  POINT .mid.point = TRANS (.ct2[1], .ct1[2], .ct2[3], .ct1[4], .ct1[5], .ct1[6])
+  POINT .put.stz = #put.stz
+  ;
+  ACCURACY 20 ALWAYS
+  SPEED 100 ALWAYS
+  ;JMOVE #before.stz
+  ACCURACY 5
+  LMOVE .put.stz + TRANS (, , 50)
+  ;
+  ;
+  CALL log ("Wait stz pneumatic open. State: WaitPneumaticOpen")
+  $action = "WaitPneumaticOpen"
+  SWAIT 2501
+  ;
+  ;
+  ACCURACY 0
+  SPEED 50 MM/S
+  LMOVE #put.stz
+  BREAK
+  PULSE capture.tare
+  TWAIT 0.5
+  ;
+  ACCURACY 0
+  SPEED 20
+  LMOVE .put.stz + TRANS (50)
+  ;
+  SPEED 80 ALWAYS
+  ACCURACY 5
+  LMOVE #before.stz
+  LMOVE #post.tare.in
+  LMOVE stocker.in[.i, .j] + TRANS (20, 0, 500)
+  ;
+  ACCURACY 0
+  SPEED 20
+  LMOVE stocker.in[.i, .j] + TRANS (20)
+  BREAK
+  ;
+  ACCURACY 0
+  SPEED 10
+  LMOVE stocker.in[.i, .j]
+  BREAK
+  PULSE release.tare
+  TWAIT 0.5
+  ;
+  LMOVE stocker.in[.i, .j] + TRANS (0, 0, 50)
+  LMOVE stocker.in[.i, .j] + TRANS (0, 0, 200)
+.END
+.PROGRAM stock.in.take (.i,.j)
+  IF FALSE THEN
+    .i = hmi.st.in.i
+    .j = hmi.st.in.j
+  END
+  .$temp = "Take pallet (" + $ENCODE (/L, .i) + ", " + $ENCODE (/L, .j) + ") from input stocker."
+  CALL log (.$temp)
+  CALL log ("State: TakingFromInStocker")
+  $action = "TakingFromInStocker"
+  ;
+  TOOL tool.pin
+  ;
+  POINT .post.tare.in = #post.tare.in
+  DECOMPOSE .ct1[1] = .post.tare.in
+  DECOMPOSE .ct2[1] = stocker.in[.i, .j]
+  POINT .mid.point = TRANS (.ct2[1], .ct1[2], .ct2[3], .ct1[4], .ct1[5], .ct1[6])
+  POINT .put.stz = #put.stz
+  ;
+  ACCURACY 20 ALWAYS
+  SPEED 100 ALWAYS
+  JMOVE stocker.in[.i, .j] + TRANS (0, 0, 200)
+  ACCURACY 5
+  JMOVE stocker.in[.i, .j] + TRANS (0, 0, 50)
+  ;
+  ACCURACY 0
+  SPEED 50 MM/S
+  LMOVE stocker.in[.i, .j]
+  BREAK
+  PULSE capture.tare
+  TWAIT 0.5
+  ;
+  ACCURACY 0
+  SPEED 20
+  LMOVE stocker.in[.i, .j] + TRANS (20)
+  ;
+  SPEED 20
+  ACCURACY 0
+  LMOVE stocker.in[.i, .j] + TRANS (20, 0, 40)
+  BREAK
+  CALL log ("Wait sensor state. State: WaitInStockerSensor")
+  $action = "WaitInStockerSensor"
+  SWAIT 1003
+  .$temp = "Take pallet (" + $ENCODE (/L, .i) + ", " + $ENCODE (/L, .j) + ") from input stocker."
+  CALL log (.$temp)
+  CALL log ("State: TakingFromInStocker")
+  $action = "TakingFromInStocker"
+  ;
+  SPEED 80 ALWAYS
+  ACCURACY 5
+  LMOVE stocker.in[.i, .j] + TRANS (20, 0, 500)
+  ACCURACY 5
+  LMOVE .mid.point
+  ACCURACY 5
+  LMOVE #post.tare.in
+  ; Put to stz
+  LMOVE #before.stz
+  ACCURACY 1
+  LMOVE .put.stz + TRANS (50)
+  BREAK
+  ACCURACY 0
+  SPEED 50 MM/S
+  LMOVE #put.stz
+  BREAK
+  PULSE release.tare
+  TWAIT 0.5
+  ; Go back
+  SPEED 50 MM/S
+  LMOVE .put.stz + TRANS (, , 50)
+  BREAK
+  ;
+  CALL log ("Wait stz pneumatic close. State: WaitPneumaticClose")
+  $action = "WaitPneumaticClose"
+  SWAIT 2501
+  ;
+  LMOVE #before.stz
+  ;
+  LMOVE #wait.pick
+  ;
+.END
+.PROGRAM stock.out.back (.i,.j)
+  IF FALSE THEN
+    .i = hmi.st.out.i
+    .j = hmi.st.out.j
+  END
+  .$temp = "Return pallet (" + $ENCODE (/L, .i) + ", " + $ENCODE (/L, .j) + ") to output stocker."
+  CALL log (.$temp)
+  CALL log ("State: ReturnToOutStocker")
+  $action = "ReturnToOutStocker"
+  ;
+  TOOL tool.pin
+  ;
+  POINT .post.tare.out = #post.tare.out
+  DECOMPOSE .ct1[1] = .post.tare.out
+  DECOMPOSE .ct2[1] = stocker.out[.i, .j]
+  POINT .mid.point = TRANS (.ct2[1], .ct1[2], .ct2[3], .ct1[4], .ct1[5], .ct1[6])
+  POINT .put.outpal = #put.outpal
+  ;
+  ACCURACY 20 ALWAYS
+  SPEED 100 ALWAYS
+  JMOVE #before.outpal
+  ACCURACY 5
+  LMOVE .put.outpal + TRANS (, , 50)
+  ;
+  ACCURACY 0
+  SPEED 50 MM/S
+  LMOVE #put.outpal
+  BREAK
+  PULSE capture.tare
+  TWAIT 0.5
+  ;
+  ACCURACY 0
+  SPEED 20
+  LMOVE .put.outpal + TRANS (50)
+  ;
+  SPEED 80 ALWAYS
+  ACCURACY 5
+  LMOVE #before.outpal
+  LMOVE #post.tare.out
+  LMOVE stocker.out[.i, .j] + TRANS (20, 0, 500)
+  ;
+  ACCURACY 0
+  SPEED 20
+  LMOVE stocker.out[.i, .j] + TRANS (20)
+  BREAK
+  ;
+  ACCURACY 0
+  SPEED 10
+  LMOVE stocker.out[.i, .j]
+  BREAK
+  PULSE release.tare
+  TWAIT 0.5
+  ;
+  LMOVE stocker.out[.i, .j] + TRANS (0, 0, 50)
+  LMOVE stocker.out[.i, .j] + TRANS (0, 0, 200)
+.END
+.PROGRAM stock.out.take (.i,.j)
+  IF FALSE THEN
+    .i = hmi.st.out.i
+    .j = hmi.st.out.j
+  END
+  .$temp = "Take pallet (" + $ENCODE (/L, .i) + ", " + $ENCODE (/L, .j) + ") from output stocker."
+  CALL log (.$temp)
+  CALL log ("State: TakingFromOutStocker")
+  $action = "TakingFromOutStocker"
+  ;
+  TOOL tool.pin
+  ;
+  POINT .post.tare.out = #post.tare.out
+  DECOMPOSE .ct1[1] = .post.tare.out
+  DECOMPOSE .ct2[1] = stocker.out[.i, .j]
+  POINT .mid.point = TRANS (.ct1[1], .ct2[2], .ct2[3], .ct1[4], .ct1[5], .ct1[6])
+  POINT .put.outpal = #put.outpal
+  ;
+  ACCURACY 20 ALWAYS
+  SPEED 100 ALWAYS
+  JMOVE stocker.out[.i, .j] + TRANS (0, 0, 200)
+  ACCURACY 5
+  JMOVE stocker.out[.i, .j] + TRANS (0, 0, 50)
+  ;
+  ACCURACY 0
+  SPEED 50 MM/S
+  LMOVE stocker.out[.i, .j]
+  BREAK
+  TWAIT 0.5;
+  ;
+  ACCURACY 0
+  SPEED 20
+  LMOVE stocker.out[.i, .j] + TRANS (20)
+  ;
+  SPEED 20
+  ACCURACY 0
+  LMOVE stocker.out[.i, .j] + TRANS (20, 0, 40)
+  BREAK
+  CALL log ("Wait sensor state. State: WaitOutStockerSensor")
+  $action = "WaitOutStockerSensor"
+  SWAIT 1003
+  .$temp = "Take pallet (" + $ENCODE (/L, .i) + ", " + $ENCODE (/L, .j) + ") from output stocker."
+  CALL log (.$temp)
+  CALL log ("State: TakingFromOutStocker")
+  $action = "TakingFromOutStocker"
+  ;
+  SPEED 80 ALWAYS
+  ACCURACY 5
+  LMOVE stocker.out[.i, .j] + TRANS (20, 0, 500)
+  ACCURACY 5
+  LMOVE .mid.point
+  ACCURACY 5
+  LMOVE #post.tare.out
+  ; Put to output pallet
+  LMOVE #before.outpal
+  ACCURACY 1
+  LMOVE .put.outpal + TRANS (50)
+  ACCURACY 0
+  SPEED 50 MM/S
+  LMOVE #put.outpal
+  BREAK
+  PULSE release.tare
+  TWAIT 0.5
+  ; Go back
+  SPEED 50 MM/S
+  LMOVE .put.outpal + TRANS (50)
+  BREAK
+  LMOVE #before.outpal
+  LMOVE #post.tare.out
+  ;
+  ;LMOVE #homep1
+.END
+.PROGRAM stz.pick()@25/10/27 15:45 #1
+  ;
+  .$temp = "Pick detail from stz (" + $ENCODE (/L, hmi.x) + ", " + $ENCODE(/L, hmi.y) + ", " + $ENCODE(/L, hmi.a) + ")"
+  CALL log (.$temp)
+  CALL log ("State: PickDetail")
+  $action = "PickDetail"
+  ;
+  SPEED 100 ALWAYS
+  ACCURACY 0.1 ALWAYS
+  TOOL tool.pick[hmi.tool.no]
+  ;
+  cx = hmi.x
+  cy = hmi.y
+  a = hmi.a
+  .ysh = 0
+  .xsh = 0
+  IF a == 180 THEN
+    .xsh = grip.180xsh[hmi.tool.no]
+    .ysh = grip.180ysh[hmi.tool.no]
+  END
+  IF hmi.x > center.x + 40 THEN
+    cx = hmi.x - dist.xp * (hmi.x - center.x)
+  END
+  IF hmi.x < center.x - 40 THEN
+    cx = hmi.x + dist.xn * (-hmi.x + center.x)
+  END
+  IF hmi.y > center.y + 20 THEN
+    cy = hmi.y - dist.yp * (hmi.y - center.y)
+  END
+  IF hmi.y < center.y - 20 THEN
+    cy = hmi.y + dist.yn * (-hmi.y + center.y)
+  END
+  POINT .pick = stz.frame + TRANS (cx + hmi.gx + .xsh, cy + hmi.gy + .ysh, hmi.gz) + RZ (a)
+  DECOMPOSE .c[1] = #pick.in
+  POINT .#pick.in = #PPOINT (.c[1], .c[2], .c[3], .c[4], .c[5], .c[6] - a)
+  ;
+  JMOVE #wait.pick
+  LMOVE .#pick.in
+  IF NOT SIG (grip.unclamped) THEN
+    PULSE grip.unclamp
+    CALL log ("Wait for unclamp gripper. State: WaitingGripUnclamped")
+    $action = "WaitingGripUnclamped"
+    WAIT SIG(grip.unclamped) OR SIG(s.in1.disable)
+  END
+  BREAK
+  ;
+  BREAK
+  LAPPRO .pick, -30
+  BREAK
+  SPEED 30 MM/S
+  LMOVE .pick
+  BREAK
+  PULSE grip.clamp
+  TWAIT 0.5
+  LAPPRO .pick, -30
+  ;
+  LMOVE .#pick.in
+  LMOVE #wait.pick
+  LMOVE #before.pos
+.END
+.PROGRAM stz.put (.pos)
+  ;
+  CALL log ("Waiting for free positioner. State: WaitPosFree")
+  $action = "WaitPosFree"
+  SWAIT -rs13.det.put
+  ;
+  .$temp = "Put detail to positioner" + $ENCODE (.pos)
+  CALL log (.$temp)
+  CALL log ("State: PutToPositioner")
+  $action = "PutToPositioner"
+  ;
+  SPEED 100 ALWAYS
+  ACCURACY 0 ALWAYS
+  ;TOOL tool.pick[.tool.no]
+  ;
+  POINT .temp = #pos.pos[.pos]
+  JMOVE .temp + TRANS (10, 0, 50)
+  LMOVE .temp + TRANS (10, 0, 20)
+  BREAK
+  ;
+  SPEED 20 MM/S
+  LMOVE #pos.pos[.pos]
+  BREAK
+  PULSE grip.unclamp
+  TWAIT 0.5
+  ;
+  LMOVE .temp + TRANS (0, 0, 200)
+  SIGNAL rs13.det.put
+  LMOVE #before.pos
+  LMOVE #wait.pick
 .END
 .PROGRAM tcp.callback.pc (.$data[],.data.length)
   .$temp = "Received "+ $ENCODE (.data.length) + " strings:"
@@ -998,7 +1074,7 @@ N_INT102    "do.work[2]"
     END
   END
 .END
-.PROGRAM tcp.send3.pc (.$data[],.data.length)
+.PROGRAM tcp.send2.pc (.$data[],.data.length)
   IF tcp.socket > 0 THEN
     TCP_SEND .status, tcp.socket, .$data[1], .data.length, tcp.send.tmo
     IF .status >= 0 THEN
@@ -1018,20 +1094,25 @@ N_INT102    "do.work[2]"
   END
   ;
 .END
-.PROGRAM errstart.pc()
-  IF ERROR == -34021 OR ERROR == -10100 THEN
-    tcp.socket = -1
-    MC ERESET
-    TWAIT 1
-    ;PCABORT 2:
-    ;PCABORT 3:
-    ;TWAIT 3
-    ;PCEXECUTE 2: tcp.client.pc
-    ;PCEXECUTE 3: sender.pc
-    ;TWAIT 1
+.PROGRAM tcp.send3.pc (.$data[],.data.length)
+  IF tcp.socket > 0 THEN
+    TCP_SEND .status, tcp.socket, .$data[1], .data.length, tcp.send.tmo
+    IF .status >= 0 THEN
+      .$temp = "Sent "+ $ENCODE(.data.length) + " strings"
+      PRINT tcp.send.ena: .$temp
+      FOR .i = 1 TO .data.length
+        PRINT tcp.send.ena: .$data[.i]
+      END
+    ELSE
+      .$temp = "Failed to send data with error:"+ $ENCODE(.status)
+      PRINT tcp.send.ena: .$temp
+      tcp.socket = -1
+    END
+  ELSE
+    PRINT tcp.send.ena: "Failed to send data. Socket is not opened. Waiting for 5 seconds"
+    TWAIT 5
   END
-  TWAIT 5
-  errstart.pc ON
+  ;
 .END
 .PROGRAM watchdog.pc ()
   WHILE TRUE DO
@@ -1070,18 +1151,20 @@ N_INT102    "do.work[2]"
       
     END
     ;
-    IF SIG(s.open.pneumo)THEN
+    IF SIG(rs7.det.picked) THEN
+      SIGNAL -rs13.det.put
+    END
+    ;
+    IF SIG(s.open.pneumo) AND NOT SWITCH(CS) THEN
       $action="WaitPneumaticOpen"
     END
     ;
-    IF SIG(s.close.pneumo) THEN
+    IF SIG(s.close.pneumo) AND NOT SWITCH(CS)  THEN
       $action="WaitPneumaticClose"
       TWAIT 1
       $action="None"
     END
     ;
-    ;
-    TWAIT 0.1
     IF TASK (1002) <> 1 THEN
       PCEXECUTE 2: tcp.client.pc
       TWAIT 2
@@ -1091,76 +1174,8 @@ N_INT102    "do.work[2]"
       TWAIT 2
     END
     ;
-    
+    TWAIT 0.01
   END
-.END
-.PROGRAM set.io.pc ()
-  ; Gripper IO
-  release.tare = 1
-  capture.tare = 2
-  ;
-  release.grip = 5
-  capture.grip = 6
-  ;
-  grip.unclamped = 1001
-  grip.clamped = 1002
-  grip.unclamp = 3
-  grip.clamp = 4
-  ;
-  ; Dedicated IO
-  do.home1 = 17 ; EIP
-  do.work[1] = 18 ; EIP
-  do.bat.alm = 2010
-  ;
-  rs7.home1 = 1017
-  rs7.work[1] = 1018
-  di.ifp.page[1] = 2001
-  di.ifp.page[2] = 2002
-  di.ifp.page[3] = 2003
-  di.ifp.page[4] = 2004
-  di.ifp.page[5] = 2005
-  di.ifp.page[6] = 2006
-  di.ifp.page[7] = 2007
-  di.ifp.page[8] = 2008
-  ;
-  ;Internal signals
-  s.tcp.send.ena = 2011
-  s.tcp.recv.ena = 2012
-  s.tcp.ena = 2013
-  s.apply.coord = 2014
-  s.close.pneumo = 2015
-  s.open.pneumo = 2016
-  s.in1.disable = 2017
-  s.in2.disable = 2018
-  ;
-.END
-.PROGRAM set.vars.pc ()
-  ;
-  IF NOT EXISTREAL("grip.xsh[8]")  THEN
-    FOR .i = 1 TO 9
-      grip.xsh[.i] = 0
-      grip.ysh[.i] = 0
-      grip.zsh[.i] = 0
-      grip.180xsh[.i] = 0
-      grip.180ysh[.i] = 0
-      ;
-      keep.tool.no = -1
-    END
-    FOR .i = 0 TO 12
-      $log.entry[.i] = " "
-    END
-  END
-  ; Variables init
-  ;
-  ;tcp.socket = 0
-  tcp.connect.tmo = 5
-  tcp.receive.tmo = 5
-  tcp.send.tmo = 5
-  ;
-  tyterm = 0
-  ;
-  $command = ""
-
 .END
 .PROGRAM Comment___ () ; Comments for IDE. Do not use.
 	; @@@ PROJECT @@@
@@ -1177,156 +1192,234 @@ N_INT102    "do.work[2]"
 	; s.tcp.recv.ena
 	; tcp.send.ena
 	; @@@ CONNECTION @@@
-	; RS013N
-	; 192.168.7.102
-	; 23
+	; KROSET R01
+	; 127.0.0.1
+	; 9105
 	; @@@ PROGRAM @@@
-	; 0:a.align:F
-	; 0:a.home:F
-	; 0:a.main:F
-	; Group:Teach:1
-	; 1:a.teach.stz:F
-	; .plb 
-	; .plt 
-	; .prt 
-	; .prb 
-	; .dx1 
-	; .dx2 
-	; .dy1 
-	; .dy2 
-	; 1:a.tch.stock.in:F
-	; .i 
-	; .j 
-	; 1:a.tch.stock.out:F
-	; .i 
-	; .j 
-	; 1:a.teach.pos:F
-	; .temp 
-	; 1:a.teach.gripper:F
-	; .temp 
-	; 1:a.test.pick:F
-	; .ysh 
-	; .xsh 
-	; .pick 
-	; .c 
-	; .#pick.in 
-	; Group:STZ:2
-	; 2:stz.pick:F
-	; .ysh 
-	; .xsh 
-	; .pick 
-	; .c 
-	; .#pick.in 
-	; 2:stz.put:F
-	; .pos 
-	; .temp 
-	; Group:ToolChange:3
-	; 3:gripper.pick:F
-	; .pos 
-	; .tool.no 
-	; .temp 
-	; 3:gripper.put:F
-	; .pos 
-	; .tool.no 
-	; .temp 
-	; Group:Stockers:4
-	; 4:stock.in.take:F
-	; .i 
-	; .j 
-	; .post.tare.in 
-	; .ct1 
-	; .ct2 
-	; .mid.point 
-	; .put.stz 
-	; 4:stock.in.back:F
-	; .i 
-	; .j 
-	; .post.tare.in 
-	; .ct1 
-	; .ct2 
-	; .mid.point 
-	; .put.stz 
-	; 4:stock.out.take:F
-	; .i 
-	; .j 
-	; .post.tare.out 
-	; .ct1 
-	; .ct2 
-	; .mid.point 
-	; .put.outpal 
-	; 4:stock.out.back:F
-	; .i 
-	; .j 
-	; .post.tare.out 
-	; .ct1 
-	; .ct2 
-	; .mid.point 
-	; .put.outpal 
-	; 0:log:F
-	; .$msg 
-	; .i 
-	; 0:safe.home:F
-	; 0:a.test:F
-	; .i 
-	; 0:autostart.pc:B
-	; Group:TCPIP:5
-	; 5:get.state.pc:B
-	; .$state 
-	; 5:sender.pc:B
-	; .$data 
-	; .pc 
-	; 5:tcp.send2.pc:B
-	; .$data 
-	; .data.length 
-	; .status 
-	; .$temp 
-	; .i 
-	; .$data[] 
-	; 5:tcp.callback.pc:B
-	; .$data 
-	; .data.length 
-	; .$temp 
-	; .i 
-	; .$x 
-	; .$y 
-	; .$a 
-	; .pc 
-	; 5:tcp.client.pc:B
-	; .tcp.retry.count 
-	; .number 
-	; .ports 
-	; .sockets 
-	; .errors 
-	; .suberrors 
-	; .$ips 
-	; .i 
-	; .$temp 
-	; .status 
-	; .$tcp.ip.copy 
-	; .$ip 
-	; .connected 
-	; .tcp.error.cnt 
-	; .$tcp.request 
-	; .request.size 
-	; 5:tcp.send3.pc:B
-	; .$data 
-	; .data.length 
-	; .status 
-	; .$temp 
-	; .i 
-	; .tcp.error.cnt 
-	; .$data[] 
-	; 0:errstart.pc:B
-	; 0:watchdog.pc:B
-	; 0:set.io.pc:B
-	; .home1 
-	; .work 
-	; 0:set.vars.pc:B
-	; .i 
+	;   0:a.align:F
+	;   0:a.home:F
+	;   0:a.main:F
+	;   Group:Teach:1
+	;     1:a.teach.stz:F
+	;       .plb 
+	;       .plt 
+	;       .prt 
+	;       .prb 
+	;       .dx1 
+	;       .dx2 
+	;       .dy1 
+	;       .dy2 
+	;     1:a.tch.stock.in:F
+	;       .i 
+	;       .j 
+	;     1:a.tch.stock.out:F
+	;       .i 
+	;       .j 
+	;     1:a.teach.pos:F
+	;       .temp 
+	;     1:a.teach.gripper:F
+	;       .temp 
+	;     1:a.test.pick:F
+	;       .ysh 
+	;       .xsh 
+	;       .pick 
+	;       .c 
+	;       .#pick.in 
+	;   Group:STZ:2
+	;     2:stz.pick:F
+	;       .$temp 
+	;       .ysh 
+	;       .xsh 
+	;       .pick 
+	;       .c 
+	;       .#pick.in 
+	;     2:stz.put:F
+	;       .pos 
+	;       .$temp 
+	;       .temp 
+	;   Group:ToolChange:3
+	;     3:gripper.pick:F
+	;       .pos 
+	;       .tool.no 
+	;       .$temp 
+	;       .temp 
+	;     3:gripper.put:F
+	;       .pos 
+	;       .tool.no 
+	;       .$temp 
+	;       .temp 
+	;   Group:Stockers:4
+	;     4:stock.in.take:F
+	;       .i 
+	;       .j 
+	;       .$temp 
+	;       .post.tare.in 
+	;       .ct1 
+	;       .ct2 
+	;       .mid.point 
+	;       .put.stz 
+	;     4:stock.in.back:F
+	;       .i 
+	;       .j 
+	;       .$temp 
+	;       .post.tare.in 
+	;       .ct1 
+	;       .ct2 
+	;       .mid.point 
+	;       .put.stz 
+	;     4:stock.out.take:F
+	;       .i 
+	;       .j 
+	;       .$temp 
+	;       .post.tare.out 
+	;       .ct1 
+	;       .ct2 
+	;       .mid.point 
+	;       .put.outpal 
+	;     4:stock.out.back:F
+	;       .i 
+	;       .j 
+	;       .$temp 
+	;       .post.tare.out 
+	;       .ct1 
+	;       .ct2 
+	;       .mid.point 
+	;       .put.outpal 
+	;   0:log:F
+	;     .$msg 
+	;     .i 
+	;   0:safe.home:F
+	;   0:a.test:F
+	;     .i 
+	;   0:autostart.pc:B
+	;   Group:TCPIP:5
+	;     5:get.state.pc:B
+	;       .$state 
+	;     5:sender.pc:B
+	;       .$data 
+	;       .pc 
+	;     5:tcp.send2.pc:B
+	;       .$data 
+	;       .data.length 
+	;       .status 
+	;       .$temp 
+	;       .i 
+	;       .$data[] 
+	;     5:tcp.callback.pc:B
+	;       .$data 
+	;       .data.length 
+	;       .$temp 
+	;       .i 
+	;       .$x 
+	;       .$y 
+	;       .$a 
+	;       .pc 
+	;     5:tcp.client.pc:B
+	;       .tcp.retry.count 
+	;       .number 
+	;       .ports 
+	;       .sockets 
+	;       .errors 
+	;       .suberrors 
+	;       .$ips 
+	;       .i 
+	;       .$temp 
+	;       .status 
+	;       .$tcp.ip.copy 
+	;       .$ip 
+	;       .connected 
+	;       .tcp.error.cnt 
+	;       .$tcp.request 
+	;       .request.size 
+	;     5:tcp.send3.pc:B
+	;       .$data 
+	;       .data.length 
+	;       .status 
+	;       .$temp 
+	;       .i 
+	;       .tcp.error.cnt 
+	;       .$data[] 
+	;   0:errstart.pc:B
+	;   0:watchdog.pc:B
+	;   0:set.io.pc:B
+	;     .home1 
+	;     .work 
+	;   0:set.vars.pc:B
+	;     .i 
 	; @@@ TRANS @@@
+	; stocker.in[] 
+	; stocker.out[] 
 	; @@@ JOINTS @@@
+	; #before.stz 
+	; #put.stz 
+	; #wait.pick 
+	; #post.tare.in 
+	; #put.outpal 
+	; #before.outpal 
+	; #post.tare.out 
+	; #homep1 
+	; #plb 
+	; #plt 
+	; #prb 
+	; #prt 
+	; #tool.pos[] 
+	; #before.pos 
+	; #pick.in 
+	; #pos.pos[] 
 	; @@@ REALS @@@
+	; hmi.st.in.i 
+	; hmi.st.in.j 
+	; hmi.st.out.i 
+	; hmi.st.out.j 
+	; hmi.gx 
+	; hmi.gy 
+	; hmi.x 
+	; hmi.y 
+	; ip[] 
+	; tcp.connect.tmo 
+	; tcp.port 
+	; tcp.receive.tmo 
+	; tcp.send.tmo 
+	; tcp.socket 
+	; tyterm 
+	; hmi.t.pos 
+	; hmi.tool.no 
+	; center.x 
+	; center.y 
+	; cx 
+	; cy 
+	; dist.xn 
+	; dist.xp 
+	; dist.yn 
+	; dist.yp 
+	; hmi.a 
+	; hmi.gz 
+	; hmi.stnew.i 
+	; hmi.stnew.j 
+	; hmi.ext.x 
+	; hmi.ext.y 
+	; a 
+	; hmi.pos.pos 
+	; tcp.send.ena 
+	; tcp.recv.ena 
+	; tcp.ena 
+	; keep.tool.no 
+	; di.rs7.home1 
+	; di.rs7.work[] 
+	; grip.180xsh[] 
+	; grip.180ysh[] 
+	; grip.xsh[] 
+	; grip.ysh[] 
+	; grip.zsh[] 
+	; hmi.g180x 
+	; hmi.g180y 
+	; hmi.pos 
+	; hmi.pospos 
 	; @@@ STRINGS @@@
+	; $tcp.ip 
+	; $action 
+	; $log.entry[] 
+	; $command 
 	; @@@ INTEGER @@@
 	; @@@ SIGNALS @@@
 	; capture.tare 
@@ -1351,6 +1444,8 @@ N_INT102    "do.work[2]"
 	; s.open.pneumo 
 	; s.in1.disable 
 	; s.in2.disable 
+	; rs13.det.put 
+	; rs7.det.picked 
 	; @@@ TOOLS @@@
 	; tool.pin 
 	; tool.pick[] 
@@ -1450,25 +1545,25 @@ tool.pick[2] -5.960000 -6.028000 171.199997 -113.500000 180.000000 0.000000
 tool.pick[3] -5.960000 -6.028000 171.199997 -113.500000 180.000000 0.000000
 tool.pick[4] -5.960000 -6.028000 171.199997 -113.500000 180.000000 0.000000
 tool.pick[5] -5.960000 -6.028000 171.199997 -113.500000 180.000000 0.000000
-stz.frame 964.867126 -329.805145 106.254669 -170.054886 1.975063 -9.030190
+stz.frame 988.154785 -343.346466 108.116516 -172.441833 1.937711 -8.772193
 .END
 .JOINTS
 #before.stz 156.298325 -5.104897 -119.705116 -18.823097 -74.563522 -35.173157
-#put.stz 136.599869 15.593916 -110.148460 -13.834775 -68.366547 -16.208761
+#put.stz 136.263840 15.705241 -109.890045 -13.677276 -68.614426 -15.814918
 #wait.pick 153.260971 -5.244692 -116.123528 -0.757969 -68.765495 -38.446480
 #post.tare.in 30.800823 -12.718077 -134.300644 0.302695 -78.852997 24.346281
 #put.outpal 53.960426 40.250061 -112.267891 16.355391 -45.131153 44.870815
 #before.outpal 49.146431 33.201904 -110.281738 16.235420 -53.055729 51.668869
 #post.tare.out -44.259357 -0.774896 -134.428055 -2.135478 -66.283951 17.958624
 #homep1 -44.998138 -30.843269 -121.243866 0.000000 -90.000000 22.499559
-#plb 121.746391 -0.368285 -123.326469 -33.625637 60.744785 -127.399849
-#plt 111.567101 19.220926 -99.464951 -24.734268 52.765961 -134.038071
-#prb 146.465775 26.350115 -90.478882 -54.905979 71.486664 -106.070389
-#prt 134.285416 40.405190 -67.878799 -50.146526 57.388458 -106.174377
+#plb 120.860649 1.281152 -121.462181 -32.857822 60.155643 -127.981834
+#plt 111.817329 21.086079 -96.765480 -25.279980 52.104725 -133.340485
+#prb 146.296967 26.655985 -89.838234 -54.878906 71.183853 -105.880890
+#prt 134.565048 41.486687 -65.941849 -50.747608 57.059559 -105.200981
 #tool.pos[1] 138.009109 26.380774 -133.075394 2.785166 -19.660723 -27.889797
 #before.pos 62.065971 -11.377430 -122.238724 -0.289775 -69.805077 52.576439
 #pick.in 130.503326 12.590690 -97.431877 -0.818260 -69.914940 -15.682721
-#pos.pos[4] 84.028427 44.137684 -101.342918 -26.716553 -42.377701 -40.990501
+#pos.pos[4] 84.899872 50.424088 -87.945923 -23.932617 -48.573303 -45.927521
 #tool.pos[4] 84.078476 44.192799 -101.346825 -26.757774 -42.315220 -40.994743
 .END
 .REALS
@@ -1479,8 +1574,8 @@ hmi.st.out.j = 1
 capture.tare = 2
 hmi.gx = 4
 hmi.gy = -2.2
-hmi.x = 206.23
-hmi.y = 90.028
+hmi.x = 121.006
+hmi.y = 274.214
 ip[1] = 192
 ip[2] = 168
 ip[3] = 7
@@ -1490,7 +1585,7 @@ tcp.connect.tmo = 5
 tcp.port = 9013
 tcp.receive.tmo = 5
 tcp.send.tmo = 5
-tcp.socket = 36
+tcp.socket = 532
 tyterm = 0
 capture.grip = 6
 hmi.t.pos = 1
@@ -1500,8 +1595,8 @@ grip.clamp = 4
 grip.unclamp = 3
 center.x = 147.8
 center.y = 245.4
-cx = 270.347
-cy = 37.4448
+cx = 121.009
+cy = 273.788
 dist.xn = 0.001
 dist.xp = 0.015
 dist.yn = 0.015
@@ -1517,7 +1612,7 @@ hmi.ext.x = -38
 hmi.ext.y = -4
 grip.unclamped = 1001
 grip.clamped = 1002
-a = 0
+a = 180
 hmi.pos.pos = 4
 rs7.home1 = 1017
 rs7.work[1] = 1018
@@ -1593,21 +1688,23 @@ s.close.pneumo = 2015
 s.open.pneumo = 2016
 s.in1.disable = 2017
 s.in2.disable = 2018
+rs13.det.put = 19
+rs7.det.picked = 1019
 .END
 .STRINGS
 $tcp.ip = "192.168.7.137"
-$action = "ReturnToInStocker"
-$log.entry[0] = "12:54:48 State: TakingFromInStocker"
-$log.entry[1] = "12:55:22 Wait sensor state. State: WaitInStockerSensor"
-$log.entry[2] = "12:55:27 Take pallet (1, 1) from input stocker."
-$log.entry[3] = "12:55:27 State: TakingFromInStocker"
-$log.entry[4] = "12:56:17 Return pallet (3, 12) to output stocker."
-$log.entry[5] = "12:56:17 State: ReturnToOutStocker"
-$log.entry[6] = "12:56:47 Return pallet (3, 12) to input stocker."
-$log.entry[7] = "12:56:47 State: ReturnToInStocker"
-$log.entry[8] = "12:56:54 Return pallet (3, 12) to input stocker."
-$log.entry[9] = "12:56:54 State: ReturnToInStocker"
-$log.entry[10] = "12:57:13 Return pallet (1, 1) to input stocker."
-$log.entry[11] = "12:57:13 State: ReturnToInStocker"
+$action = "WaitPneumaticOpen"
+$log.entry[0] = "16:41:29 Put detail to positioner 4"
+$log.entry[1] = "16:41:29 State: PutToPositioner"
+$log.entry[2] = "16:41:43 Pick detail from stz (121.027, 274.22101, 180)"
+$log.entry[3] = "16:41:43 State: PickDetail"
+$log.entry[4] = "16:41:48 Wait for unclamp gripper. State: WaitingGripUnclamped"
+$log.entry[5] = "16:41:53 Put detail to positioner 4"
+$log.entry[6] = "16:41:53 State: PutToPositioner"
+$log.entry[7] = "16:42:11 Put tool 1 to 1"
+$log.entry[8] = "16:42:11 State: PutTool"
+$log.entry[9] = "16:42:15 Return pallet (1, 1) to input stocker."
+$log.entry[10] = "16:42:15 State: ReturnToInStocker"
+$log.entry[11] = "16:42:15 Wait stz pneumatic open. State: WaitPneumaticOpen"
 $command = ""
 .END

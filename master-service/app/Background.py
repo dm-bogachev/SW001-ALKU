@@ -15,12 +15,15 @@ from api import *
 logger = config_logger("master-service/Master.py")
 
 
-class Master(Thread):
+class Background(Thread):
     def __init__(self, data_collector: DataCollector):
         super().__init__()
         self.__stop_event = Event()
         self.collector = data_collector
         self.daemon = True  # не блокировать завершение процесса при незакрытом потоке
+
+    def start_process(self, ProductName: str, ProductCount: int, InTareIDs: list, OutTareIDs: list):
+        pass
 
     def stop(self):
         """Корректно остановить поток из внешнего кода."""
