@@ -77,7 +77,7 @@
     </include>
     <include name="TeachAxisPanel.dll" validate="true" enable="true" floating="false" locationX="0" locationY="0" alwaystop="true" sizeX="240" sizeY="180" />
     <include name="TeachPointAlign.dll" validate="true" enable="true" floating="false" locationX="0" locationY="0" alwaystop="true" sizeX="240" sizeY="180" />
-    <include name="TeachPointSectionWriteDotLine.dll" validate="true" enable="true" floating="false" locationX="0" locationY="0" alwaystop="true" sizeX="240" sizeY="180" />
+    <include name="TeachPointSectionWriteDotLine.dll" validate="true" enable="false" floating="false" locationX="0" locationY="0" alwaystop="true" sizeX="240" sizeY="180" />
     <include name="TerminalGUI.dll" validate="true" enable="true" floating="false" locationX="0" locationY="0" alwaystop="true" sizeX="240" sizeY="180">
       <combine class="KHI.Fortuna.Extension.Terminal.TerminalForm" anchor="Bottom" icon="Icon27.bmp" />
     </include>

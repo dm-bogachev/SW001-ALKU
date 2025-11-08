@@ -485,7 +485,7 @@ OP_ACCUTYPE2  ON  -3818
 OP_MTN_CHK    OFF -4417
 OP_CHKINCHING  OFF -4345
 OP_COLDET     OFF -4300
-OP_BLTARM OFF -4280
+OP_BLTARM     OFF -4280
 OP_IPKALM     OFF -4145
 OP_KADOUINFO  ON  -4586
 OP_IMON2      OFF -3341
@@ -1335,38 +1335,38 @@ ZSWITCH ZFIX_CALL_1STEPPG ON   -523
 .END
 .OPE_INFO1
 OPEINFO  30 10 6 1  1623981901  ;(21/6/18 11:05:01) RS007L-B001 
-CONT_TIM  14.4 
-SERV_TIM  11.5 
-MTON_CNT  9 
+CONT_TIM  20.3 
+SERV_TIM  11.9 
+MTON_CNT  10 
 ESTP_CNT  0 
-BRKE_CNT  9 
-CON_PWR  0.100 
-SUP_PWR  0.100 
+BRKE_CNT  10 
+CON_PWR  0.122 
+SUP_PWR  0.122 
 REG_PWR  0.000 
 MOVE_TJT  0.3 0.4 0.3 0.2 0.4 0.3 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 
-DIST_DJT  43.699 39.743 19.775 16.622 52.644 24.075 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 
-DIST_DJT_PLUS  21.809 19.961 9.677 8.259 26.483 12.094 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 
-OPEINFO TP_BKLIGHT  0 1.4 50000 
+DIST_DJT  45.772 41.642 20.715 17.414 55.165 25.237 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 
+DIST_DJT_PLUS  22.843 20.911 10.142 8.653 27.744 12.674 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 
+OPEINFO TP_BKLIGHT  0 2.3 50000 
 OPEINFO MC  0 0 2000000 
 OPEINFO PARTS1  0 0 0 0 0 0 0 0 0 0 0 
 OPEINFO PARTS2  0 0 0 0 0 0 0 0 0 0 0 
 OPEINFO PARTS3  0 0 0 0 0 0 0 0 0 0 0 
 M_OPEINFO  30 10 6 1  1623981901  ;(21/6/18 11:05:01) RS007L-B001 
-M_CONT_TIM  14.4 
-M_SERV_TIM  11.5 
-M_MTON_CNT  9 
+M_CONT_TIM  20.3 
+M_SERV_TIM  11.9 
+M_MTON_CNT  10 
 M_ESTP_CNT  0 
-M_BRKE_CNT  9 
-M_CON_PWR  0.100 
-M_SUP_PWR  0.100 
+M_BRKE_CNT  10 
+M_CON_PWR  0.122 
+M_SUP_PWR  0.122 
 M_REG_PWR  0.000 
 M_MOVE_TJT  0.3 0.4 0.3 0.2 0.4 0.3 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 
-M_DIST_DJT  43.699 39.743 19.775 16.622 52.644 24.075 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 
-M_DIST_DJT_PLUS  21.809 19.961 9.677 8.259 26.483 12.094 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 
+M_DIST_DJT  45.772 41.642 20.715 17.414 55.165 25.237 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 
+M_DIST_DJT_PLUS  22.843 20.911 10.142 8.653 27.744 12.674 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 
 M_MOVE_TJT_OVERDRIVE  0.0 0.0 0.0 0.0 0.0 0.0 
 M_DIST_DJT_OVERDRIVE  0.000 0.000 0.000 0.000 0.000 0.000 
 M_WARN_CJT_OVERDRIVE  0 0 0 0 0 0 
-HOUR_MTR  14.4 
+HOUR_MTR  20.3 
 .END
 .SYSDATA
 REG_POINT       0
@@ -1401,14 +1401,14 @@ DEFSIG_I EXT_PH_PULSE.   OFF     0
 DEFSIG_I EXT_PH_PULSE_8.  OFF     0
 DEFSIG_I EXT_PH_PULSE_9.  OFF     0
 DEFSIG_I EXT_PH_PULSE_10.  OFF     0
-DEFSIG_I I/F_PAGE1       OFF     0
-DEFSIG_I I/F_PAGE2       OFF     0
-DEFSIG_I I/F_PAGE3       OFF     0
-DEFSIG_I I/F_PAGE4       OFF     0
-DEFSIG_I I/F_PAGE5       OFF     0
-DEFSIG_I I/F_PAGE6       OFF     0
-DEFSIG_I I/F_PAGE7       OFF     0
-DEFSIG_I I/F_PAGE8       OFF     0
+DEFSIG_I I/F_PAGE1       ON   2001
+DEFSIG_I I/F_PAGE2       ON   2002
+DEFSIG_I I/F_PAGE3       ON   2003
+DEFSIG_I I/F_PAGE4       ON   2004
+DEFSIG_I I/F_PAGE5       ON   2005
+DEFSIG_I I/F_PAGE6       ON   2006
+DEFSIG_I I/F_PAGE7       ON   2007
+DEFSIG_I I/F_PAGE8       ON   2008
 DEFSIG_I OPTIMIZE_MODE   OFF     0
 DEFSIG_I AUTOSAVE_C1     OFF     0
 DEFSIG_I AUTOSAVE_C2     OFF     0
@@ -3373,13 +3373,13 @@ TP_RECINHI      0   0   0
 .END
 .SIG_COMMENT
 .END
-.PROGRAM a.align()@25/11/06 17:31 #0
+.PROGRAM a.align()@25/11/09 02:45 #0
   ALIGN
 .END
-.PROGRAM a.home()@25/11/06 17:31 #0
+.PROGRAM a.home()@25/11/09 02:45 #0
   JMOVE #homep1
 .END
-.PROGRAM a.main()@25/11/06 17:31 #0
+.PROGRAM a.main()@25/11/09 02:45 #0
   SPEED 100 ALWAYS
   ACCURACY 100 ALWAYS
   JMOVE #homep1
@@ -3408,10 +3408,10 @@ TP_RECINHI      0   0   0
     PULSE 19,5
   END
 .END
-.PROGRAM a.teach.defect()@25/11/06 17:31 #0
+.PROGRAM a.teach.defect()@25/11/09 02:45 #0
   BREAK
 .END
-.PROGRAM a.teach.machine()@25/11/06 17:31 #0
+.PROGRAM a.teach.machine()@25/11/09 02:45 #0
   TOOL tool.pick[hmi.tool.no]
 ;
   POINT .temp = #pos.mach[hmi.pos.pos]
@@ -3424,7 +3424,7 @@ TP_RECINHI      0   0   0
   BREAK
   TWAIT 0.5
 .END
-.PROGRAM a.teach.pos()@25/11/06 17:31 #0
+.PROGRAM a.teach.pos()@25/11/09 02:45 #0
   TOOL tool.pick[hmi.tool.no]
 ;
   POINT .temp = #pos.pos[hmi.pos.pos]
@@ -3437,10 +3437,10 @@ TP_RECINHI      0   0   0
   BREAK
   TWAIT 0.5
 .END
-.PROGRAM a.teach.tare()@25/11/06 17:31 #0
+.PROGRAM a.teach.tare()@25/11/09 02:45 #0
   BREAK
 .END
-.PROGRAM autostart.pc()@25/11/06 17:31 #0
+.PROGRAM autostart.pc()@25/11/09 02:45 #0
 ; System switches
   CP ON
   PREFETCH.SIGINS OFF
@@ -3459,7 +3459,7 @@ TP_RECINHI      0   0   0
   CALL watchdog.pc
 ;
 .END
-.PROGRAM errstart.pc()@25/11/06 17:31 #1
+.PROGRAM errstart.pc()@25/11/09 02:45 #514
   IF ERROR==-34021 OR ERROR==-10100 THEN
     tcp.socket = -1
     MC ERESET
@@ -3474,7 +3474,7 @@ TP_RECINHI      0   0   0
   TWAIT 5
   ERRSTART.PC ON
 .END
-.PROGRAM get.state.pc(.$state)@25/11/06 17:31 #40
+.PROGRAM get.state.pc(.$state)@25/11/09 02:45 #78397
   .$state = "POWER:"
   IF SWITCH(POWER ) THEN
     .$state = .$state+"TRUE;"
@@ -3560,7 +3560,7 @@ TP_RECINHI      0   0   0
 ; MAX 12
   .$state = .$state+"\n"
 .END
-.PROGRAM log(.$msg)@25/11/06 17:31 #210
+.PROGRAM log(.$msg)@25/11/09 02:45 #220
   FOR .i = 0 TO 10
     $log.entry[.i] = $log.entry[.i+1]
   END
@@ -3570,11 +3570,11 @@ TP_RECINHI      0   0   0
   IFPWPRINT 2,1,1,9,10=$log.entry[4],$log.entry[5],$log.entry[6],$log.entry[7]
   IFPWPRINT 3,1,1,9,10=$log.entry[8],$log.entry[9],$log.entry[10],$log.entry[11]
 .END
-.PROGRAM pg0()@25/11/06 17:31 #0
+.PROGRAM pg0()@25/11/09 02:45 #0
   ALIGN
   JOINT SPEED9 ACCU1 TIMER0 TOOL1 WORK0 CLAMP1 (OFF,0,0,O) 2 (OFF,0,0,O) OX= WX= #[-90,0,-90,0,-90,0] ;
 .END
-.PROGRAM pos.pick(.pos)@25/11/06 17:31 #105
+.PROGRAM pos.pick(.pos)@25/11/09 02:45 #110
   IF FALSE THEN
     .pos = hmi.pos.pos
   END
@@ -3601,7 +3601,7 @@ TP_RECINHI      0   0   0
   LMOVE .temp+TRANS(0,0,200)
   LMOVE #homep1
 .END
-.PROGRAM safe.home()@25/11/06 17:31 #0
+.PROGRAM safe.home()@25/11/09 02:45 #0
 ; IMPLEMENT SAFE RETURN TO HOME POSITION
   CALL log("Moving to home position. State: MoveToHome")
   $action = "MoveToHome"
@@ -3609,7 +3609,7 @@ TP_RECINHI      0   0   0
   ACCURACY 10 ALWAYS
   JMOVE #homep1
 .END
-.PROGRAM sender.pc()@25/11/06 17:31 #0
+.PROGRAM sender.pc()@25/11/09 02:45 #0
 ;
 ; 0 - FALSE
 ; 1 - TRUE
@@ -3625,7 +3625,7 @@ TP_RECINHI      0   0   0
     TWAIT 0.25
   END
 .END
-.PROGRAM set.io.pc()@25/11/06 17:31 #2
+.PROGRAM set.io.pc()@25/11/09 02:45 #7
 ; Gripper IO
   release.grip = 1
   capture.grip = 2
@@ -3659,7 +3659,7 @@ TP_RECINHI      0   0   0
   s.in1.disable = 2017
   s.in2.disable = 2018
 .END
-.PROGRAM set.vars.pc()@25/11/06 17:31 #2
+.PROGRAM set.vars.pc()@25/11/09 02:45 #7
 ; Variables init
 ;
   IF NOT EXISTCHAR("$log.entry[11]") THEN
@@ -3674,7 +3674,7 @@ TP_RECINHI      0   0   0
 ;
   tyterm = 0
 .END
-.PROGRAM tcp.callback.pc(.$data[],.data.length)@25/11/06 17:31 #0
+.PROGRAM tcp.callback.pc(.$data[],.data.length)@25/11/09 02:45 #49
   .$temp = "Received "+$ENCODE(.data.length)+" strings:"
   PRINT tcp.recv.ena: .$temp
   FOR .i = 1 TO .data.length
@@ -3710,7 +3710,7 @@ TP_RECINHI      0   0   0
 ;.$data[1] = "PING\n"
 ;CALL tcp.send2.pc (.$data[], 1)
 .END
-.PROGRAM tcp.client.pc()@25/11/06 17:31 #0
+.PROGRAM tcp.client.pc()@25/11/09 02:45 #0
   .tcp.retry.count = 10
   WHILE TRUE DO
 ; Checking for active sockets and closing them
@@ -3776,7 +3776,7 @@ TP_RECINHI      0   0   0
     END
   END
 .END
-.PROGRAM tcp.send.pc(.$data[],.data.length)@25/11/06 17:31 #114404
+.PROGRAM tcp.send.pc(.$data[],.data.length)@25/11/09 02:45 #114404
   IF tcp.socket>0 THEN
     TCP_SEND .status,tcp.socket,.$data[1],.data.length,tcp.send.tmo
     IF .status>=0 THEN
@@ -3800,7 +3800,7 @@ TP_RECINHI      0   0   0
   END
 ;
 .END
-.PROGRAM tcp.send2.pc(.$data[],.data.length)@25/11/06 17:31 #0
+.PROGRAM tcp.send2.pc(.$data[],.data.length)@25/11/09 02:45 #0
   IF tcp.socket>0 THEN
     TCP_SEND .status,tcp.socket,.$data[1],.data.length,tcp.send.tmo
     IF .status>=0 THEN
@@ -3820,7 +3820,7 @@ TP_RECINHI      0   0   0
   END
 ;
 .END
-.PROGRAM tcp.send3.pc(.$data[],.data.length)@25/11/06 17:31 #39
+.PROGRAM tcp.send3.pc(.$data[],.data.length)@25/11/09 02:45 #78393
   IF tcp.socket>0 THEN
     TCP_SEND .status,tcp.socket,.$data[1],.data.length,tcp.send.tmo
     IF .status>=0 THEN
@@ -3840,7 +3840,7 @@ TP_RECINHI      0   0   0
   END
 ;
 .END
-.PROGRAM watchdog.pc()@25/11/06 17:31 #0
+.PROGRAM watchdog.pc()@25/11/09 02:45 #0
   WHILE TRUE DO
     IF SIG(s.tcp.ena) THEN
       tcp.ena = tyterm
@@ -3872,7 +3872,7 @@ TP_RECINHI      0   0   0
   END
 .END
 .TRANS
-test 26.184204 544.134399 143.333954 -103.807800 179.145859 97.269302
+test 26.184204 544.134399 143.333954 -103.807800 179.145859 97.269341
 tool.pick[1] 0.000000 10.000000 120.000000 -22.500000 180.000000 0.000000
 tool.pick[2] 0.000000 10.000000 120.000000 0.000000 0.000000 0.000000
 tool.pick[3] 0.000000 10.000000 120.000000 0.000000 0.000000 0.000000
@@ -3905,10 +3905,10 @@ grip.unclamp = 3
 grip.unclamped = 1001
 hmi.pos.pos = 4
 hmi.tool.no = 1
-ip[1] = 192
-ip[2] = 168
-ip[3] = 7
-ip[4] = 137
+ip[1] = 127
+ip[2] = 0
+ip[3] = 0
+ip[4] = 1
 release.grip = 1
 release.tare = 1
 rs13.det.put = 1019
@@ -3933,24 +3933,24 @@ tcp.recv.ena = -1
 tcp.send.dbg = -1
 tcp.send.ena = -1
 tcp.send.tmo = 5
-tcp.socket = 508
+tcp.socket = 536
 tyterm = 0
 .END
 .STRINGS
 $action = "TakeFromPositioner"
-$log.entry[0] = "22:07:08 Pick detail from positioner 4"
-$log.entry[1] = "22:07:08 State: TakeFromPositioner"
-$log.entry[2] = "22:07:13 Pick detail from positioner 4"
-$log.entry[3] = "22:07:13 State: TakeFromPositioner"
-$log.entry[4] = "22:07:18 Pick detail from positioner 4"
-$log.entry[5] = "22:07:18 State: TakeFromPositioner"
-$log.entry[6] = "22:07:23 Pick detail from positioner 4"
-$log.entry[7] = "22:07:23 State: TakeFromPositioner"
-$log.entry[8] = "22:07:27 Pick detail from positioner 4"
-$log.entry[9] = "22:07:27 State: TakeFromPositioner"
-$log.entry[10] = "22:07:32 Pick detail from positioner 4"
-$log.entry[11] = "22:07:32 State: TakeFromPositioner"
-$tcp.ip = "192.168.7.137"
+$log.entry[0] = "22:07:32 Pick detail from positioner 4"
+$log.entry[1] = "22:07:32 State: TakeFromPositioner"
+$log.entry[2] = "02:41:06 Pick detail from positioner 4"
+$log.entry[3] = "02:41:06 State: TakeFromPositioner"
+$log.entry[4] = "02:41:26 Pick detail from positioner 4"
+$log.entry[5] = "02:41:26 State: TakeFromPositioner"
+$log.entry[6] = "02:41:36 Pick detail from positioner 4"
+$log.entry[7] = "02:41:36 State: TakeFromPositioner"
+$log.entry[8] = "02:41:45 Pick detail from positioner 4"
+$log.entry[9] = "02:41:45 State: TakeFromPositioner"
+$log.entry[10] = "02:41:52 Pick detail from positioner 4"
+$log.entry[11] = "02:41:52 State: TakeFromPositioner"
+$tcp.ip = "127.0.0.1"
 .END
 .IDE_CMT
 @@@ PROJECT @@@

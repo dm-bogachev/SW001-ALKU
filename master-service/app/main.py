@@ -13,13 +13,15 @@ from common.Logger import config_logger
 from Background import Background
 from DataCollector import DataCollector
 
+from models import ProcessRequest, SensorState
+
 logger = config_logger("master-service/main.py")
 
-dc = DataCollector()
-dc.start()
+data_collector = DataCollector()
+data_collector.start()
 
-pc = Background(dc)
-pc.start()
+master = Background(data_collector)
+master.start()
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -58,18 +60,98 @@ def reboot():
     threading.Thread(target=delayed_exit).start()
     return {"Status": "Reboot"}
 
+
 @app.post("/master/start")
-def start_process(ProductName: str, ProductCount: int, InTareIDs: list, OutTareIDs: list):
+def start_process(request: ProcessRequest):
     """ Запуск процесса """
-    logger.debug(f"Запрос /master/start ({ProductName}: {ProductCount}, {InTareIDs}, {OutTareIDs})")
-    pc.start_process(ProductName, ProductCount, InTareIDs, OutTareIDs)
-    return {"Status": "Process started"}
+    logger.debug(f"Запрос /master/start ({request.ProductName}: {request.ProductCount}, {request.InTareIDs}, {request.OutTareIDs})")
+    if not master.start_process(request.ProductName, request.ProductCount, request.InTareIDs, request.OutTareIDs):
+        return {"Status": "Failed",
+                "Code": -1,
+                "Reason": "Error in sending to robot"
+                }
+    return {"Status": "OK"}    
+
+@app.post("/master/sensor_state")
+def set_sensor_state(request: SensorState):
+    """ Получение информации  о статусе сенсоров"""
+    valid_settings = ["stockerouttaresensor", 
+                      "stockerintaresensor",
+                      "outpalletsensor",
+                      "defectpalletsensor",]
+    if request.SensorName.lower() not in valid_settings:
+        return {"Status": "Failed", 
+                "Code": -1,
+                "Reason": "Wrong sensor name"
+                }
+    logger.debug(f"Запрос /master/sensor_state ({request.SensorName}: {request.State})")
+    if not master.send_sensor_state(request.SensorName, request.State):
+        return {"Status": "Failed",
+                "Code": -1,
+                "Reason": "Error in sending to robot"
+                }
+    return {"Status": "OK"}
+    
+@app.post("/master/measurement_result")
+def set_measurement_result(result: bool):
+    """ Получение результата измерений """
+    logger.debug(f"Запрос /master/measurement_result")
+    if not master.send_measurement_result(result):
+        return {"Status": "Failed",
+                "Code": -1,
+                "Reason": "Error in sending to robot"
+                }
+    return {"Status": "OK"}
+
+@app.post("/master/pause")
+def pause_process():
+    """ Пауза процесса """
+    logger.debug("Запрос /master/pause")
+    if not master.pause_process():
+        return {"Status": "Failed",
+                "Code": -1,
+                "Reason": "Error in sending to robot"
+                }
+    return {"Status": "OK"}
+
+@app.post("/master/resume")
+def resume_process():
+    """ Возобновление процесса """
+    logger.debug("Запрос /master/resume")
+    if not master.resume_process():
+        return {"Status": "Failed",
+                "Code": -1,
+                "Reason": "Error in sending to robot"
+                }
+    return {"Status": "OK"}
+
+@app.post("/master/stop")
+def stop_process():
+    """ Остановка процесса """
+    logger.debug("Запрос /master/stop")
+    if not master.stop_process():
+        return {"Status": "Failed",
+                "Code": -1,
+                "Reason": "Error in sending to robot"
+                }
+    return {"Status": "OK"}
+
+@app.post("/master/check_etalon")
+def check_etalon(etalon_id: int):
+    """ Проверка эталона """
+    logger.debug("Запрос /master/check_etalon")
+    if not master.check_etalon(etalon_id):
+        return {"Status": "Failed",
+                "Code": -1,
+                "Reason": "Error in sending to robot"
+                }
+    return {"Status": "OK"}
 
 @app.get("/data")
 def get_data():
     """ Получение собранных данных """
     logger.debug("Запрос /data")
-    data = pc.collector.get_data()
+    data = master.collector.get_data()
     return data
 
 if __name__ == "__main__":

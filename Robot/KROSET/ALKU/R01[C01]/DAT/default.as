@@ -485,7 +485,7 @@ OP_ACCUTYPE2  ON  -3818
 OP_MTN_CHK    OFF -4417
 OP_CHKINCHING  OFF -4345
 OP_COLDET     OFF -4300
-OP_BLTARM OFF -4280
+OP_BLTARM     OFF -4280
 OP_IPKALM     OFF -4145
 OP_KADOUINFO  ON  -4586
 OP_IMON2      OFF -3341
@@ -1335,38 +1335,38 @@ ZSWITCH ZFIX_CALL_1STEPPG ON   -523
 .END
 .OPE_INFO1
 OPEINFO  30 14 6 1  1623982264  ;(21/6/18 11:11:04) RS013N-A001 
-CONT_TIM  6.6 
-SERV_TIM  2.9 
-MTON_CNT  12 
+CONT_TIM  13.9 
+SERV_TIM  4.9 
+MTON_CNT  22 
 ESTP_CNT  0 
-BRKE_CNT  19 
-CON_PWR  0.036 
-SUP_PWR  0.036 
+BRKE_CNT  29 
+CON_PWR  0.070 
+SUP_PWR  0.070 
 REG_PWR  0.000 
-MOVE_TJT  0.6 0.6 0.6 0.3 0.4 0.5 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 
-DIST_DJT  53.524 45.617 32.616 10.279 15.639 119.105 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 
-DIST_DJT_PLUS  26.832 22.604 16.337 5.181 7.567 59.464 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 
-OPEINFO TP_BKLIGHT  0 2.2 50000 
+MOVE_TJT  0.8 0.8 0.8 0.4 0.5 0.7 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 
+DIST_DJT  64.696 52.194 37.701 12.305 18.478 127.277 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 
+DIST_DJT_PLUS  32.409 25.881 18.888 6.201 8.984 63.558 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 
+OPEINFO TP_BKLIGHT  0 5.7 50000 
 OPEINFO MC  0 0 2000000 
 OPEINFO PARTS1  0 0 0 0 0 0 0 0 0 0 0 
 OPEINFO PARTS2  0 0 0 0 0 0 0 0 0 0 0 
 OPEINFO PARTS3  0 0 0 0 0 0 0 0 0 0 0 
 M_OPEINFO  30 14 6 1  1623982264  ;(21/6/18 11:11:04) RS013N-A001 
-M_CONT_TIM  6.6 
-M_SERV_TIM  2.9 
-M_MTON_CNT  12 
+M_CONT_TIM  13.9 
+M_SERV_TIM  4.9 
+M_MTON_CNT  22 
 M_ESTP_CNT  0 
-M_BRKE_CNT  19 
-M_CON_PWR  0.036 
-M_SUP_PWR  0.036 
+M_BRKE_CNT  29 
+M_CON_PWR  0.070 
+M_SUP_PWR  0.070 
 M_REG_PWR  0.000 
-M_MOVE_TJT  0.6 0.6 0.6 0.3 0.4 0.5 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 
-M_DIST_DJT  53.524 45.617 32.616 10.279 15.639 119.105 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 
-M_DIST_DJT_PLUS  26.832 22.604 16.337 5.181 7.567 59.464 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 
+M_MOVE_TJT  0.8 0.8 0.8 0.4 0.5 0.7 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 
+M_DIST_DJT  64.696 52.194 37.701 12.305 18.478 127.277 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 
+M_DIST_DJT_PLUS  32.409 25.881 18.888 6.201 8.984 63.558 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 
 M_MOVE_TJT_OVERDRIVE  0.0 0.0 0.0 0.0 0.0 0.0 
 M_DIST_DJT_OVERDRIVE  0.000 0.000 0.000 0.000 0.000 0.000 
 M_WARN_CJT_OVERDRIVE  0 0 0 0 0 0 
-HOUR_MTR  6.6 
+HOUR_MTR  13.9 
 .END
 .SYSDATA
 REG_POINT       0
@@ -1401,14 +1401,14 @@ DEFSIG_I EXT_PH_PULSE.   OFF     0
 DEFSIG_I EXT_PH_PULSE_8.  OFF     0
 DEFSIG_I EXT_PH_PULSE_9.  OFF     0
 DEFSIG_I EXT_PH_PULSE_10.  OFF     0
-DEFSIG_I I/F_PAGE1       OFF     0
-DEFSIG_I I/F_PAGE2       OFF     0
-DEFSIG_I I/F_PAGE3       OFF     0
-DEFSIG_I I/F_PAGE4       OFF     0
-DEFSIG_I I/F_PAGE5       OFF     0
-DEFSIG_I I/F_PAGE6       OFF     0
-DEFSIG_I I/F_PAGE7       OFF     0
-DEFSIG_I I/F_PAGE8       OFF     0
+DEFSIG_I I/F_PAGE1       ON   2001
+DEFSIG_I I/F_PAGE2       ON   2002
+DEFSIG_I I/F_PAGE3       ON   2003
+DEFSIG_I I/F_PAGE4       ON   2004
+DEFSIG_I I/F_PAGE5       ON   2005
+DEFSIG_I I/F_PAGE6       ON   2006
+DEFSIG_I I/F_PAGE7       ON   2007
+DEFSIG_I I/F_PAGE8       ON   2008
 DEFSIG_I OPTIMIZE_MODE   OFF     0
 DEFSIG_I AUTOSAVE_C1     OFF     0
 DEFSIG_I AUTOSAVE_C2     OFF     0
@@ -2457,7 +2457,7 @@ SWITCH SLOW_REP_MM     OFF
 .END
 .CONDITION
 AS_VER       ASF_01000001G
-ELOG_NUM             33
+ELOG_NUM             35
 CHK_ONCE      255
 MAN_SPEED     1
 CHK_SPEED     1
@@ -2503,6 +2503,8 @@ STEP2ENV1_CALL_PRGNAME tcp.client.pc
 STEP2ENV1_PRG_STEP         38
 STEP2ENV2_CALL_PRGNAME sender.pc
 STEP2ENV2_PRG_STEP         13
+STEP2ENV4_CALL_PRGNAME errstart.pc
+STEP2ENV4_PRG_STEP         13
 USR_DO1      00000000000000000000000000000000
 USR_DO2      00000000000000000000000000000000
 USR_DO3      00000000000000000000000000000000
@@ -3039,7 +3041,9 @@ ROB_OP_AFTER_ERROR          0
 MOVING_AREA       0.000     0.000     0.000     0.000     0.000     0.000
 ENC_ALARM              0          0          0          0          0          0
 N_OX19   "rs13.det.put|"
+N_OX20   "rs13.tare.ack|"
 N_WX19   "rs7.det.picked|"
+N_WX20   "rs7.tare.chg|"
 SENSING_SPEED     10.000     0.000 255
 SENS_STROKE       0.000
 PAL_TYPE_01     0
@@ -3399,13 +3403,13 @@ TP_RECINHI      0   0   0
 .END
 .SIG_COMMENT
 .END
-.PROGRAM a.align()@25/11/06 17:31 #0
+.PROGRAM a.align()@25/11/09 02:44 #0
   ALIGN
 .END
-.PROGRAM a.home()@25/11/06 17:31 #0
+.PROGRAM a.home()@25/11/09 02:44 #0
   JMOVE #homep1
 .END
-.PROGRAM a.main()@25/11/06 17:31 #0
+.PROGRAM a.main()@25/11/09 02:44 #0
 ;
   CALL safe.home
 ;
@@ -3419,8 +3423,12 @@ TP_RECINHI      0   0   0
 ;
   WHILE TRUE DO
     SCASE $command OF
-     SVALUE "Main":
+     SVALUE "START":
+      CALL log("Received START command. State: StartingProgram")
+      $action = "StartingProgram"
+      CALL pg.start
       BREAK
+      $action = "WaitingForCommand"
      SVALUE "Check":
       BREAK
      ANY :
@@ -3429,7 +3437,7 @@ TP_RECINHI      0   0   0
   END
 ;
 .END
-.PROGRAM a.tch.stock.in()@25/11/06 17:31 #0
+.PROGRAM a.tch.stock.in()@25/11/09 02:44 #0
 ; Use this for first teach
   IF FALSE THEN
     TOOL tool.pin
@@ -3453,7 +3461,7 @@ TP_RECINHI      0   0   0
   LMOVE stocker.in[.i,.j]+TRANS(0,0,50)
 ;
 .END
-.PROGRAM a.tch.stock.out()@25/11/06 17:31 #0
+.PROGRAM a.tch.stock.out()@25/11/09 02:44 #0
 ; Use this for first teach
   IF FALSE THEN
     JMOVE stocker.out[1,1]+TRANS(0,0,50)
@@ -3474,7 +3482,7 @@ TP_RECINHI      0   0   0
   LMOVE stocker.out[.i,.j]
   LMOVE stocker.out[.i,.j]+TRANS(0,0,50)
 .END
-.PROGRAM a.teach.gripper()@25/11/06 17:31 #0
+.PROGRAM a.teach.gripper()@25/11/09 02:44 #0
   TOOL tool.pick[hmi.tool.no]
 ;
   POINT .temp = #tool.pos[hmi.t.pos]
@@ -3500,7 +3508,7 @@ TP_RECINHI      0   0   0
 ;
   LMOVE .temp+TRANS(0,0,50)
 .END
-.PROGRAM a.teach.pos()@25/11/06 17:31 #0
+.PROGRAM a.teach.pos()@25/11/09 02:44 #0
   TOOL tool.pick[hmi.tool.no]
 ;
   POINT .temp = #pos.pos[hmi.pos.pos]
@@ -3514,7 +3522,7 @@ TP_RECINHI      0   0   0
   BREAK
   TWAIT 0.5
 .END
-.PROGRAM a.teach.stz()@25/11/06 17:31 #0
+.PROGRAM a.teach.stz()@25/11/09 02:44 #0
   SPEED 250 MM/S ALWAYS
   ACCURACY 0 ALWAYS
   TOOL tool.pin
@@ -3549,7 +3557,7 @@ TP_RECINHI      0   0   0
   BREAK
   LMOVE stz.frame+TRANS(hmi.x,hmi.y,10)
 .END
-.PROGRAM a.test()@25/11/06 17:31 #1
+.PROGRAM a.test()@25/11/09 02:44 #0
 ;
   SIGNAL -rs13.det.put
   JMOVE #homep1
@@ -3567,7 +3575,7 @@ TP_RECINHI      0   0   0
 ;
   JMOVE #homep1
 .END
-.PROGRAM a.test.pick()@25/11/06 17:31 #0
+.PROGRAM a.test.pick()@25/11/09 02:44 #0
   IF FALSE THEN
     JMOVE #pick.in
   END
@@ -3617,7 +3625,7 @@ TP_RECINHI      0   0   0
   LMOVE #wait.pick
   LMOVE #before.pos
 .END
-.PROGRAM autostart.pc()@25/11/06 17:31 #0
+.PROGRAM autostart.pc()@25/11/09 02:44 #0
 ; System switches
   CP ON
   PREFETCH.SIGINS OFF
@@ -3636,7 +3644,7 @@ TP_RECINHI      0   0   0
   CALL watchdog.pc
 ;
 .END
-.PROGRAM errstart.pc()@25/11/06 17:31 #690
+.PROGRAM errstart.pc()@25/11/09 02:44 #112
   IF ERROR==-34021 OR ERROR==-10100 THEN
     tcp.socket = -1
     MC ERESET
@@ -3651,7 +3659,7 @@ TP_RECINHI      0   0   0
   TWAIT 5
   ERRSTART.PC ON
 .END
-.PROGRAM get.state.pc(.$state)@25/11/06 17:31 #21462
+.PROGRAM get.state.pc(.$state)@25/11/09 02:44 #35696
   .$state = "POWER:"
   IF SWITCH(POWER ) THEN
     .$state = .$state+"TRUE;"
@@ -3737,7 +3745,7 @@ TP_RECINHI      0   0   0
 ; MAX 12
   .$state = .$state+"\n"
 .END
-.PROGRAM gripper.pick(.pos,.tool.no)@25/11/06 17:31 #4
+.PROGRAM gripper.pick(.pos,.tool.no)@25/11/09 02:44 #0
   IF FALSE THEN
     .pos = hmi.t.pos
     .tool.no = hmi.tool.no
@@ -3766,7 +3774,7 @@ TP_RECINHI      0   0   0
   SPEED 100 ALWAYS
   LMOVE .temp+TRANS(0,0,200)
 .END
-.PROGRAM gripper.put(.pos,.tool.no)@25/11/06 17:31 #3
+.PROGRAM gripper.put(.pos,.tool.no)@25/11/09 02:44 #0
   IF FALSE THEN
     .pos = hmi.t.pos
     .tool.no = hmi.tool.no
@@ -3795,7 +3803,7 @@ TP_RECINHI      0   0   0
   SPEED 100 ALWAYS
   LMOVE .temp+TRANS(0,0,200)
 .END
-.PROGRAM log(.$msg)@25/11/06 17:31 #687
+.PROGRAM log(.$msg)@25/11/09 02:44 #0
   FOR .i = 0 TO 10
     $log.entry[.i] = $log.entry[.i+1]
   END
@@ -3805,7 +3813,112 @@ TP_RECINHI      0   0   0
   IFPWPRINT 2,1,1,9,10=$log.entry[4],$log.entry[5],$log.entry[6],$log.entry[7]
   IFPWPRINT 3,1,1,9,10=$log.entry[8],$log.entry[9],$log.entry[10],$log.entry[11]
 .END
-.PROGRAM safe.home()@25/11/06 17:31 #0
+.PROGRAM pg.start()@25/11/09 02:44 #0
+  $command = ""
+  CALL process.data(.state)
+  IF NOT .state THEN
+    CALL log("Wrong program name. State: WrongProgramName")
+    $action = "WrongProgramName"
+    TWAIT 5
+    RETURN
+  END
+; Change gripper if required
+  IF current.gripper<>gripper.type THEN
+    CALL log("Required gripper change")
+    JMOVE #wait.pick
+    IF current.gripper<>0 THEN
+      CALL gripper.put(current.gripper,current.gripper)
+    END
+    CALL gripper.pick(gripper.type,gripper.type)
+    current.gripper = gripper.type
+  END
+  current.intare = 1
+  current.outtare = 1
+  tare.counter = 0
+  full.counter = 0
+; First tare pick
+  CALL stock.in.take(intare.i[1],intare.j[1])
+  JMOVE #homep1
+  CALL stock.out.take(outtare.i[1],outtare.j[1])
+  JMOVE #homep1
+  JMOVE #wait.pick
+;
+  .keep.pick = TRUE
+  $action = "WaitForPick"
+  CALL log("Wait for new pick. State: WaitForPick")
+  WHILE .keep.pick DO
+;
+    IF SIG(rs7.tare.chg) THEN
+      PULSE rs13.tare.ack,10
+      JMOVE #homep1
+      CALL stock.out.back(outtare.i[current.outtare],outtare.j[current.outtare])
+      current.outtare = current.outtare+1
+      CALL stock.out.take(outtare.i[current.outtare],outtare.j[current.outtare])
+      JMOVE #homep1
+      JMOVE #wait.pick
+      $action = "WaitForPick"
+      CALL log("Wait for new pick. State: WaitForPick")
+    END
+;
+    IF $cycle.command=="PICK" AND NOT SIG(rs7.tare.chg) THEN
+      $cycle.command = ""
+      JMOVE #wait.pick
+      CALL stz.pick
+      CALL stz.put(positioner.id)
+      tare.counter = tare.counter+1
+      full.counter = full.counter+1
+      $action = "WaitForPick"
+      CALL log("Wait for new pick. State: WaitForPick")
+    END
+;
+    IF $cycle.command=="NOPICK" THEN
+      $cycle.command = ""
+      IF current.intare<>intare.count THEN
+        JMOVE #homep1
+        CALL stock.in.back(intare.i[current.intare],intare.j[current.intare])
+        JMOVE #homep1
+        current.intare = current.intare+1
+        CALL stock.in.back(intare.i[current.intare],intare.j[current.intare])
+      ELSE
+        .keep.pick = FALSE
+      END
+      $action = "WaitForPick"
+      CALL log("Wait for new pick. State: WaitForPick")
+    END
+  END
+; Last tare put
+  CALL stock.out.back(outtare.i[intare.count],outtare.j[intare.count])
+  JMOVE #homep1
+  JMOVE #wait.pick
+  CALL stock.in.back(intare.i[outtare.count],intare.j[outtare.count])
+;
+  JMOVE #homep1
+.END
+.PROGRAM process.data(.state)@25/11/09 02:44 #0
+  SCASE $detail.type OF
+   SVALUE "LONGDETAILS":
+;PRINT 0: "LONGDETAILS"
+    intare.i[1] = 1
+    intare.j[1] = 1
+    intare.count = 1
+;
+    outtare.i[1] = 1
+    outtare.j[1] = 1
+    outtare.count = 1
+;
+    gripper.type = 1
+;
+    max.tare.count = 99
+;
+    positioner.id = 4
+    .state = TRUE
+    RETURN
+  END
+any:
+  .state = FALSE
+  RETURN
+.END
+.PROGRAM safe.home()@25/11/09 02:44 #0
 ; IMPLEMENT SAFE RETURN TO HOME POSITION
   CALL log("Moving to home position. State: MoveToHome")
   $action = "MoveToHome"
@@ -3813,7 +3926,7 @@ TP_RECINHI      0   0   0
   ACCURACY 10 ALWAYS
   JMOVE #homep1
 .END
-.PROGRAM sender.pc()@25/11/06 17:31 #0
+.PROGRAM sender.pc()@25/11/09 02:44 #0
 ;
 ; 0 - FALSE
 ; 1 - TRUE
@@ -3829,7 +3942,7 @@ TP_RECINHI      0   0   0
     TWAIT 0.25
   END
 .END
-.PROGRAM set.io.pc()@25/11/06 17:31 #3
+.PROGRAM set.io.pc()@25/11/09 02:44 #2
 ; Gripper IO
   release.tare = 1
   capture.tare = 2
@@ -3852,6 +3965,8 @@ TP_RECINHI      0   0   0
 ;
   rs7.home1 = 1017 ; EIP
   rs7.work[1] = 1018 ; EIP
+  rs13.tare.ack = 20
+  rs7.tare.chg = 1020
   di.ifp.page[1] = 2001
   di.ifp.page[2] = 2002
   di.ifp.page[3] = 2003
@@ -3871,8 +3986,11 @@ TP_RECINHI      0   0   0
   s.in1.disable = 2017
   s.in2.disable = 2018
 ;
+  s.sensor.iss = 2019
+  s.sensor.oss = 2020
+  s.sensor.ot = 2021
 .END
-.PROGRAM set.vars.pc()@25/11/06 17:31 #3
+.PROGRAM set.vars.pc()@25/11/09 02:44 #2
 ;
   IF NOT EXISTREAL("grip.xsh[8]") THEN
     FOR .i = 1 TO 9
@@ -3888,6 +4006,10 @@ TP_RECINHI      0   0   0
       $log.entry[.i] = " "
     END
   END
+;
+  IF NOT EXISTREAL("current.gripper") THEN
+    current.gripper = 0
+  END
 ; Variables init
 ;
 ;tcp.socket = 0
@@ -3898,8 +4020,9 @@ TP_RECINHI      0   0   0
   tyterm = 0
 ;
   $command = ""
+  $cycle.command = ""
 .END
-.PROGRAM stock.in.back(.i,.j)@25/11/06 17:31 #2
+.PROGRAM stock.in.back(.i,.j)@25/11/09 02:44 #0
   IF FALSE THEN
     .i = hmi.st.in.i
     .j = hmi.st.in.j
@@ -3961,7 +4084,7 @@ TP_RECINHI      0   0   0
   LMOVE stocker.in[.i,.j]+TRANS(0,0,50)
   LMOVE stocker.in[.i,.j]+TRANS(0,0,200)
 .END
-.PROGRAM stock.in.take(.i,.j)@25/11/06 17:31 #4
+.PROGRAM stock.in.take(.i,.j)@25/11/09 02:44 #0
   IF FALSE THEN
     .i = hmi.st.in.i
     .j = hmi.st.in.j
@@ -4002,7 +4125,8 @@ TP_RECINHI      0   0   0
   BREAK
   CALL log("Wait sensor state. State: WaitInStockerSensor")
   $action = "WaitInStockerSensor"
-  SWAIT 1003
+  SWAIT s.sensor.iss
+  SIGNAL -s.sensor.iss
   .$temp = "Take pallet ("+$ENCODE(/L,.i)+", "+$ENCODE(/L,.j)+") from input stocker."
   CALL log(.$temp)
   CALL log("State: TakingFromInStocker")
@@ -4040,7 +4164,7 @@ TP_RECINHI      0   0   0
   LMOVE #wait.pick
 ;
 .END
-.PROGRAM stock.out.back(.i,.j)@25/11/06 17:31 #0
+.PROGRAM stock.out.back(.i,.j)@25/11/09 02:44 #0
   IF FALSE THEN
     .i = hmi.st.out.i
     .j = hmi.st.out.j
@@ -4096,7 +4220,7 @@ TP_RECINHI      0   0   0
   LMOVE stocker.out[.i,.j]+TRANS(0,0,50)
   LMOVE stocker.out[.i,.j]+TRANS(0,0,200)
 .END
-.PROGRAM stock.out.take(.i,.j)@25/11/06 17:31 #0
+.PROGRAM stock.out.take(.i,.j)@25/11/09 02:44 #0
   IF FALSE THEN
     .i = hmi.st.out.i
     .j = hmi.st.out.j
@@ -4136,7 +4260,8 @@ TP_RECINHI      0   0   0
   BREAK
   CALL log("Wait sensor state. State: WaitOutStockerSensor")
   $action = "WaitOutStockerSensor"
-  SWAIT 1003
+  SWAIT s.sensor.oss
+  SIGNAL -s.sensor.oss
   .$temp = "Take pallet ("+$ENCODE(/L,.i)+", "+$ENCODE(/L,.j)+") from output stocker."
   CALL log(.$temp)
   CALL log("State: TakingFromOutStocker")
@@ -4168,7 +4293,7 @@ TP_RECINHI      0   0   0
 ;
 ;LMOVE #homep1
 .END
-.PROGRAM stz.pick()@25/11/06 17:31 #108
+.PROGRAM stz.pick()@25/11/09 02:44 #1
 ;
   .$temp = "Pick detail from stz ("+$ENCODE(/L,hmi.x)+", "+$ENCODE(/L,hmi.y)+", "+$ENCODE(/L,hmi.a)+")"
   CALL log(.$temp)
@@ -4177,7 +4302,7 @@ TP_RECINHI      0   0   0
 ;
   SPEED 100 ALWAYS
   ACCURACY 0.1 ALWAYS
-  TOOL tool.pick[hmi.tool.no]
+  TOOL tool.pick[current.gripper]
 ;
   cx = hmi.x
   cy = hmi.y
@@ -4185,8 +4310,8 @@ TP_RECINHI      0   0   0
   .ysh = 0
   .xsh = 0
   IF a==180 THEN
-    .xsh = grip.180xsh[hmi.tool.no]
-    .ysh = grip.180ysh[hmi.tool.no]
+    .xsh = grip.180xsh[current.gripper]
+    .ysh = grip.180ysh[current.gripper]
   END
   IF hmi.x>center.x+40 THEN
     cx = hmi.x-dist.xp*(hmi.x-center.x)
@@ -4228,7 +4353,7 @@ TP_RECINHI      0   0   0
   LMOVE #wait.pick
   LMOVE #before.pos
 .END
-.PROGRAM stz.put(.pos)@25/11/06 17:31 #106
+.PROGRAM stz.put(.pos)@25/11/09 02:44 #0
 ;
   CALL log("Waiting for free positioner. State: WaitPosFree")
   $action = "WaitPosFree"
@@ -4241,7 +4366,7 @@ TP_RECINHI      0   0   0
 ;
   SPEED 100 ALWAYS
   ACCURACY 0 ALWAYS
-;TOOL tool.pick[.tool.no]
+  TOOL tool.pick[current.gripper]
 ;
   POINT .temp = #pos.pos[.pos]
   JMOVE .temp+TRANS(10,0,50)
@@ -4259,16 +4384,97 @@ TP_RECINHI      0   0   0
   LMOVE #before.pos
   LMOVE #wait.pick
 .END
-.PROGRAM tcp.callback.pc(.$data[],.data.length)@25/11/06 17:31 #0
+.PROGRAM tcp.callback.pc(.$data[],.data.length)@25/11/09 02:44 #696
   .$temp = "Received "+$ENCODE(.data.length)+" strings:"
   PRINT tcp.recv.ena: .$temp
   FOR .i = 1 TO .data.length
     PRINT tcp.recv.ena: .$data[.i]
   END
 ;
-  IF INSTR(.$data[1] , "PICK") THEN
-    .$temp = $DECODE(.$data[1],":",0)
-    .$temp = $DECODE(.$data[1],":",1)
+; String format:
+; START;DETAILNAME;DETAILCOUNT;[INTAREID1,INTAREID2,..];[OTAREID1,INTAREID2,..];
+  IF INSTR(.$data[1] , "START") THEN
+; Decode command
+    .$temp = $DECODE(.$data[1],";",0)
+    .$temp = $DECODE(.$data[1],";",1)
+; Decode detail type
+    $detail.type = $DECODE(.$data[1],";",0)
+    .$temp = $DECODE(.$data[1],";",1)
+; Decode detail count
+    detail.count = VAL($DECODE(.$data[1],";",0))
+    .$temp = $DECODE(.$data[1],";",1)
+; Decode intare ids
+    $intare.ids = $DECODE(.$data[1],";",0)
+; Decode outtare ids
+    .$temp = $DECODE(.$data[1],";",1)
+    $outtare.ids = $DECODE(.$data[1],";",0)
+    $command = "START"
+  END
+;
+; String format:
+; SENSOR;SENSORNAME;STATE;
+  IF INSTR(.$data[1] , "SENSOR") THEN
+; Decode command
+    .$temp = $DECODE(.$data[1],";",0)
+    .$temp = $DECODE(.$data[1],";",1)
+; Decode sensor name
+    .$sensor.name = $DECODE(.$data[1],";",0)
+    .$temp = $DECODE(.$data[1],";",1)
+; Decode sensor state
+;TYPE 0: .$data[1]
+    .$sensor.state = $DECODE(.$data[1],";",0)
+;
+    IF INSTR(.$sensor.state , "TRUE") THEN
+      TYPE 0: .$sensor.name,.$sensor.state
+      IF .$sensor.name=="STOCKERINTARESENSOR" THEN
+        SIGNAL s.sensor.iss
+      END
+;
+      IF .$sensor.name=="STOCKEROUTTARESENSOR" THEN
+        SIGNAL s.sensor.oss
+      END
+;
+      IF .$sensor.name=="OUTPALLETSENSOR" THEN
+        SIGNAL s.sensor.ot
+      END
+    END
+  END
+;
+; String format:
+; MEASUREMENT;STATE;
+;IF INSTR (.$data[1], "MEASUREMENT") THEN
+;  ; Decode command
+;  .$temp = $DECODE (.$data[1], ";", 0)
+;  .$temp = $DECODE (.$data[1], ";", 1)
+;  ; Decode measurement result
+;  .sensor.state = $DECODE (.$data[1], ";", 0)
+;END
+;
+; String format:
+; PAUSE;
+;
+  IF INSTR(.$data[1] , "NOPICK") THEN
+    $cycle.command = "NOPICK"
+  END
+;
+  IF INSTR(.$data[1] , "PAUSE") THEN
+    PULSE 2222
+  END
+;
+; String format:
+; RESUME;
+  IF INSTR(.$data[1] , "RESUME") THEN
+    PULSE 2222
+  END
+;
+; String format:
+; ETALON;ID;
+  IF INSTR(.$data[1] , "ETALON") THEN
+    $command = "ETALON"
+  END
+  IF INSTR(.$data[1] , "PICK") AND NOT INSTR(.$data[1] , "NO") THEN
+    .$temp = $DECODE(.$data[1],";",0)
+    .$temp = $DECODE(.$data[1],";",1)
     .$x = $DECODE(.$data[1],",",0)
     .$temp = $DECODE(.$data[1],",",1)
     .$y = $DECODE(.$data[1],",",0)
@@ -4277,25 +4483,10 @@ TP_RECINHI      0   0   0
     hmi.y = VAL(.$x)/10
     hmi.x = VAL(.$y)/10
     hmi.a = VAL(.$a)
+    $cycle.command = "PICK"
   END
-;
-  IF .$data[1]=="GO\n" THEN
-    MC ZPOWER ON
-    TWAIT 1
-    MC EXECUTE a.main
-  END
-  IF .$data[1]=="START\n" THEN
-    PULSE 2500
-  END
-  IF .$data[1]=="CONTINUE\n" THEN
-    PULSE 2501
-  END
-;
-;PRINT tcp.recv.ena: "Unhandled message. Return PING"
-;.$data[1] = "PING\n"
-;CALL tcp.send2.pc (.$data[], 1)
 .END
-.PROGRAM tcp.client.pc()@25/11/06 17:31 #0
+.PROGRAM tcp.client.pc()@25/11/09 02:44 #0
   .tcp.retry.count = 10
   WHILE TRUE DO
 ; Checking for active sockets and closing them
@@ -4361,7 +4552,7 @@ TP_RECINHI      0   0   0
     END
   END
 .END
-.PROGRAM tcp.send.pc(.$data[],.data.length)@25/11/06 17:31 #122290
+.PROGRAM tcp.send.pc(.$data[],.data.length)@25/11/09 02:44 #122290
   IF tcp.socket>0 THEN
     TCP_SEND .status,tcp.socket,.$data[1],.data.length,tcp.send.tmo
     IF .status>=0 THEN
@@ -4385,7 +4576,7 @@ TP_RECINHI      0   0   0
   END
 ;
 .END
-.PROGRAM tcp.send2.pc(.$data[],.data.length)@25/11/06 17:31 #0
+.PROGRAM tcp.send2.pc(.$data[],.data.length)@25/11/09 02:44 #0
   IF tcp.socket>0 THEN
     TCP_SEND .status,tcp.socket,.$data[1],.data.length,tcp.send.tmo
     IF .status>=0 THEN
@@ -4405,7 +4596,7 @@ TP_RECINHI      0   0   0
   END
 ;
 .END
-.PROGRAM tcp.send3.pc(.$data[],.data.length)@25/11/06 17:31 #21459
+.PROGRAM tcp.send3.pc(.$data[],.data.length)@25/11/09 02:44 #35674
   IF tcp.socket>0 THEN
     TCP_SEND .status,tcp.socket,.$data[1],.data.length,tcp.send.tmo
     IF .status>=0 THEN
@@ -4425,7 +4616,7 @@ TP_RECINHI      0   0   0
   END
 ;
 .END
-.PROGRAM watchdog.pc()@25/11/06 17:31 #0
+.PROGRAM watchdog.pc()@25/11/09 02:44 #0
   WHILE TRUE DO
     IF SIG(s.tcp.ena) THEN
       tcp.ena = tyterm
@@ -4545,7 +4736,7 @@ stocker.out[1,9] -959.071350 -800.629578 -544.605591 0.001567 89.998672 -179.684
 stocker.out[1,10] -959.069031 -800.079468 -644.604065 0.001567 89.998672 -179.684799
 stocker.out[1,11] -959.066772 -799.529358 -744.602539 0.001567 89.998672 -179.684799
 stocker.out[1,12] -959.064453 -798.979187 -844.601074 0.001567 89.998672 -179.684799
-stocker.out[1,13] -1160.977539 -736.008484 -855.637085 -179.998795 89.999100 180.000000
+stocker.out[1,13] -1160.977539 -736.008484 -855.637085 -179.998795 89.999100 -180.000000
 stocker.out[2,1] -959.103271 -315.037903 258.078003 0.001567 89.998672 -179.684799
 stocker.out[2,2] -959.100952 -314.487793 158.079514 0.001567 89.998672 -179.684799
 stocker.out[2,3] -959.098633 -313.937653 58.081024 0.001567 89.998672 -179.684799
@@ -4558,7 +4749,7 @@ stocker.out[2,9] -959.084839 -310.636963 -541.909912 0.001567 89.998672 -179.684
 stocker.out[2,10] -959.082520 -310.086823 -641.908386 0.001567 89.998672 -179.684799
 stocker.out[2,11] -959.080200 -309.536713 -741.906860 0.001567 89.998672 -179.684799
 stocker.out[2,12] -959.077881 -308.986603 -841.905396 0.001567 89.998672 -179.684799
-stocker.out[2,13] -1160.987793 -246.008499 -855.637207 -179.998795 89.999100 180.000000
+stocker.out[2,13] -1160.987793 -246.008499 -855.637207 -179.998795 89.999100 -180.000000
 stocker.out[3,1] -959.116699 174.954712 260.773682 0.001567 89.998672 -179.684799
 stocker.out[3,2] -959.114380 175.504822 160.775208 0.001567 89.998672 -179.684799
 stocker.out[3,3] -959.112122 176.054932 60.776718 0.001567 89.998672 -179.684799
@@ -4571,7 +4762,7 @@ stocker.out[3,9] -959.098267 179.355652 -539.214233 0.001567 89.998672 -179.6847
 stocker.out[3,10] -959.095947 179.905762 -639.212646 0.001567 89.998672 -179.684799
 stocker.out[3,11] -959.093689 180.455872 -739.211182 0.001567 89.998672 -179.684799
 stocker.out[3,12] -959.091370 181.006042 -839.209717 0.001567 89.998672 -179.684799
-stocker.out[3,13] -1160.998047 243.991501 -855.637329 -179.998795 89.999100 180.000000
+stocker.out[3,13] -1160.998047 243.991501 -855.637329 -179.998795 89.999100 -180.000000
 stocker.out[4,1] -959.130188 664.947266 263.469391 0.001567 89.998672 -179.684799
 stocker.out[4,2] -959.127869 665.497437 163.470901 0.001567 89.998672 -179.684799
 stocker.out[4,3] -959.125549 666.047485 63.472412 0.001567 89.998672 -179.684799
@@ -4584,21 +4775,21 @@ stocker.out[4,9] -959.111755 669.348267 -536.518494 0.001567 89.998672 -179.6847
 stocker.out[4,10] -959.109436 669.898315 -636.516968 0.001567 89.998672 -179.684799
 stocker.out[4,11] -959.107117 670.448486 -736.515442 0.001567 89.998672 -179.684799
 stocker.out[4,12] -959.104858 670.998535 -836.514038 0.001567 89.998672 -179.684799
-stocker.out[4,13] -1161.008301 733.991516 -855.637573 -179.998795 89.999100 180.000000
-stocker.out[5,1] -1161.000488 1223.991943 344.362305 -179.998795 89.999100 180.000000
-stocker.out[5,2] -1161.001953 1223.991943 244.362305 -179.998795 89.999100 180.000000
-stocker.out[5,3] -1161.003540 1223.991699 144.362305 -179.998795 89.999100 180.000000
-stocker.out[5,4] -1161.005005 1223.991699 44.362301 -179.998795 89.999100 180.000000
-stocker.out[5,5] -1161.006470 1223.991699 -55.637699 -179.998795 89.999100 180.000000
-stocker.out[5,6] -1161.008057 1223.991699 -155.637695 -179.998795 89.999100 180.000000
-stocker.out[5,7] -1161.009521 1223.991699 -255.637695 -179.998795 89.999100 180.000000
-stocker.out[5,8] -1161.011108 1223.991699 -355.637695 -179.998795 89.999100 180.000000
-stocker.out[5,9] -1161.012573 1223.991699 -455.637695 -179.998795 89.999100 180.000000
-stocker.out[5,10] -1161.014038 1223.991699 -555.637695 -179.998795 89.999100 180.000000
-stocker.out[5,11] -1161.015625 1223.991455 -655.637695 -179.998795 89.999100 180.000000
-stocker.out[5,12] -1161.017090 1223.991455 -755.637695 -179.998795 89.999100 180.000000
-stocker.out[5,13] -1161.018677 1223.991455 -855.637695 -179.998795 89.999100 180.000000
-stz.frame 988.154785 -343.346466 108.116516 -172.441833 1.937711 -8.772191
+stocker.out[4,13] -1161.008301 733.991516 -855.637573 -179.998795 89.999100 -180.000000
+stocker.out[5,1] -1161.000488 1223.991943 344.362305 -179.998795 89.999100 -180.000000
+stocker.out[5,2] -1161.001953 1223.991943 244.362305 -179.998795 89.999100 -180.000000
+stocker.out[5,3] -1161.003540 1223.991699 144.362305 -179.998795 89.999100 -180.000000
+stocker.out[5,4] -1161.005005 1223.991699 44.362301 -179.998795 89.999100 -180.000000
+stocker.out[5,5] -1161.006470 1223.991699 -55.637699 -179.998795 89.999100 -180.000000
+stocker.out[5,6] -1161.008057 1223.991699 -155.637695 -179.998795 89.999100 -180.000000
+stocker.out[5,7] -1161.009521 1223.991699 -255.637695 -179.998795 89.999100 -180.000000
+stocker.out[5,8] -1161.011108 1223.991699 -355.637695 -179.998795 89.999100 -180.000000
+stocker.out[5,9] -1161.012573 1223.991699 -455.637695 -179.998795 89.999100 -180.000000
+stocker.out[5,10] -1161.014038 1223.991699 -555.637695 -179.998795 89.999100 -180.000000
+stocker.out[5,11] -1161.015625 1223.991455 -655.637695 -179.998795 89.999100 -180.000000
+stocker.out[5,12] -1161.017090 1223.991455 -755.637695 -179.998795 89.999100 -180.000000
+stocker.out[5,13] -1161.018677 1223.991455 -855.637695 -179.998795 89.999100 -180.000000
+stz.frame 988.154785 -343.346466 108.116516 -172.441833 1.937711 -8.772183
 tool.pick[1] -5.960000 -6.028000 171.199997 -113.500000 180.000000 0.000000
 tool.pick[2] -5.960000 -6.028000 171.199997 -113.500000 180.000000 0.000000
 tool.pick[3] -5.960000 -6.028000 171.199997 -113.500000 180.000000 0.000000
@@ -4626,14 +4817,18 @@ tool.pin -85.070000 -205.369995 -19.860001 67.500000 70.000000 0.000000
 #wait.pick 153.260971 -5.244692 -116.123528 -0.757969 -68.765495 -38.446480
 .END
 .REALS
-a = 180
+a = 0
 capture.grip = 6
 capture.tare = 2
 center.x = 147.8
 center.y = 245.4
-cx = 121.006
-cy = 273.782
+current.gripper = 1
+current.intare = 1
+current.outtare = 1
+cx = 3.4445
+cy = 6.9315
 dbg.tcp = -1
+detail.count = 230
 di.ifp.page[1] = 2001
 di.ifp.page[2] = 2002
 di.ifp.page[3] = 2003
@@ -4652,6 +4847,7 @@ do.bat.alm = 2010
 do.home1 = 17
 do.work[1] = 18
 do.work[2] = 2102
+full.counter = 3
 grip.180xsh[1] = -8
 grip.180xsh[2] = 0
 grip.180xsh[3] = 0
@@ -4701,7 +4897,9 @@ grip.zsh[6] = 0
 grip.zsh[7] = 0
 grip.zsh[8] = 0
 grip.zsh[9] = 0
-hmi.a = 180
+gripper.id = 1
+gripper.type = 1
+hmi.a = 0
 hmi.ext.x = -38
 hmi.ext.y = -4
 hmi.g180x = -8
@@ -4720,18 +4918,28 @@ hmi.stnew.i = 1
 hmi.stnew.j = 1
 hmi.t.pos = 1
 hmi.tool.no = 1
-hmi.x = 121.006
-hmi.y = 274.214
-ip[1] = 192
-ip[2] = 168
-ip[3] = 7
-ip[4] = 137
+hmi.x = 3.3
+hmi.y = 3.3
+intare.count = 1
+intare.i[1] = 1
+intare.j[1] = 1
+ip[1] = 127
+ip[2] = 0
+ip[3] = 0
+ip[4] = 1
 keep.tool.no = 1
+max.tare.count = 99
+outtare.count = 1
+outtare.i[1] = 1
+outtare.j[1] = 1
+positioner.id = 4
 release.grip = 5
 release.tare = 1
 rs13.det.put = 19
+rs13.tare.ack = 20
 rs7.det.picked = 1019
 rs7.home1 = 1017
+rs7.tare.chg = 1020
 rs7.work[1] = 1018
 s.apply.coord = 2014
 s.close.pneumo = 2015
@@ -4740,10 +4948,14 @@ s.grip.sns2.dis = 2016
 s.in1.disable = 2017
 s.in2.disable = 2018
 s.open.pneumo = 2016
+s.sensor.iss = 2019
+s.sensor.oss = 2020
+s.sensor.ot = 2021
 s.tcp.ena = 2013
 s.tcp.recv.ena = 2012
 s.tcp.send.ena = 2011
 start.task = 2001
+tare.counter = 3
 tcp.calb.dbg = -1
 tcp.connect.tmo = 5
 tcp.dbg = -1
@@ -4755,25 +4967,29 @@ tcp.recv.ena = -1
 tcp.send.dbg = -1
 tcp.send.ena = -1
 tcp.send.tmo = 5
-tcp.socket = 536
+tcp.socket = 532
 tyterm = 0
 .END
 .STRINGS
 $action = "WaitPneumaticOpen"
 $command = ""
-$log.entry[0] = "22:07:26 State: PutToPositioner"
-$log.entry[1] = "22:07:28 Pick detail from stz (121.006, 274.21399, 180)"
-$log.entry[2] = "22:07:28 State: PickDetail"
-$log.entry[3] = "22:07:28 Wait for unclamp gripper. State: WaitingGripUnclamped"
-$log.entry[4] = "22:07:29 Waiting for free positioner. State: WaitPosFree"
-$log.entry[5] = "22:07:31 Put detail to positioner 4"
-$log.entry[6] = "22:07:31 State: PutToPositioner"
-$log.entry[7] = "22:07:33 Put tool 1 to 1"
-$log.entry[8] = "22:07:33 State: PutTool"
-$log.entry[9] = "22:07:33 Return pallet (1, 1) to input stocker."
-$log.entry[10] = "22:07:33 State: ReturnToInStocker"
-$log.entry[11] = "22:07:33 Wait stz pneumatic open. State: WaitPneumaticOpen"
-$tcp.ip = "192.168.7.137"
+$cycle.command = ""
+$detail.type = "LONGDETAILS"
+$intare.ids = "2,3,4"
+$log.entry[0] = "02:41:50 Wait for new pick. State: WaitForPick"
+$log.entry[1] = "02:41:50 Wait for new pick. State: WaitForPick"
+$log.entry[2] = "02:41:50 Wait for new pick. State: WaitForPick"
+$log.entry[3] = "02:41:51 Wait for new pick. State: WaitForPick"
+$log.entry[4] = "02:41:51 Wait for new pick. State: WaitForPick"
+$log.entry[5] = "02:41:51 Wait for new pick. State: WaitForPick"
+$log.entry[6] = "02:41:51 Wait for new pick. State: WaitForPick"
+$log.entry[7] = "02:41:51 Return pallet (1, 1) to output stocker."
+$log.entry[8] = "02:41:51 State: ReturnToOutStocker"
+$log.entry[9] = "02:41:55 Return pallet (1, 1) to input stocker."
+$log.entry[10] = "02:41:55 State: ReturnToInStocker"
+$log.entry[11] = "02:41:56 Wait stz pneumatic open. State: WaitPneumaticOpen"
+$outtare.ids = "2,3,4"
+$tcp.ip = "127.0.0.1"
 .END
 .IDE_CMT
 @@@ PROJECT @@@

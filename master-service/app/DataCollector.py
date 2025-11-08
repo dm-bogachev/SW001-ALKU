@@ -19,7 +19,7 @@ class DataCollector(Thread):
         super().__init__()
 
         self.devices = {
-            "rs0013n": "Offline",
+            "rs013n": "Offline",
             "rs007l": "Offline",
             "io": "Offline",
             "camera": "Offline",
@@ -32,7 +32,7 @@ class DataCollector(Thread):
             "streaming": "unreachable",
             "cv": "unreachable",
             "io": "unreachable",
-            "rs0013n": "unreachable",
+            "rs013n": "unreachable",
             "rs007l": "unreachable",
         }
 
@@ -98,8 +98,8 @@ class DataCollector(Thread):
         except requests.exceptions.RequestException as e:
             logger.warning(f"Failed to get robot data from {ROBOT_API_URL}: {e}")
 
-    def __collect_rs0013n_data(self):
-        return self.__collect_robot_data(RS0013N_API_URL)
+    def __collect_rs013n_data(self):
+        return self.__collect_robot_data(RS013N_API_URL)
 
     def __collect_rs007l_data(self):
         return self.__collect_robot_data(RS007L_API_URL)
@@ -108,7 +108,7 @@ class DataCollector(Thread):
         return {
             "healths": self.healths,
             "states": self.states,
-            "rs0013n": self.rs0013n,
+            "rs013n": self.rs013n,
             "rs007l": self.rs007l,
         }
 
@@ -116,7 +116,7 @@ class DataCollector(Thread):
         logger.info(f'Запуск потока сбора данных')
         while not self.__stop_event.is_set():
             self.healths = self.__check_healths()
-            self.rs0013n = self.__collect_rs0013n_data()
+            self.rs013n = self.__collect_rs013n_data()
             self.rs007l = self.__collect_rs007l_data()
             self.states = self.__check_states()
             time.sleep(0.1)

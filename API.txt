@@ -1,0 +1,42 @@
+1. Запуск цикла
+
+curl -X 'POST' \
+  'http://127.0.0.1/api/master/master/start' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "ProductName": "Test",
+  "ProductCount": 100,
+  "InTareIDs": [1,2],
+  "OutTareIDs": [1,2]
+}'
+
+Параметры:
+"ProductName": "Test", 
+"ProductCount": 100,
+"InTareIDs": [1,2],
+"OutTareIDs": [1,2]
+
+2. Получение состояний датчика
+
+curl -X 'POST' \
+  'http://127.0.0.1/api/master/master/sensor_state' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "SensorName": "stockerouttaresensor",
+  "State": false
+}'
+
+Параметры:
+"SensorName": "stockerouttaresensor",
+"State": false
+
+Валидация:
+"stockerouttaresensor"
+"stockerintaresensor"
+"outpalletsensor"
+"defectpalletsensor"
+
+3. Результат измерений
+

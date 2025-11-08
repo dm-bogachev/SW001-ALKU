@@ -8,11 +8,13 @@ N_OX6    "capture.grip|"
 N_OX17    "do.home1|"
 N_OX18    "do.work[1]|"
 N_OX19    "rs13.det.put|"
+N_OX20    "rs13.tare.ack|"
 N_WX1    "grip.unclamped|"
 N_WX2    "grip.clamped|"
 N_WX17    "rs7.home1|"
 N_WX18    "rs7.work[1]|"
 N_WX19    "rs7.det.picked|"
+N_WX20    "rs7.tare.chg|"
 N_INT1    "di.ifp.page[1]|"
 N_INT2    "di.ifp.page[2]|"
 N_INT3    "di.ifp.page[3]|"
@@ -30,6 +32,9 @@ N_INT15    "s.close.pneumo|"
 N_INT16    "s.open.pneumo|"
 N_INT17    "s.in1.disable|"
 N_INT18    "s.in2.disable|"
+N_INT19    "s.sensor.iss|"
+N_INT20    "s.sensor.oss|"
+N_INT21    "s.sensor.ot|"
 N_INT102    "do.work[2]|"
 .END
 .INTER_PANEL_D
@@ -129,8 +134,12 @@ N_INT102    "do.work[2]|"
   ;
   WHILE TRUE DO
     SCASE $command OF
-      SVALUE "Main":
+      SVALUE "START":
+        CALL log ("Received START command. State: StartingProgram")
+        $action = "StartingProgram"
+        CALL pg.start
         BREAK
+        $action = "WaitingForCommand"
       SVALUE "Check":
         BREAK
       ANY :
@@ -517,6 +526,113 @@ N_INT102    "do.work[2]|"
   IFPWPRINT 2, 1, 1, 9, 10 = $log.entry[4], $log.entry[5], $log.entry[6], $log.entry[7]
   IFPWPRINT 3, 1, 1, 9, 10 = $log.entry[8], $log.entry[9], $log.entry[10], $log.entry[11]
 .END
+.PROGRAM pg.start ()
+  $command = ""
+  CALL process.data (.state)
+  IF NOT .state THEN
+    CALL log ("Wrong program name. State: WrongProgramName")
+    $action = "WrongProgramName"
+    TWAIT 5
+    RETURN
+  END
+  ; Change gripper if required
+  IF current.gripper <> gripper.type THEN
+    CALL log ("Required gripper change")
+    JMOVE #wait.pick
+    IF current.gripper <> 0 THEN
+      CALL gripper.put (current.gripper, current.gripper)
+    END
+    CALL gripper.pick (gripper.type, gripper.type)
+    current.gripper = gripper.type
+  END
+  current.intare = 1
+  current.outtare = 1
+  tare.counter = 0
+  full.counter = 0
+  ; First tare pick
+  CALL stock.in.take (intare.i[1], intare.j[1])
+  JMOVE #homep1
+  CALL stock.out.take (outtare.i[1], outtare.j[1])
+  JMOVE #homep1
+  JMOVE #wait.pick
+  ;
+  .keep.pick = TRUE
+  $action = "WaitForPick"
+  CALL log ("Wait for new pick. State: WaitForPick")
+  WHILE .keep.pick DO
+    ;
+    IF SIG (rs7.tare.chg) THEN
+      PULSE rs13.tare.ack, 10
+      JMOVE #homep1
+      CALL stock.out.back (outtare.i[current.outtare], outtare.j[current.outtare])
+      current.outtare = current.outtare + 1
+      CALL stock.out.take (outtare.i[current.outtare], outtare.j[current.outtare])
+      JMOVE #homep1
+      JMOVE #wait.pick
+      $action = "WaitForPick"
+      CALL log ("Wait for new pick. State: WaitForPick")
+    END
+    ;
+    IF $cycle.command == "PICK" AND NOT SIG (rs7.tare.chg) THEN
+      $cycle.command = ""
+      JMOVE #wait.pick
+      CALL stz.pick
+      CALL stz.put (positioner.id)
+      tare.counter = tare.counter + 1
+      full.counter = full.counter + 1
+      $action = "WaitForPick"
+      CALL log ("Wait for new pick. State: WaitForPick")
+    END
+    ;
+    IF $cycle.command == "NOPICK" THEN
+      $cycle.command = ""
+      IF current.intare <> intare.count THEN
+        JMOVE #homep1
+        CALL stock.in.back (intare.i[current.intare], intare.j[current.intare])
+        JMOVE #homep1
+        current.intare = current.intare + 1
+        CALL stock.in.back (intare.i[current.intare], intare.j[current.intare])
+      ELSE
+        .keep.pick = FALSE
+      END
+      $action = "WaitForPick"
+      CALL log ("Wait for new pick. State: WaitForPick")
+    END
+  END
+  ; Last tare put
+  CALL stock.out.back (outtare.i[intare.count], outtare.j[intare.count])
+  JMOVE #homep1
+  JMOVE #wait.pick
+  CALL stock.in.back (intare.i[outtare.count], intare.j[outtare.count])
+  ;
+  JMOVE #homep1
+  
+.END
+.PROGRAM process.data (.state)
+  SCASE $detail.type OF
+  SVALUE "LONGDETAILS":
+    ;PRINT 0: "LONGDETAILS"
+    intare.i[1] = 1
+    intare.j[1] = 1
+    intare.count = 1
+    ;
+    outtare.i[1] = 1
+    outtare.j[1] = 1
+    outtare.count = 1
+    ;
+    gripper.type = 1
+    ;
+    max.tare.count = 99
+    ;
+    positioner.id = 4
+    .state = TRUE
+    RETURN
+  END
+  ANY:
+    .state = FALSE
+    RETURN
+  
+.END
 .PROGRAM safe.home ()
   ; IMPLEMENT SAFE RETURN TO HOME POSITION
   CALL log("Moving to home position. State: MoveToHome")
@@ -564,6 +680,8 @@ N_INT102    "do.work[2]|"
   ;
   rs7.home1 = 1017 ; EIP
   rs7.work[1] = 1018 ; EIP
+  rs13.tare.ack = 20
+  rs7.tare.chg = 1020
   di.ifp.page[1] = 2001
   di.ifp.page[2] = 2002
   di.ifp.page[3] = 2003
@@ -583,6 +701,9 @@ N_INT102    "do.work[2]|"
   s.in1.disable = 2017
   s.in2.disable = 2018
   ;
+  s.sensor.iss = 2019
+  s.sensor.oss = 2020
+  s.sensor.ot = 2021
 .END
 .PROGRAM set.vars.pc ()
   ;
@@ -600,6 +721,10 @@ N_INT102    "do.work[2]|"
       $log.entry[.i] = " "
     END
   END
+  ;
+  IF NOT EXISTREAL("current.gripper")
+    current.gripper = 0
+  END
   ; Variables init
   ;
   ;tcp.socket = 0
@@ -610,6 +735,7 @@ N_INT102    "do.work[2]|"
   tyterm = 0
   ;
   $command = ""
+  $cycle.command = ""
 
 .END
 .PROGRAM stock.in.back (.i,.j)
@@ -715,7 +841,8 @@ N_INT102    "do.work[2]|"
   BREAK
   CALL log ("Wait sensor state. State: WaitInStockerSensor")
   $action = "WaitInStockerSensor"
-  SWAIT 1003
+  SWAIT s.sensor.iss
+  SIGNAL -s.sensor.iss
   .$temp = "Take pallet (" + $ENCODE (/L, .i) + ", " + $ENCODE (/L, .j) + ") from input stocker."
   CALL log (.$temp)
   CALL log ("State: TakingFromInStocker")
@@ -808,6 +935,7 @@ N_INT102    "do.work[2]|"
   ;
   LMOVE stocker.out[.i, .j] + TRANS (0, 0, 50)
   LMOVE stocker.out[.i, .j] + TRANS (0, 0, 200)
+  
 .END
 .PROGRAM stock.out.take (.i,.j)
   IF FALSE THEN
@@ -849,7 +977,8 @@ N_INT102    "do.work[2]|"
   BREAK
   CALL log ("Wait sensor state. State: WaitOutStockerSensor")
   $action = "WaitOutStockerSensor"
-  SWAIT 1003
+  SWAIT s.sensor.oss
+  SIGNAL -s.sensor.oss
   .$temp = "Take pallet (" + $ENCODE (/L, .i) + ", " + $ENCODE (/L, .j) + ") from output stocker."
   CALL log (.$temp)
   CALL log ("State: TakingFromOutStocker")
@@ -890,7 +1019,7 @@ N_INT102    "do.work[2]|"
   ;
   SPEED 100 ALWAYS
   ACCURACY 0.1 ALWAYS
-  TOOL tool.pick[hmi.tool.no]
+  TOOL tool.pick[current.gripper]
   ;
   cx = hmi.x
   cy = hmi.y
@@ -898,8 +1027,8 @@ N_INT102    "do.work[2]|"
   .ysh = 0
   .xsh = 0
   IF a == 180 THEN
-    .xsh = grip.180xsh[hmi.tool.no]
-    .ysh = grip.180ysh[hmi.tool.no]
+    .xsh = grip.180xsh[current.gripper]
+    .ysh = grip.180ysh[current.gripper]
   END
   IF hmi.x > center.x + 40 THEN
     cx = hmi.x - dist.xp * (hmi.x - center.x)
@@ -954,7 +1083,7 @@ N_INT102    "do.work[2]|"
   ;
   SPEED 100 ALWAYS
   ACCURACY 0 ALWAYS
-  ;TOOL tool.pick[.tool.no]
+  TOOL tool.pick[current.gripper]
   ;
   POINT .temp = #pos.pos[.pos]
   JMOVE .temp + TRANS (10, 0, 50)
@@ -976,12 +1105,93 @@ N_INT102    "do.work[2]|"
   .$temp = "Received "+ $ENCODE (.data.length) + " strings:"
   PRINT tcp.recv.ena: .$temp
   FOR .i = 1 TO .data.length
-    PRINT tcp.recv.ena: .$data[.i] 
+    PRINT tcp.recv.ena: .$data[.i]
   END
   ;
-  IF INSTR (.$data[1], "PICK") THEN
-    .$temp = $DECODE (.$data[1], ":", 0)
-    .$temp = $DECODE (.$data[1], ":", 1)
+  ; String format:
+  ; START;DETAILNAME;DETAILCOUNT;[INTAREID1,INTAREID2,..];[OTAREID1,INTAREID2,..];
+  IF INSTR (.$data[1], "START") THEN
+    ; Decode command
+    .$temp = $DECODE (.$data[1], ";", 0)
+    .$temp = $DECODE (.$data[1], ";", 1)
+    ; Decode detail type
+    $detail.type = $DECODE (.$data[1], ";", 0)
+    .$temp = $DECODE (.$data[1], ";", 1)
+    ; Decode detail count
+    detail.count = VAL ($DECODE (.$data[1], ";", 0))
+    .$temp = $DECODE (.$data[1], ";", 1)
+    ; Decode intare ids
+    $intare.ids = $DECODE (.$data[1], ";", 0)
+    ; Decode outtare ids
+    .$temp = $DECODE (.$data[1], ";", 1)
+    $outtare.ids = $DECODE (.$data[1], ";", 0)
+    $command = "START"
+  END
+  ;
+  ; String format:
+  ; SENSOR;SENSORNAME;STATE;
+  IF INSTR (.$data[1], "SENSOR") THEN
+    ; Decode command
+    .$temp = $DECODE (.$data[1], ";", 0)
+    .$temp = $DECODE (.$data[1], ";", 1)
+    ; Decode sensor name
+    .$sensor.name = $DECODE (.$data[1], ";", 0)
+    .$temp = $DECODE (.$data[1], ";", 1)
+    ; Decode sensor state
+    ;TYPE 0: .$data[1]
+    .$sensor.state = $DECODE (.$data[1], ";", 0)
+    ;
+    IF INSTR(.$sensor.state, "TRUE") THEN
+      TYPE 0: .$sensor.name, .$sensor.state
+      IF .$sensor.name == "STOCKERINTARESENSOR" THEN
+        SIGNAL s.sensor.iss
+      END
+      ;
+      IF .$sensor.name == "STOCKEROUTTARESENSOR" THEN
+        SIGNAL s.sensor.oss
+      END
+      ;
+      IF .$sensor.name == "OUTPALLETSENSOR" THEN
+        SIGNAL s.sensor.ot
+      END
+    END
+  END
+  ;
+  ; String format:
+  ; MEASUREMENT;STATE;
+  ;IF INSTR (.$data[1], "MEASUREMENT") THEN
+  ;  ; Decode command
+  ;  .$temp = $DECODE (.$data[1], ";", 0)
+  ;  .$temp = $DECODE (.$data[1], ";", 1)
+  ;  ; Decode measurement result
+  ;  .sensor.state = $DECODE (.$data[1], ";", 0)
+  ;END
+  ;
+  ; String format:
+  ; PAUSE;
+  ;
+  IF INSTR (.$data[1], "NOPICK") THEN
+    $cycle.command = "NOPICK"
+  END
+  ;
+  IF INSTR (.$data[1], "PAUSE") THEN
+    PULSE 2222
+  END
+  ;
+  ; String format:
+  ; RESUME;
+  IF INSTR (.$data[1], "RESUME") THEN
+    PULSE 2222
+  END
+  ;
+  ; String format:
+  ; ETALON;ID;
+  IF INSTR (.$data[1], "ETALON") THEN
+    $command = "ETALON"
+  END
+  IF INSTR (.$data[1], "PICK") AND NOT INSTR (.$data[1], "NO") THEN
+    .$temp = $DECODE (.$data[1], ";", 0)
+    .$temp = $DECODE (.$data[1], ";", 1)
     .$x = $DECODE (.$data[1], ",", 0)
     .$temp = $DECODE (.$data[1], ",", 1)
     .$y = $DECODE (.$data[1], ",", 0)
@@ -990,23 +1200,8 @@ N_INT102    "do.work[2]|"
     hmi.y = VAL (.$x) / 10
     hmi.x = VAL (.$y) / 10
     hmi.a = VAL (.$a)
+    $cycle.command = "PICK"
   END
-  ;
-  IF .$data[1] == "GO\n" THEN
-    MC ZPOWER ON
-    TWAIT 1
-    MC EXECUTE a.main
-  END
-  IF .$data[1] == "START\n" THEN
-    PULSE 2500
-  END
-  IF .$data[1] == "CONTINUE\n" THEN
-    PULSE 2501
-  END
-  ;
-  ;PRINT tcp.recv.ena: "Unhandled message. Return PING"
-  ;.$data[1] = "PING\n"
-  ;CALL tcp.send2.pc (.$data[], 1)
 .END
 .PROGRAM tcp.client.pc ()
   .tcp.retry.count = 10
@@ -1183,14 +1378,12 @@ N_INT102    "do.work[2]|"
 	; ALKU_RS013N
 	; @@@ HISTORY @@@
 	; @@@ INSPECTION @@@
-	; hmi.x
-	; hmi.y
-	; hmi.a
-	; $tcp.ip
-	; s.tcp.ena
-	; s.tcp.send.ena
-	; s.tcp.recv.ena
-	; tcp.send.ena
+	; $detail.type
+	; $intare.ids
+	; $outtare.ids
+	; $command
+	; current.gripper
+	; $cycle.command
 	; @@@ CONNECTION @@@
 	; KROSET R01
 	; 127.0.0.1
@@ -1291,6 +1484,9 @@ N_INT102    "do.work[2]|"
 	;   0:safe.home:F
 	;   0:a.test:F
 	;     .i 
+	;   0:process.data:F
+	;     .state 
+	;   0:pg.start:F
 	;   0:autostart.pc:B
 	;   Group:TCPIP:5
 	;     5:get.state.pc:B
@@ -1415,11 +1611,34 @@ N_INT102    "do.work[2]|"
 	; hmi.g180y 
 	; hmi.pos 
 	; hmi.pospos 
+	; current.gripper 
+	; dbg.tcp 
+	; detail.count 
+	; gripper.id 
+	; intare.count 
+	; intare.i[] 
+	; intare.j[] 
+	; max.tare.count 
+	; outtare.count 
+	; outtare.i[] 
+	; outtare.j[] 
+	; positioner.id 
+	; s.grip.sns1.dis 
+	; s.grip.sns2.dis 
+	; start.task 
+	; tcp.calb.dbg 
+	; tcp.dbg 
+	; tcp.recv.dbg 
+	; tcp.send.dbg 
 	; @@@ STRINGS @@@
 	; $tcp.ip 
 	; $action 
 	; $log.entry[] 
 	; $command 
+	; $detail.type 
+	; $intare.ids 
+	; $outtare.ids 
+	; $cycle.command 
 	; @@@ INTEGER @@@
 	; @@@ SIGNALS @@@
 	; capture.tare 
@@ -1446,6 +1665,11 @@ N_INT102    "do.work[2]|"
 	; s.in2.disable 
 	; rs13.det.put 
 	; rs7.det.picked 
+	; s.sensor.iss 
+	; s.sensor.oss 
+	; s.sensor.ot 
+	; rs7.tare.chg 
+	; rs13.tare.ack 
 	; @@@ TOOLS @@@
 	; tool.pin 
 	; tool.pick[] 
@@ -1576,16 +1800,16 @@ hmi.gx = 4
 hmi.gy = -2.2
 hmi.x = 121.006
 hmi.y = 274.214
-ip[1] = 192
-ip[2] = 168
-ip[3] = 7
-ip[4] = 137
+ip[1] = 127
+ip[2] = 0
+ip[3] = 0
+ip[4] = 1
 release.tare = 1
 tcp.connect.tmo = 5
 tcp.port = 9013
 tcp.receive.tmo = 5
 tcp.send.tmo = 5
-tcp.socket = 532
+tcp.socket = 512
 tyterm = 0
 capture.grip = 6
 hmi.t.pos = 1
@@ -1595,8 +1819,8 @@ grip.clamp = 4
 grip.unclamp = 3
 center.x = 147.8
 center.y = 245.4
-cx = 121.009
-cy = 273.788
+cx = 121.006
+cy = 273.782
 dist.xn = 0.001
 dist.xp = 0.015
 dist.yn = 0.015
@@ -1628,7 +1852,7 @@ tcp.send.ena = -1
 s.tcp.send.ena = 2011
 s.tcp.recv.ena = 2012
 s.tcp.ena = 2013
-tcp.recv.ena = -1
+tcp.recv.ena = 0
 tcp.ena = -1
 s.apply.coord = 2014
 keep.tool.no = 1
@@ -1690,6 +1914,30 @@ s.in1.disable = 2017
 s.in2.disable = 2018
 rs13.det.put = 19
 rs7.det.picked = 1019
+s.sensor.iss = 2019
+s.sensor.oss = 2020
+s.sensor.ot = 2021
+current.gripper = 0
+rs7.tare.chg = 1020
+rs13.tare.ack = 20
+dbg.tcp = -1
+detail.count = 230
+gripper.id = 1
+intare.count = 1
+intare.i[1] = 1
+intare.j[1] = 1
+max.tare.count = 99
+outtare.count = 1
+outtare.i[1] = 1
+outtare.j[1] = 1
+positioner.id = 1
+s.grip.sns1.dis = 2015
+s.grip.sns2.dis = 2016
+start.task = 2001
+tcp.calb.dbg = -1
+tcp.dbg = -1
+tcp.recv.dbg = -1
+tcp.send.dbg = -1
 .END
 .STRINGS
 $tcp.ip = "192.168.7.137"
@@ -1707,4 +1955,8 @@ $log.entry[9] = "16:42:15 Return pallet (1, 1) to input stocker."
 $log.entry[10] = "16:42:15 State: ReturnToInStocker"
 $log.entry[11] = "16:42:15 Wait stz pneumatic open. State: WaitPneumaticOpen"
 $command = ""
+$detail.type = ""
+$intare.ids = ""
+$outtare.ids = ""
+$cycle.command = ""
 .END

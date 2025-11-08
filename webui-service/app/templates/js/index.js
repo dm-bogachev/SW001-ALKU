@@ -108,7 +108,7 @@ function updateRobotStatus(robotType, data) {
         if (element) {
             const status = robotData[key] ? statusMap[key] : 'off';
             setStatusLight(`${robotType}-${key}`, status);
-            console.log(`Updating ${robotType}-${key}:`, { value: robotData[key], status });
+            //console.log(`Updating ${robotType}-${key}:`, { value: robotData[key], status });
         } else {
             console.error(`Element not found: ${robotType}-${key}`);
         }
@@ -623,6 +623,12 @@ async function updateObjectsList() {
             const y = firstObject.pick_point[1].toFixed(2);
             const angle = firstObject.pick_angle.toFixed(2);
             console.log(`Отправка данных о точке захвата: x=${x}, y=${y}, angle=${angle}`);
+            // Check if commands should be sent
+            const sendCommandsSwitch = document.getElementById('send-commands-switch');
+            if (!sendCommandsSwitch || !sendCommandsSwitch.checked) {
+                console.log('Command sending is disabled');
+                return;
+            }
             // Отправляем POST запрос с данными о точке и угле
             fetch(`${RS013N_API_URL}/send_pick_data?x=${x}&y=${y}&angle=${angle}`, {
                 method: 'POST',
@@ -642,44 +648,44 @@ async function updateObjectsList() {
     setTimeout(updateObjectsList, 2000);
 }
 
-async function sendRobotCommand(robotType, command) {
-    const apiUrl = robotType === 'rs013n' ? RS0013N_API_URL : RS007L_API_URL;
-    const actionElement = document.getElementById(`${robotType}-action`);
+// async function sendRobotCommand(robotType, command) {
+//     const apiUrl = robotType === 'rs013n' ? RS0013N_API_URL : RS007L_API_URL;
+//     const actionElement = document.getElementById(`${robotType}-action`);
 
-    try {
-        actionElement.textContent = `Отправка команды ${command}...`;
-        actionElement.className = 'robot-status-action processing';
+//     try {
+//         actionElement.textContent = `Отправка команды ${command}...`;
+//         actionElement.className = 'robot-status-action processing';
 
-        const response = await fetch(`${apiUrl}/${command}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
+//         const response = await fetch(`${apiUrl}/${command}`, {
+//             method: 'POST',
+//             headers: {
+//                 'Content-Type': 'application/json',
+//             },
+//         });
 
-        if (!response.ok) {
-            throw new Error(`Ошибка HTTP: ${response.status}`);
-        }
+//         if (!response.ok) {
+//             throw new Error(`Ошибка HTTP: ${response.status}`);
+//         }
 
-        const data = await response.json();
-        actionElement.textContent = `Команда ${command} выполнена: ${data.Status}`;
-        actionElement.className = 'robot-status-action success';
+//         const data = await response.json();
+//         actionElement.textContent = `Команда ${command} выполнена: ${data.Status}`;
+//         actionElement.className = 'robot-status-action success';
 
-        // Обновляем статус робота после выполнения команды
-        fetchRobotStatus(robotType);
+//         // Обновляем статус робота после выполнения команды
+//         fetchRobotStatus(robotType);
 
-    } catch (error) {
-        console.error(`Ошибка при выполнении команды ${command}:`, error);
-        actionElement.textContent = `Ошибка: ${error.message}`;
-        actionElement.className = 'robot-status-action error';
-    } finally {
-        // Через 5 секунд возвращаем стандартный текст
-        setTimeout(() => {
-            actionElement.textContent = 'Ожидание...';
-            actionElement.className = 'robot-status-action';
-        }, 5000);
-    }
-}
+//     } catch (error) {
+//         console.error(`Ошибка при выполнении команды ${command}:`, error);
+//         actionElement.textContent = `Ошибка: ${error.message}`;
+//         actionElement.className = 'robot-status-action error';
+//     } finally {
+//         // Через 5 секунд возвращаем стандартный текст
+//         setTimeout(() => {
+//             actionElement.textContent = 'Ожидание...';
+//             actionElement.className = 'robot-status-action';
+//         }, 5000);
+//     }
+// }
 
 // Easter Egg Animation Function
 function showEasterEgg() {
@@ -769,7 +775,7 @@ function uncalibrate() {
 }
 
 async function sendRobotCommand(robotType, command) {
-    const apiUrl = robotType === 'rs013n' ? RS0013N_API_URL : RS007L_API_URL;
+    const apiUrl = robotType === 'rs013n' ? RS013N_API_URL : RS007L_API_URL;
     const actionElement = document.getElementById(`${robotType}-action`);
 
     try {

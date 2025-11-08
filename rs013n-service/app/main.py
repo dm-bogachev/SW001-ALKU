@@ -80,7 +80,7 @@ def status():
 def send_pick_data(x: float, y: float, angle: float):
     """ Отправка данных захвата на выполнение """
     logger.debug("Запрос /send_pick_data")
-    robot.send(f"PICK:{x},{y},{angle}\n")
+    robot.send(f"PICK;{x},{y},{angle}\n")
     logger.debug(f"Отправлено данные захвата: {x}, {y}, {angle}")
     return {"Status": "OK"}
 

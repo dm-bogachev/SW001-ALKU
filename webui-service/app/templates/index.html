@@ -181,8 +181,16 @@
         <section class="tab-content" id="robots">
             <div class="robots-container">
                 <h2>Роботы</h2>
+                <!-- Отправлять команды (вкл/выкл) -->
+                <div class="robot-send-toggle" style="margin:10px 0; display:flex; align-items:center; gap:8px;">
+                    <label class="switch" style="margin:0;">
+                        <input type="checkbox" id="send-commands-switch" checked>
+                        <span class="slider"></span>
+                    </label>
+                    <div style="font-size:14px;">Отправлять команды</div>
+                </div>
                 <div class="robot-status-container">
-                    
+
                     <!-- RS013N Status -->
                     <div class="robot-column">
                         <h3>RS013N</h3>
