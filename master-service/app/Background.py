@@ -16,6 +16,47 @@ logger = config_logger("master-service/Master.py")
 
 
 class Background(Thread):
+
+    def debug_pick(self):
+        logger.debug("Вызов отладки: Pick")
+        resp = requests.post(f"{RS013N_API_URL}/send_pick_data?x=22&y=22&angle=0",
+                    headers={'accept': 'application/json'},
+                    timeout=1)  # Added timeout
+        if resp.status_code != 200:
+            logger.error(f"Ошибка отправки данных захвата на RS013N: {resp.text}")
+        else:
+            logger.info(f"Данные захвата успешно отправлены на RS013N: x=22, y=22, angle=0")
+
+    def debug_intare_sensor_ok(self):
+        logger.debug("Вызов отладки: InTareSensor=OK")
+        self.send_sensor_state("stockerintaresensor", True)
+
+    def debug_outtare_sensor_ok(self):
+        logger.debug("Вызов отладки: OutTareSensor=OK")
+        self.send_sensor_state("stockerouttaresensor", True)
+
+    def debug_pneumo_open(self):
+        logger.debug("Вызов отладки: PNEUMOOPEN")
+        command = f"PNEUMOOPEN;"
+        resp = requests.post(f"{RS013N_API_URL}/send_command?command={command}",
+                            headers={'accept': 'application/json'},
+                            timeout=1)  # Added timeout
+        if resp.status_code != 200:
+            logger.error(f"Ошибка отправки команды на RS013N: {resp.text}")
+        else:
+            logger.info(f"Команда отправлена на RS013N: {command}")
+
+    def debug_pneumo_close(self):
+        logger.debug("Вызов отладки: PNEUMOCLOSE")
+        command = f"PNEUMOCLOSE;"
+        resp = requests.post(f"{RS013N_API_URL}/send_command?command={command}",
+                            headers={'accept': 'application/json'},
+                            timeout=1)  # Added timeout
+        if resp.status_code != 200:
+            logger.error(f"Ошибка отправки команды на RS013N: {resp.text}")
+        else:
+            logger.info(f"Команда отправлена на RS013N: {command}")
+
     def __init__(self, data_collector: DataCollector):
         super().__init__()
         self.__stop_event = Event()
@@ -210,11 +251,17 @@ class Background(Thread):
                         value = response_data[0]["Value"] if isinstance(response_data, list) and len(response_data) > 0 and "Value" in response_data[0] else None
                         if resp.status_code == 200 and value == 1:
                             logger.info("Пневматика успешно закрыта (сигнал с IO-сервиса)")
-                            break
                         else:
                             logger.warning("Пневматика не закрыта (отсутствует сигнал с IO-сервиса)")
                             continue
-                    resp = requests.post(f"{RS013N_API_URL}/continue", timeout=2)
+                        command = f"PNEUMOCLOSE;"
+                        resp = requests.post(f"{RS013N_API_URL}/send_command?command={command}",
+                                            headers={'accept': 'application/json'},
+                                            timeout=1)  # Added timeout
+                        if resp.status_code != 200:
+                            logger.error(f"Ошибка отправки команды на RS013N: {resp.text}")
+                        else:
+                            logger.info(f"Команда отправлена на RS013N: {command}")
 
                 if rs13_action.lower() == "waitpneumaticopen":
                     while True:
@@ -241,11 +288,17 @@ class Background(Thread):
                         value = response_data[0]["Value"] if isinstance(response_data, list) and len(response_data) > 0 and "Value" in response_data[0] else None
                         if resp.status_code == 200 and value == 1:
                             logger.info("Пневматика успешно закрыта (сигнал с IO-сервиса)")
-                            break
                         else:
                             logger.warning("Пневматика не закрыта (отсутствует сигнал с IO-сервиса)")
                             continue
-                    resp = requests.post(f"{RS013N_API_URL}/continue", timeout=2)
+                        command = f"PNEUMOOPEN;"
+                        resp = requests.post(f"{RS013N_API_URL}/send_command?command={command}",
+                                            headers={'accept': 'application/json'},
+                                            timeout=1)  # Added timeout
+                        if resp.status_code != 200:
+                            logger.error(f"Ошибка отправки команды на RS013N: {resp.text}")
+                        else:
+                            logger.info(f"Команда отправлена на RS013N: {command}")
 
                 if rs13_action.lower() == "waitforpick":
                     resp = requests.get(f"{CV_API_URL}/get_first_object", timeout=2)

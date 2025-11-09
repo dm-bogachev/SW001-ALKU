@@ -147,6 +147,51 @@ def check_etalon(etalon_id: int):
                 }
     return {"Status": "OK"}
 
+@app.post("/master/debug/intare_sensor_ok")
+def debug_intare_sensor_ok():
+    """ Отладка: сигнал сенсора входных тар """
+    logger.debug("Запрос /master/debug/intare_sensor_ok")
+    if not master.debug_intare_sensor_ok():
+        return {"Status": "Failed",
+                "Code": -1,
+                "Reason": "Error in sending to robot"
+                }
+    return {"Status": "OK"}
+
+@app.post("/master/debug/outtare_sensor_ok")
+def debug_outtare_sensor_ok():
+    """ Отладка: сигнал сенсора выходных тар """
+    logger.debug("Запрос /master/debug/outtare_sensor_ok")
+    if not master.debug_outtare_sensor_ok():
+        return {"Status": "Failed",
+                "Code": -1,
+                "Reason": "Error in sending to robot"
+                }
+    return {"Status": "OK"}
+
+@app.post("/master/debug/pneumo_open")
+def debug_pneumo_open():
+    """ Отладка: сигнал пневматики """
+    logger.debug("Запрос /master/debug/pneumo_open")
+    if not master.debug_pneumo_open():
+        return {"Status": "Failed",
+                "Code": -1,
+                "Reason": "Error in sending to robot"
+                }
+    return {"Status": "OK"}
+
+@app.post("/master/debug/pneumo_close")
+def debug_pneumo_close():
+    """ Отладка: сигнал пневматики """
+    logger.debug("Запрос /master/debug/pneumo_close")
+    if not master.debug_pneumo_close():
+        return {"Status": "Failed",
+                "Code": -1,
+                "Reason": "Error in sending to robot"
+                }
+    return {"Status": "OK"}
+
+
 @app.get("/data")
 def get_data():
     """ Получение собранных данных """

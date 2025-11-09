@@ -35,6 +35,9 @@ N_INT18    "s.in2.disable|"
 N_INT19    "s.sensor.iss|"
 N_INT20    "s.sensor.oss|"
 N_INT21    "s.sensor.ot|"
+N_INT22    "s.pneumo.open|"
+N_INT23    "s.pneumo.close|"
+N_INT24    "s.debug|"
 N_INT102    "do.work[2]|"
 .END
 .INTER_PANEL_D
@@ -71,7 +74,8 @@ N_INT102    "do.work[2]|"
 92,8,"hmi.st.out.j","OUTSTOCKER","SELECT ROW",10,15,4,2,0
 95,8,"hmi.t.pos","TOOL CHANG"," POSITION",10,15,2,1,0
 97,2,"","   OPEN","PNEUMATICS","",10,4,15,2016,0
-102,8,"hmi.pos.pos","POSITIONER"," POSITION",10,15,2,1,0
+102,8,"hmi.obj.id","  OBJECT","    ID",10,15,2,1,0
+104,4,1,"OFF     ON","","","  DEBUG ",10,4,4,0,2024,0
 105,2,"","   MAIN","<---------","",10,4,15,2001,0
 111,2,"","   STZ","--------->","",10,4,15,2005,0
 112,8,"dist.xp","DISTORTION"," X+ COEFF",10,15,4,2,0
@@ -223,11 +227,11 @@ N_INT102    "do.work[2]|"
 .PROGRAM a.teach.pos ()
   TOOL tool.pick[hmi.tool.no]
   ;
-  POINT .temp = #pos.pos[hmi.pos.pos]
+  POINT .temp = #pos.pos[hmi.obj.id]
   JMOVE .temp + TRANS (10, 0, 50)
   LMOVE .temp + TRANS (10, 0, 20)
   BREAK
-  LMOVE #pos.pos[hmi.pos.pos]
+  LMOVE #pos.pos[hmi.obj.id]
   BREAK
   TWAIT 0.5
   LMOVE .temp + TRANS (0, 0, 50)
@@ -516,6 +520,15 @@ N_INT102    "do.work[2]|"
   SPEED 100 ALWAYS
   LMOVE .temp + TRANS (0, 0, 200)
 .END
+.PROGRAM id4 () ; 312.229.002_1
+    ; Object ID (Use in stz.put)
+    object.id = 4
+    ; Working gripper
+    gripper.type = 1
+    ; Max objects in output tare
+    max.tare.count = 99
+    ;
+.END
 .PROGRAM log (.$msg)
   FOR .i = 0 TO 10
     $log.entry[.i] = $log.entry[.i + 1]
@@ -577,7 +590,7 @@ N_INT102    "do.work[2]|"
       $cycle.command = ""
       JMOVE #wait.pick
       CALL stz.pick
-      CALL stz.put (positioner.id)
+      CALL stz.put (object.id)
       tare.counter = tare.counter + 1
       full.counter = full.counter + 1
       $action = "WaitForPick"
@@ -587,11 +600,10 @@ N_INT102    "do.work[2]|"
     IF $cycle.command == "NOPICK" THEN
       $cycle.command = ""
       IF current.intare <> intare.count THEN
-        JMOVE #homep1
         CALL stock.in.back (intare.i[current.intare], intare.j[current.intare])
         JMOVE #homep1
         current.intare = current.intare + 1
-        CALL stock.in.back (intare.i[current.intare], intare.j[current.intare])
+        CALL stock.in.take (intare.i[current.intare], intare.j[current.intare])
       ELSE
         .keep.pick = FALSE
       END
@@ -609,29 +621,64 @@ N_INT102    "do.work[2]|"
   
 .END
 .PROGRAM process.data (.state)
-  SCASE $detail.type OF
-  SVALUE "LONGDETAILS":
-    ;PRINT 0: "LONGDETAILS"
-    intare.i[1] = 1
-    intare.j[1] = 1
-    intare.count = 1
-    ;
-    outtare.i[1] = 1
-    outtare.j[1] = 1
-    outtare.count = 1
-    ;
-    gripper.type = 1
-    ;
-    max.tare.count = 99
-    ;
-    positioner.id = 4
-    .state = TRUE
-    RETURN
+  ;
+  intare.count = 1
+  outtare.count = 1
+  ;
+  .break = FALSE
+  WHILE NOT .break DO
+    ;TYPE 0: "intares", $intare.ids
+    IF INSTR ($intare.ids, ",")
+      .id = VAL ($DECODE ($intare.ids, ",", 0))
+      CALL s.in.table (.id, intare.i[intare.count], intare.j[intare.count])
+      ; TYPE 0: "idx", intare.i[intare.count], intare.j[intare.count]
+      .$temp = $DECODE ($intare.ids, ",", 1)
+      intare.count = intare.count + 1
+     
+    ELSE
+      .id = VAL ($intare.ids)
+      CALL s.in.table (.id, intare.i[intare.count], intare.j[intare.count])
+      ;TYPE 0: "idx", intare.i[intare.count], intare.j[intare.count]
+      .break = TRUE
+    END
   END
-  ANY:
-    .state = FALSE
-    RETURN
+  ;
+  .break = FALSE
+  WHILE NOT .break DO
+    ;TYPE 0: "intares", $intare.ids
+    IF INSTR ($outtare.ids, ",")
+      .id =  VAL ($DECODE ($outtare.ids, ",", 0))
+      CALL s.out.table (.id, outtare.i[outtare.count], outtare.j[outtare.count])
+      ;TYPE 0: "idx", intare.i[intare.count], intare.j[intare.count]
+      .$temp = $DECODE ($outtare.ids, ",", 1)
+      outtare.count = outtare.count + 1
+    ELSE
+      .id = VAL ($outtare.ids)
+      CALL s.out.table (.id, outtare.i[outtare.count], outtare.j[outtare.count]) 
+ ;TYPE 0: "idx", intare.i[intare.count], intare.j[intare.count]     
+      .break = TRUE
+    END
+  END
+  ;
+  ;
+  SCASE $detail.type OF
+    SVALUE "312.229.002_1":
+      CALL id4
+      .state = TRUE
+      RETURN
+  END
+ANY:
+  .state = FALSE
+  RETURN
   
+.END
+.PROGRAM s.in.table (.no,.i,.j)
+  .j = INT((.no-1)/3) + 1
+  .i = INT((.no-1) MOD 3) + 1
+.END
+.PROGRAM s.out.table (.no,.i,.j)
+  .j = INT((.no-1)/4) + 1
+  .i = INT((.no-1) MOD 4) + 1
 .END
 .PROGRAM safe.home ()
   ; IMPLEMENT SAFE RETURN TO HOME POSITION
@@ -704,6 +751,11 @@ N_INT102    "do.work[2]|"
   s.sensor.iss = 2019
   s.sensor.oss = 2020
   s.sensor.ot = 2021
+  ;
+  s.pneumo.open = 2022
+  s.pneumo.close = 2023
+  ;
+  s.debug = 2024
 .END
 .PROGRAM set.vars.pc ()
   ;
@@ -765,8 +817,14 @@ N_INT102    "do.work[2]|"
   ;
   CALL log ("Wait stz pneumatic open. State: WaitPneumaticOpen")
   $action = "WaitPneumaticOpen"
-  SWAIT 2501
+  SWAIT s.pneumo.open
+  TWAIT 0.5
+  SIGNAL -s.pneumo.open
   ;
+  .$temp = "Return pallet (" + $ENCODE (/L, .i) + ", " + $ENCODE (/L, .j) + ") to input stocker."
+  CALL log (.$temp)
+  CALL log ("State: ReturnToInStocker")
+  $action = "ReturnToInStocker"
   ;
   ACCURACY 0
   SPEED 50 MM/S
@@ -873,7 +931,9 @@ N_INT102    "do.work[2]|"
   ;
   CALL log ("Wait stz pneumatic close. State: WaitPneumaticClose")
   $action = "WaitPneumaticClose"
-  SWAIT 2501
+  SWAIT s.pneumo.close
+  TWAIT 0.5
+  SIGNAL -s.pneumo.close
   ;
   LMOVE #before.stz
   ;
@@ -1141,18 +1201,18 @@ N_INT102    "do.work[2]|"
     ;TYPE 0: .$data[1]
     .$sensor.state = $DECODE (.$data[1], ";", 0)
     ;
-    IF INSTR(.$sensor.state, "TRUE") THEN
-      TYPE 0: .$sensor.name, .$sensor.state
+    IF INSTR (.$sensor.state, "TRUE") THEN
+      ;TYPE 0: .$sensor.name, .$sensor.state
       IF .$sensor.name == "STOCKERINTARESENSOR" THEN
-        SIGNAL s.sensor.iss
+        PULSE s.sensor.iss, 5
       END
       ;
       IF .$sensor.name == "STOCKEROUTTARESENSOR" THEN
-        SIGNAL s.sensor.oss
+        PULSE s.sensor.oss, 5
       END
       ;
       IF .$sensor.name == "OUTPALLETSENSOR" THEN
-        SIGNAL s.sensor.ot
+        PULSE s.sensor.ot, 5
       END
     END
   END
@@ -1189,6 +1249,18 @@ N_INT102    "do.work[2]|"
   IF INSTR (.$data[1], "ETALON") THEN
     $command = "ETALON"
   END
+  ;
+  ; PNEUMOOPEN;
+  IF INSTR (.$data[1], "PNEUMOOPEN") THEN
+    PULSE s.pneumo.open, 5
+  END
+  ;
+    ; PNEUMOCLOSE;
+  IF INSTR (.$data[1], "PNEUMOCLOSE") THEN
+    PULSE s.pneumo.close, 5
+  END
+  ;
+  ;
   IF INSTR (.$data[1], "PICK") AND NOT INSTR (.$data[1], "NO") THEN
     .$temp = $DECODE (.$data[1], ";", 0)
     .$temp = $DECODE (.$data[1], ";", 1)
@@ -1202,6 +1274,7 @@ N_INT102    "do.work[2]|"
     hmi.a = VAL (.$a)
     $cycle.command = "PICK"
   END
+  .$data[1] = ""
 .END
 .PROGRAM tcp.client.pc ()
   .tcp.retry.count = 10
@@ -1369,6 +1442,15 @@ N_INT102    "do.work[2]|"
       TWAIT 2
     END
     ;
+    IF NOT SIG(s.debug) THEN
+      IF SWITCH(REPEAT) AND NOT SWITCH(TEACH_LOCK) AND NOT SWITCH(EMERGENCY) AND NOT SWITCH(CS) THEN
+        MC ZPOWER ON 
+        WAIT SWITCH(POWER)
+        ;
+        MC CONTINUE
+      END
+    END
+    ;
     TWAIT 0.01
   END
 .END
@@ -1384,16 +1466,43 @@ N_INT102    "do.work[2]|"
 	; $command
 	; current.gripper
 	; $cycle.command
+	; intare.i[1]
+	; intare.j[1]
+	; current.outtare
+	; s.pneumo.open
 	; @@@ CONNECTION @@@
 	; KROSET R01
 	; 127.0.0.1
 	; 9105
 	; @@@ PROGRAM @@@
-	;   0:a.align:F
-	;   0:a.home:F
-	;   0:a.main:F
-	;   Group:Teach:1
-	;     1:a.teach.stz:F
+	;   Group:Utils:1
+	;     1:a.home:F
+	;     1:a.align:F
+	;     1:a.test:F
+	;       .i 
+	;     1:log:F
+	;       .$msg 
+	;       .i 
+	;     1:safe.home:F
+	;   Group:Main:2
+	;     2:a.main:F
+	;     2:pg.start:F
+	;       .state 
+	;       .keep.pick 
+	;     2:process.data:F
+	;       .state 
+	;     2:s.in.table:F
+	;       .no 
+	;       .i 
+	;       .j 
+	;     2:s.out.table:F
+	;       .no 
+	;       .i 
+	;       .j 
+	;   Group:Objects:3
+	;     3:id4:F
+	;   Group:Teach:4
+	;     4:a.teach.stz:F
 	;       .plb 
 	;       .plt 
 	;       .prt 
@@ -1402,47 +1511,47 @@ N_INT102    "do.work[2]|"
 	;       .dx2 
 	;       .dy1 
 	;       .dy2 
-	;     1:a.tch.stock.in:F
+	;     4:a.tch.stock.in:F
 	;       .i 
 	;       .j 
-	;     1:a.tch.stock.out:F
+	;     4:a.tch.stock.out:F
 	;       .i 
 	;       .j 
-	;     1:a.teach.pos:F
+	;     4:a.teach.pos:F
 	;       .temp 
-	;     1:a.teach.gripper:F
+	;     4:a.teach.gripper:F
 	;       .temp 
-	;     1:a.test.pick:F
+	;     4:a.test.pick:F
 	;       .ysh 
 	;       .xsh 
 	;       .pick 
 	;       .c 
 	;       .#pick.in 
-	;   Group:STZ:2
-	;     2:stz.pick:F
+	;   Group:STZ:5
+	;     5:stz.pick:F
 	;       .$temp 
 	;       .ysh 
 	;       .xsh 
 	;       .pick 
 	;       .c 
 	;       .#pick.in 
-	;     2:stz.put:F
+	;     5:stz.put:F
 	;       .pos 
 	;       .$temp 
 	;       .temp 
-	;   Group:ToolChange:3
-	;     3:gripper.pick:F
-	;       .pos 
-	;       .tool.no 
-	;       .$temp 
-	;       .temp 
-	;     3:gripper.put:F
+	;   Group:ToolChange:6
+	;     6:gripper.pick:F
 	;       .pos 
 	;       .tool.no 
 	;       .$temp 
 	;       .temp 
-	;   Group:Stockers:4
-	;     4:stock.in.take:F
+	;     6:gripper.put:F
+	;       .pos 
+	;       .tool.no 
+	;       .$temp 
+	;       .temp 
+	;   Group:Stockers:7
+	;     7:stock.in.take:F
 	;       .i 
 	;       .j 
 	;       .$temp 
@@ -1451,7 +1560,7 @@ N_INT102    "do.work[2]|"
 	;       .ct2 
 	;       .mid.point 
 	;       .put.stz 
-	;     4:stock.in.back:F
+	;     7:stock.in.back:F
 	;       .i 
 	;       .j 
 	;       .$temp 
@@ -1460,7 +1569,7 @@ N_INT102    "do.work[2]|"
 	;       .ct2 
 	;       .mid.point 
 	;       .put.stz 
-	;     4:stock.out.take:F
+	;     7:stock.out.take:F
 	;       .i 
 	;       .j 
 	;       .$temp 
@@ -1469,7 +1578,7 @@ N_INT102    "do.work[2]|"
 	;       .ct2 
 	;       .mid.point 
 	;       .put.outpal 
-	;     4:stock.out.back:F
+	;     7:stock.out.back:F
 	;       .i 
 	;       .j 
 	;       .$temp 
@@ -1478,39 +1587,39 @@ N_INT102    "do.work[2]|"
 	;       .ct2 
 	;       .mid.point 
 	;       .put.outpal 
-	;   0:log:F
-	;     .$msg 
-	;     .i 
-	;   0:safe.home:F
-	;   0:a.test:F
-	;     .i 
-	;   0:process.data:F
-	;     .state 
-	;   0:pg.start:F
-	;   0:autostart.pc:B
-	;   Group:TCPIP:5
-	;     5:get.state.pc:B
+	;   Group:Autostart:8
+	;     8:watchdog.pc:B
+	;     8:set.vars.pc:B
+	;       .i 
+	;     8:set.io.pc:B
+	;       .home1 
+	;       .work 
+	;     8:autostart.pc:B
+	;   Group:TCPIP:9
+	;     9:get.state.pc:B
 	;       .$state 
-	;     5:sender.pc:B
+	;     9:sender.pc:B
 	;       .$data 
 	;       .pc 
-	;     5:tcp.send2.pc:B
+	;     9:tcp.send2.pc:B
 	;       .$data 
 	;       .data.length 
 	;       .status 
 	;       .$temp 
 	;       .i 
 	;       .$data[] 
-	;     5:tcp.callback.pc:B
+	;     9:tcp.callback.pc:B
 	;       .$data 
 	;       .data.length 
 	;       .$temp 
 	;       .i 
+	;       .$sensor.name 
+	;       .$sensor.state 
 	;       .$x 
 	;       .$y 
 	;       .$a 
 	;       .pc 
-	;     5:tcp.client.pc:B
+	;     9:tcp.client.pc:B
 	;       .tcp.retry.count 
 	;       .number 
 	;       .ports 
@@ -1527,7 +1636,7 @@ N_INT102    "do.work[2]|"
 	;       .tcp.error.cnt 
 	;       .$tcp.request 
 	;       .request.size 
-	;     5:tcp.send3.pc:B
+	;     9:tcp.send3.pc:B
 	;       .$data 
 	;       .data.length 
 	;       .status 
@@ -1536,12 +1645,6 @@ N_INT102    "do.work[2]|"
 	;       .tcp.error.cnt 
 	;       .$data[] 
 	;   0:errstart.pc:B
-	;   0:watchdog.pc:B
-	;   0:set.io.pc:B
-	;     .home1 
-	;     .work 
-	;   0:set.vars.pc:B
-	;     .i 
 	; @@@ TRANS @@@
 	; stocker.in[] 
 	; stocker.out[] 
@@ -1595,7 +1698,7 @@ N_INT102    "do.work[2]|"
 	; hmi.ext.x 
 	; hmi.ext.y 
 	; a 
-	; hmi.pos.pos 
+	; hmi.obj.id 
 	; tcp.send.ena 
 	; tcp.recv.ena 
 	; tcp.ena 
@@ -1630,6 +1733,13 @@ N_INT102    "do.work[2]|"
 	; tcp.dbg 
 	; tcp.recv.dbg 
 	; tcp.send.dbg 
+	; current.intare 
+	; current.outtare 
+	; full.counter 
+	; gripper.type 
+	; hmi.pos.pos 
+	; object.id 
+	; tare.counter 
 	; @@@ STRINGS @@@
 	; $tcp.ip 
 	; $action 
@@ -1670,6 +1780,9 @@ N_INT102    "do.work[2]|"
 	; s.sensor.ot 
 	; rs7.tare.chg 
 	; rs13.tare.ack 
+	; s.pneumo.open 
+	; s.pneumo.close 
+	; s.debug 
 	; @@@ TOOLS @@@
 	; tool.pin 
 	; tool.pick[] 
@@ -1798,8 +1911,8 @@ hmi.st.out.j = 1
 capture.tare = 2
 hmi.gx = 4
 hmi.gy = -2.2
-hmi.x = 121.006
-hmi.y = 274.214
+hmi.x = 2.2
+hmi.y = 2.2
 ip[1] = 127
 ip[2] = 0
 ip[3] = 0
@@ -1809,7 +1922,7 @@ tcp.connect.tmo = 5
 tcp.port = 9013
 tcp.receive.tmo = 5
 tcp.send.tmo = 5
-tcp.socket = 512
+tcp.socket = 488
 tyterm = 0
 capture.grip = 6
 hmi.t.pos = 1
@@ -1819,8 +1932,8 @@ grip.clamp = 4
 grip.unclamp = 3
 center.x = 147.8
 center.y = 245.4
-cx = 121.006
-cy = 273.782
+cx = 2.3456
+cy = 5.848
 dist.xn = 0.001
 dist.xp = 0.015
 dist.yn = 0.015
@@ -1828,7 +1941,7 @@ dist.yp = 0.015
 do.bat.alm = 2010
 do.home1 = 17
 do.work[1] = 18
-hmi.a = 180
+hmi.a = 0
 hmi.gz = 6
 hmi.stnew.i = 1
 hmi.stnew.j = 1
@@ -1836,8 +1949,8 @@ hmi.ext.x = -38
 hmi.ext.y = -4
 grip.unclamped = 1001
 grip.clamped = 1002
-a = 180
-hmi.pos.pos = 4
+a = 0
+hmi.obj.id = 4
 rs7.home1 = 1017
 rs7.work[1] = 1018
 di.ifp.page[1] = 2001
@@ -1852,7 +1965,7 @@ tcp.send.ena = -1
 s.tcp.send.ena = 2011
 s.tcp.recv.ena = 2012
 s.tcp.ena = 2013
-tcp.recv.ena = 0
+tcp.recv.ena = -1
 tcp.ena = -1
 s.apply.coord = 2014
 keep.tool.no = 1
@@ -1917,20 +2030,20 @@ rs7.det.picked = 1019
 s.sensor.iss = 2019
 s.sensor.oss = 2020
 s.sensor.ot = 2021
-current.gripper = 0
+current.gripper = 1
 rs7.tare.chg = 1020
 rs13.tare.ack = 20
 dbg.tcp = -1
-detail.count = 230
+detail.count = 20
 gripper.id = 1
-intare.count = 1
+intare.count = 2
 intare.i[1] = 1
-intare.j[1] = 1
+intare.j[1] = 3
 max.tare.count = 99
 outtare.count = 1
 outtare.i[1] = 1
 outtare.j[1] = 1
-positioner.id = 1
+positioner.id = 4
 s.grip.sns1.dis = 2015
 s.grip.sns2.dis = 2016
 start.task = 2001
@@ -1938,6 +2051,18 @@ tcp.calb.dbg = -1
 tcp.dbg = -1
 tcp.recv.dbg = -1
 tcp.send.dbg = -1
+current.intare = 1
+current.outtare = 2
+full.counter = 2
+gripper.type = 1
+hmi.pos.pos = 4
+intare.i[2] = 2
+intare.j[2] = 1
+object.id = 4
+tare.counter = 2
+s.pneumo.open = 2022
+s.pneumo.close = 2023
+s.debug = 2024
 .END
 .STRINGS
 $tcp.ip = "192.168.7.137"
