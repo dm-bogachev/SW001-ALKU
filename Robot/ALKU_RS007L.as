@@ -1,35 +1,35 @@
 .AUXDATA
-N_OX1    "release.grip|"
-N_OX2    "capture.grip|"
-N_OX3    "grip.unclamp|"
-N_OX4    "grip.clamp|"
-N_OX17    "do.home1|"
-N_OX18    "do.work[1]|"
-N_OX19    "rs7.det.picked|"
-N_OX20    "rs7.tare.chg|"
-N_WX1    "grip.unclamped|"
-N_WX2    "grip.clamped|"
-N_WX17    "rs13.home1|"
-N_WX18    "rs13.work[1]|"
-N_WX19    "rs13.det.put|"
-N_WX20    "rs13.tare.ack|"
-N_INT1    "di.ifp.page[1]|"
-N_INT2    "di.ifp.page[2]|"
-N_INT3    "di.ifp.page[3]|"
-N_INT4    "di.ifp.page[4]|"
-N_INT5    "di.ifp.page[5]|"
-N_INT6    "di.ifp.page[6]|"
-N_INT7    "di.ifp.page[7]|"
-N_INT8    "di.ifp.page[8]|"
-N_INT10    "do.bat.alm|"
-N_INT11    "s.tcp.send.ena|"
-N_INT12    "s.tcp.recv.ena|"
-N_INT13    "s.tcp.ena|"
-N_INT17    "s.in1.disable|"
-N_INT18    "s.in2.disable|"
-N_INT19    "s.measure.ok|"
-N_INT20    "s.measure.ng|"
-N_INT21    "s.vacuum|"
+N_OX1    "release.grip"
+N_OX2    "capture.grip"
+N_OX3    "grip.unclamp"
+N_OX4    "grip.clamp"
+N_OX17    "do.home1"
+N_OX18    "do.work[1]"
+N_OX19    "rs7.det.picked"
+N_OX20    "rs7.tare.chg"
+N_WX1    "grip.unclamped"
+N_WX2    "grip.clamped"
+N_WX17    "rs13.home1"
+N_WX18    "rs13.work[1]"
+N_WX19    "rs13.det.put"
+N_WX20    "rs13.tare.ack"
+N_INT1    "di.ifp.page[1]"
+N_INT2    "di.ifp.page[2]"
+N_INT3    "di.ifp.page[3]"
+N_INT4    "di.ifp.page[4]"
+N_INT5    "di.ifp.page[5]"
+N_INT6    "di.ifp.page[6]"
+N_INT7    "di.ifp.page[7]"
+N_INT8    "di.ifp.page[8]"
+N_INT10    "do.bat.alm"
+N_INT11    "s.tcp.send.ena"
+N_INT12    "s.tcp.recv.ena"
+N_INT13    "s.tcp.ena"
+N_INT17    "s.in1.disable"
+N_INT18    "s.in2.disable"
+N_INT19    "s.measure.ok"
+N_INT20    "s.measure.ng"
+N_INT21    "s.vacuum"
 .END
 .INTER_PANEL_D
 0,9,1,6,15
@@ -80,191 +80,6 @@ N_INT21    "s.vacuum|"
 .INTER_PANEL_COLOR_D
 182,3,224,244,28,159,252,255,251,255,0,31,2,241,52,255,
 .END
-.PROGRAM a.align ()
-	ALIGN
-.END
-.PROGRAM a.home ()
-	JMOVE #homep1
-.END
-.PROGRAM a.main()@25/10/31 16:24 #0
-  ;
-  CALL safe.home
-  ;
-  SPEED 100 ALWAYS
-  ACCURACY 100 ALWAYS
-  ;
-  CALL log ("Main cycle started. State: WaitingForCommand")
-  $action = "WaitingForCommand"
-  ;
-  WHILE TRUE DO
-    SCASE $command OF
-      SVALUE "START":
-        CALL log ("Received START command. State: StartingProgram")
-        $action = "StartingProgram"
-        CALL pg.start
-        BREAK
-        $action = "WaitingForCommand"
-      SVALUE "Check":
-        BREAK
-      ANY :
-        BREAK
-    END
-  END
-  ;
-.END
-.PROGRAM a.teach.defect ()
- BREAK
-  
-.END
-.PROGRAM a.teach.machine ()
-  TOOL tool.pick[hmi.tool.no]
-  ;
-  POINT .temp = #pos.mach[hmi.obj.id]
-  JMOVE .temp + TRANS (0, 0, 50)
-  BREAK
-  LMOVE #pos.mach[hmi.obj.id]
-  BREAK
-  TWAIT 0.5
-  LMOVE .temp + TRANS (0, 0, 50)
-  BREAK
-  TWAIT 0.5
-.END
-.PROGRAM a.teach.pos ()
-  TOOL tool.pick[hmi.tool.no]
-  ;
-  POINT .temp = #pos.pos[hmi.obj.id]
-  JMOVE .temp + TRANS (0, 0, 50)
-  BREAK
-  LMOVE #pos.pos[hmi.obj.id]
-  BREAK
-  TWAIT 0.5
-  LMOVE .temp + TRANS (0, 0, 50)
-  BREAK
-  TWAIT 0.5
-.END
-.PROGRAM a.teach.tare ()
-  BREAK
-.END
-.PROGRAM autostart.pc()@25/10/10 14:59 #0
-  ; System switches
-  CP ON
-  PREFETCH.SIGINS OFF
-  QTOOL OFF
-  REP_ONCE ON
-  HOLD.STEP ON
-  DISP.EXESTEP ON
-  PROG.DATE ON
-  autostart.pc ON
-  errstart.pc ON  ;
-  ;
-  IFPWPRINT 8, 1, 1, 5, 10 = "Robot: RS007L S/N: C6324", "Controller: F60 S/N: C8174"," ", "Powered by Robowizard Co.Ltd."
-  ;
-  CALL set.io.pc
-  CALL set.vars.pc
-  CALL watchdog.pc
-  ;
-.END
-.PROGRAM errstart.pc()
-  IF ERROR == -34021 OR ERROR == -10100 THEN
-    tcp.socket = -1
-    MC ERESET
-    TWAIT 1
-    ;PCABORT 2:
-    ;PCABORT 3:
-    ;TWAIT 3
-    ;PCEXECUTE 2: tcp.client.pc
-    ;PCEXECUTE 3: sender.pc
-    ;TWAIT 1
-  END
-  TWAIT 5
-  errstart.pc ON
-.END
-.PROGRAM get.state.pc (.$state)
-  .$state = "POWER:"
-  IF SWITCH (POWER) THEN
-    .$state = .$state + "TRUE;"
-  ELSE
-    .$state = .$state + "FALSE;"
-  END
-  ; MAX: 12
-  ;
-  .$state = .$state + "CS:"
-  IF SWITCH (CS) THEN
-    .$state = .$state + "TRUE;"
-  ELSE
-    .$state = .$state + "FALSE;"
-  END
-  ; MAX 9
-  ;
-  .$state = .$state + "TEACH:"
-  IF SWITCH (REPEAT) THEN
-    .$state = .$state + "FALSE;"
-  ELSE
-    .$state = .$state + "TRUE;"
-  END
-  ; MAX 12
-  ;
-  .$state = .$state + "TEACHL:"
-  IF SWITCH (TEACH_LOCK) THEN
-    .$state = .$state + "TRUE;"
-  ELSE
-    .$state = .$state + "FALSE;"
-  END
-  ; MAX 13
-  ;
-  .$state = .$state + "TPEMG:"
-  IF SWITCH (TP_EMG) THEN
-    .$state = .$state + "TRUE;"
-  ELSE
-    .$state = .$state + "FALSE;"
-  END
-  ; MAX 12
-  ;
-  .$state = .$state + "OPEMG:"
-  IF SWITCH (OP_EMG) THEN
-    .$state = .$state + "TRUE;"
-  ELSE
-    .$state = .$state + "FALSE;"
-  END
-  ; MAX 12
-  ;
-  .$state = .$state + "EXEMG:"
-  IF SWITCH (EX_EMG) THEN
-    .$state = .$state + "TRUE;"
-  ELSE
-    .$state = .$state + "FALSE;"
-  END
-  ; MAX 12
-  ;
-  .$state = .$state + "ERROR:"
-  IF SWITCH (ERROR) THEN
-    .$state = .$state + "TRUE;"
-  ELSE
-    .$state = .$state + "FALSE;"
-  END
-  ; MAX 12
-  ;
-  .$state = .$state + "ECODE:"
-  .$state = .$state + $ENCODE (ERROR) + ";"
-  ; MAX 12
-  ;
-  .$state = .$state + "HOME:"
-  IF SIG (do.home1) THEN
-    .$state = .$state + "TRUE;"
-  ELSE
-    .$state = .$state + "FALSE;"
-  END
-  ; MAX 12
-  ;
-  .$state = .$state + "BATALM:"
-  IF SIG (do.bat.alm) THEN
-    .$state = .$state + "TRUE;"
-  ELSE
-    .$state = .$state + "FALSE;"
-  END
-  ; MAX 12
-  .$state = .$state + "\n"
-.END
 .PROGRAM id4 () ; 312.229.002_1
     ; Object ID (Use in stz.put)
     object.id = 4
@@ -273,6 +88,14 @@ N_INT21    "s.vacuum|"
     ; Max objects in output tare
     max.tare.count = 99
     ;
+.END
+.PROGRAM safe.home ()
+	; IMPLEMENT SAFE RETURN TO HOME POSITION
+	CALL log ("Moving to home position. State: MoveToHome")
+	$action = "MoveToHome"
+	SPEED 250 MM/S ALWAYS
+	ACCURACY 10 ALWAYS
+	JMOVE #homep1
 .END
 .PROGRAM log (.$msg)
 	FOR .i = 0 TO 10
@@ -284,28 +107,11 @@ N_INT21    "s.vacuum|"
 	IFPWPRINT 2, 1, 1, 9, 10 = $log.entry[4], $log.entry[5], $log.entry[6], $log.entry[7]
 	IFPWPRINT 3, 1, 1, 9, 10 = $log.entry[8], $log.entry[9], $log.entry[10], $log.entry[11]
 .END
-.PROGRAM measure ()
-  CALL log ("Move to measurement machine. State: MoveToMeasure")
-  $action = "MoveToMeasure"
-  ;
-  SPEED 100 ALWAYS
-  ACCURACY 10 ALWAYS
-  ;
-  JMOVE #safe.machine
-  JMOVE #before.machine
-  LMOVE #in.machine
-  ;
-  LMOVE #pos.machine[detail.id]
+.PROGRAM a.home ()
+	JMOVE #homep1
 .END
-.PROGRAM pg.start ()
-  $command = ""
-  CALL process.data (.state)
-  IF NOT .state THEN
-    CALL log ("Wrong program name. State: WrongProgramName")
-    $action = "WrongProgramName"
-    TWAIT 5
-    RETURN
-  END
+.PROGRAM a.align ()
+	ALIGN
 .END
 .PROGRAM pos.pick (.pos)
   IF FALSE THEN
@@ -334,6 +140,55 @@ N_INT21    "s.vacuum|"
   LMOVE .temp + TRANS (0, 0, 200)
   LMOVE #homep1
 .END
+.PROGRAM measure ()
+  CALL log ("Move to measurement machine. State: MoveToMeasure")
+  $action = "MoveToMeasure"
+  ;
+  SPEED 100 ALWAYS
+  ACCURACY 10 ALWAYS
+  ;
+  JMOVE #safe.machine
+  JMOVE #before.machine
+  LMOVE #in.machine
+  ;
+  LMOVE #pos.machine[detail.id]
+.END
+.PROGRAM a.main()@25/10/31 16:24 #0
+  ;
+  CALL safe.home
+  ;
+  SPEED 100 ALWAYS
+  ACCURACY 100 ALWAYS
+  ;
+  CALL log ("Main cycle started. State: WaitingForCommand")
+  $action = "WaitingForCommand"
+  ;
+  WHILE TRUE DO
+    SCASE $command OF
+      SVALUE "START":
+        CALL log ("Received START command. State: StartingProgram")
+        $action = "StartingProgram"
+        CALL pg.start
+        BREAK
+        $action = "WaitingForCommand"
+      SVALUE "Check":
+        BREAK
+      ANY :
+        BREAK
+    END
+  END
+  ;
+.END
+.PROGRAM pg.start ()
+  $command = ""
+  CALL process.data (.state)
+  IF NOT .state THEN
+    CALL log ("Wrong program name. State: WrongProgramName")
+    $action = "WrongProgramName"
+    TWAIT 5
+    RETURN
+  END
+.END
 .PROGRAM process.data ()
   ;
   SCASE $detail.type OF
@@ -347,30 +202,54 @@ ANY:
   RETURN
   
 .END
+.PROGRAM a.teach.pos ()
+  TOOL tool.pick[hmi.tool.no]
+  ;
+  POINT .temp = #pos.pos[hmi.obj.id]
+  JMOVE .temp + TRANS (0, 0, 50)
+  BREAK
+  LMOVE #pos.pos[hmi.obj.id]
+  BREAK
+  TWAIT 0.5
+  LMOVE .temp + TRANS (0, 0, 50)
+  BREAK
+  TWAIT 0.5
 .END
-.PROGRAM safe.home ()
-	; IMPLEMENT SAFE RETURN TO HOME POSITION
-	CALL log ("Moving to home position. State: MoveToHome")
-	$action = "MoveToHome"
-	SPEED 250 MM/S ALWAYS
-	ACCURACY 10 ALWAYS
-	JMOVE #homep1
+.PROGRAM a.teach.machine ()
+  TOOL tool.pick[hmi.tool.no]
+  ;
+  POINT .temp = #pos.mach[hmi.obj.id]
+  JMOVE .temp + TRANS (0, 0, 50)
+  BREAK
+  LMOVE #pos.mach[hmi.obj.id]
+  BREAK
+  TWAIT 0.5
+  LMOVE .temp + TRANS (0, 0, 50)
+  BREAK
+  TWAIT 0.5
 .END
-.PROGRAM sender.pc ()
+.PROGRAM a.teach.defect ()
+ BREAK
+  
+.END
+.PROGRAM a.teach.tare ()
+  BREAK
+.END
+.PROGRAM set.vars.pc ()
+  ; Variables init
   ;
-  ; 0 - FALSE
-  ; 1 - TRUE
-  ;
-  ; POWER;REPEAT;CS;ERROR;ERRORCODE;TEACH_LOCK;TP_EMG;OP_EMG;EX_EMG;
-  ;
-  WHILE TRUE DO
-;
-    CALL get.state.pc(.$data[1])
-    .$data[2] = "action:" + $action + "\n"
-    ;
-    CALL tcp.send3.pc (.$data[], 2)
-    TWAIT 0.250
+  IF NOT EXISTCHAR ("$log.entry[11]")  THEN
+    FOR .i = 0 TO 12
+      $log.entry[.i] = " "
+    END
   END
+  ;tcp.socket = 0
+  tcp.connect.tmo = 5
+  tcp.receive.tmo = 5
+  tcp.send.tmo = 5
+  ;
+  tyterm = 0
+  
 .END
 .PROGRAM set.io.pc ()
   ; Gripper IO
@@ -416,21 +295,95 @@ ANY:
   s.measure.ng = 2020
   s.vacuum = 2021
 .END
-.PROGRAM set.vars.pc ()
-  ; Variables init
-  ;
-  IF NOT EXISTCHAR ("$log.entry[11]")  THEN
-    FOR .i = 0 TO 12
-      $log.entry[.i] = " "
+.PROGRAM watchdog.pc ()
+  WHILE TRUE DO
+    IF SIG (s.tcp.ena) THEN
+      tcp.ena = tyterm
+    ELSE
+      tcp.ena = -1
     END
+    ;
+    IF SIG (s.tcp.send.ena) THEN
+      tcp.send.ena = tyterm
+    ELSE
+      tcp.send.ena = -1
+    END
+    ;
+    IF SIG (s.tcp.recv.ena) THEN
+      tcp.recv.ena = tyterm
+    ELSE
+      tcp.recv.ena = -1
+    END
+    ;
+    TWAIT 0.1
+    IF TASK (1002) <> 1 THEN
+      PCEXECUTE 2: tcp.client.pc
+      TWAIT 2
+    END
+    IF TASK (1003) <> 1 THEN
+      PCEXECUTE 3: sender.pc
+      TWAIT 2
+    END
+    
   END
-  ;tcp.socket = 0
-  tcp.connect.tmo = 5
-  tcp.receive.tmo = 5
-  tcp.send.tmo = 5
+.END
+.PROGRAM autostart.pc()@25/10/10 14:59 #0
+  ; System switches
+  CP ON
+  PREFETCH.SIGINS OFF
+  QTOOL OFF
+  REP_ONCE ON
+  HOLD.STEP ON
+  DISP.EXESTEP ON
+  PROG.DATE ON
+  autostart.pc ON
+  errstart.pc ON  ;
   ;
-  tyterm = 0
-  
+  IFPWPRINT 8, 1, 1, 5, 10 = "Robot: RS007L S/N: C6324", "Controller: F60 S/N: C8174"," ", "Powered by Robowizard Co.Ltd."
+  ;
+  CALL set.io.pc
+  CALL set.vars.pc
+  CALL watchdog.pc
+  ;
+.END
+.PROGRAM errstart.pc()
+  IF ERROR == -34021 OR ERROR == -10100 THEN
+    tcp.socket = -1
+    MC ERESET
+    TWAIT 1
+    ;PCABORT 2:
+    ;PCABORT 3:
+    ;TWAIT 3
+    ;PCEXECUTE 2: tcp.client.pc
+    ;PCEXECUTE 3: sender.pc
+    ;TWAIT 1
+  END
+  TWAIT 5
+  errstart.pc ON
+.END
+.PROGRAM tcp.send.pc(.$data[],.data.length) #114404
+	IF tcp.socket > 0 THEN
+		TCP_SEND .status, tcp.socket, .$data[1], .data.length, tcp.send.tmo
+		IF .status >= 0 THEN
+			PRINT tcp.send.dbg: "Sent ", .data.length, " strings"
+			FOR .i = 1 TO .data.length
+				IF LEN (.$data[.i]) > 127 THEN
+					PRINT tcp.send.dbg: /S, .i, ": "
+					PRINT tcp.send.dbg: /S, $LEFT (.$data[.i], 128)
+					PRINT tcp.send.dbg: $MID (.$data[.i], 129)
+				ELSE
+					PRINT tcp.send.dbg: /S, .i, ": "
+					PRINT tcp.send.dbg: .$data[.i]
+				END
+			END
+		ELSE
+			PRINT tcp.send.dbg: "Failed to send data with error:", .status, ". Error count:", .tcp.error.cnt
+			tcp.socket = -1
+		END
+	ELSE
+		PRINT tcp.send.dbg: "Failed to send data. Socket is not opened"
+	END
+	;
 .END
 .PROGRAM tcp.callback.pc (.$data[],.data.length)
   .$temp = "Received "+ $ENCODE (.data.length) + " strings:"
@@ -488,7 +441,7 @@ ANY:
     .$temp = $DECODE (.$data[1], ";", 1)
     ; Decode measurement result
     .$measurement.state = $DECODE (.$data[1], ";", 0)
-    IF .$measurement.state == TRUE THEN
+    IF INSTR (.$measurement.state, "TRUE") THEN
       PULSE s.measure.ok
     ELSE
       PULSE s.measure.ng
@@ -581,29 +534,107 @@ ANY:
     END
   END
 .END
-.PROGRAM tcp.send.pc(.$data[],.data.length) #114404
-	IF tcp.socket > 0 THEN
-		TCP_SEND .status, tcp.socket, .$data[1], .data.length, tcp.send.tmo
-		IF .status >= 0 THEN
-			PRINT tcp.send.dbg: "Sent ", .data.length, " strings"
-			FOR .i = 1 TO .data.length
-				IF LEN (.$data[.i]) > 127 THEN
-					PRINT tcp.send.dbg: /S, .i, ": "
-					PRINT tcp.send.dbg: /S, $LEFT (.$data[.i], 128)
-					PRINT tcp.send.dbg: $MID (.$data[.i], 129)
-				ELSE
-					PRINT tcp.send.dbg: /S, .i, ": "
-					PRINT tcp.send.dbg: .$data[.i]
-				END
-			END
-		ELSE
-			PRINT tcp.send.dbg: "Failed to send data with error:", .status, ". Error count:", .tcp.error.cnt
-			tcp.socket = -1
-		END
-	ELSE
-		PRINT tcp.send.dbg: "Failed to send data. Socket is not opened"
-	END
-	;
+.PROGRAM get.state.pc (.$state)
+  .$state = "POWER:"
+  IF SWITCH (POWER) THEN
+    .$state = .$state + "TRUE;"
+  ELSE
+    .$state = .$state + "FALSE;"
+  END
+  ; MAX: 12
+  ;
+  .$state = .$state + "CS:"
+  IF SWITCH (CS) THEN
+    .$state = .$state + "TRUE;"
+  ELSE
+    .$state = .$state + "FALSE;"
+  END
+  ; MAX 9
+  ;
+  .$state = .$state + "TEACH:"
+  IF SWITCH (REPEAT) THEN
+    .$state = .$state + "FALSE;"
+  ELSE
+    .$state = .$state + "TRUE;"
+  END
+  ; MAX 12
+  ;
+  .$state = .$state + "TEACHL:"
+  IF SWITCH (TEACH_LOCK) THEN
+    .$state = .$state + "TRUE;"
+  ELSE
+    .$state = .$state + "FALSE;"
+  END
+  ; MAX 13
+  ;
+  .$state = .$state + "TPEMG:"
+  IF SWITCH (TP_EMG) THEN
+    .$state = .$state + "TRUE;"
+  ELSE
+    .$state = .$state + "FALSE;"
+  END
+  ; MAX 12
+  ;
+  .$state = .$state + "OPEMG:"
+  IF SWITCH (OP_EMG) THEN
+    .$state = .$state + "TRUE;"
+  ELSE
+    .$state = .$state + "FALSE;"
+  END
+  ; MAX 12
+  ;
+  .$state = .$state + "EXEMG:"
+  IF SWITCH (EX_EMG) THEN
+    .$state = .$state + "TRUE;"
+  ELSE
+    .$state = .$state + "FALSE;"
+  END
+  ; MAX 12
+  ;
+  .$state = .$state + "ERROR:"
+  IF SWITCH (ERROR) THEN
+    .$state = .$state + "TRUE;"
+  ELSE
+    .$state = .$state + "FALSE;"
+  END
+  ; MAX 12
+  ;
+  .$state = .$state + "ECODE:"
+  .$state = .$state + $ENCODE (ERROR) + ";"
+  ; MAX 12
+  ;
+  .$state = .$state + "HOME:"
+  IF SIG (do.home1) THEN
+    .$state = .$state + "TRUE;"
+  ELSE
+    .$state = .$state + "FALSE;"
+  END
+  ; MAX 12
+  ;
+  .$state = .$state + "BATALM:"
+  IF SIG (do.bat.alm) THEN
+    .$state = .$state + "TRUE;"
+  ELSE
+    .$state = .$state + "FALSE;"
+  END
+  ; MAX 12
+  .$state = .$state + "\n"
+.END
+.PROGRAM sender.pc ()
+  ;
+  ; 0 - FALSE
+  ; 1 - TRUE
+  ;
+  ; POWER;REPEAT;CS;ERROR;ERRORCODE;TEACH_LOCK;TP_EMG;OP_EMG;EX_EMG;
+  ;
+  WHILE TRUE DO
+;
+    CALL get.state.pc(.$data[1])
+    .$data[2] = "action:" + $action + "\n"
+    ;
+    CALL tcp.send3.pc (.$data[], 2)
+    TWAIT 0.250
+  END
 .END
 .PROGRAM tcp.send2.pc (.$data[],.data.length)
 	IF tcp.socket > 0 THEN
@@ -645,38 +676,6 @@ ANY:
 	END
 	;
 .END
-.PROGRAM watchdog.pc ()
-  WHILE TRUE DO
-    IF SIG (s.tcp.ena) THEN
-      tcp.ena = tyterm
-    ELSE
-      tcp.ena = -1
-    END
-    ;
-    IF SIG (s.tcp.send.ena) THEN
-      tcp.send.ena = tyterm
-    ELSE
-      tcp.send.ena = -1
-    END
-    ;
-    IF SIG (s.tcp.recv.ena) THEN
-      tcp.recv.ena = tyterm
-    ELSE
-      tcp.recv.ena = -1
-    END
-    ;
-    TWAIT 0.1
-    IF TASK (1002) <> 1 THEN
-      PCEXECUTE 2: tcp.client.pc
-      TWAIT 2
-    END
-    IF TASK (1003) <> 1 THEN
-      PCEXECUTE 3: sender.pc
-      TWAIT 2
-    END
-    
-  END
-.END
 .PROGRAM Comment___ () ; Comments for IDE. Do not use.
 	; @@@ PROJECT @@@
 	; @@@ PROJECTNAME @@@
@@ -688,122 +687,103 @@ ANY:
 	; ip[1]
 	; tcp.connect.tmo
 	; @@@ CONNECTION @@@
-	; KROSET R02
-	; 127.0.0.1
-	; 9205
+	; RS007L
+	; 192.168.7.103
+	; 23
 	; @@@ PROGRAM @@@
-	;   Group:Objects:1
-	;     1:id4:F
-	;   Group:Utils:2
-	;     2:safe.home:F
-	;     2:log:F
-	;       .$msg 
-	;       .i 
-	;     2:a.home:F
-	;     2:a.align:F
-	;   Group:Main:3
-	;     3:pos.pick:F
-	;       .pos 
-	;       .$temp 
-	;       .temp 
-	;     3:measure:F
-	;     3:a.main:F
-	;       .work 
-	;     3:pg.start:F
-	;     3:process.data:F
-	;   Group:Teach:4
-	;     4:a.teach.pos:F
-	;       .temp 
-	;     4:a.teach.machine:F
-	;       .temp 
-	;     4:a.teach.defect:F
-	;     4:a.teach.tare:F
-	;   Group:Autostart:5
-	;     5:set.vars.pc:B
-	;       .i 
-	;     5:set.io.pc:B
-	;       .home1 
-	;       .work 
-	;     5:watchdog.pc:B
-	;     5:autostart.pc:B
-	;   0:errstart.pc:B
-	;   Group:TCPIP:6
-	;     6:tcp.send.pc:B
-	;       .$data 
-	;       .data.length 
-	;       .status 
-	;       .i 
-	;       .tcp.error.cnt 
-	;     6:tcp.callback.pc:B
-	;       .$data 
-	;       .data.length 
-	;       .$temp 
-	;       .i 
-	;       .$x 
-	;       .$y 
-	;       .$a 
-	;       .pc 
-	;     6:tcp.client.pc:B
-	;       .tcp.retry.count 
-	;       .number 
-	;       .ports 
-	;       .sockets 
-	;       .errors 
-	;       .suberrors 
-	;       .$ips 
-	;       .i 
-	;       .$temp 
-	;       .status 
-	;       .$tcp.ip.copy 
-	;       .$ip 
-	;       .connected 
-	;       .tcp.error.cnt 
-	;       .$tcp.request 
-	;       .request.size 
-	;     6:get.state.pc:B
-	;       .$state 
-	;     6:sender.pc:B
-	;       .$data 
-	;       .pc 
-	;     6:tcp.send2.pc:B
-	;       .$data 
-	;       .data.length 
-	;       .status 
-	;       .$temp 
-	;       .i 
-	;     6:tcp.send3.pc:B
-	;       .$data 
-	;       .data.length 
-	;       .status 
-	;       .$temp 
-	;       .i 
+	; Group:Objects:1
+	; 1:id4:F
+	; Group:Utils:2
+	; 2:safe.home:F
+	; 2:log:F
+	; .$msg 
+	; .i 
+	; 2:a.home:F
+	; 2:a.align:F
+	; Group:Main:3
+	; 3:pos.pick:F
+	; .pos 
+	; .$temp 
+	; .temp 
+	; 3:measure:F
+	; 3:a.main:F
+	; .work 
+	; 3:pg.start:F
+	; .state 
+	; 3:process.data:F
+	; .state 
+	; Group:Teach:4
+	; 4:a.teach.pos:F
+	; .temp 
+	; 4:a.teach.machine:F
+	; .temp 
+	; 4:a.teach.defect:F
+	; 4:a.teach.tare:F
+	; Group:Autostart:5
+	; 5:set.vars.pc:B
+	; .i 
+	; 5:set.io.pc:B
+	; .home1 
+	; .work 
+	; .det.put 
+	; .det.picked 
+	; .tare.chg 
+	; .tare.ack 
+	; .disable 
+	; 5:watchdog.pc:B
+	; 5:autostart.pc:B
+	; 0:errstart.pc:B
+	; Group:TCPIP:6
+	; 6:tcp.send.pc:B
+	; .$data 
+	; .data.length 
+	; .status 
+	; .i 
+	; .tcp.error.cnt 
+	; 6:tcp.callback.pc:B
+	; .$data 
+	; .data.length 
+	; .$temp 
+	; .i 
+	; .pc 
+	; 6:tcp.client.pc:B
+	; .tcp.retry.count 
+	; .number 
+	; .ports 
+	; .sockets 
+	; .errors 
+	; .suberrors 
+	; .$ips 
+	; .i 
+	; .$temp 
+	; .status 
+	; .$tcp.ip.copy 
+	; .$ip 
+	; .connected 
+	; .tcp.error.cnt 
+	; .$tcp.request 
+	; .request.size 
+	; 6:get.state.pc:B
+	; .$state 
+	; 6:sender.pc:B
+	; .$data 
+	; .pc 
+	; 6:tcp.send2.pc:B
+	; .$data 
+	; .data.length 
+	; .status 
+	; .$temp 
+	; .i 
+	; 6:tcp.send3.pc:B
+	; .$data 
+	; .data.length 
+	; .status 
+	; .$temp 
+	; .i 
 	; @@@ TRANS @@@
 	; @@@ JOINTS @@@
-	; #homep1 
-	; #measure.side 
-	; #pos.pos[] 
 	; @@@ REALS @@@
-	; tcp.socket 
-	; tcp.port 
-	; ip[] 
-	; tcp.connect.tmo 
-	; start.task 
-	; tcp.dbg 
-	; tcp.receive.tmo 
-	; tcp.recv.dbg 
-	; tcp.send.dbg 
-	; tcp.send.tmo 
-	; capture.tare 
-	; release.tare 
-	; tcp.ena 
-	; tcp.recv.ena 
-	; tcp.send.ena 
-	; tyterm 
-	; hmi.obj.id 
 	; @@@ STRINGS @@@
-	; $tcp.ip 
-	; $action 
-	; $log.entry[] 
 	; @@@ INTEGER @@@
 	; @@@ SIGNALS @@@
 	; do.bat.alm 

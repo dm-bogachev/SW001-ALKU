@@ -13613,3 +13613,7 @@ $log.entry[11] = "21:00:44 Wait for new pick. State: WaitForPick"
 $outtare.ids = "10"
 $tcp.ip = "127.0.0.1"
 .END
+
+.ROBOTDATA1
+OP_BLTARM OFF -4280
+.END

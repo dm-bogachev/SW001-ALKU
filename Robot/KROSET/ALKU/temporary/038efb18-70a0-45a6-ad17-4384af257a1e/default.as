@@ -5054,3 +5054,7 @@ $log.entry[10] = "21:00:43 Pick detail from positioner 4"
 $log.entry[11] = "21:00:43 State: TakeFromPositioner"
 $tcp.ip = "127.0.0.1"
 .END
+
+.ROBOTDATA1
+OP_BLTARM OFF -4280
+.END
