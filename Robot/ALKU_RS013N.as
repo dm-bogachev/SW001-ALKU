@@ -144,8 +144,6 @@ N_INT102    "do.work[2]|"
         CALL pg.start
         BREAK
         $action = "WaitingForCommand"
-      SVALUE "Check":
-        BREAK
       ANY :
         BREAK
     END
@@ -1243,19 +1241,12 @@ ANY:
   IF INSTR (.$data[1], "RESUME") THEN
     PULSE 2222
   END
-  ;
-  ; String format:
-  ; ETALON;ID;
-  IF INSTR (.$data[1], "ETALON") THEN
-    $command = "ETALON"
-  END
-  ;
   ; PNEUMOOPEN;
   IF INSTR (.$data[1], "PNEUMOOPEN") THEN
     PULSE s.pneumo.open, 5
   END
   ;
-    ; PNEUMOCLOSE;
+  ; PNEUMOCLOSE;
   IF INSTR (.$data[1], "PNEUMOCLOSE") THEN
     PULSE s.pneumo.close, 5
   END
@@ -1491,6 +1482,9 @@ ANY:
 	;       .keep.pick 
 	;     2:process.data:F
 	;       .state 
+	;       .break 
+	;       .id 
+	;       .$temp 
 	;     2:s.in.table:F
 	;       .no 
 	;       .i 

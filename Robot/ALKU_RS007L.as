@@ -6,11 +6,13 @@ N_OX4    "grip.clamp|"
 N_OX17    "do.home1|"
 N_OX18    "do.work[1]|"
 N_OX19    "rs7.det.picked|"
+N_OX20    "rs7.tare.chg|"
 N_WX1    "grip.unclamped|"
 N_WX2    "grip.clamped|"
 N_WX17    "rs13.home1|"
 N_WX18    "rs13.work[1]|"
 N_WX19    "rs13.det.put|"
+N_WX20    "rs13.tare.ack|"
 N_INT1    "di.ifp.page[1]|"
 N_INT2    "di.ifp.page[2]|"
 N_INT3    "di.ifp.page[3]|"
@@ -25,6 +27,9 @@ N_INT12    "s.tcp.recv.ena|"
 N_INT13    "s.tcp.ena|"
 N_INT17    "s.in1.disable|"
 N_INT18    "s.in2.disable|"
+N_INT19    "s.measure.ok|"
+N_INT20    "s.measure.ng|"
+N_INT21    "s.vacuum|"
 .END
 .INTER_PANEL_D
 0,9,1,6,15
@@ -51,7 +56,7 @@ N_INT18    "s.in2.disable|"
 77,2,"","   MAIN","<---------","",10,4,15,2001,0
 83,4,1,"OFF     ON","",""," TCP RECV",10,4,4,0,2012,0
 84,8,"hmi.tool.no","   TOOL","  NUMBER",10,15,2,1,0
-90,8,"hmi.pos.pos","POSITIONER"," POSITION",10,15,2,1,0
+90,8,"hmi.obj.id","POSITIONER"," POSITION",10,15,2,1,0
 105,2,"","   MAIN","<---------","",10,4,15,2001,0
 .END
 .INTER_PANEL_TITLE
@@ -82,34 +87,30 @@ N_INT18    "s.in2.disable|"
 	JMOVE #homep1
 .END
 .PROGRAM a.main()@25/10/31 16:24 #0
+  ;
+  CALL safe.home
+  ;
   SPEED 100 ALWAYS
   ACCURACY 100 ALWAYS
-  JMOVE #homep1
+  ;
+  CALL log ("Main cycle started. State: WaitingForCommand")
+  $action = "WaitingForCommand"
+  ;
   WHILE TRUE DO
-    ; Вот тут должен быть цикл проверки датчика"
-    PULSE rs7.det.picked, 5
-    SWAIT rs13.work[1]
-    SWAIT -rs13.work[1]
-    CALL pos.pick(4)
-    DRIVE 1,-90
-    JOINT SPEED9 ACCU1 TIMER0 TOOL1 WORK0 CLAMP OX= WX= #[-97.059,-38.081,-121,0.062402,39.309,15.375] ;
-    JOINT SPEED9 ACCU1 TIMER0 TOOL1 WORK0 CLAMP OX= WX= #[-132.99,-4.8336,-138.33,51.656,64.386,-19.369] ;
-    LINEAR SPEED9 ACCU1 TIMER0 TOOL1 WORK0 CLAMP OX= WX= #[-118.88,9.6709,-122.91,38.175,56.505,-11.718] ;
-    LINEAR 30.0 ACCU1 TIMER0 TOOL1 WORK0 CLAMP OX= WX= #[-118.88,10.934,-123.38,37.492,57.868,-10.454] ;
-    LINEAR 250. ACCU1 TIMER0 TOOL1 WORK0 CLAMP OX= WX= #[-134.46,-4.8365,-140.36,52.259,66.453,-18.33] ;
-    LINEAR 250. ACCU1 TIMER0 TOOL1 WORK0 CLAMP OX= WX= #[-118.88,10.935,-123.38,37.494,57.868,-10.455] ;
-    LINEAR 30.0 ACCU1 TIMER0 TOOL1 WORK0 CLAMP OX= WX= #[-118.88,7.3949,-121.91,39.602,53.954,-14.222] ;
-    JMOVE #homep15
-    JMOVE #homep1
-    JAPPRO test,50
-    SPEED 40
-    LMOVE test
-    BREAK
-    PULSE grip.unclamp
-    LAPPRO test,50
-    LMOVE #homep1
-    BREAK
+    SCASE $command OF
+      SVALUE "START":
+        CALL log ("Received START command. State: StartingProgram")
+        $action = "StartingProgram"
+        CALL pg.start
+        BREAK
+        $action = "WaitingForCommand"
+      SVALUE "Check":
+        BREAK
+      ANY :
+        BREAK
+    END
   END
+  ;
 .END
 .PROGRAM a.teach.defect ()
  BREAK
@@ -118,10 +119,10 @@ N_INT18    "s.in2.disable|"
 .PROGRAM a.teach.machine ()
   TOOL tool.pick[hmi.tool.no]
   ;
-  POINT .temp = #pos.mach[hmi.pos.pos]
+  POINT .temp = #pos.mach[hmi.obj.id]
   JMOVE .temp + TRANS (0, 0, 50)
   BREAK
-  LMOVE #pos.mach[hmi.pos.pos]
+  LMOVE #pos.mach[hmi.obj.id]
   BREAK
   TWAIT 0.5
   LMOVE .temp + TRANS (0, 0, 50)
@@ -131,10 +132,10 @@ N_INT18    "s.in2.disable|"
 .PROGRAM a.teach.pos ()
   TOOL tool.pick[hmi.tool.no]
   ;
-  POINT .temp = #pos.pos[hmi.pos.pos]
+  POINT .temp = #pos.pos[hmi.obj.id]
   JMOVE .temp + TRANS (0, 0, 50)
   BREAK
-  LMOVE #pos.pos[hmi.pos.pos]
+  LMOVE #pos.pos[hmi.obj.id]
   BREAK
   TWAIT 0.5
   LMOVE .temp + TRANS (0, 0, 50)
@@ -264,6 +265,15 @@ N_INT18    "s.in2.disable|"
   ; MAX 12
   .$state = .$state + "\n"
 .END
+.PROGRAM id4 () ; 312.229.002_1
+    ; Object ID (Use in stz.put)
+    object.id = 4
+    ; Working gripper
+    gripper.type = 1
+    ; Max objects in output tare
+    max.tare.count = 99
+    ;
+.END
 .PROGRAM log (.$msg)
 	FOR .i = 0 TO 10
 		$log.entry[.i] = $log.entry[.i + 1]
@@ -287,9 +297,19 @@ N_INT18    "s.in2.disable|"
   ;
   LMOVE #pos.machine[detail.id]
 .END
+.PROGRAM pg.start ()
+  $command = ""
+  CALL process.data (.state)
+  IF NOT .state THEN
+    CALL log ("Wrong program name. State: WrongProgramName")
+    $action = "WrongProgramName"
+    TWAIT 5
+    RETURN
+  END
+.END
 .PROGRAM pos.pick (.pos)
   IF FALSE THEN
-    .pos = hmi.pos.pos
+    .pos = hmi.obj.id
   END
     ;
   .$temp = "Pick detail from positioner" + $ENCODE (.pos)
@@ -313,6 +333,20 @@ N_INT18    "s.in2.disable|"
   ;
   LMOVE .temp + TRANS (0, 0, 200)
   LMOVE #homep1
+.END
+.PROGRAM process.data ()
+  ;
+  SCASE $detail.type OF
+    SVALUE "312.229.002_1":
+      CALL id4
+      .state = TRUE
+      RETURN
+  END
+ANY:
+  .state = FALSE
+  RETURN
+  
+.END
 .END
 .PROGRAM safe.home ()
 	; IMPLEMENT SAFE RETURN TO HOME POSITION
@@ -356,6 +390,8 @@ N_INT18    "s.in2.disable|"
   ;
   rs13.det.put = 1019; EIP
   rs7.det.picked = 19; EIP
+  rs7.tare.chg = 20
+  rs13.tare.ack = 1020
   ;
   rs13.home1 = 1017
   rs13.work[1] = 1018
@@ -375,6 +411,10 @@ N_INT18    "s.in2.disable|"
   ;
   s.in1.disable = 2017
   s.in2.disable = 2018
+  ;
+  s.measure.ok = 2019
+  s.measure.ng = 2020
+  s.vacuum = 2021
 .END
 .PROGRAM set.vars.pc ()
   ; Variables init
@@ -396,37 +436,84 @@ N_INT18    "s.in2.disable|"
   .$temp = "Received "+ $ENCODE (.data.length) + " strings:"
   PRINT tcp.recv.ena: .$temp
   FOR .i = 1 TO .data.length
-    PRINT tcp.recv.ena: .$data[.i] 
+    PRINT tcp.recv.ena: .$data[.i]
   END
   ;
-  IF INSTR (.$data[1], "PICK") THEN
-    .$temp = $DECODE (.$data[1], ":", 0)
-    .$temp = $DECODE (.$data[1], ":", 1)
-    .$x = $DECODE (.$data[1], ",", 0)
-    .$temp = $DECODE (.$data[1], ",", 1)
-    .$y = $DECODE (.$data[1], ",", 0)
-    .$temp = $DECODE (.$data[1], ",", 1)
-    .$a = .$data[1]
-    hmi.y = VAL (.$x) / 10
-    hmi.x = VAL (.$y) / 10
-    hmi.a = VAL (.$a)
+  ; String format:
+  ; START;DETAILNAME;DETAILCOUNT;[INTAREID1,INTAREID2,..];[OTAREID1,INTAREID2,..];
+  IF INSTR (.$data[1], "START") THEN
+    ; Decode command
+    .$temp = $DECODE (.$data[1], ";", 0)
+    .$temp = $DECODE (.$data[1], ";", 1)
+    ; Decode detail type
+    $detail.type = $DECODE (.$data[1], ";", 0)
+    .$temp = $DECODE (.$data[1], ";", 1)
+    ; Decode detail count
+    detail.count = VAL ($DECODE (.$data[1], ";", 0))
+    .$temp = $DECODE (.$data[1], ";", 1)
+    ; Decode intare ids
+    $intare.ids = $DECODE (.$data[1], ";", 0)
+    ; Decode outtare ids
+    .$temp = $DECODE (.$data[1], ";", 1)
+    $outtare.ids = $DECODE (.$data[1], ";", 0)
+    $command = "START"
   END
   ;
-  IF .$data[1] == "GO\n" THEN
-    MC ZPOWER ON
-    TWAIT 1
-    MC EXECUTE a.main
-  END
-  IF .$data[1] == "START\n" THEN
-    PULSE 2500
-  END
-  IF .$data[1] == "CONTINUE\n" THEN
-    PULSE 2501
+  ; String format:
+  ; SENSOR;SENSORNAME;STATE;
+  IF INSTR (.$data[1], "SENSOR") THEN
+    ; Decode command
+    .$temp = $DECODE (.$data[1], ";", 0)
+    .$temp = $DECODE (.$data[1], ";", 1)
+    ; Decode sensor name
+    .$sensor.name = $DECODE (.$data[1], ";", 0)
+    .$temp = $DECODE (.$data[1], ";", 1)
+    ; Decode sensor state
+    ;TYPE 0: .$data[1]
+    .$sensor.state = $DECODE (.$data[1], ";", 0)
+    ;
+    IF INSTR (.$sensor.state, "TRUE") THEN
+      ;TYPE 0: .$sensor.name, .$sensor.state
+      IF .$sensor.name == "machinevacuum" THEN
+        PULSE s.vacuum, 5
+      END
+    END
   END
   ;
-  ;PRINT tcp.recv.ena: "Unhandled message. Return PING"
-  ;.$data[1] = "PING\n"
-  ;CALL tcp.send2.pc (.$data[], 1)
+  ; String format:
+  ; MEASUREMENT;STATE;
+  IF INSTR (.$data[1], "MEASUREMENT") THEN
+    ; Decode command
+    .$temp = $DECODE (.$data[1], ";", 0)
+    .$temp = $DECODE (.$data[1], ";", 1)
+    ; Decode measurement result
+    .$measurement.state = $DECODE (.$data[1], ";", 0)
+    IF .$measurement.state == TRUE THEN
+      PULSE s.measure.ok
+    ELSE
+      PULSE s.measure.ng
+    END
+  END
+  ;
+  ; String format:
+  ; PAUSE;
+  IF INSTR (.$data[1], "PAUSE") THEN
+    PULSE 2222
+  END
+  ;
+  ; String format:
+  ; RESUME;
+  IF INSTR (.$data[1], "RESUME") THEN
+    PULSE 2222
+  END
+  ;
+  ; String format:
+  ; ETALON;ID;
+  IF INSTR (.$data[1], "ETALON") THEN
+    $command = "ETALON"
+  END
+  ;
+  .$data[1] = ""
 .END
 .PROGRAM tcp.client.pc ()
   .tcp.retry.count = 10
@@ -605,37 +692,49 @@ N_INT18    "s.in2.disable|"
 	; 127.0.0.1
 	; 9205
 	; @@@ PROGRAM @@@
-	;   0:a.main:F
-	;     .work 
-	;   0:a.align:F
-	;   0:a.home:F
-	;   0:pos.pick:F
-	;     .pos 
-	;     .$temp 
-	;     .temp 
-	;   Group:Teach:1
-	;     1:a.teach.pos:F
+	;   Group:Objects:1
+	;     1:id4:F
+	;   Group:Utils:2
+	;     2:safe.home:F
+	;     2:log:F
+	;       .$msg 
+	;       .i 
+	;     2:a.home:F
+	;     2:a.align:F
+	;   Group:Main:3
+	;     3:pos.pick:F
+	;       .pos 
+	;       .$temp 
 	;       .temp 
-	;     1:a.teach.machine:F
+	;     3:measure:F
+	;     3:a.main:F
+	;       .work 
+	;     3:pg.start:F
+	;     3:process.data:F
+	;   Group:Teach:4
+	;     4:a.teach.pos:F
 	;       .temp 
-	;     1:a.teach.defect:F
-	;     1:a.teach.tare:F
-	;   0:log:F
-	;     .$msg 
-	;     .i 
-	;   0:safe.home:F
-	;   0:measure:F
-	;   0:autostart.pc:B
-	;   0:watchdog.pc:B
+	;     4:a.teach.machine:F
+	;       .temp 
+	;     4:a.teach.defect:F
+	;     4:a.teach.tare:F
+	;   Group:Autostart:5
+	;     5:set.vars.pc:B
+	;       .i 
+	;     5:set.io.pc:B
+	;       .home1 
+	;       .work 
+	;     5:watchdog.pc:B
+	;     5:autostart.pc:B
 	;   0:errstart.pc:B
-	;   Group:TCPIP:2
-	;     2:tcp.send.pc:B
+	;   Group:TCPIP:6
+	;     6:tcp.send.pc:B
 	;       .$data 
 	;       .data.length 
 	;       .status 
 	;       .i 
 	;       .tcp.error.cnt 
-	;     2:tcp.callback.pc:B
+	;     6:tcp.callback.pc:B
 	;       .$data 
 	;       .data.length 
 	;       .$temp 
@@ -644,7 +743,7 @@ N_INT18    "s.in2.disable|"
 	;       .$y 
 	;       .$a 
 	;       .pc 
-	;     2:tcp.client.pc:B
+	;     6:tcp.client.pc:B
 	;       .tcp.retry.count 
 	;       .number 
 	;       .ports 
@@ -661,28 +760,23 @@ N_INT18    "s.in2.disable|"
 	;       .tcp.error.cnt 
 	;       .$tcp.request 
 	;       .request.size 
-	;     2:get.state.pc:B
+	;     6:get.state.pc:B
 	;       .$state 
-	;     2:sender.pc:B
+	;     6:sender.pc:B
 	;       .$data 
 	;       .pc 
-	;     2:tcp.send2.pc:B
+	;     6:tcp.send2.pc:B
 	;       .$data 
 	;       .data.length 
 	;       .status 
 	;       .$temp 
 	;       .i 
-	;     2:tcp.send3.pc:B
+	;     6:tcp.send3.pc:B
 	;       .$data 
 	;       .data.length 
 	;       .status 
 	;       .$temp 
 	;       .i 
-	;   0:set.io.pc:B
-	;     .home1 
-	;     .work 
-	;   0:set.vars.pc:B
-	;     .i 
 	; @@@ TRANS @@@
 	; @@@ JOINTS @@@
 	; #homep1 
@@ -705,6 +799,7 @@ N_INT18    "s.in2.disable|"
 	; tcp.recv.ena 
 	; tcp.send.ena 
 	; tyterm 
+	; hmi.obj.id 
 	; @@@ STRINGS @@@
 	; $tcp.ip 
 	; $action 
@@ -730,6 +825,11 @@ N_INT18    "s.in2.disable|"
 	; s.in2.disable 
 	; rs13.det.put 
 	; rs7.det.picked 
+	; rs7.tare.chg 
+	; rs13.tare.ack 
+	; s.measure.ok 
+	; s.measure.ng 
+	; s.vacuum 
 	; @@@ TOOLS @@@
 	; tool.pick[] 
 	; @@@ BASE @@@
@@ -800,6 +900,12 @@ s.in1.disable = 2017
 s.in2.disable = 2018
 rs13.det.put = 1019
 rs7.det.picked = 19
+rs7.tare.chg = 20
+rs13.tare.ack = 1020
+s.measure.ok = 2019
+s.measure.ng = 2020
+s.vacuum = 2021
+hmi.obj.id = 0
 .END
 .STRINGS
 $tcp.ip = "192.168.7.137"

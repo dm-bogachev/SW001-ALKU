@@ -2840,6 +2840,7 @@ N_OX19   "rs7.det.picked|"
 N_WX19   "rs13.det.put|"
 N_INT17   "s.in1.disable|"
 N_INT18   "s.in2.disable|"
+N_INT21   "s.vacuum|"
 SENSING_SPEED     10.000     0.000 255
 SENS_STROKE       0.000
 PAL_TYPE_01     0
@@ -3143,6 +3144,8 @@ TP_RECINHI      0   0   0
 34,2,"","  Capture","  gripper","",10,4,6,2,-1
 35,2,"","   Open ","  gripper","",10,4,5,3,0
 36,2,"","   Close","  gripper","",10,4,5,4,0
+42,4,1,"OFF     ON","","","FORCE IN 1",10,4,4,0,2017,0
+43,4,1,"OFF     ON","","","FORCE IN 2",10,4,4,0,2018,0
 49,2,"","   MAIN","<---------","",10,4,15,2001,0
 56,14,"tcp.ip","Server IP","",10,15,0
 57,8,"tcp.port","Server","port",10,15,5,1,0
@@ -3168,9 +3171,109 @@ TP_RECINHI      0   0   0
 182,3,224,244,28,159,252,255,251,255,0,31,2,241,52,255,
 .END
 .ERRLOG
-   1 - [25/11/09 21:02:09 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+   1 - [25/11/10 00:26:24 SIGNAL:00 MON.SPEED : 100 REPEAT mode]
+       (E4057)TCP)Illegal Socket ID.
+       OPERATION1:[25/11/10 00:26:24] ( ALLERESET )
+       OPERATION2:[25/11/10 00:26:21] ( LOAD using.rcc )
+       OPERATION3:[25/11/10 00:26:04] ( LOAD using.rcc )
+       OPERATION4:[25/11/10 00:26:03] ( TYPE TASK (1) )
+       OPERATION5:[25/11/10 00:26:02] ( KILL )
+       OPERATION6:[25/11/10 00:26:02] ( ABORT )
+       OPERATION7:[25/11/10 00:26:01] ( ZPOW OFF )
+       OPERATION8:[25/11/10 00:25:58] ( HOLD )
+       OPERATION9:[25/11/10 00:25:49] ( SAVE using.rcc )
+       PC1 PROGRAM: watchdog.pc Step No: 27 STATUS: WAIT
+       PC2 PROGRAM: tcp.client.pc Step No: 38 STATUS: RUN
+       PC3 PROGRAM: tcp.send3.pc Step No: 2 STATUS: STOP
+       PC5 PROGRAM: errstart.pc Step No: 12 STATUS: WAIT
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+         13.751   -37.185  -123.196     0.000   -93.838     7.316
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+         13.751   -37.185  -123.196     0.000   -93.838     7.316
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+         13.751   -37.185  -123.196     0.000   -93.838     7.316
+------------------------------------------------------------------------------
+   2 - [25/11/10 00:26:24 SIGNAL:00 MON.SPEED : 100 REPEAT mode]
+       (E4057)TCP)Illegal Socket ID.
+       OPERATION1:[25/11/10 00:26:21] ( LOAD using.rcc )
+       OPERATION2:[25/11/10 00:26:04] ( LOAD using.rcc )
+       OPERATION3:[25/11/10 00:26:03] ( TYPE TASK (1) )
+       OPERATION4:[25/11/10 00:26:02] ( KILL )
+       OPERATION5:[25/11/10 00:26:02] ( ABORT )
+       OPERATION6:[25/11/10 00:26:01] ( ZPOW OFF )
+       OPERATION7:[25/11/10 00:25:58] ( HOLD )
+       OPERATION8:[25/11/10 00:25:49] ( SAVE using.rcc )
+       OPERATION9:[25/11/10 00:25:46] ( TIME )
+       PC1 PROGRAM: watchdog.pc Step No: 27 STATUS: WAIT
+       PC2 PROGRAM: tcp.client.pc Step No: 38 STATUS: RUN
+       PC3 PROGRAM: tcp.send3.pc Step No: 2 STATUS: RUN
+       PC5 PROGRAM: errstart.pc Step No: 12 STATUS: WAIT
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+         13.751   -37.185  -123.196     0.000   -93.838     7.316
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+         13.751   -37.185  -123.196     0.000   -93.838     7.316
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+         13.751   -37.185  -123.196     0.000   -93.838     7.316
+------------------------------------------------------------------------------
+   3 - [25/11/10 00:26:22 SIGNAL:00 MON.SPEED : 100 REPEAT mode]
+       (E4057)TCP)Illegal Socket ID.
+       OPERATION1:[25/11/10 00:26:21] ( LOAD using.rcc )
+       OPERATION2:[25/11/10 00:26:04] ( LOAD using.rcc )
+       OPERATION3:[25/11/10 00:26:03] ( TYPE TASK (1) )
+       OPERATION4:[25/11/10 00:26:02] ( KILL )
+       OPERATION5:[25/11/10 00:26:02] ( ABORT )
+       OPERATION6:[25/11/10 00:26:01] ( ZPOW OFF )
+       OPERATION7:[25/11/10 00:25:58] ( HOLD )
+       OPERATION8:[25/11/10 00:25:49] ( SAVE using.rcc )
+       OPERATION9:[25/11/10 00:25:46] ( TIME )
+       PC1 PROGRAM: watchdog.pc Step No: 27 STATUS: WAIT
+       PC2 PROGRAM: tcp.client.pc Step No: 38 STATUS: RUN
+       PC3 PROGRAM: tcp.send3.pc Step No: 2 STATUS: RUN
+       PC5 PROGRAM: errstart.pc Step No: 12 STATUS: WAIT
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+         13.751   -37.185  -123.196     0.000   -93.838     7.316
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+         13.751   -37.185  -123.196     0.000   -93.838     7.316
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+         13.751   -37.185  -123.196     0.000   -93.838     7.316
+------------------------------------------------------------------------------
+   4 - [25/11/10 00:26:22 SIGNAL:00 MON.SPEED : 100 REPEAT mode]
+       (E4057)TCP)Illegal Socket ID.
+       OPERATION1:[25/11/10 00:26:21] ( LOAD using.rcc )
+       OPERATION2:[25/11/10 00:26:04] ( LOAD using.rcc )
+       OPERATION3:[25/11/10 00:26:03] ( TYPE TASK (1) )
+       OPERATION4:[25/11/10 00:26:02] ( KILL )
+       OPERATION5:[25/11/10 00:26:02] ( ABORT )
+       OPERATION6:[25/11/10 00:26:01] ( ZPOW OFF )
+       OPERATION7:[25/11/10 00:25:58] ( HOLD )
+       OPERATION8:[25/11/10 00:25:49] ( SAVE using.rcc )
+       OPERATION9:[25/11/10 00:25:46] ( TIME )
+       PC1 PROGRAM: watchdog.pc Step No: 20 STATUS: WAIT
+       PC2 PROGRAM: tcp.client.pc Step No: 38 STATUS: RUN
+       PC3 PROGRAM: tcp.send3.pc Step No: 2 STATUS: RUN
+       PC5 PROGRAM: errstart.pc Step No: 13 STATUS: STOP
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+         13.751   -37.185  -123.196     0.000   -93.838     7.316
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+         13.751   -37.185  -123.196     0.000   -93.838     7.316
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+         13.751   -37.185  -123.196     0.000   -93.838     7.316
+------------------------------------------------------------------------------
+   5 - [25/11/10 00:24:42 SIGNAL:00 MON.SPEED : 10 TEACH mode]
        (E0909)Program data file in CFast is broken. watchdog.pc
-       OPERATION1:[25/11/09 21:02:08] ( Control Power ON )
+       OPERATION1:[25/11/10 00:24:41] ( Control Power ON )
        OPERATION2:[04/01/10 22:37:04] (  )
        OPERATION3:[04/01/10 22:37:04] (  )
        OPERATION4:[04/01/10 22:37:04] (  )
@@ -3186,9 +3289,9 @@ TP_RECINHI      0   0   0
          JT1       JT2       JT3       JT4       JT5       JT6  
           0.000     0.000     0.000     0.000     0.000     0.000
 ------------------------------------------------------------------------------
-   2 - [25/11/09 21:02:09 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+   6 - [25/11/10 00:24:42 SIGNAL:00 MON.SPEED : 10 TEACH mode]
        (E0909)Program data file in CFast is broken. tcp.send3.pc
-       OPERATION1:[25/11/09 21:02:08] ( Control Power ON )
+       OPERATION1:[25/11/10 00:24:41] ( Control Power ON )
        OPERATION2:[04/01/10 22:37:04] (  )
        OPERATION3:[04/01/10 22:37:04] (  )
        OPERATION4:[04/01/10 22:37:04] (  )
@@ -3204,9 +3307,9 @@ TP_RECINHI      0   0   0
          JT1       JT2       JT3       JT4       JT5       JT6  
           0.000     0.000     0.000     0.000     0.000     0.000
 ------------------------------------------------------------------------------
-   3 - [25/11/09 21:02:09 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+   7 - [25/11/10 00:24:42 SIGNAL:00 MON.SPEED : 10 TEACH mode]
        (E0909)Program data file in CFast is broken. tcp.send2.pc
-       OPERATION1:[25/11/09 21:02:08] ( Control Power ON )
+       OPERATION1:[25/11/10 00:24:41] ( Control Power ON )
        OPERATION2:[04/01/10 22:37:04] (  )
        OPERATION3:[04/01/10 22:37:04] (  )
        OPERATION4:[04/01/10 22:37:04] (  )
@@ -3222,9 +3325,9 @@ TP_RECINHI      0   0   0
          JT1       JT2       JT3       JT4       JT5       JT6  
           0.000     0.000     0.000     0.000     0.000     0.000
 ------------------------------------------------------------------------------
-   4 - [25/11/09 21:02:09 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+   8 - [25/11/10 00:24:42 SIGNAL:00 MON.SPEED : 10 TEACH mode]
        (E0909)Program data file in CFast is broken. tcp.send.pc
-       OPERATION1:[25/11/09 21:02:08] ( Control Power ON )
+       OPERATION1:[25/11/10 00:24:41] ( Control Power ON )
        OPERATION2:[04/01/10 22:37:04] (  )
        OPERATION3:[04/01/10 22:37:04] (  )
        OPERATION4:[04/01/10 22:37:04] (  )
@@ -3240,9 +3343,9 @@ TP_RECINHI      0   0   0
          JT1       JT2       JT3       JT4       JT5       JT6  
           0.000     0.000     0.000     0.000     0.000     0.000
 ------------------------------------------------------------------------------
-   5 - [25/11/09 21:02:09 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+   9 - [25/11/10 00:24:42 SIGNAL:00 MON.SPEED : 10 TEACH mode]
        (E0909)Program data file in CFast is broken. tcp.client.pc
-       OPERATION1:[25/11/09 21:02:08] ( Control Power ON )
+       OPERATION1:[25/11/10 00:24:41] ( Control Power ON )
        OPERATION2:[04/01/10 22:37:04] (  )
        OPERATION3:[04/01/10 22:37:04] (  )
        OPERATION4:[04/01/10 22:37:04] (  )
@@ -3258,9 +3361,9 @@ TP_RECINHI      0   0   0
          JT1       JT2       JT3       JT4       JT5       JT6  
           0.000     0.000     0.000     0.000     0.000     0.000
 ------------------------------------------------------------------------------
-   6 - [25/11/09 21:02:09 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+  10 - [25/11/10 00:24:42 SIGNAL:00 MON.SPEED : 10 TEACH mode]
        (E0909)Program data file in CFast is broken. tcp.callback.pc
-       OPERATION1:[25/11/09 21:02:08] ( Control Power ON )
+       OPERATION1:[25/11/10 00:24:41] ( Control Power ON )
        OPERATION2:[04/01/10 22:37:04] (  )
        OPERATION3:[04/01/10 22:37:04] (  )
        OPERATION4:[04/01/10 22:37:04] (  )
@@ -3276,9 +3379,9 @@ TP_RECINHI      0   0   0
          JT1       JT2       JT3       JT4       JT5       JT6  
           0.000     0.000     0.000     0.000     0.000     0.000
 ------------------------------------------------------------------------------
-   7 - [25/11/09 21:02:09 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+  11 - [25/11/10 00:24:42 SIGNAL:00 MON.SPEED : 10 TEACH mode]
        (E0909)Program data file in CFast is broken. set.vars.pc
-       OPERATION1:[25/11/09 21:02:08] ( Control Power ON )
+       OPERATION1:[25/11/10 00:24:41] ( Control Power ON )
        OPERATION2:[04/01/10 22:37:04] (  )
        OPERATION3:[04/01/10 22:37:04] (  )
        OPERATION4:[04/01/10 22:37:04] (  )
@@ -3294,9 +3397,9 @@ TP_RECINHI      0   0   0
          JT1       JT2       JT3       JT4       JT5       JT6  
           0.000     0.000     0.000     0.000     0.000     0.000
 ------------------------------------------------------------------------------
-   8 - [25/11/09 21:02:09 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+  12 - [25/11/10 00:24:42 SIGNAL:00 MON.SPEED : 10 TEACH mode]
        (E0909)Program data file in CFast is broken. set.io.pc
-       OPERATION1:[25/11/09 21:02:08] ( Control Power ON )
+       OPERATION1:[25/11/10 00:24:41] ( Control Power ON )
        OPERATION2:[04/01/10 22:37:04] (  )
        OPERATION3:[04/01/10 22:37:04] (  )
        OPERATION4:[04/01/10 22:37:04] (  )
@@ -3312,9 +3415,9 @@ TP_RECINHI      0   0   0
          JT1       JT2       JT3       JT4       JT5       JT6  
           0.000     0.000     0.000     0.000     0.000     0.000
 ------------------------------------------------------------------------------
-   9 - [25/11/09 21:02:09 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+  13 - [25/11/10 00:24:42 SIGNAL:00 MON.SPEED : 10 TEACH mode]
        (E0909)Program data file in CFast is broken. sender.pc
-       OPERATION1:[25/11/09 21:02:08] ( Control Power ON )
+       OPERATION1:[25/11/10 00:24:41] ( Control Power ON )
        OPERATION2:[04/01/10 22:37:04] (  )
        OPERATION3:[04/01/10 22:37:04] (  )
        OPERATION4:[04/01/10 22:37:04] (  )
@@ -3330,9 +3433,9 @@ TP_RECINHI      0   0   0
          JT1       JT2       JT3       JT4       JT5       JT6  
           0.000     0.000     0.000     0.000     0.000     0.000
 ------------------------------------------------------------------------------
-  10 - [25/11/09 21:02:09 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+  14 - [25/11/10 00:24:42 SIGNAL:00 MON.SPEED : 10 TEACH mode]
        (E0909)Program data file in CFast is broken. safe.home
-       OPERATION1:[25/11/09 21:02:08] ( Control Power ON )
+       OPERATION1:[25/11/10 00:24:41] ( Control Power ON )
        OPERATION2:[04/01/10 22:37:04] (  )
        OPERATION3:[04/01/10 22:37:04] (  )
        OPERATION4:[04/01/10 22:37:04] (  )
@@ -3348,9 +3451,9 @@ TP_RECINHI      0   0   0
          JT1       JT2       JT3       JT4       JT5       JT6  
           0.000     0.000     0.000     0.000     0.000     0.000
 ------------------------------------------------------------------------------
-  11 - [25/11/09 21:02:09 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+  15 - [25/11/10 00:24:42 SIGNAL:00 MON.SPEED : 10 TEACH mode]
        (E0909)Program data file in CFast is broken. pos.pick
-       OPERATION1:[25/11/09 21:02:08] ( Control Power ON )
+       OPERATION1:[25/11/10 00:24:41] ( Control Power ON )
        OPERATION2:[04/01/10 22:37:04] (  )
        OPERATION3:[04/01/10 22:37:04] (  )
        OPERATION4:[04/01/10 22:37:04] (  )
@@ -3366,9 +3469,9 @@ TP_RECINHI      0   0   0
          JT1       JT2       JT3       JT4       JT5       JT6  
           0.000     0.000     0.000     0.000     0.000     0.000
 ------------------------------------------------------------------------------
-  12 - [25/11/09 21:02:09 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+  16 - [25/11/10 00:24:42 SIGNAL:00 MON.SPEED : 10 TEACH mode]
        (E0909)Program data file in CFast is broken. pg0
-       OPERATION1:[25/11/09 21:02:08] ( Control Power ON )
+       OPERATION1:[25/11/10 00:24:41] ( Control Power ON )
        OPERATION2:[04/01/10 22:37:04] (  )
        OPERATION3:[04/01/10 22:37:04] (  )
        OPERATION4:[04/01/10 22:37:04] (  )
@@ -3384,9 +3487,9 @@ TP_RECINHI      0   0   0
          JT1       JT2       JT3       JT4       JT5       JT6  
           0.000     0.000     0.000     0.000     0.000     0.000
 ------------------------------------------------------------------------------
-  13 - [25/11/09 21:02:09 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+  17 - [25/11/10 00:24:42 SIGNAL:00 MON.SPEED : 10 TEACH mode]
        (E0909)Program data file in CFast is broken. log
-       OPERATION1:[25/11/09 21:02:08] ( Control Power ON )
+       OPERATION1:[25/11/10 00:24:41] ( Control Power ON )
        OPERATION2:[04/01/10 22:37:04] (  )
        OPERATION3:[04/01/10 22:37:04] (  )
        OPERATION4:[04/01/10 22:37:04] (  )
@@ -3402,9 +3505,9 @@ TP_RECINHI      0   0   0
          JT1       JT2       JT3       JT4       JT5       JT6  
           0.000     0.000     0.000     0.000     0.000     0.000
 ------------------------------------------------------------------------------
-  14 - [25/11/09 21:02:09 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+  18 - [25/11/10 00:24:42 SIGNAL:00 MON.SPEED : 10 TEACH mode]
        (E0909)Program data file in CFast is broken. get.state.pc
-       OPERATION1:[25/11/09 21:02:08] ( Control Power ON )
+       OPERATION1:[25/11/10 00:24:41] ( Control Power ON )
        OPERATION2:[04/01/10 22:37:04] (  )
        OPERATION3:[04/01/10 22:37:04] (  )
        OPERATION4:[04/01/10 22:37:04] (  )
@@ -3420,9 +3523,9 @@ TP_RECINHI      0   0   0
          JT1       JT2       JT3       JT4       JT5       JT6  
           0.000     0.000     0.000     0.000     0.000     0.000
 ------------------------------------------------------------------------------
-  15 - [25/11/09 21:02:09 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+  19 - [25/11/10 00:24:42 SIGNAL:00 MON.SPEED : 10 TEACH mode]
        (E0909)Program data file in CFast is broken. errstart.pc
-       OPERATION1:[25/11/09 21:02:08] ( Control Power ON )
+       OPERATION1:[25/11/10 00:24:41] ( Control Power ON )
        OPERATION2:[04/01/10 22:37:04] (  )
        OPERATION3:[04/01/10 22:37:04] (  )
        OPERATION4:[04/01/10 22:37:04] (  )
@@ -3438,9 +3541,9 @@ TP_RECINHI      0   0   0
          JT1       JT2       JT3       JT4       JT5       JT6  
           0.000     0.000     0.000     0.000     0.000     0.000
 ------------------------------------------------------------------------------
-  16 - [25/11/09 21:02:09 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+  20 - [25/11/10 00:24:42 SIGNAL:00 MON.SPEED : 10 TEACH mode]
        (E0909)Program data file in CFast is broken. autostart.pc
-       OPERATION1:[25/11/09 21:02:08] ( Control Power ON )
+       OPERATION1:[25/11/10 00:24:41] ( Control Power ON )
        OPERATION2:[04/01/10 22:37:04] (  )
        OPERATION3:[04/01/10 22:37:04] (  )
        OPERATION4:[04/01/10 22:37:04] (  )
@@ -3456,9 +3559,9 @@ TP_RECINHI      0   0   0
          JT1       JT2       JT3       JT4       JT5       JT6  
           0.000     0.000     0.000     0.000     0.000     0.000
 ------------------------------------------------------------------------------
-  17 - [25/11/09 21:02:09 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+  21 - [25/11/10 00:24:42 SIGNAL:00 MON.SPEED : 10 TEACH mode]
        (E0909)Program data file in CFast is broken. a.teach.tare
-       OPERATION1:[25/11/09 21:02:08] ( Control Power ON )
+       OPERATION1:[25/11/10 00:24:41] ( Control Power ON )
        OPERATION2:[04/01/10 22:37:04] (  )
        OPERATION3:[04/01/10 22:37:04] (  )
        OPERATION4:[04/01/10 22:37:04] (  )
@@ -3474,9 +3577,9 @@ TP_RECINHI      0   0   0
          JT1       JT2       JT3       JT4       JT5       JT6  
           0.000     0.000     0.000     0.000     0.000     0.000
 ------------------------------------------------------------------------------
-  18 - [25/11/09 21:02:09 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+  22 - [25/11/10 00:24:42 SIGNAL:00 MON.SPEED : 10 TEACH mode]
        (E0909)Program data file in CFast is broken. a.teach.pos
-       OPERATION1:[25/11/09 21:02:08] ( Control Power ON )
+       OPERATION1:[25/11/10 00:24:41] ( Control Power ON )
        OPERATION2:[04/01/10 22:37:04] (  )
        OPERATION3:[04/01/10 22:37:04] (  )
        OPERATION4:[04/01/10 22:37:04] (  )
@@ -3492,9 +3595,9 @@ TP_RECINHI      0   0   0
          JT1       JT2       JT3       JT4       JT5       JT6  
           0.000     0.000     0.000     0.000     0.000     0.000
 ------------------------------------------------------------------------------
-  19 - [25/11/09 21:02:09 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+  23 - [25/11/10 00:24:42 SIGNAL:00 MON.SPEED : 10 TEACH mode]
        (E0909)Program data file in CFast is broken. a.teach.machine
-       OPERATION1:[25/11/09 21:02:08] ( Control Power ON )
+       OPERATION1:[25/11/10 00:24:41] ( Control Power ON )
        OPERATION2:[04/01/10 22:37:04] (  )
        OPERATION3:[04/01/10 22:37:04] (  )
        OPERATION4:[04/01/10 22:37:04] (  )
@@ -3510,9 +3613,9 @@ TP_RECINHI      0   0   0
          JT1       JT2       JT3       JT4       JT5       JT6  
           0.000     0.000     0.000     0.000     0.000     0.000
 ------------------------------------------------------------------------------
-  20 - [25/11/09 21:02:09 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+  24 - [25/11/10 00:24:42 SIGNAL:00 MON.SPEED : 10 TEACH mode]
        (E0909)Program data file in CFast is broken. a.teach.defect
-       OPERATION1:[25/11/09 21:02:08] ( Control Power ON )
+       OPERATION1:[25/11/10 00:24:41] ( Control Power ON )
        OPERATION2:[04/01/10 22:37:04] (  )
        OPERATION3:[04/01/10 22:37:04] (  )
        OPERATION4:[04/01/10 22:37:04] (  )
@@ -3528,9 +3631,9 @@ TP_RECINHI      0   0   0
          JT1       JT2       JT3       JT4       JT5       JT6  
           0.000     0.000     0.000     0.000     0.000     0.000
 ------------------------------------------------------------------------------
-  21 - [25/11/09 21:02:09 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+  25 - [25/11/10 00:24:42 SIGNAL:00 MON.SPEED : 10 TEACH mode]
        (E0909)Program data file in CFast is broken. a.main
-       OPERATION1:[25/11/09 21:02:08] ( Control Power ON )
+       OPERATION1:[25/11/10 00:24:41] ( Control Power ON )
        OPERATION2:[04/01/10 22:37:04] (  )
        OPERATION3:[04/01/10 22:37:04] (  )
        OPERATION4:[04/01/10 22:37:04] (  )
@@ -3546,9 +3649,9 @@ TP_RECINHI      0   0   0
          JT1       JT2       JT3       JT4       JT5       JT6  
           0.000     0.000     0.000     0.000     0.000     0.000
 ------------------------------------------------------------------------------
-  22 - [25/11/09 21:02:09 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+  26 - [25/11/10 00:24:42 SIGNAL:00 MON.SPEED : 10 TEACH mode]
        (E0909)Program data file in CFast is broken. a.home
-       OPERATION1:[25/11/09 21:02:08] ( Control Power ON )
+       OPERATION1:[25/11/10 00:24:41] ( Control Power ON )
        OPERATION2:[04/01/10 22:37:04] (  )
        OPERATION3:[04/01/10 22:37:04] (  )
        OPERATION4:[04/01/10 22:37:04] (  )
@@ -3564,9 +3667,9 @@ TP_RECINHI      0   0   0
          JT1       JT2       JT3       JT4       JT5       JT6  
           0.000     0.000     0.000     0.000     0.000     0.000
 ------------------------------------------------------------------------------
-  23 - [25/11/09 21:02:09 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+  27 - [25/11/10 00:24:42 SIGNAL:00 MON.SPEED : 10 TEACH mode]
        (E0909)Program data file in CFast is broken. a.align
-       OPERATION1:[25/11/09 21:02:08] ( Control Power ON )
+       OPERATION1:[25/11/10 00:24:41] ( Control Power ON )
        OPERATION2:[04/01/10 22:37:04] (  )
        OPERATION3:[04/01/10 22:37:04] (  )
        OPERATION4:[04/01/10 22:37:04] (  )
@@ -3604,25 +3707,25 @@ ICOM_READ[2]   0
 ICOM_READ[3]   2
 ICOM_READ[4]   2
 ICOM_READ[5]   2
-ICOM_READ[6]   0
+ICOM_READ[6]   2
 TP_RELOAD_CNT    0
 TP_SEM_ERROR_CNT    0
 .END
 .ENCTEMPLOG
 === MIN(deg C) ===
-  JT1  - [25/11/09 21:02:20]      0.000
-  JT2  - [25/11/09 21:02:20]      0.000
-  JT3  - [25/11/09 21:02:20]      0.000
-  JT4  - [25/11/09 21:02:20]      0.000
-  JT5  - [25/11/09 21:02:20]      0.000
-  JT6  - [25/11/09 21:02:20]      0.000
+  JT1  - [25/11/10 00:24:53]      0.000
+  JT2  - [25/11/10 00:24:53]      0.000
+  JT3  - [25/11/10 00:24:53]      0.000
+  JT4  - [25/11/10 00:24:53]      0.000
+  JT5  - [25/11/10 00:24:53]      0.000
+  JT6  - [25/11/10 00:24:53]      0.000
 === MAX(deg C) ===
-  JT1  - [25/11/09 21:02:20]      0.000
-  JT2  - [25/11/09 21:02:20]      0.000
-  JT3  - [25/11/09 21:02:20]      0.000
-  JT4  - [25/11/09 21:02:20]      0.000
-  JT5  - [25/11/09 21:02:20]      0.000
-  JT6  - [25/11/09 21:02:20]      0.000
+  JT1  - [25/11/10 00:24:53]      0.000
+  JT2  - [25/11/10 00:24:53]      0.000
+  JT3  - [25/11/10 00:24:53]      0.000
+  JT4  - [25/11/10 00:24:53]      0.000
+  JT5  - [25/11/10 00:24:53]      0.000
+  JT6  - [25/11/10 00:24:53]      0.000
 .END
 .REDUCTIONGEAR_LOG
 SUM_JT1_t01_v01    0 0 0 0 0 0 0 0 0 0 0 
@@ -4357,13 +4460,13 @@ SUM_JT6_t11_v11    0 0 0 0 0 0 0 0 0 0 0
 === USERTP FAULT LOG ===
 === ARMAS  FAULT LOG ===
 .END
-.PROGRAM a.align()@25/11/09 21:02 #0
+.PROGRAM a.align()@25/11/10 00:24 #0
   ALIGN
 .END
-.PROGRAM a.home()@25/11/09 21:02 #0
+.PROGRAM a.home()@25/11/10 00:24 #0
   JMOVE #homep1
 .END
-.PROGRAM a.main()@25/11/09 21:02 #0
+.PROGRAM a.main()@25/11/10 00:24 #0
   SPEED 100 ALWAYS
   ACCURACY 100 ALWAYS
   JMOVE #homep1
@@ -4392,10 +4495,10 @@ SUM_JT6_t11_v11    0 0 0 0 0 0 0 0 0 0 0
     PULSE 19,5
   END
 .END
-.PROGRAM a.teach.defect()@25/11/09 21:02 #0
+.PROGRAM a.teach.defect()@25/11/10 00:24 #0
   BREAK
 .END
-.PROGRAM a.teach.machine()@25/11/09 21:02 #0
+.PROGRAM a.teach.machine()@25/11/10 00:24 #0
   TOOL tool.pick[hmi.tool.no]
 ;
   POINT .temp = #pos.mach[hmi.pos.pos]
@@ -4408,7 +4511,7 @@ SUM_JT6_t11_v11    0 0 0 0 0 0 0 0 0 0 0
   BREAK
   TWAIT 0.5
 .END
-.PROGRAM a.teach.pos()@25/11/09 21:02 #0
+.PROGRAM a.teach.pos()@25/11/10 00:24 #0
   TOOL tool.pick[hmi.tool.no]
 ;
   POINT .temp = #pos.pos[hmi.pos.pos]
@@ -4421,10 +4524,10 @@ SUM_JT6_t11_v11    0 0 0 0 0 0 0 0 0 0 0
   BREAK
   TWAIT 0.5
 .END
-.PROGRAM a.teach.tare()@25/11/09 21:02 #0
+.PROGRAM a.teach.tare()@25/11/10 00:24 #0
   BREAK
 .END
-.PROGRAM autostart.pc()@25/11/09 21:02 #0
+.PROGRAM autostart.pc()@25/11/10 00:24 #0
 ; System switches
   CP ON
   PREFETCH.SIGINS OFF
@@ -4443,7 +4546,7 @@ SUM_JT6_t11_v11    0 0 0 0 0 0 0 0 0 0 0
   CALL watchdog.pc
 ;
 .END
-.PROGRAM errstart.pc()@25/11/09 21:02 #517
+.PROGRAM errstart.pc()@25/11/10 00:24 #519
   IF ERROR==-34021 OR ERROR==-10100 THEN
     tcp.socket = -1
     MC ERESET
@@ -4458,7 +4561,7 @@ SUM_JT6_t11_v11    0 0 0 0 0 0 0 0 0 0 0
   TWAIT 5
   ERRSTART.PC ON
 .END
-.PROGRAM get.state.pc(.$state)@25/11/09 21:02 #276446
+.PROGRAM get.state.pc(.$state)@25/11/10 00:24 #301644
   .$state = "POWER:"
   IF SWITCH(POWER ) THEN
     .$state = .$state+"TRUE;"
@@ -4544,7 +4647,16 @@ SUM_JT6_t11_v11    0 0 0 0 0 0 0 0 0 0 0
 ; MAX 12
   .$state = .$state+"\n"
 .END
-.PROGRAM log(.$msg)@25/11/09 21:02 #276
+.PROGRAM id4()@25/11/10 00:26 #0; 312.229.002_1
+; Object ID (Use in stz.put)
+  object.id = 4
+; Working gripper
+  gripper.type = 1
+; Max objects in output tare
+  max.tare.count = 99
+;
+.END
+.PROGRAM log(.$msg)@25/11/10 00:24 #276
   FOR .i = 0 TO 10
     $log.entry[.i] = $log.entry[.i+1]
   END
@@ -4554,11 +4666,11 @@ SUM_JT6_t11_v11    0 0 0 0 0 0 0 0 0 0 0
   IFPWPRINT 2,1,1,9,10=$log.entry[4],$log.entry[5],$log.entry[6],$log.entry[7]
   IFPWPRINT 3,1,1,9,10=$log.entry[8],$log.entry[9],$log.entry[10],$log.entry[11]
 .END
-.PROGRAM pg0()@25/11/09 21:02 #0
+.PROGRAM pg0()@25/11/10 00:24 #0
   ALIGN
   JOINT SPEED9 ACCU1 TIMER0 TOOL1 WORK0 CLAMP1 (OFF,0,0,O) 2 (OFF,0,0,O) OX= WX= #[-90,0,-90,0,-90,0] ;
 .END
-.PROGRAM pos.pick(.pos)@25/11/09 21:02 #138
+.PROGRAM pos.pick(.pos)@25/11/10 00:24 #138
   IF FALSE THEN
     .pos = hmi.pos.pos
   END
@@ -4585,7 +4697,7 @@ SUM_JT6_t11_v11    0 0 0 0 0 0 0 0 0 0 0
   LMOVE .temp+TRANS(0,0,200)
   LMOVE #homep1
 .END
-.PROGRAM safe.home()@25/11/09 21:02 #0
+.PROGRAM safe.home()@25/11/10 00:24 #0
 ; IMPLEMENT SAFE RETURN TO HOME POSITION
   CALL log("Moving to home position. State: MoveToHome")
   $action = "MoveToHome"
@@ -4593,7 +4705,7 @@ SUM_JT6_t11_v11    0 0 0 0 0 0 0 0 0 0 0
   ACCURACY 10 ALWAYS
   JMOVE #homep1
 .END
-.PROGRAM sender.pc()@25/11/09 21:02 #0
+.PROGRAM sender.pc()@25/11/10 00:24 #0
 ;
 ; 0 - FALSE
 ; 1 - TRUE
@@ -4609,7 +4721,7 @@ SUM_JT6_t11_v11    0 0 0 0 0 0 0 0 0 0 0
     TWAIT 0.25
   END
 .END
-.PROGRAM set.io.pc()@25/11/09 21:02 #9
+.PROGRAM set.io.pc()@25/11/10 00:24 #10
 ; Gripper IO
   release.grip = 1
   capture.grip = 2
@@ -4643,7 +4755,7 @@ SUM_JT6_t11_v11    0 0 0 0 0 0 0 0 0 0 0
   s.in1.disable = 2017
   s.in2.disable = 2018
 .END
-.PROGRAM set.vars.pc()@25/11/09 21:02 #9
+.PROGRAM set.vars.pc()@25/11/10 00:24 #10
 ; Variables init
 ;
   IF NOT EXISTCHAR("$log.entry[11]") THEN
@@ -4658,7 +4770,7 @@ SUM_JT6_t11_v11    0 0 0 0 0 0 0 0 0 0 0
 ;
   tyterm = 0
 .END
-.PROGRAM tcp.callback.pc(.$data[],.data.length)@25/11/09 21:02 #96
+.PROGRAM tcp.callback.pc(.$data[],.data.length)@25/11/10 00:24 #96
   .$temp = "Received "+$ENCODE(.data.length)+" strings:"
   PRINT tcp.recv.ena: .$temp
   FOR .i = 1 TO .data.length
@@ -4694,7 +4806,7 @@ SUM_JT6_t11_v11    0 0 0 0 0 0 0 0 0 0 0
 ;.$data[1] = "PING\n"
 ;CALL tcp.send2.pc (.$data[], 1)
 .END
-.PROGRAM tcp.client.pc()@25/11/09 21:02 #0
+.PROGRAM tcp.client.pc()@25/11/10 00:24 #0
   .tcp.retry.count = 10
   WHILE TRUE DO
 ; Checking for active sockets and closing them
@@ -4760,7 +4872,7 @@ SUM_JT6_t11_v11    0 0 0 0 0 0 0 0 0 0 0
     END
   END
 .END
-.PROGRAM tcp.send.pc(.$data[],.data.length)@25/11/09 21:02 #114404
+.PROGRAM tcp.send.pc(.$data[],.data.length)@25/11/10 00:24 #114404
   IF tcp.socket>0 THEN
     TCP_SEND .status,tcp.socket,.$data[1],.data.length,tcp.send.tmo
     IF .status>=0 THEN
@@ -4784,7 +4896,7 @@ SUM_JT6_t11_v11    0 0 0 0 0 0 0 0 0 0 0
   END
 ;
 .END
-.PROGRAM tcp.send2.pc(.$data[],.data.length)@25/11/09 21:02 #0
+.PROGRAM tcp.send2.pc(.$data[],.data.length)@25/11/10 00:24 #0
   IF tcp.socket>0 THEN
     TCP_SEND .status,tcp.socket,.$data[1],.data.length,tcp.send.tmo
     IF .status>=0 THEN
@@ -4804,7 +4916,7 @@ SUM_JT6_t11_v11    0 0 0 0 0 0 0 0 0 0 0
   END
 ;
 .END
-.PROGRAM tcp.send3.pc(.$data[],.data.length)@25/11/09 21:02 #276442
+.PROGRAM tcp.send3.pc(.$data[],.data.length)@25/11/10 00:24 #301637
   IF tcp.socket>0 THEN
     TCP_SEND .status,tcp.socket,.$data[1],.data.length,tcp.send.tmo
     IF .status>=0 THEN
@@ -4824,7 +4936,7 @@ SUM_JT6_t11_v11    0 0 0 0 0 0 0 0 0 0 0
   END
 ;
 .END
-.PROGRAM watchdog.pc()@25/11/09 21:02 #0
+.PROGRAM watchdog.pc()@25/11/10 00:24 #0
   WHILE TRUE DO
     IF SIG(s.tcp.ena) THEN
       tcp.ena = tyterm
@@ -4856,7 +4968,7 @@ SUM_JT6_t11_v11    0 0 0 0 0 0 0 0 0 0 0
   END
 .END
 .TRANS
-test 26.184204 544.134399 143.333954 -103.807800 179.145859 97.269356
+test 26.184204 544.134399 143.333954 -103.807800 179.145859 97.269363
 tool.pick[1] 0.000000 10.000000 120.000000 -22.500000 180.000000 0.000000
 tool.pick[2] 0.000000 10.000000 120.000000 0.000000 0.000000 0.000000
 tool.pick[3] 0.000000 10.000000 120.000000 0.000000 0.000000 0.000000
@@ -4887,6 +4999,7 @@ grip.clamp = 4
 grip.clamped = 1002
 grip.unclamp = 3
 grip.unclamped = 1001
+hmi.obj.id = 0
 hmi.pos.pos = 4
 hmi.tool.no = 1
 ip[1] = 127
@@ -4897,15 +5010,20 @@ release.grip = 1
 release.tare = 1
 rs13.det.put = 1019
 rs13.home1 = 1017
+rs13.tare.ack = 1020
 rs13.work[1] = 1018
 rs7.det.picked = 19
+rs7.tare.chg = 20
 s.grip.sns1.dis = 2014
 s.grip.sns2.dis = 2015
 s.in1.disable = 2017
 s.in2.disable = 2018
+s.measure.ng = 2020
+s.measure.ok = 2019
 s.tcp.ena = 2013
 s.tcp.recv.ena = 2012
 s.tcp.send.ena = 2011
+s.vacuum = 2021
 start.task = 2001
 tcp.connect.tmo = 5
 tcp.dbg = -1
@@ -4917,7 +5035,7 @@ tcp.recv.ena = -1
 tcp.send.dbg = -1
 tcp.send.ena = -1
 tcp.send.tmo = 5
-tcp.socket = 560
+tcp.socket = 576
 tyterm = 0
 .END
 .STRINGS

@@ -78,7 +78,8 @@ def set_sensor_state(request: SensorState):
     valid_settings = ["stockerouttaresensor", 
                       "stockerintaresensor",
                       "outpalletsensor",
-                      "defectpalletsensor",]
+                      "defectpalletsensor",
+                      "machinevacuum"]
     if request.SensorName.lower() not in valid_settings:
         return {"Status": "Failed", 
                 "Code": -1,

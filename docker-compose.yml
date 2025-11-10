@@ -217,7 +217,7 @@ volumes:
   data:
     driver: local
     driver_opts:
-      type: none
+      type: none2
       device: ./data
       o: bind
 

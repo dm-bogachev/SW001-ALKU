@@ -37,6 +37,7 @@ curl -X 'POST' \
 "stockerintaresensor"
 "outpalletsensor"
 "defectpalletsensor"
+"machinevacuum"
 
 3. Результат измерений
 
