@@ -561,9 +561,9 @@ N_INT102    "do.work[2]|"
   tare.counter = 0
   full.counter = 0
   ; First tare pick
-  CALL stock.in.take (intare.i[1], intare.j[1])
-  JMOVE #homep1
   CALL stock.out.take (outtare.i[1], outtare.j[1])
+  JMOVE #homep1
+  CALL stock.in.take (intare.i[1], intare.j[1])
   JMOVE #homep1
   JMOVE #wait.pick
   ;
@@ -610,10 +610,10 @@ N_INT102    "do.work[2]|"
     END
   END
   ; Last tare put
-  CALL stock.out.back (outtare.i[intare.count], outtare.j[intare.count])
-  JMOVE #homep1
   JMOVE #wait.pick
   CALL stock.in.back (intare.i[outtare.count], intare.j[outtare.count])
+  JMOVE #homep1
+  CALL stock.out.back (outtare.i[intare.count], outtare.j[intare.count])
   ;
   JMOVE #homep1
   
