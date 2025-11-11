@@ -92,6 +92,29 @@ class Background(Thread):
 
         return not failed
 
+    def set_speed(self, speed: int):
+        failed = False
+        command = f"SPEED;{speed};"
+        response = requests.post(f"{RS013N_API_URL}/send_command?command={command}", 
+                              headers={'accept': 'application/json'}, 
+                              timeout=1)  # Added timeout
+        if response.status_code != 200:
+            logger.error(f"Ошибка отправки команды на RS013N: {response.text}")
+            failed = True
+        else:
+            logger.info(f"Команда отправлена на RS013N: {command}")
+
+        response = requests.post(f"{RS007L_API_URL}/send_command?command={command}", 
+                              headers={'accept': 'application/json'}, 
+                              timeout=1)  # Added timeout
+        if response.status_code != 200:
+            logger.error(f"Ошибка отправки команды на RS007L: {response.text}")
+            failed = True
+        else:
+            logger.info(f"Команда отправлена на RS007L: {command}")
+
+        return not failed
+
     def send_sensor_state(self, SensorName: str, State: bool):
         failed = False
         command = f"Sensor;{SensorName};{State};"

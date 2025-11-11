@@ -59,7 +59,7 @@ class FrameProcessor:
         self.__models = self.detector.get_models_list()
 
         self.process_started = False
-        self.__objects = None
+        self.objects = None
 
         self.__process_thread = threading.Thread(target=self.__process_loop).start()
 
@@ -100,7 +100,7 @@ class FrameProcessor:
         if markers and len(markers) > 0:
             logger.debug(f"Обнаружено {len(markers)} маркерa(ов) ArUco")
             self.__draw_markers(frame, markers)
-        self.__objects = None
+        self.objects = None
         self.__put_frame_to_redis(frame)
 
     def __process_calibrated(self, frame):
@@ -112,11 +112,11 @@ class FrameProcessor:
             if predictions and len(predictions) > 0:
                 frame, predictions = self.function.process(frame, predictions)
             else:
-                self.__objects = None
+                self.objects = None
             if predictions and len(predictions) > 0:
-                self.__objects = predictions
+                self.objects = predictions
             else:
-                self.__objects = None
+                self.objects = None
             for x in range(0, frame.shape[1], 500):
                 cv2.line(frame, (x, 0), (x, frame.shape[0]), (0, 255, 0), 3)
             for y in range(0, frame.shape[0], 500):
@@ -285,12 +285,12 @@ class FrameProcessor:
 
     def get_objects(self):
         """Получение объектов"""
-        return self.__objects
+        return self.objects
 
     def get_first_object(self):
         """Получение первого объекта"""
-        if self.__objects:
-            return self.__objects[0]
+        if self.objects:
+            return self.objects[0]
         return None
 
 

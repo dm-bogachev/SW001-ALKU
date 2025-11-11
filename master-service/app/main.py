@@ -60,7 +60,6 @@ def reboot():
     threading.Thread(target=delayed_exit).start()
     return {"Status": "Reboot"}
 
-
 @app.post("/master/start")
 def start_process(request: ProcessRequest):
     """ Запуск процесса """
@@ -82,7 +81,7 @@ def set_sensor_state(request: SensorState):
                       "machinevacuum"]
     if request.SensorName.lower() not in valid_settings:
         return {"Status": "Failed", 
-                "Code": -1,
+                "Code": -2,
                 "Reason": "Wrong sensor name"
                 }
     logger.debug(f"Запрос /master/sensor_state ({request.SensorName}: {request.State})")
@@ -148,6 +147,22 @@ def check_etalon(etalon_id: int):
                 }
     return {"Status": "OK"}
 
+@app.post("/master/set_speed")
+def set_speed(speed: int):
+    """ Установка скорости робота """
+    logger.debug("Запрос /master/set_speed")
+    if speed < 1 or speed > 100:
+        return {"Status": "Failed",
+                "Code": -2,
+                "Reason": "Speed must be between 1 and 100"
+                }
+    if not master.set_speed(speed):
+        return {"Status": "Failed",
+                "Code": -1,
+                "Reason": "Error in sending to robot"
+                }
+    return {"Status": "OK"}
+
 @app.post("/master/debug/intare_sensor_ok")
 def debug_intare_sensor_ok():
     """ Отладка: сигнал сенсора входных тар """
@@ -193,12 +208,21 @@ def debug_pneumo_close():
     return {"Status": "OK"}
 
 
-@app.get("/data")
+@app.get("/master/data")
 def get_data():
     """ Получение собранных данных """
-    logger.debug("Запрос /data")
-    data = master.collector.get_data()
-    return data
+    logger.debug("Запрос /master/data")
+    try:
+        data = master.collector.get_data()
+    except Exception as e:
+        logger.error(f"Ошибка при получении данных: {e}")
+        return {"Status": "Failed",
+                "Code": -1,
+                "Reason": "Error in getting data"
+                }
+    return {"Status": "OK",
+            "Data": data
+            }
 
 if __name__ == "__main__":
     import uvicorn

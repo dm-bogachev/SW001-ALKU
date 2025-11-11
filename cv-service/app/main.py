@@ -154,6 +154,21 @@ def get_first_object():
     else:
         return {"Status": "Failed"}
 
+@app.get("/get_state")
+def get_state():
+    """Получение состояния """
+    try:
+        if processor.objects is not None:
+            count = len(processor.objects)
+        else:
+            count = 0
+        return {"Status": "OK", 
+                "ModelName": processor.detector.get_current_yolo_model(),
+                "Count": count,}
+    except Exception as e:
+        logger.error(f"Ошибка при получении состояния: {e}")
+        return {"Status": "Failed"}
+
 
 if __name__ == "__main__":
     import uvicorn

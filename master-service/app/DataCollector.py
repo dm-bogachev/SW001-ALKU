@@ -72,37 +72,134 @@ class DataCollector(Thread):
         return healths
 
     def __collect_robot_data(self, ROBOT_API_URL):
+        defaults = {
+            "connected": False,
+            "speed": 100,
+            "power": False,
+            "teach": False,
+            "cs": False,
+            "error": False,
+            "ecode": 0,
+            "teachl": False,
+            "tpemg": False,
+            "opemg": False,
+            "exemg": False,
+            "home": False,
+            "batalm": False,
+            "action": "",
+            "tarein": None,
+            "tareout": None,
+            "gripper": None,
+            "pickcount": 0,
+            "defectcount": 0,
+        }
+
         try:
             resp = requests.get(f"{ROBOT_API_URL}/status", timeout=3)
             resp.raise_for_status()
-            data = resp.json()
-            if not data:
-                return None
-            data = data.get("RobotStatus", {})
-            robot = RobotState(
-                connected=data.get("connected", False),
-                power=data.get("power", False),
-                teach=data.get("teach", False),
-                cs=data.get("cs", False),
-                error=data.get("error", False),
-                ecode=data.get("ecode", 0),
-                teachl=data.get("teachl", False),
-                tpemg=data.get("tpemg", False),
-                opemg=data.get("opemg", False),
-                exemg=data.get("exemg", False),
-                home=data.get("home", False),
-                batalm=data.get("batalm", False),
-                action=data.get("action", ""),
-            )
-            return robot
+            payload = resp.json()
+            if not payload:
+                return defaults.copy()
+
+            rs = payload.get("RobotStatus", {}) or {}
+            result = defaults.copy()
+
+            # Boolean-like fields
+            for key in ("connected", "power", "teach", "cs", "error",
+                        "teachl", "tpemg", "opemg", "exemg", "home", "batalm"):
+                if key in rs:
+                    val = rs.get(key)
+                    if isinstance(val, str):
+                        v = val.strip().upper()
+                        if v == "TRUE":
+                            result[key] = True
+                        elif v == "FALSE":
+                            result[key] = False
+                        else:
+                            result[key] = bool(val)
+                    else:
+                        result[key] = bool(val)
+
+            # Integer-like fields
+            for key in ("speed", "ecode", "pickcount", "defectcount", "tarein", "tareout", "gripper"):
+                if key in rs:
+                    try:
+                        result[key] = int(rs.get(key))
+                    except (TypeError, ValueError):
+                        # keep default on parse failure
+                        pass
+
+            # Action / others
+            if "action" in rs:
+                result["action"] = str(rs.get("action") or "")
+
+            return result
+
         except requests.exceptions.RequestException as e:
             logger.warning(f"Failed to get robot data from {ROBOT_API_URL}: {e}")
+            return defaults.copy()
 
     def __collect_rs013n_data(self):
+        # Use generic collector and adapt defaults for RS013N if needed
         return self.__collect_robot_data(RS013N_API_URL)
 
     def __collect_rs007l_data(self):
-        return self.__collect_robot_data(RS007L_API_URL)
+        """
+        RS007L не использует параметры 'tarein' и 'tareout'.
+        Берём общий словарь от __collect_robot_data и удаляем эти ключи, если они там есть.
+        """
+        data = self.__collect_robot_data(RS007L_API_URL)
+        if data is None:
+            return None
+        # Удаляем ключи, которые не применимы к RS007L
+        data.pop("tarein", None)
+        data.pop("tareout", None)
+        return data
+
+    def __collect_cv_data(self):
+        """
+        Сбор состояния CV: возвращает dict:
+        {
+          "model": "<model_name or model_file_name or empty>",
+          "objectcount": <int>
+        }
+        """
+        defaults = {
+            "model": "",
+            "objectcount": 0,
+        }
+
+        try:
+            resp = requests.get(f"{CV_API_URL}/get_state", timeout=3)
+            resp.raise_for_status()
+            payload = resp.json()
+            if not payload:
+                return defaults.copy()
+
+            result = defaults.copy()
+
+            # Extract model information from ModelName dict
+            model_info = payload.get("ModelName")
+            if isinstance(model_info, dict):
+                model_name = model_info.get("model_name")
+                if model_name:
+                    result["model"] = str(model_name)
+
+            # Get object count from payload
+            count = payload.get("Count")
+            if count is None:
+                # возможные альтернативы
+                count = payload.get("count") or payload.get("ObjectCount") or payload.get("ObjectsCount")
+            try:
+                result["objectcount"] = int(count) if count is not None else 0
+            except (ValueError, TypeError):
+                result["objectcount"] = 0
+
+            return result
+
+        except requests.exceptions.RequestException as e:
+            logger.warning(f"Failed to get CV data from {CV_API_URL}: {e}")
+            return defaults.copy()
 
     def get_data(self):
         return {
@@ -110,6 +207,7 @@ class DataCollector(Thread):
             "states": self.states,
             "rs013n": self.rs013n,
             "rs007l": self.rs007l,
+            "cv": self.cv,
         }
 
     def run(self):
@@ -119,6 +217,7 @@ class DataCollector(Thread):
             self.rs013n = self.__collect_rs013n_data()
             self.rs007l = self.__collect_rs007l_data()
             self.states = self.__check_states()
+            self.cv = self.__collect_cv_data()
             time.sleep(0.1)
 
         
