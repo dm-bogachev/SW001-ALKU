@@ -183,7 +183,7 @@ class DataCollector(Thread):
             if isinstance(model_info, dict):
                 model_name = model_info.get("model_name")
                 if model_name:
-                    result["model"] = str(model_name)
+                    result["productname"] = str(model_name)
 
             # Get object count from payload
             count = payload.get("Count")

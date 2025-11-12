@@ -9,11 +9,12 @@ N_OX17    "do.home1|"
 N_OX18    "do.work[1]|"
 N_OX19    "rs13.det.put|"
 N_OX20    "rs13.tare.ack|"
+N_OX22    "rs07.put.ack|"
 N_WX1    "grip.unclamped|"
 N_WX2    "grip.clamped|"
 N_WX17    "rs7.home1|"
 N_WX18    "rs7.work[1]|"
-N_WX19    "rs7.det.picked|"
+N_WX19    "rs7.working|"
 N_WX20    "rs7.tare.chg|"
 N_INT1    "di.ifp.page[1]|"
 N_INT2    "di.ifp.page[2]|"
@@ -128,10 +129,10 @@ N_INT102    "do.work[2]|"
   ;
   CALL safe.home
   ;
-  SIGNAL -rs13.det.put
-  ;
   SPEED 100 ALWAYS
   ACCURACY 100 ALWAYS
+  ;
+  RESET
   ;
   CALL log ("Main cycle started. State: WaitingForCommand")
   $action = "WaitingForCommand"
@@ -524,12 +525,17 @@ N_INT102    "do.work[2]|"
   LMOVE .temp + TRANS (0, 0, 200)
 .END
 .PROGRAM id4 () ; 312.229.002_1
-    ; Object ID (Use in stz.put)
+    ; Object ID
     object.id = 4
     ; Working gripper
     gripper.type = 1
     ; Max objects in output tare
-    max.tare.count = 99
+    max.tare.count = 3
+    ;
+    detail.length = 23.5
+    start.shift.x = 0
+    start.shift.y = 15
+    start.shift.z = 0
     ;
 .END
 .PROGRAM log (.$msg)
@@ -593,12 +599,13 @@ N_INT102    "do.work[2]|"
   WHILE .keep.pick DO
     ;
     IF SIG (rs7.tare.chg) THEN
-      PULSE rs13.tare.ack, 10
+      CALL log ("OutPalletChange requested")
       JMOVE #homep1
       CALL stock.out.back (outtare.i[current.outtare], outtare.j[current.outtare])
       current.outtare = current.outtare + 1
       CALL stock.out.take (outtare.i[current.outtare], outtare.j[current.outtare])
-      JMOVE #homep1
+      ;JMOVE #homep1
+      PULSE rs13.tare.ack, 10
       JMOVE #wait.pick
       $action = "WaitForPick"
       CALL log ("Wait for new pick. State: WaitForPick")
@@ -608,6 +615,7 @@ N_INT102    "do.work[2]|"
       $cycle.command = ""
       JMOVE #wait.pick
       CALL stz.pick
+      SWAIT -rs7.working, -rs7.work[1]
       CALL stz.put (object.id)
       tare.counter = tare.counter + 1
       full.counter = full.counter + 1
@@ -615,7 +623,7 @@ N_INT102    "do.work[2]|"
       CALL log ("Wait for new pick. State: WaitForPick")
     END
     ;
-    IF $cycle.command == "NOPICK" THEN
+    IF $cycle.command == "NOPICK" OR full.counter == max.tare.count THEN
       $cycle.command = ""
       IF current.intare <> intare.count THEN
         CALL stock.in.back (intare.i[current.intare], intare.j[current.intare])
@@ -624,6 +632,8 @@ N_INT102    "do.work[2]|"
         CALL stock.in.take (intare.i[current.intare], intare.j[current.intare])
       ELSE
         .keep.pick = FALSE
+        SIGNAL rs13.finish
+        SWAIT rs07.fin.ack
       END
       $action = "WaitForPick"
       CALL log ("Wait for new pick. State: WaitForPick")
@@ -1182,12 +1192,16 @@ ANY:
   do.bat.alm = 2010
   ;
   rs13.det.put = 19; EIP
-  rs7.det.picked = 1019; EIP
+  rs7.working = 1019; EIP
   ;
   rs7.home1 = 1017 ; EIP
   rs7.work[1] = 1018 ; EIP
   rs13.tare.ack = 20
   rs7.tare.chg = 1020
+  rs13.finish = 21
+  rs07.fin.ack = 1021
+  rs07.put.ack = 1022
+  ;
   di.ifp.page[1] = 2001
   di.ifp.page[2] = 2002
   di.ifp.page[3] = 2003
@@ -1313,7 +1327,7 @@ ANY:
   BREAK
   ;
   ACCURACY 0
-  SPEED 10
+  SPEED 50 MM/S
   LMOVE stocker.in[.i, .j]
   BREAK
   PULSE release.tare
@@ -1354,7 +1368,7 @@ ANY:
   TWAIT 0.5
   ;
   ACCURACY 0
-  SPEED 20
+  SPEED 50 MM/S
   LMOVE stocker.in[.i, .j] + TRANS (20)
   ;
   SPEED 20
@@ -1451,7 +1465,7 @@ ANY:
   BREAK
   ;
   ACCURACY 0
-  SPEED 10
+  SPEED 50 MM/S
   LMOVE stocker.out[.i, .j]
   BREAK
   PULSE release.tare
@@ -1492,7 +1506,7 @@ ANY:
   TWAIT 0.5;
   ;
   ACCURACY 0
-  SPEED 20
+  SPEED 50 MM/S
   LMOVE stocker.out[.i, .j] + TRANS (20)
   ;
   SPEED 20
@@ -1883,10 +1897,9 @@ ANY:
       grip.zsh[hmi.tool.no] = hmi.gz
       grip.180xsh[hmi.tool.no] = hmi.g180x
       grip.180ysh[hmi.tool.no] = hmi.g180y
-      
     END
     ;
-    IF SIG(rs7.det.picked) THEN
+    IF SIG(rs07.put.ack) THEN
       SIGNAL -rs13.det.put
     END
     ;
@@ -1967,10 +1980,12 @@ ANY:
 	;       .$temp 
 	;     2:s.in.table:F
 	;       .no 
+	;       .$temp 
 	;       .i 
 	;       .j 
 	;     2:s.out.table:F
 	;       .no 
+	;       .$temp 
 	;       .i 
 	;       .j 
 	;     2:s.in.table_old:F
@@ -2079,6 +2094,7 @@ ANY:
 	;       .det.put 
 	;     8:set.vars.pc:B
 	;       .i 
+	;     8:autostart.pc:B
 	;     8:set.io.pc:B
 	;       .home1 
 	;       .work 
@@ -2087,7 +2103,6 @@ ANY:
 	;       .tare.ack 
 	;       .tare.chg 
 	;       .disable 
-	;     8:autostart.pc:B
 	;   Group:TCPIP:9
 	;     9:get.state.pc:B
 	;       .$state 
@@ -2108,6 +2123,7 @@ ANY:
 	;       .i 
 	;       .$sensor.name 
 	;       .$sensor.state 
+	;       .$spd 
 	;       .$x 
 	;       .$y 
 	;       .$a 
@@ -2268,7 +2284,7 @@ ANY:
 	; s.in1.disable 
 	; s.in2.disable 
 	; rs13.det.put 
-	; rs7.det.picked 
+	; rs7.working 
 	; s.sensor.iss 
 	; s.sensor.oss 
 	; s.sensor.ot 
@@ -2277,6 +2293,7 @@ ANY:
 	; s.pneumo.open 
 	; s.pneumo.close 
 	; s.debug 
+	; rs07.put.ack 
 	; @@@ TOOLS @@@
 	; tool.pin 
 	; tool.pick[] 
@@ -2520,7 +2537,7 @@ s.open.pneumo = 2016
 s.in1.disable = 2017
 s.in2.disable = 2018
 rs13.det.put = 19
-rs7.det.picked = 1019
+rs7.working = 1019
 s.sensor.iss = 2019
 s.sensor.oss = 2020
 s.sensor.ot = 2021
@@ -2559,6 +2576,7 @@ s.pneumo.close = 2023
 s.debug = 2024
 mon.speed = 100
 pick.count = 0
+rs07.put.ack = 22
 .END
 .STRINGS
 $tcp.ip = "192.168.7.137"

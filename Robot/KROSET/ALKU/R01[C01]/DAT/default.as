@@ -16,7 +16,7 @@
 .NETCONF     0.0.0.0,"",0.0.0.0,0.0.0.0,0.0.0.0,0.0.0.0,""
 .NETCONF2     0.0.0.0,0.0.0.0,0.0.0.0
 .ROBOTDATA1
-ZROBOT.TYPE    30  14   6   1        -766   RS013N-A001 ( 2025-11-09 17:54 )
+ZROBOT.TYPE    30  14   6   1        -766   RS013N-A001 ( 2025-11-11 16:10 )
 ZSYSTEM         1   5         -91
 ZLINEAR         0   0   0   0   0   0  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1         179
 CONT_CODE     701      -10516
@@ -56,7 +56,7 @@ ZSETKVFF_SVSPEC5    1.000   1.000   1.000   1.000   1.000   1.000  -1.000  -1.00
 ZSETKVFFACC_SVSPEC5    0.000   0.000   0.000   0.000   0.000   0.000 -11.000 -11.000 -11.000 -11.000 -11.000 -11.000 -11.000 -11.000 -11.000 -11.000 -11.000 -11.000 -1832648705
 ZSETKVFFJRK_SVSPEC5    0.000   0.000   0.000   0.000   0.000   0.000 -11.000 -11.000 -11.000 -11.000 -11.000 -11.000 -11.000 -11.000 -11.000 -11.000 -11.000 -11.000 -1832648705
 ZSETKAFF2_SVSPEC5    1.000   1.000   1.000   1.000   1.000   1.000  -1.000  -1.000  -1.000  -1.000  -1.000  -1.000  -1.000  -1.000  -1.000  -1.000  -1.000  -1.000 -1262485505
-ZSAVEMR                56          14       65532       65533       65531       65531           0           0           0           0           0           0           0           0           0           0           0           0    -3932956
+ZSAVEMR                 0           0           0           0           0           0           0           0           0           0           0           0           0           0           0           0           0           0          -1
 ZRADIUS        1663.943  1663.943   963.943   203.943   203.943    78.440     1.000     1.000     1.000     1.000     1.000     1.000     1.000     1.000     1.000     1.000     1.000     1.000  -331702932
 ZJTSPEED        265.000   250.000   265.000   475.000   475.000   730.000    10.000    10.000    10.000    10.000    10.000    10.000    10.000    10.000    10.000    10.000    10.000    10.000  -217235457
 ZACCTIME          0.282     0.352     0.238     0.208     0.222     0.262     0.384     0.384     0.384     0.384     0.384     0.384     0.384     0.384     0.384     0.384     0.384     0.384   879587508
@@ -485,7 +485,7 @@ OP_ACCUTYPE2  ON  -3818
 OP_MTN_CHK    OFF -4417
 OP_CHKINCHING  OFF -4345
 OP_COLDET     OFF -4300
-OP_BLTARM OFF -4280
+OP_BLTARM     OFF -4280
 OP_IPKALM     OFF -4145
 OP_KADOUINFO  ON  -4586
 OP_IMON2      OFF -3341
@@ -2354,7 +2354,7 @@ SWITCH AUTOSTART2.PC   OFF
 SWITCH AUTOSTART3.PC   OFF
 SWITCH AUTOSTART4.PC   OFF
 SWITCH AUTOSTART5.PC   OFF
-SWITCH ERRSTART.PC     OFF
+SWITCH ERRSTART.PC     ON 
 SWITCH AUTOSTART.LSQ   OFF
 SWITCH DISPIO_01       OFF
 SWITCH HOLD.STEP       ON 
@@ -2838,7 +2838,8 @@ MOVING_AREA       0.000     0.000     0.000     0.000     0.000     0.000
 ENC_ALARM              0          0          0          0          0          0
 N_OX19   "rs13.det.put|"
 N_OX20   "rs13.tare.ack|"
-N_WX19   "rs7.det.picked|"
+N_OX22   "rs07.put.ack|"
+N_WX19   "rs7.working|"
 N_WX20   "rs7.tare.chg|"
 N_INT22   "s.pneumo.open|"
 N_INT23   "s.pneumo.close|"
@@ -3202,17 +3203,19 @@ TP_RECINHI      0   0   0
 182,3,224,244,28,159,252,255,251,255,0,31,2,241,52,255,
 .END
 .ERRLOG
-   1 - [25/11/09 21:01:56 SIGNAL:00 MON.SPEED : 100 REPEAT mode]
+   1 - [25/11/13 00:00:24 SIGNAL:00 MON.SPEED : 100 REPEAT mode]
        (E0102)Variable is not defined.
-       OPERATION1:[25/11/09 21:01:55] ( AUX1 connect )
-       OPERATION2:[25/11/09 21:01:54] ( TEACH->REPEAT )
-       OPERATION3:[25/11/09 21:01:54] ( auxapi connect )
-       OPERATION4:[25/11/09 21:01:54] ( ERROR RESET )
-       OPERATION5:[25/11/09 21:01:50] ( Control Power ON )
+       OPERATION1:[25/11/13 00:00:23] ( AUX1 connect )
+       OPERATION2:[25/11/13 00:00:23] ( TEACH->REPEAT )
+       OPERATION3:[25/11/13 00:00:23] ( auxapi connect )
+       OPERATION4:[25/11/13 00:00:22] ( ERROR RESET )
+       OPERATION5:[25/11/13 00:00:18] ( Control Power ON )
        OPERATION6:[04/01/10 22:37:04] (  )
        OPERATION7:[04/01/10 22:37:04] (  )
        OPERATION8:[04/01/10 22:37:04] (  )
        OPERATION9:[04/08/04 06:13:36] (  )
+       ROBOT1:
+        PROGRAM:a.main Step:0 Cur_Step:1 STATUS:STOP
        PC1 PROGRAM: watchdog.pc Step No: 52 STATUS: WAIT
        PC2 PROGRAM: tcp.client.pc Step No: 38 STATUS: RUN
        PC5 PROGRAM: errstart.pc Step No: 12 STATUS: WAIT
@@ -3226,9 +3229,9 @@ TP_RECINHI      0   0   0
          JT1       JT2       JT3       JT4       JT5       JT6  
         -44.998   -30.843  -121.244     0.000   -90.000    22.500
 ------------------------------------------------------------------------------
-   2 - [25/11/09 21:01:52 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+   2 - [25/11/13 00:00:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
        (E0909)Program data file in CFast is broken. watchdog.pc
-       OPERATION1:[25/11/09 21:01:50] ( Control Power ON )
+       OPERATION1:[25/11/13 00:00:18] ( Control Power ON )
        OPERATION2:[04/01/10 22:37:04] (  )
        OPERATION3:[04/01/10 22:37:04] (  )
        OPERATION4:[04/01/10 22:37:04] (  )
@@ -3244,9 +3247,9 @@ TP_RECINHI      0   0   0
          JT1       JT2       JT3       JT4       JT5       JT6  
           0.000     0.000     0.000     0.000     0.000     0.000
 ------------------------------------------------------------------------------
-   3 - [25/11/09 21:01:52 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+   3 - [25/11/13 00:00:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
        (E0909)Program data file in CFast is broken. tcp.send3.pc
-       OPERATION1:[25/11/09 21:01:50] ( Control Power ON )
+       OPERATION1:[25/11/13 00:00:18] ( Control Power ON )
        OPERATION2:[04/01/10 22:37:04] (  )
        OPERATION3:[04/01/10 22:37:04] (  )
        OPERATION4:[04/01/10 22:37:04] (  )
@@ -3262,9 +3265,9 @@ TP_RECINHI      0   0   0
          JT1       JT2       JT3       JT4       JT5       JT6  
           0.000     0.000     0.000     0.000     0.000     0.000
 ------------------------------------------------------------------------------
-   4 - [25/11/09 21:01:52 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+   4 - [25/11/13 00:00:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
        (E0909)Program data file in CFast is broken. tcp.send2.pc
-       OPERATION1:[25/11/09 21:01:50] ( Control Power ON )
+       OPERATION1:[25/11/13 00:00:18] ( Control Power ON )
        OPERATION2:[04/01/10 22:37:04] (  )
        OPERATION3:[04/01/10 22:37:04] (  )
        OPERATION4:[04/01/10 22:37:04] (  )
@@ -3280,9 +3283,9 @@ TP_RECINHI      0   0   0
          JT1       JT2       JT3       JT4       JT5       JT6  
           0.000     0.000     0.000     0.000     0.000     0.000
 ------------------------------------------------------------------------------
-   5 - [25/11/09 21:01:52 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+   5 - [25/11/13 00:00:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
        (E0909)Program data file in CFast is broken. tcp.send.pc
-       OPERATION1:[25/11/09 21:01:50] ( Control Power ON )
+       OPERATION1:[25/11/13 00:00:18] ( Control Power ON )
        OPERATION2:[04/01/10 22:37:04] (  )
        OPERATION3:[04/01/10 22:37:04] (  )
        OPERATION4:[04/01/10 22:37:04] (  )
@@ -3298,9 +3301,9 @@ TP_RECINHI      0   0   0
          JT1       JT2       JT3       JT4       JT5       JT6  
           0.000     0.000     0.000     0.000     0.000     0.000
 ------------------------------------------------------------------------------
-   6 - [25/11/09 21:01:52 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+   6 - [25/11/13 00:00:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
        (E0909)Program data file in CFast is broken. tcp.client.pc
-       OPERATION1:[25/11/09 21:01:50] ( Control Power ON )
+       OPERATION1:[25/11/13 00:00:18] ( Control Power ON )
        OPERATION2:[04/01/10 22:37:04] (  )
        OPERATION3:[04/01/10 22:37:04] (  )
        OPERATION4:[04/01/10 22:37:04] (  )
@@ -3316,9 +3319,9 @@ TP_RECINHI      0   0   0
          JT1       JT2       JT3       JT4       JT5       JT6  
           0.000     0.000     0.000     0.000     0.000     0.000
 ------------------------------------------------------------------------------
-   7 - [25/11/09 21:01:52 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+   7 - [25/11/13 00:00:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
        (E0909)Program data file in CFast is broken. tcp.callback.pc
-       OPERATION1:[25/11/09 21:01:50] ( Control Power ON )
+       OPERATION1:[25/11/13 00:00:18] ( Control Power ON )
        OPERATION2:[04/01/10 22:37:04] (  )
        OPERATION3:[04/01/10 22:37:04] (  )
        OPERATION4:[04/01/10 22:37:04] (  )
@@ -3334,9 +3337,9 @@ TP_RECINHI      0   0   0
          JT1       JT2       JT3       JT4       JT5       JT6  
           0.000     0.000     0.000     0.000     0.000     0.000
 ------------------------------------------------------------------------------
-   8 - [25/11/09 21:01:52 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+   8 - [25/11/13 00:00:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
        (E0909)Program data file in CFast is broken. stz.put
-       OPERATION1:[25/11/09 21:01:50] ( Control Power ON )
+       OPERATION1:[25/11/13 00:00:18] ( Control Power ON )
        OPERATION2:[04/01/10 22:37:04] (  )
        OPERATION3:[04/01/10 22:37:04] (  )
        OPERATION4:[04/01/10 22:37:04] (  )
@@ -3352,9 +3355,9 @@ TP_RECINHI      0   0   0
          JT1       JT2       JT3       JT4       JT5       JT6  
           0.000     0.000     0.000     0.000     0.000     0.000
 ------------------------------------------------------------------------------
-   9 - [25/11/09 21:01:52 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+   9 - [25/11/13 00:00:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
        (E0909)Program data file in CFast is broken. stz.pick
-       OPERATION1:[25/11/09 21:01:50] ( Control Power ON )
+       OPERATION1:[25/11/13 00:00:18] ( Control Power ON )
        OPERATION2:[04/01/10 22:37:04] (  )
        OPERATION3:[04/01/10 22:37:04] (  )
        OPERATION4:[04/01/10 22:37:04] (  )
@@ -3370,9 +3373,9 @@ TP_RECINHI      0   0   0
          JT1       JT2       JT3       JT4       JT5       JT6  
           0.000     0.000     0.000     0.000     0.000     0.000
 ------------------------------------------------------------------------------
-  10 - [25/11/09 21:01:52 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+  10 - [25/11/13 00:00:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
        (E0909)Program data file in CFast is broken. stock.out.take
-       OPERATION1:[25/11/09 21:01:50] ( Control Power ON )
+       OPERATION1:[25/11/13 00:00:18] ( Control Power ON )
        OPERATION2:[04/01/10 22:37:04] (  )
        OPERATION3:[04/01/10 22:37:04] (  )
        OPERATION4:[04/01/10 22:37:04] (  )
@@ -3388,9 +3391,9 @@ TP_RECINHI      0   0   0
          JT1       JT2       JT3       JT4       JT5       JT6  
           0.000     0.000     0.000     0.000     0.000     0.000
 ------------------------------------------------------------------------------
-  11 - [25/11/09 21:01:52 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+  11 - [25/11/13 00:00:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
        (E0909)Program data file in CFast is broken. stock.out.back
-       OPERATION1:[25/11/09 21:01:50] ( Control Power ON )
+       OPERATION1:[25/11/13 00:00:18] ( Control Power ON )
        OPERATION2:[04/01/10 22:37:04] (  )
        OPERATION3:[04/01/10 22:37:04] (  )
        OPERATION4:[04/01/10 22:37:04] (  )
@@ -3406,9 +3409,9 @@ TP_RECINHI      0   0   0
          JT1       JT2       JT3       JT4       JT5       JT6  
           0.000     0.000     0.000     0.000     0.000     0.000
 ------------------------------------------------------------------------------
-  12 - [25/11/09 21:01:52 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+  12 - [25/11/13 00:00:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
        (E0909)Program data file in CFast is broken. stock.in.take
-       OPERATION1:[25/11/09 21:01:50] ( Control Power ON )
+       OPERATION1:[25/11/13 00:00:18] ( Control Power ON )
        OPERATION2:[04/01/10 22:37:04] (  )
        OPERATION3:[04/01/10 22:37:04] (  )
        OPERATION4:[04/01/10 22:37:04] (  )
@@ -3424,9 +3427,9 @@ TP_RECINHI      0   0   0
          JT1       JT2       JT3       JT4       JT5       JT6  
           0.000     0.000     0.000     0.000     0.000     0.000
 ------------------------------------------------------------------------------
-  13 - [25/11/09 21:01:52 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+  13 - [25/11/13 00:00:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
        (E0909)Program data file in CFast is broken. stock.in.back
-       OPERATION1:[25/11/09 21:01:50] ( Control Power ON )
+       OPERATION1:[25/11/13 00:00:18] ( Control Power ON )
        OPERATION2:[04/01/10 22:37:04] (  )
        OPERATION3:[04/01/10 22:37:04] (  )
        OPERATION4:[04/01/10 22:37:04] (  )
@@ -3442,9 +3445,9 @@ TP_RECINHI      0   0   0
          JT1       JT2       JT3       JT4       JT5       JT6  
           0.000     0.000     0.000     0.000     0.000     0.000
 ------------------------------------------------------------------------------
-  14 - [25/11/09 21:01:52 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+  14 - [25/11/13 00:00:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
        (E0909)Program data file in CFast is broken. set.vars.pc
-       OPERATION1:[25/11/09 21:01:50] ( Control Power ON )
+       OPERATION1:[25/11/13 00:00:18] ( Control Power ON )
        OPERATION2:[04/01/10 22:37:04] (  )
        OPERATION3:[04/01/10 22:37:04] (  )
        OPERATION4:[04/01/10 22:37:04] (  )
@@ -3460,9 +3463,9 @@ TP_RECINHI      0   0   0
          JT1       JT2       JT3       JT4       JT5       JT6  
           0.000     0.000     0.000     0.000     0.000     0.000
 ------------------------------------------------------------------------------
-  15 - [25/11/09 21:01:52 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+  15 - [25/11/13 00:00:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
        (E0909)Program data file in CFast is broken. set.io.pc
-       OPERATION1:[25/11/09 21:01:50] ( Control Power ON )
+       OPERATION1:[25/11/13 00:00:18] ( Control Power ON )
        OPERATION2:[04/01/10 22:37:04] (  )
        OPERATION3:[04/01/10 22:37:04] (  )
        OPERATION4:[04/01/10 22:37:04] (  )
@@ -3478,9 +3481,9 @@ TP_RECINHI      0   0   0
          JT1       JT2       JT3       JT4       JT5       JT6  
           0.000     0.000     0.000     0.000     0.000     0.000
 ------------------------------------------------------------------------------
-  16 - [25/11/09 21:01:52 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+  16 - [25/11/13 00:00:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
        (E0909)Program data file in CFast is broken. sender.pc
-       OPERATION1:[25/11/09 21:01:50] ( Control Power ON )
+       OPERATION1:[25/11/13 00:00:18] ( Control Power ON )
        OPERATION2:[04/01/10 22:37:04] (  )
        OPERATION3:[04/01/10 22:37:04] (  )
        OPERATION4:[04/01/10 22:37:04] (  )
@@ -3496,9 +3499,9 @@ TP_RECINHI      0   0   0
          JT1       JT2       JT3       JT4       JT5       JT6  
           0.000     0.000     0.000     0.000     0.000     0.000
 ------------------------------------------------------------------------------
-  17 - [25/11/09 21:01:52 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+  17 - [25/11/13 00:00:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
        (E0909)Program data file in CFast is broken. safe.home
-       OPERATION1:[25/11/09 21:01:50] ( Control Power ON )
+       OPERATION1:[25/11/13 00:00:18] ( Control Power ON )
        OPERATION2:[04/01/10 22:37:04] (  )
        OPERATION3:[04/01/10 22:37:04] (  )
        OPERATION4:[04/01/10 22:37:04] (  )
@@ -3514,9 +3517,27 @@ TP_RECINHI      0   0   0
          JT1       JT2       JT3       JT4       JT5       JT6  
           0.000     0.000     0.000     0.000     0.000     0.000
 ------------------------------------------------------------------------------
-  18 - [25/11/09 21:01:52 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+  18 - [25/11/13 00:00:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. s.out.table_old
+       OPERATION1:[25/11/13 00:00:18] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  19 - [25/11/13 00:00:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
        (E0909)Program data file in CFast is broken. s.out.table
-       OPERATION1:[25/11/09 21:01:50] ( Control Power ON )
+       OPERATION1:[25/11/13 00:00:18] ( Control Power ON )
        OPERATION2:[04/01/10 22:37:04] (  )
        OPERATION3:[04/01/10 22:37:04] (  )
        OPERATION4:[04/01/10 22:37:04] (  )
@@ -3532,9 +3553,27 @@ TP_RECINHI      0   0   0
          JT1       JT2       JT3       JT4       JT5       JT6  
           0.000     0.000     0.000     0.000     0.000     0.000
 ------------------------------------------------------------------------------
-  19 - [25/11/09 21:01:52 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+  20 - [25/11/13 00:00:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. s.in.table_old
+       OPERATION1:[25/11/13 00:00:18] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  21 - [25/11/13 00:00:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
        (E0909)Program data file in CFast is broken. s.in.table
-       OPERATION1:[25/11/09 21:01:50] ( Control Power ON )
+       OPERATION1:[25/11/13 00:00:18] ( Control Power ON )
        OPERATION2:[04/01/10 22:37:04] (  )
        OPERATION3:[04/01/10 22:37:04] (  )
        OPERATION4:[04/01/10 22:37:04] (  )
@@ -3550,9 +3589,9 @@ TP_RECINHI      0   0   0
          JT1       JT2       JT3       JT4       JT5       JT6  
           0.000     0.000     0.000     0.000     0.000     0.000
 ------------------------------------------------------------------------------
-  20 - [25/11/09 21:01:52 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+  22 - [25/11/13 00:00:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
        (E0909)Program data file in CFast is broken. process.data
-       OPERATION1:[25/11/09 21:01:50] ( Control Power ON )
+       OPERATION1:[25/11/13 00:00:18] ( Control Power ON )
        OPERATION2:[04/01/10 22:37:04] (  )
        OPERATION3:[04/01/10 22:37:04] (  )
        OPERATION4:[04/01/10 22:37:04] (  )
@@ -3568,9 +3607,9 @@ TP_RECINHI      0   0   0
          JT1       JT2       JT3       JT4       JT5       JT6  
           0.000     0.000     0.000     0.000     0.000     0.000
 ------------------------------------------------------------------------------
-  21 - [25/11/09 21:01:52 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+  23 - [25/11/13 00:00:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
        (E0909)Program data file in CFast is broken. pg.start
-       OPERATION1:[25/11/09 21:01:50] ( Control Power ON )
+       OPERATION1:[25/11/13 00:00:18] ( Control Power ON )
        OPERATION2:[04/01/10 22:37:04] (  )
        OPERATION3:[04/01/10 22:37:04] (  )
        OPERATION4:[04/01/10 22:37:04] (  )
@@ -3586,9 +3625,27 @@ TP_RECINHI      0   0   0
          JT1       JT2       JT3       JT4       JT5       JT6  
           0.000     0.000     0.000     0.000     0.000     0.000
 ------------------------------------------------------------------------------
-  22 - [25/11/09 21:01:52 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+  24 - [25/11/13 00:00:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. pg.select
+       OPERATION1:[25/11/13 00:00:18] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  25 - [25/11/13 00:00:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
        (E0909)Program data file in CFast is broken. log
-       OPERATION1:[25/11/09 21:01:50] ( Control Power ON )
+       OPERATION1:[25/11/13 00:00:18] ( Control Power ON )
        OPERATION2:[04/01/10 22:37:04] (  )
        OPERATION3:[04/01/10 22:37:04] (  )
        OPERATION4:[04/01/10 22:37:04] (  )
@@ -3604,9 +3661,9 @@ TP_RECINHI      0   0   0
          JT1       JT2       JT3       JT4       JT5       JT6  
           0.000     0.000     0.000     0.000     0.000     0.000
 ------------------------------------------------------------------------------
-  23 - [25/11/09 21:01:52 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+  26 - [25/11/13 00:00:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
        (E0909)Program data file in CFast is broken. id4
-       OPERATION1:[25/11/09 21:01:50] ( Control Power ON )
+       OPERATION1:[25/11/13 00:00:18] ( Control Power ON )
        OPERATION2:[04/01/10 22:37:04] (  )
        OPERATION3:[04/01/10 22:37:04] (  )
        OPERATION4:[04/01/10 22:37:04] (  )
@@ -3622,9 +3679,9 @@ TP_RECINHI      0   0   0
          JT1       JT2       JT3       JT4       JT5       JT6  
           0.000     0.000     0.000     0.000     0.000     0.000
 ------------------------------------------------------------------------------
-  24 - [25/11/09 21:01:52 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+  27 - [25/11/13 00:00:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
        (E0909)Program data file in CFast is broken. gripper.put
-       OPERATION1:[25/11/09 21:01:50] ( Control Power ON )
+       OPERATION1:[25/11/13 00:00:18] ( Control Power ON )
        OPERATION2:[04/01/10 22:37:04] (  )
        OPERATION3:[04/01/10 22:37:04] (  )
        OPERATION4:[04/01/10 22:37:04] (  )
@@ -3640,9 +3697,9 @@ TP_RECINHI      0   0   0
          JT1       JT2       JT3       JT4       JT5       JT6  
           0.000     0.000     0.000     0.000     0.000     0.000
 ------------------------------------------------------------------------------
-  25 - [25/11/09 21:01:52 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+  28 - [25/11/13 00:00:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
        (E0909)Program data file in CFast is broken. gripper.pick
-       OPERATION1:[25/11/09 21:01:50] ( Control Power ON )
+       OPERATION1:[25/11/13 00:00:18] ( Control Power ON )
        OPERATION2:[04/01/10 22:37:04] (  )
        OPERATION3:[04/01/10 22:37:04] (  )
        OPERATION4:[04/01/10 22:37:04] (  )
@@ -3658,9 +3715,9 @@ TP_RECINHI      0   0   0
          JT1       JT2       JT3       JT4       JT5       JT6  
           0.000     0.000     0.000     0.000     0.000     0.000
 ------------------------------------------------------------------------------
-  26 - [25/11/09 21:01:52 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+  29 - [25/11/13 00:00:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
        (E0909)Program data file in CFast is broken. get.state.pc
-       OPERATION1:[25/11/09 21:01:50] ( Control Power ON )
+       OPERATION1:[25/11/13 00:00:18] ( Control Power ON )
        OPERATION2:[04/01/10 22:37:04] (  )
        OPERATION3:[04/01/10 22:37:04] (  )
        OPERATION4:[04/01/10 22:37:04] (  )
@@ -3676,9 +3733,9 @@ TP_RECINHI      0   0   0
          JT1       JT2       JT3       JT4       JT5       JT6  
           0.000     0.000     0.000     0.000     0.000     0.000
 ------------------------------------------------------------------------------
-  27 - [25/11/09 21:01:52 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+  30 - [25/11/13 00:00:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
        (E0909)Program data file in CFast is broken. errstart.pc
-       OPERATION1:[25/11/09 21:01:50] ( Control Power ON )
+       OPERATION1:[25/11/13 00:00:18] ( Control Power ON )
        OPERATION2:[04/01/10 22:37:04] (  )
        OPERATION3:[04/01/10 22:37:04] (  )
        OPERATION4:[04/01/10 22:37:04] (  )
@@ -3694,9 +3751,9 @@ TP_RECINHI      0   0   0
          JT1       JT2       JT3       JT4       JT5       JT6  
           0.000     0.000     0.000     0.000     0.000     0.000
 ------------------------------------------------------------------------------
-  28 - [25/11/09 21:01:52 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+  31 - [25/11/13 00:00:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
        (E0909)Program data file in CFast is broken. autostart.pc
-       OPERATION1:[25/11/09 21:01:50] ( Control Power ON )
+       OPERATION1:[25/11/13 00:00:18] ( Control Power ON )
        OPERATION2:[04/01/10 22:37:04] (  )
        OPERATION3:[04/01/10 22:37:04] (  )
        OPERATION4:[04/01/10 22:37:04] (  )
@@ -3712,9 +3769,9 @@ TP_RECINHI      0   0   0
          JT1       JT2       JT3       JT4       JT5       JT6  
           0.000     0.000     0.000     0.000     0.000     0.000
 ------------------------------------------------------------------------------
-  29 - [25/11/09 21:01:52 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+  32 - [25/11/13 00:00:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
        (E0909)Program data file in CFast is broken. a.test.pick
-       OPERATION1:[25/11/09 21:01:50] ( Control Power ON )
+       OPERATION1:[25/11/13 00:00:18] ( Control Power ON )
        OPERATION2:[04/01/10 22:37:04] (  )
        OPERATION3:[04/01/10 22:37:04] (  )
        OPERATION4:[04/01/10 22:37:04] (  )
@@ -3730,9 +3787,9 @@ TP_RECINHI      0   0   0
          JT1       JT2       JT3       JT4       JT5       JT6  
           0.000     0.000     0.000     0.000     0.000     0.000
 ------------------------------------------------------------------------------
-  30 - [25/11/09 21:01:52 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+  33 - [25/11/13 00:00:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
        (E0909)Program data file in CFast is broken. a.test
-       OPERATION1:[25/11/09 21:01:50] ( Control Power ON )
+       OPERATION1:[25/11/13 00:00:18] ( Control Power ON )
        OPERATION2:[04/01/10 22:37:04] (  )
        OPERATION3:[04/01/10 22:37:04] (  )
        OPERATION4:[04/01/10 22:37:04] (  )
@@ -3748,9 +3805,9 @@ TP_RECINHI      0   0   0
          JT1       JT2       JT3       JT4       JT5       JT6  
           0.000     0.000     0.000     0.000     0.000     0.000
 ------------------------------------------------------------------------------
-  31 - [25/11/09 21:01:52 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+  34 - [25/11/13 00:00:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
        (E0909)Program data file in CFast is broken. a.teach.stz
-       OPERATION1:[25/11/09 21:01:50] ( Control Power ON )
+       OPERATION1:[25/11/13 00:00:18] ( Control Power ON )
        OPERATION2:[04/01/10 22:37:04] (  )
        OPERATION3:[04/01/10 22:37:04] (  )
        OPERATION4:[04/01/10 22:37:04] (  )
@@ -3766,9 +3823,9 @@ TP_RECINHI      0   0   0
          JT1       JT2       JT3       JT4       JT5       JT6  
           0.000     0.000     0.000     0.000     0.000     0.000
 ------------------------------------------------------------------------------
-  32 - [25/11/09 21:01:52 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+  35 - [25/11/13 00:00:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
        (E0909)Program data file in CFast is broken. a.teach.pos
-       OPERATION1:[25/11/09 21:01:50] ( Control Power ON )
+       OPERATION1:[25/11/13 00:00:18] ( Control Power ON )
        OPERATION2:[04/01/10 22:37:04] (  )
        OPERATION3:[04/01/10 22:37:04] (  )
        OPERATION4:[04/01/10 22:37:04] (  )
@@ -3784,9 +3841,9 @@ TP_RECINHI      0   0   0
          JT1       JT2       JT3       JT4       JT5       JT6  
           0.000     0.000     0.000     0.000     0.000     0.000
 ------------------------------------------------------------------------------
-  33 - [25/11/09 21:01:52 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+  36 - [25/11/13 00:00:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
        (E0909)Program data file in CFast is broken. a.teach.gripper
-       OPERATION1:[25/11/09 21:01:50] ( Control Power ON )
+       OPERATION1:[25/11/13 00:00:18] ( Control Power ON )
        OPERATION2:[04/01/10 22:37:04] (  )
        OPERATION3:[04/01/10 22:37:04] (  )
        OPERATION4:[04/01/10 22:37:04] (  )
@@ -3802,9 +3859,9 @@ TP_RECINHI      0   0   0
          JT1       JT2       JT3       JT4       JT5       JT6  
           0.000     0.000     0.000     0.000     0.000     0.000
 ------------------------------------------------------------------------------
-  34 - [25/11/09 21:01:52 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+  37 - [25/11/13 00:00:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
        (E0909)Program data file in CFast is broken. a.tch.stock.out
-       OPERATION1:[25/11/09 21:01:50] ( Control Power ON )
+       OPERATION1:[25/11/13 00:00:18] ( Control Power ON )
        OPERATION2:[04/01/10 22:37:04] (  )
        OPERATION3:[04/01/10 22:37:04] (  )
        OPERATION4:[04/01/10 22:37:04] (  )
@@ -3820,9 +3877,9 @@ TP_RECINHI      0   0   0
          JT1       JT2       JT3       JT4       JT5       JT6  
           0.000     0.000     0.000     0.000     0.000     0.000
 ------------------------------------------------------------------------------
-  35 - [25/11/09 21:01:52 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+  38 - [25/11/13 00:00:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
        (E0909)Program data file in CFast is broken. a.tch.stock.in
-       OPERATION1:[25/11/09 21:01:50] ( Control Power ON )
+       OPERATION1:[25/11/13 00:00:18] ( Control Power ON )
        OPERATION2:[04/01/10 22:37:04] (  )
        OPERATION3:[04/01/10 22:37:04] (  )
        OPERATION4:[04/01/10 22:37:04] (  )
@@ -3838,9 +3895,9 @@ TP_RECINHI      0   0   0
          JT1       JT2       JT3       JT4       JT5       JT6  
           0.000     0.000     0.000     0.000     0.000     0.000
 ------------------------------------------------------------------------------
-  36 - [25/11/09 21:01:52 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+  39 - [25/11/13 00:00:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
        (E0909)Program data file in CFast is broken. a.main
-       OPERATION1:[25/11/09 21:01:50] ( Control Power ON )
+       OPERATION1:[25/11/13 00:00:18] ( Control Power ON )
        OPERATION2:[04/01/10 22:37:04] (  )
        OPERATION3:[04/01/10 22:37:04] (  )
        OPERATION4:[04/01/10 22:37:04] (  )
@@ -3856,9 +3913,9 @@ TP_RECINHI      0   0   0
          JT1       JT2       JT3       JT4       JT5       JT6  
           0.000     0.000     0.000     0.000     0.000     0.000
 ------------------------------------------------------------------------------
-  37 - [25/11/09 21:01:52 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+  40 - [25/11/13 00:00:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
        (E0909)Program data file in CFast is broken. a.home
-       OPERATION1:[25/11/09 21:01:50] ( Control Power ON )
+       OPERATION1:[25/11/13 00:00:18] ( Control Power ON )
        OPERATION2:[04/01/10 22:37:04] (  )
        OPERATION3:[04/01/10 22:37:04] (  )
        OPERATION4:[04/01/10 22:37:04] (  )
@@ -3874,9 +3931,9 @@ TP_RECINHI      0   0   0
          JT1       JT2       JT3       JT4       JT5       JT6  
           0.000     0.000     0.000     0.000     0.000     0.000
 ------------------------------------------------------------------------------
-  38 - [25/11/09 21:01:52 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+  41 - [25/11/13 00:00:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
        (E0909)Program data file in CFast is broken. a.align
-       OPERATION1:[25/11/09 21:01:50] ( Control Power ON )
+       OPERATION1:[25/11/13 00:00:18] ( Control Power ON )
        OPERATION2:[04/01/10 22:37:04] (  )
        OPERATION3:[04/01/10 22:37:04] (  )
        OPERATION4:[04/01/10 22:37:04] (  )
@@ -3920,19 +3977,19 @@ TP_SEM_ERROR_CNT    0
 .END
 .ENCTEMPLOG
 === MIN(deg C) ===
-  JT1  - [25/11/09 21:02:04]      0.000
-  JT2  - [25/11/09 21:02:04]      0.000
-  JT3  - [25/11/09 21:02:04]      0.000
-  JT4  - [25/11/09 21:02:04]      0.000
-  JT5  - [25/11/09 21:02:04]      0.000
-  JT6  - [25/11/09 21:02:04]      0.000
+  JT1  - [25/11/13 00:00:41]      0.000
+  JT2  - [25/11/13 00:00:41]      0.000
+  JT3  - [25/11/13 00:00:41]      0.000
+  JT4  - [25/11/13 00:00:41]      0.000
+  JT5  - [25/11/13 00:00:41]      0.000
+  JT6  - [25/11/13 00:00:41]      0.000
 === MAX(deg C) ===
-  JT1  - [25/11/09 21:02:04]      0.000
-  JT2  - [25/11/09 21:02:04]      0.000
-  JT3  - [25/11/09 21:02:04]      0.000
-  JT4  - [25/11/09 21:02:04]      0.000
-  JT5  - [25/11/09 21:02:04]      0.000
-  JT6  - [25/11/09 21:02:04]      0.000
+  JT1  - [25/11/13 00:00:41]      0.000
+  JT2  - [25/11/13 00:00:41]      0.000
+  JT3  - [25/11/13 00:00:41]      0.000
+  JT4  - [25/11/13 00:00:41]      0.000
+  JT5  - [25/11/13 00:00:41]      0.000
+  JT6  - [25/11/13 00:00:41]      0.000
 .END
 .REDUCTIONGEAR_LOG
 SUM_JT1_t01_v01    0 0 0 0 0 0 0 0 0 0 0 
@@ -11940,20 +11997,20 @@ RGLOG 0
 === USERTP FAULT LOG ===
 === ARMAS  FAULT LOG ===
 .END
-.PROGRAM a.align()@25/11/09 21:01 #0
+.PROGRAM a.align()@25/11/13 00:00 #0
   ALIGN
 .END
-.PROGRAM a.home()@25/11/09 21:01 #0
+.PROGRAM a.home()@25/11/13 00:00 #0
   JMOVE #homep1
 .END
-.PROGRAM a.main()@25/11/09 21:01 #0
+.PROGRAM a.main()@25/11/13 00:00 #0
 ;
   CALL safe.home
 ;
-  SIGNAL -rs13.det.put
-;
   SPEED 100 ALWAYS
   ACCURACY 100 ALWAYS
+;
+  RESET
 ;
   CALL log("Main cycle started. State: WaitingForCommand")
   $action = "WaitingForCommand"
@@ -11966,15 +12023,13 @@ RGLOG 0
       CALL pg.start
       BREAK
       $action = "WaitingForCommand"
-     SVALUE "Check":
-      BREAK
      ANY :
       BREAK
     END
   END
 ;
 .END
-.PROGRAM a.tch.stock.in()@25/11/09 21:01 #0
+.PROGRAM a.tch.stock.in()@25/11/13 00:00 #0
 ; Use this for first teach
   IF FALSE THEN
     TOOL tool.pin
@@ -11998,7 +12053,7 @@ RGLOG 0
   LMOVE stocker.in[.i,.j]+TRANS(0,0,50)
 ;
 .END
-.PROGRAM a.tch.stock.out()@25/11/09 21:01 #0
+.PROGRAM a.tch.stock.out()@25/11/13 00:00 #0
 ; Use this for first teach
   IF FALSE THEN
     JMOVE stocker.out[1,1]+TRANS(0,0,50)
@@ -12019,7 +12074,7 @@ RGLOG 0
   LMOVE stocker.out[.i,.j]
   LMOVE stocker.out[.i,.j]+TRANS(0,0,50)
 .END
-.PROGRAM a.teach.gripper()@25/11/09 21:01 #0
+.PROGRAM a.teach.gripper()@25/11/13 00:00 #0
   TOOL tool.pick[hmi.tool.no]
 ;
   POINT .temp = #tool.pos[hmi.t.pos]
@@ -12045,7 +12100,7 @@ RGLOG 0
 ;
   LMOVE .temp+TRANS(0,0,50)
 .END
-.PROGRAM a.teach.pos()@25/11/09 21:01 #0
+.PROGRAM a.teach.pos()@25/11/13 00:00 #0
   TOOL tool.pick[hmi.tool.no]
 ;
   POINT .temp = #pos.pos[hmi.obj.id]
@@ -12059,7 +12114,7 @@ RGLOG 0
   BREAK
   TWAIT 0.5
 .END
-.PROGRAM a.teach.stz()@25/11/09 21:01 #0
+.PROGRAM a.teach.stz()@25/11/13 00:00 #0
   SPEED 250 MM/S ALWAYS
   ACCURACY 0 ALWAYS
   TOOL tool.pin
@@ -12094,7 +12149,7 @@ RGLOG 0
   BREAK
   LMOVE stz.frame+TRANS(hmi.x,hmi.y,10)
 .END
-.PROGRAM a.test()@25/11/09 21:01 #0
+.PROGRAM a.test()@25/11/13 00:00 #0
 ;
   SIGNAL -rs13.det.put
   JMOVE #homep1
@@ -12112,7 +12167,7 @@ RGLOG 0
 ;
   JMOVE #homep1
 .END
-.PROGRAM a.test.pick()@25/11/09 21:01 #0
+.PROGRAM a.test.pick()@25/11/13 00:00 #0
   IF FALSE THEN
     JMOVE #pick.in
   END
@@ -12162,7 +12217,7 @@ RGLOG 0
   LMOVE #wait.pick
   LMOVE #before.pos
 .END
-.PROGRAM autostart.pc()@25/11/09 21:01 #0
+.PROGRAM autostart.pc()@25/11/13 00:00 #0
 ; System switches
   CP ON
   PREFETCH.SIGINS OFF
@@ -12178,10 +12233,14 @@ RGLOG 0
 ;
   CALL set.io.pc
   CALL set.vars.pc
+;
+  MC PRIME a.main
+  TWAIT 1
+;
   CALL watchdog.pc
 ;
 .END
-.PROGRAM errstart.pc()@25/11/09 21:01 #413
+.PROGRAM errstart.pc()@25/11/13 00:00 #55
   IF ERROR==-34021 OR ERROR==-10100 THEN
     tcp.socket = -1
     MC ERESET
@@ -12196,8 +12255,9 @@ RGLOG 0
   TWAIT 5
   ERRSTART.PC ON
 .END
-.PROGRAM get.state.pc(.$state)@25/11/09 21:01 #178243
-  .$state = "POWER:"
+.PROGRAM get.state.pc(.$state)@25/11/13 00:00 #23110
+  .$state = "SPEED:"+$ENCODE(mon.speed)+";"
+  .$state = .$state+"POWER:"
   IF SWITCH(POWER ) THEN
     .$state = .$state+"TRUE;"
   ELSE
@@ -12282,7 +12342,7 @@ RGLOG 0
 ; MAX 12
   .$state = .$state+"\n"
 .END
-.PROGRAM gripper.pick(.pos,.tool.no)@25/11/09 21:01 #1
+.PROGRAM gripper.pick(.pos,.tool.no)@25/11/13 00:00 #0
   IF FALSE THEN
     .pos = hmi.t.pos
     .tool.no = hmi.tool.no
@@ -12311,7 +12371,7 @@ RGLOG 0
   SPEED 100 ALWAYS
   LMOVE .temp+TRANS(0,0,200)
 .END
-.PROGRAM gripper.put(.pos,.tool.no)@25/11/09 21:01 #0
+.PROGRAM gripper.put(.pos,.tool.no)@25/11/13 00:00 #0
   IF FALSE THEN
     .pos = hmi.t.pos
     .tool.no = hmi.tool.no
@@ -12340,16 +12400,21 @@ RGLOG 0
   SPEED 100 ALWAYS
   LMOVE .temp+TRANS(0,0,200)
 .END
-.PROGRAM id4()@25/11/09 21:01 #21; 312.229.002_1
-; Object ID (Use in stz.put)
+.PROGRAM id4()@25/11/13 00:00 #3; 312.229.002_1
+; Object ID
   object.id = 4
 ; Working gripper
   gripper.type = 1
 ; Max objects in output tare
-  max.tare.count = 99
+  max.tare.count = 3
+;
+  detail.length = 23.5
+  start.shift.x = 0
+  start.shift.y = 15
+  start.shift.z = 0
 ;
 .END
-.PROGRAM log(.$msg)@25/11/09 21:01 #405
+.PROGRAM log(.$msg)@25/11/13 00:00 #451
   FOR .i = 0 TO 10
     $log.entry[.i] = $log.entry[.i+1]
   END
@@ -12359,8 +12424,23 @@ RGLOG 0
   IFPWPRINT 2,1,1,9,10=$log.entry[4],$log.entry[5],$log.entry[6],$log.entry[7]
   IFPWPRINT 3,1,1,9,10=$log.entry[8],$log.entry[9],$log.entry[10],$log.entry[11]
 .END
-.PROGRAM pg.start()@25/11/09 21:01 #2
+.PROGRAM pg.select(.state)@25/11/13 00:00 #7
+  SCASE $detail.type OF
+   SVALUE "312.229.002_1":
+    CALL id4
+    .state = TRUE
+    RETURN
+   SVALUE "STRING":
+    CALL id4
+    .state = TRUE
+    RETURN
+  END
+.END
+.PROGRAM pg.start()@25/11/13 00:00 #0
   $command = ""
+;
+  pick.count = 0
+;
   CALL process.data(.state)
   IF NOT .state THEN
     CALL log("Wrong program name. State: WrongProgramName")
@@ -12383,9 +12463,9 @@ RGLOG 0
   tare.counter = 0
   full.counter = 0
 ; First tare pick
-  CALL stock.in.take(intare.i[1],intare.j[1])
-  JMOVE #homep1
   CALL stock.out.take(outtare.i[1],outtare.j[1])
+  JMOVE #homep1
+  CALL stock.in.take(intare.i[1],intare.j[1])
   JMOVE #homep1
   JMOVE #wait.pick
 ;
@@ -12395,12 +12475,13 @@ RGLOG 0
   WHILE .keep.pick DO
 ;
     IF SIG(rs7.tare.chg) THEN
-      PULSE rs13.tare.ack,10
+      CALL log("OutPalletChange requested")
       JMOVE #homep1
       CALL stock.out.back(outtare.i[current.outtare],outtare.j[current.outtare])
       current.outtare = current.outtare+1
       CALL stock.out.take(outtare.i[current.outtare],outtare.j[current.outtare])
-      JMOVE #homep1
+;JMOVE #homep1
+      PULSE rs13.tare.ack,10
       JMOVE #wait.pick
       $action = "WaitForPick"
       CALL log("Wait for new pick. State: WaitForPick")
@@ -12410,6 +12491,7 @@ RGLOG 0
       $cycle.command = ""
       JMOVE #wait.pick
       CALL stz.pick
+      SWAIT -rs7.working,-rs7.work[1]
       CALL stz.put(object.id)
       tare.counter = tare.counter+1
       full.counter = full.counter+1
@@ -12417,7 +12499,7 @@ RGLOG 0
       CALL log("Wait for new pick. State: WaitForPick")
     END
 ;
-    IF $cycle.command=="NOPICK" THEN
+    IF $cycle.command=="NOPICK" OR full.counter==max.tare.count THEN
       $cycle.command = ""
       IF current.intare<>intare.count THEN
         CALL stock.in.back(intare.i[current.intare],intare.j[current.intare])
@@ -12426,78 +12508,517 @@ RGLOG 0
         CALL stock.in.take(intare.i[current.intare],intare.j[current.intare])
       ELSE
         .keep.pick = FALSE
+        SIGNAL rs13.finish
+        SWAIT rs07.fin.ack
       END
       $action = "WaitForPick"
       CALL log("Wait for new pick. State: WaitForPick")
     END
   END
 ; Last tare put
-  CALL stock.out.back(outtare.i[intare.count],outtare.j[intare.count])
-  JMOVE #homep1
   JMOVE #wait.pick
   CALL stock.in.back(intare.i[outtare.count],intare.j[outtare.count])
+  JMOVE #homep1
+  CALL stock.out.back(outtare.i[intare.count],outtare.j[intare.count])
 ;
   JMOVE #homep1
 .END
-.PROGRAM process.data(.state)@25/11/09 21:01 #11
+.PROGRAM process.data(.state)@25/11/13 00:00 #7
 ;
-  intare.count = 1
-  outtare.count = 1
+  intare.count = 0
+  outtare.count = 0
 ;
   .break = FALSE
   WHILE NOT .break DO
-;TYPE 0: "intares", $intare.ids
+    intare.count = intare.count+1
     IF INSTR($intare.ids , ",") THEN
       .id = VAL($DECODE($intare.ids,",",0))
-      CALL s.in.table(.id,intare.i[intare.count],intare.j[intare.count])
-; TYPE 0: "idx", intare.i[intare.count], intare.j[intare.count]
-      .$temp = $DECODE($intare.ids,",",1)
-      intare.count = intare.count+1
+      CALL s.in.table(.id)
     ELSE
       .id = VAL($intare.ids)
-      CALL s.in.table(.id,intare.i[intare.count],intare.j[intare.count])
-;TYPE 0: "idx", intare.i[intare.count], intare.j[intare.count]
+      CALL s.in.table(.id)
       .break = TRUE
     END
   END
 ;
   .break = FALSE
   WHILE NOT .break DO
-;TYPE 0: "intares", $intare.ids
+    outtare.count = outtare.count+1
     IF INSTR($outtare.ids , ",") THEN
       .id = VAL($DECODE($outtare.ids,",",0))
-      CALL s.out.table(.id,outtare.i[outtare.count],outtare.j[outtare.count])
-;TYPE 0: "idx", intare.i[intare.count], intare.j[intare.count]
+      CALL s.out.table(.id)
       .$temp = $DECODE($outtare.ids,",",1)
-      outtare.count = outtare.count+1
     ELSE
       .id = VAL($outtare.ids)
-      CALL s.out.table(.id,outtare.i[outtare.count],outtare.j[outtare.count])
-;TYPE 0: "idx", intare.i[intare.count], intare.j[intare.count]     
+      CALL s.out.table(.id)
       .break = TRUE
     END
   END
 ;
 ;
-  SCASE $detail.type OF
-   SVALUE "312.229.002_1":
-    CALL id4
-    .state = TRUE
-    RETURN
-  END
+  CALL pg.select(.state)
+  RETURN
 any:
   .state = FALSE
   RETURN
 .END
-.PROGRAM s.in.table(.no,.i,.j)@25/11/09 21:01 #18
+.PROGRAM s.in.table(.no)@25/11/13 00:00 #7
+  .$temp = "Processing in"+$ENCODE(.no)+" cell"
+  CALL log(.$temp)
+  CASE .no OF
+   VALUE 1:
+    intare.i[intare.count] = 3;
+    intare.j[intare.count] = 1;
+    intare.count = intare.count+1;
+    intare.i[intare.count] = 3;
+    intare.j[intare.count] = 2;
+    .$temp = "Row:"+$ENCODE(intare.j[intare.count-1])+" Col:"+$ENCODE(intare.i[intare.count-1])
+    CALL log(.$temp)
+    .$temp = "Row:"+$ENCODE(intare.j[intare.count])+" Col:"+$ENCODE(intare.i[intare.count])
+    CALL log(.$temp)
+;
+   VALUE 2:
+    intare.i[intare.count] = 2;
+    intare.j[intare.count] = 1;
+    intare.count = intare.count+1;
+    intare.i[intare.count] = 2;
+    intare.j[intare.count] = 2;
+    .$temp = "Row:"+$ENCODE(intare.j[intare.count]-1)+" Col:"+$ENCODE(intare.i[intare.count]-1)
+    CALL log(.$temp)
+    .$temp = "Row:"+$ENCODE(intare.j[intare.count])+" Col:"+$ENCODE(intare.i[intare.count])
+    CALL log(.$temp)
+;
+   VALUE 3:
+    intare.i[intare.count] = 1;
+    intare.j[intare.count] = 1;
+    intare.count = intare.count+1;
+    intare.i[intare.count] = 1;
+    intare.j[intare.count] = 2;
+    .$temp = "Row:"+$ENCODE(intare.j[intare.count]-1)+" Col:"+$ENCODE(intare.i[intare.count]-1)
+    CALL log(.$temp)
+    .$temp = "Row:"+$ENCODE(intare.j[intare.count])+" Col:"+$ENCODE(intare.i[intare.count])
+    CALL log(.$temp)
+;
+   VALUE 4:
+    intare.i[intare.count] = 3;
+    intare.j[intare.count] = 3;
+    intare.count = intare.count+1;
+    intare.i[intare.count] = 3;
+    intare.j[intare.count] = 4;
+    .$temp = "Row:"+$ENCODE(intare.j[intare.count]-1)+" Col:"+$ENCODE(intare.i[intare.count]-1)
+    CALL log(.$temp)
+    .$temp = "Row:"+$ENCODE(intare.j[intare.count])+" Col:"+$ENCODE(intare.i[intare.count])
+    CALL log(.$temp)
+;
+   VALUE 5:
+    intare.i[intare.count] = 2;
+    intare.j[intare.count] = 3;
+    intare.count = intare.count+1;
+    intare.i[intare.count] = 2;
+    intare.j[intare.count] = 4;
+    .$temp = "Row:"+$ENCODE(intare.j[intare.count]-1)+" Col:"+$ENCODE(intare.i[intare.count]-1)
+    CALL log(.$temp)
+    .$temp = "Row:"+$ENCODE(intare.j[intare.count])+" Col:"+$ENCODE(intare.i[intare.count])
+    CALL log(.$temp)
+;
+   VALUE 6:
+    intare.i[intare.count] = 1;
+    intare.j[intare.count] = 3;
+    intare.count = intare.count+1;
+    intare.i[intare.count] = 1;
+    intare.j[intare.count] = 4;
+    .$temp = "Row:"+$ENCODE(intare.j[intare.count]-1)+" Col:"+$ENCODE(intare.i[intare.count]-1)
+    CALL log(.$temp)
+    .$temp = "Row:"+$ENCODE(intare.j[intare.count])+" Col:"+$ENCODE(intare.i[intare.count])
+    CALL log(.$temp)
+;
+   VALUE 7:
+    intare.i[intare.count] = 3;
+    intare.j[intare.count] = 5;
+    intare.count = intare.count+1;
+    intare.i[intare.count] = 3;
+    intare.j[intare.count] = 6;
+    .$temp = "Row:"+$ENCODE(intare.j[intare.count]-1)+" Col:"+$ENCODE(intare.i[intare.count]-1)
+    CALL log(.$temp)
+    .$temp = "Row:"+$ENCODE(intare.j[intare.count])+" Col:"+$ENCODE(intare.i[intare.count])
+    CALL log(.$temp)
+;
+   VALUE 8:
+    intare.i[intare.count] = 2;
+    intare.j[intare.count] = 5;
+    intare.count = intare.count+1;
+    intare.i[intare.count] = 2;
+    intare.j[intare.count] = 6;
+    .$temp = "Row:"+$ENCODE(intare.j[intare.count]-1)+" Col:"+$ENCODE(intare.i[intare.count]-1)
+    CALL log(.$temp)
+    .$temp = "Row:"+$ENCODE(intare.j[intare.count])+" Col:"+$ENCODE(intare.i[intare.count])
+    CALL log(.$temp)
+;
+   VALUE 9:
+    intare.i[intare.count] = 1;
+    intare.j[intare.count] = 5;
+    intare.count = intare.count+1;
+    intare.i[intare.count] = 1;
+    intare.j[intare.count] = 6;
+    .$temp = "Row:"+$ENCODE(intare.j[intare.count]-1)+" Col:"+$ENCODE(intare.i[intare.count]-1)
+    CALL log(.$temp)
+    .$temp = "Row:"+$ENCODE(intare.j[intare.count])+" Col:"+$ENCODE(intare.i[intare.count])
+    CALL log(.$temp)
+;
+   VALUE 10:
+    intare.i[intare.count] = 3;
+    intare.j[intare.count] = 7;
+    intare.count = intare.count+1;
+    intare.i[intare.count] = 3;
+    intare.j[intare.count] = 8;
+    .$temp = "Row:"+$ENCODE(intare.j[intare.count]-1)+" Col:"+$ENCODE(intare.i[intare.count]-1)
+    CALL log(.$temp)
+    .$temp = "Row:"+$ENCODE(intare.j[intare.count])+" Col:"+$ENCODE(intare.i[intare.count])
+    CALL log(.$temp)
+;
+   VALUE 11:
+    intare.i[intare.count] = 2;
+    intare.j[intare.count] = 7;
+    intare.count = intare.count+1;
+    intare.i[intare.count] = 2;
+    intare.j[intare.count] = 8;
+    .$temp = "Row:"+$ENCODE(intare.j[intare.count]-1)+" Col:"+$ENCODE(intare.i[intare.count]-1)
+    CALL log(.$temp)
+    .$temp = "Row:"+$ENCODE(intare.j[intare.count])+" Col:"+$ENCODE(intare.i[intare.count])
+    CALL log(.$temp)
+;
+   VALUE 12:
+    intare.i[intare.count] = 1;
+    intare.j[intare.count] = 7;
+    intare.count = intare.count+1;
+    intare.i[intare.count] = 1;
+    intare.j[intare.count] = 8;
+    .$temp = "Row:"+$ENCODE(intare.j[intare.count]-1)+" Col:"+$ENCODE(intare.i[intare.count]-1)
+    CALL log(.$temp)
+    .$temp = "Row:"+$ENCODE(intare.j[intare.count])+" Col:"+$ENCODE(intare.i[intare.count])
+    CALL log(.$temp)
+;
+   VALUE 13:
+    intare.i[intare.count] = 3;
+    intare.j[intare.count] = 9;
+    intare.count = intare.count+1;
+    intare.i[intare.count] = 3;
+    intare.j[intare.count] = 10;
+    .$temp = "Row:"+$ENCODE(intare.j[intare.count]-1)+" Col:"+$ENCODE(intare.i[intare.count]-1)
+    CALL log(.$temp)
+    .$temp = "Row:"+$ENCODE(intare.j[intare.count])+" Col:"+$ENCODE(intare.i[intare.count])
+    CALL log(.$temp)
+;
+   VALUE 14:
+    intare.i[intare.count] = 2;
+    intare.j[intare.count] = 9;
+    intare.count = intare.count+1;
+    intare.i[intare.count] = 2;
+    intare.j[intare.count] = 10;
+    .$temp = "Row:"+$ENCODE(intare.j[intare.count]-1)+" Col:"+$ENCODE(intare.i[intare.count]-1)
+    CALL log(.$temp)
+    .$temp = "Row:"+$ENCODE(intare.j[intare.count])+" Col:"+$ENCODE(intare.i[intare.count])
+    CALL log(.$temp)
+;
+   VALUE 15:
+    intare.i[intare.count] = 1;
+    intare.j[intare.count] = 9;
+    intare.count = intare.count+1;
+    intare.i[intare.count] = 1;
+    intare.j[intare.count] = 10;
+    .$temp = "Row:"+$ENCODE(intare.j[intare.count]-1)+" Col:"+$ENCODE(intare.i[intare.count]-1)
+    CALL log(.$temp)
+    .$temp = "Row:"+$ENCODE(intare.j[intare.count])+" Col:"+$ENCODE(intare.i[intare.count])
+    CALL log(.$temp)
+  END
+.END
+.PROGRAM s.in.table_old(.no,.i,.j)@25/11/13 00:00 #0
   .j = INT((.no-1)/3)+1
   .i = INT((.no-1) MOD 3)+1
 .END
-.PROGRAM s.out.table(.no,.i,.j)@25/11/09 21:01 #18
+.PROGRAM s.out.table(.no)@25/11/13 00:00 #7
+  .$temp = "Processing out"+$ENCODE(.no)+" cell"
+  CALL log(.$temp)
+  CASE .no OF
+   VALUE 1:
+    outtare.i[outtare.count] = 4;
+    outtare.j[outtare.count] = 1;
+    outtare.count = outtare.count+1;
+    outtare.i[outtare.count] = 4;
+    outtare.j[outtare.count] = 2;
+    outtare.count = outtare.count+1;
+    outtare.i[outtare.count] = 4;
+    outtare.j[outtare.count] = 3;
+;
+    .$temp = "Row:"+$ENCODE(outtare.j[outtare.count-2])+" Col:"+$ENCODE(outtare.i[outtare.count-2])
+    CALL log(.$temp)
+    .$temp = "Row:"+$ENCODE(outtare.j[outtare.count-1])+" Col:"+$ENCODE(outtare.i[outtare.count-1])
+    CALL log(.$temp)
+    .$temp = "Row:"+$ENCODE(outtare.j[outtare.count])+" Col:"+$ENCODE(outtare.i[outtare.count])
+    CALL log(.$temp)
+;
+   VALUE 2:
+    outtare.i[outtare.count] = 3;
+    outtare.j[outtare.count] = 1;
+    outtare.count = outtare.count+1;
+    outtare.i[outtare.count] = 3;
+    outtare.j[outtare.count] = 2;
+    outtare.count = outtare.count+1;
+    outtare.i[outtare.count] = 3;
+    outtare.j[outtare.count] = 3;
+;
+    .$temp = "Row:"+$ENCODE(outtare.j[outtare.count-2])+" Col:"+$ENCODE(outtare.i[outtare.count-2])
+    CALL log(.$temp)
+    .$temp = "Row:"+$ENCODE(outtare.j[outtare.count-1])+" Col:"+$ENCODE(outtare.i[outtare.count-1])
+    CALL log(.$temp)
+    .$temp = "Row:"+$ENCODE(outtare.j[outtare.count])+" Col:"+$ENCODE(outtare.i[outtare.count])
+    CALL log(.$temp)
+;
+   VALUE 3:
+    outtare.i[outtare.count] = 2;
+    outtare.j[outtare.count] = 1;
+    outtare.count = outtare.count+1;
+    outtare.i[outtare.count] = 2;
+    outtare.j[outtare.count] = 2;
+    outtare.count = outtare.count+1;
+    outtare.i[outtare.count] = 2;
+    outtare.j[outtare.count] = 3;
+;
+    .$temp = "Row:"+$ENCODE(outtare.j[outtare.count-2])+" Col:"+$ENCODE(outtare.i[outtare.count-2])
+    CALL log(.$temp)
+    .$temp = "Row:"+$ENCODE(outtare.j[outtare.count-1])+" Col:"+$ENCODE(outtare.i[outtare.count-1])
+    CALL log(.$temp)
+    .$temp = "Row:"+$ENCODE(outtare.j[outtare.count])+" Col:"+$ENCODE(outtare.i[outtare.count])
+    CALL log(.$temp)
+;
+   VALUE 4:
+    outtare.i[outtare.count] = 1;
+    outtare.j[outtare.count] = 1;
+    outtare.count = outtare.count+1;
+    outtare.i[outtare.count] = 1;
+    outtare.j[outtare.count] = 2;
+    outtare.count = outtare.count+1;
+    outtare.i[outtare.count] = 1;
+    outtare.j[outtare.count] = 3;
+;
+    .$temp = "Row:"+$ENCODE(outtare.j[outtare.count-2])+" Col:"+$ENCODE(outtare.i[outtare.count-2])
+    CALL log(.$temp)
+    .$temp = "Row:"+$ENCODE(outtare.j[outtare.count-1])+" Col:"+$ENCODE(outtare.i[outtare.count-1])
+    CALL log(.$temp)
+    .$temp = "Row:"+$ENCODE(outtare.j[outtare.count])+" Col:"+$ENCODE(outtare.i[outtare.count])
+    CALL log(.$temp)
+;
+   VALUE 5:
+    outtare.i[outtare.count] = 4;
+    outtare.j[outtare.count] = 4;
+    outtare.count = outtare.count+1;
+    outtare.i[outtare.count] = 4;
+    outtare.j[outtare.count] = 5;
+    outtare.count = outtare.count+1;
+    outtare.i[outtare.count] = 4;
+    outtare.j[outtare.count] = 6;
+;
+    .$temp = "Row:"+$ENCODE(outtare.j[outtare.count-2])+" Col:"+$ENCODE(outtare.i[outtare.count-2])
+    CALL log(.$temp)
+    .$temp = "Row:"+$ENCODE(outtare.j[outtare.count-1])+" Col:"+$ENCODE(outtare.i[outtare.count-1])
+    CALL log(.$temp)
+    .$temp = "Row:"+$ENCODE(outtare.j[outtare.count])+" Col:"+$ENCODE(outtare.i[outtare.count])
+    CALL log(.$temp)
+;
+   VALUE 6:
+    outtare.i[outtare.count] = 3;
+    outtare.j[outtare.count] = 4;
+    outtare.count = outtare.count+1;
+    outtare.i[outtare.count] = 3;
+    outtare.j[outtare.count] = 5;
+    outtare.count = outtare.count+1;
+    outtare.i[outtare.count] = 3;
+    outtare.j[outtare.count] = 6;
+;
+    .$temp = "Row:"+$ENCODE(outtare.j[outtare.count-2])+" Col:"+$ENCODE(outtare.i[outtare.count-2])
+    CALL log(.$temp)
+    .$temp = "Row:"+$ENCODE(outtare.j[outtare.count-1])+" Col:"+$ENCODE(outtare.i[outtare.count-1])
+    CALL log(.$temp)
+    .$temp = "Row:"+$ENCODE(outtare.j[outtare.count])+" Col:"+$ENCODE(outtare.i[outtare.count])
+    CALL log(.$temp)
+;
+   VALUE 7:
+    outtare.i[outtare.count] = 2;
+    outtare.j[outtare.count] = 4;
+    outtare.count = outtare.count+1;
+    outtare.i[outtare.count] = 2;
+    outtare.j[outtare.count] = 5;
+    outtare.count = outtare.count+1;
+    outtare.i[outtare.count] = 2;
+    outtare.j[outtare.count] = 6;
+;
+    .$temp = "Row:"+$ENCODE(outtare.j[outtare.count-2])+" Col:"+$ENCODE(outtare.i[outtare.count-2])
+    CALL log(.$temp)
+    .$temp = "Row:"+$ENCODE(outtare.j[outtare.count-1])+" Col:"+$ENCODE(outtare.i[outtare.count-1])
+    CALL log(.$temp)
+    .$temp = "Row:"+$ENCODE(outtare.j[outtare.count])+" Col:"+$ENCODE(outtare.i[outtare.count])
+    CALL log(.$temp)
+;
+   VALUE 8:
+    outtare.i[outtare.count] = 1;
+    outtare.j[outtare.count] = 4;
+    outtare.count = outtare.count+1;
+    outtare.i[outtare.count] = 1;
+    outtare.j[outtare.count] = 5;
+    outtare.count = outtare.count+1;
+    outtare.i[outtare.count] = 1;
+    outtare.j[outtare.count] = 6;
+;
+    .$temp = "Row:"+$ENCODE(outtare.j[outtare.count-2])+" Col:"+$ENCODE(outtare.i[outtare.count-2])
+    CALL log(.$temp)
+    .$temp = "Row:"+$ENCODE(outtare.j[outtare.count-1])+" Col:"+$ENCODE(outtare.i[outtare.count-1])
+    CALL log(.$temp)
+    .$temp = "Row:"+$ENCODE(outtare.j[outtare.count])+" Col:"+$ENCODE(outtare.i[outtare.count])
+    CALL log(.$temp)
+;
+   VALUE 9:
+    outtare.i[outtare.count] = 4;
+    outtare.j[outtare.count] = 7;
+    outtare.count = outtare.count+1;
+    outtare.i[outtare.count] = 4;
+    outtare.j[outtare.count] = 8;
+    outtare.count = outtare.count+1;
+    outtare.i[outtare.count] = 4;
+    outtare.j[outtare.count] = 9;
+;
+    .$temp = "Row:"+$ENCODE(outtare.j[outtare.count-2])+" Col:"+$ENCODE(outtare.i[outtare.count-2])
+    CALL log(.$temp)
+    .$temp = "Row:"+$ENCODE(outtare.j[outtare.count-1])+" Col:"+$ENCODE(outtare.i[outtare.count-1])
+    CALL log(.$temp)
+    .$temp = "Row:"+$ENCODE(outtare.j[outtare.count])+" Col:"+$ENCODE(outtare.i[outtare.count])
+    CALL log(.$temp)
+;
+   VALUE 10:
+    outtare.i[outtare.count] = 3;
+    outtare.j[outtare.count] = 7;
+    outtare.count = outtare.count+1;
+    outtare.i[outtare.count] = 3;
+    outtare.j[outtare.count] = 8;
+    outtare.count = outtare.count+1;
+    outtare.i[outtare.count] = 3;
+    outtare.j[outtare.count] = 9;
+;
+    .$temp = "Row:"+$ENCODE(outtare.j[outtare.count-2])+" Col:"+$ENCODE(outtare.i[outtare.count-2])
+    CALL log(.$temp)
+    .$temp = "Row:"+$ENCODE(outtare.j[outtare.count-1])+" Col:"+$ENCODE(outtare.i[outtare.count-1])
+    CALL log(.$temp)
+    .$temp = "Row:"+$ENCODE(outtare.j[outtare.count])+" Col:"+$ENCODE(outtare.i[outtare.count])
+    CALL log(.$temp)
+;
+   VALUE 11:
+    outtare.i[outtare.count] = 2;
+    outtare.j[outtare.count] = 7;
+    outtare.count = outtare.count+1;
+    outtare.i[outtare.count] = 2;
+    outtare.j[outtare.count] = 8;
+    outtare.count = outtare.count+1;
+    outtare.i[outtare.count] = 2;
+    outtare.j[outtare.count] = 9;
+;
+    .$temp = "Row:"+$ENCODE(outtare.j[outtare.count-2])+" Col:"+$ENCODE(outtare.i[outtare.count-2])
+    CALL log(.$temp)
+    .$temp = "Row:"+$ENCODE(outtare.j[outtare.count-1])+" Col:"+$ENCODE(outtare.i[outtare.count-1])
+    CALL log(.$temp)
+    .$temp = "Row:"+$ENCODE(outtare.j[outtare.count])+" Col:"+$ENCODE(outtare.i[outtare.count])
+    CALL log(.$temp)
+;
+   VALUE 12:
+    outtare.i[outtare.count] = 1;
+    outtare.j[outtare.count] = 7;
+    outtare.count = outtare.count+1;
+    outtare.i[outtare.count] = 1;
+    outtare.j[outtare.count] = 8;
+    outtare.count = outtare.count+1;
+    outtare.i[outtare.count] = 1;
+    outtare.j[outtare.count] = 9;
+;
+    .$temp = "Row:"+$ENCODE(outtare.j[outtare.count-2])+" Col:"+$ENCODE(outtare.i[outtare.count-2])
+    CALL log(.$temp)
+    .$temp = "Row:"+$ENCODE(outtare.j[outtare.count-1])+" Col:"+$ENCODE(outtare.i[outtare.count-1])
+    CALL log(.$temp)
+    .$temp = "Row:"+$ENCODE(outtare.j[outtare.count])+" Col:"+$ENCODE(outtare.i[outtare.count])
+    CALL log(.$temp)
+;
+   VALUE 13:
+    outtare.i[outtare.count] = 4;
+    outtare.j[outtare.count] = 10;
+    outtare.count = outtare.count+1;
+    outtare.i[outtare.count] = 4;
+    outtare.j[outtare.count] = 11;
+    outtare.count = outtare.count+1;
+    outtare.i[outtare.count] = 4;
+    outtare.j[outtare.count] = 12;
+;
+    .$temp = "Row:"+$ENCODE(outtare.j[outtare.count-2])+" Col:"+$ENCODE(outtare.i[outtare.count-2])
+    CALL log(.$temp)
+    .$temp = "Row:"+$ENCODE(outtare.j[outtare.count-1])+" Col:"+$ENCODE(outtare.i[outtare.count-1])
+    CALL log(.$temp)
+    .$temp = "Row:"+$ENCODE(outtare.j[outtare.count])+" Col:"+$ENCODE(outtare.i[outtare.count])
+    CALL log(.$temp)
+;
+   VALUE 14:
+    outtare.i[outtare.count] = 3;
+    outtare.j[outtare.count] = 10;
+    outtare.count = outtare.count+1;
+    outtare.i[outtare.count] = 3;
+    outtare.j[outtare.count] = 11;
+    outtare.count = outtare.count+1;
+    outtare.i[outtare.count] = 3;
+    outtare.j[outtare.count] = 12;
+;
+    .$temp = "Row:"+$ENCODE(outtare.j[outtare.count-2])+" Col:"+$ENCODE(outtare.i[outtare.count-2])
+    CALL log(.$temp)
+    .$temp = "Row:"+$ENCODE(outtare.j[outtare.count-1])+" Col:"+$ENCODE(outtare.i[outtare.count-1])
+    CALL log(.$temp)
+    .$temp = "Row:"+$ENCODE(outtare.j[outtare.count])+" Col:"+$ENCODE(outtare.i[outtare.count])
+    CALL log(.$temp)
+;
+   VALUE 15:
+    outtare.i[outtare.count] = 2;
+    outtare.j[outtare.count] = 10;
+    outtare.count = outtare.count+1;
+    outtare.i[outtare.count] = 2;
+    outtare.j[outtare.count] = 11;
+    outtare.count = outtare.count+1;
+    outtare.i[outtare.count] = 2;
+    outtare.j[outtare.count] = 12;
+;
+    .$temp = "Row:"+$ENCODE(outtare.j[outtare.count-2])+" Col:"+$ENCODE(outtare.i[outtare.count-2])
+    CALL log(.$temp)
+    .$temp = "Row:"+$ENCODE(outtare.j[outtare.count-1])+" Col:"+$ENCODE(outtare.i[outtare.count-1])
+    CALL log(.$temp)
+    .$temp = "Row:"+$ENCODE(outtare.j[outtare.count])+" Col:"+$ENCODE(outtare.i[outtare.count])
+    CALL log(.$temp)
+;
+   VALUE 16:
+    outtare.i[outtare.count] = 1;
+    outtare.j[outtare.count] = 10;
+    outtare.count = outtare.count+1;
+    outtare.i[outtare.count] = 1;
+    outtare.j[outtare.count] = 11;
+    outtare.count = outtare.count+1;
+    outtare.i[outtare.count] = 1;
+    outtare.j[outtare.count] = 12;
+;
+    .$temp = "Row:"+$ENCODE(outtare.j[outtare.count-2])+" Col:"+$ENCODE(outtare.i[outtare.count-2])
+    CALL log(.$temp)
+    .$temp = "Row:"+$ENCODE(outtare.j[outtare.count-1])+" Col:"+$ENCODE(outtare.i[outtare.count-1])
+    CALL log(.$temp)
+    .$temp = "Row:"+$ENCODE(outtare.j[outtare.count])+" Col:"+$ENCODE(outtare.i[outtare.count])
+    CALL log(.$temp)
+;
+  END
+.END
+.PROGRAM s.out.table_old(.no,.i,.j)@25/11/13 00:00 #0
   .j = INT((.no-1)/4)+1
   .i = INT((.no-1) MOD 4)+1
 .END
-.PROGRAM safe.home()@25/11/09 21:01 #20
+.PROGRAM safe.home()@25/11/13 00:00 #7
 ; IMPLEMENT SAFE RETURN TO HOME POSITION
   CALL log("Moving to home position. State: MoveToHome")
   $action = "MoveToHome"
@@ -12505,7 +13026,7 @@ any:
   ACCURACY 10 ALWAYS
   JMOVE #homep1
 .END
-.PROGRAM sender.pc()@25/11/09 21:01 #0
+.PROGRAM sender.pc()@25/11/13 00:00 #0
 ;
 ; 0 - FALSE
 ; 1 - TRUE
@@ -12515,13 +13036,18 @@ any:
   WHILE TRUE DO
 ;
     CALL get.state.pc(.$data[1])
-    .$data[2] = "action:"+$action+"\n"
+    .$data[2] = "ACTION:"+$action+";"
+    .$data[2] = .$data[2]+"TAREIN:"+$ENCODE(current.intare)+";"
+    .$data[2] = .$data[2]+"TAREOUT:"+$ENCODE(current.outtare)+";"
+    .$data[2] = .$data[2]+"GRIPPER:"+$ENCODE(current.gripper)+";"
+    .$data[2] = .$data[2]+"PICKCOUNT:"+$ENCODE(pick.count)+";"
+    .$data[2] = .$data[2]+"\n"
 ;
     CALL tcp.send3.pc(.$data[],2)
     TWAIT 0.25
   END
 .END
-.PROGRAM set.io.pc()@25/11/09 21:01 #3
+.PROGRAM set.io.pc()@25/11/13 00:00 #5
 ; Gripper IO
   release.tare = 1
   capture.tare = 2
@@ -12540,12 +13066,16 @@ any:
   do.bat.alm = 2010
 ;
   rs13.det.put = 19; EIP
-  rs7.det.picked = 1019; EIP
+  rs7.working = 1019; EIP
 ;
   rs7.home1 = 1017 ; EIP
   rs7.work[1] = 1018 ; EIP
   rs13.tare.ack = 20
   rs7.tare.chg = 1020
+  rs13.finish = 21
+  rs07.fin.ack = 1021
+  rs07.put.ack = 1022
+;
   di.ifp.page[1] = 2001
   di.ifp.page[2] = 2002
   di.ifp.page[3] = 2003
@@ -12574,7 +13104,7 @@ any:
 ;
   s.debug = 2024
 .END
-.PROGRAM set.vars.pc()@25/11/09 21:01 #6
+.PROGRAM set.vars.pc()@25/11/13 00:00 #5
 ;
   IF NOT EXISTREAL("grip.xsh[8]") THEN
     FOR .i = 1 TO 9
@@ -12594,6 +13124,11 @@ any:
   IF NOT EXISTREAL("current.gripper") THEN
     current.gripper = 0
   END
+;
+  IF NOT EXISTREAL("mon.speed") THEN
+    mon.speed = 100
+    pick.count = 0
+  END
 ; Variables init
 ;
 ;tcp.socket = 0
@@ -12606,7 +13141,7 @@ any:
   $command = ""
   $cycle.command = ""
 .END
-.PROGRAM stock.in.back(.i,.j)@25/11/09 21:01 #0
+.PROGRAM stock.in.back(.i,.j)@25/11/13 00:00 #0
   IF FALSE THEN
     .i = hmi.st.in.i
     .j = hmi.st.in.j
@@ -12665,7 +13200,7 @@ any:
   BREAK
 ;
   ACCURACY 0
-  SPEED 10
+  SPEED 50 MM/S
   LMOVE stocker.in[.i,.j]
   BREAK
   PULSE release.tare
@@ -12674,7 +13209,7 @@ any:
   LMOVE stocker.in[.i,.j]+TRANS(0,0,50)
   LMOVE stocker.in[.i,.j]+TRANS(0,0,200)
 .END
-.PROGRAM stock.in.take(.i,.j)@25/11/09 21:01 #8
+.PROGRAM stock.in.take(.i,.j)@25/11/13 00:00 #7
   IF FALSE THEN
     .i = hmi.st.in.i
     .j = hmi.st.in.j
@@ -12706,7 +13241,7 @@ any:
   TWAIT 0.5
 ;
   ACCURACY 0
-  SPEED 20
+  SPEED 50 MM/S
   LMOVE stocker.in[.i,.j]+TRANS(20)
 ;
   SPEED 20
@@ -12756,7 +13291,7 @@ any:
   LMOVE #wait.pick
 ;
 .END
-.PROGRAM stock.out.back(.i,.j)@25/11/09 21:01 #3
+.PROGRAM stock.out.back(.i,.j)@25/11/13 00:00 #12
   IF FALSE THEN
     .i = hmi.st.out.i
     .j = hmi.st.out.j
@@ -12803,7 +13338,7 @@ any:
   BREAK
 ;
   ACCURACY 0
-  SPEED 10
+  SPEED 50 MM/S
   LMOVE stocker.out[.i,.j]
   BREAK
   PULSE release.tare
@@ -12812,7 +13347,7 @@ any:
   LMOVE stocker.out[.i,.j]+TRANS(0,0,50)
   LMOVE stocker.out[.i,.j]+TRANS(0,0,200)
 .END
-.PROGRAM stock.out.take(.i,.j)@25/11/09 21:01 #5
+.PROGRAM stock.out.take(.i,.j)@25/11/13 00:00 #18
   IF FALSE THEN
     .i = hmi.st.out.i
     .j = hmi.st.out.j
@@ -12843,7 +13378,7 @@ any:
   TWAIT 0.5;
 ;
   ACCURACY 0
-  SPEED 20
+  SPEED 50 MM/S
   LMOVE stocker.out[.i,.j]+TRANS(20)
 ;
   SPEED 20
@@ -12885,7 +13420,7 @@ any:
 ;
 ;LMOVE #homep1
 .END
-.PROGRAM stz.pick()@25/11/09 21:01 #13
+.PROGRAM stz.pick()@25/11/13 00:00 #31
 ;
   .$temp = "Pick detail from stz ("+$ENCODE(/L,hmi.x)+", "+$ENCODE(/L,hmi.y)+", "+$ENCODE(/L,hmi.a)+")"
   CALL log(.$temp)
@@ -12945,7 +13480,7 @@ any:
   LMOVE #wait.pick
   LMOVE #before.pos
 .END
-.PROGRAM stz.put(.pos)@25/11/09 21:01 #12
+.PROGRAM stz.put(.pos)@25/11/13 00:00 #29
 ;
   CALL log("Waiting for free positioner. State: WaitPosFree")
   $action = "WaitPosFree"
@@ -12976,7 +13511,7 @@ any:
   LMOVE #before.pos
   LMOVE #wait.pick
 .END
-.PROGRAM tcp.callback.pc(.$data[],.data.length)@25/11/09 21:01 #15882
+.PROGRAM tcp.callback.pc(.$data[],.data.length)@25/11/13 00:00 #58
   .$temp = "Received "+$ENCODE(.data.length)+" strings:"
   PRINT tcp.recv.ena: .$temp
   FOR .i = 1 TO .data.length
@@ -13043,6 +13578,16 @@ any:
 ;END
 ;
 ; String format:
+; SPEED;VALUE;
+;
+  IF INSTR(.$data[1] , "SPEED") THEN
+    .$temp = $DECODE(.$data[1],";",0)
+    .$temp = $DECODE(.$data[1],";",1)
+    .$spd = $DECODE(.$data[1],";",0)
+    mon.speed = VAL(.$spd)
+    MON_SPEED (mon.speed)
+  END
+; String format:
 ; PAUSE;
 ;
   IF INSTR(.$data[1] , "NOPICK") THEN
@@ -13058,13 +13603,6 @@ any:
   IF INSTR(.$data[1] , "RESUME") THEN
     PULSE 2222
   END
-;
-; String format:
-; ETALON;ID;
-  IF INSTR(.$data[1] , "ETALON") THEN
-    $command = "ETALON"
-  END
-;
 ; PNEUMOOPEN;
   IF INSTR(.$data[1] , "PNEUMOOPEN") THEN
     PULSE s.pneumo.open,5
@@ -13091,7 +13629,7 @@ any:
   END
   .$data[1] = ""
 .END
-.PROGRAM tcp.client.pc()@25/11/09 21:01 #0
+.PROGRAM tcp.client.pc()@25/11/13 00:00 #0
   .tcp.retry.count = 10
   WHILE TRUE DO
 ; Checking for active sockets and closing them
@@ -13157,7 +13695,7 @@ any:
     END
   END
 .END
-.PROGRAM tcp.send.pc(.$data[],.data.length)@25/11/09 21:01 #122290
+.PROGRAM tcp.send.pc(.$data[],.data.length)@25/11/13 00:00 #122290
   IF tcp.socket>0 THEN
     TCP_SEND .status,tcp.socket,.$data[1],.data.length,tcp.send.tmo
     IF .status>=0 THEN
@@ -13181,7 +13719,7 @@ any:
   END
 ;
 .END
-.PROGRAM tcp.send2.pc(.$data[],.data.length)@25/11/09 21:01 #0
+.PROGRAM tcp.send2.pc(.$data[],.data.length)@25/11/13 00:00 #0
   IF tcp.socket>0 THEN
     TCP_SEND .status,tcp.socket,.$data[1],.data.length,tcp.send.tmo
     IF .status>=0 THEN
@@ -13201,7 +13739,7 @@ any:
   END
 ;
 .END
-.PROGRAM tcp.send3.pc(.$data[],.data.length)@25/11/09 21:01 #178222
+.PROGRAM tcp.send3.pc(.$data[],.data.length)@25/11/13 00:00 #23110
   IF tcp.socket>0 THEN
     TCP_SEND .status,tcp.socket,.$data[1],.data.length,tcp.send.tmo
     IF .status>=0 THEN
@@ -13221,7 +13759,7 @@ any:
   END
 ;
 .END
-.PROGRAM watchdog.pc()@25/11/09 21:01 #0
+.PROGRAM watchdog.pc()@25/11/13 00:00 #0
   WHILE TRUE DO
     IF SIG(s.tcp.ena) THEN
       tcp.ena = tyterm
@@ -13257,7 +13795,7 @@ any:
       grip.180ysh[hmi.tool.no] = hmi.g180y
     END
 ;
-    IF SIG(rs7.det.picked) THEN
+    IF SIG(rs07.put.ack) THEN
       SIGNAL -rs13.det.put
     END
 ;
@@ -13281,7 +13819,7 @@ any:
     END
 ;
     IF NOT SIG(s.debug) THEN
-      IF SWITCH(REPEAT ) AND NOT SWITCH(TEACH_LOCK ) AND NOT SWITCH(EMERGENCY ) AND NOT SWITCH(CS ) THEN
+      IF SWITCH(REPEAT ) AND NOT SWITCH(TEACH_LOCK ) AND NOT SWITCH(EMERGENCY ) AND NOT SWITCH(CS ) AND NOT SWITCH(ERROR ) THEN
         MC ZPOWER ON 
         WAIT SWITCH(POWER )
 ;
@@ -13438,11 +13976,12 @@ center.x = 147.8
 center.y = 245.4
 current.gripper = 1
 current.intare = 1
-current.outtare = 1
+current.outtare = 4
 cx = 2.3456
 cy = 5.848
 dbg.tcp = -1
-detail.count = 200
+detail.count = 8
+detail.length = 23.5
 di.ifp.page[1] = 2001
 di.ifp.page[2] = 2002
 di.ifp.page[3] = 2003
@@ -13461,7 +14000,7 @@ do.bat.alm = 2010
 do.home1 = 17
 do.work[1] = 18
 do.work[2] = 2102
-full.counter = 0
+full.counter = 10
 grip.180xsh[1] = -8
 grip.180xsh[2] = 0
 grip.180xsh[3] = 0
@@ -13537,29 +14076,40 @@ hmi.y = 2.2
 intare.count = 2
 intare.i[1] = 1
 intare.i[2] = 1
-intare.j[1] = 2
-intare.j[2] = 6
+intare.j[1] = 1
+intare.j[2] = 2
 ip[1] = 127
 ip[2] = 0
 ip[3] = 0
 ip[4] = 1
 keep.tool.no = 1
-max.tare.count = 99
+max.tare.count = 3
+mon.speed = 70
 object.id = 4
-outtare.count = 2
-outtare.i[1] = 1
-outtare.i[2] = 2
-outtare.j[1] = 2
-outtare.j[2] = 3
+outtare.count = 3
+outtare.i[1] = 3
+outtare.i[2] = 3
+outtare.i[3] = 3
+outtare.i[4] = 1
+outtare.j[1] = 1
+outtare.j[2] = 2
+outtare.j[3] = 3
+outtare.j[4] = 1
+pick.count = 0
 positioner.id = 4
 release.grip = 5
 release.tare = 1
+rs07.fin.ack = 1021
+rs07.put.ack = 1022
 rs13.det.put = 19
+rs13.finish = 21
+rs13.put.ack = 22
 rs13.tare.ack = 20
 rs7.det.picked = 1019
 rs7.home1 = 1017
 rs7.tare.chg = 1020
 rs7.work[1] = 1018
+rs7.working = 1019
 s.apply.coord = 2014
 s.close.pneumo = 2015
 s.debug = 2024
@@ -13576,8 +14126,11 @@ s.sensor.ot = 2021
 s.tcp.ena = 2013
 s.tcp.recv.ena = 2012
 s.tcp.send.ena = 2011
+start.shift.x = 0
+start.shift.y = 15
+start.shift.z = 0
 start.task = 2001
-tare.counter = 0
+tare.counter = 10
 tcp.calb.dbg = -1
 tcp.connect.tmo = 5
 tcp.dbg = -1
@@ -13589,7 +14142,7 @@ tcp.recv.ena = -1
 tcp.send.dbg = -1
 tcp.send.ena = -1
 tcp.send.tmo = 5
-tcp.socket = 504
+tcp.socket = 520
 tyterm = 0
 .END
 .STRINGS
@@ -13597,23 +14150,19 @@ $action = "WaitForPick"
 $command = ""
 $cycle.command = ""
 $detail.type = "312.229.002_1"
-$intare.ids = "16"
-$log.entry[0] = "20:59:56 Take pallet (1, 2) from input stocker."
-$log.entry[1] = "20:59:56 State: TakingFromInStocker"
-$log.entry[2] = "20:59:59 Wait sensor state. State: WaitInStockerSensor"
-$log.entry[3] = "21:00:14 Take pallet (1, 2) from input stocker."
-$log.entry[4] = "21:00:14 State: TakingFromInStocker"
-$log.entry[5] = "21:00:22 Wait stz pneumatic close. State: WaitPneumaticClose"
-$log.entry[6] = "21:00:29 Take pallet (1, 2) from output stocker."
-$log.entry[7] = "21:00:29 State: TakingFromOutStocker"
-$log.entry[8] = "21:00:37 Wait sensor state. State: WaitOutStockerSensor"
-$log.entry[9] = "21:00:39 Take pallet (1, 2) from output stocker."
-$log.entry[10] = "21:00:39 State: TakingFromOutStocker"
-$log.entry[11] = "21:00:44 Wait for new pick. State: WaitForPick"
-$outtare.ids = "10"
+$intare.ids = "3"
+$log.entry[0] = "23:58:04 Put detail to positioner 4"
+$log.entry[1] = "23:58:04 State: PutToPositioner"
+$log.entry[2] = "23:58:06 Wait for new pick. State: WaitForPick"
+$log.entry[3] = "23:58:06 OutPalletChange requested"
+$log.entry[4] = "23:58:06 Return pallet (3, 3) to output stocker."
+$log.entry[5] = "23:58:06 State: ReturnToOutStocker"
+$log.entry[6] = "23:58:08 Take pallet (1, 1) from output stocker."
+$log.entry[7] = "23:58:08 State: TakingFromOutStocker"
+$log.entry[8] = "23:58:09 Wait sensor state. State: WaitOutStockerSensor"
+$log.entry[9] = "23:58:13 Take pallet (1, 1) from output stocker."
+$log.entry[10] = "23:58:13 State: TakingFromOutStocker"
+$log.entry[11] = "23:58:15 Wait for new pick. State: WaitForPick"
+$outtare.ids = "2"
 $tcp.ip = "127.0.0.1"
-.END
-
-.ROBOTDATA1
-OP_BLTARM OFF -4280
 .END
