@@ -13,6 +13,7 @@ import configuration
 from common.Logger import config_logger
 from IO import IO
 from typing import Annotated, List, Literal
+import asyncio
 
 logger = config_logger("io-service/main.py")
 
@@ -197,9 +198,31 @@ def get_all_inputs():
     inputs = [io.get_input(i) for i in range(16)]
     return {"Status": "OK", "Inputs": inputs}
 
+def tare_on_async():
+    
+    io.set_output(4, False)
+    io.set_output(3, True)
+    io.set_output(0, True)
+    time.sleep(1)
+    io.set_output(1, True)
+    time.sleep(1)
+    io.set_output(2, True)
+    time.sleep(1)
+    io.set_output(2, False)
+    time.sleep(0.1)
+    io.set_output(2, True)
+    
+def tare_off_async():
+    io.set_output(4, False)
+    io.set_output(3, True)
+    io.set_output(2, False)
+    time.sleep(1)
+    io.set_output(1, False)
+    time.sleep(1)
+    io.set_output(0, False)
+
 @app.post("/tare_on")
 def tare_on():
-
     if io is None or not io.is_connected():
         logger.error("Модуль I/O не подключен")
         return {"Status": "ERROR",
@@ -216,6 +239,7 @@ def tare_on():
     time.sleep(0.1)
     io.set_output(2, True)
     return {"Status": "OK"}
+
 
 @app.post("/tare_off")
 def tare_off():

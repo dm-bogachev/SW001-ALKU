@@ -107,7 +107,6 @@ class FrameProcessor:
         """Обрабатывает откалиброванный кадр"""
         try:
             frame = self.__prepare_frame(frame)
-
             predictions = self.detector.detect(frame)
             if predictions and len(predictions) > 0:
                 frame, predictions = self.function.process(frame, predictions)
@@ -128,6 +127,7 @@ class FrameProcessor:
             frame = self.drawer.draw(frame, predictions)
             self.__put_frame_to_redis(frame)
         except Exception as e:
+            self.objects = None
             logger.error(f"Ошибка при обработке кадра: {e}")
 
     def __prepare_frame(self, frame):

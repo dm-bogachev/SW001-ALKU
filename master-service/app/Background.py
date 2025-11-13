@@ -239,44 +239,53 @@ class Background(Thread):
 
     def run(self):
         logger.info(f'Запуск потока сбора данных')
+        on_action = False
         while not self.__stop_event.is_set():
             try:
                 logger.debug("Проверка команд от роботов")
                 # безопасно получить action (избегаем .lower() у None)
-                rs13_action = getattr(self.collector.rs013n, "action", "") or ""
-                rs7_action = getattr(self.collector.rs007l, "action", "") or ""
+                rs13_action = self.collector.rs013n["action"]
+                rs7_action = self.collector.rs007l["action"]
 
                 logger.debug(f"RS013N action: {rs13_action}")
                 logger.debug(f"RS007L action: {rs7_action}")
 
                 if rs13_action.lower() == "waitpneumaticclose":
                     while True:
-                        rs13_action = getattr(self.collector.rs013n, "action", "") or ""
+                        rs13_action = self.collector.rs013n["action"]
                         if rs13_action.lower() != "waitpneumaticclose":
                             break
                         logger.info("Команда на закрытие пневматики получена")
-                        resp = requests.post(f"{IO_API_URL}/tare_on", timeout=2)
+                        resp = requests.post(f"{IO_API_URL}/tare_on", timeout=8)
                         if resp.status_code == 200:
                             logger.info("Команда на взвешивание отправлена на IO-сервис")
+                            on_action = True
                         else:
                             logger.warning("Не удалось отправить команду на взвешивание на IO-сервис")
-                        
-                        resp = requests.get(f"{IO_API_URL}/input?bit=1", timeout=2)
+                        resp = requests.get(f"{IO_API_URL}/input?bit=1", timeout=8)
                         response_data = resp.json()
-                        value = response_data[0]["Value"] if isinstance(response_data, list) and len(response_data) > 0 and "Value" in response_data[0] else None
-                        if resp.status_code == 200 and value == 1:
+                        value = response_data["Value"] 
+                        if resp.status_code == 200 and value  == 1:
                             logger.info("Пневматика успешно закрыта (сигнал с IO-сервиса)")
                         else:
-                            logger.warning("Пневматика не закрыта (отсутствует сигнал с IO-сервиса)")
+                            logger.warning("Пневматика не закрыта (отсутствует сигнал 1 с IO-сервиса)")
+                            logger.debug(resp)
+                            logger.debug(response_data)
+                            logger.debug(value)
+                            logger.debug(resp.status_code)
                             continue
-                        resp = requests.get(f"{IO_API_URL}/input?bit=7", timeout=2)
+                        #
+                        resp = requests.get(f"{IO_API_URL}/input?bit=7", timeout=8)
                         response_data = resp.json()
-                        value = response_data[0]["Value"] if isinstance(response_data, list) and len(response_data) > 0 and "Value" in response_data[0] else None
-                        if resp.status_code == 200 and value == 1:
+                        value = response_data["Value"] 
+                        if resp.status_code == 200 and int(value) == 1:
                             logger.info("Пневматика успешно закрыта (сигнал с IO-сервиса)")
                         else:
-                            logger.warning("Пневматика не закрыта (отсутствует сигнал с IO-сервиса)")
+                            logger.warning("Пневматика не закрыта (отсутствует сигнал 7 с IO-сервиса)")
+                            logger.debug(response_data)
+                            logger.debug(resp.status_code)
                             continue
+
                         command = f"PNEUMOCLOSE;"
                         resp = requests.post(f"{RS013N_API_URL}/send_command?command={command}",
                                             headers={'accept': 'application/json'},
@@ -285,34 +294,41 @@ class Background(Thread):
                             logger.error(f"Ошибка отправки команды на RS013N: {resp.text}")
                         else:
                             logger.info(f"Команда отправлена на RS013N: {command}")
-
+                
                 if rs13_action.lower() == "waitpneumaticopen":
                     while True:
-                        rs13_action = getattr(self.collector.rs013n, "action", "") or ""
+                        logger.info("Команда на открытие пневматики получена")
+                        rs13_action = self.collector.rs013n["action"]
                         if rs13_action.lower() != "waitpneumaticopen":
                             break
-                        logger.info("Команда на открытие пневматики получена")
-                        resp = requests.post(f"{IO_API_URL}/tare_off", timeout=2)
+                        resp = requests.post(f"{IO_API_URL}/tare_off", timeout=8)
                         if resp.status_code == 200:
                             logger.info("Команда на снятие взвешивания отправлена на IO-сервис")
+                            on_action = True
                         else:
                             logger.warning("Не удалось отправить команду на снятие взвешивания на IO-сервис")
-                        
-                        resp = requests.get(f"{IO_API_URL}/input?bit=0", timeout=2)
+                            
+                        resp = requests.get(f"{IO_API_URL}/input?bit=0", timeout=8)
                         response_data = resp.json()
-                        value = response_data[0]["Value"] if isinstance(response_data, list) and len(response_data) > 0 and "Value" in response_data[0] else None
-                        if resp.status_code == 200 and value == 1:
+                        value = response_data["Value"] 
+                        if resp.status_code == 200 and value  == 1:
                             logger.info("Пневматика успешно открыта (сигнал с IO-сервиса)")
                         else:
-                            logger.warning("Пневматика не открыта (отсутствует сигнал с IO-сервиса)")
+                            logger.warning("Пневматика не открыта (отсутствует сигнал 0 с IO-сервиса)")
+                            logger.debug(resp)
+                            logger.debug(response_data)
+                            logger.debug(value)
+                            logger.debug(resp.status_code)
                             continue
-                        resp = requests.get(f"{IO_API_URL}/input?bit=6", timeout=2)
+                        resp = requests.get(f"{IO_API_URL}/input?bit=6", timeout=8)
                         response_data = resp.json()
-                        value = response_data[0]["Value"] if isinstance(response_data, list) and len(response_data) > 0 and "Value" in response_data[0] else None
-                        if resp.status_code == 200 and value == 1:
+                        value = response_data["Value"] 
+                        if resp.status_code == 200 and int(value)  == 1:
                             logger.info("Пневматика успешно закрыта (сигнал с IO-сервиса)")
                         else:
-                            logger.warning("Пневматика не закрыта (отсутствует сигнал с IO-сервиса)")
+                            logger.warning("Пневматика не закрыта (отсутствует сигнал 6 с IO-сервиса)")
+                            logger.debug(response_data)
+                            logger.debug(resp.status_code)
                             continue
                         command = f"PNEUMOOPEN;"
                         resp = requests.post(f"{RS013N_API_URL}/send_command?command={command}",
@@ -322,9 +338,11 @@ class Background(Thread):
                             logger.error(f"Ошибка отправки команды на RS013N: {resp.text}")
                         else:
                             logger.info(f"Команда отправлена на RS013N: {command}")
-
+                        on_action = False
+                
                 if rs13_action.lower() == "waitforpick":
-                    resp = requests.get(f"{CV_API_URL}/get_first_object", timeout=2)
+                    attempts = 1
+                    resp = requests.get(f"{CV_API_URL}/get_first_object", timeout=8)
                     if resp.status_code == 200:
                         data = resp.json()
                         if data.get("Status") == "OK" and "Object" in data:
@@ -341,16 +359,20 @@ class Background(Thread):
                             else:
                                 logger.info(f"Данные захвата успешно отправлены на RS013N: x={x}, y={y}, angle={angle}")
                         else:
-                            command = f"NOPICK;"
-                            command = "ffff"
-                            logger.warning("Нет доступных объектов для захвата от CV-сервиса")
-                            resp = requests.post(f"{RS013N_API_URL}/send_command?command={command}",
-                                        headers={'accept': 'application/json'},
-                                        timeout=1)  # Added timeout
-                            if resp.status_code != 200:
-                                logger.error(f"Ошибка отправки команды на RS013N: {resp.text}")
-                            else:
-                                logger.info(f"Команда отправлена на RS013N: {command}")
+                            attempts = attempts + 1
+                            if attempts <= 2:
+                                command = f"NOPICK;"
+                                #c3ommand = "ffff"
+                                logger.warning("Нет доступных объектов для захвата от CV-сервиса")
+                                resp = requests.post(f"{RS013N_API_URL}/send_command?command={command}",
+                                            headers={'accept': 'application/json'},
+                                            timeout=1)  # Added timeout
+                                if resp.status_code != 200:
+                                    logger.error(f"Ошибка отправки команды на RS013N: {resp.text}")
+                                else:
+                                    logger.info(f"Команда отправлена на RS013N: {command}")
+            
+                time.sleep(4)
             except Exception as e:
                 logger.error("Исключение в потоке Master: ", e)
             time.sleep(0.1)

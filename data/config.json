@@ -69,7 +69,7 @@
         "ExposureValue": 4000
     },
     "Process": {
-        "ProcessingDelay": 0.0,
+        "ProcessingDelay": 3.0,
         "LastModel": "LongDetails",
         "FirstObjectCriteria": "Probability"
     },
