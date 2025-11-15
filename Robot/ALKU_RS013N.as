@@ -1,45 +1,45 @@
 .AUXDATA
-N_OX1    "release.tare"
-N_OX2    "capture.tare"
-N_OX3    "grip.unclamp"
-N_OX4    "grip.clamp"
-N_OX5    "release.grip"
-N_OX6    "capture.grip"
-N_OX17    "do.home1"
-N_OX18    "do.work[1]"
-N_OX19    "rs13.det.put"
-N_OX20    "rs13.tare.ack"
-N_WX1    "grip.unclamped"
-N_WX2    "grip.clamped"
-N_WX17    "rs7.home1"
-N_WX18    "rs7.work[1]"
-N_WX19    "rs7.working"
-N_WX20    "rs7.tare.chg"
-N_WX22    "rs07.put.ack"
-N_INT1    "di.ifp.page[1]"
-N_INT2    "di.ifp.page[2]"
-N_INT3    "di.ifp.page[3]"
-N_INT4    "di.ifp.page[4]"
-N_INT5    "di.ifp.page[5]"
-N_INT6    "di.ifp.page[6]"
-N_INT7    "di.ifp.page[7]"
-N_INT8    "di.ifp.page[8]"
-N_INT10    "do.bat.alm"
-N_INT11    "s.tcp.send.ena"
-N_INT12    "s.tcp.recv.ena"
-N_INT13    "s.tcp.ena"
-N_INT14    "s.apply.coord"
-N_INT15    "s.close.pneumo"
-N_INT16    "s.open.pneumo"
-N_INT17    "s.in1.disable"
-N_INT18    "s.in2.disable"
-N_INT19    "s.sensor.iss"
-N_INT20    "s.sensor.oss"
-N_INT21    "s.sensor.ot"
-N_INT22    "s.pneumo.open"
-N_INT23    "s.pneumo.close"
-N_INT24    "s.debug"
-N_INT102    "do.work[2]"
+N_OX1    "release.tare|"
+N_OX2    "capture.tare|"
+N_OX3    "grip.unclamp|"
+N_OX4    "grip.clamp|"
+N_OX5    "release.grip|"
+N_OX6    "capture.grip|"
+N_OX17    "do.home1|"
+N_OX18    "do.work[1]|"
+N_OX19    "rs13.det.put|"
+N_OX20    "rs13.tare.ack|"
+N_WX1    "grip.unclamped|"
+N_WX2    "grip.clamped|"
+N_WX17    "rs7.home1|"
+N_WX18    "rs7.work[1]|"
+N_WX19    "rs7.working|"
+N_WX20    "rs7.tare.chg|"
+N_WX22    "rs07.put.ack|"
+N_INT1    "di.ifp.page[1]|"
+N_INT2    "di.ifp.page[2]|"
+N_INT3    "di.ifp.page[3]|"
+N_INT4    "di.ifp.page[4]|"
+N_INT5    "di.ifp.page[5]|"
+N_INT6    "di.ifp.page[6]|"
+N_INT7    "di.ifp.page[7]|"
+N_INT8    "di.ifp.page[8]|"
+N_INT10    "do.bat.alm|"
+N_INT11    "s.tcp.send.ena|"
+N_INT12    "s.tcp.recv.ena|"
+N_INT13    "s.tcp.ena|"
+N_INT14    "s.apply.coord|"
+N_INT15    "s.close.pneumo|"
+N_INT16    "s.open.pneumo|"
+N_INT17    "s.in1.disable|"
+N_INT18    "s.in2.disable|"
+N_INT19    "s.sensor.iss|"
+N_INT20    "s.sensor.oss|"
+N_INT21    "s.sensor.ot|"
+N_INT22    "s.pneumo.open|"
+N_INT23    "s.pneumo.close|"
+N_INT24    "s.debug|"
+N_INT102    "do.work[2]|"
 .END
 .INTER_PANEL_D
 0,9,1,6,15
@@ -75,7 +75,7 @@ N_INT102    "do.work[2]"
 92,8,"hmi.st.out.j","OUTSTOCKER","SELECT ROW",10,15,4,2,0
 95,8,"hmi.t.pos","TOOL CHANG"," POSITION",10,15,2,1,0
 97,2,"","   OPEN","PNEUMATICS","",10,4,15,2016,0
-98,10,"","","","",10,4,15,3,"$action="waitforpick"",0
+98,10,"","","","",10,4,15,3,"$action=waitforpick",0
 102,8,"hmi.obj.id","  OBJECT","    ID",10,15,2,1,0
 104,4,1,"OFF     ON","","","  DEBUG ",10,4,4,0,2024,0
 105,2,"","   MAIN","<---------","",10,4,15,2001,0
@@ -192,6 +192,7 @@ N_INT102    "do.work[2]"
   $command = ""
   ;
   pick.count = 0
+  RESET
   ;
   CALL process.data (.state)
   IF NOT .state THEN
@@ -263,21 +264,21 @@ N_INT102    "do.work[2]"
         JMOVE #homyak
         current.intare = current.intare + 1
         CALL stock.in.take (intare.i[current.intare], intare.j[current.intare])
+        $action = "WaitForPick"
+        CALL log ("Wait for new pick. State: WaitForPick")
       ELSE
         .keep.pick = FALSE
         SIGNAL rs13.finish
-        SWAIT rs07.fin.ack
       END
-      $action = "WaitForPick"
-      CALL log ("Wait for new pick. State: WaitForPick")
     END
   END
   ; Last tare put
   JMOVE #wait.pick
-  CALL stock.in.back (intare.i[outtare.count], intare.j[outtare.count])
+  CALL stock.in.back (intare.i[current.intare], intare.j[current.intare])
   JMOVE #homyak
-  CALL stock.out.back (outtare.i[intare.count], outtare.j[intare.count])
+  CALL stock.out.back (outtare.i[current.outtare], outtare.j[current.outtare])
   ;
+  ;SWAIT rs07.fin.ack
   JMOVE #homyak
   
 .END

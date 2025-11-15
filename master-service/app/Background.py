@@ -362,7 +362,7 @@ class Background(Thread):
                             attempts = attempts + 1
                             if attempts <= 2:
                                 command = f"NOPICK;"
-                                #c3ommand = "ffff"
+                                command = "ffff"
                                 logger.warning("Нет доступных объектов для захвата от CV-сервиса")
                                 resp = requests.post(f"{RS013N_API_URL}/send_command?command={command}",
                                             headers={'accept': 'application/json'},

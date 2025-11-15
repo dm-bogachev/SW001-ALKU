@@ -1,40 +1,40 @@
 .AUXDATA
-N_OX1    "release.grip"
-N_OX2    "capture.grip"
-N_OX3    "grip.unclamp"
-N_OX4    "grip.clamp"
-N_OX17    "do.home1"
-N_OX18    "do.work[1]"
-N_OX19    "rs7.working"
-N_OX20    "rs7.tare.chg"
-N_OX21    "rs07.fin.ack"
-N_OX22    "rs07.put.ack"
-N_WX1    "grip.unclamped"
-N_WX2    "grip.clamped"
-N_WX17    "rs13.home1"
-N_WX18    "rs13.work[1]"
-N_WX19    "rs13.det.put"
-N_WX20    "rs13.tare.ack"
-N_WX21    "rs13.finish"
-N_INT1    "di.ifp.page[1]"
-N_INT2    "di.ifp.page[2]"
-N_INT3    "di.ifp.page[3]"
-N_INT4    "di.ifp.page[4]"
-N_INT5    "di.ifp.page[5]"
-N_INT6    "di.ifp.page[6]"
-N_INT7    "di.ifp.page[7]"
-N_INT8    "di.ifp.page[8]"
-N_INT10    "do.bat.alm"
-N_INT11    "s.tcp.send.ena"
-N_INT12    "s.tcp.recv.ena"
-N_INT13    "s.tcp.ena"
-N_INT14    "s.apply.coord"
-N_INT17    "s.in1.disable"
-N_INT18    "s.in2.disable"
-N_INT19    "s.measure.ok"
-N_INT20    "s.measure.ng"
-N_INT21    "s.vacuum"
-N_INT24    "s.debug"
+N_OX1    "release.grip|"
+N_OX2    "capture.grip|"
+N_OX3    "grip.unclamp|"
+N_OX4    "grip.clamp|"
+N_OX17    "do.home1|"
+N_OX18    "do.work[1]|"
+N_OX19    "rs7.working|"
+N_OX20    "rs7.tare.chg|"
+N_OX21    "rs07.fin.ack|"
+N_OX22    "rs07.put.ack|"
+N_WX1    "grip.unclamped|"
+N_WX2    "grip.clamped|"
+N_WX17    "rs13.home1|"
+N_WX18    "rs13.work[1]|"
+N_WX19    "rs13.det.put|"
+N_WX20    "rs13.tare.ack|"
+N_WX21    "rs13.finish|"
+N_INT1    "di.ifp.page[1]|"
+N_INT2    "di.ifp.page[2]|"
+N_INT3    "di.ifp.page[3]|"
+N_INT4    "di.ifp.page[4]|"
+N_INT5    "di.ifp.page[5]|"
+N_INT6    "di.ifp.page[6]|"
+N_INT7    "di.ifp.page[7]|"
+N_INT8    "di.ifp.page[8]|"
+N_INT10    "do.bat.alm|"
+N_INT11    "s.tcp.send.ena|"
+N_INT12    "s.tcp.recv.ena|"
+N_INT13    "s.tcp.ena|"
+N_INT14    "s.apply.coord|"
+N_INT17    "s.in1.disable|"
+N_INT18    "s.in2.disable|"
+N_INT19    "s.measure.ok|"
+N_INT20    "s.measure.ng|"
+N_INT21    "s.vacuum|"
+N_INT24    "s.debug|"
 .END
 .INTER_PANEL_D
 0,9,1,6,15
@@ -207,6 +207,11 @@ N_INT24    "s.debug"
   CALL log ("Move to measurement machine. State: WaitingMMResult")
   $action = "WaitingMMResult"
   WAIT SIG (s.measure.ok) OR SIG (s.measure.ng)
+  ; Allow rs013n to continue right after the result
+  IF SIG (s.measure.ng) THEN
+    SIGNAL -rs7.working
+  END
+  ;
   CALL log ("Move to measurement machine. State: TakingFromMM")
   $action = "TakingFromMM"
   ; Pick from machine
@@ -312,22 +317,25 @@ N_INT24    "s.debug"
       tare.put.count = 0
       ;
     END
-    SWAIT rs13.det.put
-    PULSE rs07.put.ack, 5
-    SWAIT -rs13.work[1] ; Wait robot leave zone
-    SIGNAL rs7.working
-    CALL pos.pick
-    CALL measure
-    IF SIG (s.measure.ok) THEN
-      SIGNAL -s.measure.ok
-      CALL put.tare
-    ELSE
-      SIGNAL -rs7.working
-      SIGNAL -s.measure.ng
-      CALL put.defect
+    IF SIG (rs13.det.put) THEN
+      ;SWAIT rs13.det.put
+      PULSE rs07.put.ack, 5
+      SWAIT -rs13.work[1] ; Wait robot leave zone
+      SIGNAL rs7.working
+      CALL pos.pick
+      CALL measure
+      IF SIG (s.measure.ok) THEN
+        SIGNAL -s.measure.ok
+        CALL put.tare
+      ELSE
+        SIGNAL -rs7.working
+        SIGNAL -s.measure.ng
+        CALL put.defect
+      END
+      ;
     END
     ;
-    IF SIG(rs13.finish) THEN
+    IF SIG (rs13.finish) THEN
       PULSE rs07.fin.ack
       .keep.pick = FALSE
     END
@@ -1063,6 +1071,7 @@ ANY:
 	; .pos 
 	; .$temp 
 	; .temp 
+	; .disable 
 	; 3:measure:F
 	; .pos.machine 
 	; .pos 
@@ -1095,6 +1104,11 @@ ANY:
 	; .j 
 	; .i 
 	; .working 
+	; .rz 
+	; .x 
+	; .y 
+	; .z 
+	; .put 
 	; Group:Teach:4
 	; 4:a.teach.pos:F
 	; .temp 
@@ -1117,6 +1131,7 @@ ANY:
 	; 4:a.test.tare:F
 	; .j 
 	; .i 
+	; .put 
 	; Group:Autostart:5
 	; 5:set.io.pc:B
 	; .home1 
