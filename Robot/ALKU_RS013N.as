@@ -984,7 +984,7 @@ ANY:
   $action = "PickDetail"
   ;
   SPEED 100 ALWAYS
-  ACCURACY 0.1 ALWAYS
+  ACCURACY 100 ALWAYS
   TOOL tool.pick[current.gripper]
   ;
   cx = hmi.x
@@ -1013,6 +1013,7 @@ ANY:
   POINT .#pick.in = #PPOINT (.c[1], .c[2], .c[3], .c[4], .c[5], .c[6] - a)
   ;
   JMOVE #wait.pick
+  ACCURACY 20
   LMOVE .#pick.in
   IF NOT SIG (grip.unclamped) THEN
     PULSE grip.unclamp
@@ -1020,16 +1021,15 @@ ANY:
     $action = "WaitingGripUnclamped"
     WAIT SIG(grip.unclamped) OR SIG(s.in1.disable)
   END
-  BREAK
-  ;
-  BREAK
+  ACCURACY 20
   LAPPRO .pick, -30
-  BREAK
-  SPEED 30 MM/S
+  SPEED 250 MM/S
+  ACCURACY 0 FINE
   LMOVE .pick
   BREAK
   PULSE grip.clamp
   TWAIT 0.5
+  ACCURACY 20
   LAPPRO .pick, -30
   ;
   LMOVE .#pick.in
@@ -1048,15 +1048,18 @@ ANY:
   $action = "PutToPositioner"
   ;
   SPEED 100 ALWAYS
-  ACCURACY 0 ALWAYS
+  ACCURACY 100 ALWAYS
   TOOL tool.pick[current.gripper]
   ;
   POINT .temp = #pos.pos[.pos]
+  ACCURACY 20
   JMOVE .temp + TRANS (10, 0, 50)
+  ACCURACY 5
   LMOVE .temp + TRANS (10, 0, 20)
   BREAK
   ;
-  SPEED 20 MM/S
+  SPEED 250 MM/S
+  ACCURACY 0 FINE
   LMOVE #pos.pos[.pos]
   BREAK
   PULSE grip.unclamp
@@ -1080,15 +1083,17 @@ ANY:
   $action = "PickTool"
   ;
   SPEED 100 ALWAYS
-  ACCURACY 0 ALWAYS
+  ACCURACY 100 ALWAYS
   TOOL tool.pick[.tool.no]
   ;
   POINT .temp = #tool.pos[.pos]
   JMOVE .temp + TRANS (0, 0, 200)
+  ACCURACY 5
   LMOVE .temp + TRANS (0, 0, 50)
   BREAK
   ;
   SPEED 50 MM/S ALWAYS
+  ACCURACY 0 FINE
   LMOVE #tool.pos[.pos]
   BREAK
   PULSE capture.grip
@@ -1109,15 +1114,17 @@ ANY:
   $action = "PutTool"
   ;
   SPEED 100 ALWAYS
-  ACCURACY 0 ALWAYS
+  ACCURACY 100 ALWAYS
   TOOL tool.pick[.tool.no]
   ;
   POINT .temp = #tool.pos[.pos]
   JMOVE .temp + TRANS (0, 0, 200)
+  ACCURACY 5
   LMOVE .temp + TRANS (0, 0, 50)
   BREAK
   ;
   SPEED 50 MM/S ALWAYS
+  ACCURACY 0 FINE
   LMOVE #tool.pos[.pos]
   BREAK
   PULSE release.grip
@@ -1136,6 +1143,10 @@ ANY:
   CALL log ("State: TakingFromInStocker")
   $action = "TakingFromInStocker"
   ;
+  ;
+  ACCURACY 100 ALWAYS
+  SPEED 100 ALWAYS
+  ;
   PULSE release.tare
   ;
   TOOL tool.pin
@@ -1146,24 +1157,23 @@ ANY:
   POINT .mid.point = TRANS (.ct2[1], .ct1[2], .ct2[3], .ct1[4], .ct1[5], .ct1[6])
   POINT .put.stz = #put.stz
   ;
-  ACCURACY 20 ALWAYS
-  SPEED 100 ALWAYS
   JMOVE stocker.in[.i, .j] + TRANS (0, 0, 200)
   ACCURACY 5
   JMOVE stocker.in[.i, .j] + TRANS (0, 0, 50)
   ;
-  ACCURACY 0
-  SPEED 50 MM/S
+  ACCURACY 0 FINE
+  SPEED 250 MM/S
   LMOVE stocker.in[.i, .j]
   BREAK
   PULSE capture.tare
   TWAIT 0.5
   ;
   ACCURACY 0
-  SPEED 50 MM/S
+  SPEED 250 MM/S
+  ACCEL 50
   LMOVE stocker.in[.i, .j] + TRANS (20)
   ;
-  SPEED 20
+  SPEED 250 MM/S
   ACCURACY 0
   LMOVE stocker.in[.i, .j] + TRANS (20, 0, 40)
   BREAK
@@ -1176,26 +1186,25 @@ ANY:
   CALL log ("State: TakingFromInStocker")
   $action = "TakingFromInStocker"
   ;
-  SPEED 80 ALWAYS
-  ACCURACY 5
   LMOVE stocker.in[.i, .j] + TRANS (20, 0, 500)
-  ACCURACY 5
+  ;ACCURACY 5
   LMOVE .mid.point
-  ACCURACY 5
+  ;ACCURACY 5
   LMOVE #post.tare.in
   ; Put to stz
   LMOVE #before.stz
-  ACCURACY 1
+  ACCURACY 20
   LMOVE .put.stz + TRANS (50)
-  BREAK
-  ACCURACY 0
-  SPEED 50 MM/S
+  ;BREAK
+  ACCURACY 0 FINE
+  SPEED 250 MM/S
   LMOVE #put.stz
   BREAK
   PULSE release.tare
   TWAIT 0.5
   ; Go back
-  SPEED 50 MM/S
+  ;SPEED 50 MM/S
+  ACCURACY 30
   LMOVE .put.stz + TRANS (, , 50)
   BREAK
   ;
@@ -1206,7 +1215,6 @@ ANY:
   SIGNAL -s.pneumo.close
   ;
   LMOVE #before.stz
-  ;
   LMOVE #wait.pick
   ;
 .END
@@ -1220,6 +1228,9 @@ ANY:
   CALL log ("State: ReturnToInStocker")
   $action = "ReturnToInStocker"
   ;
+  ACCURACY 100 ALWAYS
+  SPEED 100 ALWAYS
+  ;
   PULSE release.tare
   ;
   TOOL tool.pin
@@ -1230,10 +1241,10 @@ ANY:
   POINT .mid.point = TRANS (.ct2[1], .ct1[2], .ct2[3], .ct1[4], .ct1[5], .ct1[6])
   POINT .put.stz = #put.stz
   ;
-  ACCURACY 20 ALWAYS
-  SPEED 100 ALWAYS
+  ;ACCURACY 20 ALWAYS
+  ;SPEED 100 ALWAYS
   ;JMOVE #before.stz
-  ACCURACY 5
+  ACCURACY 20
   LMOVE .put.stz + TRANS (, , 50)
   ;
   ;
@@ -1248,35 +1259,36 @@ ANY:
   CALL log ("State: ReturnToInStocker")
   $action = "ReturnToInStocker"
   ;
-  ACCURACY 0
-  SPEED 50 MM/S
+  ACCURACY 0 FINE
+  SPEED 250 MM/S
   LMOVE #put.stz
   BREAK
   PULSE capture.tare
   TWAIT 0.5
   ;
-  ACCURACY 0
-  SPEED 20
+  ACCURACY 0 FINE
+  SPEED 250 MM/S
   LMOVE .put.stz + TRANS (50)
   ;
-  SPEED 80 ALWAYS
-  ACCURACY 5
+  ;SPEED 80 ALWAYS
+  ;ACCURACY 5
   LMOVE #before.stz
   LMOVE #post.tare.in
   LMOVE stocker.in[.i, .j] + TRANS (20, 0, 500)
   ;
-  ACCURACY 0
-  SPEED 20
+  ACCURACY 0 FINE
+  SPEED 250 MM/S
   LMOVE stocker.in[.i, .j] + TRANS (20)
   BREAK
   ;
-  ACCURACY 0
-  SPEED 50 MM/S
+  ACCURACY 0 FINE
+  SPEED 250 MM/S
   LMOVE stocker.in[.i, .j]
   BREAK
   PULSE release.tare
   TWAIT 0.5
   ;
+  ACCURACY 30
   LMOVE stocker.in[.i, .j] + TRANS (0, 0, 50)
   LMOVE stocker.in[.i, .j] + TRANS (0, 0, 200)
 .END
@@ -1290,6 +1302,9 @@ ANY:
   CALL log ("State: TakingFromOutStocker")
   $action = "TakingFromOutStocker"
   ;
+  ACCURACY 100 ALWAYS
+  SPEED 100 ALWAYS
+  ;
   PULSE release.tare
   ;
   TOOL tool.pin
@@ -1300,26 +1315,24 @@ ANY:
   POINT .mid.point = TRANS (.ct1[1], .ct2[2], .ct2[3], .ct1[4], .ct1[5], .ct1[6])
   POINT .put.outpal = #put.outpal
   ;
-  ACCURACY 20 ALWAYS
-  SPEED 100 ALWAYS
   JMOVE #post.tare.out
   LMOVE stocker.out[.i, .j] + TRANS (0, 0, 200)
   ACCURACY 5
   JMOVE stocker.out[.i, .j] + TRANS (0, 0, 50)
   ;
-  ACCURACY 0
-  SPEED 50 MM/S
+  ACCURACY 0 FINE
+  SPEED 250 MM/S
   LMOVE stocker.out[.i, .j]
   BREAK
   PULSE capture.tare
   TWAIT 0.5
   ;
-  ACCURACY 0
-  SPEED 50 MM/S
+  ACCURACY 0 FINE
+  SPEED 250 MM/S
   LMOVE stocker.out[.i, .j] + TRANS (20)
   ;
-  SPEED 20
-  ACCURACY 0
+  ACCURACY 0 FINE
+  SPEED 250 MM/S
   LMOVE stocker.out[.i, .j] + TRANS (20, 0, 40)
   BREAK
   CALL log ("Wait sensor state. State: WaitOutStockerSensor")
@@ -1331,27 +1344,28 @@ ANY:
   CALL log ("State: TakingFromOutStocker")
   $action = "TakingFromOutStocker"
   ;
-  SPEED 80 ALWAYS
-  ACCURACY 5
+  ;]SPEED 80 ALWAYS
+  ;ACCURACY 5
   LMOVE stocker.out[.i, .j] + TRANS (20, 0, 500)
-  ACCURACY 5
+  ;ACCURACY 5
   LMOVE .mid.point
-  ACCURACY 5
+  ;ACCURACY 5
   LMOVE #post.tare.out
   ; Put to output pallet
   LMOVE #before.outpal
-  ACCURACY 1
+  ACCURACY 20
   LMOVE .put.outpal + TRANS (50)
-  ACCURACY 0
-  SPEED 50 MM/S
+  ACCURACY 0 FINE
+  SPEED 250 MM/S
   LMOVE #put.outpal
   BREAK
   PULSE release.tare
   TWAIT 0.5
   ; Go back
-  SPEED 50 MM/S
-  LMOVE .put.outpal + TRANS (,,50)
-  BREAK
+  ;SPEED 50 MM/S
+  ACCURACY 30
+  LMOVE .put.outpal + TRANS (, , 50)
+  ;BREAK
   LMOVE #before.outpal
   LMOVE #post.tare.out
   ;
@@ -1367,6 +1381,9 @@ ANY:
   CALL log ("State: ReturnToOutStocker")
   $action = "ReturnToOutStocker"
   ;
+  ACCURACY 100 ALWAYS
+  SPEED 100 ALWAYS
+  ;
   PULSE release.tare
   ;
   TOOL tool.pin
@@ -1377,41 +1394,41 @@ ANY:
   POINT .mid.point = TRANS (.ct2[1], .ct1[2], .ct2[3], .ct1[4], .ct1[5], .ct1[6])
   POINT .put.outpal = #put.outpal
   ;
-  ACCURACY 20 ALWAYS
-  SPEED 100 ALWAYS
   JMOVE #before.outpal
-  ACCURACY 5
+  ACCURACY 20
   LMOVE .put.outpal + TRANS (, , 50)
   ;
-  ACCURACY 0
-  SPEED 50 MM/S
+  ACCURACY 0 FINE
+  SPEED 250 MM/S
   LMOVE #put.outpal
   BREAK
+  ;
   PULSE capture.tare
   TWAIT 0.5
   ;
-  ACCURACY 0
-  SPEED 20
+  ACCURACY 0 FINE
+  SPEED 250 MM/S
   LMOVE .put.outpal + TRANS (50)
   ;
-  SPEED 80 ALWAYS
-  ACCURACY 5
+  ;SPEED 80 ALWAYS
+  ;ACCURACY 5
   LMOVE #before.outpal
   LMOVE #post.tare.out
   LMOVE stocker.out[.i, .j] + TRANS (20, 0, 500)
   ;
-  ACCURACY 0
-  SPEED 20
+  ACCURACY 0 FINE
+  SPEED 250 MM/S
   LMOVE stocker.out[.i, .j] + TRANS (20)
   BREAK
   ;
-  ACCURACY 0
-  SPEED 50 MM/S
+  ACCURACY 0 FINE
+  SPEED 250 MM/S
   LMOVE stocker.out[.i, .j]
   BREAK
   PULSE release.tare
   TWAIT 0.5
   ;
+  ACCURACY 30
   LMOVE stocker.out[.i, .j] + TRANS (0, 0, 50)
   LMOVE stocker.out[.i, .j] + TRANS (0, 0, 200)
   

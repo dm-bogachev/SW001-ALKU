@@ -159,7 +159,8 @@ N_INT24    "s.debug|"
     WAIT SIG (grip.unclamped) OR SIG (s.in1.disable)
   END
   ;
-  SPEED 20 MM/S
+  SPEED 250 MM/S
+  ACCURACY 0 FINE
   LMOVE #pos.pos[.pos]
   BREAK
   PULSE grip.clamp
@@ -167,7 +168,9 @@ N_INT24    "s.debug|"
   pick.count = pick.count + 1
   ;
   LMOVE .temp + TRANS (0, 5, 10)
+  ACCURACY 100
   LMOVE .temp + TRANS (0, 0, 200)
+  ACCURACY 100
   LMOVE #homyak
 .END
 .PROGRAM measure ()
@@ -180,17 +183,19 @@ N_INT24    "s.debug|"
   $action = "TakingToMM"
   ;
   SPEED 100 ALWAYS
-  ACCURACY 10 ALWAYS
+  ACCURACY 100 ALWAYS
   ;
   POINT .pos.machine = #pos.machine[.pos]
   ; Go to machine
   JMOVE #safe.machine
   JMOVE #before.machine
+  ACCURACY 10
   LMOVE .pos.machine + TRANS (0, 50, 0)
   ; Put to machine
-  ACCURACY 0
+  ACCURACY 5
   LMOVE .pos.machine + TRANS (0, 10, 0)
-  SPEED 20 MM/S
+  SPEED 250 MM/S
+  ACCURACY 0 FINE
   LMOVE #pos.machine[.pos]
   BREAK
   ;CALL log ("Waiting for vacuum enabled. State: WaitingMMVacuum")
@@ -198,11 +203,12 @@ N_INT24    "s.debug|"
   ;SWAIT s.vacuum
   PULSE grip.unclamp
   TWAIT 0.5
-  SPEED 20
+  ;
+  ACCURACY 5
   LMOVE .pos.machine + TRANS (0, 10, 0)
   LMOVE .pos.machine + TRANS (0, 50, 0)
   LMOVE #before.machine
-  BREAK
+  ;BREAK
   ; Wait result
   CALL log ("Move to measurement machine. State: WaitingMMResult")
   $action = "WaitingMMResult"
@@ -215,25 +221,23 @@ N_INT24    "s.debug|"
   CALL log ("Move to measurement machine. State: TakingFromMM")
   $action = "TakingFromMM"
   ; Pick from machine
-  SPEED 20
+  ACCURACY 10
   LMOVE .pos.machine + TRANS (0, 50, 0)
+  ACCURACY 5
   LMOVE .pos.machine + TRANS (0, 10, 0)
-  SPEED 50 MM/S
+  SPEED 250 MM/S
+  ACCURACY 0 FINE
   LMOVE #pos.machine[.pos]
   BREAK
   PULSE grip.clamp
   TWAIT 0.5
-  SPEED 20
+  ; Go home
+  ACCURACY 5
   LMOVE .pos.machine + TRANS (0, 10, 0)
   LMOVE .pos.machine + TRANS (0, 50, 0)
   LMOVE #before.machine
   JMOVE #safe.machine
   JMOVE #homyak
-  ; Temporary OFF
-  ;CALL log ("Waiting for vacuum disbled. State: WaitingMMVacuum")
-  ;$action = "WaitingMMVacuum"
-  ;SWAIT s.vacuum
-  ;
 .END
 .PROGRAM a.main()@25/10/31 16:24 #0
   ;
@@ -268,7 +272,7 @@ N_INT24    "s.debug|"
   $action = "PutToDefect"
   ;
   SPEED 100 ALWAYS
-  ACCURACY 30 ALWAYS
+  ACCURACY 100 ALWAYS
   TOOL tool.pick[current.gripper]
   .x = INT((defect.count) / 5)
   .y = (defect.count) MOD 5
@@ -276,17 +280,19 @@ N_INT24    "s.debug|"
   ;
   JMOVE #safe.defect
   ;
+  ACCURACY 10
   LAPPRO .temp, -30
   BREAK
   ;
-  ACCURACY 0
-  SPEED 20 MM/S
+  SPEED 250 MM/S
+  ACCURACY 0 FINE
   LMOVE #defect.pos[.x, .y]
   BREAK
   PULSE grip.unclamp
   defect.count = defect.count + 1
   TWAIT 0.5
   ;
+  ACCURACY 10
   LAPPRO .temp, -30
   JMOVE #safe.defect
   LMOVE #homyak
@@ -385,7 +391,7 @@ ANY:
   $action = "PutToTare"
   ;
   SPEED 100 ALWAYS
-  ACCURACY 30 ALWAYS
+  ACCURACY 100 ALWAYS
   TOOL tool.pick[current.gripper]
   ;
   .j = INT ((tare.put.count) / 20) + 1
@@ -402,8 +408,11 @@ ANY:
   .z = grip.zsh[current.gripper]
   POINT .put = tare.put[.i, .j] + TRANS (.x, .y, .z) + RZ (.rz)
   ;
-  JAPPRO .put, -20
+  JAPPRO .put, -100
+  ACCURACY 5
   LAPPRO .put, -20
+  ACCURACY 0 FINE
+  SPEED 250 MM/S
   LMOVE .put
   BREAK
   ;
@@ -1053,9 +1062,9 @@ ANY:
 	; hmi.defect.pos
 	; defect.count
 	; @@@ CONNECTION @@@
-	; RS007L
-	; 192.168.7.103
-	; 23
+	; KROSET R02
+	; 127.0.0.1
+	; 9205
 	; @@@ PROGRAM @@@
 	; Group:Objects:1
 	; 1:id4:F
