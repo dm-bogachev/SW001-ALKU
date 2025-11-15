@@ -2836,14 +2836,48 @@ ROB_EXTERNAL_RESTART          0
 ROB_OP_AFTER_ERROR          0
 MOVING_AREA       0.000     0.000     0.000     0.000     0.000     0.000
 ENC_ALARM              0          0          0          0          0          0
+N_OX1    "release.tare|"
+N_OX2    "capture.tare|"
+N_OX3    "grip.unclamp|"
+N_OX4    "grip.clamp|"
+N_OX5    "release.grip|"
+N_OX6    "capture.grip|"
+N_OX17   "do.home1|"
+N_OX18   "do.work[1]|"
 N_OX19   "rs13.det.put|"
 N_OX20   "rs13.tare.ack|"
 N_OX22   "rs07.put.ack|"
+N_WX1    "grip.unclamped|"
+N_WX2    "grip.clamped|"
+N_WX17   "rs7.home1|"
+N_WX18   "rs7.work[1]|"
 N_WX19   "rs7.working|"
 N_WX20   "rs7.tare.chg|"
+N_WX22   "rs07.put.ack|"
+N_INT1    "di.ifp.page[1]|"
+N_INT2    "di.ifp.page[2]|"
+N_INT3    "di.ifp.page[3]|"
+N_INT4    "di.ifp.page[4]|"
+N_INT5    "di.ifp.page[5]|"
+N_INT6    "di.ifp.page[6]|"
+N_INT7    "di.ifp.page[7]|"
+N_INT8    "di.ifp.page[8]|"
+N_INT10   "do.bat.alm|"
+N_INT11   "s.tcp.send.ena|"
+N_INT12   "s.tcp.recv.ena|"
+N_INT13   "s.tcp.ena|"
+N_INT14   "s.apply.coord|"
+N_INT15   "s.close.pneumo|"
+N_INT16   "s.open.pneumo|"
+N_INT17   "s.in1.disable|"
+N_INT18   "s.in2.disable|"
+N_INT19   "s.sensor.iss|"
+N_INT20   "s.sensor.oss|"
+N_INT21   "s.sensor.ot|"
 N_INT22   "s.pneumo.open|"
 N_INT23   "s.pneumo.close|"
 N_INT24   "s.debug|"
+N_INT102   "do.work[2]|"
 SENSING_SPEED     10.000     0.000 255
 SENS_STROKE       0.000
 PAL_TYPE_01     0
@@ -3166,6 +3200,7 @@ TP_RECINHI      0   0   0
 92,8,"hmi.st.out.j","OUTSTOCKER","SELECT ROW",10,15,4,2,0
 95,8,"hmi.t.pos","TOOL CHANG"," POSITION",10,15,2,1,0
 97,2,"","   OPEN","PNEUMATICS","",10,4,15,2016,0
+98,10,"","","","",10,4,15,3,"$action=waitforpick",0
 102,8,"hmi.obj.id","  OBJECT","    ID",10,15,2,1,0
 104,4,1,"OFF     ON","","","  DEBUG ",10,4,4,0,2024,0
 105,2,"","   MAIN","<---------","",10,4,15,2001,0
@@ -3203,13 +3238,13 @@ TP_RECINHI      0   0   0
 182,3,224,244,28,159,252,255,251,255,0,31,2,241,52,255,
 .END
 .ERRLOG
-   1 - [25/11/13 00:00:24 SIGNAL:00 MON.SPEED : 100 REPEAT mode]
+   1 - [25/11/15 05:41:24 SIGNAL:00 MON.SPEED : 100 REPEAT mode]
        (E0102)Variable is not defined.
-       OPERATION1:[25/11/13 00:00:23] ( AUX1 connect )
-       OPERATION2:[25/11/13 00:00:23] ( TEACH->REPEAT )
-       OPERATION3:[25/11/13 00:00:23] ( auxapi connect )
-       OPERATION4:[25/11/13 00:00:22] ( ERROR RESET )
-       OPERATION5:[25/11/13 00:00:18] ( Control Power ON )
+       OPERATION1:[25/11/15 05:41:23] ( AUX1 connect )
+       OPERATION2:[25/11/15 05:41:22] ( TEACH->REPEAT )
+       OPERATION3:[25/11/15 05:41:22] ( auxapi connect )
+       OPERATION4:[25/11/15 05:41:22] ( ERROR RESET )
+       OPERATION5:[25/11/15 05:41:20] ( Control Power ON )
        OPERATION6:[04/01/10 22:37:04] (  )
        OPERATION7:[04/01/10 22:37:04] (  )
        OPERATION8:[04/01/10 22:37:04] (  )
@@ -3217,7 +3252,7 @@ TP_RECINHI      0   0   0
        ROBOT1:
         PROGRAM:a.main Step:0 Cur_Step:1 STATUS:STOP
        PC1 PROGRAM: watchdog.pc Step No: 52 STATUS: WAIT
-       PC2 PROGRAM: tcp.client.pc Step No: 38 STATUS: RUN
+       PC2 PROGRAM: tcp.client.pc Step No: 28 STATUS: RUN
        PC5 PROGRAM: errstart.pc Step No: 12 STATUS: WAIT
        Current Pose
          JT1       JT2       JT3       JT4       JT5       JT6  
@@ -3229,9 +3264,9 @@ TP_RECINHI      0   0   0
          JT1       JT2       JT3       JT4       JT5       JT6  
         -44.998   -30.843  -121.244     0.000   -90.000    22.500
 ------------------------------------------------------------------------------
-   2 - [25/11/13 00:00:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+   2 - [25/11/15 05:41:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
        (E0909)Program data file in CFast is broken. watchdog.pc
-       OPERATION1:[25/11/13 00:00:18] ( Control Power ON )
+       OPERATION1:[25/11/15 05:41:20] ( Control Power ON )
        OPERATION2:[04/01/10 22:37:04] (  )
        OPERATION3:[04/01/10 22:37:04] (  )
        OPERATION4:[04/01/10 22:37:04] (  )
@@ -3247,9 +3282,9 @@ TP_RECINHI      0   0   0
          JT1       JT2       JT3       JT4       JT5       JT6  
           0.000     0.000     0.000     0.000     0.000     0.000
 ------------------------------------------------------------------------------
-   3 - [25/11/13 00:00:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+   3 - [25/11/15 05:41:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
        (E0909)Program data file in CFast is broken. tcp.send3.pc
-       OPERATION1:[25/11/13 00:00:18] ( Control Power ON )
+       OPERATION1:[25/11/15 05:41:20] ( Control Power ON )
        OPERATION2:[04/01/10 22:37:04] (  )
        OPERATION3:[04/01/10 22:37:04] (  )
        OPERATION4:[04/01/10 22:37:04] (  )
@@ -3265,9 +3300,9 @@ TP_RECINHI      0   0   0
          JT1       JT2       JT3       JT4       JT5       JT6  
           0.000     0.000     0.000     0.000     0.000     0.000
 ------------------------------------------------------------------------------
-   4 - [25/11/13 00:00:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+   4 - [25/11/15 05:41:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
        (E0909)Program data file in CFast is broken. tcp.send2.pc
-       OPERATION1:[25/11/13 00:00:18] ( Control Power ON )
+       OPERATION1:[25/11/15 05:41:20] ( Control Power ON )
        OPERATION2:[04/01/10 22:37:04] (  )
        OPERATION3:[04/01/10 22:37:04] (  )
        OPERATION4:[04/01/10 22:37:04] (  )
@@ -3283,9 +3318,9 @@ TP_RECINHI      0   0   0
          JT1       JT2       JT3       JT4       JT5       JT6  
           0.000     0.000     0.000     0.000     0.000     0.000
 ------------------------------------------------------------------------------
-   5 - [25/11/13 00:00:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+   5 - [25/11/15 05:41:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
        (E0909)Program data file in CFast is broken. tcp.send.pc
-       OPERATION1:[25/11/13 00:00:18] ( Control Power ON )
+       OPERATION1:[25/11/15 05:41:20] ( Control Power ON )
        OPERATION2:[04/01/10 22:37:04] (  )
        OPERATION3:[04/01/10 22:37:04] (  )
        OPERATION4:[04/01/10 22:37:04] (  )
@@ -3301,9 +3336,9 @@ TP_RECINHI      0   0   0
          JT1       JT2       JT3       JT4       JT5       JT6  
           0.000     0.000     0.000     0.000     0.000     0.000
 ------------------------------------------------------------------------------
-   6 - [25/11/13 00:00:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+   6 - [25/11/15 05:41:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
        (E0909)Program data file in CFast is broken. tcp.client.pc
-       OPERATION1:[25/11/13 00:00:18] ( Control Power ON )
+       OPERATION1:[25/11/15 05:41:20] ( Control Power ON )
        OPERATION2:[04/01/10 22:37:04] (  )
        OPERATION3:[04/01/10 22:37:04] (  )
        OPERATION4:[04/01/10 22:37:04] (  )
@@ -3319,9 +3354,9 @@ TP_RECINHI      0   0   0
          JT1       JT2       JT3       JT4       JT5       JT6  
           0.000     0.000     0.000     0.000     0.000     0.000
 ------------------------------------------------------------------------------
-   7 - [25/11/13 00:00:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+   7 - [25/11/15 05:41:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
        (E0909)Program data file in CFast is broken. tcp.callback.pc
-       OPERATION1:[25/11/13 00:00:18] ( Control Power ON )
+       OPERATION1:[25/11/15 05:41:20] ( Control Power ON )
        OPERATION2:[04/01/10 22:37:04] (  )
        OPERATION3:[04/01/10 22:37:04] (  )
        OPERATION4:[04/01/10 22:37:04] (  )
@@ -3337,9 +3372,9 @@ TP_RECINHI      0   0   0
          JT1       JT2       JT3       JT4       JT5       JT6  
           0.000     0.000     0.000     0.000     0.000     0.000
 ------------------------------------------------------------------------------
-   8 - [25/11/13 00:00:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+   8 - [25/11/15 05:41:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
        (E0909)Program data file in CFast is broken. stz.put
-       OPERATION1:[25/11/13 00:00:18] ( Control Power ON )
+       OPERATION1:[25/11/15 05:41:20] ( Control Power ON )
        OPERATION2:[04/01/10 22:37:04] (  )
        OPERATION3:[04/01/10 22:37:04] (  )
        OPERATION4:[04/01/10 22:37:04] (  )
@@ -3355,9 +3390,9 @@ TP_RECINHI      0   0   0
          JT1       JT2       JT3       JT4       JT5       JT6  
           0.000     0.000     0.000     0.000     0.000     0.000
 ------------------------------------------------------------------------------
-   9 - [25/11/13 00:00:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+   9 - [25/11/15 05:41:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
        (E0909)Program data file in CFast is broken. stz.pick
-       OPERATION1:[25/11/13 00:00:18] ( Control Power ON )
+       OPERATION1:[25/11/15 05:41:20] ( Control Power ON )
        OPERATION2:[04/01/10 22:37:04] (  )
        OPERATION3:[04/01/10 22:37:04] (  )
        OPERATION4:[04/01/10 22:37:04] (  )
@@ -3373,9 +3408,9 @@ TP_RECINHI      0   0   0
          JT1       JT2       JT3       JT4       JT5       JT6  
           0.000     0.000     0.000     0.000     0.000     0.000
 ------------------------------------------------------------------------------
-  10 - [25/11/13 00:00:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+  10 - [25/11/15 05:41:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
        (E0909)Program data file in CFast is broken. stock.out.take
-       OPERATION1:[25/11/13 00:00:18] ( Control Power ON )
+       OPERATION1:[25/11/15 05:41:20] ( Control Power ON )
        OPERATION2:[04/01/10 22:37:04] (  )
        OPERATION3:[04/01/10 22:37:04] (  )
        OPERATION4:[04/01/10 22:37:04] (  )
@@ -3391,9 +3426,9 @@ TP_RECINHI      0   0   0
          JT1       JT2       JT3       JT4       JT5       JT6  
           0.000     0.000     0.000     0.000     0.000     0.000
 ------------------------------------------------------------------------------
-  11 - [25/11/13 00:00:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+  11 - [25/11/15 05:41:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
        (E0909)Program data file in CFast is broken. stock.out.back
-       OPERATION1:[25/11/13 00:00:18] ( Control Power ON )
+       OPERATION1:[25/11/15 05:41:20] ( Control Power ON )
        OPERATION2:[04/01/10 22:37:04] (  )
        OPERATION3:[04/01/10 22:37:04] (  )
        OPERATION4:[04/01/10 22:37:04] (  )
@@ -3409,9 +3444,9 @@ TP_RECINHI      0   0   0
          JT1       JT2       JT3       JT4       JT5       JT6  
           0.000     0.000     0.000     0.000     0.000     0.000
 ------------------------------------------------------------------------------
-  12 - [25/11/13 00:00:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+  12 - [25/11/15 05:41:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
        (E0909)Program data file in CFast is broken. stock.in.take
-       OPERATION1:[25/11/13 00:00:18] ( Control Power ON )
+       OPERATION1:[25/11/15 05:41:20] ( Control Power ON )
        OPERATION2:[04/01/10 22:37:04] (  )
        OPERATION3:[04/01/10 22:37:04] (  )
        OPERATION4:[04/01/10 22:37:04] (  )
@@ -3427,9 +3462,9 @@ TP_RECINHI      0   0   0
          JT1       JT2       JT3       JT4       JT5       JT6  
           0.000     0.000     0.000     0.000     0.000     0.000
 ------------------------------------------------------------------------------
-  13 - [25/11/13 00:00:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+  13 - [25/11/15 05:41:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
        (E0909)Program data file in CFast is broken. stock.in.back
-       OPERATION1:[25/11/13 00:00:18] ( Control Power ON )
+       OPERATION1:[25/11/15 05:41:20] ( Control Power ON )
        OPERATION2:[04/01/10 22:37:04] (  )
        OPERATION3:[04/01/10 22:37:04] (  )
        OPERATION4:[04/01/10 22:37:04] (  )
@@ -3445,9 +3480,9 @@ TP_RECINHI      0   0   0
          JT1       JT2       JT3       JT4       JT5       JT6  
           0.000     0.000     0.000     0.000     0.000     0.000
 ------------------------------------------------------------------------------
-  14 - [25/11/13 00:00:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+  14 - [25/11/15 05:41:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
        (E0909)Program data file in CFast is broken. set.vars.pc
-       OPERATION1:[25/11/13 00:00:18] ( Control Power ON )
+       OPERATION1:[25/11/15 05:41:20] ( Control Power ON )
        OPERATION2:[04/01/10 22:37:04] (  )
        OPERATION3:[04/01/10 22:37:04] (  )
        OPERATION4:[04/01/10 22:37:04] (  )
@@ -3463,9 +3498,9 @@ TP_RECINHI      0   0   0
          JT1       JT2       JT3       JT4       JT5       JT6  
           0.000     0.000     0.000     0.000     0.000     0.000
 ------------------------------------------------------------------------------
-  15 - [25/11/13 00:00:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+  15 - [25/11/15 05:41:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
        (E0909)Program data file in CFast is broken. set.io.pc
-       OPERATION1:[25/11/13 00:00:18] ( Control Power ON )
+       OPERATION1:[25/11/15 05:41:20] ( Control Power ON )
        OPERATION2:[04/01/10 22:37:04] (  )
        OPERATION3:[04/01/10 22:37:04] (  )
        OPERATION4:[04/01/10 22:37:04] (  )
@@ -3481,9 +3516,9 @@ TP_RECINHI      0   0   0
          JT1       JT2       JT3       JT4       JT5       JT6  
           0.000     0.000     0.000     0.000     0.000     0.000
 ------------------------------------------------------------------------------
-  16 - [25/11/13 00:00:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+  16 - [25/11/15 05:41:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
        (E0909)Program data file in CFast is broken. sender.pc
-       OPERATION1:[25/11/13 00:00:18] ( Control Power ON )
+       OPERATION1:[25/11/15 05:41:20] ( Control Power ON )
        OPERATION2:[04/01/10 22:37:04] (  )
        OPERATION3:[04/01/10 22:37:04] (  )
        OPERATION4:[04/01/10 22:37:04] (  )
@@ -3499,9 +3534,9 @@ TP_RECINHI      0   0   0
          JT1       JT2       JT3       JT4       JT5       JT6  
           0.000     0.000     0.000     0.000     0.000     0.000
 ------------------------------------------------------------------------------
-  17 - [25/11/13 00:00:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+  17 - [25/11/15 05:41:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
        (E0909)Program data file in CFast is broken. safe.home
-       OPERATION1:[25/11/13 00:00:18] ( Control Power ON )
+       OPERATION1:[25/11/15 05:41:20] ( Control Power ON )
        OPERATION2:[04/01/10 22:37:04] (  )
        OPERATION3:[04/01/10 22:37:04] (  )
        OPERATION4:[04/01/10 22:37:04] (  )
@@ -3517,9 +3552,9 @@ TP_RECINHI      0   0   0
          JT1       JT2       JT3       JT4       JT5       JT6  
           0.000     0.000     0.000     0.000     0.000     0.000
 ------------------------------------------------------------------------------
-  18 - [25/11/13 00:00:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+  18 - [25/11/15 05:41:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
        (E0909)Program data file in CFast is broken. s.out.table_old
-       OPERATION1:[25/11/13 00:00:18] ( Control Power ON )
+       OPERATION1:[25/11/15 05:41:20] ( Control Power ON )
        OPERATION2:[04/01/10 22:37:04] (  )
        OPERATION3:[04/01/10 22:37:04] (  )
        OPERATION4:[04/01/10 22:37:04] (  )
@@ -3535,9 +3570,9 @@ TP_RECINHI      0   0   0
          JT1       JT2       JT3       JT4       JT5       JT6  
           0.000     0.000     0.000     0.000     0.000     0.000
 ------------------------------------------------------------------------------
-  19 - [25/11/13 00:00:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+  19 - [25/11/15 05:41:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
        (E0909)Program data file in CFast is broken. s.out.table
-       OPERATION1:[25/11/13 00:00:18] ( Control Power ON )
+       OPERATION1:[25/11/15 05:41:20] ( Control Power ON )
        OPERATION2:[04/01/10 22:37:04] (  )
        OPERATION3:[04/01/10 22:37:04] (  )
        OPERATION4:[04/01/10 22:37:04] (  )
@@ -3553,9 +3588,9 @@ TP_RECINHI      0   0   0
          JT1       JT2       JT3       JT4       JT5       JT6  
           0.000     0.000     0.000     0.000     0.000     0.000
 ------------------------------------------------------------------------------
-  20 - [25/11/13 00:00:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+  20 - [25/11/15 05:41:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
        (E0909)Program data file in CFast is broken. s.in.table_old
-       OPERATION1:[25/11/13 00:00:18] ( Control Power ON )
+       OPERATION1:[25/11/15 05:41:20] ( Control Power ON )
        OPERATION2:[04/01/10 22:37:04] (  )
        OPERATION3:[04/01/10 22:37:04] (  )
        OPERATION4:[04/01/10 22:37:04] (  )
@@ -3571,9 +3606,9 @@ TP_RECINHI      0   0   0
          JT1       JT2       JT3       JT4       JT5       JT6  
           0.000     0.000     0.000     0.000     0.000     0.000
 ------------------------------------------------------------------------------
-  21 - [25/11/13 00:00:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+  21 - [25/11/15 05:41:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
        (E0909)Program data file in CFast is broken. s.in.table
-       OPERATION1:[25/11/13 00:00:18] ( Control Power ON )
+       OPERATION1:[25/11/15 05:41:20] ( Control Power ON )
        OPERATION2:[04/01/10 22:37:04] (  )
        OPERATION3:[04/01/10 22:37:04] (  )
        OPERATION4:[04/01/10 22:37:04] (  )
@@ -3589,9 +3624,9 @@ TP_RECINHI      0   0   0
          JT1       JT2       JT3       JT4       JT5       JT6  
           0.000     0.000     0.000     0.000     0.000     0.000
 ------------------------------------------------------------------------------
-  22 - [25/11/13 00:00:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+  22 - [25/11/15 05:41:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
        (E0909)Program data file in CFast is broken. process.data
-       OPERATION1:[25/11/13 00:00:18] ( Control Power ON )
+       OPERATION1:[25/11/15 05:41:20] ( Control Power ON )
        OPERATION2:[04/01/10 22:37:04] (  )
        OPERATION3:[04/01/10 22:37:04] (  )
        OPERATION4:[04/01/10 22:37:04] (  )
@@ -3607,9 +3642,9 @@ TP_RECINHI      0   0   0
          JT1       JT2       JT3       JT4       JT5       JT6  
           0.000     0.000     0.000     0.000     0.000     0.000
 ------------------------------------------------------------------------------
-  23 - [25/11/13 00:00:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+  23 - [25/11/15 05:41:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
        (E0909)Program data file in CFast is broken. pg.start
-       OPERATION1:[25/11/13 00:00:18] ( Control Power ON )
+       OPERATION1:[25/11/15 05:41:20] ( Control Power ON )
        OPERATION2:[04/01/10 22:37:04] (  )
        OPERATION3:[04/01/10 22:37:04] (  )
        OPERATION4:[04/01/10 22:37:04] (  )
@@ -3625,9 +3660,9 @@ TP_RECINHI      0   0   0
          JT1       JT2       JT3       JT4       JT5       JT6  
           0.000     0.000     0.000     0.000     0.000     0.000
 ------------------------------------------------------------------------------
-  24 - [25/11/13 00:00:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+  24 - [25/11/15 05:41:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
        (E0909)Program data file in CFast is broken. pg.select
-       OPERATION1:[25/11/13 00:00:18] ( Control Power ON )
+       OPERATION1:[25/11/15 05:41:20] ( Control Power ON )
        OPERATION2:[04/01/10 22:37:04] (  )
        OPERATION3:[04/01/10 22:37:04] (  )
        OPERATION4:[04/01/10 22:37:04] (  )
@@ -3643,9 +3678,9 @@ TP_RECINHI      0   0   0
          JT1       JT2       JT3       JT4       JT5       JT6  
           0.000     0.000     0.000     0.000     0.000     0.000
 ------------------------------------------------------------------------------
-  25 - [25/11/13 00:00:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+  25 - [25/11/15 05:41:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
        (E0909)Program data file in CFast is broken. log
-       OPERATION1:[25/11/13 00:00:18] ( Control Power ON )
+       OPERATION1:[25/11/15 05:41:20] ( Control Power ON )
        OPERATION2:[04/01/10 22:37:04] (  )
        OPERATION3:[04/01/10 22:37:04] (  )
        OPERATION4:[04/01/10 22:37:04] (  )
@@ -3661,9 +3696,9 @@ TP_RECINHI      0   0   0
          JT1       JT2       JT3       JT4       JT5       JT6  
           0.000     0.000     0.000     0.000     0.000     0.000
 ------------------------------------------------------------------------------
-  26 - [25/11/13 00:00:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+  26 - [25/11/15 05:41:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
        (E0909)Program data file in CFast is broken. id4
-       OPERATION1:[25/11/13 00:00:18] ( Control Power ON )
+       OPERATION1:[25/11/15 05:41:20] ( Control Power ON )
        OPERATION2:[04/01/10 22:37:04] (  )
        OPERATION3:[04/01/10 22:37:04] (  )
        OPERATION4:[04/01/10 22:37:04] (  )
@@ -3679,9 +3714,9 @@ TP_RECINHI      0   0   0
          JT1       JT2       JT3       JT4       JT5       JT6  
           0.000     0.000     0.000     0.000     0.000     0.000
 ------------------------------------------------------------------------------
-  27 - [25/11/13 00:00:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+  27 - [25/11/15 05:41:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
        (E0909)Program data file in CFast is broken. gripper.put
-       OPERATION1:[25/11/13 00:00:18] ( Control Power ON )
+       OPERATION1:[25/11/15 05:41:20] ( Control Power ON )
        OPERATION2:[04/01/10 22:37:04] (  )
        OPERATION3:[04/01/10 22:37:04] (  )
        OPERATION4:[04/01/10 22:37:04] (  )
@@ -3697,9 +3732,9 @@ TP_RECINHI      0   0   0
          JT1       JT2       JT3       JT4       JT5       JT6  
           0.000     0.000     0.000     0.000     0.000     0.000
 ------------------------------------------------------------------------------
-  28 - [25/11/13 00:00:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+  28 - [25/11/15 05:41:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
        (E0909)Program data file in CFast is broken. gripper.pick
-       OPERATION1:[25/11/13 00:00:18] ( Control Power ON )
+       OPERATION1:[25/11/15 05:41:20] ( Control Power ON )
        OPERATION2:[04/01/10 22:37:04] (  )
        OPERATION3:[04/01/10 22:37:04] (  )
        OPERATION4:[04/01/10 22:37:04] (  )
@@ -3715,9 +3750,9 @@ TP_RECINHI      0   0   0
          JT1       JT2       JT3       JT4       JT5       JT6  
           0.000     0.000     0.000     0.000     0.000     0.000
 ------------------------------------------------------------------------------
-  29 - [25/11/13 00:00:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+  29 - [25/11/15 05:41:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
        (E0909)Program data file in CFast is broken. get.state.pc
-       OPERATION1:[25/11/13 00:00:18] ( Control Power ON )
+       OPERATION1:[25/11/15 05:41:20] ( Control Power ON )
        OPERATION2:[04/01/10 22:37:04] (  )
        OPERATION3:[04/01/10 22:37:04] (  )
        OPERATION4:[04/01/10 22:37:04] (  )
@@ -3733,9 +3768,9 @@ TP_RECINHI      0   0   0
          JT1       JT2       JT3       JT4       JT5       JT6  
           0.000     0.000     0.000     0.000     0.000     0.000
 ------------------------------------------------------------------------------
-  30 - [25/11/13 00:00:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+  30 - [25/11/15 05:41:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
        (E0909)Program data file in CFast is broken. errstart.pc
-       OPERATION1:[25/11/13 00:00:18] ( Control Power ON )
+       OPERATION1:[25/11/15 05:41:20] ( Control Power ON )
        OPERATION2:[04/01/10 22:37:04] (  )
        OPERATION3:[04/01/10 22:37:04] (  )
        OPERATION4:[04/01/10 22:37:04] (  )
@@ -3751,9 +3786,9 @@ TP_RECINHI      0   0   0
          JT1       JT2       JT3       JT4       JT5       JT6  
           0.000     0.000     0.000     0.000     0.000     0.000
 ------------------------------------------------------------------------------
-  31 - [25/11/13 00:00:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+  31 - [25/11/15 05:41:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
        (E0909)Program data file in CFast is broken. autostart.pc
-       OPERATION1:[25/11/13 00:00:18] ( Control Power ON )
+       OPERATION1:[25/11/15 05:41:20] ( Control Power ON )
        OPERATION2:[04/01/10 22:37:04] (  )
        OPERATION3:[04/01/10 22:37:04] (  )
        OPERATION4:[04/01/10 22:37:04] (  )
@@ -3769,9 +3804,9 @@ TP_RECINHI      0   0   0
          JT1       JT2       JT3       JT4       JT5       JT6  
           0.000     0.000     0.000     0.000     0.000     0.000
 ------------------------------------------------------------------------------
-  32 - [25/11/13 00:00:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+  32 - [25/11/15 05:41:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
        (E0909)Program data file in CFast is broken. a.test.pick
-       OPERATION1:[25/11/13 00:00:18] ( Control Power ON )
+       OPERATION1:[25/11/15 05:41:20] ( Control Power ON )
        OPERATION2:[04/01/10 22:37:04] (  )
        OPERATION3:[04/01/10 22:37:04] (  )
        OPERATION4:[04/01/10 22:37:04] (  )
@@ -3787,9 +3822,9 @@ TP_RECINHI      0   0   0
          JT1       JT2       JT3       JT4       JT5       JT6  
           0.000     0.000     0.000     0.000     0.000     0.000
 ------------------------------------------------------------------------------
-  33 - [25/11/13 00:00:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+  33 - [25/11/15 05:41:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
        (E0909)Program data file in CFast is broken. a.test
-       OPERATION1:[25/11/13 00:00:18] ( Control Power ON )
+       OPERATION1:[25/11/15 05:41:20] ( Control Power ON )
        OPERATION2:[04/01/10 22:37:04] (  )
        OPERATION3:[04/01/10 22:37:04] (  )
        OPERATION4:[04/01/10 22:37:04] (  )
@@ -3805,9 +3840,9 @@ TP_RECINHI      0   0   0
          JT1       JT2       JT3       JT4       JT5       JT6  
           0.000     0.000     0.000     0.000     0.000     0.000
 ------------------------------------------------------------------------------
-  34 - [25/11/13 00:00:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+  34 - [25/11/15 05:41:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
        (E0909)Program data file in CFast is broken. a.teach.stz
-       OPERATION1:[25/11/13 00:00:18] ( Control Power ON )
+       OPERATION1:[25/11/15 05:41:20] ( Control Power ON )
        OPERATION2:[04/01/10 22:37:04] (  )
        OPERATION3:[04/01/10 22:37:04] (  )
        OPERATION4:[04/01/10 22:37:04] (  )
@@ -3823,9 +3858,9 @@ TP_RECINHI      0   0   0
          JT1       JT2       JT3       JT4       JT5       JT6  
           0.000     0.000     0.000     0.000     0.000     0.000
 ------------------------------------------------------------------------------
-  35 - [25/11/13 00:00:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+  35 - [25/11/15 05:41:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
        (E0909)Program data file in CFast is broken. a.teach.pos
-       OPERATION1:[25/11/13 00:00:18] ( Control Power ON )
+       OPERATION1:[25/11/15 05:41:20] ( Control Power ON )
        OPERATION2:[04/01/10 22:37:04] (  )
        OPERATION3:[04/01/10 22:37:04] (  )
        OPERATION4:[04/01/10 22:37:04] (  )
@@ -3841,9 +3876,9 @@ TP_RECINHI      0   0   0
          JT1       JT2       JT3       JT4       JT5       JT6  
           0.000     0.000     0.000     0.000     0.000     0.000
 ------------------------------------------------------------------------------
-  36 - [25/11/13 00:00:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+  36 - [25/11/15 05:41:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
        (E0909)Program data file in CFast is broken. a.teach.gripper
-       OPERATION1:[25/11/13 00:00:18] ( Control Power ON )
+       OPERATION1:[25/11/15 05:41:20] ( Control Power ON )
        OPERATION2:[04/01/10 22:37:04] (  )
        OPERATION3:[04/01/10 22:37:04] (  )
        OPERATION4:[04/01/10 22:37:04] (  )
@@ -3859,9 +3894,9 @@ TP_RECINHI      0   0   0
          JT1       JT2       JT3       JT4       JT5       JT6  
           0.000     0.000     0.000     0.000     0.000     0.000
 ------------------------------------------------------------------------------
-  37 - [25/11/13 00:00:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+  37 - [25/11/15 05:41:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
        (E0909)Program data file in CFast is broken. a.tch.stock.out
-       OPERATION1:[25/11/13 00:00:18] ( Control Power ON )
+       OPERATION1:[25/11/15 05:41:20] ( Control Power ON )
        OPERATION2:[04/01/10 22:37:04] (  )
        OPERATION3:[04/01/10 22:37:04] (  )
        OPERATION4:[04/01/10 22:37:04] (  )
@@ -3877,9 +3912,9 @@ TP_RECINHI      0   0   0
          JT1       JT2       JT3       JT4       JT5       JT6  
           0.000     0.000     0.000     0.000     0.000     0.000
 ------------------------------------------------------------------------------
-  38 - [25/11/13 00:00:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+  38 - [25/11/15 05:41:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
        (E0909)Program data file in CFast is broken. a.tch.stock.in
-       OPERATION1:[25/11/13 00:00:18] ( Control Power ON )
+       OPERATION1:[25/11/15 05:41:20] ( Control Power ON )
        OPERATION2:[04/01/10 22:37:04] (  )
        OPERATION3:[04/01/10 22:37:04] (  )
        OPERATION4:[04/01/10 22:37:04] (  )
@@ -3895,9 +3930,9 @@ TP_RECINHI      0   0   0
          JT1       JT2       JT3       JT4       JT5       JT6  
           0.000     0.000     0.000     0.000     0.000     0.000
 ------------------------------------------------------------------------------
-  39 - [25/11/13 00:00:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+  39 - [25/11/15 05:41:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
        (E0909)Program data file in CFast is broken. a.main
-       OPERATION1:[25/11/13 00:00:18] ( Control Power ON )
+       OPERATION1:[25/11/15 05:41:20] ( Control Power ON )
        OPERATION2:[04/01/10 22:37:04] (  )
        OPERATION3:[04/01/10 22:37:04] (  )
        OPERATION4:[04/01/10 22:37:04] (  )
@@ -3913,9 +3948,9 @@ TP_RECINHI      0   0   0
          JT1       JT2       JT3       JT4       JT5       JT6  
           0.000     0.000     0.000     0.000     0.000     0.000
 ------------------------------------------------------------------------------
-  40 - [25/11/13 00:00:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+  40 - [25/11/15 05:41:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
        (E0909)Program data file in CFast is broken. a.home
-       OPERATION1:[25/11/13 00:00:18] ( Control Power ON )
+       OPERATION1:[25/11/15 05:41:20] ( Control Power ON )
        OPERATION2:[04/01/10 22:37:04] (  )
        OPERATION3:[04/01/10 22:37:04] (  )
        OPERATION4:[04/01/10 22:37:04] (  )
@@ -3931,9 +3966,9 @@ TP_RECINHI      0   0   0
          JT1       JT2       JT3       JT4       JT5       JT6  
           0.000     0.000     0.000     0.000     0.000     0.000
 ------------------------------------------------------------------------------
-  41 - [25/11/13 00:00:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+  41 - [25/11/15 05:41:21 SIGNAL:00 MON.SPEED : 10 TEACH mode]
        (E0909)Program data file in CFast is broken. a.align
-       OPERATION1:[25/11/13 00:00:18] ( Control Power ON )
+       OPERATION1:[25/11/15 05:41:20] ( Control Power ON )
        OPERATION2:[04/01/10 22:37:04] (  )
        OPERATION3:[04/01/10 22:37:04] (  )
        OPERATION4:[04/01/10 22:37:04] (  )
@@ -3977,19 +4012,19 @@ TP_SEM_ERROR_CNT    0
 .END
 .ENCTEMPLOG
 === MIN(deg C) ===
-  JT1  - [25/11/13 00:00:41]      0.000
-  JT2  - [25/11/13 00:00:41]      0.000
-  JT3  - [25/11/13 00:00:41]      0.000
-  JT4  - [25/11/13 00:00:41]      0.000
-  JT5  - [25/11/13 00:00:41]      0.000
-  JT6  - [25/11/13 00:00:41]      0.000
+  JT1  - [25/11/15 05:41:38]      0.000
+  JT2  - [25/11/15 05:41:38]      0.000
+  JT3  - [25/11/15 05:41:38]      0.000
+  JT4  - [25/11/15 05:41:38]      0.000
+  JT5  - [25/11/15 05:41:38]      0.000
+  JT6  - [25/11/15 05:41:38]      0.000
 === MAX(deg C) ===
-  JT1  - [25/11/13 00:00:41]      0.000
-  JT2  - [25/11/13 00:00:41]      0.000
-  JT3  - [25/11/13 00:00:41]      0.000
-  JT4  - [25/11/13 00:00:41]      0.000
-  JT5  - [25/11/13 00:00:41]      0.000
-  JT6  - [25/11/13 00:00:41]      0.000
+  JT1  - [25/11/15 05:41:38]      0.000
+  JT2  - [25/11/15 05:41:38]      0.000
+  JT3  - [25/11/15 05:41:38]      0.000
+  JT4  - [25/11/15 05:41:38]      0.000
+  JT5  - [25/11/15 05:41:38]      0.000
+  JT6  - [25/11/15 05:41:38]      0.000
 .END
 .REDUCTIONGEAR_LOG
 SUM_JT1_t01_v01    0 0 0 0 0 0 0 0 0 0 0 
@@ -4112,7 +4147,7 @@ SUM_JT1_t11_v07    0 0 0 0 0 0 0 0 0 0 0
 SUM_JT1_t11_v08    0 0 0 0 0 0 0 0 0 0 0 
 SUM_JT1_t11_v09    0 0 0 0 0 0 0 0 0 0 0 
 SUM_JT1_t11_v10    0 0 0 0 0 0 0 0 0 0 0 
-SUM_JT1_t11_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t11_v11    0 0 0 0 0 0 0 0 0 0 1561 
 SUM_JT2_t01_v01    0 0 0 0 0 0 0 0 0 0 0 
 SUM_JT2_t01_v02    0 0 0 0 0 0 0 0 0 0 0 
 SUM_JT2_t01_v03    0 0 0 0 0 0 0 0 0 0 0 
@@ -4233,7 +4268,7 @@ SUM_JT2_t11_v07    0 0 0 0 0 0 0 0 0 0 0
 SUM_JT2_t11_v08    0 0 0 0 0 0 0 0 0 0 0 
 SUM_JT2_t11_v09    0 0 0 0 0 0 0 0 0 0 0 
 SUM_JT2_t11_v10    0 0 0 0 0 0 0 0 0 0 0 
-SUM_JT2_t11_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t11_v11    0 0 0 0 0 0 0 0 0 0 1561 
 SUM_JT3_t01_v01    0 0 0 0 0 0 0 0 0 0 0 
 SUM_JT3_t01_v02    0 0 0 0 0 0 0 0 0 0 0 
 SUM_JT3_t01_v03    0 0 0 0 0 0 0 0 0 0 0 
@@ -4310,7 +4345,7 @@ SUM_JT3_t07_v07    0 0 0 0 0 0 0 0 0 0 0
 SUM_JT3_t07_v08    0 0 0 0 0 0 0 0 0 0 0 
 SUM_JT3_t07_v09    0 0 0 0 0 0 0 0 0 0 0 
 SUM_JT3_t07_v10    0 0 0 0 0 0 0 0 0 0 0 
-SUM_JT3_t07_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t07_v11    0 0 0 0 0 0 0 0 0 0 1560 
 SUM_JT3_t08_v01    0 0 0 0 0 0 0 0 0 0 0 
 SUM_JT3_t08_v02    0 0 0 0 0 0 0 0 0 0 0 
 SUM_JT3_t08_v03    0 0 0 0 0 0 0 0 0 0 0 
@@ -4354,7 +4389,7 @@ SUM_JT3_t11_v07    0 0 0 0 0 0 0 0 0 0 0
 SUM_JT3_t11_v08    0 0 0 0 0 0 0 0 0 0 0 
 SUM_JT3_t11_v09    0 0 0 0 0 0 0 0 0 0 0 
 SUM_JT3_t11_v10    0 0 0 0 0 0 0 0 0 0 0 
-SUM_JT3_t11_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t11_v11    0 0 0 0 0 0 0 0 0 0 1 
 SUM_JT4_t01_v01    0 0 0 0 0 0 0 0 0 0 0 
 SUM_JT4_t01_v02    0 0 0 0 0 0 0 0 0 0 0 
 SUM_JT4_t01_v03    0 0 0 0 0 0 0 0 0 0 0 
@@ -4475,7 +4510,7 @@ SUM_JT4_t11_v07    0 0 0 0 0 0 0 0 0 0 0
 SUM_JT4_t11_v08    0 0 0 0 0 0 0 0 0 0 0 
 SUM_JT4_t11_v09    0 0 0 0 0 0 0 0 0 0 0 
 SUM_JT4_t11_v10    0 0 0 0 0 0 0 0 0 0 0 
-SUM_JT4_t11_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t11_v11    0 0 0 0 0 0 0 0 0 0 1561 
 SUM_JT5_t01_v01    0 0 0 0 0 0 0 0 0 0 0 
 SUM_JT5_t01_v02    0 0 0 0 0 0 0 0 0 0 0 
 SUM_JT5_t01_v03    0 0 0 0 0 0 0 0 0 0 0 
@@ -4596,7 +4631,7 @@ SUM_JT5_t11_v07    0 0 0 0 0 0 0 0 0 0 0
 SUM_JT5_t11_v08    0 0 0 0 0 0 0 0 0 0 0 
 SUM_JT5_t11_v09    0 0 0 0 0 0 0 0 0 0 0 
 SUM_JT5_t11_v10    0 0 0 0 0 0 0 0 0 0 0 
-SUM_JT5_t11_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t11_v11    0 0 0 0 0 0 0 0 0 0 1561 
 SUM_JT6_t01_v01    0 0 0 0 0 0 0 0 0 0 0 
 SUM_JT6_t01_v02    0 0 0 0 0 0 0 0 0 0 0 
 SUM_JT6_t01_v03    0 0 0 0 0 0 0 0 0 0 0 
@@ -4717,7 +4752,7 @@ SUM_JT6_t11_v07    0 0 0 0 0 0 0 0 0 0 0
 SUM_JT6_t11_v08    0 0 0 0 0 0 0 0 0 0 0 
 SUM_JT6_t11_v09    0 0 0 0 0 0 0 0 0 0 0 
 SUM_JT6_t11_v10    0 0 0 0 0 0 0 0 0 0 0 
-SUM_JT6_t11_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t11_v11    0 0 0 0 0 0 0 0 0 0 1561 
 SUB1_JT1_t01_v01    0 0 0 0 0 0 0 0 0 0 0 
 SUB1_JT1_t01_v02    0 0 0 0 0 0 0 0 0 0 0 
 SUB1_JT1_t01_v03    0 0 0 0 0 0 0 0 0 0 0 
@@ -11372,7 +11407,7 @@ SUB10_JT1_t11_v07    0 0 0 0 0 0 0 0 0 0 0
 SUB10_JT1_t11_v08    0 0 0 0 0 0 0 0 0 0 0 
 SUB10_JT1_t11_v09    0 0 0 0 0 0 0 0 0 0 0 
 SUB10_JT1_t11_v10    0 0 0 0 0 0 0 0 0 0 0 
-SUB10_JT1_t11_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUB10_JT1_t11_v11    0 0 0 0 0 0 0 0 0 0 1561 
 SUB10_JT2_t01_v01    0 0 0 0 0 0 0 0 0 0 0 
 SUB10_JT2_t01_v02    0 0 0 0 0 0 0 0 0 0 0 
 SUB10_JT2_t01_v03    0 0 0 0 0 0 0 0 0 0 0 
@@ -11493,7 +11528,7 @@ SUB10_JT2_t11_v07    0 0 0 0 0 0 0 0 0 0 0
 SUB10_JT2_t11_v08    0 0 0 0 0 0 0 0 0 0 0 
 SUB10_JT2_t11_v09    0 0 0 0 0 0 0 0 0 0 0 
 SUB10_JT2_t11_v10    0 0 0 0 0 0 0 0 0 0 0 
-SUB10_JT2_t11_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUB10_JT2_t11_v11    0 0 0 0 0 0 0 0 0 0 1561 
 SUB10_JT3_t01_v01    0 0 0 0 0 0 0 0 0 0 0 
 SUB10_JT3_t01_v02    0 0 0 0 0 0 0 0 0 0 0 
 SUB10_JT3_t01_v03    0 0 0 0 0 0 0 0 0 0 0 
@@ -11570,7 +11605,7 @@ SUB10_JT3_t07_v07    0 0 0 0 0 0 0 0 0 0 0
 SUB10_JT3_t07_v08    0 0 0 0 0 0 0 0 0 0 0 
 SUB10_JT3_t07_v09    0 0 0 0 0 0 0 0 0 0 0 
 SUB10_JT3_t07_v10    0 0 0 0 0 0 0 0 0 0 0 
-SUB10_JT3_t07_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUB10_JT3_t07_v11    0 0 0 0 0 0 0 0 0 0 1560 
 SUB10_JT3_t08_v01    0 0 0 0 0 0 0 0 0 0 0 
 SUB10_JT3_t08_v02    0 0 0 0 0 0 0 0 0 0 0 
 SUB10_JT3_t08_v03    0 0 0 0 0 0 0 0 0 0 0 
@@ -11614,7 +11649,7 @@ SUB10_JT3_t11_v07    0 0 0 0 0 0 0 0 0 0 0
 SUB10_JT3_t11_v08    0 0 0 0 0 0 0 0 0 0 0 
 SUB10_JT3_t11_v09    0 0 0 0 0 0 0 0 0 0 0 
 SUB10_JT3_t11_v10    0 0 0 0 0 0 0 0 0 0 0 
-SUB10_JT3_t11_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUB10_JT3_t11_v11    0 0 0 0 0 0 0 0 0 0 1 
 SUB10_JT4_t01_v01    0 0 0 0 0 0 0 0 0 0 0 
 SUB10_JT4_t01_v02    0 0 0 0 0 0 0 0 0 0 0 
 SUB10_JT4_t01_v03    0 0 0 0 0 0 0 0 0 0 0 
@@ -11735,7 +11770,7 @@ SUB10_JT4_t11_v07    0 0 0 0 0 0 0 0 0 0 0
 SUB10_JT4_t11_v08    0 0 0 0 0 0 0 0 0 0 0 
 SUB10_JT4_t11_v09    0 0 0 0 0 0 0 0 0 0 0 
 SUB10_JT4_t11_v10    0 0 0 0 0 0 0 0 0 0 0 
-SUB10_JT4_t11_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUB10_JT4_t11_v11    0 0 0 0 0 0 0 0 0 0 1561 
 SUB10_JT5_t01_v01    0 0 0 0 0 0 0 0 0 0 0 
 SUB10_JT5_t01_v02    0 0 0 0 0 0 0 0 0 0 0 
 SUB10_JT5_t01_v03    0 0 0 0 0 0 0 0 0 0 0 
@@ -11856,7 +11891,7 @@ SUB10_JT5_t11_v07    0 0 0 0 0 0 0 0 0 0 0
 SUB10_JT5_t11_v08    0 0 0 0 0 0 0 0 0 0 0 
 SUB10_JT5_t11_v09    0 0 0 0 0 0 0 0 0 0 0 
 SUB10_JT5_t11_v10    0 0 0 0 0 0 0 0 0 0 0 
-SUB10_JT5_t11_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUB10_JT5_t11_v11    0 0 0 0 0 0 0 0 0 0 1561 
 SUB10_JT6_t01_v01    0 0 0 0 0 0 0 0 0 0 0 
 SUB10_JT6_t01_v02    0 0 0 0 0 0 0 0 0 0 0 
 SUB10_JT6_t01_v03    0 0 0 0 0 0 0 0 0 0 0 
@@ -11977,7 +12012,7 @@ SUB10_JT6_t11_v07    0 0 0 0 0 0 0 0 0 0 0
 SUB10_JT6_t11_v08    0 0 0 0 0 0 0 0 0 0 0 
 SUB10_JT6_t11_v09    0 0 0 0 0 0 0 0 0 0 0 
 SUB10_JT6_t11_v10    0 0 0 0 0 0 0 0 0 0 0 
-SUB10_JT6_t11_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUB10_JT6_t11_v11    0 0 0 0 0 0 0 0 0 0 1561 
 GRSALRT_TIME_JT1      0
 GRSALRT_PARAM_JT1      
 GRSALRT_TIME_JT2      0
@@ -11997,13 +12032,13 @@ RGLOG 0
 === USERTP FAULT LOG ===
 === ARMAS  FAULT LOG ===
 .END
-.PROGRAM a.align()@25/11/13 00:00 #0
+.PROGRAM a.align()@25/11/15 05:41 #0
   ALIGN
 .END
-.PROGRAM a.home()@25/11/13 00:00 #0
-  JMOVE #homep1
+.PROGRAM a.home()@25/11/15 05:41 #0
+  JMOVE #homyak
 .END
-.PROGRAM a.main()@25/11/13 00:00 #0
+.PROGRAM a.main()@25/11/15 05:41 #0
 ;
   CALL safe.home
 ;
@@ -12029,7 +12064,7 @@ RGLOG 0
   END
 ;
 .END
-.PROGRAM a.tch.stock.in()@25/11/13 00:00 #0
+.PROGRAM a.tch.stock.in()@25/11/15 05:41 #0
 ; Use this for first teach
   IF FALSE THEN
     TOOL tool.pin
@@ -12053,7 +12088,7 @@ RGLOG 0
   LMOVE stocker.in[.i,.j]+TRANS(0,0,50)
 ;
 .END
-.PROGRAM a.tch.stock.out()@25/11/13 00:00 #0
+.PROGRAM a.tch.stock.out()@25/11/15 05:41 #0
 ; Use this for first teach
   IF FALSE THEN
     JMOVE stocker.out[1,1]+TRANS(0,0,50)
@@ -12074,7 +12109,7 @@ RGLOG 0
   LMOVE stocker.out[.i,.j]
   LMOVE stocker.out[.i,.j]+TRANS(0,0,50)
 .END
-.PROGRAM a.teach.gripper()@25/11/13 00:00 #0
+.PROGRAM a.teach.gripper()@25/11/15 05:41 #0
   TOOL tool.pick[hmi.tool.no]
 ;
   POINT .temp = #tool.pos[hmi.t.pos]
@@ -12100,7 +12135,7 @@ RGLOG 0
 ;
   LMOVE .temp+TRANS(0,0,50)
 .END
-.PROGRAM a.teach.pos()@25/11/13 00:00 #0
+.PROGRAM a.teach.pos()@25/11/15 05:41 #0
   TOOL tool.pick[hmi.tool.no]
 ;
   POINT .temp = #pos.pos[hmi.obj.id]
@@ -12114,7 +12149,7 @@ RGLOG 0
   BREAK
   TWAIT 0.5
 .END
-.PROGRAM a.teach.stz()@25/11/13 00:00 #0
+.PROGRAM a.teach.stz()@25/11/15 05:41 #0
   SPEED 250 MM/S ALWAYS
   ACCURACY 0 ALWAYS
   TOOL tool.pin
@@ -12149,10 +12184,10 @@ RGLOG 0
   BREAK
   LMOVE stz.frame+TRANS(hmi.x,hmi.y,10)
 .END
-.PROGRAM a.test()@25/11/13 00:00 #0
+.PROGRAM a.test()@25/11/15 05:41 #0
 ;
   SIGNAL -rs13.det.put
-  JMOVE #homep1
+  JMOVE #homyak
   CALL stock.in.take(1,1)
   JMOVE #wait.pick
   CALL gripper.pick(1,1)
@@ -12165,9 +12200,9 @@ RGLOG 0
   CALL gripper.put(1,1)
   CALL stock.in.back(1,1)
 ;
-  JMOVE #homep1
+  JMOVE #homyak
 .END
-.PROGRAM a.test.pick()@25/11/13 00:00 #0
+.PROGRAM a.test.pick()@25/11/15 05:41 #0
   IF FALSE THEN
     JMOVE #pick.in
   END
@@ -12217,7 +12252,7 @@ RGLOG 0
   LMOVE #wait.pick
   LMOVE #before.pos
 .END
-.PROGRAM autostart.pc()@25/11/13 00:00 #0
+.PROGRAM autostart.pc()@25/11/15 05:41 #0
 ; System switches
   CP ON
   PREFETCH.SIGINS OFF
@@ -12226,6 +12261,7 @@ RGLOG 0
   HOLD.STEP ON
   DISP.EXESTEP ON
   PROG.DATE ON
+;ABS.SPEED ON
   AUTOSTART.PC ON
   ERRSTART.PC ON  ;
 ;
@@ -12240,7 +12276,7 @@ RGLOG 0
   CALL watchdog.pc
 ;
 .END
-.PROGRAM errstart.pc()@25/11/13 00:00 #55
+.PROGRAM errstart.pc()@25/11/15 05:41 #2
   IF ERROR==-34021 OR ERROR==-10100 THEN
     tcp.socket = -1
     MC ERESET
@@ -12255,7 +12291,7 @@ RGLOG 0
   TWAIT 5
   ERRSTART.PC ON
 .END
-.PROGRAM get.state.pc(.$state)@25/11/13 00:00 #23110
+.PROGRAM get.state.pc(.$state)@25/11/15 05:41 #50
   .$state = "SPEED:"+$ENCODE(mon.speed)+";"
   .$state = .$state+"POWER:"
   IF SWITCH(POWER ) THEN
@@ -12342,12 +12378,13 @@ RGLOG 0
 ; MAX 12
   .$state = .$state+"\n"
 .END
-.PROGRAM gripper.pick(.pos,.tool.no)@25/11/13 00:00 #0
+.PROGRAM gripper.pick(.pos,.tool.no)@25/11/15 05:41 #0
   IF FALSE THEN
     .pos = hmi.t.pos
     .tool.no = hmi.tool.no
   END
 ;
+  PULSE release.grip
   .$temp = "Pick tool"+$ENCODE(.pos)+" from"+$ENCODE(.tool.no)
   CALL log(.$temp)
   CALL log("State: PickTool")
@@ -12371,7 +12408,7 @@ RGLOG 0
   SPEED 100 ALWAYS
   LMOVE .temp+TRANS(0,0,200)
 .END
-.PROGRAM gripper.put(.pos,.tool.no)@25/11/13 00:00 #0
+.PROGRAM gripper.put(.pos,.tool.no)@25/11/15 05:41 #0
   IF FALSE THEN
     .pos = hmi.t.pos
     .tool.no = hmi.tool.no
@@ -12400,13 +12437,13 @@ RGLOG 0
   SPEED 100 ALWAYS
   LMOVE .temp+TRANS(0,0,200)
 .END
-.PROGRAM id4()@25/11/13 00:00 #3; 312.229.002_1
+.PROGRAM id4()@25/11/15 05:41 #0; 312.229.002_1
 ; Object ID
   object.id = 4
 ; Working gripper
   gripper.type = 1
 ; Max objects in output tare
-  max.tare.count = 3
+  max.tare.count = 168
 ;
   detail.length = 23.5
   start.shift.x = 0
@@ -12414,7 +12451,7 @@ RGLOG 0
   start.shift.z = 0
 ;
 .END
-.PROGRAM log(.$msg)@25/11/13 00:00 #451
+.PROGRAM log(.$msg)@25/11/15 05:41 #4
   FOR .i = 0 TO 10
     $log.entry[.i] = $log.entry[.i+1]
   END
@@ -12424,7 +12461,7 @@ RGLOG 0
   IFPWPRINT 2,1,1,9,10=$log.entry[4],$log.entry[5],$log.entry[6],$log.entry[7]
   IFPWPRINT 3,1,1,9,10=$log.entry[8],$log.entry[9],$log.entry[10],$log.entry[11]
 .END
-.PROGRAM pg.select(.state)@25/11/13 00:00 #7
+.PROGRAM pg.select(.state)@25/11/15 05:41 #0
   SCASE $detail.type OF
    SVALUE "312.229.002_1":
     CALL id4
@@ -12436,7 +12473,7 @@ RGLOG 0
     RETURN
   END
 .END
-.PROGRAM pg.start()@25/11/13 00:00 #0
+.PROGRAM pg.start()@25/11/15 05:41 #0
   $command = ""
 ;
   pick.count = 0
@@ -12451,12 +12488,15 @@ RGLOG 0
 ; Change gripper if required
   IF current.gripper<>gripper.type THEN
     CALL log("Required gripper change")
+    JMOVE #post.tare.in
     JMOVE #wait.pick
     IF current.gripper<>0 THEN
       CALL gripper.put(current.gripper,current.gripper)
     END
     CALL gripper.pick(gripper.type,gripper.type)
     current.gripper = gripper.type
+    JMOVE #post.tare.in
+    JMOVE #homyak
   END
   current.intare = 1
   current.outtare = 1
@@ -12464,9 +12504,9 @@ RGLOG 0
   full.counter = 0
 ; First tare pick
   CALL stock.out.take(outtare.i[1],outtare.j[1])
-  JMOVE #homep1
+  JMOVE #homyak
   CALL stock.in.take(intare.i[1],intare.j[1])
-  JMOVE #homep1
+;JMOVE #homyak
   JMOVE #wait.pick
 ;
   .keep.pick = TRUE
@@ -12476,12 +12516,14 @@ RGLOG 0
 ;
     IF SIG(rs7.tare.chg) THEN
       CALL log("OutPalletChange requested")
-      JMOVE #homep1
+      JMOVE #post.tare.in
+      JMOVE #homyak
       CALL stock.out.back(outtare.i[current.outtare],outtare.j[current.outtare])
       current.outtare = current.outtare+1
       CALL stock.out.take(outtare.i[current.outtare],outtare.j[current.outtare])
 ;JMOVE #homep1
       PULSE rs13.tare.ack,10
+      JMOVE #post.tare.in;!!
       JMOVE #wait.pick
       $action = "WaitForPick"
       CALL log("Wait for new pick. State: WaitForPick")
@@ -12503,7 +12545,7 @@ RGLOG 0
       $cycle.command = ""
       IF current.intare<>intare.count THEN
         CALL stock.in.back(intare.i[current.intare],intare.j[current.intare])
-        JMOVE #homep1
+        JMOVE #homyak
         current.intare = current.intare+1
         CALL stock.in.take(intare.i[current.intare],intare.j[current.intare])
       ELSE
@@ -12518,12 +12560,12 @@ RGLOG 0
 ; Last tare put
   JMOVE #wait.pick
   CALL stock.in.back(intare.i[outtare.count],intare.j[outtare.count])
-  JMOVE #homep1
+  JMOVE #homyak
   CALL stock.out.back(outtare.i[intare.count],outtare.j[intare.count])
 ;
-  JMOVE #homep1
+  JMOVE #homyak
 .END
-.PROGRAM process.data(.state)@25/11/13 00:00 #7
+.PROGRAM process.data(.state)@25/11/15 05:41 #0
 ;
   intare.count = 0
   outtare.count = 0
@@ -12562,7 +12604,7 @@ any:
   .state = FALSE
   RETURN
 .END
-.PROGRAM s.in.table(.no)@25/11/13 00:00 #7
+.PROGRAM s.in.table(.no)@25/11/15 05:41 #0
   .$temp = "Processing in"+$ENCODE(.no)+" cell"
   CALL log(.$temp)
   CASE .no OF
@@ -12732,11 +12774,11 @@ any:
     CALL log(.$temp)
   END
 .END
-.PROGRAM s.in.table_old(.no,.i,.j)@25/11/13 00:00 #0
+.PROGRAM s.in.table_old(.no,.i,.j)@25/11/15 05:41 #0
   .j = INT((.no-1)/3)+1
   .i = INT((.no-1) MOD 3)+1
 .END
-.PROGRAM s.out.table(.no)@25/11/13 00:00 #7
+.PROGRAM s.out.table(.no)@25/11/15 05:41 #0
   .$temp = "Processing out"+$ENCODE(.no)+" cell"
   CALL log(.$temp)
   CASE .no OF
@@ -13014,19 +13056,19 @@ any:
 ;
   END
 .END
-.PROGRAM s.out.table_old(.no,.i,.j)@25/11/13 00:00 #0
+.PROGRAM s.out.table_old(.no,.i,.j)@25/11/15 05:41 #0
   .j = INT((.no-1)/4)+1
   .i = INT((.no-1) MOD 4)+1
 .END
-.PROGRAM safe.home()@25/11/13 00:00 #7
+.PROGRAM safe.home()@25/11/15 05:41 #2
 ; IMPLEMENT SAFE RETURN TO HOME POSITION
   CALL log("Moving to home position. State: MoveToHome")
   $action = "MoveToHome"
   SPEED 250 MM/S ALWAYS
   ACCURACY 10 ALWAYS
-  JMOVE #homep1
+  JMOVE #homyak
 .END
-.PROGRAM sender.pc()@25/11/13 00:00 #0
+.PROGRAM sender.pc()@25/11/15 05:41 #0
 ;
 ; 0 - FALSE
 ; 1 - TRUE
@@ -13047,7 +13089,7 @@ any:
     TWAIT 0.25
   END
 .END
-.PROGRAM set.io.pc()@25/11/13 00:00 #5
+.PROGRAM set.io.pc()@25/11/15 05:41 #2
 ; Gripper IO
   release.tare = 1
   capture.tare = 2
@@ -13104,7 +13146,7 @@ any:
 ;
   s.debug = 2024
 .END
-.PROGRAM set.vars.pc()@25/11/13 00:00 #5
+.PROGRAM set.vars.pc()@25/11/15 05:41 #2
 ;
   IF NOT EXISTREAL("grip.xsh[8]") THEN
     FOR .i = 1 TO 9
@@ -13141,7 +13183,7 @@ any:
   $command = ""
   $cycle.command = ""
 .END
-.PROGRAM stock.in.back(.i,.j)@25/11/13 00:00 #0
+.PROGRAM stock.in.back(.i,.j)@25/11/15 05:41 #0
   IF FALSE THEN
     .i = hmi.st.in.i
     .j = hmi.st.in.j
@@ -13150,6 +13192,8 @@ any:
   CALL log(.$temp)
   CALL log("State: ReturnToInStocker")
   $action = "ReturnToInStocker"
+;
+  PULSE release.tare
 ;
   TOOL tool.pin
 ;
@@ -13209,7 +13253,7 @@ any:
   LMOVE stocker.in[.i,.j]+TRANS(0,0,50)
   LMOVE stocker.in[.i,.j]+TRANS(0,0,200)
 .END
-.PROGRAM stock.in.take(.i,.j)@25/11/13 00:00 #7
+.PROGRAM stock.in.take(.i,.j)@25/11/15 05:41 #0
   IF FALSE THEN
     .i = hmi.st.in.i
     .j = hmi.st.in.j
@@ -13218,6 +13262,8 @@ any:
   CALL log(.$temp)
   CALL log("State: TakingFromInStocker")
   $action = "TakingFromInStocker"
+;
+  PULSE release.tare
 ;
   TOOL tool.pin
 ;
@@ -13291,7 +13337,7 @@ any:
   LMOVE #wait.pick
 ;
 .END
-.PROGRAM stock.out.back(.i,.j)@25/11/13 00:00 #12
+.PROGRAM stock.out.back(.i,.j)@25/11/15 05:41 #0
   IF FALSE THEN
     .i = hmi.st.out.i
     .j = hmi.st.out.j
@@ -13300,6 +13346,8 @@ any:
   CALL log(.$temp)
   CALL log("State: ReturnToOutStocker")
   $action = "ReturnToOutStocker"
+;
+  PULSE release.tare
 ;
   TOOL tool.pin
 ;
@@ -13347,7 +13395,7 @@ any:
   LMOVE stocker.out[.i,.j]+TRANS(0,0,50)
   LMOVE stocker.out[.i,.j]+TRANS(0,0,200)
 .END
-.PROGRAM stock.out.take(.i,.j)@25/11/13 00:00 #18
+.PROGRAM stock.out.take(.i,.j)@25/11/15 05:41 #0
   IF FALSE THEN
     .i = hmi.st.out.i
     .j = hmi.st.out.j
@@ -13356,6 +13404,8 @@ any:
   CALL log(.$temp)
   CALL log("State: TakingFromOutStocker")
   $action = "TakingFromOutStocker"
+;
+  PULSE release.tare
 ;
   TOOL tool.pin
 ;
@@ -13367,7 +13417,8 @@ any:
 ;
   ACCURACY 20 ALWAYS
   SPEED 100 ALWAYS
-  JMOVE stocker.out[.i,.j]+TRANS(0,0,200)
+  JMOVE #post.tare.out
+  LMOVE stocker.out[.i,.j]+TRANS(0,0,200)
   ACCURACY 5
   JMOVE stocker.out[.i,.j]+TRANS(0,0,50)
 ;
@@ -13375,7 +13426,8 @@ any:
   SPEED 50 MM/S
   LMOVE stocker.out[.i,.j]
   BREAK
-  TWAIT 0.5;
+  PULSE capture.tare
+  TWAIT 0.5
 ;
   ACCURACY 0
   SPEED 50 MM/S
@@ -13413,14 +13465,14 @@ any:
   TWAIT 0.5
 ; Go back
   SPEED 50 MM/S
-  LMOVE .put.outpal+TRANS(50)
+  LMOVE .put.outpal+TRANS(,,50)
   BREAK
   LMOVE #before.outpal
   LMOVE #post.tare.out
 ;
 ;LMOVE #homep1
 .END
-.PROGRAM stz.pick()@25/11/13 00:00 #31
+.PROGRAM stz.pick()@25/11/15 05:41 #1
 ;
   .$temp = "Pick detail from stz ("+$ENCODE(/L,hmi.x)+", "+$ENCODE(/L,hmi.y)+", "+$ENCODE(/L,hmi.a)+")"
   CALL log(.$temp)
@@ -13480,7 +13532,7 @@ any:
   LMOVE #wait.pick
   LMOVE #before.pos
 .END
-.PROGRAM stz.put(.pos)@25/11/13 00:00 #29
+.PROGRAM stz.put(.pos)@25/11/15 05:41 #0
 ;
   CALL log("Waiting for free positioner. State: WaitPosFree")
   $action = "WaitPosFree"
@@ -13511,7 +13563,7 @@ any:
   LMOVE #before.pos
   LMOVE #wait.pick
 .END
-.PROGRAM tcp.callback.pc(.$data[],.data.length)@25/11/13 00:00 #58
+.PROGRAM tcp.callback.pc(.$data[],.data.length)@25/11/15 05:41 #0
   .$temp = "Received "+$ENCODE(.data.length)+" strings:"
   PRINT tcp.recv.ena: .$temp
   FOR .i = 1 TO .data.length
@@ -13592,6 +13644,7 @@ any:
 ;
   IF INSTR(.$data[1] , "NOPICK") THEN
     $cycle.command = "NOPICK"
+    $action = " "
   END
 ;
   IF INSTR(.$data[1] , "PAUSE") THEN
@@ -13605,11 +13658,13 @@ any:
   END
 ; PNEUMOOPEN;
   IF INSTR(.$data[1] , "PNEUMOOPEN") THEN
+    $action = " "
     PULSE s.pneumo.open,5
   END
 ;
 ; PNEUMOCLOSE;
   IF INSTR(.$data[1] , "PNEUMOCLOSE") THEN
+    $action = " "
     PULSE s.pneumo.close,5
   END
 ;
@@ -13626,10 +13681,11 @@ any:
     hmi.x = VAL(.$y)/10
     hmi.a = VAL(.$a)
     $cycle.command = "PICK"
+    $action = " "
   END
   .$data[1] = ""
 .END
-.PROGRAM tcp.client.pc()@25/11/13 00:00 #0
+.PROGRAM tcp.client.pc()@25/11/15 05:41 #0
   .tcp.retry.count = 10
   WHILE TRUE DO
 ; Checking for active sockets and closing them
@@ -13695,7 +13751,7 @@ any:
     END
   END
 .END
-.PROGRAM tcp.send.pc(.$data[],.data.length)@25/11/13 00:00 #122290
+.PROGRAM tcp.send.pc(.$data[],.data.length)@25/11/15 05:41 #122290
   IF tcp.socket>0 THEN
     TCP_SEND .status,tcp.socket,.$data[1],.data.length,tcp.send.tmo
     IF .status>=0 THEN
@@ -13719,7 +13775,7 @@ any:
   END
 ;
 .END
-.PROGRAM tcp.send2.pc(.$data[],.data.length)@25/11/13 00:00 #0
+.PROGRAM tcp.send2.pc(.$data[],.data.length)@25/11/15 05:41 #0
   IF tcp.socket>0 THEN
     TCP_SEND .status,tcp.socket,.$data[1],.data.length,tcp.send.tmo
     IF .status>=0 THEN
@@ -13739,7 +13795,7 @@ any:
   END
 ;
 .END
-.PROGRAM tcp.send3.pc(.$data[],.data.length)@25/11/13 00:00 #23110
+.PROGRAM tcp.send3.pc(.$data[],.data.length)@25/11/15 05:41 #46
   IF tcp.socket>0 THEN
     TCP_SEND .status,tcp.socket,.$data[1],.data.length,tcp.send.tmo
     IF .status>=0 THEN
@@ -13759,7 +13815,7 @@ any:
   END
 ;
 .END
-.PROGRAM watchdog.pc()@25/11/13 00:00 #0
+.PROGRAM watchdog.pc()@25/11/15 05:41 #0
   WHILE TRUE DO
     IF SIG(s.tcp.ena) THEN
       tcp.ena = tyterm
@@ -13832,38 +13888,38 @@ any:
 .END
 .TRANS
 f 964.867126 -329.805145 106.254669 -170.054886 1.975063 -9.030190
-stocker.in[1,1] -466.552246 1167.948242 35.962097 -88.510201 89.391075 -179.934814
-stocker.in[1,2] -466.439148 1167.100708 -44.033333 -88.510201 89.391075 -179.934814
-stocker.in[1,3] -466.326080 1166.253174 -124.028763 -88.510201 89.391075 -179.934814
-stocker.in[1,4] -466.212982 1165.405640 -204.024200 -88.510201 89.391075 -179.934814
-stocker.in[1,5] -466.099915 1164.558105 -284.019623 -88.510201 89.391075 -179.934814
-stocker.in[1,6] -465.986816 1163.710571 -364.015076 -88.510201 89.391075 -179.934814
-stocker.in[1,7] -465.873749 1162.862915 -444.010498 -88.510201 89.391075 -179.934814
-stocker.in[1,8] -465.760651 1162.015381 -524.005920 -88.510201 89.391075 -179.934814
-stocker.in[1,9] -465.647552 1161.167847 -604.001343 -88.510201 89.391075 -179.934814
-stocker.in[1,10] -465.534485 1160.320312 -683.996765 -88.510201 89.391075 -179.934814
+stocker.in[1,1] -467.921844 1167.823975 114.945084 -88.225647 89.910507 -179.936432
+stocker.in[1,2] -467.831024 1168.710693 40.710327 -88.231407 89.905037 -179.931412
+stocker.in[1,3] -467.736664 1167.579712 -45.054626 -88.225647 89.910507 -179.936432
+stocker.in[1,4] -467.644104 1167.457520 -125.054489 -88.225647 89.910507 -179.936432
+stocker.in[1,5] -467.551514 1167.335327 -205.054337 -88.225647 89.910507 -179.936432
+stocker.in[1,6] -467.458923 1167.213257 -285.054199 -88.225647 89.910507 -179.936432
+stocker.in[1,7] -467.366333 1167.091064 -365.054077 -88.225647 89.910507 -179.936432
+stocker.in[1,8] -467.273743 1166.968872 -445.053955 -88.225647 89.910507 -179.936432
+stocker.in[1,9] -467.181183 1166.846802 -525.053772 -88.225647 89.910507 -179.936432
+stocker.in[1,10] -467.088593 1166.724609 -605.053650 -88.225647 89.910507 -179.936432
 stocker.in[1,11] -465.421387 1159.472656 -763.992249 -88.510201 89.391075 -179.934814
-stocker.in[2,1] 143.240967 1183.814941 36.656021 -88.510201 89.391075 -179.934814
-stocker.in[2,2] 143.354065 1182.967407 -43.339409 -88.510201 89.391075 -179.934814
-stocker.in[2,3] 143.467163 1182.119873 -123.334839 -88.510201 89.391075 -179.934814
-stocker.in[2,4] 143.580200 1181.272339 -203.330276 -88.510201 89.391075 -179.934814
-stocker.in[2,5] 143.693298 1180.424805 -283.325684 -88.510201 89.391075 -179.934814
-stocker.in[2,6] 143.806396 1179.577271 -363.321136 -88.510201 89.391075 -179.934814
-stocker.in[2,7] 143.919495 1178.729614 -443.316559 -88.510201 89.391075 -179.934814
-stocker.in[2,8] 144.032593 1177.882080 -523.312012 -88.510201 89.391075 -179.934814
-stocker.in[2,9] 144.145630 1177.034546 -603.307434 -88.510201 89.391075 -179.934814
-stocker.in[2,10] 144.258728 1176.187012 -683.302856 -88.510201 89.391075 -179.934814
+stocker.in[2,1] 141.785309 1186.712646 115.621971 -88.225647 89.910507 -179.936432
+stocker.in[2,2] 141.877899 1186.590576 35.622116 -88.225647 89.910507 -179.936432
+stocker.in[2,3] 141.970490 1186.468384 -44.377731 -88.225647 89.910507 -179.936432
+stocker.in[2,4] 142.063080 1186.346191 -124.377594 -88.225647 89.910507 -179.936432
+stocker.in[2,5] 142.155670 1186.224121 -204.377457 -88.225647 89.910507 -179.936432
+stocker.in[2,6] 142.248199 1186.101929 -284.377319 -88.225647 89.910507 -179.936432
+stocker.in[2,7] 142.340790 1185.979736 -364.377197 -88.225647 89.910507 -179.936432
+stocker.in[2,8] 142.433380 1185.857666 -444.377075 -88.225647 89.910507 -179.936432
+stocker.in[2,9] 142.525970 1185.735474 -524.376892 -88.225647 89.910507 -179.936432
+stocker.in[2,10] 142.618561 1185.613281 -604.376770 -88.225647 89.910507 -179.936432
 stocker.in[2,11] 144.371826 1175.339478 -763.298218 -88.510201 89.391075 -179.934814
-stocker.in[3,1] 753.034180 1199.681641 37.349945 -88.510201 89.391075 -179.934814
-stocker.in[3,2] 753.147217 1198.834106 -42.645485 -88.510201 89.391075 -179.934814
-stocker.in[3,3] 753.260376 1197.986572 -122.640915 -88.510201 89.391075 -179.934814
-stocker.in[3,4] 753.373413 1197.139038 -202.636353 -88.510201 89.391075 -179.934814
-stocker.in[3,5] 753.486572 1196.291504 -282.631775 -88.510201 89.391075 -179.934814
-stocker.in[3,6] 753.599609 1195.443970 -362.627228 -88.510201 89.391075 -179.934814
-stocker.in[3,7] 753.712646 1194.596313 -442.622650 -88.510201 89.391075 -179.934814
-stocker.in[3,8] 753.825806 1193.748779 -522.618042 -88.510201 89.391075 -179.934814
-stocker.in[3,9] 753.938843 1192.901245 -602.613464 -88.510201 89.391075 -179.934814
-stocker.in[3,10] 754.052002 1192.053711 -682.608887 -88.510201 89.391075 -179.934814
+stocker.in[3,1] 751.492432 1205.601440 116.298859 -88.225647 89.910507 -179.936432
+stocker.in[3,2] 751.584961 1205.479248 36.299004 -88.225647 89.910507 -179.936432
+stocker.in[3,3] 751.677612 1205.357178 -43.700851 -88.225647 89.910507 -179.936432
+stocker.in[3,4] 751.770142 1205.234985 -123.700714 -88.225647 89.910507 -179.936432
+stocker.in[3,5] 751.862793 1205.112793 -203.700546 -88.225647 89.910507 -179.936432
+stocker.in[3,6] 751.955322 1204.990723 -283.700439 -88.225647 89.910507 -179.936432
+stocker.in[3,7] 752.047974 1204.868530 -363.700256 -88.225647 89.910507 -179.936432
+stocker.in[3,8] 752.140503 1204.746338 -443.700195 -88.225647 89.910507 -179.936432
+stocker.in[3,9] 752.233154 1204.624268 -523.700012 -88.225647 89.910507 -179.936432
+stocker.in[3,10] 752.325684 1204.502075 -603.699890 -88.225647 89.910507 -179.936432
 stocker.in[3,11] 754.165039 1191.206177 -762.604187 -88.510201 89.391075 -179.934814
 stocker.in[4,1] 1362.827393 1215.548462 38.044216 -88.510201 89.391075 -179.934814
 stocker.in[4,2] 1362.940430 1214.700928 -41.951210 -88.510201 89.391075 -179.934814
@@ -13876,72 +13932,72 @@ stocker.in[4,8] 1363.619019 1209.615601 -521.923828 -88.510201 89.391075 -179.93
 stocker.in[4,9] 1363.732056 1208.768066 -601.919250 -88.510201 89.391075 -179.934814
 stocker.in[4,10] 1363.845215 1207.920532 -681.914673 -88.510201 89.391075 -179.934814
 stocker.in[4,11] 1363.958252 1207.072876 -761.910156 -88.510201 89.391075 -179.934814
-stocker.out[1,1] -959.089783 -805.030518 255.382309 0.001567 89.998672 -179.684799
-stocker.out[1,2] -959.087463 -804.480408 155.383820 0.001567 89.998672 -179.684799
-stocker.out[1,3] -959.085205 -803.930298 55.385330 0.001567 89.998672 -179.684799
-stocker.out[1,4] -959.082886 -803.380188 -44.613144 0.001567 89.998672 -179.684799
-stocker.out[1,5] -959.080566 -802.830017 -144.611649 0.001567 89.998672 -179.684799
-stocker.out[1,6] -959.078247 -802.279907 -244.610123 0.001567 89.998672 -179.684799
-stocker.out[1,7] -959.075989 -801.729797 -344.608582 0.001567 89.998672 -179.684799
-stocker.out[1,8] -959.073669 -801.179688 -444.607056 0.001567 89.998672 -179.684799
-stocker.out[1,9] -959.071350 -800.629578 -544.605591 0.001567 89.998672 -179.684799
-stocker.out[1,10] -959.069031 -800.079468 -644.604065 0.001567 89.998672 -179.684799
-stocker.out[1,11] -959.066772 -799.529358 -744.602539 0.001567 89.998672 -179.684799
-stocker.out[1,12] -959.064453 -798.979187 -844.601074 0.001567 89.998672 -179.684799
-stocker.out[1,13] -1160.977539 -736.008484 -855.637085 -179.998795 89.999100 -180.000000
-stocker.out[2,1] -959.103271 -315.037903 258.078003 0.001567 89.998672 -179.684799
-stocker.out[2,2] -959.100952 -314.487793 158.079514 0.001567 89.998672 -179.684799
-stocker.out[2,3] -959.098633 -313.937653 58.081024 0.001567 89.998672 -179.684799
-stocker.out[2,4] -959.096313 -313.387543 -41.917435 0.001567 89.998672 -179.684799
-stocker.out[2,5] -959.094055 -312.837433 -141.915970 0.001567 89.998672 -179.684799
-stocker.out[2,6] -959.091736 -312.287323 -241.914444 0.001567 89.998672 -179.684799
-stocker.out[2,7] -959.089417 -311.737183 -341.912903 0.001567 89.998672 -179.684799
-stocker.out[2,8] -959.087097 -311.187073 -441.911377 0.001567 89.998672 -179.684799
-stocker.out[2,9] -959.084839 -310.636963 -541.909912 0.001567 89.998672 -179.684799
-stocker.out[2,10] -959.082520 -310.086823 -641.908386 0.001567 89.998672 -179.684799
-stocker.out[2,11] -959.080200 -309.536713 -741.906860 0.001567 89.998672 -179.684799
-stocker.out[2,12] -959.077881 -308.986603 -841.905396 0.001567 89.998672 -179.684799
-stocker.out[2,13] -1160.987793 -246.008499 -855.637207 -179.998795 89.999100 -180.000000
-stocker.out[3,1] -959.116699 174.954712 260.773682 0.001567 89.998672 -179.684799
-stocker.out[3,2] -959.114380 175.504822 160.775208 0.001567 89.998672 -179.684799
-stocker.out[3,3] -959.112122 176.054932 60.776718 0.001567 89.998672 -179.684799
-stocker.out[3,4] -959.109802 176.605042 -39.221756 0.001567 89.998672 -179.684799
-stocker.out[3,5] -959.107483 177.155212 -139.220261 0.001567 89.998672 -179.684799
-stocker.out[3,6] -959.105164 177.705322 -239.218735 0.001567 89.998672 -179.684799
-stocker.out[3,7] -959.102905 178.255432 -339.217163 0.001567 89.998672 -179.684799
-stocker.out[3,8] -959.100586 178.805542 -439.215698 0.001567 89.998672 -179.684799
-stocker.out[3,9] -959.098267 179.355652 -539.214233 0.001567 89.998672 -179.684799
-stocker.out[3,10] -959.095947 179.905762 -639.212646 0.001567 89.998672 -179.684799
-stocker.out[3,11] -959.093689 180.455872 -739.211182 0.001567 89.998672 -179.684799
-stocker.out[3,12] -959.091370 181.006042 -839.209717 0.001567 89.998672 -179.684799
-stocker.out[3,13] -1160.998047 243.991501 -855.637329 -179.998795 89.999100 -180.000000
-stocker.out[4,1] -959.130188 664.947266 263.469391 0.001567 89.998672 -179.684799
-stocker.out[4,2] -959.127869 665.497437 163.470901 0.001567 89.998672 -179.684799
-stocker.out[4,3] -959.125549 666.047485 63.472412 0.001567 89.998672 -179.684799
-stocker.out[4,4] -959.123291 666.597656 -36.526077 0.001567 89.998672 -179.684799
-stocker.out[4,5] -959.120972 667.147705 -136.524551 0.001567 89.998672 -179.684799
-stocker.out[4,6] -959.118652 667.697876 -236.523026 0.001567 89.998672 -179.684799
-stocker.out[4,7] -959.116333 668.247925 -336.521484 0.001567 89.998672 -179.684799
-stocker.out[4,8] -959.114075 668.798096 -436.519958 0.001567 89.998672 -179.684799
-stocker.out[4,9] -959.111755 669.348267 -536.518494 0.001567 89.998672 -179.684799
-stocker.out[4,10] -959.109436 669.898315 -636.516968 0.001567 89.998672 -179.684799
-stocker.out[4,11] -959.107117 670.448486 -736.515442 0.001567 89.998672 -179.684799
-stocker.out[4,12] -959.104858 670.998535 -836.514038 0.001567 89.998672 -179.684799
-stocker.out[4,13] -1161.008301 733.991516 -855.637573 -179.998795 89.999100 -180.000000
-stocker.out[5,1] -1161.000488 1223.991943 344.362305 -179.998795 89.999100 -180.000000
-stocker.out[5,2] -1161.001953 1223.991943 244.362305 -179.998795 89.999100 -180.000000
-stocker.out[5,3] -1161.003540 1223.991699 144.362305 -179.998795 89.999100 -180.000000
-stocker.out[5,4] -1161.005005 1223.991699 44.362301 -179.998795 89.999100 -180.000000
-stocker.out[5,5] -1161.006470 1223.991699 -55.637699 -179.998795 89.999100 -180.000000
-stocker.out[5,6] -1161.008057 1223.991699 -155.637695 -179.998795 89.999100 -180.000000
-stocker.out[5,7] -1161.009521 1223.991699 -255.637695 -179.998795 89.999100 -180.000000
-stocker.out[5,8] -1161.011108 1223.991699 -355.637695 -179.998795 89.999100 -180.000000
-stocker.out[5,9] -1161.012573 1223.991699 -455.637695 -179.998795 89.999100 -180.000000
-stocker.out[5,10] -1161.014038 1223.991699 -555.637695 -179.998795 89.999100 -180.000000
-stocker.out[5,11] -1161.015625 1223.991455 -655.637695 -179.998795 89.999100 -180.000000
-stocker.out[5,12] -1161.017090 1223.991455 -755.637695 -179.998795 89.999100 -180.000000
-stocker.out[5,13] -1161.018677 1223.991455 -855.637695 -179.998795 89.999100 -180.000000
-stz.frame 988.154785 -343.346466 108.116516 -172.441833 1.937711 -8.772182
+stocker.out[1,1] -1052.546387 -795.727783 -45.427361 0.430426 89.588951 -179.683609
+stocker.out[1,2] -1051.372070 -794.572571 -145.292877 0.007129 89.661934 -179.680191
+stocker.out[1,3] -1050.288818 -794.017334 -242.360001 0.008705 89.996239 -179.683685
+stocker.out[1,4] -1052.497803 -793.365784 -343.645386 0.001783 89.995987 -179.682617
+stocker.out[1,5] -1052.490845 -792.811829 -443.643860 0.001783 89.995987 -179.682617
+stocker.out[1,6] -1052.483887 -792.257935 -543.642334 0.001783 89.995987 -179.682617
+stocker.out[1,7] -1052.476807 -791.704041 -643.640747 0.001783 89.995987 -179.682617
+stocker.out[1,8] -1052.469849 -791.150146 -743.639282 0.001783 89.995987 -179.682617
+stocker.out[1,9] -1052.462891 -790.596252 -843.637695 0.001783 89.995987 -179.682617
+stocker.out[1,10] -1052.455933 -790.042358 -943.636230 0.001783 89.995987 -179.682617
+stocker.out[1,11] -1052.448853 -789.488403 -1043.634644 0.001783 89.995987 -179.682617
+stocker.out[1,12] -1052.441895 -788.934509 -1143.633179 0.001783 89.995987 -179.682617
+stocker.out[1,13] -1160.977539 -736.008484 -855.637085 -179.998795 89.999100 180.000000
+stocker.out[2,1] -1052.534180 -305.034943 -40.935745 0.001783 89.995987 -179.682617
+stocker.out[2,2] -1052.527222 -304.481049 -140.934204 0.001783 89.995987 -179.682617
+stocker.out[2,3] -1052.520264 -303.927124 -240.932678 0.001783 89.995987 -179.682617
+stocker.out[2,4] -1052.513306 -303.373230 -340.931152 0.001783 89.995987 -179.682617
+stocker.out[2,5] -1052.506226 -302.819336 -440.929626 0.001783 89.995987 -179.682617
+stocker.out[2,6] -1052.499268 -302.265411 -540.928101 0.001783 89.995987 -179.682617
+stocker.out[2,7] -1052.492310 -301.711517 -640.926514 0.001783 89.995987 -179.682617
+stocker.out[2,8] -1052.485352 -301.157623 -740.925049 0.001783 89.995987 -179.682617
+stocker.out[2,9] -1052.478271 -300.603729 -840.923462 0.001783 89.995987 -179.682617
+stocker.out[2,10] -1052.471313 -300.049805 -940.921997 0.001783 89.995987 -179.682617
+stocker.out[2,11] -1052.464355 -299.495911 -1040.920410 0.001783 89.995987 -179.682617
+stocker.out[2,12] -1052.457275 -298.942017 -1140.918945 0.001783 89.995987 -179.682617
+stocker.out[2,13] -1160.987793 -246.008499 -855.637207 -179.998795 89.999100 180.000000
+stocker.out[3,1] -1052.549683 184.957581 -38.221497 0.001783 89.995987 -179.682617
+stocker.out[3,2] -1052.542725 185.511475 -138.219971 0.001783 89.995987 -179.682617
+stocker.out[3,3] -1052.535645 186.065369 -238.218430 0.001783 89.995987 -179.682617
+stocker.out[3,4] -1052.528687 186.619263 -338.216888 0.001783 89.995987 -179.682617
+stocker.out[3,5] -1052.521729 187.173218 -438.215363 0.001783 89.995987 -179.682617
+stocker.out[3,6] -1052.514771 187.727112 -538.213867 0.001783 89.995987 -179.682617
+stocker.out[3,7] -1052.507690 188.281006 -638.212280 0.001783 89.995987 -179.682617
+stocker.out[3,8] -1052.500732 188.834900 -738.210815 0.001783 89.995987 -179.682617
+stocker.out[3,9] -1052.493774 189.388794 -838.209229 0.001783 89.995987 -179.682617
+stocker.out[3,10] -1052.486694 189.942688 -938.207764 0.001783 89.995987 -179.682617
+stocker.out[3,11] -1052.479736 190.496643 -1038.206177 0.001783 89.995987 -179.682617
+stocker.out[3,12] -1052.472778 191.050537 -1138.204712 0.001783 89.995987 -179.682617
+stocker.out[3,13] -1160.998047 243.991501 -855.637329 -179.998795 89.999100 180.000000
+stocker.out[4,1] -1052.565063 674.950073 -35.507252 0.001783 89.995987 -179.682617
+stocker.out[4,2] -1052.558105 675.504028 -135.505707 0.001783 89.995987 -179.682617
+stocker.out[4,3] -1052.551147 676.057861 -235.504181 0.001783 89.995987 -179.682617
+stocker.out[4,4] -1052.544189 676.611816 -335.502655 0.001783 89.995987 -179.682617
+stocker.out[4,5] -1052.537109 677.165649 -435.501129 0.001783 89.995987 -179.682617
+stocker.out[4,6] -1052.530151 677.719604 -535.499634 0.001783 89.995987 -179.682617
+stocker.out[4,7] -1052.523193 678.273438 -635.498047 0.001783 89.995987 -179.682617
+stocker.out[4,8] -1052.516113 678.827393 -735.496460 0.001783 89.995987 -179.682617
+stocker.out[4,9] -1052.509155 679.381348 -835.494995 0.001783 89.995987 -179.682617
+stocker.out[4,10] -1052.502197 679.935181 -935.493408 0.001783 89.995987 -179.682617
+stocker.out[4,11] -1052.495239 680.489136 -1035.491943 0.001783 89.995987 -179.682617
+stocker.out[4,12] -1052.488159 681.042969 -1135.490479 0.001783 89.995987 -179.682617
+stocker.out[4,13] -1161.008301 733.991516 -855.637573 -179.998795 89.999100 180.000000
+stocker.out[5,1] -1161.000488 1223.991943 344.362305 -179.998795 89.999100 180.000000
+stocker.out[5,2] -1161.001953 1223.991943 244.362305 -179.998795 89.999100 180.000000
+stocker.out[5,3] -1161.003540 1223.991699 144.362305 -179.998795 89.999100 180.000000
+stocker.out[5,4] -1161.005005 1223.991699 44.362301 -179.998795 89.999100 180.000000
+stocker.out[5,5] -1161.006470 1223.991699 -55.637699 -179.998795 89.999100 180.000000
+stocker.out[5,6] -1161.008057 1223.991699 -155.637695 -179.998795 89.999100 180.000000
+stocker.out[5,7] -1161.009521 1223.991699 -255.637695 -179.998795 89.999100 180.000000
+stocker.out[5,8] -1161.011108 1223.991699 -355.637695 -179.998795 89.999100 180.000000
+stocker.out[5,9] -1161.012573 1223.991699 -455.637695 -179.998795 89.999100 180.000000
+stocker.out[5,10] -1161.014038 1223.991699 -555.637695 -179.998795 89.999100 180.000000
+stocker.out[5,11] -1161.015625 1223.991455 -655.637695 -179.998795 89.999100 180.000000
+stocker.out[5,12] -1161.017090 1223.991455 -755.637695 -179.998795 89.999100 180.000000
+stocker.out[5,13] -1161.018677 1223.991455 -855.637695 -179.998795 89.999100 180.000000
+stz.frame 988.154785 -343.346466 108.116516 -172.441833 1.937711 -8.772192
 tool.pick[1] -5.960000 -6.028000 171.199997 -113.500000 180.000000 0.000000
 tool.pick[2] -5.960000 -6.028000 171.199997 -113.500000 180.000000 0.000000
 tool.pick[3] -5.960000 -6.028000 171.199997 -113.500000 180.000000 0.000000
@@ -13950,37 +14006,38 @@ tool.pick[5] -5.960000 -6.028000 171.199997 -113.500000 180.000000 0.000000
 tool.pin -85.070000 -205.369995 -19.860001 67.500000 70.000000 0.000000
 .END
 .JOINTS
-#before.outpal 49.146431 33.201904 -110.281738 16.235420 -53.055729 51.668869
+#before.outpal 62.411133 28.136063 -114.655502 9.339873 -56.100311 42.658512
 #before.pos 62.065971 -11.377430 -122.238724 -0.289775 -69.805077 52.576439
 #before.stz 156.298325 -5.104897 -119.705116 -18.823097 -74.563522 -35.173157
 #homep1 -44.998138 -30.843269 -121.243866 0.000000 -90.000000 22.499559
+#homyak -44.998138 -30.843269 -121.243866 0.000000 -90.000000 22.499559
 #pick.in 130.503326 12.590690 -97.431877 -0.818260 -69.914940 -15.682721
 #plb 120.860649 1.281152 -121.462181 -32.857822 60.155643 -127.981834
 #plt 111.817329 21.086079 -96.765480 -25.279980 52.104725 -133.340485
 #pos.pos[4] 84.899872 50.424088 -87.945923 -23.932617 -48.573303 -45.927521
 #post.tare.in 30.800823 -12.718077 -134.300644 0.302695 -78.852997 24.346281
-#post.tare.out -44.259357 -0.774896 -134.428055 -2.135478 -66.283951 17.958624
+#post.tare.out -37.503078 7.653695 -123.335922 -4.558887 -68.644638 12.396273
 #prb 146.296967 26.655985 -89.838234 -54.878906 71.183853 -105.880890
 #prt 134.565048 41.486687 -65.941849 -50.747608 57.059559 -105.200981
-#put.outpal 53.960426 40.250061 -112.267891 16.355391 -45.131153 44.870815
+#put.outpal 66.063728 55.521683 -110.023979 11.797119 -34.001999 34.595959
 #put.stz 136.263840 15.705241 -109.890045 -13.677276 -68.614426 -15.814918
 #tool.pos[1] 138.009109 26.380774 -133.075394 2.785166 -19.660723 -27.889797
 #tool.pos[4] 84.078476 44.192799 -101.346825 -26.757774 -42.315220 -40.994743
 #wait.pick 153.260971 -5.244692 -116.123528 -0.757969 -68.765495 -38.446480
 .END
 .REALS
-a = 0
+a = 180
 capture.grip = 6
 capture.tare = 2
 center.x = 147.8
 center.y = 245.4
 current.gripper = 1
-current.intare = 1
-current.outtare = 4
-cx = 2.3456
-cy = 5.848
+current.intare = 2
+current.outtare = 1
+cx = 198.768
+cy = 128.933
 dbg.tcp = -1
-detail.count = 8
+detail.count = 10
 detail.length = 23.5
 di.ifp.page[1] = 2001
 di.ifp.page[2] = 2002
@@ -14000,7 +14057,7 @@ do.bat.alm = 2010
 do.home1 = 17
 do.work[1] = 18
 do.work[2] = 2102
-full.counter = 10
+full.counter = 6
 grip.180xsh[1] = -8
 grip.180xsh[2] = 0
 grip.180xsh[3] = 0
@@ -14041,7 +14098,7 @@ grip.ysh[6] = 0
 grip.ysh[7] = 0
 grip.ysh[8] = 0
 grip.ysh[9] = 0
-grip.zsh[1] = 6
+grip.zsh[1] = 4
 grip.zsh[2] = 0
 grip.zsh[3] = 0
 grip.zsh[4] = 0
@@ -14059,7 +14116,8 @@ hmi.g180x = -8
 hmi.g180y = 7
 hmi.gx = 4
 hmi.gy = -2.2
-hmi.gz = 6
+hmi.gz = 4
+hmi.obj.id = 4
 hmi.pos = 1
 hmi.pos.pos = 4
 hmi.pospos = 4
@@ -14071,23 +14129,23 @@ hmi.stnew.i = 1
 hmi.stnew.j = 1
 hmi.t.pos = 1
 hmi.tool.no = 1
-hmi.x = 2.2
-hmi.y = 2.2
+hmi.x = 121.5
+hmi.y = 144.731
 intare.count = 2
 intare.i[1] = 1
 intare.i[2] = 1
 intare.j[1] = 1
 intare.j[2] = 2
-ip[1] = 127
-ip[2] = 0
-ip[3] = 0
-ip[4] = 1
+ip[1] = 192
+ip[2] = 168
+ip[3] = 7
+ip[4] = 100
 keep.tool.no = 1
-max.tare.count = 3
-mon.speed = 70
+max.tare.count = 81
+mon.speed = 100
 object.id = 4
 outtare.count = 3
-outtare.i[1] = 3
+outtare.i[1] = 1
 outtare.i[2] = 3
 outtare.i[3] = 3
 outtare.i[4] = 1
@@ -14130,7 +14188,7 @@ start.shift.x = 0
 start.shift.y = 15
 start.shift.z = 0
 start.task = 2001
-tare.counter = 10
+tare.counter = 6
 tcp.calb.dbg = -1
 tcp.connect.tmo = 5
 tcp.dbg = -1
@@ -14142,27 +14200,27 @@ tcp.recv.ena = -1
 tcp.send.dbg = -1
 tcp.send.ena = -1
 tcp.send.tmo = 5
-tcp.socket = 520
+tcp.socket = -34024
 tyterm = 0
 .END
 .STRINGS
-$action = "WaitForPick"
+$action = "WaitingForCommand"
 $command = ""
 $cycle.command = ""
 $detail.type = "312.229.002_1"
 $intare.ids = "3"
-$log.entry[0] = "23:58:04 Put detail to positioner 4"
-$log.entry[1] = "23:58:04 State: PutToPositioner"
-$log.entry[2] = "23:58:06 Wait for new pick. State: WaitForPick"
-$log.entry[3] = "23:58:06 OutPalletChange requested"
-$log.entry[4] = "23:58:06 Return pallet (3, 3) to output stocker."
-$log.entry[5] = "23:58:06 State: ReturnToOutStocker"
-$log.entry[6] = "23:58:08 Take pallet (1, 1) from output stocker."
-$log.entry[7] = "23:58:08 State: TakingFromOutStocker"
-$log.entry[8] = "23:58:09 Wait sensor state. State: WaitOutStockerSensor"
-$log.entry[9] = "23:58:13 Take pallet (1, 1) from output stocker."
-$log.entry[10] = "23:58:13 State: TakingFromOutStocker"
-$log.entry[11] = "23:58:15 Wait for new pick. State: WaitForPick"
-$outtare.ids = "2"
-$tcp.ip = "127.0.0.1"
+$log.entry[0] = "16:10:09 Take pallet (1, 2) from input stocker."
+$log.entry[1] = "16:10:09 State: TakingFromInStocker"
+$log.entry[2] = "16:10:16 Wait sensor state. State: WaitInStockerSensor"
+$log.entry[3] = "16:10:24 Take pallet (1, 2) from input stocker."
+$log.entry[4] = "16:10:24 State: TakingFromInStocker"
+$log.entry[5] = "16:10:33 Wait stz pneumatic close. State: WaitPneumaticClose"
+$log.entry[6] = "16:10:38 Wait for new pick. State: WaitForPick"
+$log.entry[7] = "16:10:48 Wait for new pick. State: WaitForPick"
+$log.entry[8] = "05:40:00 Moving to home position. State: MoveToHome"
+$log.entry[9] = "05:40:00 Main cycle started. State: WaitingForCommand"
+$log.entry[10] = "05:41:37 Moving to home position. State: MoveToHome"
+$log.entry[11] = "05:41:37 Main cycle started. State: WaitingForCommand"
+$outtare.ids = "4"
+$tcp.ip = "192.168.7.100"
 .END

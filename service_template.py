@@ -36,7 +36,7 @@ app.add_middleware(
 @app.get("/health")
 def health():
     """ Проверка работоспособности сервиса """
-    logger.debug("Запрос /health")
+    #logger.debug("Запрос /health")
     return {"Status": "OK"}
 
 @app.post("/reboot")

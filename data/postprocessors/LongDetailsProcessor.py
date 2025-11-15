@@ -27,23 +27,5 @@ def process(frame, yolo_data):
             data.pick_point = (data.pick_point[0], data.pick_point[1] + 0.8*abs(data.keypoints[0][1] - data.keypoints[1][1]))
         logger.debug(f"Угол забора: {data.pick_angle}")
         result.append(data)
-        # if data.keypoints[0].y > data.keypoints[1].y:
-        #     data.pick_angle = 180
-            
-        # else:
-        #     data.pick_angle = 0
-        
-
-        # draw_frame = cv2.circle(draw_frame, (int(center[0]), int(center[1])), int(abs(x1-x2)), (0, 255, 0), 2)
-        
-
-        # # найди все контуры
-        # contours, _ = cv2.findContours(process_frame, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
-        # # нарисуй все контуры
-        # logger.debug(f"Количество контуров: {len(contours)}")
-        # for contour in contours:
-        #     cv2.drawContours(draw_frame, [contour], -1, (0, 255, 0), 2)
-        
-        
-        
+                
     return draw_frame, result

@@ -16,11 +16,11 @@
 .NETCONF     0.0.0.0,"",0.0.0.0,0.0.0.0,0.0.0.0,0.0.0.0,""
 .NETCONF2     0.0.0.0,0.0.0.0,0.0.0.0
 .ROBOTDATA1
-ZROBOT.TYPE    30  10   6   1        -706   RS007L-B001 ( 2025-11-12 20:49 )
+ZROBOT.TYPE    30  10   6   1        -706   RS007L-B001 ( 2025-11-15 05:36 )
 ZSYSTEM         1   5         -91
 ZLINEAR         0   0   0   0   0   0  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1         179
 CONT_CODE     701      -10516
-ZZERO         268466747 268333916 268159364 268435456 268298795 268427089 268435456 268435456 268435456 268435456 268435456 268435456 268435456 268435456 268435456 268435456 268435456 268435456   544241446
+ZZERO         268225989 268450030 268146275 268435457 268493345 268429527 268435456 268435456 268435456 268435456 268435456 268435456 268435456 268435456 268435456 268435456 268435456 268435456   543352606
 ENDLESS_POS   0 100 1       -1516
 LANGUAGE      2
 ZSIGSPEC      256 256 512      -15361
@@ -2354,7 +2354,7 @@ SWITCH AUTOSTART2.PC   OFF
 SWITCH AUTOSTART3.PC   OFF
 SWITCH AUTOSTART4.PC   OFF
 SWITCH AUTOSTART5.PC   OFF
-SWITCH ERRSTART.PC     ON 
+SWITCH ERRSTART.PC     OFF
 SWITCH AUTOSTART.LSQ   OFF
 SWITCH DISPIO_01       OFF
 SWITCH HOLD.STEP       ON 
@@ -2836,13 +2836,40 @@ ROB_EXTERNAL_RESTART          0
 ROB_OP_AFTER_ERROR          0
 MOVING_AREA       0.000     0.000     0.000     0.000     0.000     0.000
 ENC_ALARM              0          0          0          0          0          0
+N_OX1    "release.grip|"
+N_OX2    "capture.grip|"
+N_OX3    "grip.unclamp|"
+N_OX4    "grip.clamp|"
+N_OX17   "do.home1|"
+N_OX18   "do.work[1]|"
 N_OX19   "rs7.working|"
+N_OX20   "rs7.tare.chg|"
 N_OX21   "rs07.fin.ack|"
 N_OX22   "rs07.put.ack|"
+N_WX1    "grip.unclamped|"
+N_WX2    "grip.clamped|"
+N_WX17   "rs13.home1|"
+N_WX18   "rs13.work[1]|"
 N_WX19   "rs13.det.put|"
+N_WX20   "rs13.tare.ack|"
 N_WX21   "rs13.finish|"
+N_INT1    "di.ifp.page[1]|"
+N_INT2    "di.ifp.page[2]|"
+N_INT3    "di.ifp.page[3]|"
+N_INT4    "di.ifp.page[4]|"
+N_INT5    "di.ifp.page[5]|"
+N_INT6    "di.ifp.page[6]|"
+N_INT7    "di.ifp.page[7]|"
+N_INT8    "di.ifp.page[8]|"
+N_INT10   "do.bat.alm|"
+N_INT11   "s.tcp.send.ena|"
+N_INT12   "s.tcp.recv.ena|"
+N_INT13   "s.tcp.ena|"
+N_INT14   "s.apply.coord|"
 N_INT17   "s.in1.disable|"
 N_INT18   "s.in2.disable|"
+N_INT19   "s.measure.ok|"
+N_INT20   "s.measure.ng|"
 N_INT21   "s.vacuum|"
 N_INT24   "s.debug|"
 SENSING_SPEED     10.000     0.000 255
@@ -3166,7 +3193,7 @@ TP_RECINHI      0   0   0
 94,8,"hmi.g180x","GRIPPER N","180X SHIFT",10,15,4,2,0
 100,8,"hmi.gz","GRIPPER N"," Z SHIFT",10,15,4,2,0
 101,8,"hmi.g180y","GRIPPER N","180Y SHIFT",10,15,4,2,0
-104,4,1,"OFF     ON","","","  DEBUG ",10,4,4,2024,0,0
+104,4,1,"OFF     ON","","","  DEBUG ",10,4,4,0,2024,0
 105,2,"","   MAIN","<---------","",10,4,15,2001,0
 107,2,""," APPLY FOR"," N GRIPPER","",10,4,15,2014,0
 .END
