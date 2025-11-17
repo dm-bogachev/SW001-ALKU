@@ -273,6 +273,7 @@ class Background(Thread):
                             logger.debug(response_data)
                             logger.debug(value)
                             logger.debug(resp.status_code)
+                            time.sleep(2)
                             continue
                         #
                         resp = requests.get(f"{IO_API_URL}/input?bit=7", timeout=8)
@@ -284,6 +285,7 @@ class Background(Thread):
                             logger.warning("Пневматика не закрыта (отсутствует сигнал 7 с IO-сервиса)")
                             logger.debug(response_data)
                             logger.debug(resp.status_code)
+                            time.sleep(2)
                             continue
 
                         command = f"PNEUMOCLOSE;"
@@ -319,6 +321,7 @@ class Background(Thread):
                             logger.debug(response_data)
                             logger.debug(value)
                             logger.debug(resp.status_code)
+                            time.sleep(2)
                             continue
                         resp = requests.get(f"{IO_API_URL}/input?bit=6", timeout=8)
                         response_data = resp.json()
@@ -329,6 +332,7 @@ class Background(Thread):
                             logger.warning("Пневматика не закрыта (отсутствует сигнал 6 с IO-сервиса)")
                             logger.debug(response_data)
                             logger.debug(resp.status_code)
+                            time.sleep(2)
                             continue
                         command = f"PNEUMOOPEN;"
                         resp = requests.post(f"{RS013N_API_URL}/send_command?command={command}",
@@ -340,6 +344,23 @@ class Background(Thread):
                             logger.info(f"Команда отправлена на RS013N: {command}")
                         on_action = False
                 
+                if rs13_action.lower() == "waitposfree":
+                    resp = requests.get(f"{IO_API_URL}/input?bit=9", timeout=8)
+                    response_data = resp.json()
+                    value = response_data["Value"] 
+                    if resp.status_code == 200 and value  == 1:
+                        logger.warning("Деталь на позиционере. Ожидай")
+                    else:
+                        command = "ALLOWPUT;"
+                        logger.info("Датчик свободен")
+                        resp = requests.post(f"{RS013N_API_URL}/send_command?command={command}",
+                                            headers={'accept': 'application/json'},
+                                            timeout=1)  # Added timeout
+                        if resp.status_code != 200:
+                            logger.error(f"Ошибка отправки команды на RS013N: {resp.text}")
+                        else:
+                            logger.info(f"Команда отправлена на RS013N: {command}")
+
                 if rs13_action.lower() == "waitforpick":
                     attempts = 1
                     resp = requests.get(f"{CV_API_URL}/get_first_object", timeout=8)
@@ -359,10 +380,11 @@ class Background(Thread):
                             else:
                                 logger.info(f"Данные захвата успешно отправлены на RS013N: x={x}, y={y}, angle={angle}")
                         else:
+                            time.sleep(2)
                             attempts = attempts + 1
                             if attempts <= 2:
                                 command = f"NOPICK;"
-                                command = "ffff"
+                                #command = "ffff"
                                 logger.warning("Нет доступных объектов для захвата от CV-сервиса")
                                 resp = requests.post(f"{RS013N_API_URL}/send_command?command={command}",
                                             headers={'accept': 'application/json'},
@@ -372,7 +394,7 @@ class Background(Thread):
                                 else:
                                     logger.info(f"Команда отправлена на RS013N: {command}")
             
-                time.sleep(4)
+                #time.sleep(4)
             except Exception as e:
                 logger.error("Исключение в потоке Master: ", e)
             time.sleep(0.1)

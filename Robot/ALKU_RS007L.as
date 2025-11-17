@@ -1,41 +1,3 @@
-.AUXDATA
-N_OX1    "release.grip|"
-N_OX2    "capture.grip|"
-N_OX3    "grip.unclamp|"
-N_OX4    "grip.clamp|"
-N_OX17    "do.home1|"
-N_OX18    "do.work[1]|"
-N_OX19    "rs7.working|"
-N_OX20    "rs7.tare.chg|"
-N_OX21    "rs07.fin.ack|"
-N_OX22    "rs07.put.ack|"
-N_WX1    "grip.unclamped|"
-N_WX2    "grip.clamped|"
-N_WX17    "rs13.home1|"
-N_WX18    "rs13.work[1]|"
-N_WX19    "rs13.det.put|"
-N_WX20    "rs13.tare.ack|"
-N_WX21    "rs13.finish|"
-N_INT1    "di.ifp.page[1]|"
-N_INT2    "di.ifp.page[2]|"
-N_INT3    "di.ifp.page[3]|"
-N_INT4    "di.ifp.page[4]|"
-N_INT5    "di.ifp.page[5]|"
-N_INT6    "di.ifp.page[6]|"
-N_INT7    "di.ifp.page[7]|"
-N_INT8    "di.ifp.page[8]|"
-N_INT10    "do.bat.alm|"
-N_INT11    "s.tcp.send.ena|"
-N_INT12    "s.tcp.recv.ena|"
-N_INT13    "s.tcp.ena|"
-N_INT14    "s.apply.coord|"
-N_INT17    "s.in1.disable|"
-N_INT18    "s.in2.disable|"
-N_INT19    "s.measure.ok|"
-N_INT20    "s.measure.ng|"
-N_INT21    "s.vacuum|"
-N_INT24    "s.debug|"
-.END
 .INTER_PANEL_D
 0,9,1,6,15
 6,10,"","PCEXECUTE","AUTOSTART","",10,4,15,1,"PCEXECUTE autostart.pc",0
@@ -160,7 +122,7 @@ N_INT24    "s.debug|"
   END
   ;
   SPEED 250 MM/S
-  ACCURACY 0 FINE
+  ACCURACY 0.02 
   LMOVE #pos.pos[.pos]
   BREAK
   PULSE grip.clamp
@@ -195,7 +157,7 @@ N_INT24    "s.debug|"
   ACCURACY 5
   LMOVE .pos.machine + TRANS (0, 10, 0)
   SPEED 250 MM/S
-  ACCURACY 0 FINE
+  ACCURACY 0.02 
   LMOVE #pos.machine[.pos]
   BREAK
   ;CALL log ("Waiting for vacuum enabled. State: WaitingMMVacuum")
@@ -285,7 +247,7 @@ N_INT24    "s.debug|"
   BREAK
   ;
   SPEED 250 MM/S
-  ACCURACY 0 FINE
+  ACCURACY 0.02 
   LMOVE #defect.pos[.x, .y]
   BREAK
   PULSE grip.unclamp
@@ -325,13 +287,16 @@ N_INT24    "s.debug|"
     END
     IF SIG (rs13.det.put) THEN
       ;SWAIT rs13.det.put
-      PULSE rs07.put.ack, 5
+      PULSE rs07.put.ack, 0.5
       SWAIT -rs13.work[1] ; Wait robot leave zone
       SIGNAL rs7.working
       CALL pos.pick
+      SIGNAL -rs7.working
       CALL measure
       IF SIG (s.measure.ok) THEN
         SIGNAL -s.measure.ok
+        ;SWAIT -rs013.putting
+        SWAIT rs13.det.put
         CALL put.tare
       ELSE
         SIGNAL -rs7.working
@@ -411,7 +376,7 @@ ANY:
   JAPPRO .put, -100
   ACCURACY 5
   LAPPRO .put, -20
-  ACCURACY 0 FINE
+  ACCURACY 0.02 
   SPEED 250 MM/S
   LMOVE .put
   BREAK
@@ -422,9 +387,9 @@ ANY:
   SIGNAL -rs7.working
   ;
   LAPPRO .put, -20
-  LAPPRO .put, -100
+  LAPPRO .put, -200
   ;
-  JMOVE #homyak
+  ;JMOVE #homyak
   
 .END
 .PROGRAM a.teach.pos ()
@@ -544,21 +509,27 @@ ANY:
   grip.clamp = 4
   ;
   ; Dedicated IO
-  do.home1 = 17 ; EIP
-  do.work[1] = 18 ; EIP
+  ;
+  di.hold = 2026
   do.bat.alm = 2010
   ;
   ;
-  rs13.det.put = 1019; EIP
-  rs7.working = 19; EIP
-  rs7.tare.chg = 20
-  rs13.tare.ack = 1020
-  rs13.finish = 1021
-  rs07.fin.ack = 21
-  rs07.put.ack = 22
+  do.home1 = 17 ; 
+  do.work[1] = 18 ; 
+  rs7.working = 19; 
+  rs7.tare.chg = 20 ; Request tare change
+  rs07.fin.ack = 21; NU Task finished
+  rs07.put.ack = 22; I took detail
   ;
-  rs13.home1 = 1017
-  rs13.work[1] = 1018
+  rs13.home1 = 1017;
+  rs13.work[1] = 1018;
+  rs13.det.put = 1019; 
+  rs13.tare.ack = 1020; Wait tare change
+  rs13.finish = 1021; Finish task
+  rs013.putting = 1023;
+  ;rs7.det.picked = 19
+  ;
+  ;
   di.ifp.page[1] = 2001
   di.ifp.page[2] = 2002
   di.ifp.page[3] = 2003
@@ -581,9 +552,18 @@ ANY:
   s.measure.ng = 2020
   s.vacuum = 2021
   s.debug = 2024
+  ;
+  s.lock = 2025
 .END
 .PROGRAM watchdog.pc ()
   WHILE TRUE DO
+    ;
+    ;
+    ; Если мы въехали в зону раньше второго робота
+    ; То ставим лок, пока не уедем
+    SOUT 2025 = 18 AND (NOT 1018 OR 2025)
+    SOUT 2026 = NOT (NOT 2025 AND 1018 AND 18)
+    ;
     IF SIG (s.tcp.ena) THEN
       tcp.ena = tyterm
     ELSE
@@ -1062,9 +1042,9 @@ ANY:
 	; hmi.defect.pos
 	; defect.count
 	; @@@ CONNECTION @@@
-	; KROSET R02
-	; 127.0.0.1
-	; 9205
+	; RS007L
+	; 192.168.7.103
+	; 23
 	; @@@ PROGRAM @@@
 	; Group:Objects:1
 	; 1:id4:F
@@ -1084,6 +1064,7 @@ ANY:
 	; 3:measure:F
 	; .pos.machine 
 	; .pos 
+	; .working 
 	; 3:a.main:F
 	; 3:put.defect:F
 	; .x 
@@ -1146,7 +1127,6 @@ ANY:
 	; .home1 
 	; .work 
 	; .det.put 
-	; .det.picked 
 	; .tare.chg 
 	; .tare.ack 
 	; .disable 
@@ -1245,6 +1225,8 @@ ANY:
 	; rs13.finish 
 	; rs07.fin.ack 
 	; rs07.put.ack 
+	; do.hold 
+	; di.hold 
 	; @@@ TOOLS @@@
 	; tool.pick[] 
 	; @@@ BASE @@@
@@ -1635,7 +1617,7 @@ start.shift.y = 15
 start.shift.z = 0
 max.tare.count = 168
 spc.tare.count = 50
-defect.count = 1
+defect.count = 6
 rs13.finish = 1021
 rs07.fin.ack = 21
 rs07.put.ack = 22
@@ -1700,26 +1682,29 @@ max.in.line = 8.34
 min.spacer = 1.5
 mon.speed = 100
 object.id = 4
-pick.count = 5
+pick.count = 45
 rs7.det.picked = 19
 s.grip.sns1.dis = 2014
 s.grip.sns2.dis = 2015
-tare.lines = 21
+tare.lines = 20
 tare.width = 210
+rs013.putting = 1023
+do.hold = 1024
+di.hold = 2026
 .END
 .STRINGS
 $tcp.ip = "192.168.7.100"
-$action = "WaitingForCommand"
-$log.entry[0] = "15:58:42 Pick detail from positioner 4"
-$log.entry[1] = "15:58:42 State: TakeFromPositioner"
-$log.entry[2] = "15:58:48 Move to measurement machine. State: TakingToMM"
-$log.entry[3] = "15:58:56 Move to measurement machine. State: WaitingMMResult"
-$log.entry[4] = "15:58:56 Move to measurement machine. State: TakingFromMM"
-$log.entry[5] = "15:59:04 Putting to defect. State: PutToDefect "
-$log.entry[6] = "16:00:47 Pick detail from positioner 4"
-$log.entry[7] = "16:00:47 State: TakeFromPositioner"
-$log.entry[8] = "16:02:18 Move to measurement machine. State: TakingToMM"
-$log.entry[9] = "16:02:27 Move to measurement machine. State: WaitingMMResult"
-$log.entry[10] = "16:02:35 Move to measurement machine. State: TakingFromMM"
-$log.entry[11] = "16:02:42 Putting to defect. State: PutToTare "
+$action = "TakingFromMM"
+$log.entry[0] = "17:03:25 Putting to defect. State: PutToTare "
+$log.entry[1] = "17:03:27 Pick detail from positioner 4"
+$log.entry[2] = "17:03:27 State: TakeFromPositioner"
+$log.entry[3] = "17:03:29 Move to measurement machine. State: TakingToMM"
+$log.entry[4] = "17:03:31 Move to measurement machine. State: WaitingMMResult"
+$log.entry[5] = "17:03:36 Move to measurement machine. State: TakingFromMM"
+$log.entry[6] = "17:03:40 Putting to defect. State: PutToTare "
+$log.entry[7] = "17:03:41 Pick detail from positioner 4"
+$log.entry[8] = "17:03:41 State: TakeFromPositioner"
+$log.entry[9] = "17:03:43 Move to measurement machine. State: TakingToMM"
+$log.entry[10] = "17:03:46 Move to measurement machine. State: WaitingMMResult"
+$log.entry[11] = "17:03:47 Move to measurement machine. State: TakingFromMM"
 .END

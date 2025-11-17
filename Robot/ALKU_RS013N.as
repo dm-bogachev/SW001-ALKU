@@ -39,6 +39,8 @@ N_INT21    "s.sensor.ot|"
 N_INT22    "s.pneumo.open|"
 N_INT23    "s.pneumo.close|"
 N_INT24    "s.debug|"
+N_INT26    "di.hold|"
+N_INT27    "s.allow.put|"
 N_INT102    "do.work[2]|"
 .END
 .INTER_PANEL_D
@@ -76,6 +78,7 @@ N_INT102    "do.work[2]|"
 95,8,"hmi.t.pos","TOOL CHANG"," POSITION",10,15,2,1,0
 97,2,"","   OPEN","PNEUMATICS","",10,4,15,2016,0
 98,10,"","","","",10,4,15,3,"$action=waitforpick",0
+99,1,"","","","",10,15,4,15,19,0
 102,8,"hmi.obj.id","  OBJECT","    ID",10,15,2,1,0
 104,4,1,"OFF     ON","","","  DEBUG ",10,4,4,0,2024,0
 105,2,"","   MAIN","<---------","",10,4,15,2001,0
@@ -250,6 +253,8 @@ N_INT102    "do.work[2]|"
       JMOVE #wait.pick
       CALL stz.pick
       SWAIT -rs7.working, -rs7.work[1]
+      ;SWAIT -rs7.work[1]
+      ;SIGNAL rs013.putting
       CALL stz.put (object.id)
       tare.counter = tare.counter + 1
       full.counter = full.counter + 1
@@ -1024,7 +1029,7 @@ ANY:
   ACCURACY 20
   LAPPRO .pick, -30
   SPEED 250 MM/S
-  ACCURACY 0 FINE
+  ACCURACY 0.02 
   LMOVE .pick
   BREAK
   PULSE grip.clamp
@@ -1036,38 +1041,41 @@ ANY:
   LMOVE #wait.pick
   LMOVE #before.pos
 .END
-.PROGRAM stz.put (.pos)
-  ;
-  CALL log ("Waiting for free positioner. State: WaitPosFree")
+.PROGRAM stz.put(.pos)@25/11/17 16:13 #63
+;
+  CALL log("Waiting for free positioner. State: WaitPosFree")
   $action = "WaitPosFree"
-  SWAIT -rs13.det.put
-  ;
-  .$temp = "Put detail to positioner" + $ENCODE (.pos)
-  CALL log (.$temp)
-  CALL log ("State: PutToPositioner")
+  SWAIT s.allow.put, -rs13.det.put
+  SWAIT -rs7.work[1]
+;
+  ;SIGNAL -rs13.det.put
+  .$temp = "Put detail to positioner"+$ENCODE(.pos)
+  CALL log(.$temp)
+  CALL log("State: PutToPositioner")
   $action = "PutToPositioner"
-  ;
+;
   SPEED 100 ALWAYS
   ACCURACY 100 ALWAYS
   TOOL tool.pick[current.gripper]
-  ;
+;
   POINT .temp = #pos.pos[.pos]
   ACCURACY 20
-  JMOVE .temp + TRANS (10, 0, 50)
+  JMOVE .temp+TRANS(10,0,50)
   ACCURACY 5
-  LMOVE .temp + TRANS (10, 0, 20)
+  LMOVE .temp+TRANS(10,0,20)
   BREAK
-  ;
+;
   SPEED 250 MM/S
-  ACCURACY 0 FINE
+  ACCURACY 0.02
   LMOVE #pos.pos[.pos]
   BREAK
   PULSE grip.unclamp
   TWAIT 0.5
-  ;
-  LMOVE .temp + TRANS (0, 0, 200)
+;
+  LMOVE .temp+TRANS(0,0,200)
   SIGNAL rs13.det.put
   LMOVE #before.pos
+;SIGNAL -rs013.putting
   LMOVE #wait.pick
 .END
 .PROGRAM gripper.pick (.pos,.tool.no)
@@ -1093,7 +1101,7 @@ ANY:
   BREAK
   ;
   SPEED 50 MM/S ALWAYS
-  ACCURACY 0 FINE
+  ACCURACY 0.02 
   LMOVE #tool.pos[.pos]
   BREAK
   PULSE capture.grip
@@ -1124,7 +1132,7 @@ ANY:
   BREAK
   ;
   SPEED 50 MM/S ALWAYS
-  ACCURACY 0 FINE
+  ACCURACY 0.02 
   LMOVE #tool.pos[.pos]
   BREAK
   PULSE release.grip
@@ -1145,7 +1153,7 @@ ANY:
   ;
   ;
   ACCURACY 100 ALWAYS
-  SPEED 100 ALWAYS
+  SPEED 20 ALWAYS
   ;
   PULSE release.tare
   ;
@@ -1161,14 +1169,14 @@ ANY:
   ACCURACY 5
   JMOVE stocker.in[.i, .j] + TRANS (0, 0, 50)
   ;
-  ACCURACY 0 FINE
+  ACCURACY 0.02 
   SPEED 250 MM/S
   LMOVE stocker.in[.i, .j]
   BREAK
   PULSE capture.tare
   TWAIT 0.5
   ;
-  ACCURACY 0
+  ACCURACY 0.02 
   SPEED 250 MM/S
   ACCEL 50
   LMOVE stocker.in[.i, .j] + TRANS (20)
@@ -1196,8 +1204,8 @@ ANY:
   ACCURACY 20
   LMOVE .put.stz + TRANS (50)
   ;BREAK
-  ACCURACY 0 FINE
-  SPEED 250 MM/S
+  ACCURACY 0.02 
+  SPEED 100 MM/S
   LMOVE #put.stz
   BREAK
   PULSE release.tare
@@ -1229,7 +1237,7 @@ ANY:
   $action = "ReturnToInStocker"
   ;
   ACCURACY 100 ALWAYS
-  SPEED 100 ALWAYS
+  SPEED 20 ALWAYS
   ;
   PULSE release.tare
   ;
@@ -1259,14 +1267,14 @@ ANY:
   CALL log ("State: ReturnToInStocker")
   $action = "ReturnToInStocker"
   ;
-  ACCURACY 0 FINE
+  ACCURACY 0.02 
   SPEED 250 MM/S
   LMOVE #put.stz
   BREAK
   PULSE capture.tare
   TWAIT 0.5
   ;
-  ACCURACY 0 FINE
+  ACCURACY 0.02 
   SPEED 250 MM/S
   LMOVE .put.stz + TRANS (50)
   ;
@@ -1276,12 +1284,12 @@ ANY:
   LMOVE #post.tare.in
   LMOVE stocker.in[.i, .j] + TRANS (20, 0, 500)
   ;
-  ACCURACY 0 FINE
+  ACCURACY 0.02 
   SPEED 250 MM/S
   LMOVE stocker.in[.i, .j] + TRANS (20)
   BREAK
   ;
-  ACCURACY 0 FINE
+  ACCURACY 0.02 
   SPEED 250 MM/S
   LMOVE stocker.in[.i, .j]
   BREAK
@@ -1303,7 +1311,7 @@ ANY:
   $action = "TakingFromOutStocker"
   ;
   ACCURACY 100 ALWAYS
-  SPEED 100 ALWAYS
+  SPEED 20 ALWAYS
   ;
   PULSE release.tare
   ;
@@ -1320,18 +1328,18 @@ ANY:
   ACCURACY 5
   JMOVE stocker.out[.i, .j] + TRANS (0, 0, 50)
   ;
-  ACCURACY 0 FINE
+  ACCURACY 0.02 
   SPEED 250 MM/S
   LMOVE stocker.out[.i, .j]
   BREAK
   PULSE capture.tare
   TWAIT 0.5
   ;
-  ACCURACY 0 FINE
+  ACCURACY 0.02 
   SPEED 250 MM/S
   LMOVE stocker.out[.i, .j] + TRANS (20)
   ;
-  ACCURACY 0 FINE
+  ACCURACY 0.02 
   SPEED 250 MM/S
   LMOVE stocker.out[.i, .j] + TRANS (20, 0, 40)
   BREAK
@@ -1355,8 +1363,8 @@ ANY:
   LMOVE #before.outpal
   ACCURACY 20
   LMOVE .put.outpal + TRANS (50)
-  ACCURACY 0 FINE
-  SPEED 250 MM/S
+  ACCURACY 0.02 
+  SPEED 100 MM/S
   LMOVE #put.outpal
   BREAK
   PULSE release.tare
@@ -1382,7 +1390,7 @@ ANY:
   $action = "ReturnToOutStocker"
   ;
   ACCURACY 100 ALWAYS
-  SPEED 100 ALWAYS
+  SPEED 20 ALWAYS
   ;
   PULSE release.tare
   ;
@@ -1398,7 +1406,7 @@ ANY:
   ACCURACY 20
   LMOVE .put.outpal + TRANS (, , 50)
   ;
-  ACCURACY 0 FINE
+  ACCURACY 0.02 
   SPEED 250 MM/S
   LMOVE #put.outpal
   BREAK
@@ -1406,7 +1414,7 @@ ANY:
   PULSE capture.tare
   TWAIT 0.5
   ;
-  ACCURACY 0 FINE
+  ACCURACY 0.02 
   SPEED 250 MM/S
   LMOVE .put.outpal + TRANS (50)
   ;
@@ -1416,12 +1424,12 @@ ANY:
   LMOVE #post.tare.out
   LMOVE stocker.out[.i, .j] + TRANS (20, 0, 500)
   ;
-  ACCURACY 0 FINE
+  ACCURACY 0.02 
   SPEED 250 MM/S
   LMOVE stocker.out[.i, .j] + TRANS (20)
   BREAK
   ;
-  ACCURACY 0 FINE
+  ACCURACY 0.02 
   SPEED 250 MM/S
   LMOVE stocker.out[.i, .j]
   BREAK
@@ -1435,6 +1443,12 @@ ANY:
 .END
 .PROGRAM watchdog.pc ()
   WHILE TRUE DO
+        ;
+    ; Если мы въехали в зону раньше второго робота
+    ; То ставим лок, пока не уедем
+    SOUT 2025 = 18 AND (NOT 1018 OR 2025)
+    SOUT 2026 = NOT (NOT 2025 AND 1018 AND 18)
+    ;
     IF SIG (s.tcp.ena) THEN
       tcp.ena = tyterm
     ELSE
@@ -1581,19 +1595,23 @@ ANY:
   ;
   ; Dedicated IO
   do.home1 = 17 ; EIP
-  do.work[1] = 18 ; EIP
+  
+  di.hold = 2026
   do.bat.alm = 2010
   ;
-  rs13.det.put = 19; EIP
-  rs7.working = 1019; EIP
   ;
-  rs7.home1 = 1017 ; EIP
-  rs7.work[1] = 1018 ; EIP
-  rs13.tare.ack = 20
-  rs7.tare.chg = 1020
-  rs13.finish = 21
-  rs07.fin.ack = 1021
+  rs7.home1 = 1017 ; 
+  rs7.work[1] = 1018 ; 
+  rs7.working = 1019; 
+  rs7.tare.chg = 1020; Request tare change
+  rs07.fin.ack = 1021; NU Task finished
   rs07.put.ack = 1022
+  ;
+  do.work[1] = 18 ; 
+  rs13.det.put = 19; I put detail
+  rs13.tare.ack = 20; Tare changed
+  rs13.finish = 21 ; Finish task
+  rs013.putting = 23
   ;
   di.ifp.page[1] = 2001
   di.ifp.page[2] = 2002
@@ -1622,6 +1640,10 @@ ANY:
   s.pneumo.close = 2023
   ;
   s.debug = 2024
+  ;
+  s.lock = 2025
+  s.allow.put = 2027
+  ;di.hold = 2026
 .END
 .PROGRAM get.state.pc (.$state)
   .$state = "SPEED:" + $ENCODE(mon.speed) + ";"
@@ -1839,6 +1861,12 @@ ANY:
     PULSE 2222
   END
   ;
+  ; ALLOWPICK;
+    ;
+  IF INSTR (.$data[1], "ALLOWPUT") THEN
+    PULSE s.allow.put, 2
+  END
+  ;
   ; String format:
   ; RESUME;
   IF INSTR (.$data[1], "RESUME") THEN
@@ -1992,9 +2020,9 @@ ANY:
 	; s.pneumo.open
 	; #homyak
 	; @@@ CONNECTION @@@
-	; KROSET R01
-	; 127.0.0.1
-	; 9105
+	; RS013N
+	; 192.168.7.102
+	; 23
 	; @@@ PROGRAM @@@
 	; Group:Utils:1
 	; 1:a.home:F
@@ -2017,6 +2045,7 @@ ANY:
 	; .work 
 	; .finish 
 	; .fin.ack 
+	; .putting 
 	; 2:process.data:F
 	; .state 
 	; .break 
@@ -2084,6 +2113,7 @@ ANY:
 	; .$temp 
 	; .temp 
 	; .det.put 
+	; .work 
 	; Group:ToolChange:6
 	; 6:gripper.pick:F
 	; .pos 
@@ -2143,7 +2173,6 @@ ANY:
 	; .home1 
 	; .work 
 	; .det.put 
-	; .det.picked 
 	; .tare.ack 
 	; .tare.chg 
 	; .disable 
@@ -2151,6 +2180,7 @@ ANY:
 	; .finish 
 	; .fin.ack 
 	; .put.ack 
+	; .putting 
 	; Group:TCPIP:9
 	; 9:get.state.pc:B
 	; .$state 
@@ -2240,6 +2270,8 @@ ANY:
 	; s.pneumo.close 
 	; s.debug 
 	; rs07.put.ack 
+	; di.hold 
+	; s.allow.put 
 	; @@@ TOOLS @@@
 	; tool.pin 
 	; tool.pick[] 
@@ -2368,8 +2400,8 @@ hmi.st.out.j = 1
 capture.tare = 2
 hmi.gx = 4
 hmi.gy = -2.2
-hmi.x = 121.5
-hmi.y = 144.731
+hmi.x = 176.154
+hmi.y = 200.567
 ip[1] = 192
 ip[2] = 168
 ip[3] = 7
@@ -2389,8 +2421,8 @@ grip.clamp = 4
 grip.unclamp = 3
 center.x = 147.8
 center.y = 245.4
-cx = 198.768
-cy = 128.933
+cx = 219.176
+cy = 255.873
 dist.xn = 0.001
 dist.xp = 0.015
 dist.yn = 0.015
@@ -2398,7 +2430,7 @@ dist.yp = 0.015
 do.bat.alm = 2010
 do.home1 = 17
 do.work[1] = 18
-hmi.a = 0
+hmi.a = 180
 hmi.gz = 4
 hmi.stnew.i = 1
 hmi.stnew.j = 1
@@ -2491,12 +2523,12 @@ current.gripper = 1
 rs7.tare.chg = 1020
 rs13.tare.ack = 20
 dbg.tcp = -1
-detail.count = 10
+detail.count = 50
 gripper.id = 1
 intare.count = 2
 intare.i[1] = 1
 intare.j[1] = 1
-max.tare.count = 81
+max.tare.count = 168
 outtare.count = 3
 outtare.i[1] = 1
 outtare.j[1] = 1
@@ -2508,37 +2540,40 @@ tcp.calb.dbg = -1
 tcp.dbg = -1
 tcp.recv.dbg = -1
 tcp.send.dbg = -1
-current.intare = 2
+current.intare = 1
 current.outtare = 1
-full.counter = 6
+full.counter = 45
 gripper.type = 1
 hmi.pos.pos = 4
 intare.i[2] = 1
 intare.j[2] = 2
 object.id = 4
-tare.counter = 6
+tare.counter = 45
 s.pneumo.open = 2022
 s.pneumo.close = 2023
 s.debug = 2024
 mon.speed = 100
 pick.count = 0
 rs07.put.ack = 1022
+rs013.putting = 23
+di.hold = 2026
+s.allow.put = 2027
 .END
 .STRINGS
 $tcp.ip = "192.168.7.100"
-$action = "WaitForPick"
-$log.entry[0] = "16:09:53 State: ReturnToInStocker"
-$log.entry[1] = "16:09:55 Wait stz pneumatic open. State: WaitPneumaticOpen"
-$log.entry[2] = "16:10:00 Return pallet (1, 1) to input stocker."
-$log.entry[3] = "16:10:00 State: ReturnToInStocker"
-$log.entry[4] = "16:10:09 Take pallet (1, 2) from input stocker."
-$log.entry[5] = "16:10:09 State: TakingFromInStocker"
-$log.entry[6] = "16:10:16 Wait sensor state. State: WaitInStockerSensor"
-$log.entry[7] = "16:10:24 Take pallet (1, 2) from input stocker."
-$log.entry[8] = "16:10:24 State: TakingFromInStocker"
-$log.entry[9] = "16:10:33 Wait stz pneumatic close. State: WaitPneumaticClose"
-$log.entry[10] = "16:10:38 Wait for new pick. State: WaitForPick"
-$log.entry[11] = "16:10:48 Wait for new pick. State: WaitForPick"
+$action = " "
+$log.entry[0] = "17:11:20 Wait for unclamp gripper. State: WaitingGripUnclamped"
+$log.entry[1] = "17:11:22 Waiting for free positioner. State: WaitPosFree"
+$log.entry[2] = "17:11:26 Put detail to positioner 4"
+$log.entry[3] = "17:11:26 State: PutToPositioner"
+$log.entry[4] = "17:11:29 Wait for new pick. State: WaitForPick"
+$log.entry[5] = "17:11:29 Pick detail from stz (220.26326, 255.87288, 180)"
+$log.entry[6] = "17:11:29 State: PickDetail"
+$log.entry[7] = "17:11:30 Wait for unclamp gripper. State: WaitingGripUnclamped"
+$log.entry[8] = "17:11:36 Waiting for free positioner. State: WaitPosFree"
+$log.entry[9] = "17:11:36 Put detail to positioner 4"
+$log.entry[10] = "17:11:36 State: PutToPositioner"
+$log.entry[11] = "17:11:39 Wait for new pick. State: WaitForPick"
 $command = ""
 $detail.type = "312.229.002_1"
 $intare.ids = "3"
