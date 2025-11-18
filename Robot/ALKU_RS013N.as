@@ -285,6 +285,7 @@ N_INT102    "do.work[2]|"
       ELSE
         .keep.pick = FALSE
         SIGNAL rs13.finish
+        SWAIT rs07.fin.ack
       END
     END
   END
@@ -812,7 +813,7 @@ ANY:
     ; Working gripper
     gripper.type = 1
     ; Max objects in output tare
-    max.tare.count = 5;168
+    max.tare.count = 4;168
     spc.tare.count = 50
     ;
     detail.length = 23.5
@@ -1181,14 +1182,14 @@ ANY:
   ACCURACY 5
   JMOVE stocker.in[.i, .j] + TRANS (0, 0, 50)
   ;
-  ACCURACY 0.02 
+  ACCURACY 0.02
   SPEED 250 MM/S
   LMOVE stocker.in[.i, .j]
   BREAK
   PULSE capture.tare
   TWAIT 0.5
   ;
-  ACCURACY 0.02 
+  ACCURACY 0.02
   SPEED 250 MM/S
   ACCEL 50
   LMOVE stocker.in[.i, .j] + TRANS (20)
@@ -1197,10 +1198,14 @@ ANY:
   ACCURACY 0
   LMOVE stocker.in[.i, .j] + TRANS (20, 0, 40)
   BREAK
+  ;
   CALL log ("Wait sensor state. State: WaitInStockerSensor")
-  $action = "WaitInStockerSensor"
-  SWAIT s.sensor.iss
+  WHILE NOT SIG (s.sensor.iss) DO
+    $action = "WaitInStockerSensor"
+    TWAIT 0.5
+  END
   SIGNAL -s.sensor.iss
+  ;
   .$temp = "Take pallet (" + $ENCODE (/L, .i) + ", " + $ENCODE (/L, .j) + ") from input stocker."
   CALL log (.$temp)
   CALL log ("State: TakingFromInStocker")
@@ -1216,7 +1221,7 @@ ANY:
   ACCURACY 20
   LMOVE .put.stz + TRANS (50)
   ;BREAK
-  ACCURACY 0.02 
+  ACCURACY 0.02
   SPEED 100 MM/S
   LMOVE #put.stz
   BREAK
@@ -1269,9 +1274,10 @@ ANY:
   ;
   ;
   CALL log ("Wait stz pneumatic open. State: WaitPneumaticOpen")
-  $action = "WaitPneumaticOpen"
-  SWAIT s.pneumo.open
-  TWAIT 0.5
+  WHILE NOT SIG(s.pneumo.open) DO
+    $action = "WaitPneumaticOpen"
+    TWAIT 0.5
+  END
   SIGNAL -s.pneumo.open
   ;
   .$temp = "Return pallet (" + $ENCODE (/L, .i) + ", " + $ENCODE (/L, .j) + ") to input stocker."
@@ -1340,25 +1346,29 @@ ANY:
   ACCURACY 5
   JMOVE stocker.out[.i, .j] + TRANS (0, 0, 50)
   ;
-  ACCURACY 0.02 
+  ACCURACY 0.02
   SPEED 250 MM/S
   LMOVE stocker.out[.i, .j]
   BREAK
   PULSE capture.tare
   TWAIT 0.5
   ;
-  ACCURACY 0.02 
+  ACCURACY 0.02
   SPEED 250 MM/S
   LMOVE stocker.out[.i, .j] + TRANS (20)
   ;
-  ACCURACY 0.02 
+  ACCURACY 0.02
   SPEED 250 MM/S
   LMOVE stocker.out[.i, .j] + TRANS (20, 0, 40)
   BREAK
+  ;
   CALL log ("Wait sensor state. State: WaitOutStockerSensor")
-  $action = "WaitOutStockerSensor"
-  SWAIT s.sensor.oss
+  WHILE NOT SIG (s.sensor.oss) DO
+    $action = "WaitOutStockerSensor"
+    TWAIT 0.5
+  END
   SIGNAL -s.sensor.oss
+  ;
   .$temp = "Take pallet (" + $ENCODE (/L, .i) + ", " + $ENCODE (/L, .j) + ") from output stocker."
   CALL log (.$temp)
   CALL log ("State: TakingFromOutStocker")
@@ -1375,7 +1385,7 @@ ANY:
   LMOVE #before.outpal
   ACCURACY 20
   LMOVE .put.outpal + TRANS (50)
-  ACCURACY 0.02 
+  ACCURACY 0.02
   SPEED 100 MM/S
   LMOVE #put.outpal
   BREAK
@@ -1455,11 +1465,16 @@ ANY:
 .END
 .PROGRAM watchdog.pc ()
   WHILE TRUE DO
-        ;
+    ;
     ; Если мы въехали в зону раньше второго робота
     ; То ставим лок, пока не уедем
     SOUT 2025 = 18 AND (NOT 1018 OR 2025)
     SOUT 2026 = NOT (NOT 2025 AND 1018 AND 18)
+    ;
+    ;
+    IF TIMER (1) > 10 AND $command == "START" THEN
+      $command = ""
+    END
     ;
     IF SIG (s.tcp.ena) THEN
       tcp.ena = tyterm
@@ -1487,7 +1502,7 @@ ANY:
       hmi.g180y = grip.180ysh[hmi.tool.no]
       keep.tool.no = hmi.tool.no
     END
-    IF SIG(s.apply.coord) THEN
+    IF SIG (s.apply.coord) THEN
       grip.xsh[hmi.tool.no] = hmi.gx
       grip.ysh[hmi.tool.no] = hmi.gy
       grip.zsh[hmi.tool.no] = hmi.gz
@@ -1495,18 +1510,18 @@ ANY:
       grip.180ysh[hmi.tool.no] = hmi.g180y
     END
     ;
-    IF SIG(rs07.put.ack) THEN
+    IF SIG (rs07.put.ack) THEN
       SIGNAL -rs13.det.put
     END
     ;
-    IF SIG(s.open.pneumo) AND NOT SWITCH(CS) THEN
-      $action="WaitPneumaticOpen"
+    IF SIG (s.open.pneumo) AND NOT SWITCH (CS) THEN
+      $action = "WaitPneumaticOpen"
     END
     ;
-    IF SIG(s.close.pneumo) AND NOT SWITCH(CS)  THEN
-      $action="WaitPneumaticClose"
+    IF SIG (s.close.pneumo) AND NOT SWITCH (CS)  THEN
+      $action = "WaitPneumaticClose"
       TWAIT 1
-      $action="None"
+      $action = "None"
     END
     ;
     IF TASK (1002) <> 1 THEN
@@ -1518,10 +1533,10 @@ ANY:
       TWAIT 2
     END
     ;
-    IF NOT SIG(s.debug) THEN
-      IF SWITCH(REPEAT) AND NOT SWITCH(TEACH_LOCK) AND NOT SWITCH(EMERGENCY) AND NOT SWITCH(CS) AND NOT SWITCH(ERROR) THEN
-        MC ZPOWER ON 
-        WAIT SWITCH(POWER)
+    IF NOT SIG (s.debug) THEN
+      IF SWITCH (REPEAT) AND NOT SWITCH (TEACH_LOCK) AND NOT SWITCH (EMERGENCY) AND NOT SWITCH (CS) AND NOT SWITCH (ERROR) THEN
+        MC ZPOWER ON
+        WAIT SWITCH (POWER)
         ;
         MC CONTINUE
       END
@@ -1812,6 +1827,7 @@ ANY:
     hmi.x = -1
     hmi.y = -1
     $command = "START"
+    TIMER 1 = 0
   END
   ;
   ; String format:
@@ -1888,13 +1904,13 @@ ANY:
   END
   ; PNEUMOOPEN;
   IF INSTR (.$data[1], "PNEUMOOPEN") THEN
-    ;$action = " "
+    $action = " "
     PULSE s.pneumo.open, 5
   END
   ;
   ; PNEUMOCLOSE;
   IF INSTR (.$data[1], "PNEUMOCLOSE") THEN
-    ;$action = " "
+    $action = " "
     PULSE s.pneumo.close, 5
   END
   ;
@@ -2365,9 +2381,9 @@ stocker.out[3,12] -1031.946777 190.905212 -850.542236 0.430718 89.588928 -179.68
 stocker.out[4,1] -1043.495483 674.746399 252.120209 0.430718 89.588928 -179.683395
 stocker.out[4,2] -1042.782227 675.304382 152.124298 0.430718 89.588928 -179.683395
 stocker.out[4,3] -1042.068970 675.862244 52.128418 0.430718 89.588928 -179.683395
-stocker.out[4,4] -1067.613037 672.028992 -47.517174 0.294382 89.588638 -179.682312
-stocker.out[4,5] -1066.526123 671.564148 -148.520462 0.480605 89.581970 -179.688034
-stocker.out[4,6] -1065.214722 671.370239 -247.958435 0.419525 89.355240 -179.687180
+stocker.out[4,4] -1089.269897 675.309509 -48.238235 2.141467 89.577538 -179.808044
+stocker.out[4,5] -1087.651245 674.424194 -150.077835 2.117664 89.176361 -179.699219
+stocker.out[4,6] -1086.889648 674.501465 -250.068161 2.092799 89.346794 -179.705933
 stocker.out[4,7] -1039.215942 678.094055 -347.855194 0.430718 89.588928 -179.683395
 stocker.out[4,8] -1038.502686 678.651917 -447.851105 0.430718 89.588928 -179.683395
 stocker.out[4,9] -1037.789429 679.209900 -547.846924 0.430718 89.588928 -179.683395
@@ -2405,12 +2421,12 @@ stz.frame 988.154785 -343.346466 108.116516 -172.441833 1.937711 -8.772194
 hmi.st.in.i = 2
 hmi.st.in.j = 4
 hmi.st.out.i = 4
-hmi.st.out.j = 4
+hmi.st.out.j = 6
 capture.tare = 2
 hmi.gx = 4
 hmi.gy = -2.2
-hmi.x = 156.47
-hmi.y = 292.199
+hmi.x = -1
+hmi.y = -1
 ip[1] = 192
 ip[2] = 168
 ip[3] = 7
@@ -2430,8 +2446,8 @@ grip.clamp = 4
 grip.unclamp = 3
 center.x = 147.8
 center.y = 245.4
-cx = 156.47
-cy = 291.497
+cx = 138.612
+cy = 310.251
 dist.xn = 0.001
 dist.xp = 0.015
 dist.yn = 0.015
@@ -2532,12 +2548,12 @@ current.gripper = 1
 rs7.tare.chg = 1020
 rs13.tare.ack = 20
 dbg.tcp = -1
-detail.count = 100
+detail.count = 10
 gripper.id = 1
 intare.count = 2
 intare.i[1] = 2
 intare.j[1] = 3
-max.tare.count = 5
+max.tare.count = 4
 outtare.count = 3
 outtare.i[1] = 4
 outtare.j[1] = 4
@@ -2572,7 +2588,7 @@ outtare.i[2] = 4
 outtare.i[3] = 4
 outtare.j[2] = 5
 outtare.j[3] = 6
-picked = -1
+picked = 0
 rs07.fin.ack = 1021
 rs13.finish = 21
 rs7.det.picked = 1019
@@ -2584,22 +2600,22 @@ start.shift.z = 0
 .END
 .STRINGS
 $tcp.ip = "192.168.7.100"
-$action = "WaitingGripUnclamped"
-$log.entry[0] = "12:36:51 Take pallet (4, 4) from output stocker."
-$log.entry[1] = "12:36:51 State: TakingFromOutStocker"
-$log.entry[2] = "12:37:00 Take pallet (2, 3) from input stocker."
-$log.entry[3] = "12:37:00 State: TakingFromInStocker"
-$log.entry[4] = "12:37:06 Wait sensor state. State: WaitInStockerSensor"
-$log.entry[5] = "12:37:09 Take pallet (2, 3) from input stocker."
-$log.entry[6] = "12:37:09 State: TakingFromInStocker"
-$log.entry[7] = "12:37:15 Wait stz pneumatic close. State: WaitPneumaticClose"
-$log.entry[8] = "12:37:24 Wait for new pick. State: WaitForPick"
-$log.entry[9] = "12:38:23 Pick detail from stz (156.46962, 292.19913, 0)"
-$log.entry[10] = "12:38:23 State: PickDetail"
-$log.entry[11] = "12:38:23 Wait for unclamp gripper. State: WaitingGripUnclamped"
+$action = "WaitOutStockerSensor"
+$log.entry[0] = "16:07:48 Main cycle started. State: WaitingForCommand"
+$log.entry[1] = "16:09:29 Received START command. State: StartingProgram"
+$log.entry[2] = "16:09:29 Processing in 5 cell"
+$log.entry[3] = "16:09:29 Row: 3 Col: 1"
+$log.entry[4] = "16:09:29 Row: 4 Col: 2"
+$log.entry[5] = "16:09:29 Processing out 5 cell"
+$log.entry[6] = "16:09:29 Row: 4 Col: 4"
+$log.entry[7] = "16:09:29 Row: 5 Col: 4"
+$log.entry[8] = "16:09:29 Row: 6 Col: 4"
+$log.entry[9] = "16:09:29 Take pallet (4, 4) from output stocker."
+$log.entry[10] = "16:09:30 State: TakingFromOutStocker"
+$log.entry[11] = "16:09:32 Wait sensor state. State: WaitOutStockerSensor"
 $command = ""
-$detail.type = "312.229.002_1"
+$detail.type = "312.229.002"
 $intare.ids = "5"
 $outtare.ids = "5"
-$cycle.command = "PICK"
+$cycle.command = "NOPICK"
 .END

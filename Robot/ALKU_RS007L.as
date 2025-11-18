@@ -102,7 +102,7 @@ N_INT26    "di.hold|"
 ; Working gripper
   gripper.type = 1
 ; Max objects in output tare
-  max.tare.count = 5;168
+  max.tare.count = 4;168
   spc.tare.count = 50
 ;
   detail.length = 23.5
@@ -349,10 +349,14 @@ N_INT26    "di.hold|"
         ;SWAIT -rs013.putting
         IF NOT .changed THEN
           SWAIT rs13.det.put
+          CALL put.tare
         ELSE
+          SWAIT rs13.tare.ack
+          CALL put.tare
+          JMOVE #homyak
           .changed = FALSE
         END
-          CALL put.tare
+          ;CALL put.tare
         ELSE
           SIGNAL -rs7.working
           SIGNAL -s.measure.ng
@@ -619,6 +623,12 @@ ANY:
     SOUT 2025 = 18 AND (NOT 1018 OR 2025)
     SOUT 2026 = NOT (NOT 2025 AND 1018 AND 18)
     ;
+    ;
+    IF TIMER (1) > 10 AND $command == "START" THEN
+      $command = ""
+    END
+    ;
+    ;
     IF SIG (s.tcp.ena) THEN
       tcp.ena = tyterm
     ELSE
@@ -804,6 +814,7 @@ ANY:
     .$temp = $DECODE (.$data[1], ";", 1)
     $outtare.ids = $DECODE (.$data[1], ";", 0)
     $command = "START"
+    TIMER 1 = 0
   END
   ;
   ; String format:
@@ -841,13 +852,13 @@ ANY:
       SIGNAL s.measure.ng
     END
   END
-    ;
+  ;
   IF INSTR (.$data[1], "SPEED") THEN
     .$temp = $DECODE (.$data[1], ";", 0)
     .$temp = $DECODE (.$data[1], ";", 1)
     .$spd = $DECODE (.$data[1], ";", 0)
-    mon.speed = VAL(.$spd)
-    MON_SPEED(mon.speed)
+    mon.speed = VAL (.$spd)
+    MON_SPEED (mon.speed)
   END
   ;
   ; String format:
@@ -1665,7 +1676,7 @@ s.apply.coord = 2014
 start.shift.x = 0
 start.shift.y = 15
 start.shift.z = 0
-max.tare.count = 168
+max.tare.count = 4
 spc.tare.count = 50
 defect.count = 6
 rs13.finish = 1021
@@ -1732,7 +1743,7 @@ max.in.line = 8.34
 min.spacer = 1.5
 mon.speed = 100
 object.id = 4
-pick.count = 45
+pick.count = 0
 rs7.det.picked = 19
 s.grip.sns1.dis = 2014
 s.grip.sns2.dis = 2015
@@ -1744,17 +1755,17 @@ di.hold = 2026
 .END
 .STRINGS
 $tcp.ip = "192.168.7.100"
-$action = "TakingFromMM"
-$log.entry[0] = "17:03:25 Putting to defect. State: PutToTare "
-$log.entry[1] = "17:03:27 Pick detail from positioner 4"
-$log.entry[2] = "17:03:27 State: TakeFromPositioner"
-$log.entry[3] = "17:03:29 Move to measurement machine. State: TakingToMM"
-$log.entry[4] = "17:03:31 Move to measurement machine. State: WaitingMMResult"
-$log.entry[5] = "17:03:36 Move to measurement machine. State: TakingFromMM"
-$log.entry[6] = "17:03:40 Putting to defect. State: PutToTare "
-$log.entry[7] = "17:03:41 Pick detail from positioner 4"
-$log.entry[8] = "17:03:41 State: TakeFromPositioner"
-$log.entry[9] = "17:03:43 Move to measurement machine. State: TakingToMM"
-$log.entry[10] = "17:03:46 Move to measurement machine. State: WaitingMMResult"
-$log.entry[11] = "17:03:47 Move to measurement machine. State: TakingFromMM"
+$action = "StartingProgram"
+$log.entry[0] = "15:48:45 Move to measurement machine. State: TakingFromMM"
+$log.entry[1] = "15:48:49 Putting to defect. State: PutToTare "
+$log.entry[2] = "15:48:51 Pick detail from positioner 4"
+$log.entry[3] = "15:48:52 State: TakeFromPositioner"
+$log.entry[4] = "15:48:54 Move to measurement machine. State: TakingToMM"
+$log.entry[5] = "15:48:58 Move to measurement machine. State: WaitingMMResult"
+$log.entry[6] = "15:59:59 Moving to home position. State: MoveToHome"
+$log.entry[7] = "16:00:07 Main cycle started. State: WaitingForCommand"
+$log.entry[8] = "16:00:07 Received START command. State: StartingProgram"
+$log.entry[9] = "16:00:20 Moving to home position. State: MoveToHome"
+$log.entry[10] = "16:00:20 Main cycle started. State: WaitingForCommand"
+$log.entry[11] = "16:01:22 Received START command. State: StartingProgram"
 .END

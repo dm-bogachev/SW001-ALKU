@@ -390,6 +390,7 @@ class Background(Thread):
                                 logger.error(f"Ошибка отправки данных захвата на RS013N: {resp.text}")
                             else:
                                 logger.info(f"Данные захвата успешно отправлены на RS013N: x={x}, y={y}, angle={angle}")
+                            time.sleep(2)
                         else:
                             time.sleep(2)
                             self.attempts = self.attempts + 1
