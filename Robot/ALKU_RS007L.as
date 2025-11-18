@@ -1,3 +1,43 @@
+.AUXDATA
+N_OX1    "release.grip|"
+N_OX2    "capture.grip|"
+N_OX3    "grip.unclamp|"
+N_OX4    "grip.clamp|"
+N_OX17    "do.home1|"
+N_OX18    "do.work[1]|"
+N_OX19    "rs7.working|"
+N_OX20    "rs7.tare.chg|"
+N_OX21    "rs07.fin.ack|"
+N_OX22    "rs07.put.ack|"
+N_WX1    "grip.unclamped|"
+N_WX2    "grip.clamped|"
+N_WX17    "rs13.home1|"
+N_WX18    "rs13.work[1]|"
+N_WX19    "rs13.det.put|"
+N_WX20    "rs13.tare.ack|"
+N_WX21    "rs13.finish|"
+N_WX24    "do.hold|"
+N_INT1    "di.ifp.page[1]|"
+N_INT2    "di.ifp.page[2]|"
+N_INT3    "di.ifp.page[3]|"
+N_INT4    "di.ifp.page[4]|"
+N_INT5    "di.ifp.page[5]|"
+N_INT6    "di.ifp.page[6]|"
+N_INT7    "di.ifp.page[7]|"
+N_INT8    "di.ifp.page[8]|"
+N_INT10    "do.bat.alm|"
+N_INT11    "s.tcp.send.ena|"
+N_INT12    "s.tcp.recv.ena|"
+N_INT13    "s.tcp.ena|"
+N_INT14    "s.apply.coord|"
+N_INT17    "s.in1.disable|"
+N_INT18    "s.in2.disable|"
+N_INT19    "s.measure.ok|"
+N_INT20    "s.measure.ng|"
+N_INT21    "s.vacuum|"
+N_INT24    "s.debug|"
+N_INT26    "di.hold|"
+.END
 .INTER_PANEL_D
 0,9,1,6,15
 6,10,"","PCEXECUTE","AUTOSTART","",10,4,15,1,"PCEXECUTE autostart.pc",0
@@ -62,7 +102,7 @@
 ; Working gripper
   gripper.type = 1
 ; Max objects in output tare
-  max.tare.count = 168
+  max.tare.count = 5;168
   spc.tare.count = 50
 ;
   detail.length = 23.5
@@ -157,7 +197,7 @@
   ACCURACY 5
   LMOVE .pos.machine + TRANS (0, 10, 0)
   SPEED 250 MM/S
-  ACCURACY 0.02 
+  ACCURACY 0.5 
   LMOVE #pos.machine[.pos]
   BREAK
   ;CALL log ("Waiting for vacuum enabled. State: WaitingMMVacuum")
@@ -188,7 +228,7 @@
   ACCURACY 5
   LMOVE .pos.machine + TRANS (0, 10, 0)
   SPEED 250 MM/S
-  ACCURACY 0 FINE
+  ACCURACY 0.5
   LMOVE #pos.machine[.pos]
   BREAK
   PULSE grip.clamp
@@ -275,6 +315,8 @@
   tare.put.count = 0
   ;
   .keep.pick = TRUE
+  .wait.ack = FALSE
+  .changed = FALSE
   ;
   WHILE .keep.pick DO
     IF tare.put.count == max.tare.count THEN
@@ -282,6 +324,7 @@
       SIGNAL rs7.tare.chg
       SWAIT rs13.tare.ack
       SIGNAL -rs7.tare.chg
+      .wait.ack = TRUE
       tare.put.count = 0
       ;
     END
@@ -291,33 +334,45 @@
       SWAIT -rs13.work[1] ; Wait robot leave zone
       SIGNAL rs7.working
       CALL pos.pick
+      IF .wait.ack THEN
+        .wait.ack = FALSE
+        SIGNAL -rs7.working
+        SWAIT rs13.tare.ack
+        SIGNAL rs7.working
+        SIGNAL -rs7.tare.chg
+        .changed = TRUE
+      END
       SIGNAL -rs7.working
       CALL measure
       IF SIG (s.measure.ok) THEN
         SIGNAL -s.measure.ok
         ;SWAIT -rs013.putting
-        SWAIT rs13.det.put
-        CALL put.tare
-      ELSE
-        SIGNAL -rs7.working
-        SIGNAL -s.measure.ng
-        CALL put.defect
+        IF NOT .changed THEN
+          SWAIT rs13.det.put
+        ELSE
+          .changed = FALSE
+        END
+          CALL put.tare
+        ELSE
+          SIGNAL -rs7.working
+          SIGNAL -s.measure.ng
+          CALL put.defect
+        END
+        ;
       END
       ;
+      IF SIG (rs13.finish) THEN
+        PULSE rs07.fin.ack
+        .keep.pick = FALSE
+      END
     END
+    ;CALL measure
     ;
-    IF SIG (rs13.finish) THEN
-      PULSE rs07.fin.ack
-      .keep.pick = FALSE
-    END
-  END
-  ;CALL measure
-  ;
 .END
 .PROGRAM process.data (.state)
   ;
   SCASE $detail.type OF
-    SVALUE "312.229.002_1":
+    SVALUE "312.229.002":
       CALL id4
       .state = TRUE
       RETURN
@@ -1035,12 +1090,6 @@ ANY:
 	; ALKU_RS007L
 	; @@@ HISTORY @@@
 	; @@@ INSPECTION @@@
-	; tcp.socket
-	; tcp.port
-	; ip[1]
-	; tcp.connect.tmo
-	; hmi.defect.pos
-	; defect.count
 	; @@@ CONNECTION @@@
 	; RS007L
 	; 192.168.7.103
@@ -1134,6 +1183,7 @@ ANY:
 	; .finish 
 	; .fin.ack 
 	; .put.ack 
+	; .putting 
 	; 5:watchdog.pc:B
 	; 5:autostart.pc:B
 	; 0:errstart.pc:B

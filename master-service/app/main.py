@@ -60,7 +60,7 @@ def reboot():
     threading.Thread(target=delayed_exit).start()
     return {"Status": "Reboot"}
 
-@app.post("/master/start")
+@app.post("/start")
 def start_process(request: ProcessRequest):
     """ Запуск процесса """
     logger.debug(f"Запрос /master/start ({request.ProductName}: {request.ProductCount}, {request.InTareIDs}, {request.OutTareIDs})")
@@ -71,7 +71,7 @@ def start_process(request: ProcessRequest):
                 }
     return {"Status": "OK"}    
 
-@app.post("/master/sensor_state")
+@app.post("/sensor_state")
 def set_sensor_state(request: SensorState):
     """ Получение информации  о статусе сенсоров"""
     valid_settings = ["stockerouttaresensor", 
@@ -92,7 +92,7 @@ def set_sensor_state(request: SensorState):
                 }
     return {"Status": "OK"}
     
-@app.post("/master/measurement_result")
+@app.post("/measurement_result")
 def set_measurement_result(result: bool):
     """ Получение результата измерений """
     logger.debug(f"Запрос /master/measurement_result")
@@ -103,7 +103,7 @@ def set_measurement_result(result: bool):
                 }
     return {"Status": "OK"}
 
-@app.post("/master/pause")
+@app.post("/pause")
 def pause_process():
     """ Пауза процесса """
     logger.debug("Запрос /master/pause")
@@ -114,7 +114,7 @@ def pause_process():
                 }
     return {"Status": "OK"}
 
-@app.post("/master/resume")
+@app.post("/resume")
 def resume_process():
     """ Возобновление процесса """
     logger.debug("Запрос /master/resume")
@@ -125,7 +125,7 @@ def resume_process():
                 }
     return {"Status": "OK"}
 
-@app.post("/master/stop")
+@app.post("/stop")
 def stop_process():
     """ Остановка процесса """
     logger.debug("Запрос /master/stop")
@@ -136,7 +136,7 @@ def stop_process():
                 }
     return {"Status": "OK"}
 
-@app.post("/master/check_etalon")
+@app.post("/check_etalon")
 def check_etalon(etalon_id: int):
     """ Проверка эталона """
     logger.debug("Запрос /master/check_etalon")
@@ -147,7 +147,7 @@ def check_etalon(etalon_id: int):
                 }
     return {"Status": "OK"}
 
-@app.post("/master/set_speed")
+@app.post("/set_speed")
 def set_speed(speed: int):
     """ Установка скорости робота """
     logger.debug("Запрос /master/set_speed")
@@ -163,7 +163,7 @@ def set_speed(speed: int):
                 }
     return {"Status": "OK"}
 
-@app.post("/master/debug/intare_sensor_ok")
+@app.post("/debug/intare_sensor_ok")
 def debug_intare_sensor_ok():
     """ Отладка: сигнал сенсора входных тар """
     logger.debug("Запрос /master/debug/intare_sensor_ok")
@@ -174,7 +174,7 @@ def debug_intare_sensor_ok():
                 }
     return {"Status": "OK"}
 
-@app.post("/master/debug/outtare_sensor_ok")
+@app.post("/debug/outtare_sensor_ok")
 def debug_outtare_sensor_ok():
     """ Отладка: сигнал сенсора выходных тар """
     logger.debug("Запрос /master/debug/outtare_sensor_ok")
@@ -185,7 +185,7 @@ def debug_outtare_sensor_ok():
                 }
     return {"Status": "OK"}
 
-@app.post("/master/debug/pneumo_open")
+@app.post("/debug/pneumo_open")
 def debug_pneumo_open():
     """ Отладка: сигнал пневматики """
     logger.debug("Запрос /master/debug/pneumo_open")
@@ -196,7 +196,7 @@ def debug_pneumo_open():
                 }
     return {"Status": "OK"}
 
-@app.post("/master/debug/pneumo_close")
+@app.post("/debug/pneumo_close")
 def debug_pneumo_close():
     """ Отладка: сигнал пневматики """
     logger.debug("Запрос /master/debug/pneumo_close")
@@ -208,7 +208,7 @@ def debug_pneumo_close():
     return {"Status": "OK"}
 
 
-@app.get("/master/data")
+@app.get("/data")
 def get_data():
     """ Получение собранных данных """
     logger.debug("Запрос /master/data")

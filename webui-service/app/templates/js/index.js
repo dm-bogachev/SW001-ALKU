@@ -625,7 +625,7 @@ async function updateObjectsList() {
             console.log(`Отправка данных о точке захвата: x=${x}, y=${y}, angle=${angle}`);
             // Check if commands should be sent
             const sendCommandsSwitch = document.getElementById('send-commands-switch');
-            if (!sendCommandsSwitch || !sendCommandsSwitch.checked) {
+            if (!sendCommandsSwitch || sendCommandsSwitch.checked) {
                 console.log('Command sending is disabled');
                 return;
             }

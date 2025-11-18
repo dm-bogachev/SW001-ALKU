@@ -62,9 +62,13 @@ class Background(Thread):
         self.__stop_event = Event()
         self.collector = data_collector
         self.daemon = True  # не блокировать завершение процесса при незакрытом потоке
+        self.first_pick = True
+        self.attempts = 0
 
     def start_process(self, ProductName: str, ProductCount: int, InTareIDs: list, OutTareIDs: list):
+        
         failed = False
+
         command = f"START;{ProductName};{ProductCount};"
         if InTareIDs:
             command += ",".join(str(id) for id in InTareIDs)
@@ -90,6 +94,7 @@ class Background(Thread):
         else:
             logger.info(f"Команда отправлена на RS007L: {command}")
 
+        self.first_pick = True
         return not failed
 
     def set_speed(self, speed: int):
@@ -232,7 +237,6 @@ class Background(Thread):
 
         return not failed
 
-
     def stop(self):
         """Корректно остановить поток из внешнего кода."""
         self.__stop_event.set()
@@ -296,6 +300,7 @@ class Background(Thread):
                             logger.error(f"Ошибка отправки команды на RS013N: {resp.text}")
                         else:
                             logger.info(f"Команда отправлена на RS013N: {command}")
+                        #time.sleep(5)
                 
                 if rs13_action.lower() == "waitpneumaticopen":
                     while True:
@@ -321,7 +326,7 @@ class Background(Thread):
                             logger.debug(response_data)
                             logger.debug(value)
                             logger.debug(resp.status_code)
-                            time.sleep(2)
+                            time.sleep(1)
                             continue
                         resp = requests.get(f"{IO_API_URL}/input?bit=6", timeout=8)
                         response_data = resp.json()
@@ -332,7 +337,7 @@ class Background(Thread):
                             logger.warning("Пневматика не закрыта (отсутствует сигнал 6 с IO-сервиса)")
                             logger.debug(response_data)
                             logger.debug(resp.status_code)
-                            time.sleep(2)
+                            time.sleep(1)
                             continue
                         command = f"PNEUMOOPEN;"
                         resp = requests.post(f"{RS013N_API_URL}/send_command?command={command}",
@@ -362,11 +367,17 @@ class Background(Thread):
                             logger.info(f"Команда отправлена на RS013N: {command}")
 
                 if rs13_action.lower() == "waitforpick":
-                    attempts = 1
+                    
+                    ###
                     resp = requests.get(f"{CV_API_URL}/get_first_object", timeout=8)
                     if resp.status_code == 200:
+                        if self.first_pick:
+                            self.first_pick = False
+                            #time.sleep(2)
+                            continue
                         data = resp.json()
                         if data.get("Status") == "OK" and "Object" in data:
+                            self.attempts = 0
                             pick_object = data["Object"]
                             x = pick_object["pick_point"][0]
                             y = pick_object["pick_point"][1]
@@ -381,8 +392,8 @@ class Background(Thread):
                                 logger.info(f"Данные захвата успешно отправлены на RS013N: x={x}, y={y}, angle={angle}")
                         else:
                             time.sleep(2)
-                            attempts = attempts + 1
-                            if attempts <= 2:
+                            self.attempts = self.attempts + 1
+                            if self.attempts  <= 2:
                                 command = f"NOPICK;"
                                 #command = "ffff"
                                 logger.warning("Нет доступных объектов для захвата от CV-сервиса")

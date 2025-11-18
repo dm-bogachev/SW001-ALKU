@@ -7,7 +7,7 @@
         "LongDetails": {
             "ModelName": "LongDetails",
             "ModelFileName": "details_long_test.pt",
-            "ConfidenceThreshold": 0.7,
+            "ConfidenceThreshold": 0.5,
             "ModelType": "yolo-pose",
             "ModelProcessor": "LongDetailsProcessor.py"
         },
@@ -69,7 +69,7 @@
         "ExposureValue": 4000
     },
     "Process": {
-        "ProcessingDelay": 3.0,
+        "ProcessingDelay": 0.0,
         "LastModel": "LongDetails",
         "FirstObjectCriteria": "Probability"
     },
