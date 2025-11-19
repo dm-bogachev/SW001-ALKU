@@ -41,7 +41,7 @@
         }
     },
     "Display": {
-        "BBOX": true,
+        "BBOX": false,
         "COORDINATES": true,
         "KEYPOINTS": false,
         "LABELS": false,

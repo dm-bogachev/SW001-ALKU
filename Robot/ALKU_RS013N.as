@@ -171,6 +171,8 @@ N_INT102    "do.work[2]|"
   ;
   SPEED 100 ALWAYS
   ACCURACY 100 ALWAYS
+    ACCEL 100 ALWAYS
+  DECEL 100 ALWAYS
   ;
   RESET
   ;
@@ -231,13 +233,14 @@ N_INT102    "do.work[2]|"
   .keep.pick = TRUE
   picked = FALSE
   ;
+  BREAK
   $action = "WaitForPick"
   CALL log ("Wait for new pick. State: WaitForPick")
   WHILE .keep.pick DO
     ;
     IF hmi.x >= 0 AND NOT picked AND $cycle.command == "PICK" AND NOT SIG (rs7.tare.chg) THEN
       $action = ""
-      $cycle.command = ""
+      $cycle.command = " "
       JMOVE #wait.pick
       CALL stz.pick
       hmi.x = -1
@@ -274,8 +277,8 @@ N_INT102    "do.work[2]|"
     END
     ;
     IF $cycle.command == "NOPICK" OR full.counter == detail.count THEN
-      $cycle.command = ""
-      IF current.intare <> intare.count THEN
+      $cycle.command = " "
+      IF current.intare <> intare.count AND full.counter <> detail.count THEN
         CALL stock.in.back (intare.i[current.intare], intare.j[current.intare])
         JMOVE #homyak
         current.intare = current.intare + 1
@@ -813,7 +816,7 @@ ANY:
     ; Working gripper
     gripper.type = 1
     ; Max objects in output tare
-    max.tare.count = 4;168
+    max.tare.count = 168
     spc.tare.count = 50
     ;
     detail.length = 23.5
@@ -1166,7 +1169,9 @@ ANY:
   ;
   ;
   ACCURACY 100 ALWAYS
-  SPEED 20 ALWAYS
+  ACCEL 30 ALWAYS
+  DECEL 30 ALWAYS
+  SPEED 10 ALWAYS
   ;
   PULSE release.tare
   ;
@@ -1183,18 +1188,20 @@ ANY:
   JMOVE stocker.in[.i, .j] + TRANS (0, 0, 50)
   ;
   ACCURACY 0.02
-  SPEED 250 MM/S
+  SPEED 100 MM/S
   LMOVE stocker.in[.i, .j]
   BREAK
   PULSE capture.tare
   TWAIT 0.5
   ;
   ACCURACY 0.02
+  ACCEL 30 ALWAYS
+  DECEL 30 ALWAYS
   SPEED 250 MM/S
   ACCEL 50
   LMOVE stocker.in[.i, .j] + TRANS (20)
   ;
-  SPEED 250 MM/S
+  SPEED 100 MM/S
   ACCURACY 0
   LMOVE stocker.in[.i, .j] + TRANS (20, 0, 40)
   BREAK
@@ -1229,6 +1236,8 @@ ANY:
   TWAIT 0.5
   ; Go back
   ;SPEED 50 MM/S
+    ACCEL 100 ALWAYS
+  DECEL 100 ALWAYS
   ACCURACY 30
   LMOVE .put.stz + TRANS (, , 50)
   BREAK
@@ -1254,7 +1263,7 @@ ANY:
   $action = "ReturnToInStocker"
   ;
   ACCURACY 100 ALWAYS
-  SPEED 20 ALWAYS
+  SPEED 10 ALWAYS
   ;
   PULSE release.tare
   ;
@@ -1286,14 +1295,16 @@ ANY:
   $action = "ReturnToInStocker"
   ;
   ACCURACY 0.02 
-  SPEED 250 MM/S
+  SPEED 100 MM/S
   LMOVE #put.stz
   BREAK
   PULSE capture.tare
   TWAIT 0.5
   ;
+    ACCEL 30 ALWAYS
+  DECEL 30 ALWAYS
   ACCURACY 0.02 
-  SPEED 250 MM/S
+  SPEED 100 MM/S
   LMOVE .put.stz + TRANS (50)
   ;
   ;SPEED 80 ALWAYS
@@ -1303,17 +1314,19 @@ ANY:
   LMOVE stocker.in[.i, .j] + TRANS (20, 0, 500)
   ;
   ACCURACY 0.02 
-  SPEED 250 MM/S
+  SPEED 100 MM/S
   LMOVE stocker.in[.i, .j] + TRANS (20)
   BREAK
   ;
   ACCURACY 0.02 
-  SPEED 250 MM/S
+  SPEED 100 MM/S
   LMOVE stocker.in[.i, .j]
   BREAK
   PULSE release.tare
   TWAIT 0.5
   ;
+    ACCEL 100 ALWAYS
+  DECEL 100 ALWAYS
   ACCURACY 30
   LMOVE stocker.in[.i, .j] + TRANS (0, 0, 50)
   LMOVE stocker.in[.i, .j] + TRANS (0, 0, 200)
@@ -1329,7 +1342,7 @@ ANY:
   $action = "TakingFromOutStocker"
   ;
   ACCURACY 100 ALWAYS
-  SPEED 20 ALWAYS
+  SPEED 10 ALWAYS
   ;
   PULSE release.tare
   ;
@@ -1347,18 +1360,20 @@ ANY:
   JMOVE stocker.out[.i, .j] + TRANS (0, 0, 50)
   ;
   ACCURACY 0.02
-  SPEED 250 MM/S
+  SPEED 100 MM/S
   LMOVE stocker.out[.i, .j]
   BREAK
   PULSE capture.tare
   TWAIT 0.5
   ;
+    ACCEL 30 ALWAYS
+  DECEL 30 ALWAYS
   ACCURACY 0.02
-  SPEED 250 MM/S
+  SPEED 100 MM/S
   LMOVE stocker.out[.i, .j] + TRANS (20)
   ;
   ACCURACY 0.02
-  SPEED 250 MM/S
+  SPEED 100 MM/S
   LMOVE stocker.out[.i, .j] + TRANS (20, 0, 40)
   BREAK
   ;
@@ -1394,6 +1409,8 @@ ANY:
   ; Go back
   ;SPEED 50 MM/S
   ACCURACY 30
+    ACCEL 100 ALWAYS
+  DECEL 100 ALWAYS
   LMOVE .put.outpal + TRANS (, , 50)
   ;BREAK
   LMOVE #before.outpal
@@ -1412,7 +1429,7 @@ ANY:
   $action = "ReturnToOutStocker"
   ;
   ACCURACY 100 ALWAYS
-  SPEED 20 ALWAYS
+  SPEED 10 ALWAYS
   ;
   PULSE release.tare
   ;
@@ -1428,16 +1445,18 @@ ANY:
   ACCURACY 20
   LMOVE .put.outpal + TRANS (, , 50)
   ;
-  ACCURACY 0.02 
-  SPEED 250 MM/S
+  ACCURACY 0.02
+  SPEED 100 MM/S
   LMOVE #put.outpal
   BREAK
   ;
   PULSE capture.tare
   TWAIT 0.5
   ;
-  ACCURACY 0.02 
-  SPEED 250 MM/S
+  ACCEL 30 ALWAYS
+  DECEL 30 ALWAYS
+  ACCURACY 0.02
+  SPEED 100 MM/S
   LMOVE .put.outpal + TRANS (50)
   ;
   ;SPEED 80 ALWAYS
@@ -1446,18 +1465,20 @@ ANY:
   LMOVE #post.tare.out
   LMOVE stocker.out[.i, .j] + TRANS (20, 0, 500)
   ;
-  ACCURACY 0.02 
-  SPEED 250 MM/S
+  ACCURACY 0.02
+  SPEED 100 MM/S
   LMOVE stocker.out[.i, .j] + TRANS (20)
   BREAK
   ;
-  ACCURACY 0.02 
-  SPEED 250 MM/S
+  ACCURACY 0.02
+  SPEED 100 MM/S
   LMOVE stocker.out[.i, .j]
   BREAK
   PULSE release.tare
   TWAIT 0.5
   ;
+  ACCEL 100 ALWAYS
+  DECEL 100 ALWAYS
   ACCURACY 30
   LMOVE stocker.out[.i, .j] + TRANS (0, 0, 50)
   LMOVE stocker.out[.i, .j] + TRANS (0, 0, 200)
@@ -2044,6 +2065,7 @@ ANY:
 	; rs7.working
 	; rs7.work[1]
 	; s.allow.put
+	; full.counter
 	; @@@ CONNECTION @@@
 	; RS013N
 	; 192.168.7.102
@@ -2070,7 +2092,6 @@ ANY:
 	; .work 
 	; .finish 
 	; .fin.ack 
-	; .putting 
 	; 2:process.data:F
 	; .state 
 	; .break 
@@ -2446,8 +2467,8 @@ grip.clamp = 4
 grip.unclamp = 3
 center.x = 147.8
 center.y = 245.4
-cx = 138.612
-cy = 310.251
+cx = 265.347
+cy = 202.784
 dist.xn = 0.001
 dist.xp = 0.015
 dist.yn = 0.015
@@ -2553,7 +2574,7 @@ gripper.id = 1
 intare.count = 2
 intare.i[1] = 2
 intare.j[1] = 3
-max.tare.count = 4
+max.tare.count = 168
 outtare.count = 3
 outtare.i[1] = 4
 outtare.j[1] = 4
@@ -2567,13 +2588,13 @@ tcp.recv.dbg = -1
 tcp.send.dbg = -1
 current.intare = 1
 current.outtare = 1
-full.counter = 0
+full.counter = 10
 gripper.type = 1
 hmi.pos.pos = 4
 intare.i[2] = 2
 intare.j[2] = 4
 object.id = 4
-tare.counter = 0
+tare.counter = 10
 s.pneumo.open = 2022
 s.pneumo.close = 2023
 s.debug = 2024
@@ -2600,19 +2621,19 @@ start.shift.z = 0
 .END
 .STRINGS
 $tcp.ip = "192.168.7.100"
-$action = "WaitOutStockerSensor"
-$log.entry[0] = "16:07:48 Main cycle started. State: WaitingForCommand"
-$log.entry[1] = "16:09:29 Received START command. State: StartingProgram"
-$log.entry[2] = "16:09:29 Processing in 5 cell"
-$log.entry[3] = "16:09:29 Row: 3 Col: 1"
-$log.entry[4] = "16:09:29 Row: 4 Col: 2"
-$log.entry[5] = "16:09:29 Processing out 5 cell"
-$log.entry[6] = "16:09:29 Row: 4 Col: 4"
-$log.entry[7] = "16:09:29 Row: 5 Col: 4"
-$log.entry[8] = "16:09:29 Row: 6 Col: 4"
-$log.entry[9] = "16:09:29 Take pallet (4, 4) from output stocker."
-$log.entry[10] = "16:09:30 State: TakingFromOutStocker"
-$log.entry[11] = "16:09:32 Wait sensor state. State: WaitOutStockerSensor"
+$action = "WaitingForCommand"
+$log.entry[0] = "16:11:36 Wait for unclamp gripper. State: WaitingGripUnclamped"
+$log.entry[1] = "16:11:48 Waiting for free positioner. State: WaitPosFree"
+$log.entry[2] = "16:11:48 Put detail to positioner 4"
+$log.entry[3] = "16:11:48 State: PutToPositioner"
+$log.entry[4] = "16:11:51 Wait for new pick. State: WaitForPick"
+$log.entry[5] = "16:12:17 Return pallet (2, 3) to input stocker."
+$log.entry[6] = "16:12:17 State: ReturnToInStocker"
+$log.entry[7] = "16:12:17 Wait stz pneumatic open. State: WaitPneumaticOpen"
+$log.entry[8] = "16:12:23 Return pallet (2, 3) to input stocker."
+$log.entry[9] = "16:12:23 State: ReturnToInStocker"
+$log.entry[10] = "16:12:33 Return pallet (4, 4) to output stocker."
+$log.entry[11] = "16:12:33 State: ReturnToOutStocker"
 $command = ""
 $detail.type = "312.229.002"
 $intare.ids = "5"

@@ -102,7 +102,7 @@ N_INT26    "di.hold|"
 ; Working gripper
   gripper.type = 1
 ; Max objects in output tare
-  max.tare.count = 168
+  max.tare.count = 4;168
   spc.tare.count = 50
 ;
   detail.length = 23.5
@@ -201,7 +201,7 @@ N_INT26    "di.hold|"
   LMOVE #pos.machine[.pos]
   BREAK
   ;CALL log ("Waiting for vacuum enabled. State: WaitingMMVacuum")
-  $action = "WaitingMMVacuum"
+  ;$action = "WaitingMMVacuum"
   ;SWAIT s.vacuum
   PULSE grip.unclamp
   TWAIT 0.5
@@ -210,7 +210,6 @@ N_INT26    "di.hold|"
   LMOVE .pos.machine + TRANS (0, 10, 0)
   LMOVE .pos.machine + TRANS (0, 50, 0)
   LMOVE #before.machine
-  BREAK
   ;BREAK
   ; Wait result
   CALL log ("Move to measurement machine. State: WaitingMMResult")
@@ -253,20 +252,30 @@ N_INT26    "di.hold|"
   CALL log ("Main cycle started. State: WaitingForCommand")
   $action = "WaitingForCommand"
   ;
-  WHILE TRUE DO
-    SCASE $command OF
-      SVALUE "START":
-        CALL log ("Received START command. State: StartingProgram")
-        $action = "StartingProgram"
-        CALL pg.start
-        BREAK
-        $action = "WaitingForCommand"
-      SVALUE "Check":
-        BREAK
-      ANY :
-        BREAK
-    END
-  END
+  ;State 0 Тн
+  ; State 1
+  ; State 2 Omitted
+  ; State 3 - pick from pos.pick
+  ; State 4 - go measure
+  ; State 5 - put to tare.frame
+  ; State 6 - put to defect
+  ; State 7 - check etalon
+  ; State 25
+  ; State 26 - Decision
+  ;WHILE TRUE DO
+  ;  SCASE $command OF
+  ;    SVALUE "START":
+  ;      CALL log ("Received START command. State: StartingProgram")
+  ;      $action = "StartingProgram"
+  ;      CALL pg.start
+  ;      BREAK
+  ;      $action = "WaitingForCommand"
+  ;    SVALUE "Check":
+  ;      BREAK
+  ;    ANY :
+  ;      BREAK
+  ;  END
+  ;END
   ;
 .END
 .PROGRAM put.defect ()
@@ -357,37 +366,22 @@ N_INT26    "di.hold|"
           JMOVE #homyak
           .changed = FALSE
         END
-        ;CALL put.tare
-      ELSE
-        ;SIGNAL -rs7.working
-        SIGNAL -s.measure.ng
-        CALL put.defect
-        BREAK
-        SIGNAL -rs7.working
+          ;CALL put.tare
+        ELSE
+          SIGNAL -rs7.working
+          SIGNAL -s.measure.ng
+          CALL put.defect
+        END
+        ;
       END
       ;
+      IF SIG (rs13.finish) THEN
+        PULSE rs07.fin.ack
+        .keep.pick = FALSE
+      END
     END
+    ;CALL measure
     ;
-    IF SIG (rs13.finish) THEN
-      .keep.pick = FALSE
-    END
-  END
-  CALL pos.pick
-  CALL measure
-  IF SIG (s.measure.ok) THEN
-    SIGNAL -s.measure.ok
-    CALL put.tare
-    BREAK 
-    PULSE rs07.fin.ack
-  ELSE
-    PULSE rs07.fin.ack
-    SIGNAL -rs7.working
-    SIGNAL -s.measure.ng
-    CALL put.defect
-  END
-  LMOVE #homyak
-  ;CALL measure
-  ;
 .END
 .PROGRAM process.data (.state)
   ;
@@ -572,6 +566,54 @@ ANY:
   LAPPRO .put,-20
   LMOVE .put
   LAPPRO .put,-20
+.END
+.PROGRAM state0 () ; Initialization of parameters
+  CALL log ("State 0: Program reset. Initialization of parameters")
+  SIGNAL -s.opt.placed, -s.ot.placed, -s.grip.full, -s.tare.full
+  count.pick = 0
+  count.put = 0
+  ; count.defect
+  $loaded.pg = "None"
+  ;
+  state = 1
+  ;
+.END
+.PROGRAM state1 () ; Wait for program start
+  CALL log ("State 1: Wait for program start command")
+  $action = "WaitingForCommand"
+  WHILE $command <> "START"
+    TWAIT 0.5
+  END
+  ;
+  CALL select.pg ; States -> 0, 2
+  ;
+.END
+.PROGRAM state2 ()
+	; *******************************************************************
+	;
+	; Program:      state2
+	; Comment:      
+	; Author:       User
+	;
+	; Date:         11/19/2025
+	;
+	; *******************************************************************
+	;
+	
+.END
+.PROGRAM select.pg ()
+  SCASE $pg.name OF
+    SVALUE "312.229.002":
+      CALL id4
+    SVALUE "STRING":
+      CALL id4
+      ANY
+      CALL log ("Wrong program name. Program reset")
+      state = 0
+      RETURN
+  END
+  CALL log ("Selected program: " + $pg.name)
+  state = 2
 .END
 .PROGRAM set.io.pc ()
   ; Gripper IO
@@ -1114,13 +1156,14 @@ ANY:
 .PROGRAM Comment___ () ; Comments for IDE. Do not use.
 	; @@@ PROJECT @@@
 	; @@@ PROJECTNAME @@@
-	; ALKU_RS007L
+	; ALKU_RS007L_states
 	; @@@ HISTORY @@@
 	; @@@ INSPECTION @@@
+	; max.tare.count
 	; @@@ CONNECTION @@@
-	; RS007L
-	; 192.168.7.103
-	; 23
+	; KROSET R02
+	; 127.0.0.1
+	; 9205
 	; @@@ PROGRAM @@@
 	; Group:Objects:1
 	; 1:id4:F
@@ -1200,8 +1243,14 @@ ANY:
 	; .j 
 	; .i 
 	; .put 
-	; Group:Autostart:5
-	; 5:set.io.pc:B
+	; Group:States:5
+	; 5:state0:F
+	; 5:state1:F
+	; 5:state2:F
+	; Group:New:6
+	; 6:select.pg:F
+	; Group:Autostart:7
+	; 7:set.io.pc:B
 	; .home1 
 	; .work 
 	; .det.put 
@@ -1213,19 +1262,19 @@ ANY:
 	; .fin.ack 
 	; .put.ack 
 	; .putting 
-	; 5:watchdog.pc:B
-	; 5:autostart.pc:B
+	; 7:watchdog.pc:B
+	; 7:autostart.pc:B
 	; 0:errstart.pc:B
-	; Group:TCPIP:6
-	; 6:set.vars.pc:B
+	; Group:TCPIP:8
+	; 8:set.vars.pc:B
 	; .i 
-	; 6:tcp.send.pc:B
+	; 8:tcp.send.pc:B
 	; .$data 
 	; .data.length 
 	; .status 
 	; .i 
 	; .tcp.error.cnt 
-	; 6:tcp.callback.pc:B
+	; 8:tcp.callback.pc:B
 	; .$data 
 	; .data.length 
 	; .$temp 
@@ -1235,7 +1284,7 @@ ANY:
 	; .$measurement.state 
 	; .$spd 
 	; .pc 
-	; 6:tcp.client.pc:B
+	; 8:tcp.client.pc:B
 	; .tcp.retry.count 
 	; .number 
 	; .ports 
@@ -1252,18 +1301,18 @@ ANY:
 	; .tcp.error.cnt 
 	; .$tcp.request 
 	; .request.size 
-	; 6:get.state.pc:B
+	; 8:get.state.pc:B
 	; .$state 
-	; 6:sender.pc:B
+	; 8:sender.pc:B
 	; .$data 
 	; .pc 
-	; 6:tcp.send2.pc:B
+	; 8:tcp.send2.pc:B
 	; .$data 
 	; .data.length 
 	; .status 
 	; .$temp 
 	; .i 
-	; 6:tcp.send3.pc:B
+	; 8:tcp.send3.pc:B
 	; .$data 
 	; .data.length 
 	; .status 
@@ -1694,9 +1743,9 @@ s.apply.coord = 2014
 start.shift.x = 0
 start.shift.y = 15
 start.shift.z = 0
-max.tare.count = 168
+max.tare.count = 4
 spc.tare.count = 50
-defect.count = 1
+defect.count = 6
 rs13.finish = 1021
 rs07.fin.ack = 21
 rs07.put.ack = 22
@@ -1761,7 +1810,7 @@ max.in.line = 8.34
 min.spacer = 1.5
 mon.speed = 100
 object.id = 4
-pick.count = 10
+pick.count = 0
 rs7.det.picked = 19
 s.grip.sns1.dis = 2014
 s.grip.sns2.dis = 2015
@@ -1773,17 +1822,17 @@ di.hold = 2026
 .END
 .STRINGS
 $tcp.ip = "192.168.7.100"
-$action = "WaitingForCommand"
-$log.entry[0] = "16:03:37 Pick detail from positioner 4"
-$log.entry[1] = "16:03:37 State: TakeFromPositioner"
-$log.entry[2] = "16:03:39 Move to measurement machine. State: TakingToMM"
-$log.entry[3] = "16:03:44 Move to measurement machine. State: WaitingMMResult"
-$log.entry[4] = "16:03:47 Move to measurement machine. State: TakingFromMM"
-$log.entry[5] = "16:03:51 Putting to defect. State: PutToTare "
-$log.entry[6] = "16:03:53 Pick detail from positioner 4"
-$log.entry[7] = "16:03:53 State: TakeFromPositioner"
-$log.entry[8] = "16:03:55 Move to measurement machine. State: TakingToMM"
-$log.entry[9] = "16:03:59 Move to measurement machine. State: WaitingMMResult"
-$log.entry[10] = "16:04:02 Move to measurement machine. State: TakingFromMM"
-$log.entry[11] = "16:04:06 Putting to defect. State: PutToTare "
+$action = "StartingProgram"
+$log.entry[0] = "15:48:45 Move to measurement machine. State: TakingFromMM"
+$log.entry[1] = "15:48:49 Putting to defect. State: PutToTare "
+$log.entry[2] = "15:48:51 Pick detail from positioner 4"
+$log.entry[3] = "15:48:52 State: TakeFromPositioner"
+$log.entry[4] = "15:48:54 Move to measurement machine. State: TakingToMM"
+$log.entry[5] = "15:48:58 Move to measurement machine. State: WaitingMMResult"
+$log.entry[6] = "15:59:59 Moving to home position. State: MoveToHome"
+$log.entry[7] = "16:00:07 Main cycle started. State: WaitingForCommand"
+$log.entry[8] = "16:00:07 Received START command. State: StartingProgram"
+$log.entry[9] = "16:00:20 Moving to home position. State: MoveToHome"
+$log.entry[10] = "16:00:20 Main cycle started. State: WaitingForCommand"
+$log.entry[11] = "16:01:22 Received START command. State: StartingProgram"
 .END

@@ -115,7 +115,7 @@ services:
       start_period: 30s
 
   cv-service:
-    #runtime: nvidia
+    runtime: nvidia
     build:
       context: .
       dockerfile: ./cv-service/Dockerfile

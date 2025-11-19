@@ -95,6 +95,7 @@ class Background(Thread):
             logger.info(f"Команда отправлена на RS007L: {command}")
 
         self.first_pick = True
+        self.attempts = 0
         return not failed
 
     def set_speed(self, speed: int):
@@ -246,13 +247,13 @@ class Background(Thread):
         on_action = False
         while not self.__stop_event.is_set():
             try:
-                logger.debug("Проверка команд от роботов")
+                #logger.debug("Проверка команд от роботов")
                 # безопасно получить action (избегаем .lower() у None)
                 rs13_action = self.collector.rs013n["action"]
                 rs7_action = self.collector.rs007l["action"]
 
-                logger.debug(f"RS013N action: {rs13_action}")
-                logger.debug(f"RS007L action: {rs7_action}")
+                #logger.debug(f"RS013N action: {rs13_action}")
+                #logger.debug(f"RS007L action: {rs7_action}")
 
                 if rs13_action.lower() == "waitpneumaticclose":
                     while True:
@@ -392,9 +393,9 @@ class Background(Thread):
                                 logger.info(f"Данные захвата успешно отправлены на RS013N: x={x}, y={y}, angle={angle}")
                             time.sleep(2)
                         else:
-                            time.sleep(2)
                             self.attempts = self.attempts + 1
-                            if self.attempts  <= 2:
+                            logger.error("Объект не обнаружен, парниша")
+                            if self.attempts  <= 4:
                                 command = f"NOPICK;"
                                 #command = "ffff"
                                 logger.warning("Нет доступных объектов для захвата от CV-сервиса")
@@ -405,7 +406,7 @@ class Background(Thread):
                                     logger.error(f"Ошибка отправки команды на RS013N: {resp.text}")
                                 else:
                                     logger.info(f"Команда отправлена на RS013N: {command}")
-            
+                            time.sleep(3)
                 #time.sleep(4)
             except Exception as e:
                 logger.error("Исключение в потоке Master: ", e)
