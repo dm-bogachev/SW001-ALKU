@@ -11,25 +11,39 @@
             "ModelType": "yolo-pose",
             "ModelProcessor": "LongDetailsProcessor.py"
         },
-        "440.00.26": {
-            "ModelName": "440.00.26",
-            "ModelFileName": "model_440.00.26.pt",
-            "ConfidenceThreshold": 0.5,
-            "ModelType": "yolo-pose",
-            "ModelProcessor": "proc_440.00.26.py"
-        },
         "RoundDetails": {
             "ModelName": "RoundDetails",
             "ModelFileName": "rounds.pt",
-            "ConfidenceThreshold": 0.5,
+            "ConfidenceThreshold": 0.1,
             "ModelType": "yolo-detect",
             "ModelProcessor": "RoundDetailsProcessor.py"
+        },
+        "Smalls_vn": {
+            "ModelName": "Smalls_vn",
+            "ModelFileName": "smalls_vn.pt",
+            "ConfidenceThreshold": 0.7,
+            "ModelType": "yolo-pose",
+            "ModelProcessor": "dummy_pose.py"
+        },
+        "Smalls_vs": {
+            "ModelName": "Smalls_vs",
+            "ModelFileName": "smalls_vs.pt",
+            "ConfidenceThreshold": 0.7,
+            "ModelType": "yolo-pose",
+            "ModelProcessor": "dummy_pose.py"
+        },
+        "Smalls_vm": {
+            "ModelName": "Smalls_vm",
+            "ModelFileName": "smalls_vm.pt",
+            "ConfidenceThreshold": 0.5,
+            "ModelType": "yolo-pose",
+            "ModelProcessor": "dummy_pose.py"
         }
     },
     "Display": {
-        "BBOX": true,
+        "BBOX": false,
         "COORDINATES": true,
-        "KEYPOINTS": true,
+        "KEYPOINTS": false,
         "LABELS": false,
         "SCORES": false,
         "POINTS": true,
@@ -56,7 +70,7 @@
     },
     "Process": {
         "ProcessingDelay": 0.0,
-        "LastModel": "440.00.26",
+        "LastModel": "LongDetails",
         "FirstObjectCriteria": "Probability"
     },
     "IO": {

@@ -41,6 +41,7 @@ N_INT23    "s.pneumo.close|"
 N_INT24    "s.debug|"
 N_INT26    "di.hold|"
 N_INT27    "s.allow.put|"
+N_INT28    "s.receive.p|"
 N_INT102    "do.work[2]|"
 .END
 .INTER_PANEL_D
@@ -100,6 +101,7 @@ N_INT102    "do.work[2]|"
 135,8,"hmi.a","   STZ ","  ANGLE",10,15,4,2,0
 136,8,"hmi.x","   STZ X","COORDINATE",10,15,4,2,0
 137,8,"hmi.y","   STZ Y","COORDINATE",10,15,4,2,0
+138,4,1,"OFF     ON","","","  RECEIVE ",10,4,4,0,2028,0
 139,2,"","   MAIN","<---------","",10,4,15,2001,0
 .END
 .INTER_PANEL_TITLE
@@ -123,98 +125,98 @@ N_INT102    "do.work[2]|"
 .INTER_PANEL_COLOR_D
 182,3,224,244,28,159,252,255,251,255,0,31,2,241,52,255,
 .END
-.PROGRAM a.home ()
+.PROGRAM a.home()@25/11/17 15:18 #0
   JMOVE #homyak
 .END
-.PROGRAM a.align ()
+.PROGRAM a.align()@25/11/17 15:18 #0
   ALIGN
 .END
-.PROGRAM a.test ()
-  ;
+.PROGRAM a.test()@25/11/17 15:18 #0
+;
   SIGNAL -rs13.det.put
   JMOVE #homyak
-  CALL stock.in.take (1, 1)
+  CALL stock.in.take(1,1)
   JMOVE #wait.pick
-  CALL gripper.pick (1, 1)
+  CALL gripper.pick(1,1)
   JMOVE #wait.pick
   FOR .i = 1 TO 50
     CALL stz.pick
     CALL stz.put(4)
   END
   LMOVE #wait.pick
-  CALL gripper.put (1, 1)
-  CALL stock.in.back (1, 1)
-  ;
+  CALL gripper.put(1,1)
+  CALL stock.in.back(1,1)
+;
   JMOVE #homyak
 .END
-.PROGRAM log (.$msg)
+.PROGRAM log(.$msg)@25/11/17 15:18 #2733
   FOR .i = 0 TO 10
-    $log.entry[.i] = $log.entry[.i + 1]
+    $log.entry[.i] = $log.entry[.i+1]
   END
-  $log.entry[11] = $TIME + " " + .$msg
-  ;
-  IFPWPRINT 1, 1, 1, 9, 10 = $log.entry[0], $log.entry[1], $log.entry[2], $log.entry[3]
-  IFPWPRINT 2, 1, 1, 9, 10 = $log.entry[4], $log.entry[5], $log.entry[6], $log.entry[7]
-  IFPWPRINT 3, 1, 1, 9, 10 = $log.entry[8], $log.entry[9], $log.entry[10], $log.entry[11]
+  $log.entry[11] = $TIME+" "+.$msg
+;
+  IFPWPRINT 1,1,1,9,10=$log.entry[0],$log.entry[1],$log.entry[2],$log.entry[3]
+  IFPWPRINT 2,1,1,9,10=$log.entry[4],$log.entry[5],$log.entry[6],$log.entry[7]
+  IFPWPRINT 3,1,1,9,10=$log.entry[8],$log.entry[9],$log.entry[10],$log.entry[11]
 .END
-.PROGRAM safe.home ()
-  ; IMPLEMENT SAFE RETURN TO HOME POSITION
+.PROGRAM safe.home()@25/11/17 15:18 #37
+; IMPLEMENT SAFE RETURN TO HOME POSITION
   CALL log("Moving to home position. State: MoveToHome")
   $action = "MoveToHome"
-  SPEED 250 MM/S ALWAYS 
+  SPEED 250 MM/S ALWAYS
   ACCURACY 10 ALWAYS
   JMOVE #homyak
 .END
-.PROGRAM a.main ()
-  ;
+.PROGRAM a.main()@25/11/19 15:20 #0
+;
   CALL safe.home
-  ;
+;
   SPEED 100 ALWAYS
   ACCURACY 100 ALWAYS
-    ACCEL 100 ALWAYS
+  ACCEL 100 ALWAYS
   DECEL 100 ALWAYS
-  ;
+;
   RESET
-  ;
-  CALL log ("Main cycle started. State: WaitingForCommand")
+;
+  CALL log("Main cycle started. State: WaitingForCommand")
   $action = "WaitingForCommand"
-  ;
+;
   WHILE TRUE DO
     SCASE $command OF
-      SVALUE "START":
-        CALL log ("Received START command. State: StartingProgram")
-        $action = "StartingProgram"
-        CALL pg.start
-        BREAK
-        $action = "WaitingForCommand"
-      ANY :
-        BREAK
+     SVALUE "START":
+      CALL log("Received START command. State: StartingProgram")
+      $action = "StartingProgram"
+      CALL pg.start
+      BREAK
+      $action = "WaitingForCommand"
+     ANY :
+      BREAK
     END
   END
-  ;
+;
 .END
-.PROGRAM pg.start ()
+.PROGRAM pg.start()@25/11/19 15:16 #3
   $command = ""
-  ;
+;
   pick.count = 0
   RESET
-  ;
-  CALL process.data (.state)
+;
+  CALL process.data(.state)
   IF NOT .state THEN
-    CALL log ("Wrong program name. State: WrongProgramName")
+    CALL log("Wrong program name. State: WrongProgramName")
     $action = "WrongProgramName"
     TWAIT 5
     RETURN
   END
-  ; Change gripper if required
-  IF current.gripper <> gripper.type THEN
-    CALL log ("Required gripper change")
+; Change gripper if required
+  IF current.gripper<>gripper.type THEN
+    CALL log("Required gripper change")
     JMOVE #post.tare.in
     JMOVE #wait.pick
-    IF current.gripper <> 0 THEN
-      CALL gripper.put (current.gripper, current.gripper)
+    IF current.gripper<>0 THEN
+      CALL gripper.put(current.gripper,current.gripper)
     END
-    CALL gripper.pick (gripper.type, gripper.type)
+    CALL gripper.pick(gripper.type,gripper.type)
     current.gripper = gripper.type
     JMOVE #post.tare.in
     JMOVE #homyak
@@ -223,22 +225,22 @@ N_INT102    "do.work[2]|"
   current.outtare = 1
   tare.counter = 0
   full.counter = 0
-  ; First tare pick
-  CALL stock.out.take (outtare.i[1], outtare.j[1])
-  ;JMOVE #homyak
-  CALL stock.in.take (intare.i[1], intare.j[1])
-  ;JMOVE #homyak
+; First tare pick
+  CALL stock.out.take(outtare.i[1],outtare.j[1])
+;JMOVE #homyak
+  CALL stock.in.take(intare.i[1],intare.j[1])
+;JMOVE #homyak
   JMOVE #wait.pick
-  ;
+;
   .keep.pick = TRUE
   picked = FALSE
-  ;
+;
   BREAK
   $action = "WaitForPick"
-  CALL log ("Wait for new pick. State: WaitForPick")
+  CALL log("Wait for new pick. State: WaitForPick")
   WHILE .keep.pick DO
-    ;
-    IF hmi.x >= 0 AND NOT picked AND $cycle.command == "PICK" AND NOT SIG (rs7.tare.chg) THEN
+;
+    IF hmi.x>=0 AND NOT picked AND $cycle.command=="PICK" AND NOT SIG(rs7.tare.chg) THEN
       $action = ""
       $cycle.command = " "
       JMOVE #wait.pick
@@ -248,43 +250,43 @@ N_INT102    "do.work[2]|"
       picked = TRUE
       $action = "WaitPosFree"
     END
-    ;
-    IF SIG (rs7.tare.chg) THEN
-      PULSE rs13.tare.ack, 10
-      CALL log ("OutPalletChange requested")
+;
+    IF SIG(rs7.tare.chg) THEN
+      PULSE rs13.tare.ack,10
+      CALL log("OutPalletChange requested")
       JMOVE #post.tare.in
       SWAIT -rs7.work[1]
-      ;JMOVE #homyak
-      CALL stock.out.back (outtare.i[current.outtare], outtare.j[current.outtare])
-      current.outtare = current.outtare + 1
-      CALL stock.out.take (outtare.i[current.outtare], outtare.j[current.outtare])
-      PULSE rs13.tare.ack, 10
+;JMOVE #homyak
+      CALL stock.out.back(outtare.i[current.outtare],outtare.j[current.outtare])
+      current.outtare = current.outtare+1
+      CALL stock.out.take(outtare.i[current.outtare],outtare.j[current.outtare])
+      PULSE rs13.tare.ack,10
       JMOVE #before.pos
-      ;JMOVE #homep1
+;JMOVE #homep1
       $action = "WaitPosFree"
-      ;JMOVE #post.tare.in ;!!
-      ;JMOVE #wait.pick
+;JMOVE #post.tare.in ;!!
+;JMOVE #wait.pick
     END
-    ;
+;
     IF picked AND NOT SIG(rs7.working) AND NOT SIG(rs7.work[1]) AND SIG(s.allow.put) THEN
-      ;SWAIT -rs7.working, -rs7.work[1]
-      CALL stz.put (object.id)
+;SWAIT -rs7.working, -rs7.work[1]
+      CALL stz.put(object.id)
       picked = FALSE
-      tare.counter = tare.counter + 1
-      full.counter = full.counter + 1
+      tare.counter = tare.counter+1
+      full.counter = full.counter+1
       $action = "WaitForPick"
-      CALL log ("Wait for new pick. State: WaitForPick")
+      CALL log("Wait for new pick. State: WaitForPick")
     END
-    ;
-    IF $cycle.command == "NOPICK" OR full.counter == detail.count THEN
+;
+    IF $cycle.command=="NOPICK" OR full.counter==detail.count THEN
       $cycle.command = " "
-      IF current.intare <> intare.count AND full.counter <> detail.count THEN
-        CALL stock.in.back (intare.i[current.intare], intare.j[current.intare])
+      IF current.intare<>intare.count AND full.counter<>detail.count THEN
+        CALL stock.in.back(intare.i[current.intare],intare.j[current.intare])
         JMOVE #homyak
-        current.intare = current.intare + 1
-        CALL stock.in.take (intare.i[current.intare], intare.j[current.intare])
+        current.intare = current.intare+1
+        CALL stock.in.take(intare.i[current.intare],intare.j[current.intare])
         $action = "WaitForPick"
-        CALL log ("Wait for new pick. State: WaitForPick")
+        CALL log("Wait for new pick. State: WaitForPick")
       ELSE
         .keep.pick = FALSE
         SIGNAL rs13.finish
@@ -292,662 +294,673 @@ N_INT102    "do.work[2]|"
       END
     END
   END
-  ; Last tare put
+; Last tare put
   JMOVE #wait.pick
-  CALL stock.in.back (intare.i[current.intare], intare.j[current.intare])
+  CALL stock.in.back(intare.i[current.intare],intare.j[current.intare])
   JMOVE #homyak
-  CALL stock.out.back (outtare.i[current.outtare], outtare.j[current.outtare])
-  ;
-  ;SWAIT rs07.fin.ack
+  CALL stock.out.back(outtare.i[current.outtare],outtare.j[current.outtare])
+;
+;SWAIT rs07.fin.ack
   JMOVE #homyak
-  
 .END
-.PROGRAM process.data (.state)
-  ;
+.PROGRAM process.data(.state)@25/11/18 12:58 #26
+;
   intare.count = 0
   outtare.count = 0
-  ;
+;
   .break = FALSE
   WHILE NOT .break DO
-    intare.count = intare.count + 1
-    IF INSTR ($intare.ids, ",")
-      .id = VAL ($DECODE ($intare.ids, ",", 0))
-      CALL s.in.table (.id)
+    intare.count = intare.count+1
+    IF INSTR($intare.ids , ",") THEN
+      .id = VAL($DECODE($intare.ids,",",0))
+      CALL s.in.table(.id)
     ELSE
-      .id = VAL ($intare.ids)
-      CALL s.in.table (.id)
+      .id = VAL($intare.ids)
+      CALL s.in.table(.id)
       .break = TRUE
     END
   END
-  ;
+;
   .break = FALSE
   WHILE NOT .break DO
-    outtare.count = outtare.count + 1
-    IF INSTR ($outtare.ids, ",")
-      .id =  VAL ($DECODE ($outtare.ids, ",", 0))
-      CALL s.out.table (.id)
-      .$temp = $DECODE ($outtare.ids, ",", 1)
+    outtare.count = outtare.count+1
+    IF INSTR($outtare.ids , ",") THEN
+      .id = VAL($DECODE($outtare.ids,",",0))
+      CALL s.out.table(.id)
+      .$temp = $DECODE($outtare.ids,",",1)
     ELSE
-      .id = VAL ($outtare.ids)
-      CALL s.out.table (.id)  
+      .id = VAL($outtare.ids)
+      CALL s.out.table(.id)
       .break = TRUE
     END
   END
-  ;
-  ;
+;
+;
   CALL pg.select(.state)
   RETURN
-ANY:
+any:
   .state = FALSE
   RETURN
-  
 .END
-.PROGRAM s.in.table (.no)
-  .$temp = "Processing in" + $ENCODE (.no) + " cell"
-  CALL log (.$temp)
+.PROGRAM s.in.table(.no)@25/11/18 12:58 #26
+  .$temp = "Processing in"+$ENCODE(.no)+" cell"
+  CALL log(.$temp)
   CASE .no OF
-    VALUE 1:
-      intare.i[intare.count] = 3;
-      intare.j[intare.count] = 1;
-      intare.count = intare.count + 1;
-      intare.i[intare.count] = 3;
-      intare.j[intare.count] = 2;
-      .$temp = "Row:" + $ENCODE (intare.j[intare.count- 1]) + " Col:"+ $ENCODE (intare.i[intare.count- 1])
-      CALL log (.$temp)
-      .$temp = "Row:" + $ENCODE (intare.j[intare.count]) + " Col:"+ $ENCODE (intare.i[intare.count])
-      CALL log (.$temp)
-      ;
-    VALUE 2:
-      intare.i[intare.count] = 2;
-      intare.j[intare.count] = 1;
-      intare.count = intare.count + 1;
-      intare.i[intare.count] = 2;
-      intare.j[intare.count] = 2;
-      .$temp = "Row:" + $ENCODE (intare.j[intare.count] - 1) + " Col:"+ $ENCODE (intare.i[intare.count] - 1)
-      CALL log (.$temp)
-      .$temp = "Row:" + $ENCODE (intare.j[intare.count]) + " Col:"+ $ENCODE (intare.i[intare.count])
-      CALL log (.$temp)
-      ;
-    VALUE 3:
-      intare.i[intare.count] = 1;
-      intare.j[intare.count] = 1;
-      intare.count = intare.count + 1;
-      intare.i[intare.count] = 1;
-      intare.j[intare.count] = 2;
-      .$temp = "Row:" + $ENCODE (intare.j[intare.count] - 1) + " Col:"+ $ENCODE (intare.i[intare.count] - 1)
-      CALL log (.$temp)
-      .$temp = "Row:" + $ENCODE (intare.j[intare.count]) + " Col:"+ $ENCODE (intare.i[intare.count])
-      CALL log (.$temp)
-      ;
-    VALUE 4:
-      intare.i[intare.count] = 3;
-      intare.j[intare.count] = 3;
-      intare.count = intare.count + 1;
-      intare.i[intare.count] = 3;
-      intare.j[intare.count] = 4;
-      .$temp = "Row:" + $ENCODE (intare.j[intare.count] - 1) + " Col:"+ $ENCODE (intare.i[intare.count] - 1)
-      CALL log (.$temp)
-      .$temp = "Row:" + $ENCODE (intare.j[intare.count]) + " Col:"+ $ENCODE (intare.i[intare.count])
-      CALL log (.$temp)
-      ;
-    VALUE 5:
-      intare.i[intare.count] = 2;
-      intare.j[intare.count] = 3;
-      intare.count = intare.count + 1;
-      intare.i[intare.count] = 2;
-      intare.j[intare.count] = 4;
-      .$temp = "Row:" + $ENCODE (intare.j[intare.count] - 1) + " Col:"+ $ENCODE (intare.i[intare.count] - 1)
-      CALL log (.$temp)
-      .$temp = "Row:" + $ENCODE (intare.j[intare.count]) + " Col:"+ $ENCODE (intare.i[intare.count])
-      CALL log (.$temp)
-      ;
-    VALUE 6:
-      intare.i[intare.count] = 1;
-      intare.j[intare.count] = 3;
-      intare.count = intare.count + 1;
-      intare.i[intare.count] = 1;
-      intare.j[intare.count] = 4;
-      .$temp = "Row:" + $ENCODE (intare.j[intare.count] - 1) + " Col:"+ $ENCODE (intare.i[intare.count] - 1)
-      CALL log (.$temp)
-      .$temp = "Row:" + $ENCODE (intare.j[intare.count]) + " Col:"+ $ENCODE (intare.i[intare.count])
-      CALL log (.$temp)
-      ;
-    VALUE 7:
-      intare.i[intare.count] = 3;
-      intare.j[intare.count] = 5;
-      intare.count = intare.count + 1;
-      intare.i[intare.count] = 3;
-      intare.j[intare.count] = 6;
-      .$temp = "Row:" + $ENCODE (intare.j[intare.count] - 1) + " Col:"+ $ENCODE (intare.i[intare.count] - 1)
-      CALL log (.$temp)
-      .$temp = "Row:" + $ENCODE (intare.j[intare.count]) + " Col:"+ $ENCODE (intare.i[intare.count])
-      CALL log (.$temp)
-      ;
-    VALUE 8:
-      intare.i[intare.count] = 2;
-      intare.j[intare.count] = 5;
-      intare.count = intare.count + 1;
-      intare.i[intare.count] = 2;
-      intare.j[intare.count] = 6;
-      .$temp = "Row:" + $ENCODE (intare.j[intare.count] - 1) + " Col:"+ $ENCODE (intare.i[intare.count] - 1)
-      CALL log (.$temp)
-      .$temp = "Row:" + $ENCODE (intare.j[intare.count]) + " Col:"+ $ENCODE (intare.i[intare.count])
-      CALL log (.$temp)
-      ;
-    VALUE 9:
-      intare.i[intare.count] = 1;
-      intare.j[intare.count] = 5;
-      intare.count = intare.count + 1;
-      intare.i[intare.count] = 1;
-      intare.j[intare.count] = 6;
-      .$temp = "Row:" + $ENCODE (intare.j[intare.count] - 1) + " Col:"+ $ENCODE (intare.i[intare.count] - 1)
-      CALL log (.$temp)
-      .$temp = "Row:" + $ENCODE (intare.j[intare.count]) + " Col:"+ $ENCODE (intare.i[intare.count])
-      CALL log (.$temp)
-      ;
-    VALUE 10:
-      intare.i[intare.count] = 3;
-      intare.j[intare.count] = 7;
-      intare.count = intare.count + 1;
-      intare.i[intare.count] = 3;
-      intare.j[intare.count] = 8;
-      .$temp = "Row:" + $ENCODE (intare.j[intare.count] - 1) + " Col:"+ $ENCODE (intare.i[intare.count] - 1)
-      CALL log (.$temp)
-      .$temp = "Row:" + $ENCODE (intare.j[intare.count]) + " Col:"+ $ENCODE (intare.i[intare.count])
-      CALL log (.$temp)
-      ;
-    VALUE 11:
-      intare.i[intare.count] = 2;
-      intare.j[intare.count] = 7;
-      intare.count = intare.count + 1;
-      intare.i[intare.count] = 2;
-      intare.j[intare.count] = 8;
-      .$temp = "Row:" + $ENCODE (intare.j[intare.count] - 1) + " Col:"+ $ENCODE (intare.i[intare.count] - 1)
-      CALL log (.$temp)
-      .$temp = "Row:" + $ENCODE (intare.j[intare.count]) + " Col:"+ $ENCODE (intare.i[intare.count])
-      CALL log (.$temp)
-      ;
-    VALUE 12:
-      intare.i[intare.count] = 1;
-      intare.j[intare.count] = 7;
-      intare.count = intare.count + 1;
-      intare.i[intare.count] = 1;
-      intare.j[intare.count] = 8;
-      .$temp = "Row:" + $ENCODE (intare.j[intare.count] - 1) + " Col:"+ $ENCODE (intare.i[intare.count] - 1)
-      CALL log (.$temp)
-      .$temp = "Row:" + $ENCODE (intare.j[intare.count]) + " Col:"+ $ENCODE (intare.i[intare.count])
-      CALL log (.$temp)
-      ;
-    VALUE 13:
-      intare.i[intare.count] = 3;
-      intare.j[intare.count] = 9;
-      intare.count = intare.count + 1;
-      intare.i[intare.count] = 3;
-      intare.j[intare.count] = 10;
-      .$temp = "Row:" + $ENCODE (intare.j[intare.count] - 1) + " Col:"+ $ENCODE (intare.i[intare.count] - 1)
-      CALL log (.$temp)
-      .$temp = "Row:" + $ENCODE (intare.j[intare.count]) + " Col:"+ $ENCODE (intare.i[intare.count])
-      CALL log (.$temp)
-      ;
-    VALUE 14:
-      intare.i[intare.count] = 2;
-      intare.j[intare.count] = 9;
-      intare.count = intare.count + 1;
-      intare.i[intare.count] = 2;
-      intare.j[intare.count] = 10;
-      .$temp = "Row:" + $ENCODE (intare.j[intare.count] - 1) + " Col:"+ $ENCODE (intare.i[intare.count] - 1)
-      CALL log (.$temp)
-      .$temp = "Row:" + $ENCODE (intare.j[intare.count]) + " Col:"+ $ENCODE (intare.i[intare.count])
-      CALL log (.$temp)
-      ;
-    VALUE 15:
-      intare.i[intare.count] = 1;
-      intare.j[intare.count] = 9;
-      intare.count = intare.count + 1;
-      intare.i[intare.count] = 1;
-      intare.j[intare.count] = 10;
-      .$temp = "Row:" + $ENCODE (intare.j[intare.count] - 1) + " Col:"+ $ENCODE (intare.i[intare.count] - 1)
-      CALL log (.$temp)
-      .$temp = "Row:" + $ENCODE (intare.j[intare.count]) + " Col:"+ $ENCODE (intare.i[intare.count])
-      CALL log (.$temp)
+   VALUE 1:
+    intare.i[intare.count] = 3;
+    intare.j[intare.count] = 1;
+    intare.count = intare.count+1;
+    intare.i[intare.count] = 3;
+    intare.j[intare.count] = 2;
+    .$temp = "Row:"+$ENCODE(intare.j[intare.count-1])+" Col:"+$ENCODE(intare.i[intare.count-1])
+    CALL log(.$temp)
+    .$temp = "Row:"+$ENCODE(intare.j[intare.count])+" Col:"+$ENCODE(intare.i[intare.count])
+    CALL log(.$temp)
+;
+   VALUE 2:
+    intare.i[intare.count] = 2;
+    intare.j[intare.count] = 1;
+    intare.count = intare.count+1;
+    intare.i[intare.count] = 2;
+    intare.j[intare.count] = 2;
+    .$temp = "Row:"+$ENCODE(intare.j[intare.count]-1)+" Col:"+$ENCODE(intare.i[intare.count]-1)
+    CALL log(.$temp)
+    .$temp = "Row:"+$ENCODE(intare.j[intare.count])+" Col:"+$ENCODE(intare.i[intare.count])
+    CALL log(.$temp)
+;
+   VALUE 3:
+    intare.i[intare.count] = 1;
+    intare.j[intare.count] = 1;
+    intare.count = intare.count+1;
+    intare.i[intare.count] = 1;
+    intare.j[intare.count] = 2;
+    .$temp = "Row:"+$ENCODE(intare.j[intare.count]-1)+" Col:"+$ENCODE(intare.i[intare.count]-1)
+    CALL log(.$temp)
+    .$temp = "Row:"+$ENCODE(intare.j[intare.count])+" Col:"+$ENCODE(intare.i[intare.count])
+    CALL log(.$temp)
+;
+   VALUE 4:
+    intare.i[intare.count] = 3;
+    intare.j[intare.count] = 3;
+    intare.count = intare.count+1;
+    intare.i[intare.count] = 3;
+    intare.j[intare.count] = 4;
+    .$temp = "Row:"+$ENCODE(intare.j[intare.count]-1)+" Col:"+$ENCODE(intare.i[intare.count]-1)
+    CALL log(.$temp)
+    .$temp = "Row:"+$ENCODE(intare.j[intare.count])+" Col:"+$ENCODE(intare.i[intare.count])
+    CALL log(.$temp)
+;
+   VALUE 5:
+    intare.i[intare.count] = 2;
+    intare.j[intare.count] = 3;
+    intare.count = intare.count+1;
+    intare.i[intare.count] = 2;
+    intare.j[intare.count] = 4;
+    .$temp = "Row:"+$ENCODE(intare.j[intare.count]-1)+" Col:"+$ENCODE(intare.i[intare.count]-1)
+    CALL log(.$temp)
+    .$temp = "Row:"+$ENCODE(intare.j[intare.count])+" Col:"+$ENCODE(intare.i[intare.count])
+    CALL log(.$temp)
+;
+   VALUE 6:
+    intare.i[intare.count] = 1;
+    intare.j[intare.count] = 3;
+    intare.count = intare.count+1;
+    intare.i[intare.count] = 1;
+    intare.j[intare.count] = 4;
+    .$temp = "Row:"+$ENCODE(intare.j[intare.count]-1)+" Col:"+$ENCODE(intare.i[intare.count]-1)
+    CALL log(.$temp)
+    .$temp = "Row:"+$ENCODE(intare.j[intare.count])+" Col:"+$ENCODE(intare.i[intare.count])
+    CALL log(.$temp)
+;
+   VALUE 7:
+    intare.i[intare.count] = 3;
+    intare.j[intare.count] = 5;
+    intare.count = intare.count+1;
+    intare.i[intare.count] = 3;
+    intare.j[intare.count] = 6;
+    .$temp = "Row:"+$ENCODE(intare.j[intare.count]-1)+" Col:"+$ENCODE(intare.i[intare.count]-1)
+    CALL log(.$temp)
+    .$temp = "Row:"+$ENCODE(intare.j[intare.count])+" Col:"+$ENCODE(intare.i[intare.count])
+    CALL log(.$temp)
+;
+   VALUE 8:
+    intare.i[intare.count] = 2;
+    intare.j[intare.count] = 5;
+    intare.count = intare.count+1;
+    intare.i[intare.count] = 2;
+    intare.j[intare.count] = 6;
+    .$temp = "Row:"+$ENCODE(intare.j[intare.count]-1)+" Col:"+$ENCODE(intare.i[intare.count]-1)
+    CALL log(.$temp)
+    .$temp = "Row:"+$ENCODE(intare.j[intare.count])+" Col:"+$ENCODE(intare.i[intare.count])
+    CALL log(.$temp)
+;
+   VALUE 9:
+    intare.i[intare.count] = 1;
+    intare.j[intare.count] = 5;
+    intare.count = intare.count+1;
+    intare.i[intare.count] = 1;
+    intare.j[intare.count] = 6;
+    .$temp = "Row:"+$ENCODE(intare.j[intare.count]-1)+" Col:"+$ENCODE(intare.i[intare.count]-1)
+    CALL log(.$temp)
+    .$temp = "Row:"+$ENCODE(intare.j[intare.count])+" Col:"+$ENCODE(intare.i[intare.count])
+    CALL log(.$temp)
+;
+   VALUE 10:
+    intare.i[intare.count] = 3;
+    intare.j[intare.count] = 7;
+    intare.count = intare.count+1;
+    intare.i[intare.count] = 3;
+    intare.j[intare.count] = 8;
+    .$temp = "Row:"+$ENCODE(intare.j[intare.count]-1)+" Col:"+$ENCODE(intare.i[intare.count]-1)
+    CALL log(.$temp)
+    .$temp = "Row:"+$ENCODE(intare.j[intare.count])+" Col:"+$ENCODE(intare.i[intare.count])
+    CALL log(.$temp)
+;
+   VALUE 11:
+    intare.i[intare.count] = 2;
+    intare.j[intare.count] = 7;
+    intare.count = intare.count+1;
+    intare.i[intare.count] = 2;
+    intare.j[intare.count] = 8;
+    .$temp = "Row:"+$ENCODE(intare.j[intare.count]-1)+" Col:"+$ENCODE(intare.i[intare.count]-1)
+    CALL log(.$temp)
+    .$temp = "Row:"+$ENCODE(intare.j[intare.count])+" Col:"+$ENCODE(intare.i[intare.count])
+    CALL log(.$temp)
+;
+   VALUE 12:
+    intare.i[intare.count] = 1;
+    intare.j[intare.count] = 7;
+    intare.count = intare.count+1;
+    intare.i[intare.count] = 1;
+    intare.j[intare.count] = 8;
+    .$temp = "Row:"+$ENCODE(intare.j[intare.count]-1)+" Col:"+$ENCODE(intare.i[intare.count]-1)
+    CALL log(.$temp)
+    .$temp = "Row:"+$ENCODE(intare.j[intare.count])+" Col:"+$ENCODE(intare.i[intare.count])
+    CALL log(.$temp)
+;
+   VALUE 13:
+    intare.i[intare.count] = 3;
+    intare.j[intare.count] = 9;
+    intare.count = intare.count+1;
+    intare.i[intare.count] = 3;
+    intare.j[intare.count] = 10;
+    .$temp = "Row:"+$ENCODE(intare.j[intare.count]-1)+" Col:"+$ENCODE(intare.i[intare.count]-1)
+    CALL log(.$temp)
+    .$temp = "Row:"+$ENCODE(intare.j[intare.count])+" Col:"+$ENCODE(intare.i[intare.count])
+    CALL log(.$temp)
+;
+   VALUE 14:
+    intare.i[intare.count] = 2;
+    intare.j[intare.count] = 9;
+    intare.count = intare.count+1;
+    intare.i[intare.count] = 2;
+    intare.j[intare.count] = 10;
+    .$temp = "Row:"+$ENCODE(intare.j[intare.count]-1)+" Col:"+$ENCODE(intare.i[intare.count]-1)
+    CALL log(.$temp)
+    .$temp = "Row:"+$ENCODE(intare.j[intare.count])+" Col:"+$ENCODE(intare.i[intare.count])
+    CALL log(.$temp)
+;
+   VALUE 15:
+    intare.i[intare.count] = 1;
+    intare.j[intare.count] = 9;
+    intare.count = intare.count+1;
+    intare.i[intare.count] = 1;
+    intare.j[intare.count] = 10;
+    .$temp = "Row:"+$ENCODE(intare.j[intare.count]-1)+" Col:"+$ENCODE(intare.i[intare.count]-1)
+    CALL log(.$temp)
+    .$temp = "Row:"+$ENCODE(intare.j[intare.count])+" Col:"+$ENCODE(intare.i[intare.count])
+    CALL log(.$temp)
   END
 .END
-.PROGRAM s.out.table (.no)
-  .$temp = "Processing out" + $ENCODE (.no) + " cell"
-  CALL log (.$temp)
+.PROGRAM s.out.table(.no)@25/11/18 12:58 #26
+  .$temp = "Processing out"+$ENCODE(.no)+" cell"
+  CALL log(.$temp)
   CASE .no OF
-    VALUE 1:
-      outtare.i[outtare.count] = 4;
-      outtare.j[outtare.count] = 1;
-      outtare.count = outtare.count + 1;
-      outtare.i[outtare.count] = 4;
-      outtare.j[outtare.count] = 2;
-      outtare.count = outtare.count + 1;
-      outtare.i[outtare.count] = 4;
-      outtare.j[outtare.count] = 3;
-      ;
-      .$temp = "Row:" + $ENCODE (outtare.j[outtare.count - 2]) + " Col:"+ $ENCODE (outtare.i[outtare.count- 2] )
-      CALL log (.$temp)
-      .$temp = "Row:" + $ENCODE (outtare.j[outtare.count - 1] ) + " Col:"+ $ENCODE (outtare.i[outtare.count- 1] )
-      CALL log (.$temp)
-      .$temp = "Row:" + $ENCODE (outtare.j[outtare.count]) + " Col:"+ $ENCODE (outtare.i[outtare.count])
-      CALL log (.$temp)
-      ;
-    VALUE 2:
-      outtare.i[outtare.count] = 3;
-      outtare.j[outtare.count] = 1;
-      outtare.count = outtare.count + 1;
-      outtare.i[outtare.count] = 3;
-      outtare.j[outtare.count] = 2;
-      outtare.count = outtare.count + 1;
-      outtare.i[outtare.count] = 3;
-      outtare.j[outtare.count] = 3;
-      ;
-      .$temp = "Row:" + $ENCODE (outtare.j[outtare.count - 2]) + " Col:"+ $ENCODE (outtare.i[outtare.count- 2] )
-      CALL log (.$temp)
-      .$temp = "Row:" + $ENCODE (outtare.j[outtare.count - 1] ) + " Col:"+ $ENCODE (outtare.i[outtare.count- 1] )
-      CALL log (.$temp)
-      .$temp = "Row:" + $ENCODE (outtare.j[outtare.count]) + " Col:"+ $ENCODE (outtare.i[outtare.count])
-      CALL log (.$temp)
-      ;
-    VALUE 3:
-      outtare.i[outtare.count] = 2;
-      outtare.j[outtare.count] = 1;
-      outtare.count = outtare.count + 1;
-      outtare.i[outtare.count] = 2;
-      outtare.j[outtare.count] = 2;
-      outtare.count = outtare.count + 1;
-      outtare.i[outtare.count] = 2;
-      outtare.j[outtare.count] = 3;
-      ;
-      .$temp = "Row:" + $ENCODE (outtare.j[outtare.count - 2]) + " Col:"+ $ENCODE (outtare.i[outtare.count- 2] )
-      CALL log (.$temp)
-      .$temp = "Row:" + $ENCODE (outtare.j[outtare.count - 1] ) + " Col:"+ $ENCODE (outtare.i[outtare.count- 1] )
-      CALL log (.$temp)
-      .$temp = "Row:" + $ENCODE (outtare.j[outtare.count]) + " Col:"+ $ENCODE (outtare.i[outtare.count])
-      CALL log (.$temp)
-      ;
-    VALUE 4:
-      outtare.i[outtare.count] = 1;
-      outtare.j[outtare.count] = 1;
-      outtare.count = outtare.count + 1;
-      outtare.i[outtare.count] = 1;
-      outtare.j[outtare.count] = 2;
-      outtare.count = outtare.count + 1;
-      outtare.i[outtare.count] = 1;
-      outtare.j[outtare.count] = 3;
-      ;
-      .$temp = "Row:" + $ENCODE (outtare.j[outtare.count - 2]) + " Col:"+ $ENCODE (outtare.i[outtare.count- 2] )
-      CALL log (.$temp)
-      .$temp = "Row:" + $ENCODE (outtare.j[outtare.count - 1] ) + " Col:"+ $ENCODE (outtare.i[outtare.count- 1] )
-      CALL log (.$temp)
-      .$temp = "Row:" + $ENCODE (outtare.j[outtare.count]) + " Col:"+ $ENCODE (outtare.i[outtare.count])
-      CALL log (.$temp)
-      ;
-    VALUE 5:
-      outtare.i[outtare.count] = 4;
-      outtare.j[outtare.count] = 4;
-      outtare.count = outtare.count + 1;
-      outtare.i[outtare.count] = 4;
-      outtare.j[outtare.count] = 5;
-      outtare.count = outtare.count + 1;
-      outtare.i[outtare.count] = 4;
-      outtare.j[outtare.count] = 6;
-      ;
-      .$temp = "Row:" + $ENCODE (outtare.j[outtare.count - 2]) + " Col:"+ $ENCODE (outtare.i[outtare.count- 2] )
-      CALL log (.$temp)
-      .$temp = "Row:" + $ENCODE (outtare.j[outtare.count - 1] ) + " Col:"+ $ENCODE (outtare.i[outtare.count- 1] )
-      CALL log (.$temp)
-      .$temp = "Row:" + $ENCODE (outtare.j[outtare.count]) + " Col:"+ $ENCODE (outtare.i[outtare.count])
-      CALL log (.$temp)
-      ;
-    VALUE 6:
-      outtare.i[outtare.count] = 3;
-      outtare.j[outtare.count] = 4;
-      outtare.count = outtare.count + 1;
-      outtare.i[outtare.count] = 3;
-      outtare.j[outtare.count] = 5;
-      outtare.count = outtare.count + 1;
-      outtare.i[outtare.count] = 3;
-      outtare.j[outtare.count] = 6;
-      ;
-      .$temp = "Row:" + $ENCODE (outtare.j[outtare.count - 2]) + " Col:"+ $ENCODE (outtare.i[outtare.count- 2] )
-      CALL log (.$temp)
-      .$temp = "Row:" + $ENCODE (outtare.j[outtare.count - 1] ) + " Col:"+ $ENCODE (outtare.i[outtare.count- 1] )
-      CALL log (.$temp)
-      .$temp = "Row:" + $ENCODE (outtare.j[outtare.count]) + " Col:"+ $ENCODE (outtare.i[outtare.count])
-      CALL log (.$temp)
-      ;
-    VALUE 7:
-      outtare.i[outtare.count] = 2;
-      outtare.j[outtare.count] = 4;
-      outtare.count = outtare.count + 1;
-      outtare.i[outtare.count] = 2;
-      outtare.j[outtare.count] = 5;
-      outtare.count = outtare.count + 1;
-      outtare.i[outtare.count] = 2;
-      outtare.j[outtare.count] = 6;
-      ;
-      .$temp = "Row:" + $ENCODE (outtare.j[outtare.count - 2]) + " Col:"+ $ENCODE (outtare.i[outtare.count- 2] )
-      CALL log (.$temp)
-      .$temp = "Row:" + $ENCODE (outtare.j[outtare.count - 1] ) + " Col:"+ $ENCODE (outtare.i[outtare.count- 1] )
-      CALL log (.$temp)
-      .$temp = "Row:" + $ENCODE (outtare.j[outtare.count]) + " Col:"+ $ENCODE (outtare.i[outtare.count])
-      CALL log (.$temp)
-      ;
-    VALUE 8:
-      outtare.i[outtare.count] = 1;
-      outtare.j[outtare.count] = 4;
-      outtare.count = outtare.count + 1;
-      outtare.i[outtare.count] = 1;
-      outtare.j[outtare.count] = 5;
-      outtare.count = outtare.count + 1;
-      outtare.i[outtare.count] = 1;
-      outtare.j[outtare.count] = 6;
-      ;
-      .$temp = "Row:" + $ENCODE (outtare.j[outtare.count - 2]) + " Col:"+ $ENCODE (outtare.i[outtare.count- 2] )
-      CALL log (.$temp)
-      .$temp = "Row:" + $ENCODE (outtare.j[outtare.count - 1] ) + " Col:"+ $ENCODE (outtare.i[outtare.count- 1] )
-      CALL log (.$temp)
-      .$temp = "Row:" + $ENCODE (outtare.j[outtare.count]) + " Col:"+ $ENCODE (outtare.i[outtare.count])
-      CALL log (.$temp)
-      ;
-    VALUE 9:
-      outtare.i[outtare.count] = 4;
-      outtare.j[outtare.count] = 7;
-      outtare.count = outtare.count + 1;
-      outtare.i[outtare.count] = 4;
-      outtare.j[outtare.count] = 8;
-      outtare.count = outtare.count + 1;
-      outtare.i[outtare.count] = 4;
-      outtare.j[outtare.count] = 9;
-      ;
-      .$temp = "Row:" + $ENCODE (outtare.j[outtare.count - 2]) + " Col:"+ $ENCODE (outtare.i[outtare.count- 2] )
-      CALL log (.$temp)
-      .$temp = "Row:" + $ENCODE (outtare.j[outtare.count - 1] ) + " Col:"+ $ENCODE (outtare.i[outtare.count- 1] )
-      CALL log (.$temp)
-      .$temp = "Row:" + $ENCODE (outtare.j[outtare.count]) + " Col:"+ $ENCODE (outtare.i[outtare.count])
-      CALL log (.$temp)
-      ;
-    VALUE 10:
-      outtare.i[outtare.count] = 3;
-      outtare.j[outtare.count] = 7;
-      outtare.count = outtare.count + 1;
-      outtare.i[outtare.count] = 3;
-      outtare.j[outtare.count] = 8;
-      outtare.count = outtare.count + 1;
-      outtare.i[outtare.count] = 3;
-      outtare.j[outtare.count] = 9;
-      ;
-      .$temp = "Row:" + $ENCODE (outtare.j[outtare.count - 2]) + " Col:"+ $ENCODE (outtare.i[outtare.count- 2] )
-      CALL log (.$temp)
-      .$temp = "Row:" + $ENCODE (outtare.j[outtare.count - 1] ) + " Col:"+ $ENCODE (outtare.i[outtare.count- 1] )
-      CALL log (.$temp)
-      .$temp = "Row:" + $ENCODE (outtare.j[outtare.count]) + " Col:"+ $ENCODE (outtare.i[outtare.count])
-      CALL log (.$temp)
-      ;
-    VALUE 11:
-      outtare.i[outtare.count] = 2;
-      outtare.j[outtare.count] = 7;
-      outtare.count = outtare.count + 1;
-      outtare.i[outtare.count] = 2;
-      outtare.j[outtare.count] = 8;
-      outtare.count = outtare.count + 1;
-      outtare.i[outtare.count] = 2;
-      outtare.j[outtare.count] = 9;
-      ;
-      .$temp = "Row:" + $ENCODE (outtare.j[outtare.count - 2]) + " Col:"+ $ENCODE (outtare.i[outtare.count- 2] )
-      CALL log (.$temp)
-      .$temp = "Row:" + $ENCODE (outtare.j[outtare.count - 1] ) + " Col:"+ $ENCODE (outtare.i[outtare.count- 1] )
-      CALL log (.$temp)
-      .$temp = "Row:" + $ENCODE (outtare.j[outtare.count]) + " Col:"+ $ENCODE (outtare.i[outtare.count])
-      CALL log (.$temp)
-      ;
-    VALUE 12:
-      outtare.i[outtare.count] = 1;
-      outtare.j[outtare.count] = 7;
-      outtare.count = outtare.count + 1;
-      outtare.i[outtare.count] = 1;
-      outtare.j[outtare.count] = 8;
-      outtare.count = outtare.count + 1;
-      outtare.i[outtare.count] = 1;
-      outtare.j[outtare.count] = 9;
-      ;
-      .$temp = "Row:" + $ENCODE (outtare.j[outtare.count - 2]) + " Col:"+ $ENCODE (outtare.i[outtare.count- 2] )
-      CALL log (.$temp)
-      .$temp = "Row:" + $ENCODE (outtare.j[outtare.count - 1] ) + " Col:"+ $ENCODE (outtare.i[outtare.count- 1] )
-      CALL log (.$temp)
-      .$temp = "Row:" + $ENCODE (outtare.j[outtare.count]) + " Col:"+ $ENCODE (outtare.i[outtare.count])
-      CALL log (.$temp)
-      ;
-    VALUE 13:
-      outtare.i[outtare.count] = 4;
-      outtare.j[outtare.count] = 10;
-      outtare.count = outtare.count + 1;
-      outtare.i[outtare.count] = 4;
-      outtare.j[outtare.count] = 11;
-      outtare.count = outtare.count + 1;
-      outtare.i[outtare.count] = 4;
-      outtare.j[outtare.count] = 12;
-      ;
-      .$temp = "Row:" + $ENCODE (outtare.j[outtare.count - 2]) + " Col:"+ $ENCODE (outtare.i[outtare.count- 2] )
-      CALL log (.$temp)
-      .$temp = "Row:" + $ENCODE (outtare.j[outtare.count - 1] ) + " Col:"+ $ENCODE (outtare.i[outtare.count- 1] )
-      CALL log (.$temp)
-      .$temp = "Row:" + $ENCODE (outtare.j[outtare.count]) + " Col:"+ $ENCODE (outtare.i[outtare.count])
-      CALL log (.$temp)
-      ;
-    VALUE 14:
-      outtare.i[outtare.count] = 3;
-      outtare.j[outtare.count] = 10;
-      outtare.count = outtare.count + 1;
-      outtare.i[outtare.count] = 3;
-      outtare.j[outtare.count] = 11;
-      outtare.count = outtare.count + 1;
-      outtare.i[outtare.count] = 3;
-      outtare.j[outtare.count] = 12;
-      ;
-      .$temp = "Row:" + $ENCODE (outtare.j[outtare.count - 2]) + " Col:"+ $ENCODE (outtare.i[outtare.count- 2] )
-      CALL log (.$temp)
-      .$temp = "Row:" + $ENCODE (outtare.j[outtare.count - 1] ) + " Col:"+ $ENCODE (outtare.i[outtare.count- 1] )
-      CALL log (.$temp)
-      .$temp = "Row:" + $ENCODE (outtare.j[outtare.count]) + " Col:"+ $ENCODE (outtare.i[outtare.count])
-      CALL log (.$temp)
-      ;
-    VALUE 15:
-      outtare.i[outtare.count] = 2;
-      outtare.j[outtare.count] = 10;
-      outtare.count = outtare.count + 1;
-      outtare.i[outtare.count] = 2;
-      outtare.j[outtare.count] = 11;
-      outtare.count = outtare.count + 1;
-      outtare.i[outtare.count] = 2;
-      outtare.j[outtare.count] = 12;
-      ;
-      .$temp = "Row:" + $ENCODE (outtare.j[outtare.count - 2]) + " Col:"+ $ENCODE (outtare.i[outtare.count- 2] )
-      CALL log (.$temp)
-      .$temp = "Row:" + $ENCODE (outtare.j[outtare.count - 1] ) + " Col:"+ $ENCODE (outtare.i[outtare.count- 1] )
-      CALL log (.$temp)
-      .$temp = "Row:" + $ENCODE (outtare.j[outtare.count]) + " Col:"+ $ENCODE (outtare.i[outtare.count])
-      CALL log (.$temp)
-      ;
-    VALUE 16:
-      outtare.i[outtare.count] = 1;
-      outtare.j[outtare.count] = 10;
-      outtare.count = outtare.count + 1;
-      outtare.i[outtare.count] = 1;
-      outtare.j[outtare.count] = 11;
-      outtare.count = outtare.count + 1;
-      outtare.i[outtare.count] = 1;
-      outtare.j[outtare.count] = 12;
-      ;
-      .$temp = "Row:" + $ENCODE (outtare.j[outtare.count - 2]) + " Col:"+ $ENCODE (outtare.i[outtare.count- 2] )
-      CALL log (.$temp)
-      .$temp = "Row:" + $ENCODE (outtare.j[outtare.count - 1] ) + " Col:"+ $ENCODE (outtare.i[outtare.count- 1] )
-      CALL log (.$temp)
-      .$temp = "Row:" + $ENCODE (outtare.j[outtare.count]) + " Col:"+ $ENCODE (outtare.i[outtare.count])
-      CALL log (.$temp)
-      ;
+   VALUE 1:
+    outtare.i[outtare.count] = 4;
+    outtare.j[outtare.count] = 1;
+    outtare.count = outtare.count+1;
+    outtare.i[outtare.count] = 4;
+    outtare.j[outtare.count] = 2;
+    outtare.count = outtare.count+1;
+    outtare.i[outtare.count] = 4;
+    outtare.j[outtare.count] = 3;
+;
+    .$temp = "Row:"+$ENCODE(outtare.j[outtare.count-2])+" Col:"+$ENCODE(outtare.i[outtare.count-2])
+    CALL log(.$temp)
+    .$temp = "Row:"+$ENCODE(outtare.j[outtare.count-1])+" Col:"+$ENCODE(outtare.i[outtare.count-1])
+    CALL log(.$temp)
+    .$temp = "Row:"+$ENCODE(outtare.j[outtare.count])+" Col:"+$ENCODE(outtare.i[outtare.count])
+    CALL log(.$temp)
+;
+   VALUE 2:
+    outtare.i[outtare.count] = 3;
+    outtare.j[outtare.count] = 1;
+    outtare.count = outtare.count+1;
+    outtare.i[outtare.count] = 3;
+    outtare.j[outtare.count] = 2;
+    outtare.count = outtare.count+1;
+    outtare.i[outtare.count] = 3;
+    outtare.j[outtare.count] = 3;
+;
+    .$temp = "Row:"+$ENCODE(outtare.j[outtare.count-2])+" Col:"+$ENCODE(outtare.i[outtare.count-2])
+    CALL log(.$temp)
+    .$temp = "Row:"+$ENCODE(outtare.j[outtare.count-1])+" Col:"+$ENCODE(outtare.i[outtare.count-1])
+    CALL log(.$temp)
+    .$temp = "Row:"+$ENCODE(outtare.j[outtare.count])+" Col:"+$ENCODE(outtare.i[outtare.count])
+    CALL log(.$temp)
+;
+   VALUE 3:
+    outtare.i[outtare.count] = 2;
+    outtare.j[outtare.count] = 1;
+    outtare.count = outtare.count+1;
+    outtare.i[outtare.count] = 2;
+    outtare.j[outtare.count] = 2;
+    outtare.count = outtare.count+1;
+    outtare.i[outtare.count] = 2;
+    outtare.j[outtare.count] = 3;
+;
+    .$temp = "Row:"+$ENCODE(outtare.j[outtare.count-2])+" Col:"+$ENCODE(outtare.i[outtare.count-2])
+    CALL log(.$temp)
+    .$temp = "Row:"+$ENCODE(outtare.j[outtare.count-1])+" Col:"+$ENCODE(outtare.i[outtare.count-1])
+    CALL log(.$temp)
+    .$temp = "Row:"+$ENCODE(outtare.j[outtare.count])+" Col:"+$ENCODE(outtare.i[outtare.count])
+    CALL log(.$temp)
+;
+   VALUE 4:
+    outtare.i[outtare.count] = 1;
+    outtare.j[outtare.count] = 1;
+    outtare.count = outtare.count+1;
+    outtare.i[outtare.count] = 1;
+    outtare.j[outtare.count] = 2;
+    outtare.count = outtare.count+1;
+    outtare.i[outtare.count] = 1;
+    outtare.j[outtare.count] = 3;
+;
+    .$temp = "Row:"+$ENCODE(outtare.j[outtare.count-2])+" Col:"+$ENCODE(outtare.i[outtare.count-2])
+    CALL log(.$temp)
+    .$temp = "Row:"+$ENCODE(outtare.j[outtare.count-1])+" Col:"+$ENCODE(outtare.i[outtare.count-1])
+    CALL log(.$temp)
+    .$temp = "Row:"+$ENCODE(outtare.j[outtare.count])+" Col:"+$ENCODE(outtare.i[outtare.count])
+    CALL log(.$temp)
+;
+   VALUE 5:
+    outtare.i[outtare.count] = 4;
+    outtare.j[outtare.count] = 4;
+    outtare.count = outtare.count+1;
+    outtare.i[outtare.count] = 4;
+    outtare.j[outtare.count] = 5;
+    outtare.count = outtare.count+1;
+    outtare.i[outtare.count] = 4;
+    outtare.j[outtare.count] = 6;
+;
+    .$temp = "Row:"+$ENCODE(outtare.j[outtare.count-2])+" Col:"+$ENCODE(outtare.i[outtare.count-2])
+    CALL log(.$temp)
+    .$temp = "Row:"+$ENCODE(outtare.j[outtare.count-1])+" Col:"+$ENCODE(outtare.i[outtare.count-1])
+    CALL log(.$temp)
+    .$temp = "Row:"+$ENCODE(outtare.j[outtare.count])+" Col:"+$ENCODE(outtare.i[outtare.count])
+    CALL log(.$temp)
+;
+   VALUE 6:
+    outtare.i[outtare.count] = 3;
+    outtare.j[outtare.count] = 4;
+    outtare.count = outtare.count+1;
+    outtare.i[outtare.count] = 3;
+    outtare.j[outtare.count] = 5;
+    outtare.count = outtare.count+1;
+    outtare.i[outtare.count] = 3;
+    outtare.j[outtare.count] = 6;
+;
+    .$temp = "Row:"+$ENCODE(outtare.j[outtare.count-2])+" Col:"+$ENCODE(outtare.i[outtare.count-2])
+    CALL log(.$temp)
+    .$temp = "Row:"+$ENCODE(outtare.j[outtare.count-1])+" Col:"+$ENCODE(outtare.i[outtare.count-1])
+    CALL log(.$temp)
+    .$temp = "Row:"+$ENCODE(outtare.j[outtare.count])+" Col:"+$ENCODE(outtare.i[outtare.count])
+    CALL log(.$temp)
+;
+   VALUE 7:
+    outtare.i[outtare.count] = 2;
+    outtare.j[outtare.count] = 4;
+    outtare.count = outtare.count+1;
+    outtare.i[outtare.count] = 2;
+    outtare.j[outtare.count] = 5;
+    outtare.count = outtare.count+1;
+    outtare.i[outtare.count] = 2;
+    outtare.j[outtare.count] = 6;
+;
+    .$temp = "Row:"+$ENCODE(outtare.j[outtare.count-2])+" Col:"+$ENCODE(outtare.i[outtare.count-2])
+    CALL log(.$temp)
+    .$temp = "Row:"+$ENCODE(outtare.j[outtare.count-1])+" Col:"+$ENCODE(outtare.i[outtare.count-1])
+    CALL log(.$temp)
+    .$temp = "Row:"+$ENCODE(outtare.j[outtare.count])+" Col:"+$ENCODE(outtare.i[outtare.count])
+    CALL log(.$temp)
+;
+   VALUE 8:
+    outtare.i[outtare.count] = 1;
+    outtare.j[outtare.count] = 4;
+    outtare.count = outtare.count+1;
+    outtare.i[outtare.count] = 1;
+    outtare.j[outtare.count] = 5;
+    outtare.count = outtare.count+1;
+    outtare.i[outtare.count] = 1;
+    outtare.j[outtare.count] = 6;
+;
+    .$temp = "Row:"+$ENCODE(outtare.j[outtare.count-2])+" Col:"+$ENCODE(outtare.i[outtare.count-2])
+    CALL log(.$temp)
+    .$temp = "Row:"+$ENCODE(outtare.j[outtare.count-1])+" Col:"+$ENCODE(outtare.i[outtare.count-1])
+    CALL log(.$temp)
+    .$temp = "Row:"+$ENCODE(outtare.j[outtare.count])+" Col:"+$ENCODE(outtare.i[outtare.count])
+    CALL log(.$temp)
+;
+   VALUE 9:
+    outtare.i[outtare.count] = 4;
+    outtare.j[outtare.count] = 7;
+    outtare.count = outtare.count+1;
+    outtare.i[outtare.count] = 4;
+    outtare.j[outtare.count] = 8;
+    outtare.count = outtare.count+1;
+    outtare.i[outtare.count] = 4;
+    outtare.j[outtare.count] = 9;
+;
+    .$temp = "Row:"+$ENCODE(outtare.j[outtare.count-2])+" Col:"+$ENCODE(outtare.i[outtare.count-2])
+    CALL log(.$temp)
+    .$temp = "Row:"+$ENCODE(outtare.j[outtare.count-1])+" Col:"+$ENCODE(outtare.i[outtare.count-1])
+    CALL log(.$temp)
+    .$temp = "Row:"+$ENCODE(outtare.j[outtare.count])+" Col:"+$ENCODE(outtare.i[outtare.count])
+    CALL log(.$temp)
+;
+   VALUE 10:
+    outtare.i[outtare.count] = 3;
+    outtare.j[outtare.count] = 7;
+    outtare.count = outtare.count+1;
+    outtare.i[outtare.count] = 3;
+    outtare.j[outtare.count] = 8;
+    outtare.count = outtare.count+1;
+    outtare.i[outtare.count] = 3;
+    outtare.j[outtare.count] = 9;
+;
+    .$temp = "Row:"+$ENCODE(outtare.j[outtare.count-2])+" Col:"+$ENCODE(outtare.i[outtare.count-2])
+    CALL log(.$temp)
+    .$temp = "Row:"+$ENCODE(outtare.j[outtare.count-1])+" Col:"+$ENCODE(outtare.i[outtare.count-1])
+    CALL log(.$temp)
+    .$temp = "Row:"+$ENCODE(outtare.j[outtare.count])+" Col:"+$ENCODE(outtare.i[outtare.count])
+    CALL log(.$temp)
+;
+   VALUE 11:
+    outtare.i[outtare.count] = 2;
+    outtare.j[outtare.count] = 7;
+    outtare.count = outtare.count+1;
+    outtare.i[outtare.count] = 2;
+    outtare.j[outtare.count] = 8;
+    outtare.count = outtare.count+1;
+    outtare.i[outtare.count] = 2;
+    outtare.j[outtare.count] = 9;
+;
+    .$temp = "Row:"+$ENCODE(outtare.j[outtare.count-2])+" Col:"+$ENCODE(outtare.i[outtare.count-2])
+    CALL log(.$temp)
+    .$temp = "Row:"+$ENCODE(outtare.j[outtare.count-1])+" Col:"+$ENCODE(outtare.i[outtare.count-1])
+    CALL log(.$temp)
+    .$temp = "Row:"+$ENCODE(outtare.j[outtare.count])+" Col:"+$ENCODE(outtare.i[outtare.count])
+    CALL log(.$temp)
+;
+   VALUE 12:
+    outtare.i[outtare.count] = 1;
+    outtare.j[outtare.count] = 7;
+    outtare.count = outtare.count+1;
+    outtare.i[outtare.count] = 1;
+    outtare.j[outtare.count] = 8;
+    outtare.count = outtare.count+1;
+    outtare.i[outtare.count] = 1;
+    outtare.j[outtare.count] = 9;
+;
+    .$temp = "Row:"+$ENCODE(outtare.j[outtare.count-2])+" Col:"+$ENCODE(outtare.i[outtare.count-2])
+    CALL log(.$temp)
+    .$temp = "Row:"+$ENCODE(outtare.j[outtare.count-1])+" Col:"+$ENCODE(outtare.i[outtare.count-1])
+    CALL log(.$temp)
+    .$temp = "Row:"+$ENCODE(outtare.j[outtare.count])+" Col:"+$ENCODE(outtare.i[outtare.count])
+    CALL log(.$temp)
+;
+   VALUE 13:
+    outtare.i[outtare.count] = 4;
+    outtare.j[outtare.count] = 10;
+    outtare.count = outtare.count+1;
+    outtare.i[outtare.count] = 4;
+    outtare.j[outtare.count] = 11;
+    outtare.count = outtare.count+1;
+    outtare.i[outtare.count] = 4;
+    outtare.j[outtare.count] = 12;
+;
+    .$temp = "Row:"+$ENCODE(outtare.j[outtare.count-2])+" Col:"+$ENCODE(outtare.i[outtare.count-2])
+    CALL log(.$temp)
+    .$temp = "Row:"+$ENCODE(outtare.j[outtare.count-1])+" Col:"+$ENCODE(outtare.i[outtare.count-1])
+    CALL log(.$temp)
+    .$temp = "Row:"+$ENCODE(outtare.j[outtare.count])+" Col:"+$ENCODE(outtare.i[outtare.count])
+    CALL log(.$temp)
+;
+   VALUE 14:
+    outtare.i[outtare.count] = 3;
+    outtare.j[outtare.count] = 10;
+    outtare.count = outtare.count+1;
+    outtare.i[outtare.count] = 3;
+    outtare.j[outtare.count] = 11;
+    outtare.count = outtare.count+1;
+    outtare.i[outtare.count] = 3;
+    outtare.j[outtare.count] = 12;
+;
+    .$temp = "Row:"+$ENCODE(outtare.j[outtare.count-2])+" Col:"+$ENCODE(outtare.i[outtare.count-2])
+    CALL log(.$temp)
+    .$temp = "Row:"+$ENCODE(outtare.j[outtare.count-1])+" Col:"+$ENCODE(outtare.i[outtare.count-1])
+    CALL log(.$temp)
+    .$temp = "Row:"+$ENCODE(outtare.j[outtare.count])+" Col:"+$ENCODE(outtare.i[outtare.count])
+    CALL log(.$temp)
+;
+   VALUE 15:
+    outtare.i[outtare.count] = 2;
+    outtare.j[outtare.count] = 10;
+    outtare.count = outtare.count+1;
+    outtare.i[outtare.count] = 2;
+    outtare.j[outtare.count] = 11;
+    outtare.count = outtare.count+1;
+    outtare.i[outtare.count] = 2;
+    outtare.j[outtare.count] = 12;
+;
+    .$temp = "Row:"+$ENCODE(outtare.j[outtare.count-2])+" Col:"+$ENCODE(outtare.i[outtare.count-2])
+    CALL log(.$temp)
+    .$temp = "Row:"+$ENCODE(outtare.j[outtare.count-1])+" Col:"+$ENCODE(outtare.i[outtare.count-1])
+    CALL log(.$temp)
+    .$temp = "Row:"+$ENCODE(outtare.j[outtare.count])+" Col:"+$ENCODE(outtare.i[outtare.count])
+    CALL log(.$temp)
+;
+   VALUE 16:
+    outtare.i[outtare.count] = 1;
+    outtare.j[outtare.count] = 10;
+    outtare.count = outtare.count+1;
+    outtare.i[outtare.count] = 1;
+    outtare.j[outtare.count] = 11;
+    outtare.count = outtare.count+1;
+    outtare.i[outtare.count] = 1;
+    outtare.j[outtare.count] = 12;
+;
+    .$temp = "Row:"+$ENCODE(outtare.j[outtare.count-2])+" Col:"+$ENCODE(outtare.i[outtare.count-2])
+    CALL log(.$temp)
+    .$temp = "Row:"+$ENCODE(outtare.j[outtare.count-1])+" Col:"+$ENCODE(outtare.i[outtare.count-1])
+    CALL log(.$temp)
+    .$temp = "Row:"+$ENCODE(outtare.j[outtare.count])+" Col:"+$ENCODE(outtare.i[outtare.count])
+    CALL log(.$temp)
+;
   END
 .END
-.PROGRAM s.in.table_old (.no,.i,.j)
-  .j = INT((.no-1)/3) + 1
-  .i = INT((.no-1) MOD 3) + 1
+.PROGRAM s.in.table_old(.no,.i,.j)@25/11/18 12:58 #0
+  .j = INT((.no-1)/3)+1
+  .i = INT((.no-1) MOD 3)+1
 .END
-.PROGRAM s.out.table_old (.no,.i,.j)
-  .j = INT((.no-1)/4) + 1
-  .i = INT((.no-1) MOD 4) + 1
+.PROGRAM s.out.table_old(.no,.i,.j)@25/11/18 12:58 #0
+  .j = INT((.no-1)/4)+1
+  .i = INT((.no-1) MOD 4)+1
 .END
-.PROGRAM pg.select (.state)
+.PROGRAM pg.select(.state)@25/11/18 12:58 #26
   SCASE $detail.type OF
-    SVALUE "312.229.002":
-      CALL id4
-      .state = TRUE
-      RETURN
-    SVALUE "STRING":
-      CALL id4
-      .state = TRUE
-      RETURN
+   SVALUE "312.229.002":
+    CALL id4
+    .state = TRUE
+    RETURN
+   SVALUE "STRING":
+    CALL id4
+    .state = TRUE
+    RETURN
   END
 .END
-.PROGRAM id4 () ; 312.229.002_1
-    ; Object ID
-    object.id = 4
-    ; Working gripper
-    gripper.type = 1
-    ; Max objects in output tare
-    max.tare.count = 168
-    spc.tare.count = 50
-    ;
-    detail.length = 23.5
-    start.shift.x = 0
-    start.shift.y = 15
-    start.shift.z = 0
-    ;
+.PROGRAM id4()@25/11/19 14:17 #8; 312.229.002_1
+; Object ID
+  object.id = 4
+; Working gripper
+  gripper.type = 1
+; Max objects in output tare
+  max.tare.count = 168
+  spc.tare.count = 50
+;
+  detail.length = 23.5
+  start.shift.x = 0
+  start.shift.y = 15
+  start.shift.z = 0
+;
 .END
-.PROGRAM a.teach.stz()@25/10/21 15:36 #0
+.PROGRAM id1()@25/11/20 14:28 #0; 440.00.26
+; Object ID
+  object.id = 1
+; Working gripper
+  gripper.type = 2
+; Max objects in output tare
+  max.tare.count = 126
+  spc.tare.count = 50
+;
+  detail.length = 27.5
+  start.shift.x = 0
+  start.shift.y = 0
+  start.shift.z = 0
+;
+.END
+.PROGRAM a.teach.stz()@25/11/17 15:18 #0
   SPEED 250 MM/S ALWAYS
   ACCURACY 0 ALWAYS
   TOOL tool.pin
-  ;
-  LMOVE #plb ; *** TEACH POINT *** Left bottom 
-  LMOVE #plt ; *** TEACH POINT *** Left top
-  LMOVE #prt ; *** TEACH POINT *** Right top
-  LMOVE #prb ; *** TEACH POINT *** Right bottom
-  ;
+;
+  LMOVE #plb; *** TEACH POINT *** Left bottom 
+  LMOVE #plt; *** TEACH POINT *** Left top
+  LMOVE #prt; *** TEACH POINT *** Right top
+  LMOVE #prb; *** TEACH POINT *** Right bottom
+;
   POINT .plb = #plb
   POINT .plt = #plt
   POINT .prt = #prt
   POINT .prb = #prb
-  ;
-  .dx1 = DISTANCE(.plt, .plb) ; DX1
-  .dx2 = DISTANCE(.prt, .prb) ; DX2
-  .dy1 = DISTANCE(.plt, .prt) ; DY1
-  .dy2 = DISTANCE(.plb, .prb) ; DY2
-  ;
-  PRINT 0: "DX1 =", .dx1
-  PRINT 0: "DX2 =", .dx2 
-  PRINT 0: "DY1 =", .dy1
-  PRINT 0: "DY2 =", .dy2
-  PRINT 0: "AVEX =", (.dx1+.dx2)/2
-  PRINT 0: "AVEY =", (.dy1+.dy2)/2
-  ;
+;
+  .dx1 = DISTANCE(.plt,.plb) ; DX1
+  .dx2 = DISTANCE(.prt,.prb) ; DX2
+  .dy1 = DISTANCE(.plt,.prt) ; DY1
+  .dy2 = DISTANCE(.plb,.prb) ; DY2
+;
+  PRINT 0: "DX1 =",.dx1
+  PRINT 0: "DX2 =",.dx2
+  PRINT 0: "DY1 =",.dy1
+  PRINT 0: "DY2 =",.dy2
+  PRINT 0: "AVEX =",(.dx1+.dx2)/2
+  PRINT 0: "AVEY =",(.dy1+.dy2)/2
+;
   BREAK
-  POINT stz.frame = FRAME (.plb, .prb, .prt, .plt)
-  POINT stz.frame = stz.frame + RZ (-90)
-  ; CIR1 = 100, 100 CIR2 = 148, 250
-  ; CIR3 = 248, 300 CIR4 = 148; 450
+  POINT stz.frame = FRAME(.plb,.prb,.prt,.plt)
+  POINT stz.frame = stz.frame+RZ(-90)
+; CIR1 = 100, 100 CIR2 = 148, 250
+; CIR3 = 248, 300 CIR4 = 148; 450
   BREAK
-  LMOVE stz.frame + TRANS (hmi.x, hmi.y, 10)
+  LMOVE stz.frame+TRANS(hmi.x,hmi.y,10)
 .END
-.PROGRAM a.tch.stock.in ()
-  ; Use this for first teach
+.PROGRAM a.tch.stock.in()@25/11/18 11:08 #0
+; Use this for first teach
   IF FALSE THEN
     TOOL tool.pin
-    JMOVE stocker.in[1, 1] + TRANS (0, 0, 50)
-    LMOVE stocker.in[1, 1]
+    JMOVE stocker.in[1,1]+TRANS(0,0,50)
+    LMOVE stocker.in[1,1]
     FOR .i = 0 TO 2
       FOR .j = 0 TO 9
-        PRINT 0: .i, .j
-        POINT stocker.in[.i + 1, .j + 1] = stocker.in[1, 1] + TRANS (-80 * .j, -610 * .i)
+        PRINT 0: .i,.j
+        POINT stocker.in[.i+1,.j+1] = stocker.in[1,1]+TRANS(-80*.j,-610*.i)
       END
     END
   END
-  ; Correct point
+; Correct point
   TOOL tool.pin
   .i = hmi.st.in.i
   .j = hmi.st.in.j
-  JMOVE stocker.in[.i, .j] + TRANS (0, 0, 50)
-  LMOVE stocker.in[.i, .j] ; *** TEACH POINT ***
-  LMOVE stocker.in[.i, .j] + TRANS (0, 0, 50)
-  LMOVE stocker.in[.i, .j]
-  LMOVE stocker.in[.i, .j] + TRANS (0, 0, 50)
-  ;
-  
+  JMOVE stocker.in[.i,.j]+TRANS(0,0,50)
+  LMOVE stocker.in[.i,.j]; *** TEACH POINT ***
+  LMOVE stocker.in[.i,.j]+TRANS(0,0,50)
+  LMOVE stocker.in[.i,.j]
+  LMOVE stocker.in[.i,.j]+TRANS(0,0,50)
+;
 .END
-.PROGRAM a.tch.stock.out ()
-  ; Use this for first teach
+.PROGRAM a.tch.stock.out()@25/11/18 15:31 #0
+; Use this for first teach
   IF FALSE THEN
-    JMOVE stocker.out[1, 1] + TRANS (0, 0, 50)
-    LMOVE stocker.out[1, 1]
+    JMOVE stocker.out[1,1]+TRANS(0,0,50)
+    LMOVE stocker.out[1,1]
     FOR .i = 0 TO 3
       FOR .j = 0 TO 11
-        PRINT 0: .i, .j
-        POINT stocker.out[.i + 1, .j + 1] = stocker.out[1, 1] + TRANS (-100 * .j, -490 * .i)
+        PRINT 0: .i,.j
+        POINT stocker.out[.i+1,.j+1] = stocker.out[1,1]+TRANS(-100*.j,-490*.i)
       END
     END
   END
-  ; Correct point
+; Correct point
   .i = hmi.st.out.i
   .j = hmi.st.out.j
-  JMOVE stocker.out[.i, .j] + TRANS (0, 0, 50)
-  LMOVE stocker.out[.i, .j] ; *** TEACH POINT ***
-  LMOVE stocker.out[.i, .j] + TRANS (0, 0, 50)
-  LMOVE stocker.out[.i, .j]
-  LMOVE stocker.out[.i, .j] + TRANS (0, 0, 50)
+  JMOVE stocker.out[.i,.j]+TRANS(0,0,50)
+  LMOVE stocker.out[.i,.j]; *** TEACH POINT ***
+  LMOVE stocker.out[.i,.j]+TRANS(0,0,50)
+  LMOVE stocker.out[.i,.j]
+  LMOVE stocker.out[.i,.j]+TRANS(0,0,50)
 .END
-.PROGRAM a.teach.pos ()
+.PROGRAM a.teach.pos()@25/11/18 11:43 #0
   TOOL tool.pick[hmi.tool.no]
-  ;
+;
   POINT .temp = #pos.pos[hmi.obj.id]
-  JMOVE .temp + TRANS (10, 0, 50)
-  LMOVE .temp + TRANS (10, 0, 20)
+  JMOVE .temp+TRANS(10,0,50)
+  LMOVE .temp+TRANS(10,0,20)
   BREAK
   LMOVE #pos.pos[hmi.obj.id]
   BREAK
   TWAIT 0.5
-  LMOVE .temp + TRANS (0, 0, 50)
+  LMOVE .temp+TRANS(0,0,50)
   BREAK
   TWAIT 0.5
-
 .END
-.PROGRAM a.teach.gripper ()
+.PROGRAM a.teach.gripper()@25/11/20 12:46 #0
   TOOL tool.pick[hmi.tool.no]
-  ;
+;
   POINT .temp = #tool.pos[hmi.t.pos]
-  JMOVE .temp + TRANS (0, 0, 50)
+  JMOVE .temp+TRANS(0,0,50)
   BREAK
-  ;
+;
   LMOVE #tool.pos[hmi.t.pos]
   BREAK
   PULSE capture.grip
   TWAIT 0.5
-  ;
-  LMOVE .temp + TRANS (0, 0, 200)
+;
+  LMOVE .temp+TRANS(0,0,200)
   BREAK
   JMOVE #wait.pick
-  ;
-  LMOVE .temp + TRANS (0, 0, 200)
-  LMOVE .temp + TRANS (0, 0, 50)
+;
+  LMOVE .temp+TRANS(0,0,200)
+  LMOVE .temp+TRANS(0,0,50)
   BREAK
   LMOVE #tool.pos[hmi.t.pos]
   BREAK
   PULSE release.grip
   TWAIT 0.5
-  ;
-  LMOVE .temp + TRANS (0, 0, 50)
+;
+  LMOVE .temp+TRANS(0,0,50)
 .END
-.PROGRAM a.test.pick()@25/10/29 15:55 #0
+.PROGRAM a.test.pick()@25/11/17 15:18 #0
   IF FALSE THEN
     JMOVE #pick.in
   END
@@ -978,7 +991,7 @@ ANY:
   END
   POINT .pick = stz.frame+TRANS(cx+grip.xsh[hmi.tool.no]+.xsh,cy+grip.ysh[hmi.tool.no]+.ysh,grip.zsh[hmi.tool.no])+RZ(a)
   DECOMPOSE .c[1] = #pick.in
-  POINT .#pick.in = #PPOINT(.c[1],.c[2],.c[3],.c[4],.c[5],.c[6] - a)
+  POINT .#pick.in = #PPOINT(.c[1],.c[2],.c[3],.c[4],.c[5],.c[6]-a)
 ;
   JMOVE #wait.pick
   LMOVE .#pick.in
@@ -997,74 +1010,74 @@ ANY:
   LMOVE #wait.pick
   LMOVE #before.pos
 .END
-.PROGRAM stz.pick()@25/10/27 15:45 #1
-  ;
-  .$temp = "Pick detail from stz (" + $ENCODE (/L, hmi.x) + ", " + $ENCODE(/L, hmi.y) + ", " + $ENCODE(/L, hmi.a) + ")"
-  CALL log (.$temp)
-  CALL log ("State: PickDetail")
+.PROGRAM stz.pick()@25/11/17 15:18 #735
+;
+  .$temp = "Pick detail from stz ("+$ENCODE(/L,hmi.x)+", "+$ENCODE(/L,hmi.y)+", "+$ENCODE(/L,hmi.a)+")"
+  CALL log(.$temp)
+  CALL log("State: PickDetail")
   $action = "PickDetail"
-  ;
+;
   SPEED 100 ALWAYS
   ACCURACY 100 ALWAYS
   TOOL tool.pick[current.gripper]
-  ;
+;
   cx = hmi.x
   cy = hmi.y
   a = hmi.a
   .ysh = 0
   .xsh = 0
-  IF a == 180 THEN
+  IF a==180 THEN
     .xsh = grip.180xsh[current.gripper]
     .ysh = grip.180ysh[current.gripper]
   END
-  IF hmi.x > center.x + 40 THEN
-    cx = hmi.x - dist.xp * (hmi.x - center.x)
+  IF hmi.x>center.x+40 THEN
+    cx = hmi.x-dist.xp*(hmi.x-center.x)
   END
-  IF hmi.x < center.x - 40 THEN
-    cx = hmi.x + dist.xn * (-hmi.x + center.x)
+  IF hmi.x<center.x-40 THEN
+    cx = hmi.x+dist.xn*(-hmi.x+center.x)
   END
-  IF hmi.y > center.y + 20 THEN
-    cy = hmi.y - dist.yp * (hmi.y - center.y)
+  IF hmi.y>center.y+20 THEN
+    cy = hmi.y-dist.yp*(hmi.y-center.y)
   END
-  IF hmi.y < center.y - 20 THEN
-    cy = hmi.y + dist.yn * (-hmi.y + center.y)
+  IF hmi.y<center.y-20 THEN
+    cy = hmi.y+dist.yn*(-hmi.y+center.y)
   END
-  POINT .pick = stz.frame + TRANS (cx + hmi.gx + .xsh, cy + hmi.gy + .ysh, hmi.gz) + RZ (a)
+  POINT .pick = stz.frame+TRANS(cx+hmi.gx+.xsh,cy+hmi.gy+.ysh,hmi.gz)+RZ(a)
   DECOMPOSE .c[1] = #pick.in
-  POINT .#pick.in = #PPOINT (.c[1], .c[2], .c[3], .c[4], .c[5], .c[6] - a)
-  ;
+  POINT .#pick.in = #PPOINT(.c[1],.c[2],.c[3],.c[4],.c[5],.c[6]-a)
+;
   JMOVE #wait.pick
   ACCURACY 20
   LMOVE .#pick.in
-  IF NOT SIG (grip.unclamped) THEN
+  IF NOT SIG(grip.unclamped) THEN
     PULSE grip.unclamp
-    CALL log ("Wait for unclamp gripper. State: WaitingGripUnclamped")
+    CALL log("Wait for unclamp gripper. State: WaitingGripUnclamped")
     $action = "WaitingGripUnclamped"
     WAIT SIG(grip.unclamped) OR SIG(s.in1.disable)
   END
   ACCURACY 20
-  LAPPRO .pick, -30
+  LAPPRO .pick,-30
   SPEED 250 MM/S
-  ACCURACY 0.02 
+  ACCURACY 0.02
   LMOVE .pick
   BREAK
   PULSE grip.clamp
   TWAIT 0.5
   ACCURACY 20
-  LAPPRO .pick, -30
-  ;
+  LAPPRO .pick,-30
+;
   LMOVE .#pick.in
   LMOVE #wait.pick
   LMOVE #before.pos
 .END
-.PROGRAM stz.put(.pos)@25/11/17 16:13 #63
+.PROGRAM stz.put(.pos)@25/11/17 16:41 #260
 ;
   CALL log("Waiting for free positioner. State: WaitPosFree")
   $action = "WaitPosFree"
-  SWAIT s.allow.put, -rs13.det.put
+  SWAIT s.allow.put,-rs13.det.put
   SWAIT -rs7.work[1]
 ;
-  ;SIGNAL -rs13.det.put
+;SIGNAL -rs13.det.put
   .$temp = "Put detail to positioner"+$ENCODE(.pos)
   CALL log(.$temp)
   CALL log("State: PutToPositioner")
@@ -1094,428 +1107,432 @@ ANY:
 ;SIGNAL -rs013.putting
   LMOVE #wait.pick
 .END
-.PROGRAM gripper.pick (.pos,.tool.no)
+.PROGRAM gripper.pick(.pos,.tool.no)@25/11/17 15:18 #0
   IF FALSE THEN
     .pos = hmi.t.pos
     .tool.no = hmi.tool.no
   END
-  ;
+;
   PULSE release.grip
-  .$temp = "Pick tool" + $ENCODE(.pos) + " from" + $ENCODE (.tool.no)
-  CALL log (.$temp)
-  CALL log ("State: PickTool")
+  .$temp = "Pick tool"+$ENCODE(.pos)+" from"+$ENCODE(.tool.no)
+  CALL log(.$temp)
+  CALL log("State: PickTool")
   $action = "PickTool"
-  ;
+;
   SPEED 100 ALWAYS
   ACCURACY 100 ALWAYS
   TOOL tool.pick[.tool.no]
-  ;
+;
   POINT .temp = #tool.pos[.pos]
-  JMOVE .temp + TRANS (0, 0, 200)
+  JMOVE .temp+TRANS(0,0,200)
   ACCURACY 5
-  LMOVE .temp + TRANS (0, 0, 50)
+  LMOVE .temp+TRANS(0,0,50)
   BREAK
-  ;
+;
   SPEED 50 MM/S ALWAYS
-  ACCURACY 0.02 
+  ACCURACY 0.02
   LMOVE #tool.pos[.pos]
   BREAK
   PULSE capture.grip
   TWAIT 0.5
-  ;
+;
   SPEED 100 ALWAYS
-  LMOVE .temp + TRANS (0, 0, 200)
+  LMOVE .temp+TRANS(0,0,200)
 .END
-.PROGRAM gripper.put(.pos,.tool.no)@25/10/27 15:57 #0
+.PROGRAM gripper.put(.pos,.tool.no)@25/11/17 15:18 #0
   IF FALSE THEN
     .pos = hmi.t.pos
     .tool.no = hmi.tool.no
   END
-  ;
-  .$temp = "Put tool" + $ENCODE (.pos) + " to" + $ENCODE (.tool.no)
-  CALL log (.$temp)
-  CALL log ("State: PutTool")
+;
+  .$temp = "Put tool"+$ENCODE(.pos)+" to"+$ENCODE(.tool.no)
+  CALL log(.$temp)
+  CALL log("State: PutTool")
   $action = "PutTool"
-  ;
+;
   SPEED 100 ALWAYS
   ACCURACY 100 ALWAYS
   TOOL tool.pick[.tool.no]
-  ;
+;
   POINT .temp = #tool.pos[.pos]
-  JMOVE .temp + TRANS (0, 0, 200)
+  JMOVE .temp+TRANS(0,0,200)
   ACCURACY 5
-  LMOVE .temp + TRANS (0, 0, 50)
+  LMOVE .temp+TRANS(0,0,50)
   BREAK
-  ;
+;
   SPEED 50 MM/S ALWAYS
-  ACCURACY 0.02 
+  ACCURACY 0.02
   LMOVE #tool.pos[.pos]
   BREAK
   PULSE release.grip
   TWAIT 0.5
-  ;
+;
   SPEED 100 ALWAYS
-  LMOVE .temp + TRANS (0, 0, 200)
+  LMOVE .temp+TRANS(0,0,200)
 .END
-.PROGRAM stock.in.take (.i,.j)
+.PROGRAM stock.in.take(.i,.j)@25/11/19 15:58 #1
   IF FALSE THEN
     .i = hmi.st.in.i
     .j = hmi.st.in.j
   END
-  .$temp = "Take pallet (" + $ENCODE (/L, .i) + ", " + $ENCODE (/L, .j) + ") from input stocker."
-  CALL log (.$temp)
-  CALL log ("State: TakingFromInStocker")
+  .$temp = "Take pallet ("+$ENCODE(/L,.i)+", "+$ENCODE(/L,.j)+") from input stocker."
+  CALL log(.$temp)
+  CALL log("State: TakingFromInStocker")
   $action = "TakingFromInStocker"
-  ;
-  ;
+;
+;
   ACCURACY 100 ALWAYS
   ACCEL 30 ALWAYS
   DECEL 30 ALWAYS
   SPEED 10 ALWAYS
-  ;
+;
   PULSE release.tare
-  ;
+;
   TOOL tool.pin
-  ;
+;
   POINT .post.tare.in = #post.tare.in
   DECOMPOSE .ct1[1] = .post.tare.in
-  DECOMPOSE .ct2[1] = stocker.in[.i, .j]
-  POINT .mid.point = TRANS (.ct2[1], .ct1[2], .ct2[3], .ct1[4], .ct1[5], .ct1[6])
+  DECOMPOSE .ct2[1] = stocker.in[.i,.j]
+  POINT .mid.point = TRANS(.ct2[1],.ct1[2],.ct2[3],.ct1[4],.ct1[5],.ct1[6])
   POINT .put.stz = #put.stz
-  ;
-  JMOVE stocker.in[.i, .j] + TRANS (0, 0, 200)
+;
+  JMOVE stocker.in[.i,.j]+TRANS(0,0,200)
   ACCURACY 5
-  JMOVE stocker.in[.i, .j] + TRANS (0, 0, 50)
-  ;
+  JMOVE stocker.in[.i,.j]+TRANS(0,0,50)
+;
   ACCURACY 0.02
   SPEED 100 MM/S
-  LMOVE stocker.in[.i, .j]
+  LMOVE stocker.in[.i,.j]
   BREAK
   PULSE capture.tare
   TWAIT 0.5
-  ;
+;
   ACCURACY 0.02
   ACCEL 30 ALWAYS
   DECEL 30 ALWAYS
   SPEED 250 MM/S
   ACCEL 50
-  LMOVE stocker.in[.i, .j] + TRANS (20)
-  ;
+  LMOVE stocker.in[.i,.j]+TRANS(20)
+;
   SPEED 100 MM/S
   ACCURACY 0
-  LMOVE stocker.in[.i, .j] + TRANS (20, 0, 40)
+  LMOVE stocker.in[.i,.j]+TRANS(20,0,40)
   BREAK
-  ;
-  CALL log ("Wait sensor state. State: WaitInStockerSensor")
-  WHILE NOT SIG (s.sensor.iss) DO
+;
+  CALL log("Wait sensor state. State: WaitInStockerSensor")
+  WHILE NOT SIG(s.sensor.iss) DO
     $action = "WaitInStockerSensor"
     TWAIT 0.5
   END
   SIGNAL -s.sensor.iss
-  ;
-  .$temp = "Take pallet (" + $ENCODE (/L, .i) + ", " + $ENCODE (/L, .j) + ") from input stocker."
-  CALL log (.$temp)
-  CALL log ("State: TakingFromInStocker")
+;
+  .$temp = "Take pallet ("+$ENCODE(/L,.i)+", "+$ENCODE(/L,.j)+") from input stocker."
+  CALL log(.$temp)
+  CALL log("State: TakingFromInStocker")
   $action = "TakingFromInStocker"
-  ;
-  LMOVE stocker.in[.i, .j] + TRANS (20, 0, 500)
-  ;ACCURACY 5
+;
+  LMOVE stocker.in[.i,.j]+TRANS(20,0,500)
+;ACCURACY 5
   LMOVE .mid.point
-  ;ACCURACY 5
+;ACCURACY 5
   LMOVE #post.tare.in
-  ; Put to stz
+; Put to stz
   LMOVE #before.stz
   ACCURACY 20
-  LMOVE .put.stz + TRANS (50)
-  ;BREAK
+  LMOVE .put.stz+TRANS(50)
+;BREAK
   ACCURACY 0.02
   SPEED 100 MM/S
   LMOVE #put.stz
   BREAK
   PULSE release.tare
   TWAIT 0.5
-  ; Go back
-  ;SPEED 50 MM/S
-    ACCEL 100 ALWAYS
+; Go back
+;SPEED 50 MM/S
+  ACCEL 100 ALWAYS
   DECEL 100 ALWAYS
   ACCURACY 30
-  LMOVE .put.stz + TRANS (, , 50)
+  LMOVE .put.stz+TRANS(,,50)
   BREAK
-  ;
-  CALL log ("Wait stz pneumatic close. State: WaitPneumaticClose")
+;
+  CALL log("Wait stz pneumatic close. State: WaitPneumaticClose")
   $action = "WaitPneumaticClose"
   SWAIT s.pneumo.close
   TWAIT 0.5
   SIGNAL -s.pneumo.close
-  ;
+;
   LMOVE #before.stz
   LMOVE #wait.pick
-  ;
+;
 .END
-.PROGRAM stock.in.back (.i,.j)
+.PROGRAM stock.in.back(.i,.j)@25/11/19 15:58 #1
   IF FALSE THEN
     .i = hmi.st.in.i
     .j = hmi.st.in.j
   END
-  .$temp = "Return pallet (" + $ENCODE (/L, .i) + ", " + $ENCODE (/L, .j) + ") to input stocker."
-  CALL log (.$temp)
-  CALL log ("State: ReturnToInStocker")
+  .$temp = "Return pallet ("+$ENCODE(/L,.i)+", "+$ENCODE(/L,.j)+") to input stocker."
+  CALL log(.$temp)
+  CALL log("State: ReturnToInStocker")
   $action = "ReturnToInStocker"
-  ;
+;
   ACCURACY 100 ALWAYS
   SPEED 10 ALWAYS
-  ;
+;
   PULSE release.tare
-  ;
+;
   TOOL tool.pin
-  ;
+;
   POINT .post.tare.in = #post.tare.in
   DECOMPOSE .ct1[1] = .post.tare.in
-  DECOMPOSE .ct2[1] = stocker.in[.i, .j]
-  POINT .mid.point = TRANS (.ct2[1], .ct1[2], .ct2[3], .ct1[4], .ct1[5], .ct1[6])
+  DECOMPOSE .ct2[1] = stocker.in[.i,.j]
+  POINT .mid.point = TRANS(.ct2[1],.ct1[2],.ct2[3],.ct1[4],.ct1[5],.ct1[6])
   POINT .put.stz = #put.stz
-  ;
-  ;ACCURACY 20 ALWAYS
-  ;SPEED 100 ALWAYS
-  ;JMOVE #before.stz
+;
+;ACCURACY 20 ALWAYS
+;SPEED 100 ALWAYS
+;JMOVE #before.stz
   ACCURACY 20
-  LMOVE .put.stz + TRANS (, , 50)
-  ;
-  ;
-  CALL log ("Wait stz pneumatic open. State: WaitPneumaticOpen")
+  LMOVE .put.stz+TRANS(,,50)
+;
+;
+  CALL log("Wait stz pneumatic open. State: WaitPneumaticOpen")
   WHILE NOT SIG(s.pneumo.open) DO
     $action = "WaitPneumaticOpen"
     TWAIT 0.5
   END
   SIGNAL -s.pneumo.open
-  ;
-  .$temp = "Return pallet (" + $ENCODE (/L, .i) + ", " + $ENCODE (/L, .j) + ") to input stocker."
-  CALL log (.$temp)
-  CALL log ("State: ReturnToInStocker")
+;
+  .$temp = "Return pallet ("+$ENCODE(/L,.i)+", "+$ENCODE(/L,.j)+") to input stocker."
+  CALL log(.$temp)
+  CALL log("State: ReturnToInStocker")
   $action = "ReturnToInStocker"
-  ;
-  ACCURACY 0.02 
+;
+  ACCURACY 0.02
   SPEED 100 MM/S
   LMOVE #put.stz
   BREAK
   PULSE capture.tare
   TWAIT 0.5
-  ;
-    ACCEL 30 ALWAYS
-  DECEL 30 ALWAYS
-  ACCURACY 0.02 
-  SPEED 100 MM/S
-  LMOVE .put.stz + TRANS (50)
-  ;
-  ;SPEED 80 ALWAYS
-  ;ACCURACY 5
-  LMOVE #before.stz
-  LMOVE #post.tare.in
-  LMOVE stocker.in[.i, .j] + TRANS (20, 0, 500)
-  ;
-  ACCURACY 0.02 
-  SPEED 100 MM/S
-  LMOVE stocker.in[.i, .j] + TRANS (20)
-  BREAK
-  ;
-  ACCURACY 0.02 
-  SPEED 100 MM/S
-  LMOVE stocker.in[.i, .j]
-  BREAK
-  PULSE release.tare
-  TWAIT 0.5
-  ;
-    ACCEL 100 ALWAYS
-  DECEL 100 ALWAYS
-  ACCURACY 30
-  LMOVE stocker.in[.i, .j] + TRANS (0, 0, 50)
-  LMOVE stocker.in[.i, .j] + TRANS (0, 0, 200)
-.END
-.PROGRAM stock.out.take (.i,.j)
-  IF FALSE THEN
-    .i = hmi.st.out.i
-    .j = hmi.st.out.j
-  END
-  .$temp = "Take pallet (" + $ENCODE (/L, .i) + ", " + $ENCODE (/L, .j) + ") from output stocker."
-  CALL log (.$temp)
-  CALL log ("State: TakingFromOutStocker")
-  $action = "TakingFromOutStocker"
-  ;
-  ACCURACY 100 ALWAYS
-  SPEED 10 ALWAYS
-  ;
-  PULSE release.tare
-  ;
-  TOOL tool.pin
-  ;
-  POINT .post.tare.out = #post.tare.out
-  DECOMPOSE .ct1[1] = .post.tare.out
-  DECOMPOSE .ct2[1] = stocker.out[.i, .j]
-  POINT .mid.point = TRANS (.ct1[1], .ct2[2], .ct2[3], .ct1[4], .ct1[5], .ct1[6])
-  POINT .put.outpal = #put.outpal
-  ;
-  JMOVE #post.tare.out
-  LMOVE stocker.out[.i, .j] + TRANS (0, 0, 200)
-  ACCURACY 5
-  JMOVE stocker.out[.i, .j] + TRANS (0, 0, 50)
-  ;
-  ACCURACY 0.02
-  SPEED 100 MM/S
-  LMOVE stocker.out[.i, .j]
-  BREAK
-  PULSE capture.tare
-  TWAIT 0.5
-  ;
-    ACCEL 30 ALWAYS
-  DECEL 30 ALWAYS
-  ACCURACY 0.02
-  SPEED 100 MM/S
-  LMOVE stocker.out[.i, .j] + TRANS (20)
-  ;
-  ACCURACY 0.02
-  SPEED 100 MM/S
-  LMOVE stocker.out[.i, .j] + TRANS (20, 0, 40)
-  BREAK
-  ;
-  CALL log ("Wait sensor state. State: WaitOutStockerSensor")
-  WHILE NOT SIG (s.sensor.oss) DO
-    $action = "WaitOutStockerSensor"
-    TWAIT 0.5
-  END
-  SIGNAL -s.sensor.oss
-  ;
-  .$temp = "Take pallet (" + $ENCODE (/L, .i) + ", " + $ENCODE (/L, .j) + ") from output stocker."
-  CALL log (.$temp)
-  CALL log ("State: TakingFromOutStocker")
-  $action = "TakingFromOutStocker"
-  ;
-  ;]SPEED 80 ALWAYS
-  ;ACCURACY 5
-  LMOVE stocker.out[.i, .j] + TRANS (20, 0, 500)
-  ;ACCURACY 5
-  LMOVE .mid.point
-  ;ACCURACY 5
-  LMOVE #post.tare.out
-  ; Put to output pallet
-  LMOVE #before.outpal
-  ACCURACY 20
-  LMOVE .put.outpal + TRANS (50)
-  ACCURACY 0.02
-  SPEED 100 MM/S
-  LMOVE #put.outpal
-  BREAK
-  PULSE release.tare
-  TWAIT 0.5
-  ; Go back
-  ;SPEED 50 MM/S
-  ACCURACY 30
-    ACCEL 100 ALWAYS
-  DECEL 100 ALWAYS
-  LMOVE .put.outpal + TRANS (, , 50)
-  ;BREAK
-  LMOVE #before.outpal
-  LMOVE #post.tare.out
-  ;
-  ;LMOVE #homep1
-.END
-.PROGRAM stock.out.back (.i,.j)
-  IF FALSE THEN
-    .i = hmi.st.out.i
-    .j = hmi.st.out.j
-  END
-  .$temp = "Return pallet (" + $ENCODE (/L, .i) + ", " + $ENCODE (/L, .j) + ") to output stocker."
-  CALL log (.$temp)
-  CALL log ("State: ReturnToOutStocker")
-  $action = "ReturnToOutStocker"
-  ;
-  ACCURACY 100 ALWAYS
-  SPEED 10 ALWAYS
-  ;
-  PULSE release.tare
-  ;
-  TOOL tool.pin
-  ;
-  POINT .post.tare.out = #post.tare.out
-  DECOMPOSE .ct1[1] = .post.tare.out
-  DECOMPOSE .ct2[1] = stocker.out[.i, .j]
-  POINT .mid.point = TRANS (.ct2[1], .ct1[2], .ct2[3], .ct1[4], .ct1[5], .ct1[6])
-  POINT .put.outpal = #put.outpal
-  ;
-  JMOVE #before.outpal
-  ACCURACY 20
-  LMOVE .put.outpal + TRANS (, , 50)
-  ;
-  ACCURACY 0.02
-  SPEED 100 MM/S
-  LMOVE #put.outpal
-  BREAK
-  ;
-  PULSE capture.tare
-  TWAIT 0.5
-  ;
+;
   ACCEL 30 ALWAYS
   DECEL 30 ALWAYS
   ACCURACY 0.02
   SPEED 100 MM/S
-  LMOVE .put.outpal + TRANS (50)
-  ;
-  ;SPEED 80 ALWAYS
-  ;ACCURACY 5
-  LMOVE #before.outpal
-  LMOVE #post.tare.out
-  LMOVE stocker.out[.i, .j] + TRANS (20, 0, 500)
-  ;
+  LMOVE .put.stz+TRANS(50)
+;
+;SPEED 80 ALWAYS
+;ACCURACY 5
+  LMOVE #before.stz
+  LMOVE #post.tare.in
+  LMOVE stocker.in[.i,.j]+TRANS(20,0,500)
+;
   ACCURACY 0.02
   SPEED 100 MM/S
-  LMOVE stocker.out[.i, .j] + TRANS (20)
+  LMOVE stocker.in[.i,.j]+TRANS(20)
   BREAK
-  ;
+;
   ACCURACY 0.02
   SPEED 100 MM/S
-  LMOVE stocker.out[.i, .j]
+  LMOVE stocker.in[.i,.j]
   BREAK
   PULSE release.tare
   TWAIT 0.5
-  ;
+;
   ACCEL 100 ALWAYS
   DECEL 100 ALWAYS
   ACCURACY 30
-  LMOVE stocker.out[.i, .j] + TRANS (0, 0, 50)
-  LMOVE stocker.out[.i, .j] + TRANS (0, 0, 200)
-  
+  LMOVE stocker.in[.i,.j]+TRANS(0,0,50)
+  LMOVE stocker.in[.i,.j]+TRANS(0,0,200)
 .END
-.PROGRAM watchdog.pc ()
+.PROGRAM stock.out.take(.i,.j)@25/11/19 15:58 #1
+  IF FALSE THEN
+    .i = hmi.st.out.i
+    .j = hmi.st.out.j
+  END
+  .$temp = "Take pallet ("+$ENCODE(/L,.i)+", "+$ENCODE(/L,.j)+") from output stocker."
+  CALL log(.$temp)
+  CALL log("State: TakingFromOutStocker")
+  $action = "TakingFromOutStocker"
+;
+  ACCURACY 100 ALWAYS
+  SPEED 10 ALWAYS
+;
+  PULSE release.tare
+;
+  TOOL tool.pin
+;
+  POINT .post.tare.out = #post.tare.out
+  DECOMPOSE .ct1[1] = .post.tare.out
+  DECOMPOSE .ct2[1] = stocker.out[.i,.j]
+  POINT .mid.point = TRANS(.ct1[1],.ct2[2],.ct2[3],.ct1[4],.ct1[5],.ct1[6])
+  POINT .put.outpal = #put.outpal
+;
+  JMOVE #post.tare.out
+  LMOVE stocker.out[.i,.j]+TRANS(0,0,200)
+  ACCURACY 5
+  JMOVE stocker.out[.i,.j]+TRANS(0,0,50)
+;
+  ACCURACY 0.02
+  SPEED 100 MM/S
+  LMOVE stocker.out[.i,.j]
+  BREAK
+  PULSE capture.tare
+  TWAIT 0.5
+;
+  ACCEL 30 ALWAYS
+  DECEL 30 ALWAYS
+  ACCURACY 0.02
+  SPEED 100 MM/S
+  LMOVE stocker.out[.i,.j]+TRANS(20)
+;
+  ACCURACY 0.02
+  SPEED 100 MM/S
+  LMOVE stocker.out[.i,.j]+TRANS(20,0,40)
+  BREAK
+;
+  CALL log("Wait sensor state. State: WaitOutStockerSensor")
+  WHILE NOT SIG(s.sensor.oss) DO
+    $action = "WaitOutStockerSensor"
+    TWAIT 0.5
+  END
+  SIGNAL -s.sensor.oss
+;
+  .$temp = "Take pallet ("+$ENCODE(/L,.i)+", "+$ENCODE(/L,.j)+") from output stocker."
+  CALL log(.$temp)
+  CALL log("State: TakingFromOutStocker")
+  $action = "TakingFromOutStocker"
+;
+;]SPEED 80 ALWAYS
+;ACCURACY 5
+  LMOVE stocker.out[.i,.j]+TRANS(20,0,500)
+;ACCURACY 5
+  LMOVE .mid.point
+;ACCURACY 5
+  LMOVE #post.tare.out
+; Put to output pallet
+  LMOVE #before.outpal
+  ACCURACY 20
+  LMOVE .put.outpal+TRANS(50)
+  ACCURACY 0.02
+  SPEED 100 MM/S
+  LMOVE #put.outpal
+  BREAK
+  PULSE release.tare
+  TWAIT 0.5
+; Go back
+;SPEED 50 MM/S
+  ACCURACY 30
+  ACCEL 100 ALWAYS
+  DECEL 100 ALWAYS
+  LMOVE .put.outpal+TRANS(,,50)
+;BREAK
+  LMOVE #before.outpal
+  LMOVE #post.tare.out
+;
+;LMOVE #homep1
+.END
+.PROGRAM stock.out.back(.i,.j)@25/11/19 15:58 #1
+  IF FALSE THEN
+    .i = hmi.st.out.i
+    .j = hmi.st.out.j
+  END
+  .$temp = "Return pallet ("+$ENCODE(/L,.i)+", "+$ENCODE(/L,.j)+") to output stocker."
+  CALL log(.$temp)
+  CALL log("State: ReturnToOutStocker")
+  $action = "ReturnToOutStocker"
+;
+  ACCURACY 100 ALWAYS
+  SPEED 10 ALWAYS
+;
+  PULSE release.tare
+;
+  TOOL tool.pin
+;
+  POINT .post.tare.out = #post.tare.out
+  DECOMPOSE .ct1[1] = .post.tare.out
+  DECOMPOSE .ct2[1] = stocker.out[.i,.j]
+  POINT .mid.point = TRANS(.ct2[1],.ct1[2],.ct2[3],.ct1[4],.ct1[5],.ct1[6])
+  POINT .put.outpal = #put.outpal
+;
+  JMOVE #before.outpal
+  ACCURACY 20
+  LMOVE .put.outpal+TRANS(,,50)
+;
+  ACCURACY 0.02
+  SPEED 100 MM/S
+  LMOVE #put.outpal
+  BREAK
+;
+  PULSE capture.tare
+  TWAIT 0.5
+;
+  ACCEL 30 ALWAYS
+  DECEL 30 ALWAYS
+  ACCURACY 0.02
+  SPEED 100 MM/S
+  LMOVE .put.outpal+TRANS(50)
+;
+;SPEED 80 ALWAYS
+;ACCURACY 5
+  LMOVE #before.outpal
+  LMOVE #post.tare.out
+  LMOVE stocker.out[.i,.j]+TRANS(20,0,500)
+;
+  ACCURACY 0.02
+  SPEED 100 MM/S
+  LMOVE stocker.out[.i,.j]+TRANS(20)
+  BREAK
+;
+  ACCURACY 0.02
+  SPEED 100 MM/S
+  LMOVE stocker.out[.i,.j]
+  BREAK
+  PULSE release.tare
+  TWAIT 0.5
+;
+  ACCEL 100 ALWAYS
+  DECEL 100 ALWAYS
+  ACCURACY 30
+  LMOVE stocker.out[.i,.j]+TRANS(0,0,50)
+  LMOVE stocker.out[.i,.j]+TRANS(0,0,200)
+.END
+.PROGRAM a.test.gripper()@25/11/20 12:41 #0
+	JMOVE #wait.pick
+	CALL gripper.pick (hmi.t.pos, hmi.tool.no)
+	CALL gripper.put (hmi.t.pos, hmi.tool.no)
+.END
+.PROGRAM watchdog.pc()@25/11/18 16:27 #0
   WHILE TRUE DO
-    ;
-    ; Если мы въехали в зону раньше второго робота
-    ; То ставим лок, пока не уедем
+;
+; Если мы въехали в зону раньше второго робота
+; То ставим лок, пока не уедем
     SOUT 2025 = 18 AND (NOT 1018 OR 2025)
     SOUT 2026 = NOT (NOT 2025 AND 1018 AND 18)
-    ;
-    ;
-    IF TIMER (1) > 10 AND $command == "START" THEN
+;
+;
+    IF TIMER(1)>10 AND $command=="START" THEN
       $command = ""
     END
-    ;
-    IF SIG (s.tcp.ena) THEN
+;
+    IF SIG(s.tcp.ena) THEN
       tcp.ena = tyterm
     ELSE
       tcp.ena = -1
     END
-    ;
-    IF SIG (s.tcp.send.ena) THEN
+;
+    IF SIG(s.tcp.send.ena) THEN
       tcp.send.ena = tyterm
     ELSE
       tcp.send.ena = -1
     END
-    ;
-    IF SIG (s.tcp.recv.ena) THEN
+;
+    IF SIG(s.tcp.recv.ena) THEN
       tcp.recv.ena = tyterm
     ELSE
       tcp.recv.ena = -1
     END
-    ; HMI PANEL GRIPPER TEACH DATA
-    IF keep.tool.no <> hmi.tool.no THEN
+; HMI PANEL GRIPPER TEACH DATA
+    IF keep.tool.no<>hmi.tool.no THEN
       hmi.gx = grip.xsh[hmi.tool.no]
       hmi.gy = grip.ysh[hmi.tool.no]
       hmi.gz = grip.zsh[hmi.tool.no]
@@ -1523,89 +1540,92 @@ ANY:
       hmi.g180y = grip.180ysh[hmi.tool.no]
       keep.tool.no = hmi.tool.no
     END
-    IF SIG (s.apply.coord) THEN
+    IF SIG(s.apply.coord) THEN
       grip.xsh[hmi.tool.no] = hmi.gx
       grip.ysh[hmi.tool.no] = hmi.gy
       grip.zsh[hmi.tool.no] = hmi.gz
       grip.180xsh[hmi.tool.no] = hmi.g180x
       grip.180ysh[hmi.tool.no] = hmi.g180y
     END
-    ;
-    IF SIG (rs07.put.ack) THEN
+;
+    IF SIG(rs07.put.ack) THEN
       SIGNAL -rs13.det.put
     END
-    ;
-    IF SIG (s.open.pneumo) AND NOT SWITCH (CS) THEN
+;
+    IF SIG(s.open.pneumo) AND NOT SWITCH(CS ) THEN
       $action = "WaitPneumaticOpen"
     END
-    ;
-    IF SIG (s.close.pneumo) AND NOT SWITCH (CS)  THEN
+;
+    IF SIG(s.close.pneumo) AND NOT SWITCH(CS ) THEN
       $action = "WaitPneumaticClose"
       TWAIT 1
       $action = "None"
     END
-    ;
-    IF TASK (1002) <> 1 THEN
+   ;
+   IF SIG(s.receive.p) THEN
+     $action = "WaitForPick"
+   END
+;
+    IF TASK(1002)<>1 THEN
       PCEXECUTE 2: tcp.client.pc
       TWAIT 2
     END
-    IF TASK (1003) <> 1 THEN
+    IF TASK(1003)<>1 THEN
       PCEXECUTE 3: sender.pc
       TWAIT 2
     END
-    ;
-    IF NOT SIG (s.debug) THEN
-      IF SWITCH (REPEAT) AND NOT SWITCH (TEACH_LOCK) AND NOT SWITCH (EMERGENCY) AND NOT SWITCH (CS) AND NOT SWITCH (ERROR) THEN
+;
+    IF NOT SIG(s.debug) THEN
+      IF SWITCH(REPEAT ) AND NOT SWITCH(TEACH_LOCK ) AND NOT SWITCH(EMERGENCY ) AND NOT SWITCH(CS ) AND NOT SWITCH(ERROR ) THEN
         MC ZPOWER ON
-        WAIT SWITCH (POWER)
-        ;
+        WAIT SWITCH(POWER )
+;
         MC CONTINUE
       END
     END
-    ;
+;
     TWAIT 0.01
   END
 .END
-.PROGRAM set.vars.pc ()
-  ;
-  IF NOT EXISTREAL ("grip.xsh[8]")  THEN
+.PROGRAM set.vars.pc()@25/11/17 14:11 #11
+;
+  IF NOT EXISTREAL("grip.xsh[8]") THEN
     FOR .i = 1 TO 9
       grip.xsh[.i] = 0
       grip.ysh[.i] = 0
       grip.zsh[.i] = 0
       grip.180xsh[.i] = 0
       grip.180ysh[.i] = 0
-      ;
+;
       keep.tool.no = -1
     END
     FOR .i = 0 TO 12
       $log.entry[.i] = " "
     END
   END
-  ;
-  IF NOT EXISTREAL ("current.gripper")
+;
+  IF NOT EXISTREAL("current.gripper") THEN
     current.gripper = 0
   END
-  ;
-  IF NOT EXISTREAL ("mon.speed")
+;
+  IF NOT EXISTREAL("mon.speed") THEN
     mon.speed = 100
     pick.count = 0
   END
-  ; Variables init
-  ;
-  ;tcp.socket = 0
+; Variables init
+;
+;tcp.socket = 0
   tcp.connect.tmo = 5
   tcp.receive.tmo = 5
   tcp.send.tmo = 5
-  ;
+;
   tyterm = 0
-  ;
+;
   $command = ""
   $cycle.command = ""
-  
 .END
-.PROGRAM autostart.pc()@25/10/10 14:59 #0
-  ; System switches
+.PROGRAM autostart.pc()@25/11/17 14:11 #0
+; System switches
   CP ON
   PREFETCH.SIGINS OFF
   QTOOL OFF
@@ -1613,54 +1633,53 @@ ANY:
   HOLD.STEP ON
   DISP.EXESTEP ON
   PROG.DATE ON
-  ;ABS.SPEED ON
+;ABS.SPEED ON
   autostart.pc ON
   errstart.pc ON  ;
-  ;
-  IFPWPRINT 8, 1, 1, 5, 10 = "Robot: RS013N S/N: C2392", "Controller: F60 S/N: C10632"," ", "Powered by Robowizard Co.Ltd."
-  ;
+;
+  IFPWPRINT 8,1,1,5,10="Robot: RS013N S/N: C2392","Controller: F60 S/N: C10632"," ","Powered by Robowizard Co.Ltd."
+;
   CALL set.io.pc
   CALL set.vars.pc
-  ;
+;
   MC PRIME a.main
   TWAIT 1
-  ;
+;
   CALL watchdog.pc
-  ;
+;
 .END
-.PROGRAM set.io.pc ()
-  ; Gripper IO
+.PROGRAM set.io.pc()@25/11/17 16:41 #7
+; Gripper IO
   release.tare = 1
   capture.tare = 2
-  ;
+;
   release.grip = 5
   capture.grip = 6
-  ;
+;
   grip.unclamped = 1001
   grip.clamped = 1002
   grip.unclamp = 3
   grip.clamp = 4
-  ;
-  ; Dedicated IO
+;
+; Dedicated IO
   do.home1 = 17 ; EIP
-  
   di.hold = 2026
   do.bat.alm = 2010
-  ;
-  ;
+;
+;
   rs7.home1 = 1017 ; 
   rs7.work[1] = 1018 ; 
   rs7.working = 1019; 
   rs7.tare.chg = 1020; Request tare change
   rs07.fin.ack = 1021; NU Task finished
   rs07.put.ack = 1022
-  ;
+;
   do.work[1] = 18 ; 
   rs13.det.put = 19; I put detail
   rs13.tare.ack = 20; Tare changed
   rs13.finish = 21 ; Finish task
   rs013.putting = 23
-  ;
+;
   di.ifp.page[1] = 2001
   di.ifp.page[2] = 2002
   di.ifp.page[3] = 2003
@@ -1669,8 +1688,8 @@ ANY:
   di.ifp.page[6] = 2006
   di.ifp.page[7] = 2007
   di.ifp.page[8] = 2008
-  ;
-  ;Internal signals
+;
+;Internal signals
   s.tcp.send.ena = 2011
   s.tcp.recv.ena = 2012
   s.tcp.ena = 2013
@@ -1679,139 +1698,140 @@ ANY:
   s.open.pneumo = 2016
   s.in1.disable = 2017
   s.in2.disable = 2018
-  ;
+;
   s.sensor.iss = 2019
   s.sensor.oss = 2020
   s.sensor.ot = 2021
-  ;
+;
   s.pneumo.open = 2022
   s.pneumo.close = 2023
-  ;
+;
   s.debug = 2024
-  ;
+;
   s.lock = 2025
   s.allow.put = 2027
-  ;di.hold = 2026
+  s.receive.p = 2028
+;di.hold = 2026
 .END
-.PROGRAM get.state.pc (.$state)
-  .$state = "SPEED:" + $ENCODE(mon.speed) + ";"
-  .$state = .$state + "POWER:"
-  IF SWITCH (POWER) THEN
-    .$state = .$state + "TRUE;"
+.PROGRAM get.state.pc(.$state)@25/11/17 14:11 #210978
+  .$state = "SPEED:"+$ENCODE(mon.speed)+";"
+  .$state = .$state+"POWER:"
+  IF SWITCH(POWER ) THEN
+    .$state = .$state+"TRUE;"
   ELSE
-    .$state = .$state + "FALSE;"
+    .$state = .$state+"FALSE;"
   END
-  ; MAX: 12
-  ;
-  .$state = .$state + "CS:"
-  IF SWITCH (CS) THEN
-    .$state = .$state + "TRUE;"
+; MAX: 12
+;
+  .$state = .$state+"CS:"
+  IF SWITCH(CS ) THEN
+    .$state = .$state+"TRUE;"
   ELSE
-    .$state = .$state + "FALSE;"
+    .$state = .$state+"FALSE;"
   END
-  ; MAX 9
-  ;
-  .$state = .$state + "TEACH:"
-  IF SWITCH (REPEAT) THEN
-    .$state = .$state + "FALSE;"
+; MAX 9
+;
+  .$state = .$state+"TEACH:"
+  IF SWITCH(REPEAT ) THEN
+    .$state = .$state+"FALSE;"
   ELSE
-    .$state = .$state + "TRUE;"
+    .$state = .$state+"TRUE;"
   END
-  ; MAX 12
-  ;
-  .$state = .$state + "TEACHL:"
-  IF SWITCH (TEACH_LOCK) THEN
-    .$state = .$state + "TRUE;"
+; MAX 12
+;
+  .$state = .$state+"TEACHL:"
+  IF SWITCH(TEACH_LOCK ) THEN
+    .$state = .$state+"TRUE;"
   ELSE
-    .$state = .$state + "FALSE;"
+    .$state = .$state+"FALSE;"
   END
-  ; MAX 13
-  ;
-  .$state = .$state + "TPEMG:"
-  IF SWITCH (TP_EMG) THEN
-    .$state = .$state + "TRUE;"
+; MAX 13
+;
+  .$state = .$state+"TPEMG:"
+  IF SWITCH(TP_EMG ) THEN
+    .$state = .$state+"TRUE;"
   ELSE
-    .$state = .$state + "FALSE;"
+    .$state = .$state+"FALSE;"
   END
-  ; MAX 12
-  ;
-  .$state = .$state + "OPEMG:"
-  IF SWITCH (OP_EMG) THEN
-    .$state = .$state + "TRUE;"
+; MAX 12
+;
+  .$state = .$state+"OPEMG:"
+  IF SWITCH(OP_EMG ) THEN
+    .$state = .$state+"TRUE;"
   ELSE
-    .$state = .$state + "FALSE;"
+    .$state = .$state+"FALSE;"
   END
-  ; MAX 12
-  ;
-  .$state = .$state + "EXEMG:"
-  IF SWITCH (EX_EMG) THEN
-    .$state = .$state + "TRUE;"
+; MAX 12
+;
+  .$state = .$state+"EXEMG:"
+  IF SWITCH(EX_EMG ) THEN
+    .$state = .$state+"TRUE;"
   ELSE
-    .$state = .$state + "FALSE;"
+    .$state = .$state+"FALSE;"
   END
-  ; MAX 12
-  ;
-  .$state = .$state + "ERROR:"
-  IF SWITCH (ERROR) THEN
-    .$state = .$state + "TRUE;"
+; MAX 12
+;
+  .$state = .$state+"ERROR:"
+  IF SWITCH(ERROR ) THEN
+    .$state = .$state+"TRUE;"
   ELSE
-    .$state = .$state + "FALSE;"
+    .$state = .$state+"FALSE;"
   END
-  ; MAX 12
-  ;
-  .$state = .$state + "ECODE:"
-  .$state = .$state + $ENCODE (ERROR) + ";"
-  ; MAX 12
-  ;
-  .$state = .$state + "HOME:"
-  IF SIG (do.home1) THEN
-    .$state = .$state + "TRUE;"
+; MAX 12
+;
+  .$state = .$state+"ECODE:"
+  .$state = .$state+$ENCODE(ERROR)+";"
+; MAX 12
+;
+  .$state = .$state+"HOME:"
+  IF SIG(do.home1) THEN
+    .$state = .$state+"TRUE;"
   ELSE
-    .$state = .$state + "FALSE;"
+    .$state = .$state+"FALSE;"
   END
-  ; MAX 12
-  ;
-  .$state = .$state + "BATALM:"
-  IF SIG (do.bat.alm) THEN
-    .$state = .$state + "TRUE;"
+; MAX 12
+;
+  .$state = .$state+"BATALM:"
+  IF SIG(do.bat.alm) THEN
+    .$state = .$state+"TRUE;"
   ELSE
-    .$state = .$state + "FALSE;"
+    .$state = .$state+"FALSE;"
   END
-  ; MAX 12
-  .$state = .$state + "\n"
+; MAX 12
+  .$state = .$state+"\n"
 .END
-.PROGRAM sender.pc ()
-  ;
-  ; 0 - FALSE
-  ; 1 - TRUE
-  ;
-  ; POWER;REPEAT;CS;ERROR;ERRORCODE;TEACH_LOCK;TP_EMG;OP_EMG;EX_EMG;
-  ;
+.PROGRAM sender.pc()@25/11/17 14:11 #0
+;
+; 0 - FALSE
+; 1 - TRUE
+;
+; POWER;REPEAT;CS;ERROR;ERRORCODE;TEACH_LOCK;TP_EMG;OP_EMG;EX_EMG;
+;
   WHILE TRUE DO
 ;
     CALL get.state.pc(.$data[1])
-    .$data[2] = "ACTION:" + $action + ";"
-    .$data[2] = .$data[2] + "TAREIN:" + $ENCODE(current.intare) + ";"
-    .$data[2] = .$data[2] + "TAREOUT:" + $ENCODE(current.outtare) + ";"
-    .$data[2] = .$data[2] + "GRIPPER:" + $ENCODE(current.gripper) + ";"
-    .$data[2] = .$data[2] + "PICKCOUNT:" + $ENCODE(pick.count) + ";"
-    .$data[2] = .$data[2] + "\n"
-    ;
-    CALL tcp.send3.pc (.$data[], 2)
-    TWAIT 0.250
+    .$data[2] = "ACTION:"+$action+";"
+    .$data[2] = .$data[2]+"TAREIN:"+$ENCODE(current.intare)+";"
+    .$data[2] = .$data[2]+"TAREOUT:"+$ENCODE(current.outtare)+";"
+    .$data[2] = .$data[2]+"GRIPPER:"+$ENCODE(current.gripper)+";"
+    .$data[2] = .$data[2]+"PICKCOUNT:"+$ENCODE(pick.count)+";"
+    .$data[2] = .$data[2]+"\n"
+;
+    CALL tcp.send3.pc(.$data[],2)
+    TWAIT 0.25
   END
 .END
-.PROGRAM tcp.send2.pc (.$data[],.data.length)
-  IF tcp.socket > 0 THEN
-    TCP_SEND .status, tcp.socket, .$data[1], .data.length, tcp.send.tmo
-    IF .status >= 0 THEN
-      .$temp = "Sent "+ $ENCODE(.data.length) + " strings"
+.PROGRAM tcp.send2.pc(.$data[],.data.length)@25/11/17 14:11 #0
+  IF tcp.socket>0 THEN
+    TCP_SEND .status,tcp.socket,.$data[1],.data.length,tcp.send.tmo
+    IF .status>=0 THEN
+      .$temp = "Sent "+$ENCODE(.data.length)+" strings"
       PRINT tcp.send.ena: .$temp
       FOR .i = 1 TO .data.length
         PRINT tcp.send.ena: .$data[.i]
       END
     ELSE
-      .$temp = "Failed to send data with error:"+ $ENCODE(.status)
+      .$temp = "Failed to send data with error:"+$ENCODE(.status)
       PRINT tcp.send.ena: .$temp
       tcp.socket = -1
     END
@@ -1819,216 +1839,216 @@ ANY:
     PRINT tcp.send.ena: "Failed to send data. Socket is not opened. Waiting for 5 seconds"
     TWAIT 5
   END
-  ;
+;
 .END
-.PROGRAM tcp.callback.pc (.$data[],.data.length)
-  .$temp = "Received "+ $ENCODE (.data.length) + " strings:"
+.PROGRAM tcp.callback.pc(.$data[],.data.length)@25/11/18 16:27 #1195
+  .$temp = "Received "+$ENCODE(.data.length)+" strings:"
   PRINT tcp.recv.ena: .$temp
   FOR .i = 1 TO .data.length
     PRINT tcp.recv.ena: .$data[.i]
   END
-  ;
-  ; String format:
-  ; START;DETAILNAME;DETAILCOUNT;[INTAREID1,INTAREID2,..];[OTAREID1,INTAREID2,..];
-  IF INSTR (.$data[1], "START") THEN
-    ; Decode command
-    .$temp = $DECODE (.$data[1], ";", 0)
-    .$temp = $DECODE (.$data[1], ";", 1)
-    ; Decode detail type
-    $detail.type = $DECODE (.$data[1], ";", 0)
-    .$temp = $DECODE (.$data[1], ";", 1)
-    ; Decode detail count
-    detail.count = VAL ($DECODE (.$data[1], ";", 0))
-    .$temp = $DECODE (.$data[1], ";", 1)
-    ; Decode intare ids
-    $intare.ids = $DECODE (.$data[1], ";", 0)
-    ; Decode outtare ids
-    .$temp = $DECODE (.$data[1], ";", 1)
-    $outtare.ids = $DECODE (.$data[1], ";", 0)
+;
+; String format:
+; START;DETAILNAME;DETAILCOUNT;[INTAREID1,INTAREID2,..];[OTAREID1,INTAREID2,..];
+  IF INSTR(.$data[1] , "START") THEN
+; Decode command
+    .$temp = $DECODE(.$data[1],";",0)
+    .$temp = $DECODE(.$data[1],";",1)
+; Decode detail type
+    $detail.type = $DECODE(.$data[1],";",0)
+    .$temp = $DECODE(.$data[1],";",1)
+; Decode detail count
+    detail.count = VAL($DECODE(.$data[1],";",0))
+    .$temp = $DECODE(.$data[1],";",1)
+; Decode intare ids
+    $intare.ids = $DECODE(.$data[1],";",0)
+; Decode outtare ids
+    .$temp = $DECODE(.$data[1],";",1)
+    $outtare.ids = $DECODE(.$data[1],";",0)
     hmi.x = -1
     hmi.y = -1
     $command = "START"
     TIMER 1 = 0
   END
-  ;
-  ; String format:
-  ; SENSOR;SENSORNAME;STATE;
-  IF INSTR (.$data[1], "SENSOR") THEN
-    ; Decode command
-    .$temp = $DECODE (.$data[1], ";", 0)
-    .$temp = $DECODE (.$data[1], ";", 1)
-    ; Decode sensor name
-    .$sensor.name = $DECODE (.$data[1], ";", 0)
-    .$temp = $DECODE (.$data[1], ";", 1)
-    ; Decode sensor state
-    ;TYPE 0: .$data[1]
-    .$sensor.state = $DECODE (.$data[1], ";", 0)
-    ;
-    IF INSTR (.$sensor.state, "TRUE") THEN
-      ;TYPE 0: .$sensor.name, .$sensor.state
-      IF .$sensor.name == "STOCKERINTARESENSOR" THEN
-        PULSE s.sensor.iss, 5
+;
+; String format:
+; SENSOR;SENSORNAME;STATE;
+  IF INSTR(.$data[1] , "SENSOR") THEN
+; Decode command
+    .$temp = $DECODE(.$data[1],";",0)
+    .$temp = $DECODE(.$data[1],";",1)
+; Decode sensor name
+    .$sensor.name = $DECODE(.$data[1],";",0)
+    .$temp = $DECODE(.$data[1],";",1)
+; Decode sensor state
+;TYPE 0: .$data[1]
+    .$sensor.state = $DECODE(.$data[1],";",0)
+;
+    IF INSTR(.$sensor.state , "TRUE") THEN
+;TYPE 0: .$sensor.name, .$sensor.state
+      IF .$sensor.name=="STOCKERINTARESENSOR" THEN
+        PULSE s.sensor.iss,5
       END
-      ;
-      IF .$sensor.name == "STOCKEROUTTARESENSOR" THEN
-        PULSE s.sensor.oss, 5
+;
+      IF .$sensor.name=="STOCKEROUTTARESENSOR" THEN
+        PULSE s.sensor.oss,5
       END
-      ;
-      IF .$sensor.name == "OUTPALLETSENSOR" THEN
-        PULSE s.sensor.ot, 5
+;
+      IF .$sensor.name=="OUTPALLETSENSOR" THEN
+        PULSE s.sensor.ot,5
       END
     END
   END
-  ;
-  ; String format:
-  ; MEASUREMENT;STATE;
-  ;IF INSTR (.$data[1], "MEASUREMENT") THEN
-  ;  ; Decode command
-  ;  .$temp = $DECODE (.$data[1], ";", 0)
-  ;  .$temp = $DECODE (.$data[1], ";", 1)
-  ;  ; Decode measurement result
-  ;  .sensor.state = $DECODE (.$data[1], ";", 0)
-  ;END
-  ;
-  ; String format:
-  ; SPEED;VALUE;
-  ;
-  IF INSTR (.$data[1], "SPEED") THEN
-    .$temp = $DECODE (.$data[1], ";", 0)
-    .$temp = $DECODE (.$data[1], ";", 1)
-    .$spd = $DECODE (.$data[1], ";", 0)
+;
+; String format:
+; MEASUREMENT;STATE;
+;IF INSTR (.$data[1], "MEASUREMENT") THEN
+;  ; Decode command
+;  .$temp = $DECODE (.$data[1], ";", 0)
+;  .$temp = $DECODE (.$data[1], ";", 1)
+;  ; Decode measurement result
+;  .sensor.state = $DECODE (.$data[1], ";", 0)
+;END
+;
+; String format:
+; SPEED;VALUE;
+;
+  IF INSTR(.$data[1] , "SPEED") THEN
+    .$temp = $DECODE(.$data[1],";",0)
+    .$temp = $DECODE(.$data[1],";",1)
+    .$spd = $DECODE(.$data[1],";",0)
     mon.speed = VAL(.$spd)
-    MON_SPEED(mon.speed)
+    MON_SPEED (mon.speed)
   END
-  ; String format:
-  ; PAUSE;
-  ;
-  IF INSTR (.$data[1], "NOPICK") THEN
+; String format:
+; PAUSE;
+;
+  IF INSTR(.$data[1] , "NOPICK") THEN
     $cycle.command = "NOPICK"
     $action = " "
   END
-  ;
-  IF INSTR (.$data[1], "PAUSE") THEN
+;
+  IF INSTR(.$data[1] , "PAUSE") THEN
     PULSE 2222
   END
-  ;
-  ; ALLOWPICK;
-    ;
-  IF INSTR (.$data[1], "ALLOWPUT") THEN
-    PULSE s.allow.put, 2
+;
+; ALLOWPICK;
+;
+  IF INSTR(.$data[1] , "ALLOWPUT") THEN
+    PULSE s.allow.put,2
   END
-  ;
-  ; String format:
-  ; RESUME;
-  IF INSTR (.$data[1], "RESUME") THEN
+;
+; String format:
+; RESUME;
+  IF INSTR(.$data[1] , "RESUME") THEN
     PULSE 2222
   END
-  ; PNEUMOOPEN;
-  IF INSTR (.$data[1], "PNEUMOOPEN") THEN
+; PNEUMOOPEN;
+  IF INSTR(.$data[1] , "PNEUMOOPEN") THEN
     $action = " "
-    PULSE s.pneumo.open, 5
+    PULSE s.pneumo.open,5
   END
-  ;
-  ; PNEUMOCLOSE;
-  IF INSTR (.$data[1], "PNEUMOCLOSE") THEN
+;
+; PNEUMOCLOSE;
+  IF INSTR(.$data[1] , "PNEUMOCLOSE") THEN
     $action = " "
-    PULSE s.pneumo.close, 5
+    PULSE s.pneumo.close,5
   END
-  ;
-  ;
-  IF INSTR (.$data[1], "PICK") AND NOT INSTR (.$data[1], "NO") THEN
-    .$temp = $DECODE (.$data[1], ";", 0)
-    .$temp = $DECODE (.$data[1], ";", 1)
-    .$x = $DECODE (.$data[1], ",", 0)
-    .$temp = $DECODE (.$data[1], ",", 1)
-    .$y = $DECODE (.$data[1], ",", 0)
-    .$temp = $DECODE (.$data[1], ",", 1)
+;
+;
+  IF INSTR(.$data[1] , "PICK") AND NOT INSTR(.$data[1] , "NO") THEN
+    .$temp = $DECODE(.$data[1],";",0)
+    .$temp = $DECODE(.$data[1],";",1)
+    .$x = $DECODE(.$data[1],",",0)
+    .$temp = $DECODE(.$data[1],",",1)
+    .$y = $DECODE(.$data[1],",",0)
+    .$temp = $DECODE(.$data[1],",",1)
     .$a = .$data[1]
-    hmi.y = VAL (.$x) / 10
-    hmi.x = VAL (.$y) / 10
-    hmi.a = VAL (.$a)
+    hmi.y = VAL(.$x)/10
+    hmi.x = VAL(.$y)/10
+    hmi.a = VAL(.$a)
     $cycle.command = "PICK"
     $action = " "
   END
   .$data[1] = ""
 .END
-.PROGRAM tcp.client.pc ()
+.PROGRAM tcp.client.pc()@25/11/17 14:11 #0
   .tcp.retry.count = 10
   WHILE TRUE DO
-    ; Checking for active sockets and closing them
+; Checking for active sockets and closing them
     PRINT tcp.ena: "Checking for active sockets and closing them"
-    TCP_STATUS .number, .ports[0], .sockets[0], .errors[0], .suberrors[0], .$ips[0]
-    IF .number > 0 THEN
-      FOR .i = 0 TO .number - 1
-        IF .sockets[.i] <> 0 THEN
-          .$temp =  "Closing socket with id: " + $ENCODE(.sockets[.i])
+    TCP_STATUS .number,.ports[0],.sockets[0],.errors[0],.suberrors[0],.$ips[0]
+    IF .number>0 THEN
+      FOR .i = 0 TO .number-1
+        IF .sockets[.i]<>0 THEN
+          .$temp = "Closing socket with id: "+$ENCODE(.sockets[.i])
           PRINT tcp.ena: .$temp
-          TCP_CLOSE .status, .sockets[.i]
+          TCP_CLOSE .status,.sockets[.i]
         END
       END
     END
-    ; Get IP from string
+; Get IP from string
     .$tcp.ip.copy = $tcp.ip
     FOR .i = 1 TO 4
-      .$ip = $DECODE (.$tcp.ip.copy, ".")
-      ip[.i] = VAL (.$ip)
-      IF .i < 4 THEN
-        .$ip = $DECODE (.$tcp.ip.copy, ".", 1)
+      .$ip = $DECODE(.$tcp.ip.copy,".")
+      ip[.i] = VAL(.$ip)
+      IF .i<4 THEN
+        .$ip = $DECODE(.$tcp.ip.copy,".",1)
       END
     END
-    ;
-    ; Connect to server
-    .$temp = "Connecting to server with ip: " + $tcp.ip
+;
+; Connect to server
+    .$temp = "Connecting to server with ip: "+$tcp.ip
     PRINT tcp.ena: .$temp
-    TCP_CONNECT tcp.socket, tcp.port, ip[1], tcp.connect.tmo
-    ;
-    ; Start data processing cycle
-    IF tcp.socket >= 0 THEN
-      .$temp =  "Connection established with socket id:"+ $ENCODE(tcp.socket)
+    TCP_CONNECT tcp.socket,tcp.port,ip[1],tcp.connect.tmo
+;
+; Start data processing cycle
+    IF tcp.socket>=0 THEN
+      .$temp = "Connection established with socket id:"+$ENCODE(tcp.socket)
       PRINT tcp.ena: .$temp
       .connected = TRUE
-      ; Start receiving data cycle
+; Start receiving data cycle
       .tcp.error.cnt = 0
-      WHILE .connected AND .tcp.error.cnt <= .tcp.retry.count DO
-        TCP_RECV .status, tcp.socket, .$tcp.request[1], .request.size, tcp.receive.tmo, 255
-        IF .status >= 0 THEN
-          IF .request.size == 0 THEN
-            .tcp.error.cnt = .tcp.error.cnt + 1
-            .$temp =  "Received data with 0 length. Error count:"+ $ENCODE(.tcp.error.cnt)
+      WHILE .connected AND .tcp.error.cnt<=.tcp.retry.count DO
+        TCP_RECV .status,tcp.socket,.$tcp.request[1],.request.size,tcp.receive.tmo,255
+        IF .status>=0 THEN
+          IF .request.size==0 THEN
+            .tcp.error.cnt = .tcp.error.cnt+1
+            .$temp = "Received data with 0 length. Error count:"+$ENCODE(.tcp.error.cnt)
             PRINT tcp.ena: .$temp
           ELSE
-            CALL tcp.callback.pc (.$tcp.request[], .request.size)
+            CALL tcp.callback.pc(.$tcp.request[],.request.size)
           END
         ELSE
-          IF .status == -34024 THEN
-            PRINT tcp.ena: "Timeout in receive, it's ok"
+          IF .status==-34024 THEN
+            PRINT tcp.ena: "Timeout in receive, it\'s ok"
           ELSE
-            .tcp.error.cnt = .tcp.error.cnt + 1
-            .$temp =  "Failed to receive data with error:"+ $ENCODE(.status) + ". Error count:" + $ENCODE(.tcp.error.cnt)
+            .tcp.error.cnt = .tcp.error.cnt+1
+            .$temp = "Failed to receive data with error:"+$ENCODE(.status)+". Error count:"+$ENCODE(.tcp.error.cnt)
             PRINT tcp.ena: .$temp
           END
         END
       END
     ELSE
-      .$temp =  "Connection failed with error:"+ $ENCODE(tcp.socket)
+      .$temp = "Connection failed with error:"+$ENCODE(tcp.socket)
       PRINT tcp.ena: .$temp
-      IF tcp.socket > 0 THEN
-        TCP_CLOSE .status, tcp.socket
+      IF tcp.socket>0 THEN
+        TCP_CLOSE .status,tcp.socket
       END
     END
   END
 .END
-.PROGRAM tcp.send3.pc (.$data[],.data.length)
-  IF tcp.socket > 0 THEN
-    TCP_SEND .status, tcp.socket, .$data[1], .data.length, tcp.send.tmo
-    IF .status >= 0 THEN
-      .$temp = "Sent "+ $ENCODE(.data.length) + " strings"
+.PROGRAM tcp.send3.pc(.$data[],.data.length)@25/11/17 14:11 #210973
+  IF tcp.socket>0 THEN
+    TCP_SEND .status,tcp.socket,.$data[1],.data.length,tcp.send.tmo
+    IF .status>=0 THEN
+      .$temp = "Sent "+$ENCODE(.data.length)+" strings"
       PRINT tcp.send.ena: .$temp
       FOR .i = 1 TO .data.length
         PRINT tcp.send.ena: .$data[.i]
       END
     ELSE
-      .$temp = "Failed to send data with error:"+ $ENCODE(.status)
+      .$temp = "Failed to send data with error:"+$ENCODE(.status)
       PRINT tcp.send.ena: .$temp
       tcp.socket = -1
     END
@@ -2036,19 +2056,19 @@ ANY:
     PRINT tcp.send.ena: "Failed to send data. Socket is not opened. Waiting for 5 seconds"
     TWAIT 5
   END
-  ;
+;
 .END
-.PROGRAM errstart.pc()
-  IF ERROR == -34021 OR ERROR == -10100 THEN
+.PROGRAM errstart.pc()@25/11/17 14:11 #66
+  IF ERROR==-34021 OR ERROR==-10100 THEN
     tcp.socket = -1
     MC ERESET
     TWAIT 1
-    ;PCABORT 2:
-    ;PCABORT 3:
-    ;TWAIT 3
-    ;PCEXECUTE 2: tcp.client.pc
-    ;PCEXECUTE 3: sender.pc
-    ;TWAIT 1
+;PCABORT 2:
+;PCABORT 3:
+;TWAIT 3
+;PCEXECUTE 2: tcp.client.pc
+;PCEXECUTE 3: sender.pc
+;TWAIT 1
   END
   TWAIT 5
   errstart.pc ON
@@ -2119,6 +2139,7 @@ ANY:
 	; .state 
 	; Group:Objects:3
 	; 3:id4:F
+	; 3:id1:F
 	; Group:Teach:4
 	; 4:a.teach.stz:F
 	; .plb 
@@ -2208,6 +2229,7 @@ ANY:
 	; .ct2 
 	; .mid.point 
 	; .put.outpal 
+	; 0:a.test.gripper:F
 	; Group:Autostart:8
 	; 8:watchdog.pc:B
 	; .det.put 
@@ -2318,6 +2340,7 @@ ANY:
 	; rs07.put.ack 
 	; di.hold 
 	; s.allow.put 
+	; s.receive.p 
 	; @@@ TOOLS @@@
 	; tool.pin 
 	; tool.pick[] 
@@ -2437,6 +2460,9 @@ stz.frame 988.154785 -343.346466 108.116516 -172.441833 1.937711 -8.772194
 #pick.in 130.503326 12.590690 -97.431877 -0.818260 -69.914940 -15.682721
 #pos.pos[4] 84.887558 50.425911 -87.949188 -23.932617 -48.571243 -45.915394
 #tool.pos[4] 84.078476 44.192799 -101.346825 -26.757774 -42.315220 -40.994743
+#homep1 -44.998138 -30.843269 -121.243866 0.000000 -90.000000 22.499559
+#tool.pos[2] 146.547989 31.255722 -122.853958 3.178916 -25.219118 -36.335194
+#tool.pos[3] 152.513062 36.866146 -111.188293 3.732012 -30.937502 -42.612892
 .END
 .REALS
 hmi.st.in.i = 2
@@ -2444,8 +2470,8 @@ hmi.st.in.j = 4
 hmi.st.out.i = 4
 hmi.st.out.j = 6
 capture.tare = 2
-hmi.gx = 4
-hmi.gy = -2.2
+hmi.gx = 0
+hmi.gy = 0
 hmi.x = -1
 hmi.y = -1
 ip[1] = 192
@@ -2457,11 +2483,11 @@ tcp.connect.tmo = 5
 tcp.port = 9013
 tcp.receive.tmo = 5
 tcp.send.tmo = 5
-tcp.socket = 36
+tcp.socket = -34024
 tyterm = 0
 capture.grip = 6
-hmi.t.pos = 1
-hmi.tool.no = 1
+hmi.t.pos = 2
+hmi.tool.no = 2
 release.grip = 5
 grip.clamp = 4
 grip.unclamp = 3
@@ -2477,7 +2503,7 @@ do.bat.alm = 2010
 do.home1 = 17
 do.work[1] = 18
 hmi.a = 0
-hmi.gz = 4
+hmi.gz = 0
 hmi.stnew.i = 1
 hmi.stnew.j = 1
 hmi.ext.x = -38
@@ -2485,7 +2511,7 @@ hmi.ext.y = -4
 grip.unclamped = 1001
 grip.clamped = 1002
 a = 0
-hmi.obj.id = 4
+hmi.obj.id = 1
 rs7.home1 = 1017
 rs7.work[1] = 1018
 di.ifp.page[1] = 2001
@@ -2503,7 +2529,7 @@ s.tcp.ena = 2013
 tcp.recv.ena = -1
 tcp.ena = -1
 s.apply.coord = 2014
-keep.tool.no = 1
+keep.tool.no = 2
 di.rs7.home1 = 1017
 di.rs7.work[1] = 1018
 do.work[2] = 2102
@@ -2552,8 +2578,8 @@ grip.zsh[6] = 0
 grip.zsh[7] = 0
 grip.zsh[8] = 0
 grip.zsh[9] = 0
-hmi.g180x = -8
-hmi.g180y = 7
+hmi.g180x = 0
+hmi.g180y = 0
 hmi.pos = 1
 hmi.pospos = 4
 s.close.pneumo = 2015
@@ -2618,25 +2644,26 @@ spc.tare.count = 50
 start.shift.x = 0
 start.shift.y = 15
 start.shift.z = 0
+s.receive.p = 2028
 .END
 .STRINGS
 $tcp.ip = "192.168.7.100"
-$action = "WaitingForCommand"
-$log.entry[0] = "16:11:36 Wait for unclamp gripper. State: WaitingGripUnclamped"
-$log.entry[1] = "16:11:48 Waiting for free positioner. State: WaitPosFree"
-$log.entry[2] = "16:11:48 Put detail to positioner 4"
-$log.entry[3] = "16:11:48 State: PutToPositioner"
-$log.entry[4] = "16:11:51 Wait for new pick. State: WaitForPick"
-$log.entry[5] = "16:12:17 Return pallet (2, 3) to input stocker."
-$log.entry[6] = "16:12:17 State: ReturnToInStocker"
-$log.entry[7] = "16:12:17 Wait stz pneumatic open. State: WaitPneumaticOpen"
-$log.entry[8] = "16:12:23 Return pallet (2, 3) to input stocker."
-$log.entry[9] = "16:12:23 State: ReturnToInStocker"
-$log.entry[10] = "16:12:33 Return pallet (4, 4) to output stocker."
-$log.entry[11] = "16:12:33 State: ReturnToOutStocker"
+$action = "PutTool"
+$log.entry[0] = "12:42:19 Pick tool 2 from 2"
+$log.entry[1] = "12:42:19 State: PickTool"
+$log.entry[2] = "12:42:34 Put tool 2 to 2"
+$log.entry[3] = "12:42:34 State: PutTool"
+$log.entry[4] = "12:47:44 Pick tool 3 from 3"
+$log.entry[5] = "12:47:44 State: PickTool"
+$log.entry[6] = "12:48:06 Put tool 3 to 3"
+$log.entry[7] = "12:48:06 State: PutTool"
+$log.entry[8] = "14:26:05 Pick tool 2 from 2"
+$log.entry[9] = "14:26:05 State: PickTool"
+$log.entry[10] = "14:26:15 Put tool 2 to 2"
+$log.entry[11] = "14:26:15 State: PutTool"
 $command = ""
 $detail.type = "312.229.002"
 $intare.ids = "5"
 $outtare.ids = "5"
-$cycle.command = "NOPICK"
+$cycle.command = ""
 .END

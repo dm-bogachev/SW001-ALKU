@@ -5,7 +5,8 @@ import shutil
 from datetime import datetime
 from ultralytics import YOLO
 
-YOLO_BASE_MODEL = 'yolo11x-pose.pt'
+YOLO_BASE_DETECT_MODEL = 'yolo11m.pt'
+YOLO_BASE_POSE_MODEL = 'yolo11m-pose.pt'
 PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
 DATASETS_DIR = os.path.join(PROJECT_DIR, 'datasets')
 RUNS_DIR = os.path.join(PROJECT_DIR, 'runs')
@@ -29,11 +30,12 @@ def extract_zip_to_named_folder(zip_path, extract_root, folder_name):
 
 
 if __name__ == '__main__':
-    if len(sys.argv) < 2:   
-        print("Usage: python trainer.py <dataset_zip_file>")
+    if len(sys.argv) < 3:   
+        print("Usage: python trainer.py <model:pose, detect> <dataset_zip_file>")
         sys.exit(1)
 
-    zip_filename = sys.argv[1]
+    model_type = sys.argv[1]
+    zip_filename = sys.argv[2]
     zip_path = os.path.join(PROJECT_DIR, zip_filename)
     if not os.path.isfile(zip_path):
         print(f"File not found: {zip_path}")
@@ -47,6 +49,11 @@ if __name__ == '__main__':
     if not os.path.isfile(os.path.join(PROJECT_DIR, data_yaml_path)):
         print(f"data.yaml not found in {data_yaml_path}")
         sys.exit(1)
+
+    if model_type == "pose":
+        YOLO_BASE_MODEL = YOLO_BASE_POSE_MODEL
+    else:
+        YOLO_BASE_MODEL = YOLO_BASE_DETECT_MODEL
 
     model = YOLO(YOLO_BASE_MODEL)
     model.to("cuda")
