@@ -116,14 +116,14 @@ class FrameProcessor:
                 self.objects = predictions
             else:
                 self.objects = None
-            for x in range(0, frame.shape[1], 500):
-                cv2.line(frame, (x, 0), (x, frame.shape[0]), (0, 255, 0), 3)
-            for y in range(0, frame.shape[0], 500):
-                cv2.line(frame, (0, y), (frame.shape[1], y), (0, 255, 0), 3)
-            for x in range(0, frame.shape[1], 100):
-                cv2.line(frame, (x, 0), (x, frame.shape[0]), (0, 255, 0), 1)
-            for y in range(0, frame.shape[0], 100):
-                cv2.line(frame, (0, y), (frame.shape[1], y), (0, 255, 0), 1)
+            # for x in range(0, frame.shape[1], 500):
+            #     cv2.line(frame, (x, 0), (x, frame.shape[0]), (0, 255, 0), 3)
+            # for y in range(0, frame.shape[0], 500):
+            #     cv2.line(frame, (0, y), (frame.shape[1], y), (0, 255, 0), 3)
+            # for x in range(0, frame.shape[1], 100):
+            #     cv2.line(frame, (x, 0), (x, frame.shape[0]), (0, 255, 0), 1)
+            # for y in range(0, frame.shape[0], 100):
+            #     cv2.line(frame, (0, y), (frame.shape[1], y), (0, 255, 0), 1)
             frame = self.drawer.draw(frame, predictions)
             self.__put_frame_to_redis(frame)
         except Exception as e:

@@ -67,6 +67,11 @@ class Background(Thread):
 
     def start_process(self, ProductName: str, ProductCount: int, InTareIDs: list, OutTareIDs: list):
         
+        response = requests.post(f"{CV_API_URL}/change_model?model_name={ProductName}", 
+                              headers={'accept': 'application/json'}, 
+                              timeout=1)
+        
+
         failed = False
 
         command = f"START;{ProductName};{ProductCount};"

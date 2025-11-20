@@ -211,15 +211,16 @@ N_INT102    "do.work[2]|"
 ; Change gripper if required
   IF current.gripper<>gripper.type THEN
     CALL log("Required gripper change")
-    JMOVE #post.tare.in
-    JMOVE #wait.pick
+    LMOVE #post.tare.in
+    LMOVE #wait.pick
     IF current.gripper<>0 THEN
       CALL gripper.put(current.gripper,current.gripper)
     END
     CALL gripper.pick(gripper.type,gripper.type)
+    LMOVE #wait.pick
     current.gripper = gripper.type
-    JMOVE #post.tare.in
-    JMOVE #homyak
+    LMOVE #post.tare.in
+    LMOVE #homyak
   END
   current.intare = 1
   current.outtare = 1
@@ -804,13 +805,13 @@ any:
     CALL id4
     .state = TRUE
     RETURN
-   SVALUE "STRING":
-    CALL id4
+   SVALUE "0401.17.02.023":
+    CALL id1
     .state = TRUE
     RETURN
   END
 .END
-.PROGRAM id4()@25/11/19 14:17 #8; 312.229.002_1
+.PROGRAM id4 () ; 312.229.002
 ; Object ID
   object.id = 4
 ; Working gripper
@@ -823,6 +824,11 @@ any:
   start.shift.x = 0
   start.shift.y = 15
   start.shift.z = 0
+  ;
+  dist.xp = 0.015
+  dist.xn = 0.001
+  dist.yp = 0.015
+  dist.yn = 0.015
 ;
 .END
 .PROGRAM id1()@25/11/20 14:28 #0; 440.00.26
@@ -839,6 +845,10 @@ any:
   start.shift.y = 0
   start.shift.z = 0
 ;
+  dist.xp = 0.025
+  dist.xn = 0.015
+  dist.yp = 0.015
+  dist.yn = 0.015
 .END
 .PROGRAM a.teach.stz()@25/11/17 15:18 #0
   SPEED 250 MM/S ALWAYS
@@ -1137,7 +1147,9 @@ any:
   TWAIT 0.5
 ;
   SPEED 100 ALWAYS
+  ACCURACY 1
   LMOVE .temp+TRANS(0,0,200)
+  
 .END
 .PROGRAM gripper.put(.pos,.tool.no)@25/11/17 15:18 #0
   IF FALSE THEN
@@ -1168,6 +1180,7 @@ any:
   TWAIT 0.5
 ;
   SPEED 100 ALWAYS
+  ACCURACY 1
   LMOVE .temp+TRANS(0,0,200)
 .END
 .PROGRAM stock.in.take(.i,.j)@25/11/19 15:58 #1
@@ -2086,6 +2099,10 @@ any:
 	; rs7.work[1]
 	; s.allow.put
 	; full.counter
+	; dist.xp
+	; dist.xn
+	; dist.yp
+	; dist.yn
 	; @@@ CONNECTION @@@
 	; RS013N
 	; 192.168.7.102
@@ -2369,7 +2386,7 @@ stocker.in[1,10] -465.543182 1138.765381 -444.362488 -88.225594 89.907661 -179.9
 stocker.in[2,1] 143.310699 1158.789185 276.329041 -88.225594 89.907661 -179.934937
 stocker.in[2,2] 143.405487 1158.663208 196.329193 -88.225594 89.907661 -179.934937
 stocker.in[2,3] 140.736588 1190.405762 120.218231 -88.228432 89.817619 -179.936249
-stocker.in[2,4] 140.507278 1190.664185 44.694473 -87.985725 89.729172 -179.661163
+stocker.in[2,4] 140.593338 1189.788574 41.771439 -88.098320 89.454063 -179.660568
 stocker.in[2,5] 143.689911 1158.285034 -43.670380 -88.225594 89.907661 -179.934937
 stocker.in[2,6] 143.784698 1158.158936 -123.670227 -88.225594 89.907661 -179.934937
 stocker.in[2,7] 143.879486 1158.032837 -203.670074 -88.225594 89.907661 -179.934937
@@ -2437,7 +2454,7 @@ stocker.out[4,12] -1035.649658 680.883728 -847.834595 0.430718 89.588928 -179.68
 tool.pin -85.070000 -205.369995 -19.860001 67.500000 70.000000 0.000000
 tool.pick[1] -5.960000 -6.028000 171.199997 -113.500000 180.000000 0.000000
 tool.pick[2] -5.960000 -6.028000 171.199997 -113.500000 180.000000 0.000000
-tool.pick[3] -5.960000 -6.028000 171.199997 -113.500000 180.000000 0.000000
+tool.pick[3] -2.000000 0.000000 171.199997 -113.500000 180.000000 0.000000
 tool.pick[4] -5.960000 -6.028000 171.199997 -113.500000 180.000000 0.000000
 tool.pick[5] -5.960000 -6.028000 171.199997 -113.500000 180.000000 0.000000
 stz.frame 988.154785 -343.346466 108.116516 -172.441833 1.937711 -8.772194
@@ -2470,10 +2487,10 @@ hmi.st.in.j = 4
 hmi.st.out.i = 4
 hmi.st.out.j = 6
 capture.tare = 2
-hmi.gx = 0
-hmi.gy = 0
-hmi.x = -1
-hmi.y = -1
+hmi.gx = 1
+hmi.gy = -1
+hmi.x = 155.507
+hmi.y = 243.517
 ip[1] = 192
 ip[2] = 168
 ip[3] = 7
@@ -2483,27 +2500,27 @@ tcp.connect.tmo = 5
 tcp.port = 9013
 tcp.receive.tmo = 5
 tcp.send.tmo = 5
-tcp.socket = -34024
+tcp.socket = 36
 tyterm = 0
 capture.grip = 6
 hmi.t.pos = 2
-hmi.tool.no = 2
+hmi.tool.no = 3
 release.grip = 5
 grip.clamp = 4
 grip.unclamp = 3
 center.x = 147.8
 center.y = 245.4
-cx = 265.347
-cy = 202.784
-dist.xn = 0.001
-dist.xp = 0.015
-dist.yn = 0.015
-dist.yp = 0.015
+cx = 155.507
+cy = 243.517
+dist.xn = 0
+dist.xp = 0
+dist.yn = 0
+dist.yp = 0
 do.bat.alm = 2010
 do.home1 = 17
 do.work[1] = 18
 hmi.a = 0
-hmi.gz = 0
+hmi.gz = 11
 hmi.stnew.i = 1
 hmi.stnew.j = 1
 hmi.ext.x = -38
@@ -2511,7 +2528,7 @@ hmi.ext.y = -4
 grip.unclamped = 1001
 grip.clamped = 1002
 a = 0
-hmi.obj.id = 1
+hmi.obj.id = 2
 rs7.home1 = 1017
 rs7.work[1] = 1018
 di.ifp.page[1] = 2001
@@ -2529,12 +2546,12 @@ s.tcp.ena = 2013
 tcp.recv.ena = -1
 tcp.ena = -1
 s.apply.coord = 2014
-keep.tool.no = 2
+keep.tool.no = 3
 di.rs7.home1 = 1017
 di.rs7.work[1] = 1018
 do.work[2] = 2102
 grip.180xsh[1] = -8
-grip.180xsh[2] = 0
+grip.180xsh[2] = -10
 grip.180xsh[3] = 0
 grip.180xsh[4] = 0
 grip.180xsh[5] = 0
@@ -2543,7 +2560,7 @@ grip.180xsh[7] = 0
 grip.180xsh[8] = 0
 grip.180xsh[9] = 0
 grip.180ysh[1] = 7
-grip.180ysh[2] = 0
+grip.180ysh[2] = 4
 grip.180ysh[3] = 0
 grip.180ysh[4] = 0
 grip.180ysh[5] = 0
@@ -2552,8 +2569,8 @@ grip.180ysh[7] = 0
 grip.180ysh[8] = 0
 grip.180ysh[9] = 0
 grip.xsh[1] = 4
-grip.xsh[2] = 0
-grip.xsh[3] = 0
+grip.xsh[2] = 6
+grip.xsh[3] = 1
 grip.xsh[4] = 0
 grip.xsh[5] = 0
 grip.xsh[6] = 0
@@ -2561,8 +2578,8 @@ grip.xsh[7] = 0
 grip.xsh[8] = 0
 grip.xsh[9] = 0
 grip.ysh[1] = -2.2
-grip.ysh[2] = 0
-grip.ysh[3] = 0
+grip.ysh[2] = -1.5
+grip.ysh[3] = -1
 grip.ysh[4] = 0
 grip.ysh[5] = 0
 grip.ysh[6] = 0
@@ -2570,8 +2587,8 @@ grip.ysh[7] = 0
 grip.ysh[8] = 0
 grip.ysh[9] = 0
 grip.zsh[1] = 4
-grip.zsh[2] = 0
-grip.zsh[3] = 0
+grip.zsh[2] = 5.8
+grip.zsh[3] = 11
 grip.zsh[4] = 0
 grip.zsh[5] = 0
 grip.zsh[6] = 0
@@ -2591,7 +2608,7 @@ rs7.working = 1019
 s.sensor.iss = 2019
 s.sensor.oss = 2020
 s.sensor.ot = 2021
-current.gripper = 1
+current.gripper = 3
 rs7.tare.chg = 1020
 rs13.tare.ack = 20
 dbg.tcp = -1
@@ -2600,7 +2617,7 @@ gripper.id = 1
 intare.count = 2
 intare.i[1] = 2
 intare.j[1] = 3
-max.tare.count = 168
+max.tare.count = 126
 outtare.count = 3
 outtare.i[1] = 4
 outtare.j[1] = 4
@@ -2614,13 +2631,13 @@ tcp.recv.dbg = -1
 tcp.send.dbg = -1
 current.intare = 1
 current.outtare = 1
-full.counter = 10
-gripper.type = 1
+full.counter = 6
+gripper.type = 2
 hmi.pos.pos = 4
 intare.i[2] = 2
 intare.j[2] = 4
-object.id = 4
-tare.counter = 10
+object.id = 1
+tare.counter = 6
 s.pneumo.open = 2022
 s.pneumo.close = 2023
 s.debug = 2024
@@ -2630,40 +2647,40 @@ rs07.put.ack = 1022
 rs013.putting = 23
 di.hold = 2026
 s.allow.put = 2027
-detail.length = 23.5
+detail.length = 27.5
 outtare.i[2] = 4
 outtare.i[3] = 4
 outtare.j[2] = 5
 outtare.j[3] = 6
-picked = 0
+picked = -1
 rs07.fin.ack = 1021
 rs13.finish = 21
 rs7.det.picked = 1019
 s.lock = 2025
 spc.tare.count = 50
 start.shift.x = 0
-start.shift.y = 15
+start.shift.y = 0
 start.shift.z = 0
 s.receive.p = 2028
 .END
 .STRINGS
 $tcp.ip = "192.168.7.100"
-$action = "PutTool"
-$log.entry[0] = "12:42:19 Pick tool 2 from 2"
-$log.entry[1] = "12:42:19 State: PickTool"
-$log.entry[2] = "12:42:34 Put tool 2 to 2"
-$log.entry[3] = "12:42:34 State: PutTool"
-$log.entry[4] = "12:47:44 Pick tool 3 from 3"
-$log.entry[5] = "12:47:44 State: PickTool"
-$log.entry[6] = "12:48:06 Put tool 3 to 3"
-$log.entry[7] = "12:48:06 State: PutTool"
-$log.entry[8] = "14:26:05 Pick tool 2 from 2"
-$log.entry[9] = "14:26:05 State: PickTool"
-$log.entry[10] = "14:26:15 Put tool 2 to 2"
-$log.entry[11] = "14:26:15 State: PutTool"
+$action = " "
+$log.entry[0] = "17:14:31 State: PutToPositioner"
+$log.entry[1] = "17:14:36 Wait for new pick. State: WaitForPick"
+$log.entry[2] = "17:14:38 Pick detail from stz (218.50485, 237.21823, 180)"
+$log.entry[3] = "17:14:38 State: PickDetail"
+$log.entry[4] = "17:14:39 Wait for unclamp gripper. State: WaitingGripUnclamped"
+$log.entry[5] = "17:14:57 Waiting for free positioner. State: WaitPosFree"
+$log.entry[6] = "17:14:57 Put detail to positioner 1"
+$log.entry[7] = "17:14:57 State: PutToPositioner"
+$log.entry[8] = "17:15:01 Wait for new pick. State: WaitForPick"
+$log.entry[9] = "17:15:03 Pick detail from stz (179.17799, 404.33792, 180)"
+$log.entry[10] = "17:15:03 State: PickDetail"
+$log.entry[11] = "17:15:04 Wait for unclamp gripper. State: WaitingGripUnclamped"
 $command = ""
-$detail.type = "312.229.002"
+$detail.type = "0401.17.02.023"
 $intare.ids = "5"
 $outtare.ids = "5"
-$cycle.command = ""
+$cycle.command = "PICK"
 .END

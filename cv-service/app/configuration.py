@@ -27,23 +27,6 @@ base_settings = {
         "Marker0YPoint": 3,  # Bottom Left
     },
     
-    "Models": {
-        "LongDetails": {
-            "ModelName": "LongDetails",
-            "ModelFileName": "details_long_test.pt",
-            "ConfidenceThreshold": 0.5,
-            "ModelType": "yolo-pose",
-            "ModelProcessor": "LongDetailsProcessor.py",
-            
-        },
-        "RoundDetails": {
-            "ModelName": "RoundDetails",
-            "ModelFileName": "rounds.pt",
-            "ConfidenceThreshold": 0.5,
-            "ModelType": "yolo-detect",
-            "ModelProcessor": "RoundDetailsProcessor.py",
-        },
-    },
     "Display": {
         "BBOX": True,
         "COORDINATES": True,

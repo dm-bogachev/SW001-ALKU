@@ -7,7 +7,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 # Внутренние модули
 from common.Logger import config_logger
-logger = config_logger("proc_440.00.26.py")
+logger = config_logger("proc_312.229.02.py")
 
 def process(frame, yolo_data):
     process_frame = frame.copy()

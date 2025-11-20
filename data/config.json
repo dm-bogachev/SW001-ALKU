@@ -4,37 +4,37 @@
         "DisplayedFrame": "REDIS_PROCESSED_FRAME_KEY"
     },
     "Models": {
-        "LongDetails": {
-            "ModelName": "LongDetails",
-            "ModelFileName": "details_long_test.pt",
+        "312.229.002": {
+            "ModelName": "312.229.002",
+            "ModelFileName": "model_312.229.002.pt",
             "ConfidenceThreshold": 0.5,
             "ModelType": "yolo-pose",
-            "ModelProcessor": "LongDetailsProcessor.py"
+            "ModelProcessor": "proc_312.229.002.py"
         },
-        "440.00.26": {
-            "ModelName": "440.00.26",
-            "ModelFileName": "model_440.00.26.pt",
+        "0401.17.02.023": {
+            "ModelName": "0401.17.02.023",
+            "ModelFileName": "model_0401.17.02.023.pt",
             "ConfidenceThreshold": 0.5,
             "ModelType": "yolo-pose",
-            "ModelProcessor": "proc_440.00.26.py"
+            "ModelProcessor": "proc_0401.17.02.023.py"
         },
-        "RoundDetails": {
-            "ModelName": "RoundDetails",
-            "ModelFileName": "rounds.pt",
+        "440.00.111": {
+            "ModelName": "440.00.111",
+            "ModelFileName": "model_440.00.111.pt",
             "ConfidenceThreshold": 0.5,
             "ModelType": "yolo-detect",
-            "ModelProcessor": "RoundDetailsProcessor.py"
+            "ModelProcessor": "proc_440.00.111.py"
         }
     },
     "Display": {
         "BBOX": true,
         "COORDINATES": true,
-        "KEYPOINTS": true,
+        "KEYPOINTS": false,
         "LABELS": false,
         "SCORES": false,
         "POINTS": true,
         "PICK_ANGLE": false,
-        "GRID": true
+        "GRID": false
     },
     "Markers": {
         "MarkersXDistance": 489.5,
@@ -56,7 +56,7 @@
     },
     "Process": {
         "ProcessingDelay": 0.0,
-        "LastModel": "440.00.26",
+        "LastModel": "440.00.111",
         "FirstObjectCriteria": "Probability"
     },
     "IO": {
