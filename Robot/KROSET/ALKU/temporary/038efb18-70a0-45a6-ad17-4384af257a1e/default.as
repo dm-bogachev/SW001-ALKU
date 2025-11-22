@@ -1333,41 +1333,6 @@ ZSWITCH ZOPTACDC_FTRQ_TN_FIX OFF  -531
 ZSWITCH ZFIX_PG_CONTINUE ON   -521
 ZSWITCH ZFIX_CALL_1STEPPG ON   -523
 .END
-.OPE_INFO1
-OPEINFO  30 10 6 1  1763208317  ;(25/11/15 21:05:17) RS007L-B001 
-CONT_TIM  2.0 
-SERV_TIM  1.2 
-MTON_CNT  7 
-ESTP_CNT  0 
-BRKE_CNT  7 
-CON_PWR  0.012 
-SUP_PWR  0.012 
-REG_PWR  0.000 
-MOVE_TJT  0.1 0.1 0.1 0.0 0.1 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 
-DIST_DJT  4.640 4.241 2.487 0.579 5.451 4.437 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 
-DIST_DJT_PLUS  2.327 2.115 1.265 0.288 2.733 2.239 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 
-OPEINFO TP_BKLIGHT  0 0.6 50000 
-OPEINFO MC  0 0 2000000 
-OPEINFO PARTS1  0 0 0 0 0 0 0 0 0 0 0 
-OPEINFO PARTS2  0 0 0 0 0 0 0 0 0 0 0 
-OPEINFO PARTS3  0 0 0 0 0 0 0 0 0 0 0 
-M_OPEINFO  30 10 6 1  1763208317  ;(25/11/15 21:05:17) RS007L-B001 
-M_CONT_TIM  2.0 
-M_SERV_TIM  1.2 
-M_MTON_CNT  7 
-M_ESTP_CNT  0 
-M_BRKE_CNT  7 
-M_CON_PWR  0.012 
-M_SUP_PWR  0.012 
-M_REG_PWR  0.000 
-M_MOVE_TJT  0.1 0.1 0.1 0.0 0.1 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 
-M_DIST_DJT  4.640 4.241 2.487 0.579 5.451 4.437 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 
-M_DIST_DJT_PLUS  2.327 2.115 1.265 0.288 2.733 2.239 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 
-M_MOVE_TJT_OVERDRIVE  0.0 0.0 0.0 0.0 0.0 0.0 
-M_DIST_DJT_OVERDRIVE  0.000 0.000 0.000 0.000 0.000 0.000 
-M_WARN_CJT_OVERDRIVE  0 0 0 0 0 0 
-HOUR_MTR  2.0 
-.END
 .SYSDATA
 REG_POINT       0
 ATE_REG_POINT  0
@@ -2389,7 +2354,7 @@ SWITCH AUTOSTART2.PC   OFF
 SWITCH AUTOSTART3.PC   OFF
 SWITCH AUTOSTART4.PC   OFF
 SWITCH AUTOSTART5.PC   OFF
-SWITCH ERRSTART.PC     ON 
+SWITCH ERRSTART.PC     OFF
 SWITCH AUTOSTART.LSQ   OFF
 SWITCH DISPIO_01       OFF
 SWITCH HOLD.STEP       ON 
@@ -2454,192 +2419,6 @@ SWITCH LIST_VERTICAL   OFF
 SWITCH REP_SINGULAR    OFF
 SWITCH TCH_SINGULAR    OFF
 SWITCH SLOW_REP_MM     OFF
-.END
-.CONDITION
-AS_VER       ASF_01000001G
-ELOG_NUM             38
-CHK_ONCE      255
-MAN_SPEED     1
-CHK_SPEED     1
-MON_SPEED        70.000
-PRG_ACCEL       100.000
-PRG_SPEED       100.000
-PRG_DECEL       100.000
-PRM_SPEED       100.000
-PRM_ACCEL       100.000
-PRM_DECEL       100.000
-BLK_SPEED       100.000
-PRG_TIME      0
-PRM_TIME      0
-PRG_NOT_SPEED    100.000
-PRM_NOT_SPEED    100.000
-ACCEL_TICK           -1
-DECEL_TICK           -1
-ABS_SPEED         0.000
-SPEED_TYPE2       0.000
-VEL_E             0.000
-EXT_R1            0.000     0.000     0.000     0.000     0.000     0.000     0.000     0.000     0.000     0.000     0.000     0.000
-EXT_R2            0.000     0.000     0.000     0.000     0.000     0.000     0.000     0.000     0.000     0.000     0.000     0.000
-CINT_PRM_SPEED1    100.000
-CINT_PRG_SPEED1    100.000
-CINT_PRM_SPEED2    100.000
-CINT_PRG_SPEED2    100.000
-CINT_PRM_SPEED3    100.000
-CINT_PRG_SPEED3    100.000
-CINT_PRM_ACCEL    100.000
-CINT_PRG_ACCEL    100.000
-CINT_PRM_DECEL    100.000
-CINT_PRG_DECEL    100.000
-PRG_ACCEL_ORG    100.000
-PRG_SPEED_ORG    100.000
-PRG_DECEL_ORG    100.000
-PRG_JT_ACCEL    100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000
-PRG_JT_DECEL    100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000
-PRM_JT_ACCEL    100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000
-PRM_JT_DECEL    100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000
-STEP1ENV_CALL_PRGNAME a.main
-STEP1ENV_PRG_STEP          1
-STEP2ENV0_CALL_PRGNAME autostart.pc
-STEP2ENV0_PRG_STEP          1
-STEP2ENV1_CALL_PRGNAME tcp.client.pc
-STEP2ENV1_PRG_STEP         38
-STEP2ENV2_CALL_PRGNAME sender.pc
-STEP2ENV2_PRG_STEP         18
-STEP2ENV4_CALL_PRGNAME errstart.pc
-STEP2ENV4_PRG_STEP         13
-USR_DO1      10010000000001000000000000000000
-USR_DO2      00000000000000000000000000000000
-USR_DO3      00000000000000000000000000000000
-USR_DO4      00000000000000000000000000000000
-USR_DO5      00000000000000000000000000000000
-USR_DO6      00000000000000000000000000000000
-USR_DO7      00000000000000000000000000000000
-USR_DO8      00000000000000000000000000000000
-USR_DO9      00000000000000000000000000000000
-USR_DO10     00000000000000000000000000000000
-USR_DO11     00000000000000000000000000000000
-USR_DO12     00000000000000000000000000000000
-USR_DO13     00000000000000000000000000000000
-USR_DO14     00000000000000000000000000000000
-USR_DO15     00000000000000000000000000000000
-USR_DO16     00000000000000000000000000000000
-USR_DO17     00000000000000000000000000000000
-USR_DO18     00000000000000000000000000000000
-USR_DO19     00000000000000000000000000000000
-USR_DO20     00000000000000000000000000000000
-USR_DO21     00000000000000000000000000000000
-USR_DO22     00000000000000000000000000000000
-USR_DO23     00000000000000000000000000000000
-USR_DO24     00000000000000000000000000000000
-USR_DO25     00000000000000000000000000000000
-USR_DO26     00000000000000000000000000000000
-USR_DO27     00000000000000000000000000000000
-USR_DO28     00000000000000000000000000000000
-USR_DO29     00000000000000000000000000000000
-USR_DO30     00000000000000000000000000000000
-USR_INTERNAL 00000000100000110000000000000000
-USR_INTERNAL1 00000000100000110000000000000000
-USR_INTERNAL2 00000000000000000000000000000000
-USR_INTERNAL3 00000000000000000000000000000000
-USR_INTERNAL4 00000000000000000000000000000000
-USR_INTERNAL5 00000000000000000000000000000000
-USR_INTERNAL6 00000000000000000000000000000000
-USR_INTERNAL7 00000000000000000000000000000000
-USR_INTERNAL8 00000000000000000000000000000000
-USR_INTERNAL9 00000000000000000000000000000000
-USR_INTERNAL10 00000000000000000000000000000000
-USR_INTERNAL11 00000000000000000000000000000000
-USR_INTERNAL12 00000000000000000000000000000000
-USR_INTERNAL13 00000000000000000000000000000000
-USR_INTERNAL14 00000000000000000000000000000000
-USR_INTERNAL15 00000000000000000000000000000000
-USR_INTERNAL16 00000000000000000000000000000000
-USR_INTERNAL17 00000000000000000000000000000000
-USR_INTERNAL18 00000000000000000000000000000000
-USR_INTERNAL19 00000000000000000000000000000000
-USR_INTERNAL20 00000000000000000000000000000000
-USR_INTERNAL21 00000000000000000000000000000000
-USR_INTERNAL22 00000000000000000000000000000000
-USR_INTERNAL23 00000000000000000000000000000000
-USR_INTERNAL24 00000000000000000000000000000000
-USR_INTERNAL25 00000000000000000000000000000000
-USR_INTERNAL26 00000000000000000000000000000000
-USR_INTERNAL27 00000000000000000000000000000000
-USR_INTERNAL28 00000000000000000000000000000000
-USR_INTERNAL29 00000000000000000000000000000000
-USR_INTERNAL30 00000000000000000000000000000000
-USR_AD       00000000000000000000000000000000
-USR_DA                0         0         0         0         0         0         0         0         0         0         0         0         0         0         0         0
-USR_ADO_1          0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0
-USR_ADO_2          0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0
-USR_ADO_3          0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0
-USR_ADO_4          0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0
-USR_ADO_5          0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0
-USR_ADO_6          0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0
-USR_ADO_7          0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0
-USR_ADO_8          0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0
-USR_ADO2_1         0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0
-USR_ADO2_2         0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0
-USR_ADO2_3         0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0
-USR_ADO2_4         0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0
-USR_ADO2_5         0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0
-USR_ADO2_6         0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0
-USR_ADO2_7         0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0
-USR_ADO2_8         0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0
-UCINDENT1          0
-UCLINE1            0
-UCFGCOLOR1        11
-UCBGCOLOR1        10
-UCCHARWINSTR1 22:26:35 Move to measurement machine. State: TakingToMM
-22:26:38 Move to measurement machine. State: WaitingMMResult
-22:26:39 Move to measurement machine. State: TakingFromMM
-22:26:42 Putting to defect. State: PutToDefect 
-
-UCINDENT2          0
-UCLINE2            0
-UCFGCOLOR2        11
-UCBGCOLOR2        10
-UCCHARWINSTR2 22:44:05 Moving to home position. State: MoveToHome
-22:44:05 Main cycle started. State: WaitingForCommand
-22:44:22 Received START command. State: StartingProgram
-22:45:58 Pick detail from positioner 4
-
-UCINDENT3          0
-UCLINE3            0
-UCFGCOLOR3        11
-UCBGCOLOR3        10
-UCCHARWINSTR3 22:45:58 State: TakeFromPositioner
-22:45:59 Wait for unclamp gripper. State: WaitingGripUnclamped
-22:46:00 Move to measurement machine. State: TakingToMM
-22:46:02 Move to measurement machine. State: WaitingMMResult
-
-UCINDENT4          0
-UCLINE4            0
-UCFGCOLOR4         0
-UCBGCOLOR4         0
-UCINDENT5          0
-UCLINE5            0
-UCFGCOLOR5         0
-UCBGCOLOR5         0
-UCINDENT6          0
-UCLINE6            0
-UCFGCOLOR6         0
-UCBGCOLOR6         0
-UCINDENT7          0
-UCLINE7            0
-UCFGCOLOR7         0
-UCBGCOLOR7         0
-UCINDENT8          0
-UCLINE8            0
-UCFGCOLOR8        11
-UCBGCOLOR8         6
-UCCHARWINSTR8 Robot: RS007L S/N: C6324
-Controller: F60 S/N: C8174
- 
-Powered by Robowizard Co.Ltd.
-
-SEQEXECUTE            0
-TPHOLDSTAT    ON 
 .END
 .AUXDATA
 ROB_START_LIM      0.000     0.000     0.000     0.000     0.000     0.000     0.000     0.000     0.000     0.000     0.000     0.000     0.000     0.000     0.000     0.000     0.000     0.000
@@ -3008,7 +2787,7 @@ LAN_HOST_PATH
 LAN_HOST_ACNT   
 LAN_HOST_ASCBIN    1
 LAN_HOST_EUSJ    0
-AUX_PASSWD      3
+AUX_PASSWD      2
 AUX_CHOOSE1   2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
 AUX_CHOOSE2   2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
 AUX_CHOOSE3   2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
@@ -3431,15 +3210,1383 @@ TP_RECINHI      0   0   0
 .INTER_PANEL_COLOR_D
 182,3,224,244,28,159,252,255,251,255,0,31,2,241,52,255,
 .END
-.SIG_COMMENT
+.ERRLOG
+   1 - [25/11/22 17:12:10 SIGNAL:00 MON.SPEED : 100 REPEAT mode]
+       (E4057)TCP)Illegal Socket ID.
+       OPERATION1:[25/11/22 17:12:06] ( AUX1 connect )
+       OPERATION2:[25/11/22 17:12:06] ( auxapi connect )
+       OPERATION3:[25/11/22 17:12:06] ( TEACH->REPEAT )
+       OPERATION4:[25/11/22 17:12:05] ( ERROR RESET )
+       OPERATION5:[25/11/22 17:12:02] ( Control Power ON )
+       OPERATION6:[04/01/10 22:37:04] (  )
+       OPERATION7:[04/01/10 22:37:04] (  )
+       OPERATION8:[04/01/10 22:37:04] (  )
+       OPERATION9:[04/08/04 06:13:36] (  )
+       ROBOT1:
+        PROGRAM:a.main Step:0 Cur_Step:1 STATUS:STOP
+       PC1 PROGRAM: watchdog.pc Step No: 43 STATUS: WAIT
+       PC2 PROGRAM: tcp.client.pc Step No: 28 STATUS: RUN
+       PC3 PROGRAM: tcp.send3.pc Step No: 2 STATUS: RUN
+       PC5 PROGRAM: errstart.pc Step No: 12 STATUS: WAIT
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+        -92.051     5.337  -129.037    -0.001    39.749     7.309
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+        -92.051     5.337  -129.037    -0.001    39.749     7.309
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+        -92.051     5.337  -129.037    -0.001    39.749     7.309
+------------------------------------------------------------------------------
+   2 - [25/11/22 17:12:08 SIGNAL:00 MON.SPEED : 100 REPEAT mode]
+       (E4057)TCP)Illegal Socket ID.
+       OPERATION1:[25/11/22 17:12:06] ( AUX1 connect )
+       OPERATION2:[25/11/22 17:12:06] ( auxapi connect )
+       OPERATION3:[25/11/22 17:12:06] ( TEACH->REPEAT )
+       OPERATION4:[25/11/22 17:12:05] ( ERROR RESET )
+       OPERATION5:[25/11/22 17:12:02] ( Control Power ON )
+       OPERATION6:[04/01/10 22:37:04] (  )
+       OPERATION7:[04/01/10 22:37:04] (  )
+       OPERATION8:[04/01/10 22:37:04] (  )
+       OPERATION9:[04/08/04 06:13:36] (  )
+       ROBOT1:
+        PROGRAM:a.main Step:0 Cur_Step:1 STATUS:STOP
+       PC1 PROGRAM: watchdog.pc Step No: 43 STATUS: WAIT
+       PC2 PROGRAM: tcp.client.pc Step No: 28 STATUS: RUN
+       PC3 PROGRAM: tcp.send3.pc Step No: 2 STATUS: RUN
+       PC5 PROGRAM: errstart.pc Step No: 12 STATUS: WAIT
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+        -92.051     5.337  -129.037    -0.001    39.749     7.309
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+        -92.051     5.337  -129.037    -0.001    39.749     7.309
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+        -92.051     5.337  -129.037    -0.001    39.749     7.309
+------------------------------------------------------------------------------
+   3 - [25/11/22 17:12:03 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. watchdog.pc
+       OPERATION1:[25/11/22 17:12:02] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+   4 - [25/11/22 17:12:03 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. tcp.send3.pc
+       OPERATION1:[25/11/22 17:12:02] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+   5 - [25/11/22 17:12:03 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. tcp.send2.pc
+       OPERATION1:[25/11/22 17:12:02] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+   6 - [25/11/22 17:12:03 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. tcp.send.pc
+       OPERATION1:[25/11/22 17:12:02] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+   7 - [25/11/22 17:12:03 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. tcp.client.pc
+       OPERATION1:[25/11/22 17:12:02] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+   8 - [25/11/22 17:12:03 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. tcp.callback.pc
+       OPERATION1:[25/11/22 17:12:02] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+   9 - [25/11/22 17:12:03 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. set.vars.pc
+       OPERATION1:[25/11/22 17:12:02] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  10 - [25/11/22 17:12:03 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. set.io.pc
+       OPERATION1:[25/11/22 17:12:02] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  11 - [25/11/22 17:12:03 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. sender.pc
+       OPERATION1:[25/11/22 17:12:02] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  12 - [25/11/22 17:12:03 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. safe.home
+       OPERATION1:[25/11/22 17:12:02] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  13 - [25/11/22 17:12:03 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. put.tare
+       OPERATION1:[25/11/22 17:12:02] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  14 - [25/11/22 17:12:03 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. put.defect
+       OPERATION1:[25/11/22 17:12:02] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  15 - [25/11/22 17:12:03 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. process.data
+       OPERATION1:[25/11/22 17:12:02] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  16 - [25/11/22 17:12:03 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. pos.pick
+       OPERATION1:[25/11/22 17:12:02] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  17 - [25/11/22 17:12:03 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. pg.start
+       OPERATION1:[25/11/22 17:12:02] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  18 - [25/11/22 17:12:03 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. measure
+       OPERATION1:[25/11/22 17:12:02] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  19 - [25/11/22 17:12:03 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. log
+       OPERATION1:[25/11/22 17:12:02] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  20 - [25/11/22 17:12:03 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. id4
+       OPERATION1:[25/11/22 17:12:02] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  21 - [25/11/22 17:12:03 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. get.state.pc
+       OPERATION1:[25/11/22 17:12:02] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  22 - [25/11/22 17:12:03 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. errstart.pc
+       OPERATION1:[25/11/22 17:12:02] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  23 - [25/11/22 17:12:03 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. calc.tare
+       OPERATION1:[25/11/22 17:12:02] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  24 - [25/11/22 17:12:03 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. autostart.pc
+       OPERATION1:[25/11/22 17:12:02] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  25 - [25/11/22 17:12:03 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. a.test.tare
+       OPERATION1:[25/11/22 17:12:02] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  26 - [25/11/22 17:12:03 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. a.teach.tare
+       OPERATION1:[25/11/22 17:12:02] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  27 - [25/11/22 17:12:03 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. a.teach.pos
+       OPERATION1:[25/11/22 17:12:02] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  28 - [25/11/22 17:12:03 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. a.teach.machine
+       OPERATION1:[25/11/22 17:12:02] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  29 - [25/11/22 17:12:03 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. a.teach.defect
+       OPERATION1:[25/11/22 17:12:02] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  30 - [25/11/22 17:12:03 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. a.main
+       OPERATION1:[25/11/22 17:12:02] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  31 - [25/11/22 17:12:03 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. a.home
+       OPERATION1:[25/11/22 17:12:02] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  32 - [25/11/22 17:12:03 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. a.align
+       OPERATION1:[25/11/22 17:12:02] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
 .END
-.PROGRAM a.align()@25/11/15 21:05 #0
+.TP_TASK_SEQ
+COMM  0, 0, 0
+TPMA  0, 3, 3
+MFP_  0, 3, 3
+DTL_  0, 3, 3
+TPFLT  0, 0, 0
+DRAW_LOCK  0
+SEQ_LOCK   0
+ICOM_WRITE[0]  0
+ICOM_WRITE[1]  0
+ICOM_WRITE[2]  0
+ICOM_WRITE[3]  0
+ICOM_WRITE[4]  0
+ICOM_WRITE[5]  0
+ICOM_WRITE[6]  2
+ICOM_READ[0]   0
+ICOM_READ[1]   0
+ICOM_READ[2]   0
+ICOM_READ[3]   2
+ICOM_READ[4]   2
+ICOM_READ[5]   2
+ICOM_READ[6]   0
+TP_RELOAD_CNT    0
+TP_SEM_ERROR_CNT    0
+.END
+.ENCTEMPLOG
+=== MIN(deg C) ===
+  JT1  - [25/11/22 17:12:15]      0.000
+  JT2  - [25/11/22 17:12:15]      0.000
+  JT3  - [25/11/22 17:12:15]      0.000
+  JT4  - [25/11/22 17:12:15]      0.000
+  JT5  - [25/11/22 17:12:15]      0.000
+  JT6  - [25/11/22 17:12:15]      0.000
+=== MAX(deg C) ===
+  JT1  - [25/11/22 17:12:15]      0.000
+  JT2  - [25/11/22 17:12:15]      0.000
+  JT3  - [25/11/22 17:12:15]      0.000
+  JT4  - [25/11/22 17:12:15]      0.000
+  JT5  - [25/11/22 17:12:15]      0.000
+  JT6  - [25/11/22 17:12:15]      0.000
+.END
+.REDUCTIONGEAR_LOG
+SUM_JT1_t01_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t01_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t01_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t01_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t01_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t01_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t01_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t01_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t01_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t01_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t01_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t02_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t02_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t02_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t02_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t02_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t02_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t02_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t02_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t02_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t02_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t02_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t03_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t03_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t03_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t03_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t03_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t03_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t03_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t03_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t03_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t03_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t03_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t04_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t04_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t04_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t04_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t04_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t04_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t04_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t04_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t04_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t04_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t04_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t05_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t05_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t05_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t05_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t05_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t05_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t05_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t05_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t05_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t05_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t05_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t06_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t06_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t06_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t06_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t06_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t06_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t06_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t06_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t06_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t06_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t06_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t07_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t07_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t07_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t07_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t07_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t07_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t07_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t07_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t07_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t07_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t07_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t08_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t08_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t08_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t08_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t08_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t08_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t08_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t08_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t08_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t08_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t08_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t09_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t09_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t09_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t09_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t09_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t09_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t09_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t09_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t09_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t09_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t09_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t10_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t10_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t10_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t10_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t10_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t10_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t10_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t10_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t10_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t10_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t10_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t11_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t11_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t11_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t11_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t11_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t11_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t11_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t11_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t11_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t11_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t11_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t01_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t01_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t01_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t01_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t01_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t01_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t01_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t01_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t01_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t01_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t01_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t02_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t02_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t02_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t02_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t02_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t02_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t02_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t02_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t02_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t02_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t02_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t03_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t03_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t03_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t03_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t03_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t03_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t03_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t03_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t03_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t03_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t03_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t04_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t04_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t04_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t04_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t04_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t04_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t04_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t04_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t04_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t04_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t04_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t05_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t05_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t05_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t05_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t05_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t05_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t05_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t05_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t05_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t05_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t05_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t06_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t06_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t06_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t06_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t06_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t06_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t06_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t06_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t06_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t06_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t06_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t07_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t07_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t07_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t07_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t07_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t07_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t07_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t07_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t07_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t07_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t07_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t08_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t08_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t08_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t08_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t08_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t08_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t08_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t08_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t08_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t08_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t08_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t09_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t09_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t09_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t09_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t09_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t09_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t09_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t09_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t09_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t09_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t09_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t10_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t10_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t10_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t10_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t10_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t10_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t10_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t10_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t10_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t10_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t10_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t11_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t11_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t11_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t11_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t11_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t11_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t11_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t11_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t11_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t11_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t11_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t01_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t01_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t01_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t01_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t01_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t01_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t01_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t01_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t01_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t01_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t01_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t02_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t02_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t02_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t02_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t02_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t02_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t02_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t02_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t02_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t02_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t02_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t03_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t03_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t03_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t03_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t03_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t03_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t03_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t03_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t03_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t03_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t03_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t04_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t04_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t04_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t04_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t04_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t04_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t04_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t04_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t04_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t04_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t04_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t05_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t05_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t05_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t05_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t05_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t05_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t05_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t05_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t05_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t05_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t05_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t06_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t06_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t06_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t06_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t06_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t06_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t06_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t06_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t06_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t06_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t06_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t07_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t07_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t07_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t07_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t07_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t07_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t07_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t07_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t07_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t07_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t07_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t08_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t08_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t08_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t08_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t08_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t08_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t08_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t08_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t08_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t08_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t08_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t09_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t09_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t09_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t09_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t09_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t09_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t09_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t09_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t09_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t09_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t09_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t10_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t10_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t10_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t10_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t10_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t10_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t10_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t10_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t10_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t10_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t10_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t11_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t11_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t11_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t11_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t11_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t11_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t11_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t11_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t11_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t11_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t11_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t01_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t01_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t01_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t01_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t01_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t01_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t01_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t01_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t01_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t01_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t01_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t02_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t02_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t02_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t02_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t02_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t02_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t02_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t02_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t02_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t02_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t02_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t03_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t03_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t03_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t03_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t03_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t03_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t03_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t03_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t03_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t03_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t03_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t04_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t04_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t04_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t04_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t04_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t04_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t04_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t04_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t04_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t04_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t04_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t05_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t05_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t05_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t05_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t05_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t05_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t05_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t05_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t05_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t05_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t05_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t06_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t06_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t06_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t06_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t06_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t06_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t06_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t06_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t06_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t06_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t06_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t07_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t07_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t07_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t07_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t07_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t07_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t07_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t07_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t07_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t07_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t07_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t08_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t08_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t08_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t08_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t08_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t08_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t08_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t08_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t08_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t08_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t08_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t09_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t09_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t09_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t09_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t09_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t09_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t09_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t09_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t09_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t09_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t09_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t10_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t10_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t10_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t10_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t10_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t10_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t10_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t10_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t10_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t10_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t10_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t11_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t11_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t11_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t11_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t11_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t11_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t11_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t11_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t11_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t11_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t11_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t01_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t01_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t01_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t01_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t01_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t01_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t01_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t01_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t01_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t01_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t01_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t02_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t02_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t02_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t02_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t02_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t02_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t02_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t02_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t02_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t02_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t02_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t03_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t03_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t03_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t03_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t03_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t03_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t03_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t03_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t03_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t03_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t03_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t04_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t04_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t04_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t04_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t04_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t04_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t04_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t04_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t04_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t04_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t04_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t05_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t05_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t05_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t05_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t05_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t05_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t05_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t05_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t05_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t05_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t05_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t06_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t06_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t06_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t06_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t06_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t06_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t06_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t06_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t06_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t06_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t06_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t07_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t07_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t07_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t07_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t07_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t07_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t07_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t07_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t07_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t07_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t07_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t08_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t08_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t08_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t08_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t08_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t08_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t08_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t08_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t08_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t08_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t08_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t09_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t09_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t09_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t09_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t09_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t09_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t09_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t09_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t09_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t09_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t09_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t10_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t10_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t10_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t10_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t10_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t10_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t10_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t10_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t10_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t10_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t10_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t11_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t11_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t11_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t11_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t11_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t11_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t11_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t11_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t11_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t11_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t11_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t01_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t01_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t01_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t01_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t01_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t01_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t01_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t01_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t01_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t01_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t01_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t02_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t02_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t02_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t02_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t02_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t02_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t02_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t02_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t02_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t02_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t02_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t03_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t03_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t03_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t03_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t03_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t03_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t03_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t03_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t03_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t03_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t03_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t04_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t04_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t04_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t04_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t04_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t04_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t04_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t04_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t04_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t04_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t04_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t05_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t05_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t05_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t05_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t05_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t05_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t05_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t05_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t05_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t05_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t05_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t06_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t06_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t06_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t06_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t06_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t06_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t06_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t06_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t06_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t06_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t06_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t07_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t07_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t07_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t07_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t07_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t07_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t07_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t07_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t07_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t07_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t07_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t08_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t08_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t08_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t08_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t08_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t08_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t08_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t08_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t08_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t08_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t08_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t09_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t09_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t09_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t09_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t09_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t09_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t09_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t09_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t09_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t09_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t09_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t10_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t10_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t10_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t10_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t10_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t10_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t10_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t10_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t10_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t10_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t10_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t11_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t11_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t11_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t11_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t11_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t11_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t11_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t11_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t11_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t11_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t11_v11    0 0 0 0 0 0 0 0 0 0 0 
+.END
+.FLTLOG
+=== USERAS FAULT LOG ===
+=== USERTP FAULT LOG ===
+=== ARMAS  FAULT LOG ===
+.END
+.PROGRAM a.align()@25/11/22 17:12 #0
   ALIGN
 .END
-.PROGRAM a.home()@25/11/15 21:05 #0
+.PROGRAM a.home()@25/11/22 17:12 #0
   JMOVE #homyak
 .END
-.PROGRAM a.main()@25/11/15 22:24 #0
+.PROGRAM a.main()@25/11/22 17:12 #0
 ;
   CALL safe.home
 ;
@@ -3466,7 +4613,7 @@ TP_RECINHI      0   0   0
   END
 ;
 .END
-.PROGRAM a.teach.defect()@25/11/15 21:05 #0
+.PROGRAM a.teach.defect()@25/11/22 17:12 #0
   IF FALSE THEN
     SPEED 250 MM/S ALWAYS
     ACCURACY 0 ALWAYS
@@ -3502,7 +4649,7 @@ TP_RECINHI      0   0   0
   LMOVE .defect.pos
   LAPPRO .defect.pos,-10
 .END
-.PROGRAM a.teach.machine()@25/11/15 21:05 #0
+.PROGRAM a.teach.machine()@25/11/22 17:12 #0
   TOOL tool.pick[hmi.tool.no]
 ;POINT .pos.machine = #pos.machine[detail.id]
   JMOVE #safe.machine
@@ -3519,7 +4666,7 @@ TP_RECINHI      0   0   0
   TWAIT 0.5
   LMOVE #before.machine
 .END
-.PROGRAM a.teach.pos()@25/11/15 21:05 #0
+.PROGRAM a.teach.pos()@25/11/22 17:12 #0
   TOOL tool.pick[hmi.tool.no]
 ;
   POINT .temp = #pos.pos[hmi.obj.id]
@@ -3534,7 +4681,7 @@ TP_RECINHI      0   0   0
   BREAK
   TWAIT 0.5
 .END
-.PROGRAM a.teach.tare()@25/11/15 21:05 #0
+.PROGRAM a.teach.tare()@25/11/22 17:12 #0
   SPEED 250 MM/S ALWAYS
   ACCURACY 0 ALWAYS
   TOOL tool.pick[hmi.tool.no]
@@ -3555,7 +4702,7 @@ TP_RECINHI      0   0   0
 ;
   JMOVE tare.frame+TRANS(grip.xsh[hmi.tool.no],grip.ysh[hmi.tool.no],grip.zsh[hmi.tool.no])
 .END
-.PROGRAM a.test.tare()@25/11/15 21:05 #0
+.PROGRAM a.test.tare()@25/11/22 17:12 #0
   .j = INT((hmi.tare.pos-1)/20)+1
   .i = (hmi.tare.pos-1) MOD 20+1
 ;TYPE 0: .i,.j
@@ -3571,7 +4718,7 @@ TP_RECINHI      0   0   0
   LMOVE .put
   LAPPRO .put,-20
 .END
-.PROGRAM autostart.pc()@25/11/15 21:05 #0
+.PROGRAM autostart.pc()@25/11/22 17:12 #0
 ; System switches
   CP ON
   PREFETCH.SIGINS OFF
@@ -3593,7 +4740,7 @@ TP_RECINHI      0   0   0
   CALL watchdog.pc
 ;
 .END
-.PROGRAM calc.tare(.spacer)@25/11/15 22:24 #2
+.PROGRAM calc.tare(.spacer)@25/11/22 17:12 #2
 ;IF EXISTLOCALREAL(".spacer") THEN
 ;  .max = max.tare.count
 ;ELSE
@@ -3616,7 +4763,7 @@ TP_RECINHI      0   0   0
     END
   END
 .END
-.PROGRAM errstart.pc()@25/11/15 21:05 #23
+.PROGRAM errstart.pc()@25/11/22 17:12 #2377
   IF ERROR==-34021 OR ERROR==-10100 THEN
     tcp.socket = -1
     MC ERESET
@@ -3631,7 +4778,7 @@ TP_RECINHI      0   0   0
   TWAIT 5
   ERRSTART.PC ON
 .END
-.PROGRAM get.state.pc(.$state)@25/11/15 21:05 #27963
+.PROGRAM get.state.pc(.$state)@25/11/22 17:12 #30249
   .$state = "SPEED:"+$ENCODE(mon.speed)+";"
   .$state = .$state+"POWER:"
   IF SWITCH(POWER ) THEN
@@ -3718,7 +4865,7 @@ TP_RECINHI      0   0   0
 ; MAX 12
   .$state = .$state+"\n"
 .END
-.PROGRAM id4()@25/11/15 21:05 #8; 312.229.002_1
+.PROGRAM id4()@25/11/22 17:12 #8; 312.229.002_1
 ; Object ID
   object.id = 4
 ; Working gripper
@@ -3733,7 +4880,7 @@ TP_RECINHI      0   0   0
   start.shift.z = 0
 ;
 .END
-.PROGRAM log(.$msg)@25/11/15 21:05 #96
+.PROGRAM log(.$msg)@25/11/22 17:12 #96
   FOR .i = 0 TO 10
     $log.entry[.i] = $log.entry[.i+1]
   END
@@ -3743,7 +4890,7 @@ TP_RECINHI      0   0   0
   IFPWPRINT 2,1,1,9,10=$log.entry[4],$log.entry[5],$log.entry[6],$log.entry[7]
   IFPWPRINT 3,1,1,9,10=$log.entry[8],$log.entry[9],$log.entry[10],$log.entry[11]
 .END
-.PROGRAM measure()@25/11/15 22:24 #2
+.PROGRAM measure()@25/11/22 17:12 #2
   IF FALSE THEN
     .pos = hmi.obj.id
   END
@@ -3809,7 +4956,7 @@ TP_RECINHI      0   0   0
   JMOVE #safe.machine
   JMOVE #homyak
 .END
-.PROGRAM pg.start()@25/11/15 22:24 #0
+.PROGRAM pg.start()@25/11/22 17:12 #0
   $command = ""
   CALL process.data(.state)
   IF NOT .state THEN
@@ -3861,7 +5008,7 @@ TP_RECINHI      0   0   0
 ;CALL measure
 ;
 .END
-.PROGRAM pos.pick()@25/11/15 22:24 #3
+.PROGRAM pos.pick()@25/11/22 17:12 #3
   IF FALSE THEN
     .pos = hmi.obj.id
   END
@@ -3901,7 +5048,7 @@ TP_RECINHI      0   0   0
   ACCURACY 100
   LMOVE #homyak
 .END
-.PROGRAM process.data(.state)@25/11/15 22:24 #2
+.PROGRAM process.data(.state)@25/11/22 17:12 #2
 ;
   SCASE $detail.type OF
    SVALUE "312.229.002_1":
@@ -3913,7 +5060,7 @@ any:
   .state = FALSE
   RETURN
 .END
-.PROGRAM put.defect()@25/11/15 22:24 #1
+.PROGRAM put.defect()@25/11/22 17:12 #1
 ;
   CALL log("Putting to defect. State: PutToDefect ")
   $action = "PutToDefect"
@@ -3944,7 +5091,7 @@ any:
   JMOVE #safe.defect
   LMOVE #homyak
 .END
-.PROGRAM put.tare()@25/11/15 22:24 #1
+.PROGRAM put.tare()@25/11/22 17:12 #1
 ;
   CALL log("Putting to defect. State: PutToTare ")
   $action = "PutToTare"
@@ -3985,7 +5132,7 @@ any:
 ;
   JMOVE #homyak
 .END
-.PROGRAM safe.home()@25/11/15 21:05 #5
+.PROGRAM safe.home()@25/11/22 17:12 #5
 ; IMPLEMENT SAFE RETURN TO HOME POSITION
   CALL log("Moving to home position. State: MoveToHome")
   $action = "MoveToHome"
@@ -3993,7 +5140,7 @@ any:
   ACCURACY 10 ALWAYS
   JMOVE #homyak
 .END
-.PROGRAM sender.pc()@25/11/15 21:05 #0
+.PROGRAM sender.pc()@25/11/22 17:12 #0
 ;
 ; 0 - FALSE
 ; 1 - TRUE
@@ -4014,7 +5161,7 @@ any:
     TWAIT 0.25
   END
 .END
-.PROGRAM set.io.pc()@25/11/15 21:05 #3
+.PROGRAM set.io.pc()@25/11/22 17:12 #4
 ; Gripper IO
   release.grip = 1
   capture.grip = 2
@@ -4063,7 +5210,7 @@ any:
   s.vacuum = 2021
   s.debug = 2024
 .END
-.PROGRAM set.vars.pc()@25/11/15 21:05 #3
+.PROGRAM set.vars.pc()@25/11/22 17:12 #4
 ; Variables init
 ;
   IF NOT EXISTREAL("current.gripper") THEN
@@ -4107,7 +5254,7 @@ any:
 ;
   tyterm = 0
 .END
-.PROGRAM tcp.callback.pc(.$data[],.data.length)@25/11/15 21:05 #18
+.PROGRAM tcp.callback.pc(.$data[],.data.length)@25/11/22 17:12 #18
   .$temp = "Received "+$ENCODE(.data.length)+" strings:"
   PRINT tcp.recv.ena: .$temp
   FOR .i = 1 TO .data.length
@@ -4198,7 +5345,7 @@ any:
 ;
   .$data[1] = ""
 .END
-.PROGRAM tcp.client.pc()@25/11/15 21:05 #0
+.PROGRAM tcp.client.pc()@25/11/22 17:12 #0
   .tcp.retry.count = 10
   WHILE TRUE DO
 ; Checking for active sockets and closing them
@@ -4264,7 +5411,7 @@ any:
     END
   END
 .END
-.PROGRAM tcp.send.pc(.$data[],.data.length)@25/11/15 21:05 #114404
+.PROGRAM tcp.send.pc(.$data[],.data.length)@25/11/22 17:12 #114404
   IF tcp.socket>0 THEN
     TCP_SEND .status,tcp.socket,.$data[1],.data.length,tcp.send.tmo
     IF .status>=0 THEN
@@ -4288,7 +5435,7 @@ any:
   END
 ;
 .END
-.PROGRAM tcp.send2.pc(.$data[],.data.length)@25/11/15 21:05 #0
+.PROGRAM tcp.send2.pc(.$data[],.data.length)@25/11/22 17:12 #0
   IF tcp.socket>0 THEN
     TCP_SEND .status,tcp.socket,.$data[1],.data.length,tcp.send.tmo
     IF .status>=0 THEN
@@ -4308,7 +5455,7 @@ any:
   END
 ;
 .END
-.PROGRAM tcp.send3.pc(.$data[],.data.length)@25/11/15 21:05 #27954
+.PROGRAM tcp.send3.pc(.$data[],.data.length)@25/11/22 17:12 #30237
   IF tcp.socket>0 THEN
     TCP_SEND .status,tcp.socket,.$data[1],.data.length,tcp.send.tmo
     IF .status>=0 THEN
@@ -4328,7 +5475,7 @@ any:
   END
 ;
 .END
-.PROGRAM watchdog.pc()@25/11/15 21:05 #0
+.PROGRAM watchdog.pc()@25/11/22 17:12 #0
   WHILE TRUE DO
     IF SIG(s.tcp.ena) THEN
       tcp.ena = tyterm
@@ -4632,7 +5779,7 @@ tare.put[20,5] 175.137543 663.791565 -2.729891 -84.510620 1.748560 -95.627419
 tare.put[20,6] 175.198883 688.779968 -1.970733 -84.510620 1.748560 -95.627419
 tare.put[20,7] 175.260223 713.768372 -1.211575 -84.510620 1.748560 -95.627419
 tare.put[20,8] 175.321564 738.756714 -0.452416 -84.510620 1.748560 -95.627419
-test 26.184204 544.134399 143.333954 -103.807800 179.145859 97.269302
+test 26.184204 544.134399 143.333954 -103.807800 179.145859 97.269310
 tool.pick[1] 0.000000 10.000000 120.000000 -22.500000 180.000000 0.000000
 tool.pick[2] 0.000000 10.000000 120.000000 0.000000 0.000000 0.000000
 tool.pick[3] 0.000000 10.000000 120.000000 0.000000 0.000000 0.000000
@@ -4838,7 +5985,7 @@ tcp.recv.ena = -1
 tcp.send.dbg = -1
 tcp.send.ena = -1
 tcp.send.tmo = 5
-tcp.socket = 784
+tcp.socket = -34024
 tyterm = 0
 valet = 0
 .END

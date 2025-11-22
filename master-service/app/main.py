@@ -207,6 +207,38 @@ def debug_pneumo_close():
                 }
     return {"Status": "OK"}
 
+@app.post("/debug/put")
+def debug_pneumo_close():
+    """ Отладка: сигнал пневматики """
+    logger.debug("Запрос /master/debug/put")
+    if not master.debug_put():
+        return {"Status": "Failed",
+                "Code": -1,
+                "Reason": "Error in sending to robot"
+                }
+    return {"Status": "OK"}
+
+@app.post("/debug/pick")
+def debug_pneumo_close():
+    """ Отладка: сигнал пневматики """
+    logger.debug("Запрос /master/debug/pick")
+    if not master.debug_pick():
+        return {"Status": "Failed",
+                "Code": -1,
+                "Reason": "Error in sending to robot"
+                }
+    return {"Status": "OK"}
+
+@app.post("/debug/start")
+def debug_pneumo_close():
+    """ Отладка: сигнал пневматики """
+    logger.debug("Запрос /master/debug/start")
+    if not master.debug_start():
+        return {"Status": "Failed",
+                "Code": -1,
+                "Reason": "Error in sending to robot"
+                }
+    return {"Status": "OK"}
 
 @app.get("/data")
 def get_data():

@@ -199,6 +199,7 @@ N_INT102    "do.work[2]|"
   $command = ""
 ;
   pick.count = 0
+  first.iteration = TRUE
   RESET
 ;
   CALL process.data(.state)
@@ -246,6 +247,7 @@ N_INT102    "do.work[2]|"
       $cycle.command = " "
       JMOVE #wait.pick
       CALL stz.pick
+      first.iteration = FALSE
       hmi.x = -1
       hmi.y = -1
       picked = TRUE
@@ -279,7 +281,7 @@ N_INT102    "do.work[2]|"
       CALL log("Wait for new pick. State: WaitForPick")
     END
 ;
-    IF $cycle.command=="NOPICK" OR full.counter==detail.count THEN
+    IF $cycle.command=="NOPICK" OR full.counter==detail.count AND NOT first.iteration THEN
       $cycle.command = " "
       IF current.intare<>intare.count AND full.counter<>detail.count THEN
         CALL stock.in.back(intare.i[current.intare],intare.j[current.intare])

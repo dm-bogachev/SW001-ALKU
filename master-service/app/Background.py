@@ -17,6 +17,17 @@ logger = config_logger("master-service/Master.py")
 
 class Background(Thread):
 
+    def debug_start(self):
+        logger.debug("Вызов отладки: START")
+        command = f"START;440.00.026;4;5;5;"
+        resp = requests.post(f"{RS013N_API_URL}/send_command?command={command}",
+                    headers={'accept': 'application/json'},
+                    timeout=1)  # Added timeout
+        if resp.status_code != 200:
+            logger.error(f"Ошибка отправки команды на RS013N: {resp.text}")
+        else:
+            logger.info(f"Команда отправлена на RS013N: {command}")
+
     def debug_pick(self):
         logger.debug("Вызов отладки: Pick")
         resp = requests.post(f"{RS013N_API_URL}/send_pick_data?x=22&y=22&angle=0",
@@ -57,6 +68,17 @@ class Background(Thread):
         else:
             logger.info(f"Команда отправлена на RS013N: {command}")
 
+    def debug_put(self):
+        command = "POSITIONEREMPTY;"
+        logger.info("Датчик свободен")
+        resp = requests.post(f"{RS013N_API_URL}/send_command?command={command}",
+                            headers={'accept': 'application/json'},
+                            timeout=1)  # Added timeout
+        if resp.status_code != 200:
+            logger.error(f"Ошибка отправки команды на RS013N: {resp.text}")
+        else:
+            logger.info(f"Команда отправлена на RS013N: {command}")
+
     def __init__(self, data_collector: DataCollector):
         super().__init__()
         self.__stop_event = Event()
@@ -67,10 +89,9 @@ class Background(Thread):
 
     def start_process(self, ProductName: str, ProductCount: int, InTareIDs: list, OutTareIDs: list):
         
-        response = requests.post(f"{CV_API_URL}/change_model?model_name={ProductName}", 
-                              headers={'accept': 'application/json'}, 
-                              timeout=1)
-        
+        # response = requests.post(f"{CV_API_URL}/change_model?model_name={ProductName}", 
+        #                       headers={'accept': 'application/json'}, 
+        #                       timeout=1)
 
         failed = False
 
@@ -362,7 +383,7 @@ class Background(Thread):
                     if resp.status_code == 200 and value  == 1:
                         logger.warning("Деталь на позиционере. Ожидай")
                     else:
-                        command = "ALLOWPUT;"
+                        command = "POSITIONEREMPTY;"
                         logger.info("Датчик свободен")
                         resp = requests.post(f"{RS013N_API_URL}/send_command?command={command}",
                                             headers={'accept': 'application/json'},
@@ -377,10 +398,10 @@ class Background(Thread):
                     ###
                     resp = requests.get(f"{CV_API_URL}/get_first_object", timeout=8)
                     if resp.status_code == 200:
-                        if self.first_pick:
-                            self.first_pick = False
-                            #time.sleep(2)
-                            continue
+                        # if self.first_pick:
+                        #     self.first_pick = False
+                        #     #time.sleep(2)
+                        #     continue
                         data = resp.json()
                         if data.get("Status") == "OK" and "Object" in data:
                             self.attempts = 0
@@ -401,7 +422,7 @@ class Background(Thread):
                             self.attempts = self.attempts + 1
                             logger.error("Объект не обнаружен, парниша")
                             if self.attempts  <= 4:
-                                command = f"NOPICK;"
+                                command = f"PALLETEMPTY;"
                                 #command = "ffff"
                                 logger.warning("Нет доступных объектов для захвата от CV-сервиса")
                                 resp = requests.post(f"{RS013N_API_URL}/send_command?command={command}",

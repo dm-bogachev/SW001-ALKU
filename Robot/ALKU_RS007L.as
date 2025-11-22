@@ -445,13 +445,25 @@ ANY:
   lines.diff = 16; mm
   min.spacer = 1.5; mm
   ;
-  .detail.len.ws = detail.length + min.spacer
-  ;
-  max.in.line = (tare.width - min.spacer) / .detail.len.ws
-  ;
-  FOR .i = 1 TO tare.lines
-    FOR .j = 1 TO max.in.line
-      POINT tare.put[.i, .j] = tare.frame + TRANS(-.i*lines.diff, -.j*.detail.len.ws)
+  IF object.id <> 3 THEN
+    ;
+    .detail.len.ws = detail.length + min.spacer
+    ;
+    max.in.line = (tare.width - min.spacer) / .detail.len.ws
+    ;
+    FOR .i = 1 TO tare.lines
+      FOR .j = 1 TO max.in.line
+        POINT tare.put[.i, .j] = tare.frame + TRANS (-.i * lines.diff, -.j * .detail.len.ws)
+      END
+    END
+  ELSE
+    .max = 77
+    .dx = 10
+    .dy = 10
+    FOR .i = 0 TO 10
+      FOR .j = 1 TO 6
+        POINT tare.put[.i, .j] = tare.frame + TRANS (-.i * .dx, -.j * .dy)
+      END
     END
   END
 .END
