@@ -55,6 +55,9 @@ N_INT235    "s.cmd.pneum.op|Pneumatics opened"
 N_INT236    "s.cmd.pneum.cl|Pneumatics closed"
 N_INT237    "s.cmd.chg.opt|Change OPT command"
 N_INT238    "s.cmd.finish|Finish program"
+N_INT239    "s.cmd.pause|Pause program command"
+N_INT240    "s.cmd.resume|Resume program command"
+N_INT241    "s.cmd.stop|Stop program command"
 N_INT250    "s.pr.home|Prime a.home"
 N_INT251    "s.pr.tch.st.ot|Prime a.teach.ot"
 N_INT252    "s.pr.tch.st.opt|Prime a.teach.opt"
@@ -197,7 +200,29 @@ N_INT260    "s.hmi.get.cv|Get coordinates from CV"
 .INTER_PANEL_COLOR_D
 182,3,225,244,28,159,252,255,251,255,0,31,2,241,52,255,
 .END
-.PROGRAM id4 ()
+.PROGRAM id1 () ; 312.229.002
+  ; Object ID
+  object.id = 1
+  ; Working gripper
+  pg.gripper = 2
+  ; Max objects in output tare
+  max.tare.count = 126
+  spc.tare.count = 50
+  ;
+  detail.length = 27.5
+.END
+.PROGRAM id2 () ; 312.229.001
+  ; Object ID
+  object.id = 2
+  ; Working gripper
+  pg.gripper = 3
+  ; Max objects in output tare
+  max.tare.count = 77
+  spc.tare.count = 77
+  ;
+  detail.length = 12.3
+.END
+.PROGRAM id4 () ; 440.00.026
   ; Object ID
   object.id = 4
   ; Working gripper
@@ -207,15 +232,6 @@ N_INT260    "s.hmi.get.cv|Get coordinates from CV"
   spc.tare.count = 50
   ;
   detail.length = 23.5
-  ;
-  ;start.shift.x = 0
-  ;start.shift.y = 0
-  ;start.shift.z = 0
-  ;
-  ;dist.xp = 0.015
-  ;dist.xn = 0.001
-  ;dist.yp = 0.015
-  ;dist.yn = 0.015
   ;
 .END
 .PROGRAM a.teach.stz ()
@@ -1387,7 +1403,7 @@ N_INT260    "s.hmi.get.cv|Get coordinates from CV"
 .END
 .PROGRAM state9 () ; Decide if pick next OPT
   CALL log ("State 9: Decide if pick next OPT")
-  IF count.opt >= max.count.opt OR count.pick == detail.count THEN
+  IF count.opt >= max.count.opt OR count.pick == detail.count OR SIG(s.cmd.stop) THEN
     LMOVE #homyak
     ;
     POINT #current.pos = #homyak
@@ -1419,22 +1435,26 @@ N_INT260    "s.hmi.get.cv|Get coordinates from CV"
 .END
 .PROGRAM state102 () ; Decision making
   ; Priority 1
+  IF SIG(s.cmd.pause) THEN
+    state = 105
+    RETURN
+  END
+  ; Priority 3
   IF NOT SIG (s.ot.placed) THEN
     state = 1
     RETURN
   END
-  ; Priority 2
+  ; Priority 4
   IF NOT SIG (s.opt.placed) AND SIG (s.ot.placed) THEN
     state = 2
     RETURN
   END
-  ; Priority 3
+  ; Priority 5
   IF SIG (rs7.tare.chg) THEN
     state = 5
     RETURN
   END
-  ;
-  ; Priority 4
+  ; Priority 6
   IF SIG (s.ot.placed) AND SIG (s.opt.placed) AND NOT SIG (s.grip.full) THEN
     $action = "WaitForPick"
     IF stz.x >= 0 AND SIG (s.cmd.pick) ;AND NOT SIG (rs7.tare.chg) THEN
@@ -1443,7 +1463,7 @@ N_INT260    "s.hmi.get.cv|Get coordinates from CV"
       RETURN
     END
   END
-  ; Priority 5
+  ; Priority 7
   IF SIG (s.ot.placed) AND SIG (s.opt.placed) AND SIG (s.grip.full) THEN
     $action = "WaitPosFree"
     IF NOT SIG (rs7.work[1]) AND SIG (s.cmd.put) AND NOT SIG (rs7.locked.zone) THEN
@@ -1451,8 +1471,8 @@ N_INT260    "s.hmi.get.cv|Get coordinates from CV"
       RETURN
     END
   END
-  ; Priority 6
-  IF SIG (s.cmd.chg.opt) OR count.pick == detail.count THEN
+  ; Priority 8
+  IF SIG (s.cmd.chg.opt) OR count.pick == detail.count OR SIG(s.cmd.stop) THEN
     state = 6
     RETURN
   END
@@ -1469,7 +1489,7 @@ N_INT260    "s.hmi.get.cv|Get coordinates from CV"
     RETURN
   END
   ;
-  IF count.opt >= max.count.opt OR count.pick == detail.count THEN
+  IF count.opt >= max.count.opt OR count.pick == detail.count OR SIG(s.cmd.stop) THEN
     WAIT FALSE ;rs07 finished
     SIGNAL s.cmd.finish
     SIGNAL rs13.finish
@@ -1482,6 +1502,13 @@ N_INT260    "s.hmi.get.cv|Get coordinates from CV"
     RETURN
   END
   ;
+.END
+.PROGRAM state105 () ; Program paused
+  CALL log("State 105: Program paused")
+  SWAIT s.cmd.resume
+  CALL log("Program resumed")
+  SIGNAL -s.cmd.pause
+  state = 101
 .END
 .PROGRAM state255 () ; Unexpected behaviour
   CALL log ("State 255: Unexpected behaviour")
@@ -1775,11 +1802,53 @@ N_INT260    "s.hmi.get.cv|Get coordinates from CV"
     PULSE s.cmd.put, 5
   END
   ;
-    ; PALLETEMPTY COMMAND
+  ; PALLETEMPTY COMMAND
   ; String format:
   ; PALLETEMPTY;
   IF INSTR (.$data[1] , "PALLETEMPTY") THEN
     PULSE s.cmd.chg.opt, 5
+  END
+  ;
+  ; SPEED COMMAND
+  ; String format:
+  ; SPEED;VALUE;
+  ;
+  IF INSTR (.$data[1] , "SPEED") THEN
+    .$temp = $DECODE (.$data[1], ";",0)
+    .$temp = $DECODE (.$data[1], ";",1)
+    .$spd = $DECODE (.$data[1], ";",0)
+    .speed = VAL (.$spd)
+    IF .speed <=0 THEN
+      .speed = 1
+    END
+    IF .speed > 100 THEN
+      .speed = 100
+    END
+    MON_SPEED (.speed)
+  END
+  ;
+  ; PAUSE COMMAND
+  ; String format:
+  ; PAUSE;
+  ;
+  IF INSTR (.$data[1] , "PAUSE") THEN
+    SIGNAL s.cmd.pause
+  END
+  ;
+  ; RESUME COMMAND
+  ; String format:
+  ; RESUME;
+  ;
+  IF INSTR (.$data[1] , "RESUME") THEN
+    PULSE s.cmd.resume, 5
+  END
+    ;
+  ; STOP COMMAND
+  ; String format:
+  ; STOP;
+  ;
+  IF INSTR (.$data[1] , "STOP") THEN
+    SIGNAL s.cmd.stop
   END
   ;
   .$data[1] = ""
@@ -2011,6 +2080,9 @@ N_INT260    "s.hmi.get.cv|Get coordinates from CV"
   s.cmd.pneum.cl = 2236
   s.cmd.chg.opt = 2237
   s.cmd.finish = 2238
+  s.cmd.pause = 2239
+  s.cmd.resume = 2240
+  s.cmd.stop = 2241
   ;
   s.pr.home = 2250
   s.pr.tch.st.ot = 2251
@@ -2312,7 +2384,7 @@ N_INT260    "s.hmi.get.cv|Get coordinates from CV"
 .PROGRAM Comment___ () ; Comments for IDE. Do not use.
 	; @@@ PROJECT @@@
 	; @@@ PROJECTNAME @@@
-	; ALKU_RS013N_STATES
+	; ALKU_RS013N_UPDATE
 	; @@@ HISTORY @@@
 	; @@@ INSPECTION @@@
 	; count.pick
@@ -2328,6 +2400,8 @@ N_INT260    "s.hmi.get.cv|Get coordinates from CV"
 	; 9105
 	; @@@ PROGRAM @@@
 	; Group:Objects:1
+	; 1:id1:F
+	; 1:id2:F
 	; 1:id4:F
 	; Group:STZ:2
 	; 2:a.teach.stz:F
@@ -2470,6 +2544,7 @@ N_INT260    "s.hmi.get.cv|Get coordinates from CV"
 	; 7:state103:F
 	; 7:state104:F
 	; .finish 
+	; 7:state105:F
 	; 7:state255:F
 	; Group:Utilities:8
 	; 8:a.home:F
@@ -2647,6 +2722,9 @@ N_INT260    "s.hmi.get.cv|Get coordinates from CV"
 	; s.hmi.pneum.op Open pneumatic from HMI
 	; s.hmi.pneum.cl Close pneumatic from HMI
 	; s.hmi.get.cv Get coordinates from CV
+	; s.cmd.pause Pause program command
+	; s.cmd.resume Resume program command
+	; s.cmd.stop Stop program command
 	; @@@ TOOLS @@@
 	; tool.pin Tool for calibration pin and tare
 	; tool.pick[] Gripper 3 tool
@@ -3043,6 +3121,9 @@ ot.cell[5,2] = 5
 ot.cell[6,1] = 3
 ot.cell[6,2] = 6
 spc.tare.count = 50
+s.cmd.pause = 2239
+s.cmd.resume = 2240
+s.cmd.stop = 2241
 .END
 .STRINGS
 $tcp.ip = "192.168.0.10"
