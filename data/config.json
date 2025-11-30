@@ -4,6 +4,13 @@
         "DisplayedFrame": "REDIS_PROCESSED_FRAME_KEY"
     },
     "Models": {
+        "440.00.026": {
+            "ModelName": "440.00.026",
+            "ModelFileName": "model_440.00.026.pt",
+            "ConfidenceThreshold": 0.5,
+            "ModelType": "yolo-pose",
+            "ModelProcessor": "proc_440.00.026.py"
+        },
         "312.229.002": {
             "ModelName": "312.229.002",
             "ModelFileName": "model_312.229.002.pt",
@@ -11,27 +18,27 @@
             "ModelType": "yolo-pose",
             "ModelProcessor": "proc_312.229.002.py"
         },
-        "0401.17.02.023": {
-            "ModelName": "0401.17.02.023",
-            "ModelFileName": "model_0401.17.02.023.pt",
-            "ConfidenceThreshold": 0.5,
-            "ModelType": "yolo-pose",
-            "ModelProcessor": "proc_0401.17.02.023.py"
-        },
-        "440.00.111": {
-            "ModelName": "440.00.111",
-            "ModelFileName": "model_440.00.111.pt",
+        "312.229.001": {
+            "ModelName": "312.229.001",
+            "ModelFileName": "model_312.229.001.pt",
             "ConfidenceThreshold": 0.5,
             "ModelType": "yolo-detect",
-            "ModelProcessor": "proc_440.00.111.py"
+            "ModelProcessor": "proc_312.229.001.py"
+        },
+        "312": {
+            "229": {
+                "001": {
+                    "ConfidenceThreshold": 0.92
+                }
+            }
         }
     },
     "Display": {
-        "BBOX": true,
-        "COORDINATES": true,
+        "BBOX": false,
+        "COORDINATES": false,
         "KEYPOINTS": false,
         "LABELS": false,
-        "SCORES": false,
+        "SCORES": true,
         "POINTS": true,
         "PICK_ANGLE": false,
         "GRID": false
@@ -49,14 +56,14 @@
         "Marker0YPoint": 3
     },
     "HikCamera": {
-        "IPAddress": "192.168.7.101",
-        "DeviceName": "MV-CH120-20GM",
+        "IPAddress": "10.64.191.204",
+        "DeviceName": "MV-CS050-20GC",
         "FrameInterval": 0.0,
         "ExposureValue": 4000
     },
     "Process": {
         "ProcessingDelay": 0.0,
-        "LastModel": "440.00.111",
+        "LastModel": "312.229.001",
         "FirstObjectCriteria": "Probability"
     },
     "IO": {

@@ -26,6 +26,7 @@ N_INT7    "di.ifp.page[7]|Open IFP page i"
 N_INT8    "di.ifp.page[8]|Open IFP page i"
 N_INT9    "di.hold|Set hold mode"
 N_INT10    "do.home|Robot in home position"
+N_INT11    "do.bat.alm|Battery low alarm"
 N_INT201    "s.tcp.send.ena|Display TCP send prints"
 N_INT202    "s.tcp.recv.ena|Display TCP receive prints"
 N_INT203    "s.tcp.ena|Display TCP connect prints"
@@ -69,12 +70,15 @@ N_INT257    "s.apply.cv|Apply cv coeffciients data from HMI"
 N_INT258    "s.hmi.pneum.op|Open pneumatic from HMI"
 N_INT259    "s.hmi.pneum.cl|Close pneumatic from HMI"
 N_INT260    "s.hmi.get.cv|Get coordinates from CV"
+N_INT261    "s.hmi.res.state|Reset state from HMI"
+N_INT262    "s.hmi.res.act|Reset action from hmi"
+N_INT300    "s.debug.mode|Debug mode"
 .END
 .INTER_PANEL_D
 0,9,1,6,15
 6,10,"","PCEXECUTE","AUTOSTART","",10,4,6,1,"PCEXECUTE autostart.pc",0
 7,9,2,6,15
-13,2,""," NETWORK","--------->","",10,4,11,2003,0
+13,2,""," DEBUG","--------->","",10,4,11,2003,0
 14,9,3,6,15
 20,2,""," GRIPPERS","--------->","",10,4,11,2002,0
 21,9,8,6,15
@@ -92,15 +96,20 @@ N_INT260    "s.hmi.get.cv|Get coordinates from CV"
 42,4,1,"OFF     ON","","","FORCE IN 1",10,4,4,0,2221,0
 43,4,1,"OFF     ON","","","FORCE IN 2",10,4,4,0,2222,0
 49,2,"","   MAIN","<---------","",10,4,11,2001,0
-54,2,"","   OPEN","PNEUMATICS","",10,4,8,2258,0
-55,2,"","   CLOSE","PNEUMATICS","",10,4,8,2259,0
 56,14,"tcp.ip","Server IP","",10,15,0
 57,8,"tcp.port","Server","port",10,15,5,1,0
 58,8,"tcp.sender.dly","Polling","delay, s",10,15,2,2,0
-69,4,1,"OFF     ON","","","TCP COMMON",10,4,4,0,2203,0
-76,4,1,"OFF     ON","",""," TCP SEND",10,4,4,0,2201,0
+61,8,"state","  CURRENT","   STATE",10,15,3,1,0
+62,2,"","   RESET","   STATE","",10,4,15,2261,0
+63,4,1,"OFF     ON","","","TCP COMMON",10,4,4,0,2203,0
+64,4,1,"OFF     ON","",""," TCP SEND",10,4,4,0,2201,0
+65,4,1,"OFF     ON","",""," TCP RECV",10,4,4,0,2202,0
+68,14,"$action","  CURRENT","  ACTION",10,15,0
+69,2,"","   RESET","   ACTION","",10,4,15,2262,0
+76,4,1,"OFF     ON","","","  DEBUG",10,4,4,0,2300,0
 77,2,"","   MAIN","<---------","",10,4,11,2001,0
-83,4,1,"OFF     ON","",""," TCP RECV",10,4,4,0,2202,0
+82,2,"","   OPEN","PNEUMATICS","",10,4,8,2258,0
+83,2,"","   CLOSE","PNEUMATICS","",10,4,8,2259,0
 84,2,"  ","  PRIME","  HOME","",10,4,11,2250,0
 85,8,"hmi.obj.id","  OBJECT","    ID",10,2,2,1,0
 86,8,"hmi.gripper","    HMI","  GRIPPER ",10,2,2,1,0
@@ -182,7 +191,7 @@ N_INT260    "s.hmi.get.cv|Get coordinates from CV"
 .INTER_PANEL_TITLE
 "MAIN",1
 "GRIPPERS",1
-"NETWORK",1
+"DEBUG",1
 "TEACH OBJECT",1
 "TEACH STOCKERS",1
 "TEACH POSITIONER",1
@@ -210,6 +219,7 @@ N_INT260    "s.hmi.get.cv|Get coordinates from CV"
   spc.tare.count = 50
   ;
   detail.length = 27.5
+  ;
 .END
 .PROGRAM id2 () ; 312.229.001
   ; Object ID
@@ -221,6 +231,7 @@ N_INT260    "s.hmi.get.cv|Get coordinates from CV"
   spc.tare.count = 77
   ;
   detail.length = 12.3
+  ;
 .END
 .PROGRAM id4 () ; 440.00.026
   ; Object ID
@@ -332,6 +343,79 @@ N_INT260    "s.hmi.get.cv|Get coordinates from CV"
   PULSE grip.clamp
   TWAIT 0.5
   SIGNAL s.grip.full
+  $action = "WaitPosFree"
+  ;
+  ACCURACY 20
+  LAPPRO .pick, -30
+  ;
+  LMOVE .#pick.in
+  LMOVE #stz.wait
+  LMOVE #pos.wait
+  ;
+.END
+.PROGRAM a.test.stz ()
+  .$temp = "Pick detail from stz (" + $ENCODE (/L, stz.x) + ", " + $ENCODE (/L, stz.y) + ", " + $ENCODE (/L, stz.a) + ")"
+  CALL log (.$temp)
+  ;
+  SPEED 100 ALWAYS
+  ACCURACY 100 ALWAYS
+  TOOL tool.pick[current.gripper]
+  ; Raw coordinates
+  .x = stz.x
+  .y = stz.y
+  .a = stz.a
+  ;
+  ; Gripper shift
+  .xsh = grip.xsh[current.gripper]
+  .ysh = grip.ysh[current.gripper]
+  .zsh = grip.zsh[current.gripper]
+  IF .a == 180 THEN
+    .xsh = grip.180xsh[current.gripper]
+    .ysh = grip.180ysh[current.gripper]
+  END
+  ; CV correction
+  .xp = cv.x.plus[object.id]
+  .xm = cv.x.minus[object.id]
+  .yp = cv.y.plus[object.id]
+  .ym = cv.y.minus[object.id]
+  ;
+  IF .x > center.x + 10 THEN
+    .x = .x - .xp * (.x - center.x)
+  END
+  IF .x < center.x - 10 THEN
+    .x = .x + .xm * (-.x + center.x)
+  END
+  IF .y > center.y + 10 THEN
+    .y = .y - .yp * (.y - center.y)
+  END
+  IF .y < center.y - 10 THEN
+    .y = .y + .ym * (-.y + center.y)
+  END
+  ;
+  POINT .pick = stz.frame + TRANS (.x + .xsh, .y + .ysh, .zsh) + RZ (.a)
+  DECOMPOSE .c[1] = #pick.in
+  POINT .#pick.in = #PPOINT (.c[1], .c[2], .c[3], .c[4], .c[5], .c[6] - .a)
+  ;
+  LMOVE #stz.wait
+  ACCURACY 20
+  LMOVE .#pick.in
+  IF NOT SIG (grip.unclamped) THEN
+    PULSE grip.unclamp
+    CALL log ("Wait for unclamp gripper")
+    $action = "WaitingGripUnclamped"
+    WAIT SIG (grip.unclamped) OR SIG (s.force.in[1])
+  END
+  ACCURACY 20
+  LAPPRO .pick, -30
+  SPEED 250 MM/S
+  ACCURACY 0.02
+  LMOVE .pick
+  BREAK
+  ;
+  PULSE grip.clamp
+  TWAIT 0.5
+  SIGNAL s.grip.full
+  $action = "WaitPosFree"
   ;
   ACCURACY 20
   LAPPRO .pick, -30
@@ -370,9 +454,9 @@ N_INT260    "s.hmi.get.cv|Get coordinates from CV"
   ;
   POINT .temp = #pos.point[object.id]
   ACCURACY 20
-  JMOVE #pos.wait
+  LMOVE #pos.wait
   ;
-  JMOVE .temp + TRANS (10, 0, 50)
+  LMOVE .temp + TRANS (10, 0, 50)
   ACCURACY 5
   LMOVE .temp + TRANS (10, 0, 20)
   BREAK
@@ -386,6 +470,7 @@ N_INT260    "s.hmi.get.cv|Get coordinates from CV"
   SIGNAL -s.grip.full
   count.pick = count.pick + 1
   CALL log("Detail counter:" + $ENCODE(count.pick))
+  $action = "WaitForPick"
   ;
   LMOVE .temp + TRANS (0, 0, 200)
   ;SIGNAL rs13.det.put
@@ -627,9 +712,9 @@ N_INT260    "s.hmi.get.cv|Get coordinates from CV"
     ; Move out of put point
     LMOVE #opt.put.safe
     LMOVE #stz.wait
-    POINT #current.pos = #stz.wait
-  ELSE
-    POINT #current.pos = #HERE
+    ;POINT #current.pos = #stz.wait
+  ;ELSE
+  ;  POINT #current.pos = #HERE
   END
 .END
 .PROGRAM a.teach.opt ()
@@ -734,7 +819,7 @@ N_INT260    "s.hmi.get.cv|Get coordinates from CV"
   ;
   CALL gripper.pick(hmi.gripper)
   CALL gripper.put(hmi.gripper)
-  ;
+  ; detail.type
 .END
 .PROGRAM gripper.pick (.gripper.no)
   ;
@@ -1155,13 +1240,13 @@ N_INT260    "s.hmi.get.cv|Get coordinates from CV"
     SIGNAL s.ot.placed
     ; Move out of put point
     ACCURACY 30
-    LMOVE .ot.put + TRANS (, , 50)
-    LMOVE #ot.put.safe
+    LMOVE .ot.put + TRANS (, , 350)
+    ;LMOVE #ot.put.safe
     LMOVE #pos.wait
     ;
-    POINT #current.pos = #pos.wait
-  ELSE
-    POINT #current.pos = #HERE
+  ;  POINT #current.pos = #pos.wait
+  ;ELSE
+  ;  POINT #current.pos = #HERE
   END
   ;
 .END
@@ -1239,23 +1324,29 @@ N_INT260    "s.hmi.get.cv|Get coordinates from CV"
 .PROGRAM state1 () ; Pick OT from stocker
   ;
   CALL log ("State 1: Pick OT")
+  IF count.ot >= max.count.ot THEN
+    CALL log ("Reached out of maximum tare count")
+    LMOVE #homyak
+    state = 255
+    RETURN
+  END
   ; Check all start positions
-  POINT .current.pos = #current.pos
+  POINT .current.pos = #HERE
   POINT .stz.wait = #stz.wait
   POINT .pos.wait = #pos.wait
   ; Move to start position
-  IF SIG(do.home) THEN
+  IF SIG (do.home) THEN
     LMOVE #ot.take.safe
   END
   IF DISTANCE (.current.pos, .stz.wait) <= 25 THEN
     LMOVE #pos.wait
     LMOVE #ot.take.safe
   END
-    IF DISTANCE (.current.pos, .pos.wait) <= 25 THEN
+  IF DISTANCE (.current.pos, .pos.wait) <= 25 THEN
     LMOVE #ot.take.safe
   END
   ; #ot.take.safe -> take -> put -> pos.wait
-  ; #ot.take.safe -> take 
+  ; #ot.take.safe -> take
   .i = ot.cell[count.ot + 1, 1]
   .j = ot.cell[count.ot + 1, 2]
   CALL ot.take (.i, .j) ; count.ot + 1
@@ -1266,8 +1357,14 @@ N_INT260    "s.hmi.get.cv|Get coordinates from CV"
 .PROGRAM state2 () ; Pick OPT from stocker
   ;
   CALL log ("State 2: Pick OPT")
+  IF count.opt >= max.count.opt THEN
+    CALL log ("Reached out of maximum tare count")
+    LMOVE #homyak
+    state = 255
+    RETURN
+  END
   ; Check all start positions
-  POINT .current.pos = #current.pos
+  POINT .current.pos = #HERE
   POINT .stz.wait = #stz.wait
   POINT .pos.wait = #pos.wait
   ; Move to start position
@@ -1280,7 +1377,7 @@ N_INT260    "s.hmi.get.cv|Get coordinates from CV"
   .j = opt.cell[count.opt + 1, 2]
   CALL opt.take (.i, .j) ; count.opt + 1
   ;
-  POINT #current.pos = #stz.wait
+  ;POINT #current.pos = #stz.wait
   ;
   state = 101
   ;
@@ -1289,11 +1386,11 @@ N_INT260    "s.hmi.get.cv|Get coordinates from CV"
   ;
   CALL log ("State 3: Pick from STZ")
   ; Check all start positions
-  POINT .current.pos = #current.pos
+  POINT .current.pos = #HERE
   POINT .stz.wait = #stz.wait
   POINT .pos.wait = #pos.wait
   IF SIG (do.home) THEN
-    JMOVE #opt.take.safe
+    LMOVE #opt.take.safe
     LMOVE #opt.put.safe
     LMOVE #stz.wait
   END
@@ -1303,7 +1400,7 @@ N_INT260    "s.hmi.get.cv|Get coordinates from CV"
   ; stz.wait -> pick -> pos.wait
   CALL stz.pick
   ;
-  POINT #current.pos = #pos.wait
+  ;POINT #current.pos = #pos.wait
   ;
   state = 101
   ;
@@ -1311,7 +1408,7 @@ N_INT260    "s.hmi.get.cv|Get coordinates from CV"
 .PROGRAM state4 () ; Put detail to positioner
   CALL log ("State 4: Put detail to positioner")
   ; Check all start positions
-  POINT .current.pos = #current.pos
+  POINT .current.pos = #HERE
   POINT .stz.wait = #stz.wait
   POINT .pos.wait = #pos.wait
   IF SIG (do.home) THEN
@@ -1324,7 +1421,7 @@ N_INT260    "s.hmi.get.cv|Get coordinates from CV"
   ; pos.wait -> put -> pos.wait
   CALL pos.put
   ;
-  POINT #current.pos = #pos.wait
+  ;POINT #current.pos = #pos.wait JMOVE
   ;
   state = 101
   ;
@@ -1332,7 +1429,7 @@ N_INT260    "s.hmi.get.cv|Get coordinates from CV"
 .PROGRAM state5 () ; Return OT
   CALL log ("State 5: Return OT")
   ; Check all start positions
-  POINT .current.pos = #current.pos
+  POINT .current.pos = #HERE
   POINT .stz.wait = #stz.wait
   POINT .pos.wait = #pos.wait
   IF DISTANCE (.current.pos, .stz.wait) <= 25 THEN
@@ -1343,14 +1440,14 @@ N_INT260    "s.hmi.get.cv|Get coordinates from CV"
   .j = ot.cell[count.ot, 2]
   CALL ot.return (.i, .j) ; count.ot + 1
   ;
-  POINT #current.pos = #HERE
+  ;POINT #current.pos = #HERE
   state = 8
   ;
 .END
 .PROGRAM state6 () ; Return OPT
   CALL log ("State 6: Return OPT")
   ; Check all start positions
-  POINT .current.pos = #current.pos
+  POINT .current.pos = #HERE
   POINT .stz.wait = #stz.wait
   POINT .pos.wait = #pos.wait
   IF SIG (do.home) THEN
@@ -1366,7 +1463,7 @@ N_INT260    "s.hmi.get.cv|Get coordinates from CV"
   .j = opt.cell[count.opt, 2]
   CALL opt.return (.i, .j) ; count.ot + 1
   ;
-  POINT #current.pos = #HERE
+  ;POINT #current.pos = #HERE
   state = 9
   ;
 .END
@@ -1376,14 +1473,14 @@ N_INT260    "s.hmi.get.cv|Get coordinates from CV"
   ; We are at home at this point. No cases without home!
   IF current.gripper <> pg.gripper THEN
     CALL log ("Selected wrong gripper, perform change")
-    JMOVE #opt.take.safe
-    JMOVE #stz.wait
+    LMOVE #opt.take.safe
+    LMOVE #stz.wait
     IF current.gripper <> 0 THEN
       CALL gripper.put (current.gripper)
     END
     CALL gripper.pick (pg.gripper)
-    JMOVE #opt.take.safe
-    JMOVE #homyak
+    LMOVE #opt.take.safe
+    LMOVE #homyak
   ELSE
     CALL log ("Program gripper is the same as current gripper")
   END
@@ -1395,7 +1492,7 @@ N_INT260    "s.hmi.get.cv|Get coordinates from CV"
     LMOVE #ot.take.safe
     LMOVE #homyak
     ;
-    POINT #current.pos = #homyak
+    ;POINT #current.pos = #homyak
     state = 103
   ELSE
     state = 1
@@ -1406,7 +1503,7 @@ N_INT260    "s.hmi.get.cv|Get coordinates from CV"
   IF count.opt >= max.count.opt OR count.pick == detail.count OR SIG(s.cmd.stop) THEN
     LMOVE #homyak
     ;
-    POINT #current.pos = #homyak
+    ;POINT #current.pos = #homyak
     state = 103
   ELSE
     state = 2
@@ -1444,6 +1541,7 @@ N_INT260    "s.hmi.get.cv|Get coordinates from CV"
     state = 1
     RETURN
   END
+  ;
   ; Priority 4
   IF NOT SIG (s.opt.placed) AND SIG (s.ot.placed) THEN
     state = 2
@@ -1498,6 +1596,7 @@ N_INT260    "s.hmi.get.cv|Get coordinates from CV"
   END
   ;
   IF count.ot >= max.count.ot THEN
+    CALL log("Unexpected behaviour!")
     state = 255
     RETURN
   END
@@ -1510,9 +1609,9 @@ N_INT260    "s.hmi.get.cv|Get coordinates from CV"
   SIGNAL -s.cmd.pause
   state = 101
 .END
-.PROGRAM state255 () ; Unexpected behaviour
-  CALL log ("State 255: Unexpected behaviour")
-  HALT
+.PROGRAM state255 () ; Program complete
+  CALL log ("State 255: Program complete")
+  state = 0
 .END
 .PROGRAM a.home ()
   ;
@@ -1877,7 +1976,7 @@ N_INT260    "s.hmi.get.cv|Get coordinates from CV"
     .$tcp.ip.copy = $tcp.ip
     FOR .i = 1 TO 4
       .$ip = $DECODE (.$tcp.ip.copy, ".")
-      ip[.i] = VAL (.$ip)
+      .ip[.i] = VAL (.$ip)
       IF .i < 4 THEN
         .$ip = $DECODE (.$tcp.ip.copy, ".", 1)
       END
@@ -1886,7 +1985,7 @@ N_INT260    "s.hmi.get.cv|Get coordinates from CV"
     ; Connect to server
     .$temp = "Connecting to server with ip: " + $tcp.ip
     PRINT tcp.ena: .$temp
-    TCP_CONNECT tcp.socket, tcp.port, ip[1], .tcp.connect.tmo
+    TCP_CONNECT tcp.socket, tcp.port, .ip[1], .tcp.connect.tmo
     ;
     ; Start data processing cycle
     IF tcp.socket >= 0 THEN
@@ -2036,7 +2135,7 @@ N_INT260    "s.hmi.get.cv|Get coordinates from CV"
   ; Dedicated outputs 2101-2164
   ;
   do.home = 2010
-  ;do.bat.alm = 2026
+  do.bat.alm = 2011
   ;
   ;;
   ;
@@ -2097,6 +2196,10 @@ N_INT260    "s.hmi.get.cv|Get coordinates from CV"
   s.hmi.pneum.op = 2258
   s.hmi.pneum.cl = 2259
   s.hmi.get.cv = 2260
+  s.hmi.res.state = 2261
+  s.hmi.res.act = 2262
+  ;
+  s.debug.mode = 2300
 .END
 .PROGRAM set.vars.pc ()
   ;
@@ -2143,9 +2246,9 @@ N_INT260    "s.hmi.get.cv|Get coordinates from CV"
     END
   END
   ;
-  IF NOT EXISTJOINT ("#current.pos") THEN
-    POINT #current.pos = #homyak
-  END
+  ;IF NOT EXISTJOINT ("#current.pos") THEN
+  ;POINT #current.pos = #homyak
+  ;END
   ;
   IF NOT EXISTREAL ("current.gripper") THEN
     current.gripper = 0
@@ -2177,6 +2280,10 @@ N_INT260    "s.hmi.get.cv|Get coordinates from CV"
   ;
   IF NOT EXISTREAL ("hmi.obj.id") THEN
     hmi.obj.id = 1
+  END
+  ;
+  IF NOT EXISTCHAR ("$action") THEN
+    $action = "Default"
   END
   ;
   IF NOT EXISTCHAR ("$pg.name") THEN
@@ -2221,17 +2328,28 @@ N_INT260    "s.hmi.get.cv|Get coordinates from CV"
     CALL check.tasks.pc
     CALL check.disp.pc
     CALL check.zone.pc
+    ;
+    IF SIG (rs7.put.ack) THEN
+      SIGNAL -rs13.detail.put
+    END
+    ;
+    IF NOT SIG (s.debug.mode) THEN
+      IF SWITCH (REPEAT) AND NOT SWITCH (TEACH_LOCK) AND NOT SWITCH (EMERGENCY ) AND NOT SWITCH (CS ) AND NOT SWITCH (ERROR ) THEN
+        MC ZPOWER ON
+        ;MC PRIME a.main
+        ;WHILE NOT SWITCH(POWER)
+        ;  TWAIT 0.01
+        ;  MC CONTINUE
+        ;END
+      END
+    END
+    ;
     IF NOT SWITCH (REPEAT) THEN
       CALL check.teach.pc
     END
     TWAIT 0.01
   END
   ;
-  ;;
-  ;    IF SIG(rs07.put.ack) THEN
-  ;      SIGNAL -rs13.det.put
-  ;    END
-  ;;
   ;   ;
   ;   IF SIG(s.receive.p) THEN
   ;     $action = "WaitForPick"
@@ -2303,6 +2421,14 @@ N_INT260    "s.hmi.get.cv|Get coordinates from CV"
   ;
 .END
 .PROGRAM check.teach.pc ()
+  ;
+  IF SIG(s.hmi.res.state) THEN
+    state = 0
+  END
+  ;
+  IF SIG(s.hmi.res.act) THEN
+    $action = " "
+  END
   ;
   IF SIG (s.hmi.pneum.op) THEN
     $action = "WaitPneumaticOpen"
@@ -2387,13 +2513,7 @@ N_INT260    "s.hmi.get.cv|Get coordinates from CV"
 	; ALKU_RS013N_UPDATE
 	; @@@ HISTORY @@@
 	; @@@ INSPECTION @@@
-	; count.pick
-	; detail.count
 	; $action
-	; count.opt
-	; $opt.data
-	; s.cmd.pneum.op
-	; s.cmd.pneum.cl
 	; @@@ CONNECTION @@@
 	; KROSET R01
 	; 127.0.0.1
@@ -2426,6 +2546,7 @@ N_INT260    "s.hmi.get.cv|Get coordinates from CV"
 	; .ym 
 	; .pick 
 	; .c 
+	; 2:a.test.stz:F
 	; Group:Positioner:3
 	; 3:a.teach.pos:F
 	; .temp 
@@ -2561,6 +2682,7 @@ N_INT260    "s.hmi.get.cv|Get coordinates from CV"
 	; 9:tcp.callback.pc:B
 	; .data.length 
 	; .i 
+	; .speed 
 	; 9:tcp.client.pc:B
 	; .tcp.retry.count 
 	; .tcp.connect.tmo 
@@ -2604,8 +2726,7 @@ N_INT260    "s.hmi.get.cv|Get coordinates from CV"
 	; @@@ TRANS @@@
 	; @@@ JOINTS @@@
 	; #homyak Home point
-	; #current.pos Current robot point at program end
-	; #tool.point[] Point for pick gripper 3
+	; #tool.point[] Point for pick gripper i
 	; #prb Right bottom STZ point
 	; #prt Right top STZ point
 	; #plt Left top STZ point
@@ -2725,6 +2846,10 @@ N_INT260    "s.hmi.get.cv|Get coordinates from CV"
 	; s.cmd.pause Pause program command
 	; s.cmd.resume Resume program command
 	; s.cmd.stop Stop program command
+	; s.hmi.res.state Reset state from HMI
+	; s.hmi.res.act Reset action from hmi
+	; s.debug.mode Debug mode
+	; do.bat.alm Battery low alarm
 	; @@@ TOOLS @@@
 	; tool.pin Tool for calibration pin and tare
 	; tool.pick[] Gripper 3 tool
@@ -2824,7 +2949,6 @@ opt.point[3,10] 753.871094 1176.544067 -442.976746 -88.225586 89.907661 -179.934
 .END
 .JOINTS
 #homyak -45.000000 -30.000002 -120.000008 0.000000 -90.000000 22.500000
-#current.pos -45.000000 -30.000002 -120.000008 0.000000 -90.000000 22.500000
 #tool.point[3] 152.513062 36.866146 -111.188293 3.732012 -30.937502 -42.612892
 #tool.point[2] 146.547989 31.255722 -122.853958 3.178916 -25.219118 -36.335194
 #tool.point[1] 138.009109 26.380774 -133.075394 2.785166 -19.660723 -27.889797
@@ -2835,7 +2959,7 @@ opt.point[3,10] 753.871094 1176.544067 -442.976746 -88.225586 89.907661 -179.934
 #opt.put 136.263840 15.705241 -109.890045 -13.677276 -68.614426 -15.814918
 #pick.in 130.503326 12.590690 -97.431877 -0.818260 -69.914940 -15.682721
 #ot.take.safe -37.502689 7.653700 -123.335922 -4.558890 -68.643951 12.396290
-#ot.put.safe 30.000002 -38.000000 -138.000000 0.000000 -80.000000 84.000000
+#ot.put.safe 35.497650 -37.572060 -132.300160 16.290790 -96.920010 77.315880
 #ot.put 66.275833 55.400139 -110.316277 13.204776 -32.943192 32.538525
 #pos.wait 62.065971 -11.377430 -122.238724 -0.289775 -69.805077 52.576439
 #stz.wait 153.260971 -5.244692 -116.123528 -0.757969 -68.765495 -38.446480
@@ -2867,10 +2991,6 @@ tcp.recv.ena = -1
 tcp.send.ena = -1
 tcp.sender.dly = 2
 tyterm = 0
-ip[1] = 192
-ip[2] = 168
-ip[3] = 0
-ip[4] = 10
 tcp.port = 9013
 do.home = 2010
 s.tcp.send.ena = 2201
@@ -3124,6 +3244,10 @@ spc.tare.count = 50
 s.cmd.pause = 2239
 s.cmd.resume = 2240
 s.cmd.stop = 2241
+s.hmi.res.state = 2261
+s.hmi.res.act = 2262
+s.debug.mode = 2300
+do.bat.alm = 2011
 .END
 .STRINGS
 $tcp.ip = "192.168.0.10"
@@ -3259,5 +3383,4 @@ $action = "None"
 $pg.name = "440.00C.026"
 $ot.data = "6"
 $opt.data = "6"
-$otp.data = "5"
 .END
