@@ -35,7 +35,7 @@ class APIDebugger(QMainWindow):
         product_layout = QHBoxLayout()
         product_layout.addWidget(QLabel("Product:"))
         self.product_combo = QComboBox()
-        self.product_combo.addItems(["440.00.026", "440.00.027", "440.00.028"])  # Add more products as needed
+        self.product_combo.addItems(["440.00.026", "312.229.002", "312.229.001"])  # Add more products as needed
         product_layout.addWidget(self.product_combo)
         
         # Product Count
@@ -225,8 +225,10 @@ class APIDebugger(QMainWindow):
         result = self.result_combo.currentText()
         if result == "Random (1:25)":
             result_value = random.randint(1, 25) != 1  # 1:25 chance of False
-        else:
-            result_value = result == "True"
+        if result == "True":
+            result_value = True 
+        if result == "False":
+            result_value = False
         
         self.send_request(f"/master/measurement_result?result={str(result_value).lower()}", "POST", {})
     

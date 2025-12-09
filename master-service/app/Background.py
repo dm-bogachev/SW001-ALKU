@@ -300,11 +300,11 @@ class Background(Thread):
         
     def process_check_positioner(self):
 
-        if os.environ.get("DEBUG", "False").lower() == "False".lower():
-            logger.info("Режим отладки включен, пропуск проверки позиционера")
-            self.send_command_to_robot("POSITIONEREMPTY;", "RS013N", RS013N_API_URL)
-            self.send_command_to_robot("POSITIONERFULL;", "RS007L", RS007L_API_URL)
-            return
+        #if os.environ.get("DEBUG", "True").lower() == "True".lower():
+        logger.info("Режим отладки включен, пропуск проверки позиционера")
+        self.send_command_to_robot("POSITIONEREMPTY;", "RS013N", RS013N_API_URL)
+        self.send_command_to_robot("POSITIONERFULL;", "RS007L", RS007L_API_URL)
+        return
 
         if self.get_io_state(9):
             logger.info("Позиционер занят")

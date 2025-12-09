@@ -528,10 +528,6 @@ N_INT300    "s.debug.mode|Debug mode"
       max.count.opt = max.count.opt + 1;
       opt.cell[max.count.opt, 1] = 3;
       opt.cell[max.count.opt, 2] = 2;
-      .$temp = "Row:" + $ENCODE (opt.cell[max.count.opt, 1- 1]) + " Col:"+ $ENCODE (opt.cell[max.count.opt, 1- 1])
-      CALL log (.$temp)
-      .$temp = "Row:" + $ENCODE (opt.cell[max.count.opt, 1]) + " Col:"+ $ENCODE (opt.cell[max.count.opt, 1])
-      CALL log (.$temp)
       ;
     VALUE 2:
       opt.cell[max.count.opt, 1] = 2;
@@ -897,7 +893,7 @@ N_INT300    "s.debug.mode|Debug mode"
   END
   ; Safety check
   IF current.gripper == 0 THEN
-    CALL log ("Gripper is empty")
+    CALL log ("There is no gripper")
     RETURN
   END
   ; Log info
@@ -929,9 +925,11 @@ N_INT300    "s.debug.mode|Debug mode"
   ACCURACY 1
   LMOVE .temp + TRANS (0, 0, 200)
   ;
-      ; Log info
+  ; Log info
   .$temp = "Gripper" + $ENCODE (.gripper.no) + " put"
   CALL log (.$temp)
+  .gripper.no = 0
+  BREAK
   ;
 .END
 .PROGRAM a.teach.gripper ()
@@ -1259,8 +1257,8 @@ N_INT300    "s.debug.mode|Debug mode"
     BREAK
     PULSE release.tare
     TWAIT 0.5
+    PULSE rs13.tare.ack, 15
     SIGNAL s.ot.placed
-    PULSE rs13.tare.ack, 5
     ; Move out of put point
     ACCURACY 30
     LMOVE .ot.put + TRANS (, , 350)
@@ -1459,6 +1457,8 @@ N_INT300    "s.debug.mode|Debug mode"
   IF DISTANCE (.current.pos, .stz.wait) <= 25 THEN
     LMOVE #pos.wait
   END
+  ;
+  SWAIT -rs7.work[1]
   ; pos.wait -> take -> put -> Decide
   .i = ot.cell[count.ot, 1]
   .j = ot.cell[count.ot, 2]
@@ -2551,14 +2551,13 @@ N_INT300    "s.debug.mode|Debug mode"
 	; ALKU_RS013N_UPDATE
 	; @@@ HISTORY @@@
 	; @@@ INSPECTION @@@
+	; current.gripper
+	; pg.gripper
 	; $action
-	; hmi.obj.id
-	; keep.object
-	; hmi.x.plus
-	; s.grip.full
-	; s.opt.placed
 	; s.ot.placed
-	; s.cmd.finish
+	; s.opt.placed
+	; s.grip.full
+	; count.put
 	; rs7.locked.zone
 	; @@@ CONNECTION @@@
 	; KROSET R01
@@ -2610,6 +2609,7 @@ N_INT300    "s.debug.mode|Debug mode"
 	; .temp 
 	; 3:pos.put:F
 	; .temp 
+	; .det.put 
 	; Group:OPT:4
 	; 4:load.opt.data:F
 	; .id 
@@ -2668,6 +2668,7 @@ N_INT300    "s.debug.mode|Debug mode"
 	; .ct2 
 	; .mid.point 
 	; .ot.put 
+	; .tare.ack 
 	; 6:ot.return:F
 	; .i 
 	; .j 
@@ -2679,6 +2680,7 @@ N_INT300    "s.debug.mode|Debug mode"
 	; Group:States:7
 	; 7:state0:F
 	; .finish 
+	; .det.put 
 	; 7:state1:F
 	; .current.pos 
 	; .stz.wait 
@@ -2720,9 +2722,11 @@ N_INT300    "s.debug.mode|Debug mode"
 	; .tare.chg 
 	; .work 
 	; .locked.zone 
+	; .det.picked 
 	; 7:state103:F
 	; 7:state104:F
 	; .finish 
+	; .finish.ack 
 	; 7:state105:F
 	; 7:state106:F
 	; 7:state255:F
@@ -2775,6 +2779,8 @@ N_INT300    "s.debug.mode|Debug mode"
 	; .tare.ack 
 	; .finish 
 	; .detail.put 
+	; .det.picked 
+	; .det.put 
 	; 10:set.vars.pc:B
 	; .i 
 	; Group:Watchdog:11
@@ -2935,6 +2941,7 @@ N_INT300    "s.debug.mode|Debug mode"
 	; tool.pick[] Gripper 3 tool
 	; @@@ BASE @@@
 	; @@@ FRAME @@@
+	; stz.frame 
 	; @@@ BOOL @@@
 	; @@@ DEFAULTS @@@
 	; BASE: NULL
@@ -3026,6 +3033,7 @@ opt.point[3,7] 753.586670 1176.922241 -202.977173 -88.225586 89.907661 -179.9349
 opt.point[3,8] 753.681396 1176.796143 -282.977051 -88.225586 89.907661 -179.934937
 opt.point[3,9] 753.776245 1176.670044 -362.976929 -88.225586 89.907661 -179.934937
 opt.point[3,10] 753.871094 1176.544067 -442.976746 -88.225586 89.907661 -179.934937
+stz.frame 988.691956 -343.384247 109.344147 -173.771179 1.999711 -7.460209
 .END
 .JOINTS
 #homyak -45.000000 -30.000002 -120.000008 0.000000 -90.000000 22.500000
