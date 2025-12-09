@@ -8,12 +8,28 @@ N_OX18    "rs7.tare.chg|Request tare change"
 N_OX19    "rs7.locked.zone|RS007L Blocked positioner zone"
 N_OX20    "rs7.finish.ack|RS007L finished work"
 N_OX21    "rs7.put.ack|RS007L picked detail"
+N_OX25    "rs7.det.picked[0]|Picked details count from RS007L"
+N_OX26    "rs7.det.picked[1]|Picked details count from RS007L"
+N_OX27    "rs7.det.picked[2]|Picked details count from RS007L"
+N_OX28    "rs7.det.picked[3]|Picked details count from RS007L"
+N_OX29    "rs7.det.picked[4]|Picked details count from RS007L"
+N_OX30    "rs7.det.picked[5]|Picked details count from RS007L"
+N_OX31    "rs7.det.picked[6]|Picked details count from RS007L"
+N_OX32    "rs7.det.picked[7]|Picked details count from RS007L"
 N_WX1    "grip.unclamped|Gripper unclamped"
 N_WX2    "grip.clamped|Gripper clamped"
 N_WX17    "rs13.work[1]|Robot in workspace 1"
 N_WX18    "rs13.tare.ack|Acknowledge of tare change"
 N_WX19    "rs13.detail.put|RS013N put detail to positioner"
 N_WX20    "rs13.finish|RS013N finish process"
+N_WX25    "rs13.det.put[0]|Put details count from RS0013N"
+N_WX26    "rs13.det.put[1]|Put details count from RS0013N"
+N_WX27    "rs13.det.put[2]|Put details count from RS0013N"
+N_WX28    "rs13.det.put[3]|Put details count from RS0013N"
+N_WX29    "rs13.det.put[4]|Put details count from RS0013N"
+N_WX30    "rs13.det.put[5]|Put details count from RS0013N"
+N_WX31    "rs13.det.put[6]|Put details count from RS0013N"
+N_WX32    "rs13.det.put[7]|Put details count from RS0013N"
 N_INT1    "di.ifp.page[1]|Open IFP page i"
 N_INT2    "di.ifp.page[2]|Open IFP page i"
 N_INT3    "di.ifp.page[3]|Open IFP page i"
@@ -45,6 +61,7 @@ N_INT226    "s.measure.ng|Measurement result NG"
 N_INT231    "s.grip.full|Gripper is full"
 N_INT232    "s.cmd.start|Start command"
 N_INT233    "s.cmd.pick|Pick from positioner command"
+N_INT234    "s.cmd.measured|Detail measured"
 N_INT237    "s.cmd.chk.etal|Check etalon command"
 N_INT238    "s.cmd.finish|Finish program"
 N_INT239    "s.cmd.pause|Pause program command"
@@ -94,6 +111,8 @@ N_INT300    "s.debug.mode|Debug mode"
 69,2,"","   RESET","   ACTION","",10,4,15,2262,0
 76,4,1,"OFF     ON","","","  DEBUG",10,4,4,0,2300,0
 77,2,"","   MAIN","<---------","",10,4,11,2001,0
+79,7,"  RS013N"," COUNT PUT",10,15,4,0,0,26,8,1
+80,7,"  RS007L","COUNT PICK",10,15,4,0,0,1025,8,1
 84,2,"  ","  PRIME","  HOME","",10,4,11,2250,0
 85,8,"hmi.obj.id","  OBJECT","    ID",10,2,2,1,0
 86,8,"hmi.tool.no","    HMI","  GRIPPER ",10,2,2,1,0
@@ -268,7 +287,7 @@ N_INT300    "s.debug.mode|Debug mode"
   CALL log ("Move to measure machine")
   $action = "TakingToMM"
   ;
-  POINT .machine.pos = #et.mac.pos[.id]
+  POINT .machine.pos = #et.mac.point[.id]
   ; Go to machine
   JMOVE #safe.machine
   JMOVE #before.machine[.p.idx]
@@ -278,7 +297,7 @@ N_INT300    "s.debug.mode|Debug mode"
   LMOVE .machine.pos + TRANS (0, .shift.y * 0.2, .shift.z * 0.2)
   SPEED 250 MM/S
   ACCURACY 0.5
-  LMOVE #et.mac.pos[.id]
+  LMOVE #et.mac.point[.id]
   BREAK
   CALL log ("Send command to enable vacuum")
   $action = "WaitingMMVacuum"
@@ -302,6 +321,7 @@ N_INT300    "s.debug.mode|Debug mode"
   ELSE
     CALL log ("Measurement result: DEFECT")
   END
+  SIGNAL -s.measure.ok, s.measure.ng
   ;
   ; Pick from machine
   ACCURACY 10
@@ -310,7 +330,7 @@ N_INT300    "s.debug.mode|Debug mode"
   LMOVE .machine.pos + TRANS (0, .shift.y * 0.2, .shift.z * 0.2)
   SPEED 250 MM/S
   ACCURACY 0.5
-  LMOVE #et.mac.pos[.id]
+  LMOVE #et.mac.point[.id]
   BREAK
   PULSE grip.clamp
   TWAIT 0.5
@@ -321,7 +341,25 @@ N_INT300    "s.debug.mode|Debug mode"
   LMOVE .machine.pos + TRANS (0, .shift.y, .shift.z)
   ;
   LMOVE #before.machine[.p.idx]
-
+  ;
+  ; Part 3 Return Etalon
+  JMOVE #safe.machine
+  JMOVE #homyak
+  JMOVE .temp + TRANS (0, 0, 30)
+  ;
+  SPEED 250 MM/S
+  ACCURACY 0.02
+  LMOVE #et.pos.point[.id]
+  BREAK
+  PULSE grip.unclamp
+  TWAIT 0.5
+  SIGNAL -s.grip.full
+  ;
+  LMOVE .temp + TRANS (0, 5, 10)
+  ACCURACY 100
+  LMOVE .temp + TRANS (0, 0, 200)
+  ACCURACY 100
+  LMOVE #homyak
 .END
 .PROGRAM a.teach.ot ()
   SPEED 250 MM/S ALWAYS
@@ -340,7 +378,7 @@ N_INT300    "s.debug.mode|Debug mode"
   ;
   BREAK
   POINT ot.frame = FRAME (.ot.down.left, .ot.down.right, .ot.up.right, .ot.orig)
-  POINT ot.frame = ot.frame + RZ (180)
+  POINT ot.frame = ot.frame + RZ (-180)
   ;
   ;JMOVE ot.frame + TRANS (grip.xsh[hmi.tool.no], grip.ysh[hmi.tool.no], grip.zsh[hmi.tool.no])
 
@@ -382,98 +420,8 @@ N_INT300    "s.debug.mode|Debug mode"
 ;
 .END
 .PROGRAM get.ot.point (.obj.id)
-  ; Get matrix center
-  .center.col = INT (lines.count / 2)
-  .center.row = INT (obj.in.line / 2)
-  ; Get Manhattan distances matrix
-  .cell = 0
-  FOR .i = 0 TO lines.count-1
-    FOR .j = 0 TO obj.in.line-1
-      .dist = ABS (.i - .center.col) + ABS (.j - .center.row)
-      .dists[.cell] = .dist
-      .ms[.cell] = .i
-      .ns[.cell] = .j
-      .cell = .cell + 1
-    END
-  END
-  .array.size = .cell - 1
-  ; Bubble sort distances array
-  FOR .i = 0 TO .array.size - 1
-    FOR .j = 0 TO .array.size - .i - 1
-      ; Compare by angular distances
-      ; I don't want to make it 
-      IF .dists[.j] <> .dists[.j + 1]
-        .result = .dists[.j] - .dists[.j + 1]
-      ELSE
-        .cornerA = ABS (.ms[.j] - .center.col)
-        IF ABS (.ns[.j] - .center.row) > .cornerA THEN
-          .cornerA = ABS (.ns[.j] - .center.row)
-        END
-        
-        .cornerB = ABS (.ms[.j + 1] - .center.col)
-        IF ABS (.ns[.j + 1] - .center.row) > .cornerB THEN
-          .cornerB = ABS (.ns[.j + 1] - .center.row)
-        END
-        
-        IF .cornerA <> .cornerB
-          .result = .cornerA - .cornerB
-        ELSE
-          IF .ms[.j] <> .ms[.j + 1]
-            .result = .ms[.j] - .ms[.j + 1]
-          ELSE
-            .result = .ns[.j] - .ns[.j + 1]
-          END
-        END
-      END
-      ; Simple compare. Commented in case of troubles
-      ;IF .dists[.j] <> .dists[.j + 1]
-      ;  .result = .dists[.j] - .dists[.j + 1]
-      ;ELSE
-      ;  IF .ms[.j] <> .ms[.j + 1]
-      ;    .result = .ms[.j] - .ms[.j + 1]
-      ;  ELSE
-      ;    .result = .ns[.j] - .ns[.j + 1]
-      ;  END
-      ;END
-      ;
-      IF .result > 0 THEN
-        ;
-        .tmp.dist = .dists[.j]
-        .tmp.m = .ms[.j]
-        .tmp.n = .ns[.j]
-        ;
-        .dists[.j] = .dists[.j + 1]
-        .ms[.j] = .ms[.j + 1]
-        .ns[.j] = .ns[.j + 1]
-        ;
-        .dists[.j + 1] = .tmp.dist
-        .ms[.j + 1] = .tmp.m
-        .ns[.j + 1] = .tmp.n
-      END
-    END
-  END
-  ot.x = .ms[.obj.id]
-  ot.y = .ns[.obj.id]
-  ;
-  ; Debug print
-  ;PRINT "ASCII grid"
-  ;FOR .n = 0 TO obj.in.line-1
-  ;  .$line = ""        ; буфер строки
-  ;  FOR .m = 0 TO lines.count-1
-  ;    .filled = 0
-  ;    FOR .i = 0 TO .obj.id
-  ;      IF .ms[.i] == .m AND .ns[.i] == .n THEN
-  ;        .filled = 1
-  ;      END
-  ;    END
-  ;    IF .filled == 1 THEN
-  ;      .$line = .$line + "X "
-  ;    ELSE
-  ;      .$line = .$line + ". "
-  ;    END
-  ;  END
-  ;  PRINT .$line    ; печатаем всю строку одним вызовом
-  ;END
+  ot.x = ms[.obj.id]
+  ot.y = ns[.obj.id]
 .END
 .PROGRAM a.test.ot ()
   IF hmi.ot.k <> -1 THEN
@@ -489,7 +437,7 @@ N_INT300    "s.debug.mode|Debug mode"
     CALL log ("Waiting for new OT")
   END
   ;
-  CALL log ("Put to OT detail" + $ENCODE(count.put))
+  CALL log ("Put to OT detail" + $ENCODE(count.put + 1))
   $action = "PutToTare"
   ;
   SPEED 100 ALWAYS
@@ -538,6 +486,98 @@ N_INT300    "s.debug.mode|Debug mode"
     SIGNAL rs7.tare.chg
   END
   ;
+.END
+.PROGRAM calc.ot ()
+  ; Get matrix center
+  .center.col = INT (lines.count / 2)
+  .center.row = INT (obj.in.line / 2)
+  ; Get Manhattan distances matrix
+  .cell = 0
+  FOR .i = 0 TO lines.count-1
+    FOR .j = 0 TO obj.in.line-1
+      .dist = ABS (.i - .center.col) + ABS (.j - .center.row)
+      .dists[.cell] = .dist
+      ms[.cell] = .i
+      ns[.cell] = .j
+      .cell = .cell + 1
+    END
+  END
+  .array.size = .cell - 1
+  ; Bubble sort distances array
+  FOR .i = 0 TO .array.size - 1
+    FOR .j = 0 TO .array.size - .i - 1
+      ; Compare by angular distances
+      ; I don't want to make it 
+      IF .dists[.j] <> .dists[.j + 1]
+        .result = .dists[.j] - .dists[.j + 1]
+      ELSE
+        .cornerA = ABS (ms[.j] - .center.col)
+        IF ABS (ns[.j] - .center.row) > .cornerA THEN
+          .cornerA = ABS (ns[.j] - .center.row)
+        END
+        
+        .cornerB = ABS (ms[.j + 1] - .center.col)
+        IF ABS (ns[.j + 1] - .center.row) > .cornerB THEN
+          .cornerB = ABS (ns[.j + 1] - .center.row)
+        END
+        
+        IF .cornerA <> .cornerB
+          .result = .cornerA - .cornerB
+        ELSE
+          IF ms[.j] <> ms[.j + 1]
+            .result = ms[.j] - ms[.j + 1]
+          ELSE
+            .result = ns[.j] - ns[.j + 1]
+          END
+        END
+      END
+      ; Simple compare. Commented in case of troubles
+      ;IF .dists[.j] <> .dists[.j + 1]
+      ;  .result = .dists[.j] - .dists[.j + 1]
+      ;ELSE
+      ;  IF ms[.j] <> ms[.j + 1]
+      ;    .result = ms[.j] - ms[.j + 1]
+      ;  ELSE
+      ;    .result = ns[.j] - ns[.j + 1]
+      ;  END
+      ;END
+      ;
+      IF .result > 0 THEN
+        ;
+        .tmp.dist = .dists[.j]
+        .tmp.m = ms[.j]
+        .tmp.n = ns[.j]
+        ;
+        .dists[.j] = .dists[.j + 1]
+        ms[.j] = ms[.j + 1]
+        ns[.j] = ns[.j + 1]
+        ;
+        .dists[.j + 1] = .tmp.dist
+        ms[.j + 1] = .tmp.m
+        ns[.j + 1] = .tmp.n
+      END
+    END
+  END
+  ;
+  ; Debug print
+  ;PRINT "ASCII grid"
+  ;FOR .n = 0 TO obj.in.line-1
+  ;  .$line = ""        ; буфер строки
+  ;  FOR .m = 0 TO lines.count-1
+  ;    .filled = 0
+  ;    FOR .i = 0 TO .obj.id
+  ;      IF ms[.i] == .m AND ns[.i] == .n THEN
+  ;        .filled = 1
+  ;      END
+  ;    END
+  ;    IF .filled == 1 THEN
+  ;      .$line = .$line + "X "
+  ;    ELSE
+  ;      .$line = .$line + ". "
+  ;    END
+  ;  END
+  ;  PRINT .$line    ; печатаем всю строку одним вызовом
+  ;END
 .END
 .PROGRAM a.teach.machine ()
   IF FALSE THEN ; For round details
@@ -623,6 +663,7 @@ N_INT300    "s.debug.mode|Debug mode"
   CALL log ("Waiting for measurement result")
   $action = "WaitingMMResult"
   WAIT SIG (s.measure.ok) OR SIG (s.measure.ng)
+  SIGNAL s.cmd.measured
   ;
   IF SIG (s.measure.ok) THEN
     CALL log ("Measurement result: OK")
@@ -648,6 +689,7 @@ N_INT300    "s.debug.mode|Debug mode"
   LMOVE .machine.pos + TRANS (0, .shift.y, .shift.z)
   ;
   LMOVE #before.machine[.p.idx]
+  JMOVE #safe.machine
   ;BREAK
   ;JMOVE #safe.machine
   ;JMOVE #homyak
@@ -718,7 +760,9 @@ N_INT300    "s.debug.mode|Debug mode"
   PULSE grip.clamp
   TWAIT 0.5
   SIGNAL s.grip.full
+  SIGNAL -s.cmd.measured
   count.pick = count.pick + 1
+  BITS rs7.det.picked[0], 8 = count.pick
   ;
   LMOVE .temp + TRANS (0, 5, 10)
   ACCURACY 100
@@ -753,7 +797,7 @@ N_INT300    "s.debug.mode|Debug mode"
   ACCURACY 100 ALWAYS
   TOOL tool.pick[current.gripper]
   ;
-  POINT .temp = #defect.point[count.defect]
+  POINT .temp = #defect.point[count.defect + 1]
   ;
   JMOVE #defect.safe
   ;
@@ -762,7 +806,7 @@ N_INT300    "s.debug.mode|Debug mode"
     WAIT count.defect == 1
   END
   ;
-  CALL log ("Putting to defect tare with No:" + $ENCODE (count.defect))
+  CALL log ("Putting to defect tare with No:" + $ENCODE (count.defect + 1))
   ;
   ACCURACY 10
   LAPPRO .temp, -30
@@ -770,11 +814,11 @@ N_INT300    "s.debug.mode|Debug mode"
   ;
   SPEED 250 MM/S
   ACCURACY 0.02
-  LMOVE #defect.point[count.defect]
+  LMOVE #defect.point[count.defect + 1]
   BREAK
   PULSE grip.unclamp
   TWAIT 0.5
-  defect.count = defect.count + 1
+  count.defect = count.defect + 1
   SIGNAL -s.grip.full
   ;
   ACCURACY 10
@@ -822,9 +866,10 @@ N_INT300    "s.debug.mode|Debug mode"
 .PROGRAM state0 () ; Initialization of parameters
   ;
   CALL log ("State 0: Program reset. Initialization of parameters")
-  SIGNAL -s.grip.full, -s.measure.ok, -s.measure.ng, -rs7.tare.chg
-  SIGNAL -s.cmd.start, -s.cmd.pick, -s.cmd.finish, -rs7.finish.ack
+  SIGNAL -s.grip.full, -s.measure.ok, -s.measure.ng, -rs7.tare.chg, -s.cmd.measured
+  SIGNAL -s.cmd.start, -s.cmd.pick, -s.cmd.finish, -rs7.finish.ack, -rs7.locked.zone
   count.pick = 0
+  BITS rs7.det.picked[0], 8 = count.pick
   count.put = 0
   ;$loaded.pg = "None"
   ;
@@ -859,6 +904,7 @@ N_INT300    "s.debug.mode|Debug mode"
   ; Possible do not needed because robot can be only in HOME or near positioner
   ;JMOVE #homyak
   ;
+  SIGNAL -s.measure.ok, -s.measure.ng
   CALL ot.put
   ;
   state = 101
@@ -870,6 +916,7 @@ N_INT300    "s.debug.mode|Debug mode"
   ; Possible do not needed because robot can be only in HOME or near positioner
   ;JMOVE #homyak
   ;
+  SIGNAL -s.measure.ok, -s.measure.ng
   CALL defect.put
   ;
   state = 101
@@ -924,13 +971,13 @@ N_INT300    "s.debug.mode|Debug mode"
   ; Priority 2
   IF NOT SIG (s.grip.full) THEN
     $action = "WaitPosFull"
-    IF SIG (s.cmd.pick) AND NOT SIG (rs13.work[1]) THEN
+    IF SIG (s.cmd.pick) AND NOT SIG (rs13.work[1]) AND BITS(rs13.det.put[0], 8) > count.pick THEN
       state = 1
       RETURN
     END
   END
   ;
-  IF SIG (s.grip.full) AND NOT (SIG (s.measure.ok) OR SIG (s.measure.ng)) THEN
+  IF SIG (s.grip.full) AND NOT SIG(s.cmd.measured) THEN
     state = 2
     RETURN
   END
@@ -976,17 +1023,12 @@ N_INT300    "s.debug.mode|Debug mode"
   ;
 .END
 .PROGRAM state105 ()
-	; *******************************************************************
-	;
-	; Program:      state105
-	; Comment:      
-	; Author:       User
-	;
-	; Date:         11/23/2025
-	;
-	; *******************************************************************
-	;
-	
+  CALL log("State 105: Program paused")
+  SWAIT s.cmd.resume
+  CALL log("Program resumed")
+  SIGNAL -s.cmd.pause
+  state = 101
+  
 .END
 .PROGRAM state106 ()
   CALL log ("State 106: Check program")
@@ -997,6 +1039,7 @@ N_INT300    "s.debug.mode|Debug mode"
     ELSE
       CALL calc.grid
     END
+    CALL calc.ot
     state = 7
   ELSE
     CALL log ("Wrong program name. Program reset")
@@ -1195,7 +1238,13 @@ N_INT300    "s.debug.mode|Debug mode"
     CALL check.disp.pc
     CALL check.zone.pc
     ;
-    IF SIG(rs13.tare.ack) THEN
+    ;IF SWITCH (CS) AND state > 0 THEN
+    ;  IF BITS (rs13.det.put[0], 8) == count.pick THEN
+    ;    TIMER(1) = 0
+    ;  END
+    ;END
+    ;
+    IF SIG (rs13.tare.ack) THEN
       SIGNAL -rs7.tare.chg
     END
     ;
@@ -1355,6 +1404,14 @@ N_INT300    "s.debug.mode|Debug mode"
   rs13.detail.put = 1019
   rs13.finish = 1020
   ;rs13.put.ack = 1021
+  rs13.det.put[0] = 1025
+  rs13.det.put[1] = 1026
+  rs13.det.put[2] = 1027
+  rs13.det.put[3] = 1028
+  rs13.det.put[4] = 1029
+  rs13.det.put[5] = 1030
+  rs13.det.put[6] = 1031
+  rs13.det.put[7] = 1032
   ;
   ; Outputs
   ;
@@ -1362,8 +1419,16 @@ N_INT300    "s.debug.mode|Debug mode"
   rs7.tare.chg = 18
   rs7.locked.zone = 19
   rs7.finish.ack = 20
-  rs7.put.ack = 21
+  ;rs7.put.ack = 21
   ;rs13.detail.put = 21
+  rs7.det.picked[0] = 25
+  rs7.det.picked[1] = 26
+  rs7.det.picked[2] = 27
+  rs7.det.picked[3] = 28
+  rs7.det.picked[4] = 29
+  rs7.det.picked[5] = 30
+  rs7.det.picked[6] = 31
+  rs7.det.picked[7] = 32
   ;
   ; Internal IO
   ;
@@ -1429,7 +1494,7 @@ N_INT300    "s.debug.mode|Debug mode"
   ;
   s.cmd.start = 2232
   s.cmd.pick = 2233
-  ;s.cmd.put = 2234
+  s.cmd.measured = 2234
   ;s.cmd.pneum.op = 2235
   ;s.cmd.pneum.cl = 2236
   s.cmd.chk.etal = 2237
@@ -1838,6 +1903,14 @@ N_INT300    "s.debug.mode|Debug mode"
 	; @@@ HISTORY @@@
 	; @@@ INSPECTION @@@
 	; ot.frame
+	; s.cmd.pick
+	; rs13.work[1]
+	; count.defect
+	; s.measure.ok
+	; s.measure.ng
+	; rs13.det.put[0]
+	; count.pick
+	; s.grip.full
 	; @@@ CONNECTION @@@
 	; KROSET R02
 	; 127.0.0.1
@@ -1889,6 +1962,29 @@ N_INT300    "s.debug.mode|Debug mode"
 	; .obj.id 
 	; 2:a.test.ot:F
 	; 2:ot.put:F
+	; 2:calc.ot:F
+	; .center.col 
+	; .center.row 
+	; .cell 
+	; .i 
+	; .j 
+	; .dist 
+	; .dists 
+	; .ms 
+	; .ns 
+	; .array.size 
+	; .result 
+	; .cornerA 
+	; .cornerB 
+	; .tmp.dist 
+	; .tmp.m 
+	; .tmp.n 
+	; .n 
+	; .m 
+	; .filled 
+	; .x 
+	; .y 
+	; .obj.id 
 	; Group:MeasureMachine:3
 	; 3:a.teach.machine:F
 	; .temp 
@@ -2102,6 +2198,9 @@ N_INT300    "s.debug.mode|Debug mode"
 	; s.cmd.pick Pick from positioner command
 	; s.opt.spacer Option for put to OT with spacer
 	; s.opt.flip Option to put to OT with flip
+	; rs13.det.put[] Put details count from RS0013N
+	; rs7.det.picked[] Picked details count from RS007L
+	; s.cmd.measured Detail measured
 	; @@@ TOOLS @@@
 	; tool.pick[] Gripper tool
 	; @@@ BASE @@@
@@ -2294,7 +2393,7 @@ ot.put[20,7] -465.937042 366.299408 -8.900530 -85.560921 2.096370 85.437073
 #def.up.right 96.007767 47.274536 -59.097469 -0.012305 -71.775055 109.124313
 #def.up.left 80.256454 48.302124 -57.362587 -0.444727 -72.541359 125.001823
 #def.down.right 97.141563 30.778561 -86.732826 0.026370 -60.681606 107.972900
-#before.machine[1] -121.616000 4.829000 -127.328000 -137.613000 -51.010000 -8.870000
+#before.machine[1] -121.615997 4.829000 -127.328003 -137.613007 -51.009998 -8.870000
 #defect.point[50] 79.791443 47.037457 -59.593079 -0.403593 -71.823288 124.406555
 #safe.machine -104.177643 -37.185425 -123.196983 -0.000879 -93.836975 -146.334885
 #safe.defect 96.363724 -37.185425 -123.196983 -0.001758 -93.836296 7.313338
@@ -2342,12 +2441,12 @@ ot.put[20,7] -465.937042 366.299408 -8.900530 -85.560921 2.096370 85.437073
 #defect.point[8] 86.398911 19.776346 -103.422112 -0.247110 -55.221348 117.816513
 #defect.point[7] 92.185593 19.531656 -103.752724 -0.051933 -55.122780 111.920776
 #defect.point[6] 97.959946 19.895241 -103.240402 0.143387 -55.275391 106.037285
-#defect.point[5] 74.419975 19.216248 -104.324867 -0.643125 -54.956654 130.019669
+#defect.point[5] 74.419975 19.216248 -104.324867 -0.643125 -54.956657 130.019669
 #defect.point[4] 80.151932 17.720953 -106.357857 -0.459774 -54.373089 124.188110
 #defect.point[3] 86.124573 16.827234 -107.550613 -0.260089 -54.042984 118.102524
 #defect.point[2] 92.218063 16.567932 -107.887985 -0.051579 -53.951233 111.888985
 #defect.point[1] 98.297157 16.953238 -107.365265 0.157040 -54.093266 105.689781
-#before.machine[2] -108.428000 22.215000 -84.199000 0.002000 -73.312000 -142.090000
+#before.machine[2] -108.428001 22.215000 -84.198997 0.002000 -73.311996 -142.089996
 #ot.up.right 8.931886 44.847294 -64.250351 -0.056250 -70.603638 12.642737
 #ot.orig -14.483058 19.727785 -99.746216 -0.044824 -60.321125 36.061401
 #ot.down.right 20.170900 20.364260 -104.057533 -0.065918 -55.349121 1.423169
@@ -2358,6 +2457,8 @@ ot.put[20,7] -465.937042 366.299408 -8.900530 -85.560921 2.096370 85.437073
 #machine.pos[2] -121.084282 32.413334 -129.866989 -147.280975 -75.143738 11.431330
 #machine.pos[3] -108.429352 28.302614 -91.449318 0.007031 -59.981922 -142.099304
 #machine.pos[4] -120.810501 34.656010 -129.709488 -148.471008 -76.604927 12.318366
+#et.mac.point[99] -116.219101 48.973022 -118.426521 -153.258408 -78.901749 15.482635
+#et.pos.point[99] 42.590481 27.213867 -85.643173 19.667286 -94.327240 -118.745911
 .END
 .REALS
 s.pr.tst.ot = 2249
@@ -2470,6 +2571,33 @@ tyterm = 0
 s.cmd.pick = 2233
 s.opt.spacer = 2223
 s.opt.flip = 2224
+rs13.det.put[0] = 1025
+rs13.det.put[1] = 1026
+rs13.det.put[2] = 1027
+rs13.det.put[3] = 1028
+rs13.det.put[4] = 1029
+rs13.det.put[5] = 1030
+rs13.det.put[6] = 1031
+rs13.det.put[7] = 1032
+rs7.det.picked[0] = 25
+rs7.det.picked[1] = 26
+rs7.det.picked[2] = 27
+rs7.det.picked[3] = 28
+rs7.det.picked[4] = 29
+rs7.det.picked[5] = 30
+rs7.det.picked[6] = 31
+rs7.det.picked[7] = 32
+grip.180xsh[4] = 0
+grip.180xsh[5] = 0
+grip.180ysh[4] = 0
+grip.180ysh[5] = 0
+grip.xsh[4] = 0
+grip.xsh[5] = 0
+grip.ysh[4] = 0
+grip.ysh[5] = 0
+grip.zsh[4] = 0
+grip.zsh[5] = 0
+s.cmd.measured = 2234
 .END
 .STRINGS
 $log.entry[2] = " "

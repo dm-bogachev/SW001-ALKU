@@ -24,17 +24,10 @@
             "ConfidenceThreshold": 0.5,
             "ModelType": "yolo-detect",
             "ModelProcessor": "proc_312.229.001.py"
-        },
-        "312": {
-            "229": {
-                "001": {
-                    "ConfidenceThreshold": 0.92
-                }
-            }
         }
     },
     "Display": {
-        "BBOX": false,
+        "BBOX": true,
         "COORDINATES": false,
         "KEYPOINTS": false,
         "LABELS": false,
@@ -63,7 +56,7 @@
     },
     "Process": {
         "ProcessingDelay": 0.0,
-        "LastModel": "312.229.001",
+        "LastModel": "440.00.026",
         "FirstObjectCriteria": "Probability"
     },
     "IO": {

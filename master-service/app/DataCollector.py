@@ -52,7 +52,7 @@ class DataCollector(Thread):
                     state = "Offline"
                 states[key] = state
             except requests.exceptions.RequestException as e:
-                logger.warning(f"Failed to get state from {api}: {e}")
+                #logger.warning(f"Failed to get state from {api}: {e}")
                 states[key] = "Offline"
         return states
 
@@ -67,7 +67,7 @@ class DataCollector(Thread):
 
                 healths[key] = data.get("Status", "unreachable").lower()
             except requests.exceptions.RequestException as e:
-                logger.warning(f"Failed to get health from {api}: {e}")
+                #logger.warning(f"Failed to get health from {api}: {e}")
                 healths[key] = "unreachable"
         return healths
 

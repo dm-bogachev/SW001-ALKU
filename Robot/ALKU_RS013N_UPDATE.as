@@ -9,6 +9,14 @@ N_OX17    "do.work[1]|Robot in workspace i"
 N_OX18    "rs13.tare.ack|Acknowledge of tare change"
 N_OX19    "rs13.detail.put|RS013N put detail to positioner"
 N_OX20    "rs13.finish|RS013N finish process"
+N_OX26    "rs13.det.put[0]|Put details count from RS0013N"
+N_OX27    "rs13.det.put[1]|Put details count from RS0013N"
+N_OX28    "rs13.det.put[2]|Put details count from RS0013N"
+N_OX29    "rs13.det.put[3]|Put details count from RS0013N"
+N_OX30    "rs13.det.put[4]|Put details count from RS0013N"
+N_OX31    "rs13.det.put[5]|Put details count from RS0013N"
+N_OX32    "rs13.det.put[6]|Put details count from RS0013N"
+N_OX33    "rs13.det.put[7]|Put details count from RS0013N"
 N_WX1    "grip.unclamped|Gripper unclamped"
 N_WX2    "grip.clamped|Gripper clamped"
 N_WX17    "rs7.work[1]|RS007L in common area"
@@ -16,6 +24,14 @@ N_WX18    "rs7.tare.chg|Request tare change"
 N_WX19    "rs7.locked.zone|RS007L Blocked positioner zone"
 N_WX20    "rs7.finish.ack|RS007L finished work"
 N_WX21    "rs7.put.ack|RS007L picked detail"
+N_WX25    "rs7.det.picked[0]|Picked details count from RS007L"
+N_WX26    "rs7.det.picked[1]|Picked details count from RS007L"
+N_WX27    "rs7.det.picked[2]|Picked details count from RS007L"
+N_WX28    "rs7.det.picked[3]|Picked details count from RS007L"
+N_WX29    "rs7.det.picked[4]|Picked details count from RS007L"
+N_WX30    "rs7.det.picked[5]|Picked details count from RS007L"
+N_WX31    "rs7.det.picked[6]|Picked details count from RS007L"
+N_WX32    "rs7.det.picked[7]|Picked details count from RS007L"
 N_INT1    "di.ifp.page[1]|Open IFP page i"
 N_INT2    "di.ifp.page[2]|Open IFP page i"
 N_INT3    "di.ifp.page[3]|Open IFP page i"
@@ -109,6 +125,8 @@ N_INT300    "s.debug.mode|Debug mode"
 69,2,"","   RESET","   ACTION","",10,4,15,2262,0
 76,4,1,"OFF     ON","","","  DEBUG",10,4,4,0,2300,0
 77,2,"","   MAIN","<---------","",10,4,11,2001,0
+79,7,"  RS013N"," COUNT PUT",10,15,4,0,0,26,8,1
+80,7,"  RS007L","COUNT PICK",10,15,4,0,0,1025,8,1
 82,2,"","   OPEN","PNEUMATICS","",10,4,8,2258,0
 83,2,"","   CLOSE","PNEUMATICS","",10,4,8,2259,0
 84,2,"  ","  PRIME","  HOME","",10,4,11,2250,0
@@ -472,6 +490,7 @@ N_INT300    "s.debug.mode|Debug mode"
   TWAIT 0.5
   SIGNAL -s.grip.full
   count.put = count.put + 1
+  BITS rs13.det.put[0], 8 = count.put
   CALL log("Detail counter:" + $ENCODE(count.put))
   $action = "WaitForPick"
   ;
@@ -1318,6 +1337,7 @@ N_INT300    "s.debug.mode|Debug mode"
   SIGNAL -s.opt.placed, -s.ot.placed, -s.grip.full
   SIGNAL -s.cmd.start, -s.cmd.pick, -s.cmd.finish, -rs13.finish
   count.put = 0
+  BITS rs13.det.put[0], 8 = count.put
   count.ot = 0
   count.opt = 0
   ;$loaded.pg = "None"
@@ -1567,7 +1587,7 @@ N_INT300    "s.debug.mode|Debug mode"
     END
   END
   ; Priority 7
-  IF SIG (s.ot.placed) AND SIG (s.opt.placed) AND SIG (s.grip.full) THEN
+  IF SIG (s.ot.placed) AND SIG (s.opt.placed) AND SIG (s.grip.full) AND BITS(rs7.det.picked[0], 8) == count.put THEN
     $action = "WaitPosFree"
     IF NOT SIG (rs7.work[1]) AND SIG (s.cmd.put) AND NOT SIG (rs7.locked.zone) THEN
       state = 4
@@ -1593,7 +1613,6 @@ N_INT300    "s.debug.mode|Debug mode"
   END
   ;
   IF count.opt >= max.count.opt OR count.put == detail.count OR SIG(s.cmd.stop) THEN
-    WAIT FALSE ;rs07 finished
     SIGNAL s.cmd.finish
     SIGNAL rs13.finish
     CALL log("Wait for RS007L finish task")
@@ -2122,7 +2141,16 @@ N_INT300    "s.debug.mode|Debug mode"
   rs7.tare.chg = 1018
   rs7.locked.zone = 1019
   rs7.finish.ack = 1020
-  ;rs7.put.ack = 1021
+  rs7.put.ack = 1021
+  ;
+  rs7.det.picked[0] = 1025
+  rs7.det.picked[1] = 1026
+  rs7.det.picked[2] = 1027
+  rs7.det.picked[3] = 1028
+  rs7.det.picked[4] = 1029
+  rs7.det.picked[5] = 1030
+  rs7.det.picked[6] = 1031
+  rs7.det.picked[7] = 1032
   ;
   ; Outputs
   ;
@@ -2131,6 +2159,14 @@ N_INT300    "s.debug.mode|Debug mode"
   rs13.finish = 20
   rs13.detail.put = 21
   ;
+  rs13.det.put[0] = 25
+  rs13.det.put[1] = 26
+  rs13.det.put[2] = 27
+  rs13.det.put[3] = 28
+  rs13.det.put[4] = 29
+  rs13.det.put[5] = 30
+  rs13.det.put[6] = 31
+  rs13.det.put[7] = 32
   ; Internal IO
   ;
   ; Dedicated inputs 2001 - 2064
@@ -2519,6 +2555,11 @@ N_INT300    "s.debug.mode|Debug mode"
 	; hmi.obj.id
 	; keep.object
 	; hmi.x.plus
+	; s.grip.full
+	; s.opt.placed
+	; s.ot.placed
+	; s.cmd.finish
+	; rs7.locked.zone
 	; @@@ CONNECTION @@@
 	; KROSET R01
 	; 127.0.0.1
@@ -2887,6 +2928,8 @@ N_INT300    "s.debug.mode|Debug mode"
 	; s.debug.mode Debug mode
 	; do.bat.alm Battery low alarm
 	; s.pr.tst.stz Prime test stz program
+	; rs7.det.picked[] Picked details count from RS007L
+	; rs13.det.put[] Put details count from RS0013N
 	; @@@ TOOLS @@@
 	; tool.pin Tool for calibration pin and tare
 	; tool.pick[] Gripper 3 tool
@@ -3288,6 +3331,22 @@ s.hmi.res.act = 2262
 s.debug.mode = 2300
 do.bat.alm = 2011
 s.pr.tst.stz = 2248
+rs7.det.picked[0] = 1025
+rs7.det.picked[1] = 1026
+rs7.det.picked[2] = 1027
+rs7.det.picked[3] = 1028
+rs7.det.picked[4] = 1029
+rs7.det.picked[5] = 1030
+rs7.det.picked[6] = 1031
+rs7.det.picked[7] = 1032
+rs13.det.put[0] = 26
+rs13.det.put[1] = 27
+rs13.det.put[2] = 28
+rs13.det.put[3] = 29
+rs13.det.put[4] = 30
+rs13.det.put[5] = 31
+rs13.det.put[6] = 32
+rs13.det.put[7] = 33
 .END
 .STRINGS
 $tcp.ip = "192.168.0.10"
