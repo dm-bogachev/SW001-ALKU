@@ -59,6 +59,7 @@ N_INT238    "s.cmd.finish|Finish program"
 N_INT239    "s.cmd.pause|Pause program command"
 N_INT240    "s.cmd.resume|Resume program command"
 N_INT241    "s.cmd.stop|Stop program command"
+N_INT248    "s.pr.tst.stz|Prime test stz program"
 N_INT250    "s.pr.home|Prime a.home"
 N_INT251    "s.pr.tch.st.ot|Prime a.teach.ot"
 N_INT252    "s.pr.tch.st.opt|Prime a.teach.opt"
@@ -121,6 +122,7 @@ N_INT300    "s.debug.mode|Debug mode"
 95,8,"hmi.x.minus","DISTORTION"," X- COEFF",10,3,4,2,0
 96,8,"hmi.y.minus","DISTORTION"," Y- COEFF",10,3,4,2,0
 97,2,""," APPLY FOR"," N OBJECT","",10,4,14,2257,0
+98,2,"   PRIME","","    TEST","    STZ",10,4,11,2258,0
 99,8,"stz.x","   STZ X","COORDINATE",10,3,4,2,0
 100,8,"stz.y","   STZ Y","COORDINATE",10,3,4,2,0
 101,8,"stz.a","   STZ ","  ANGLE",10,3,4,2,0
@@ -145,8 +147,8 @@ N_INT300    "s.debug.mode|Debug mode"
 138,2,"","   TEACH","    STZ","",10,4,11,2007,0
 139,2,"","   TEACH","  GRIPPERS","",10,4,11,2008,0
 140,2,"  ","  PRIME","  HOME","",10,4,11,2250,0
+141,8,"hmi.obj.id","  OBJECT","    ID",10,2,2,1,0
 142,8,"hmi.gripper","    HMI","  GRIPPER ",10,2,2,1,0
-143,8,"hmi.obj.id","  OBJECT","    ID",10,2,2,1,0
 146,2,"","   Open ","  gripper","",10,4,5,3,0
 147,2,"   PRIME","","   TEACH","POSITIONER",10,4,11,2255,0
 153,2,"","   Close","  gripper","",10,4,5,4,0
@@ -167,6 +169,7 @@ N_INT300    "s.debug.mode|Debug mode"
 179,8,"hmi.g180x","GRIPPER N","180X SHIFT",10,3,4,2,0
 180,8,"hmi.g180y","GRIPPER N","180Y SHIFT",10,3,4,2,0
 181,2,""," APPLY FOR"," N GRIPPER","",10,4,14,2256,0
+182,2,"   PRIME","","    TEST","    STZ",10,4,11,2258,0
 183,8,"stz.x","   STZ X","COORDINATE",10,3,4,2,0
 184,8,"stz.y","   STZ Y","COORDINATE",10,3,4,2,0
 185,8,"stz.a","   STZ ","  ANGLE",10,3,4,2,0
@@ -218,7 +221,7 @@ N_INT300    "s.debug.mode|Debug mode"
   max.tare.count = 126
   spc.tare.count = 50
   ;
-  detail.length = 27.5
+  object.length = 27.5
   ;
 .END
 .PROGRAM id2 () ; 312.229.001
@@ -230,7 +233,7 @@ N_INT300    "s.debug.mode|Debug mode"
   max.tare.count = 77
   spc.tare.count = 77
   ;
-  detail.length = 12.3
+  object.length = 12.3
   ;
 .END
 .PROGRAM id4 () ; 440.00.026
@@ -242,7 +245,7 @@ N_INT300    "s.debug.mode|Debug mode"
   max.tare.count = 168
   spc.tare.count = 50
   ;
-  detail.length = 23.5
+  object.length = 23.5
   ;
 .END
 .PROGRAM a.teach.stz ()
@@ -468,8 +471,8 @@ N_INT300    "s.debug.mode|Debug mode"
   PULSE grip.unclamp
   TWAIT 0.5
   SIGNAL -s.grip.full
-  count.pick = count.pick + 1
-  CALL log("Detail counter:" + $ENCODE(count.pick))
+  count.put = count.put + 1
+  CALL log("Detail counter:" + $ENCODE(count.put))
   $action = "WaitForPick"
   ;
   LMOVE .temp + TRANS (0, 0, 200)
@@ -1238,6 +1241,7 @@ N_INT300    "s.debug.mode|Debug mode"
     PULSE release.tare
     TWAIT 0.5
     SIGNAL s.ot.placed
+    PULSE rs13.tare.ack, 5
     ; Move out of put point
     ACCURACY 30
     LMOVE .ot.put + TRANS (, , 350)
@@ -1313,7 +1317,7 @@ N_INT300    "s.debug.mode|Debug mode"
   CALL log ("State 0: Program reset. Initialization of parameters")
   SIGNAL -s.opt.placed, -s.ot.placed, -s.grip.full
   SIGNAL -s.cmd.start, -s.cmd.pick, -s.cmd.finish, -rs13.finish
-  count.pick = 0
+  count.put = 0
   count.ot = 0
   count.opt = 0
   ;$loaded.pg = "None"
@@ -1500,7 +1504,7 @@ N_INT300    "s.debug.mode|Debug mode"
 .END
 .PROGRAM state9 () ; Decide if pick next OPT
   CALL log ("State 9: Decide if pick next OPT")
-  IF count.opt >= max.count.opt OR count.pick == detail.count OR SIG(s.cmd.stop) THEN
+  IF count.opt >= max.count.opt OR count.put == detail.count OR SIG(s.cmd.stop) THEN
     LMOVE #homyak
     ;
     ;POINT #current.pos = #homyak
@@ -1523,7 +1527,8 @@ N_INT300    "s.debug.mode|Debug mode"
   ;
   CALL load.opt.data
   CALL load.ot.data
-  CALL pg.select ; States -> 0, 7
+  CALL pg.select 
+  state = 106
   ;
 .END
 .PROGRAM state101 () ; Auxilary state
@@ -1570,7 +1575,7 @@ N_INT300    "s.debug.mode|Debug mode"
     END
   END
   ; Priority 8
-  IF SIG (s.cmd.chg.opt) OR count.pick == detail.count OR SIG(s.cmd.stop) THEN
+  IF SIG (s.cmd.chg.opt) OR count.put == detail.count OR SIG(s.cmd.stop) THEN
     state = 6
     RETURN
   END
@@ -1587,10 +1592,12 @@ N_INT300    "s.debug.mode|Debug mode"
     RETURN
   END
   ;
-  IF count.opt >= max.count.opt OR count.pick == detail.count OR SIG(s.cmd.stop) THEN
+  IF count.opt >= max.count.opt OR count.put == detail.count OR SIG(s.cmd.stop) THEN
     WAIT FALSE ;rs07 finished
     SIGNAL s.cmd.finish
     SIGNAL rs13.finish
+    CALL log("Wait for RS007L finish task")
+    SWAIT rs7.finish.ack
     state = 5
     RETURN
   END
@@ -1608,6 +1615,16 @@ N_INT300    "s.debug.mode|Debug mode"
   CALL log("Program resumed")
   SIGNAL -s.cmd.pause
   state = 101
+.END
+.PROGRAM state106 () ; Check program
+  CALL log ("State 106: Check program")
+  IF $pg.name <> "NULL" THEN
+    CALL log ("Selected program: " + $pg.name)
+    state = 7
+  ELSE
+    CALL log ("Wrong program name. Program reset")
+    state = 0
+  END
 .END
 .PROGRAM state255 () ; Program complete
   CALL log ("State 255: Program complete")
@@ -1660,12 +1677,10 @@ N_INT300    "s.debug.mode|Debug mode"
     SVALUE "312.229.001":
       CALL id3
     ANY :
-      CALL log ("Wrong program name. Program reset")
-      state = 0
+      $pg.name = "NULL"
       RETURN
   END
-  CALL log ("Selected program: " + $pg.name)
-  state = 7
+
 .END
 .PROGRAM a.main ()
   ;
@@ -1779,7 +1794,7 @@ N_INT300    "s.debug.mode|Debug mode"
     .$data[2] = .$data[2] + "TAREIN:" + $ENCODE (count.opt) + ";"
     .$data[2] = .$data[2] + "TAREOUT:" + $ENCODE (count.ot) + ";"
     .$data[2] = .$data[2] + "GRIPPER:" + $ENCODE (current.gripper) + ";"
-    .$data[2] = .$data[2] + "PICKCOUNT:" + $ENCODE (count.pick) + ";"
+    .$data[2] = .$data[2] + "PICKCOUNT:" + $ENCODE (count.put) + ";"
     .$data[2] = .$data[2] + "\n"
     ;
     CALL tcp.send.pc (.$data[], 2)
@@ -2107,7 +2122,7 @@ N_INT300    "s.debug.mode|Debug mode"
   rs7.tare.chg = 1018
   rs7.locked.zone = 1019
   rs7.finish.ack = 1020
-  rs7.put.ack = 1021
+  ;rs7.put.ack = 1021
   ;
   ; Outputs
   ;
@@ -2189,6 +2204,7 @@ N_INT300    "s.debug.mode|Debug mode"
   s.pr.tch.stz = 2253
   s.pr.tch.grip = 2254
   s.pr.tch.pos = 2255
+  s.pr.tst.stz = 2248
   ;
   s.apply.grip = 2256
   s.apply.cv = 2257
@@ -2329,9 +2345,9 @@ N_INT300    "s.debug.mode|Debug mode"
     CALL check.disp.pc
     CALL check.zone.pc
     ;
-    IF SIG (rs7.put.ack) THEN
-      SIGNAL -rs13.detail.put
-    END
+    ;IF SIG (rs7.put.ack) THEN
+    ;  SIGNAL -rs13.detail.put
+    ;END
     ;
     IF NOT SIG (s.debug.mode) THEN
       IF SWITCH (REPEAT) AND NOT SWITCH (TEACH_LOCK) AND NOT SWITCH (EMERGENCY ) AND NOT SWITCH (CS ) AND NOT SWITCH (ERROR ) THEN
@@ -2350,20 +2366,6 @@ N_INT300    "s.debug.mode|Debug mode"
     TWAIT 0.01
   END
   ;
-  ;   ;
-  ;   IF SIG(s.receive.p) THEN
-  ;     $action = "WaitForPick"
-  ;   END
-  ;    IF NOT SIG(s.debug) THEN
-  ;      IF SWITCH(REPEAT ) AND NOT SWITCH(TEACH_LOCK ) AND NOT SWITCH(EMERGENCY ) AND NOT SWITCH(CS ) AND NOT SWITCH(ERROR ) THEN
-  ;        MC ZPOWER ON
-  ;        WAIT SWITCH(POWER )
-  ;;
-  ;        MC CONTINUE
-  ;      END
-  ;    END
-  ;
-  
 .END
 .PROGRAM check.tasks.pc ()
   ;
@@ -2514,6 +2516,9 @@ N_INT300    "s.debug.mode|Debug mode"
 	; @@@ HISTORY @@@
 	; @@@ INSPECTION @@@
 	; $action
+	; hmi.obj.id
+	; keep.object
+	; hmi.x.plus
 	; @@@ CONNECTION @@@
 	; KROSET R01
 	; 127.0.0.1
@@ -2547,6 +2552,18 @@ N_INT300    "s.debug.mode|Debug mode"
 	; .pick 
 	; .c 
 	; 2:a.test.stz:F
+	; .x 
+	; .y 
+	; .a 
+	; .xsh 
+	; .ysh 
+	; .zsh 
+	; .xp 
+	; .xm 
+	; .yp 
+	; .ym 
+	; .pick 
+	; .c 
 	; Group:Positioner:3
 	; 3:a.teach.pos:F
 	; .temp 
@@ -2666,6 +2683,7 @@ N_INT300    "s.debug.mode|Debug mode"
 	; 7:state104:F
 	; .finish 
 	; 7:state105:F
+	; 7:state106:F
 	; 7:state255:F
 	; Group:Utilities:8
 	; 8:a.home:F
@@ -2697,6 +2715,7 @@ N_INT300    "s.debug.mode|Debug mode"
 	; .connected 
 	; .tcp.error.cnt 
 	; .request.size 
+	; .ip 
 	; 9:tcp.send.pc:B
 	; .$data[] 
 	; .data.length 
@@ -2719,11 +2738,15 @@ N_INT300    "s.debug.mode|Debug mode"
 	; .i 
 	; Group:Watchdog:11
 	; 11:watchdog.pc:B
+	; .put.ack 
+	; .detail.put 
 	; 11:check.tasks.pc:B
 	; 11:check.disp.pc:B
 	; 11:check.zone.pc:B
 	; 11:check.teach.pc:B
 	; @@@ TRANS @@@
+	; ot.point[] OT point i, j
+	; opt.point[] OPT point i, j
 	; @@@ JOINTS @@@
 	; #homyak Home point
 	; #tool.point[] Point for pick gripper i
@@ -2740,6 +2763,7 @@ N_INT300    "s.debug.mode|Debug mode"
 	; #stz.wait Point before positioner
 	; #opt.put.safe Safe point before put OTP to STZ
 	; #opt.take.safe Safe point for taking OTP
+	; #pos.point[] Positioner point for object i
 	; @@@ REALS @@@
 	; tcp.socket TCP socket ID
 	; tcp.ena Enable TCP connect display
@@ -2755,7 +2779,7 @@ N_INT300    "s.debug.mode|Debug mode"
 	; max.count.ot Maximum count of OT in task
 	; detail.count Count of details in tares
 	; max.count.opt Maximum count of OPT in task
-	; count.pick Picked details counter
+	; count.put Putted details counter
 	; count.ot Processed OT counter
 	; count.opt Processed OPT counter
 	; stz.a Pick point Alpha
@@ -2766,6 +2790,15 @@ N_INT300    "s.debug.mode|Debug mode"
 	; hmi.ot.j HMI OT row index
 	; stz.x Pick point X
 	; stz.y Pick point Y
+	; cv.x.minus[] CV X- camera correction for object i
+	; cv.x.plus[] CV X+ camera correction for object i
+	; cv.y.minus[] CV Y- camera correction for object i
+	; cv.y.plus[] CV Y+ camera correction for object i
+	; grip.180xsh[] X shift for gripper i in 180
+	; grip.180ysh[] Y shift for gripper i in 180
+	; grip.xsh[] X shift for gripper i
+	; grip.ysh[] Y shift for gripper i
+	; grip.zsh[] Z shift for gripper i
 	; center.x Center of camera view X
 	; hmi.g180x HMI rotated gripper X shift for gripper N
 	; hmi.g180y HMI rotated gripper Y shift for gripper N
@@ -2779,12 +2812,15 @@ N_INT300    "s.debug.mode|Debug mode"
 	; keep.gripper HMI aux variable
 	; keep.object HMI aux variable
 	; center.y Center of camera view Y
-	; detail.length Object data: detail length
+	; object.length Object data: detail length
 	; max.tare.count Object data: Max details in tare
 	; object.id Object data: ID
+	; opt.cell[] OPT cells in task
+	; ot.cell[] OT cells in task
 	; spc.tare.count Object data: Max details in tare with spacer
 	; @@@ STRINGS @@@
 	; $tcp.ip Server PC IP address
+	; $log.entry[] Log entry
 	; $action Current robot action to send
 	; $pg.name Program name (same as in machine)
 	; $ot.data Used OT cells string
@@ -2850,6 +2886,7 @@ N_INT300    "s.debug.mode|Debug mode"
 	; s.hmi.res.act Reset action from hmi
 	; s.debug.mode Debug mode
 	; do.bat.alm Battery low alarm
+	; s.pr.tst.stz Prime test stz program
 	; @@@ TOOLS @@@
 	; tool.pin Tool for calibration pin and tare
 	; tool.pick[] Gripper 3 tool
@@ -2967,6 +3004,8 @@ opt.point[3,10] 753.871094 1176.544067 -442.976746 -88.225586 89.907661 -179.934
 #opt.take.safe 30.699938 -18.854830 -127.388382 0.332227 -91.897202 24.509468
 #pos.point[1] 83.508499 43.291611 -103.723045 -31.864834 -39.713516 -35.560505
 #pos.point[4] 84.887558 50.425911 -87.949188 -23.932617 -48.571243 -45.915394
+#pos.point[2] 83.275742 47.011696 -96.549759 -29.782879 -42.747120 -38.074425
+#pos.point[3] 82.294281 41.237392 -110.080681 -36.038586 -37.402271 -28.378662
 .END
 .REALS
 release.tare = 1
@@ -3017,7 +3056,7 @@ hmi.gripper = 1
 max.count.ot = 6
 detail.count = 30
 max.count.opt = 4
-count.pick = 0
+count.put = 0
 count.ot = 0
 count.opt = 0
 s.stock.ot.ok = 2223
@@ -3217,7 +3256,7 @@ rs7.put.ack = 1021
 s.hmi.pneum.op = 2258
 s.hmi.pneum.cl = 2259
 s.hmi.get.cv = 2260
-detail.length = 23.5
+object.length = 23.5
 max.tare.count = 168
 object.id = 4
 opt.cell[1,1] = 2
@@ -3248,6 +3287,7 @@ s.hmi.res.state = 2261
 s.hmi.res.act = 2262
 s.debug.mode = 2300
 do.bat.alm = 2011
+s.pr.tst.stz = 2248
 .END
 .STRINGS
 $tcp.ip = "192.168.0.10"

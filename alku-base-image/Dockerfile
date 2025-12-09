@@ -1,4 +1,4 @@
-FROM alku-base-image
+FROM python:3.13
 
 COPY MvCamCtrlSDK_Runtime-4.5.0_x86_64_20241128.deb /tmp/MvCamCtrlSDK_Runtime.deb
 RUN dpkg -i /tmp/MvCamCtrlSDK_Runtime.deb || apt-get install -f -y && rm /tmp/MvCamCtrlSDK_Runtime.deb
