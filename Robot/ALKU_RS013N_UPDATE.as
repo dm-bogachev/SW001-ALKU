@@ -1552,8 +1552,7 @@ N_INT300    "s.debug.mode|Debug mode"
   END
   SIGNAL -s.cmd.start
   ;
-  CALL log ("START with Name:" + $pg.name + " Count:" + $ENCODE(detail.count) + " OT:" + $ot.data + " OPT:" + $opt.data)
-  ;
+CALL log ("START with Name:" + $pg.name + "-" + $ENCODE (detail.spec) + " Count:" + $ENCODE (detail.count) + " OT:" + $ot.data + " OPT:" + $opt.data)  ;
   CALL load.opt.data
   CALL load.ot.data
   CALL pg.select 
@@ -1699,16 +1698,32 @@ N_INT300    "s.debug.mode|Debug mode"
 .PROGRAM pg.select ()
   SCASE $pg.name OF
     SVALUE "440.00.026":
-      CALL id4
+      CASE detail.spec OF
+        VALUE 1:
+          CALL id4; id4_1
+        ANY :
+          $pg.name = "NULL"
+      END
+      ;
     SVALUE "312.229.002":
-      CALL id1
+      CASE detail.spec OF
+        VALUE 1:
+          CALL id1; id1_1
+        ANY :
+          $pg.name = "NULL"
+      END
     SVALUE "312.229.001":
-      CALL id3
+      CASE detail.spec OF
+        VALUE 1:
+          CALL id3; id3_1
+        ANY :
+          $pg.name = "NULL"
+      END
     ANY :
       $pg.name = "NULL"
       RETURN
   END
-
+  ;
 .END
 .PROGRAM a.main ()
   ;
@@ -1848,6 +1863,9 @@ N_INT300    "s.debug.mode|Debug mode"
     ; Decode detail type
     $pg.name = $DECODE (.$data[1], ";",0)
     .$temp = $DECODE (.$data[1], ";",1)
+    ; Decode detail spec
+    detail.spec = VAL ($DECODE (.$data[1], ";",0))
+    .$temp = $DECODE (.$data[1], ";",1)
     ; Decode detail count
     detail.count = VAL ($DECODE (.$data[1], ";",0))
     .$temp = $DECODE (.$data[1], ";",1)
@@ -1859,7 +1877,6 @@ N_INT300    "s.debug.mode|Debug mode"
     stz.x = -1
     stz.y = -1
     PULSE s.cmd.start, 5
-    ;TIMER 1 = 0
   END
   ;
   ; SENSOR COMMAND
@@ -1984,7 +2001,7 @@ N_INT300    "s.debug.mode|Debug mode"
   IF INSTR (.$data[1] , "RESUME") THEN
     PULSE s.cmd.resume, 5
   END
-    ;
+  ;
   ; STOP COMMAND
   ; String format:
   ; STOP;
@@ -1992,7 +2009,7 @@ N_INT300    "s.debug.mode|Debug mode"
   IF INSTR (.$data[1] , "STOP") THEN
     SIGNAL s.cmd.stop
   END
-    ;
+  ;
   ; RESET COMMAND
   ; String format:
   ; RESET;
@@ -2886,6 +2903,7 @@ N_INT300    "s.debug.mode|Debug mode"
 	; opt.cell[] OPT cells in task
 	; ot.cell[] OT cells in task
 	; spc.tare.count Object data: Max details in tare with spacer
+	; detail.spec Detail specification
 	; @@@ STRINGS @@@
 	; $tcp.ip Server PC IP address
 	; $log.entry[] Log entry
@@ -3376,6 +3394,7 @@ rs13.det.put[4] = 30
 rs13.det.put[5] = 31
 rs13.det.put[6] = 32
 rs13.det.put[7] = 33
+detail.spec = 0
 .END
 .STRINGS
 $tcp.ip = "192.168.0.10"

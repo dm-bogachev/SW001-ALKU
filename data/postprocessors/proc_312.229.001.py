@@ -16,7 +16,7 @@ def process(frame, yolo_data: list):
     for data in yolo_data:
         x1, y1, x2, y2 = data.xyxy
         if data.class_id == 0:
-            cv2.rectangle(drawframe, (int(x1), int(y1)), (int(x2), int(y2)), (0, 0, 255), 2)
+            cv2.rectangle(drawframe, (int(x1), int(y1)), (int(x2), int(y2)), (255, 233, 255), 2)
             continue    
         
         center = (x1 + x2) / 2, (y1 + y2) / 2

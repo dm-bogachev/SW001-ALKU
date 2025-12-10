@@ -734,7 +734,7 @@ N_INT300    "s.debug.mode|Debug mode"
   ; Object ID
   object.id = 3
   ; Working gripper
-  gripper.type = 3
+  pg.gripper = 3
   ; Max objects in output tare
   max.tare.count = 77
   spc.tare.count = 77
@@ -880,7 +880,6 @@ N_INT300    "s.debug.mode|Debug mode"
   count.pick = 0
   BITS rs7.det.picked[0], 8 = count.pick
   count.put = 0
-  ;$loaded.pg = "None"
   ;
   state = 100
   ;
@@ -963,7 +962,7 @@ N_INT300    "s.debug.mode|Debug mode"
   END
   SIGNAL -s.cmd.start
   ;
-  CALL log ("START with Name:" + $pg.name + " Count:" + $ENCODE (detail.count) + " OT:" + $ot.data + " OPT:" + $opt.data)
+  CALL log ("START with Name:" + $pg.name + "-" + $ENCODE (detail.spec) + " Count:" + $ENCODE (detail.count) + " OT:" + $ot.data + " OPT:" + $opt.data)
   ;
   CALL pg.select
   state = 106
@@ -1111,15 +1110,32 @@ N_INT300    "s.debug.mode|Debug mode"
 .PROGRAM pg.select ()
   SCASE $pg.name OF
     SVALUE "440.00.026":
-      CALL id4
+      CASE detail.spec OF
+        VALUE 1:
+          CALL id4; id4_1
+        ANY :
+          $pg.name = "NULL"
+      END
+      ;
     SVALUE "312.229.002":
-      CALL id1
+      CASE detail.spec OF
+        VALUE 1:
+          CALL id1; id1_1
+        ANY :
+          $pg.name = "NULL"
+      END
     SVALUE "312.229.001":
-      CALL id3
+      CASE detail.spec OF
+        VALUE 1:
+          CALL id3; id3_1
+        ANY :
+          $pg.name = "NULL"
+      END
     ANY :
       $pg.name = "NULL"
       RETURN
   END
+    ;
 .END
 .PROGRAM a.main ()
   ;
@@ -1658,13 +1674,16 @@ N_INT300    "s.debug.mode|Debug mode"
   ;
   ; START COMMAND
   ; String format:
-  ; START;DETAILNAME;DETAILCOUNT;[INTAREID1,INTAREID2,..];[OTAREID1,INTAREID2,..];
+  ; START;DETAILNAME;DETAILSPEC;DETAILCOUNT;[INTAREID1,INTAREID2,..];[OTAREID1,INTAREID2,..];
   IF INSTR (.$data[1] , "START") THEN
     ; Decode command
     .$temp = $DECODE (.$data[1], ";",0)
     .$temp = $DECODE (.$data[1], ";",1)
     ; Decode detail type
     $pg.name = $DECODE (.$data[1], ";",0)
+    .$temp = $DECODE (.$data[1], ";",1)
+    ; Decode detail spec
+    detail.spec = VAL($DECODE (.$data[1], ";",0))
     .$temp = $DECODE (.$data[1], ";",1)
     ; Decode detail count
     detail.count = VAL ($DECODE (.$data[1], ";",0))
@@ -1675,7 +1694,6 @@ N_INT300    "s.debug.mode|Debug mode"
     .$temp = $DECODE (.$data[1], ";",1)
     $opt.data = $DECODE (.$data[1], ";",0)
     PULSE s.cmd.start, 5
-    ;TIMER 1 = 0
   END
   ;
   ; SENSOR COMMAND
@@ -1752,7 +1770,9 @@ N_INT300    "s.debug.mode|Debug mode"
     ; Decode command
     .$temp = $DECODE (.$data[1], ";",0)
     .$temp = $DECODE (.$data[1], ";",1)
-    etalon.id
+    ; Need to decide where to check etalon!!!!
+    ; Decode etalon id
+    etalon.id = VAL($DECODE (.$data[1], ";",0))
     ;
     SIGNAL s.cmd.chk.etal
   END
@@ -1788,7 +1808,7 @@ N_INT300    "s.debug.mode|Debug mode"
   IF INSTR (.$data[1] , "STOP") THEN
     SIGNAL s.cmd.stop
   END
-    ;
+  ;
   ; RESET COMMAND
   ; String format:
   ; RESET;
@@ -2180,6 +2200,7 @@ N_INT300    "s.debug.mode|Debug mode"
 	; ot.y OT put coordinate Y
 	; round.no ID for round detail
 	; spc.tare.count Object data: Max details in tare with spacer
+	; detail.spec Detail specification
 	; @@@ STRINGS @@@
 	; $log.entry[] Log entry
 	; $action Current robot action to send
@@ -2937,6 +2958,7 @@ ot.x = 10
 ot.y = 3
 round.no = 3
 spc.tare.count = 50
+detail.spec = 0
 .END
 .STRINGS
 $log.entry[2] = " "
