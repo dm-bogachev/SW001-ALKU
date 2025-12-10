@@ -80,6 +80,10 @@ class APIDebugger(QMainWindow):
         self.stop_btn.clicked.connect(lambda: self.send_request("/master/stop", "POST", {}))
         control_layout.addWidget(self.stop_btn)
         
+        self.reset_btn = QPushButton("Reset")
+        self.reset_btn.clicked.connect(lambda: self.send_request("/master/reset", "POST", {}))
+        control_layout.addWidget(self.reset_btn)
+
         control_group.setLayout(control_layout)
         layout.addWidget(control_group)
         
@@ -183,6 +187,8 @@ class APIDebugger(QMainWindow):
         
         self.pneumo_close_btn = QPushButton("Pneumo Close")
         self.pneumo_close_btn.clicked.connect(lambda: self.send_request("/master/debug/pneumo_close", "POST", {}))
+        
+
         
         debug_layout.addWidget(self.pneumo_open_btn)
         debug_layout.addWidget(self.pneumo_close_btn)

@@ -476,11 +476,11 @@ N_INT300    "s.debug.mode|Debug mode"
   LAPPRO .put, -20
   LAPPRO .put, -200
   ;
-  IF NOT SIG (s.cmd.pick) THEN
-    JMOVE #homyak
-    BREAK
-    SIGNAL -rs7.locked.zone
-  END
+  ;IF NOT SIG (s.cmd.pick) THEN
+  ;  JMOVE #homyak
+  ;  BREAK
+  ;  SIGNAL -rs7.locked.zone
+  ;END
   ;
   IF count.put >= max.tare.count THEN
     SIGNAL rs7.tare.chg
@@ -730,6 +730,15 @@ N_INT300    "s.debug.mode|Debug mode"
 	detail.length = 23.5
 	;
 .END
+.PROGRAM id3 ()
+  ; Object ID
+  object.id = 3
+  ; Working gripper
+  gripper.type = 3
+  ; Max objects in output tare
+  max.tare.count = 77
+  spc.tare.count = 77
+.END
 .PROGRAM pos.pick ()
   ;
   .$temp = "Pick detail from positioner (ID:" + $ENCODE (object.id) + ")"
@@ -867,7 +876,7 @@ N_INT300    "s.debug.mode|Debug mode"
   ;
   CALL log ("State 0: Program reset. Initialization of parameters")
   SIGNAL -s.grip.full, -s.measure.ok, -s.measure.ng, -rs7.tare.chg, -s.cmd.measured
-  SIGNAL -s.cmd.start, -s.cmd.pick, -s.cmd.finish, -rs7.finish.ack, -rs7.locked.zone
+  SIGNAL -s.cmd.start, -s.cmd.pick, -s.cmd.finish, -rs7.finish.ack, -rs7.locked.zone, -s.cmd.stop
   count.pick = 0
   BITS rs7.det.picked[0], 8 = count.pick
   count.put = 0
@@ -972,18 +981,18 @@ N_INT300    "s.debug.mode|Debug mode"
   ; Priority 2
   IF NOT SIG (s.grip.full) THEN
     $action = "WaitPosFull"
-    IF SIG (s.cmd.pick) AND NOT SIG (rs13.work[1]) AND BITS(rs13.det.put[0], 8) > count.pick THEN
+    IF SIG (s.cmd.pick) AND NOT SIG (rs13.work[1]) AND BITS (rs13.det.put[0], 8) > count.pick THEN
       state = 1
       RETURN
     END
   END
   ;
-  IF SIG (s.grip.full) AND NOT SIG(s.cmd.measured) THEN
+  IF SIG (s.grip.full) AND NOT SIG (s.cmd.measured) THEN
     state = 2
     RETURN
   END
   ;
-  IF SIG (s.grip.full) AND SIG (s.measure.ok) AND NOT SIG(rs7.tare.chg) THEN
+  IF SIG (s.grip.full) AND SIG (s.measure.ok) AND NOT SIG (rs7.tare.chg) THEN
     state = 3
     RETURN
   END
@@ -993,8 +1002,16 @@ N_INT300    "s.debug.mode|Debug mode"
     RETURN
   END
   ;
-  IF SIG(rs13.finish) THEN
+  IF SIG (rs13.finish) THEN
     state = 103
+    RETURN
+  END
+  ;
+  IF NOT SIG (s.grip.full); AND NOT SIG (s.cmd.pick) THEN
+    JMOVE #homyak
+    BREAK
+    SIGNAL -rs7.locked.zone
+    RETURN
   END
   ; Priority 7
   ;IF SIG (s.ot.placed) AND SIG (s.opt.placed) AND SIG (s.grip.full) THEN
@@ -1278,7 +1295,11 @@ N_INT300    "s.debug.mode|Debug mode"
   IF NOT EXISTREAL ("state") THEN
     state = 0
   END
-    ;
+  ;
+  IF NOT EXISTREAL ("etalon.id") THEN
+    etalon.id = -1
+  END
+  ;
   IF NOT EXISTREAL ("round.no") THEN
     round.no = 3
   END
@@ -1324,7 +1345,7 @@ N_INT300    "s.debug.mode|Debug mode"
   IF NOT EXISTREAL ("count.pick") THEN
     count.pick = 0
   END
-    ;
+  ;
   IF NOT EXISTREAL ("count.put") THEN
     count.put = 0
   END
@@ -1348,7 +1369,7 @@ N_INT300    "s.debug.mode|Debug mode"
   IF NOT EXISTREAL ("hmi.obj.id") THEN
     hmi.obj.id = 1
   END
-    ;
+  ;
   IF NOT EXISTREAL ("hmi.tool.no") THEN
     hmi.tool.no = 1
   END
@@ -1725,9 +1746,14 @@ N_INT300    "s.debug.mode|Debug mode"
   ;
   ; ETALON COMMAND
   ; String format:
-  ; ETALON;
+  ; ETALON;ID;
   ;
   IF INSTR (.$data[1] , "ETALON") THEN
+    ; Decode command
+    .$temp = $DECODE (.$data[1], ";",0)
+    .$temp = $DECODE (.$data[1], ";",1)
+    etalon.id
+    ;
     SIGNAL s.cmd.chk.etal
   END
   ;
@@ -1761,6 +1787,14 @@ N_INT300    "s.debug.mode|Debug mode"
   ;
   IF INSTR (.$data[1] , "STOP") THEN
     SIGNAL s.cmd.stop
+  END
+    ;
+  ; RESET COMMAND
+  ; String format:
+  ; RESET;
+  ;
+  IF INSTR (.$data[1] , "RESET") THEN
+    state = 0
   END
   ;
   .$data[1] = ""
@@ -1903,13 +1937,8 @@ N_INT300    "s.debug.mode|Debug mode"
 	; ALKU_RS007L_UPDATE
 	; @@@ HISTORY @@@
 	; @@@ INSPECTION @@@
-	; max.tare.count
-	; rs7.tare.chg
-	; s.grip.full
 	; s.cmd.pick
-	; $action
-	; >TY BITS(rs13.det.put[0], 8) > count.pick|0|1|1|0|0|0
-	; count.pick
+	; s.grip.full
 	; @@@ CONNECTION @@@
 	; KROSET R02
 	; 127.0.0.1
@@ -1987,6 +2016,7 @@ N_INT300    "s.debug.mode|Debug mode"
 	; 4:id1:F
 	; 4:id2:F
 	; 4:id4:F
+	; 4:id3:F
 	; Group:Positioner:5
 	; 5:pos.pick:F
 	; .temp 
@@ -2024,6 +2054,7 @@ N_INT300    "s.debug.mode|Debug mode"
 	; .work 
 	; .det.put 
 	; .finish 
+	; .tare.chg 
 	; 7:state103:F
 	; 7:state104:F
 	; .finish.ack 

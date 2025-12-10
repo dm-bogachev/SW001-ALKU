@@ -266,6 +266,15 @@ N_INT300    "s.debug.mode|Debug mode"
   object.length = 23.5
   ;
 .END
+.PROGRAM id3 ()
+  ; Object ID
+  object.id = 3
+  ; Working gripper
+  pg.gripper = 3
+  ; Max objects in output tare
+  max.tare.count = 77
+  spc.tare.count = 77
+.END
 .PROGRAM a.teach.stz ()
   ;
   TOOL tool.pin
@@ -445,59 +454,6 @@ N_INT300    "s.debug.mode|Debug mode"
   LMOVE #stz.wait
   LMOVE #pos.wait
   ;
-.END
-.PROGRAM a.teach.pos ()
-  ;
-  TOOL tool.pick[hmi.gripper]
-  ;
-  POINT .temp = #pos.point[hmi.obj.id]
-  LMOVE .temp + TRANS (10, 0, 50)
-  LMOVE .temp + TRANS (10, 0, 20)
-  BREAK
-  LMOVE #pos.point[hmi.obj.id] ; *** TEACH POINT ***
-  BREAK
-  TWAIT 0.5
-  POINT .temp = #pos.point[hmi.obj.id]
-  LMOVE .temp + TRANS (10, 0, 20)
-  LMOVE .temp + TRANS (0, 0, 50)
-  BREAK
-  TWAIT 0.5
-;
-.END
-.PROGRAM pos.put ()
-  ;
-  .$temp = "Put detail to positioner (ID:" + $ENCODE (object.id) + ")"
-  CALL log (.$temp)
-  ;
-  SPEED 100 ALWAYS
-  ACCURACY 100 ALWAYS
-  TOOL tool.pick[current.gripper]
-  ;
-  POINT .temp = #pos.point[object.id]
-  ACCURACY 20
-  LMOVE #pos.wait
-  ;
-  LMOVE .temp + TRANS (10, 0, 50)
-  ACCURACY 5
-  LMOVE .temp + TRANS (10, 0, 20)
-  BREAK
-  ;
-  SPEED 250 MM/S
-  ACCURACY 0.02
-  LMOVE #pos.point[object.id]
-  BREAK
-  PULSE grip.unclamp
-  TWAIT 0.5
-  SIGNAL -s.grip.full
-  count.put = count.put + 1
-  BITS rs13.det.put[0], 8 = count.put
-  CALL log("Detail counter:" + $ENCODE(count.put))
-  $action = "WaitForPick"
-  ;
-  LMOVE .temp + TRANS (0, 0, 200)
-  ;SIGNAL rs13.det.put
-  LMOVE #pos.wait
-  ;LMOVE #stz.wait
 .END
 .PROGRAM load.opt.data ()
   ;
@@ -1329,11 +1285,64 @@ N_INT300    "s.debug.mode|Debug mode"
   LMOVE ot.point[.i, .j] + TRANS (0, 0, 200)
   
 .END
+.PROGRAM a.teach.pos ()
+  ;
+  TOOL tool.pick[hmi.gripper]
+  ;
+  POINT .temp = #pos.point[hmi.obj.id]
+  LMOVE .temp + TRANS (10, 0, 50)
+  LMOVE .temp + TRANS (10, 0, 20)
+  BREAK
+  LMOVE #pos.point[hmi.obj.id] ; *** TEACH POINT ***
+  BREAK
+  TWAIT 0.5
+  POINT .temp = #pos.point[hmi.obj.id]
+  LMOVE .temp + TRANS (10, 0, 20)
+  LMOVE .temp + TRANS (0, 0, 50)
+  BREAK
+  TWAIT 0.5
+;
+.END
+.PROGRAM pos.put ()
+  ;
+  .$temp = "Put detail to positioner (ID:" + $ENCODE (object.id) + ")"
+  CALL log (.$temp)
+  ;
+  SPEED 100 ALWAYS
+  ACCURACY 100 ALWAYS
+  TOOL tool.pick[current.gripper]
+  ;
+  POINT .temp = #pos.point[object.id]
+  ACCURACY 20
+  LMOVE #pos.wait
+  ;
+  LMOVE .temp + TRANS (10, 0, 50)
+  ACCURACY 5
+  LMOVE .temp + TRANS (10, 0, 20)
+  BREAK
+  ;
+  SPEED 250 MM/S
+  ACCURACY 0.02
+  LMOVE #pos.point[object.id]
+  BREAK
+  PULSE grip.unclamp
+  TWAIT 0.5
+  SIGNAL -s.grip.full
+  count.put = count.put + 1
+  BITS rs13.det.put[0], 8 = count.put
+  CALL log("Detail counter:" + $ENCODE(count.put))
+  $action = "WaitForPick"
+  ;
+  LMOVE .temp + TRANS (0, 0, 200)
+  ;SIGNAL rs13.det.put
+  LMOVE #pos.wait
+  ;LMOVE #stz.wait
+.END
 .PROGRAM state0 () ; Initialization of parameters
   ;
   CALL log ("State 0: Program reset. Initialization of parameters")
   SIGNAL -s.opt.placed, -s.ot.placed, -s.grip.full
-  SIGNAL -s.cmd.start, -s.cmd.pick, -s.cmd.finish, -rs13.finish
+  SIGNAL -s.cmd.start, -s.cmd.pick, -s.cmd.finish, -rs13.finish, -s.cmd.stop
   count.put = 0
   BITS rs13.det.put[0], 8 = count.put
   count.ot = 0
@@ -1983,6 +1992,14 @@ N_INT300    "s.debug.mode|Debug mode"
   IF INSTR (.$data[1] , "STOP") THEN
     SIGNAL s.cmd.stop
   END
+    ;
+  ; RESET COMMAND
+  ; String format:
+  ; RESET;
+  ;
+  IF INSTR (.$data[1] , "RESET") THEN
+    state = 0
+  END
   ;
   .$data[1] = ""
 .END
@@ -2559,6 +2576,8 @@ N_INT300    "s.debug.mode|Debug mode"
 	; s.grip.full
 	; count.put
 	; rs7.locked.zone
+	; detail.count
+	; s.cmd.stop
 	; @@@ CONNECTION @@@
 	; KROSET R01
 	; 127.0.0.1
@@ -2568,6 +2587,7 @@ N_INT300    "s.debug.mode|Debug mode"
 	; 1:id1:F
 	; 1:id2:F
 	; 1:id4:F
+	; 1:id3:F
 	; Group:STZ:2
 	; 2:a.teach.stz:F
 	; .plb 
@@ -2604,19 +2624,13 @@ N_INT300    "s.debug.mode|Debug mode"
 	; .ym 
 	; .pick 
 	; .c 
-	; Group:Positioner:3
-	; 3:a.teach.pos:F
-	; .temp 
-	; 3:pos.put:F
-	; .temp 
-	; .det.put 
-	; Group:OPT:4
-	; 4:load.opt.data:F
+	; Group:OPT:3
+	; 3:load.opt.data:F
 	; .id 
 	; .temp 
-	; 4:opt.table:F
+	; 3:opt.table:F
 	; .id 
-	; 4:opt.take:F
+	; 3:opt.take:F
 	; .i 
 	; .j 
 	; .opt.take.safe 
@@ -2624,13 +2638,13 @@ N_INT300    "s.debug.mode|Debug mode"
 	; .ct2 
 	; .mid.point 
 	; .opt.put 
-	; 4:a.teach.opt:F
+	; 3:a.teach.opt:F
 	; .i 
 	; .j 
-	; 4:a.test.opt:F
+	; 3:a.test.opt:F
 	; .i 
 	; .j 
-	; 4:opt.return:F
+	; 3:opt.return:F
 	; .i 
 	; .j 
 	; .post.tare.in 
@@ -2638,29 +2652,29 @@ N_INT300    "s.debug.mode|Debug mode"
 	; .ct2 
 	; .mid.point 
 	; .put.stz 
-	; Group:Gripper:5
-	; 5:a.test.gripper:F
-	; 5:gripper.pick:F
+	; Group:Gripper:4
+	; 4:a.test.gripper:F
+	; 4:gripper.pick:F
 	; .gripper.no 
 	; .temp 
-	; 5:gripper.put:F
+	; 4:gripper.put:F
 	; .gripper.no 
 	; .temp 
-	; 5:a.teach.gripper:F
+	; 4:a.teach.gripper:F
 	; .temp 
-	; Group:OT:6
-	; 6:a.test.ot:F
+	; Group:OT:5
+	; 5:a.test.ot:F
 	; .i 
 	; .j 
-	; 6:a.teach.ot:F
+	; 5:a.teach.ot:F
 	; .i 
 	; .j 
-	; 6:load.ot.data:F
+	; 5:load.ot.data:F
 	; .id 
 	; .temp 
-	; 6:ot.table:F
+	; 5:ot.table:F
 	; .id 
-	; 6:ot.take:F
+	; 5:ot.take:F
 	; .i 
 	; .j 
 	; .ot.take.safe 
@@ -2669,7 +2683,7 @@ N_INT300    "s.debug.mode|Debug mode"
 	; .mid.point 
 	; .ot.put 
 	; .tare.ack 
-	; 6:ot.return:F
+	; 5:ot.return:F
 	; .i 
 	; .j 
 	; .post.tare.out 
@@ -2677,6 +2691,12 @@ N_INT300    "s.debug.mode|Debug mode"
 	; .ct2 
 	; .mid.point 
 	; .put.outpal 
+	; Group:Positioner:6
+	; 6:a.teach.pos:F
+	; .temp 
+	; 6:pos.put:F
+	; .temp 
+	; .det.put 
 	; Group:States:7
 	; 7:state0:F
 	; .finish 
@@ -2707,6 +2727,7 @@ N_INT300    "s.debug.mode|Debug mode"
 	; .pos.wait 
 	; .i 
 	; .j 
+	; .work 
 	; 7:state6:F
 	; .current.pos 
 	; .stz.wait 

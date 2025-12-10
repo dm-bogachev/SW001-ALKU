@@ -235,6 +235,14 @@ class Background(Thread):
             return False
         return True
 
+    def reset_process(self):
+        command = "RESET;"
+        if not self.send_command_to_robot(command, "RS013N", RS013N_API_URL):
+            return False
+        if not self.send_command_to_robot(command, "RS007L", RS007L_API_URL):
+            return False
+        return True
+
     def check_etalon(self, etalon_id: int):
         command = f"Etalon;{etalon_id};"
         if not self.send_command_to_robot(command, "RS007L", RS007L_API_URL):

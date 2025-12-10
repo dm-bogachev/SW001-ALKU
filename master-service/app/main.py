@@ -136,6 +136,17 @@ def stop_process():
                 }
     return {"Status": "OK"}
 
+@app.post("/reset")
+def reset_process():
+    """ Сброс процесса """
+    logger.debug("Запрос /master/reset")
+    if not master.reset_process():
+        return {"Status": "Failed",
+                "Code": -1,
+                "Reason": "Error in sending to robot"
+                }
+    return {"Status": "OK"}
+
 @app.post("/check_etalon")
 def check_etalon(etalon_id: int):
     """ Проверка эталона """
