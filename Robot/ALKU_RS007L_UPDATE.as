@@ -697,6 +697,7 @@ N_INT300    "s.debug.mode|Debug mode"
 .PROGRAM id1 () ; 312.229.002
   ; Object ID
   object.id = 1
+  etalon.id = 1 ; Can be object.id <> etalon.id
   ; Working gripper
   pg.gripper = 2
   ; Max objects in output tare
@@ -709,6 +710,7 @@ N_INT300    "s.debug.mode|Debug mode"
 .PROGRAM id2 () ; 0401.17.02.023-02
   ; Object ID
   object.id = 2
+  etalon.id = 2 ; Can be object.id <> etalon.id
   ; Working gripper
   pg.gripper = 2
   ; Max objects in output tare
@@ -721,6 +723,7 @@ N_INT300    "s.debug.mode|Debug mode"
 .PROGRAM id3 () ; 312.229.001
   ; Object ID
   object.id = 3
+  etalon.id = 3 ; Can be object.id <> etalon.id
   ; Working gripper
   pg.gripper = 3
   ; Max objects in output tare
@@ -733,6 +736,7 @@ N_INT300    "s.debug.mode|Debug mode"
 .PROGRAM id4 () ; 440.00.026
   ; Object ID
   object.id = 4
+  etalon.id = 4 ; Can be object.id <> etalon.id
   ; Working gripper
   pg.gripper = 1
   ; Max objects in output tare
@@ -745,6 +749,7 @@ N_INT300    "s.debug.mode|Debug mode"
 .PROGRAM id5 () ; 440.00.111
   ; Object ID
   object.id = 5
+  etalon.id = 5 ; Can be object.id <> etalon.id
   ; Working gripper
   pg.gripper = 1
   ; Max objects in output tare
@@ -757,6 +762,7 @@ N_INT300    "s.debug.mode|Debug mode"
 .PROGRAM id6 () ; 0401.28.02.063
   ; Object ID
   object.id = 6
+  etalon.id = 6 ; Can be object.id <> etalon.id
   ; Working gripper
   pg.gripper = 1
   ; Max objects in output tare
@@ -960,7 +966,7 @@ N_INT300    "s.debug.mode|Debug mode"
 .END
 .PROGRAM state5 ()
   CALL log ("State 5: Check etalon")
-  CALL etalon.measure(99)
+  CALL etalon.measure(etalon.id)
   state = 101
 .END
 .PROGRAM state6 ()
@@ -2154,6 +2160,7 @@ N_INT300    "s.debug.mode|Debug mode"
 	; Group:Initialization:10
 	; 10:set.vars.pc:B
 	; .i 
+	; .n 
 	; 10:set.io.pc:B
 	; .work 
 	; .tare.ack 
