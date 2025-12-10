@@ -4,12 +4,26 @@
         "DisplayedFrame": "REDIS_PROCESSED_FRAME_KEY"
     },
     "Models": {
+        "440.00.026": {
+            "ModelName": "440.00.026",
+            "ModelFileName": "model_440.00.026.pt",
+            "ConfidenceThreshold": 0.5,
+            "ModelType": "yolo-pose",
+            "ModelProcessor": "proc_440.00.026.py"
+        },
         "312.229.002": {
             "ModelName": "312.229.002",
             "ModelFileName": "model_312.229.002.pt",
             "ConfidenceThreshold": 0.5,
             "ModelType": "yolo-pose",
             "ModelProcessor": "proc_312.229.002.py"
+        },
+        "312.229.001": {
+            "ModelName": "312.229.001",
+            "ModelFileName": "model_312.229.001.pt",
+            "ConfidenceThreshold": 0.5,
+            "ModelType": "yolo-detect",
+            "ModelProcessor": "proc_312.229.001.py"
         },
         "0401.17.02.023": {
             "ModelName": "0401.17.02.023",
@@ -18,11 +32,18 @@
             "ModelType": "yolo-pose",
             "ModelProcessor": "proc_0401.17.02.023.py"
         },
+        "0401.28.02.063": {
+            "ModelName": "0401.28.02.063",
+            "ModelFileName": "model_0401.28.02.063.pt",
+            "ConfidenceThreshold": 0.5,
+            "ModelType": "yolo-pose",
+            "ModelProcessor": "proc_0401.28.02.063.py"
+        },
         "440.00.111": {
             "ModelName": "440.00.111",
             "ModelFileName": "model_440.00.111.pt",
             "ConfidenceThreshold": 0.5,
-            "ModelType": "yolo-detect",
+            "ModelType": "yolo-pose",
             "ModelProcessor": "proc_440.00.111.py"
         }
     },
@@ -56,7 +77,7 @@
     },
     "Process": {
         "ProcessingDelay": 0.0,
-        "LastModel": "440.00.111",
+        "LastModel": "312.229.002",
         "FirstObjectCriteria": "Probability"
     },
     "IO": {
