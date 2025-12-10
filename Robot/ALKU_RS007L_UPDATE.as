@@ -700,37 +700,25 @@ N_INT300    "s.debug.mode|Debug mode"
   ; Working gripper
   pg.gripper = 2
   ; Max objects in output tare
-  max.tare.count = 126
+  max.tare.count = 8;147
   spc.tare.count = 50
-  ;
+  ; Object length
   object.length = 27.5
   ;
 .END
-.PROGRAM id2 () ; 312.229.001
-	; Object ID
-	object.id = 2
-	; Working gripper
-	pg.gripper = 3
-	; Max objects in output tare
-	max.tare.count = 77
-	spc.tare.count = 77
-	;
-	detail.length = 12.3
-	;
+.PROGRAM id2 () ; 0401.17.02.023-02
+  ; Object ID
+  object.id = 2
+  ; Working gripper
+  pg.gripper = 2
+  ; Max objects in output tare
+  max.tare.count = 84
+  spc.tare.count = 50
+  ; Object length
+  object.length = 40
+  ;
 .END
-.PROGRAM id4 () ; 440.00.026
-	; Object ID
-	object.id = 4
-	; Working gripper
-	pg.gripper = 1
-	; Max objects in output tare
-	max.tare.count = 168
-	spc.tare.count = 50
-	;
-	detail.length = 23.5
-	;
-.END
-.PROGRAM id3 ()
+.PROGRAM id3 () ; 312.229.001
   ; Object ID
   object.id = 3
   ; Working gripper
@@ -738,6 +726,45 @@ N_INT300    "s.debug.mode|Debug mode"
   ; Max objects in output tare
   max.tare.count = 77
   spc.tare.count = 77
+  ; Object length
+  object.length = 40
+  ;
+.END
+.PROGRAM id4 () ; 440.00.026
+  ; Object ID
+  object.id = 4
+  ; Working gripper
+  pg.gripper = 1
+  ; Max objects in output tare
+  max.tare.count = 8;168
+  spc.tare.count = 50
+  ; Object length
+  object.length = 23.5
+  ;
+.END
+.PROGRAM id5 () ; 440.00.111
+  ; Object ID
+  object.id = 5
+  ; Working gripper
+  pg.gripper = 1
+  ; Max objects in output tare
+  max.tare.count = 273
+  spc.tare.count = 50
+  ; Object length
+  object.length = 13.5
+  ;
+.END
+.PROGRAM id6 () ; 0401.28.02.063
+  ; Object ID
+  object.id = 6
+  ; Working gripper
+  pg.gripper = 1
+  ; Max objects in output tare
+  max.tare.count = 126
+  spc.tare.count = 50
+  ; Object length
+  object.length = 28.5
+  ;
 .END
 .PROGRAM pos.pick ()
   ;
@@ -1109,33 +1136,64 @@ N_INT300    "s.debug.mode|Debug mode"
 .END
 .PROGRAM pg.select ()
   SCASE $pg.name OF
-    SVALUE "440.00.026":
+    SVALUE "312.229.002":
       CASE detail.spec OF
         VALUE 1:
-          CALL id4; id4_1
+          CALL id1; idX_1
         ANY :
           $pg.name = "NULL"
       END
       ;
-    SVALUE "312.229.002":
+    SVALUE "0401.17.02.023":
       CASE detail.spec OF
         VALUE 1:
-          CALL id1; id1_1
+          CALL id2; idX_1
+        VALUE 2:
+          CALL id2
         ANY :
           $pg.name = "NULL"
       END
+      ;
     SVALUE "312.229.001":
       CASE detail.spec OF
         VALUE 1:
-          CALL id3; id3_1
+          CALL id3; idX_1
         ANY :
           $pg.name = "NULL"
       END
+      ;
+    SVALUE "440.00.026":
+      CASE detail.spec OF
+        VALUE 1:
+          CALL id4; idX_1
+        ANY :
+          $pg.name = "NULL"
+      END
+      ;
+    SVALUE "440.00.111":
+      CASE detail.spec OF
+        VALUE 1:
+          CALL id5; idX_1
+        VALUE 2:
+          CALL id5
+        ANY :
+          $pg.name = "NULL"
+      END
+      ;
+    SVALUE "0401.28.02.063":
+      CASE detail.spec OF
+        VALUE 1:
+          CALL id6; idX_1
+        ANY :
+          $pg.name = "NULL"
+      END
+      ;
+      ;
     ANY :
       $pg.name = "NULL"
       RETURN
   END
-    ;
+  ;
 .END
 .PROGRAM a.main ()
   ;
@@ -2035,8 +2093,10 @@ N_INT300    "s.debug.mode|Debug mode"
 	; Group:Objects:4
 	; 4:id1:F
 	; 4:id2:F
-	; 4:id4:F
 	; 4:id3:F
+	; 4:id4:F
+	; 4:id5:F
+	; 4:id6:F
 	; Group:Positioner:5
 	; 5:pos.pick:F
 	; .temp 
@@ -2075,6 +2135,7 @@ N_INT300    "s.debug.mode|Debug mode"
 	; .det.put 
 	; .finish 
 	; .tare.chg 
+	; .locked.zone 
 	; 7:state103:F
 	; 7:state104:F
 	; .finish.ack 
@@ -2447,8 +2508,8 @@ ot.put[20,7] -465.937042 366.299408 -8.900530 -85.560913 2.096370 85.437073
 .END
 .JOINTS
 #homyak 13.751370 -37.185059 -123.196098 -0.000880 -93.838348 7.315490
-#pos.point[1] -15.739016 35.440067 -67.625504 20.556740 -71.928864 121.853294
-#pos.point[4] -21.233936 18.726564 -91.757652 16.669336 -62.311707 127.879379
+#pos.point[1] -15.713965 35.412598 -67.587135 20.550589 -72.001648 121.858429
+#pos.point[4] -21.391262 18.831665 -91.545250 16.562988 -62.277378 126.711113
 #def.up.right 96.007767 47.274536 -59.097469 -0.012305 -71.775055 109.124313
 #def.up.left 80.256454 48.302124 -57.362587 -0.444727 -72.541359 125.001823
 #def.down.right 97.141563 30.778561 -86.732826 0.026370 -60.681606 107.972900
@@ -2510,7 +2571,7 @@ ot.put[20,7] -465.937042 366.299408 -8.900530 -85.560913 2.096370 85.437073
 #ot.orig -14.483058 19.727785 -99.746216 -0.044824 -60.321125 36.061401
 #ot.down.right 20.170900 20.364260 -104.057533 -0.065918 -55.349121 1.423169
 #ot.down.left -17.771484 19.531130 -105.070885 -0.043066 -55.206303 39.353027
-#pos.point[2] -17.911671 27.360720 -79.997231 20.971584 -67.197189 120.773483
+#pos.point[2] -17.943750 27.158203 -80.301994 20.984768 -67.090767 120.775612
 #pos.point[3] -14.039650 43.860355 -55.270287 18.441212 -76.891945 31.769417
 #machine.pos[1] -120.900589 34.739502 -129.595703 -148.167786 -76.755989 12.907508
 #machine.pos[2] -121.084282 32.413334 -129.866989 -147.280975 -75.143738 11.431330
@@ -2519,6 +2580,10 @@ ot.put[20,7] -465.937042 366.299408 -8.900530 -85.560913 2.096370 85.437073
 #et.mac.point[99] -116.219101 48.973022 -118.426521 -153.258408 -78.901749 15.482635
 #et.pos.point[99] 42.590481 27.213867 -85.643173 19.667286 -94.327240 -118.745911
 #defect.safe 109.729700 -37.185060 -123.196550 -0.002640 -93.839720 38.109040
+#pos.point[5] -27.062403 3.609741 -109.914543 17.690626 -57.549133 128.931549
+#pos.point[6] -24.266603 11.206055 -101.154915 16.572657 -59.693531 126.417831
+#machine.pos[5] -120.855339 35.200932 -129.580521 -148.420029 -76.970901 12.493420
+#machine.pos[6] -120.808754 34.013309 -129.783554 -148.398056 -76.117401 12.009513
 .END
 .REALS
 s.pr.tst.ot = 2249

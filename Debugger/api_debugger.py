@@ -10,7 +10,7 @@ class APIDebugger(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("API Debugger")
-        self.setMinimumSize(800, 600)
+        self.setMinimumSize(1024, 768)
         self.base_url = "http://127.0.0.1/api"
         self.setup_ui()
         
@@ -35,10 +35,14 @@ class APIDebugger(QMainWindow):
         product_layout = QHBoxLayout()
         product_layout.addWidget(QLabel("Product:"))
         self.product_combo = QComboBox()
-        self.product_combo.addItems(["440.00.026", "312.229.002", "312.229.001"])  # Add more products as needed
+        self.product_combo.addItems(["312.229.002", "0401.17.02.023", "312.229.001", "440.00.026", "440.00.111", "0401.28.02.063"])  # Add more products as needed
         product_layout.addWidget(self.product_combo)
         
-        # Product Count
+        product_layout.addWidget(QLabel("Spec:"))
+        self.product_spec = QSpinBox()
+        self.product_spec.setRange(1, 32)
+        product_layout.addWidget(self.product_spec)
+
         product_layout.addWidget(QLabel("Count:"))
         self.product_count = QSpinBox()
         self.product_count.setRange(1, 1000)
@@ -208,11 +212,13 @@ class APIDebugger(QMainWindow):
     def start_process(self):
         product_name = self.product_combo.currentText()
         product_count = self.product_count.value()
+        product_spec = self.spec.value()
         in_tare_ids = [int(tid.strip()) for tid in self.in_tare_ids.text().split(",") if tid.strip()]
         out_tare_ids = [int(tid.strip()) for tid in self.out_tare_ids.text().split(",") if tid.strip()]
         
         data = {
             "ProductName": product_name,
+            "ProductSpec": product_spec,
             "ProductCount": product_count,
             "InTareIDs": in_tare_ids,
             "OutTareIDs": out_tare_ids

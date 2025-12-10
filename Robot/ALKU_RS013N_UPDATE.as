@@ -236,22 +236,22 @@ N_INT300    "s.debug.mode|Debug mode"
   ; Working gripper
   pg.gripper = 2
   ; Max objects in output tare
-  max.tare.count = 126
+  max.tare.count = 8;147
   spc.tare.count = 50
-  ;
+  ; Object length
   object.length = 27.5
   ;
 .END
-.PROGRAM id2 () ; 312.229.001
+.PROGRAM id2 () ; 0401.17.02.023-02
   ; Object ID
   object.id = 2
   ; Working gripper
-  pg.gripper = 3
+  pg.gripper = 2
   ; Max objects in output tare
-  max.tare.count = 77
-  spc.tare.count = 77
-  ;
-  object.length = 12.3
+  max.tare.count = 84
+  spc.tare.count = 50
+  ; Object length
+  object.length = 40
   ;
 .END
 .PROGRAM id4 () ; 440.00.026
@@ -260,13 +260,13 @@ N_INT300    "s.debug.mode|Debug mode"
   ; Working gripper
   pg.gripper = 1
   ; Max objects in output tare
-  max.tare.count = 168
+  max.tare.count = 8;168
   spc.tare.count = 50
-  ;
+  ; Object length
   object.length = 23.5
   ;
 .END
-.PROGRAM id3 ()
+.PROGRAM id3 () ; 312.229.001
   ; Object ID
   object.id = 3
   ; Working gripper
@@ -274,6 +274,33 @@ N_INT300    "s.debug.mode|Debug mode"
   ; Max objects in output tare
   max.tare.count = 77
   spc.tare.count = 77
+  ; Object length
+  object.length = 40
+  ;
+.END
+.PROGRAM id5 () ; 440.00.111
+	; Object ID
+	object.id = 5
+	; Working gripper
+	pg.gripper = 1
+	; Max objects in output tare
+	max.tare.count = 273
+	spc.tare.count = 50
+	; Object length
+	object.length = 13.5
+	;
+.END
+.PROGRAM id6 () ; 0401.28.02.063
+	; Object ID
+	object.id = 6
+	; Working gripper
+	pg.gripper = 1
+	; Max objects in output tare
+	max.tare.count = 126
+	spc.tare.count = 50
+	; Object length
+	object.length = 28.5
+	;
 .END
 .PROGRAM a.teach.stz ()
   ;
@@ -1697,28 +1724,59 @@ CALL log ("START with Name:" + $pg.name + "-" + $ENCODE (detail.spec) + " Count:
 .END
 .PROGRAM pg.select ()
   SCASE $pg.name OF
-    SVALUE "440.00.026":
+    SVALUE "312.229.002":
       CASE detail.spec OF
         VALUE 1:
-          CALL id4; id4_1
+          CALL id1; idX_1
         ANY :
           $pg.name = "NULL"
       END
       ;
-    SVALUE "312.229.002":
+    SVALUE "0401.17.02.023":
       CASE detail.spec OF
         VALUE 1:
-          CALL id1; id1_1
+          CALL id2; idX_1
+        VALUE 2:
+          CALL id2
         ANY :
           $pg.name = "NULL"
       END
+      ;
     SVALUE "312.229.001":
       CASE detail.spec OF
         VALUE 1:
-          CALL id3; id3_1
+          CALL id3; idX_1
         ANY :
           $pg.name = "NULL"
       END
+      ;
+    SVALUE "440.00.026":
+      CASE detail.spec OF
+        VALUE 1:
+          CALL id4; idX_1
+        ANY :
+          $pg.name = "NULL"
+      END
+      ;
+    SVALUE "440.00.111":
+      CASE detail.spec OF
+        VALUE 1:
+          CALL id5; idX_1
+        VALUE 2:
+          CALL id5
+        ANY :
+          $pg.name = "NULL"
+      END
+      ;
+    SVALUE "0401.28.02.063":
+      CASE detail.spec OF
+        VALUE 1:
+          CALL id6; idX_1
+        ANY :
+          $pg.name = "NULL"
+      END
+      ;
+      ;
     ANY :
       $pg.name = "NULL"
       RETURN
@@ -2605,6 +2663,8 @@ CALL log ("START with Name:" + $pg.name + "-" + $ENCODE (detail.spec) + " Count:
 	; 1:id2:F
 	; 1:id4:F
 	; 1:id3:F
+	; 1:id5:F
+	; 1:id6:F
 	; Group:STZ:2
 	; 2:a.teach.stz:F
 	; .plb 
@@ -3092,10 +3152,12 @@ stz.frame 988.691956 -343.384247 109.344147 -173.771179 1.999711 -7.460209
 #stz.wait 153.260971 -5.244692 -116.123528 -0.757969 -68.765495 -38.446480
 #opt.put.safe 156.298325 -5.104900 -119.704788 -18.823099 -74.562843 -35.173141
 #opt.take.safe 30.699938 -18.854830 -127.388382 0.332227 -91.897202 24.509468
-#pos.point[1] 83.508499 43.291611 -103.723045 -31.864834 -39.713516 -35.560505
-#pos.point[4] 84.887558 50.425911 -87.949188 -23.932617 -48.571243 -45.915394
-#pos.point[2] 83.275742 47.011696 -96.549759 -29.782879 -42.747120 -38.074425
-#pos.point[3] 82.294281 41.237392 -110.080681 -36.038586 -37.402271 -28.378662
+#pos.point[1] 83.419533 43.293804 -103.687843 -31.818077 -39.768448 -35.524250
+#pos.point[4] 84.161888 50.764633 -87.928658 -28.182043 -49.606709 -42.339184
+#pos.point[2] 83.295212 46.977753 -96.418434 -29.699825 -42.884445 -38.210106
+#pos.point[3] 82.330032 41.277905 -109.930130 -35.967831 -37.481236 -28.508781
+#pos.point[5] 84.546371 57.979229 -72.567024 -26.345566 -53.911289 -46.767071
+#pos.point[6] 84.539223 54.666489 -79.643852 -26.222521 -53.463593 -45.489197
 .END
 .REALS
 release.tare = 1
