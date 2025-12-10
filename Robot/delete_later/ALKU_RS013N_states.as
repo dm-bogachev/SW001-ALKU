@@ -2134,15 +2134,43 @@ N_INT103    "s.tare.full|"
 	; 1:state1:F
 	; 1:state2:F
 	; 1:state3:F
+	; .current.pos 
+	; .stz.wait 
+	; .pos.wait 
+	; .i 
+	; .j 
 	; 1:state4:F
+	; .current.pos 
+	; .stz.wait 
+	; .pos.wait 
+	; .i 
+	; .j 
 	; 1:state5:F
+	; .current.pos 
+	; .stz.wait 
+	; .pos.wait 
+	; .i 
+	; .j 
 	; 1:state6:F
+	; .current.pos 
+	; .stz.wait 
+	; .pos.wait 
+	; .i 
+	; .j 
 	; 1:state7:F
+	; .current.pos 
+	; .stz.wait 
+	; .pos.wait 
 	; 1:state8:F
+	; .current.pos 
+	; .stz.wait 
+	; .pos.wait 
 	; 1:state9:F
 	; 1:state10:F
 	; 1:state25:F
 	; 1:state26:F
+	; .tare.chg 
+	; .work 
 	; Group:New:2
 	; 2:pos.put:F
 	; .pos 
@@ -2161,7 +2189,6 @@ N_INT103    "s.tare.full|"
 	; 2:load.opt.data:F
 	; .id 
 	; 2:ot.table:F
-	; .no 
 	; .id 
 	; 2:load.ot.data:F
 	; .id 
@@ -2213,14 +2240,6 @@ N_INT103    "s.tare.full|"
 	; 3:safe.home:F
 	; Group:Main:4
 	; 4:a.main:F
-	; .i 
-	; .j 
-	; .tare.chg 
-	; .working 
-	; .work 
-	; .current.pos 
-	; .stz.wait 
-	; .pos.wait 
 	; 4:pg.start:F
 	; .state 
 	; .keep.pick 

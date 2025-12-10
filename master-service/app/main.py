@@ -63,8 +63,8 @@ def reboot():
 @app.post("/start")
 def start_process(request: ProcessRequest):
     """ Запуск процесса """
-    logger.debug(f"Запрос /master/start ({request.ProductName}: {request.ProductCount}, {request.InTareIDs}, {request.OutTareIDs})")
-    if not master.start_process(request.ProductName, request.ProductCount, request.InTareIDs, request.OutTareIDs):
+    logger.debug(f"Запрос /master/start ({request.ProductName}-{request.ProductSpec}: {request.ProductCount}, {request.InTareIDs}, {request.OutTareIDs})")
+    if not master.start_process(request.ProductName, request.ProductSpec, request.ProductCount, request.InTareIDs, request.OutTareIDs):
         return {"Status": "Failed",
                 "Code": -1,
                 "Reason": "Error in sending to robot"
@@ -136,6 +136,17 @@ def stop_process():
                 }
     return {"Status": "OK"}
 
+@app.post("/reset")
+def reset_process():
+    """ Сброс процесса """
+    logger.debug("Запрос /master/reset")
+    if not master.reset_process():
+        return {"Status": "Failed",
+                "Code": -1,
+                "Reason": "Error in sending to robot"
+                }
+    return {"Status": "OK"}
+
 @app.post("/check_etalon")
 def check_etalon(etalon_id: int):
     """ Проверка эталона """
@@ -162,51 +173,6 @@ def set_speed(speed: int):
                 "Reason": "Error in sending to robot"
                 }
     return {"Status": "OK"}
-
-@app.post("/debug/intare_sensor_ok")
-def debug_intare_sensor_ok():
-    """ Отладка: сигнал сенсора входных тар """
-    logger.debug("Запрос /master/debug/intare_sensor_ok")
-    if not master.debug_intare_sensor_ok():
-        return {"Status": "Failed",
-                "Code": -1,
-                "Reason": "Error in sending to robot"
-                }
-    return {"Status": "OK"}
-
-@app.post("/debug/outtare_sensor_ok")
-def debug_outtare_sensor_ok():
-    """ Отладка: сигнал сенсора выходных тар """
-    logger.debug("Запрос /master/debug/outtare_sensor_ok")
-    if not master.debug_outtare_sensor_ok():
-        return {"Status": "Failed",
-                "Code": -1,
-                "Reason": "Error in sending to robot"
-                }
-    return {"Status": "OK"}
-
-@app.post("/debug/pneumo_open")
-def debug_pneumo_open():
-    """ Отладка: сигнал пневматики """
-    logger.debug("Запрос /master/debug/pneumo_open")
-    if not master.debug_pneumo_open():
-        return {"Status": "Failed",
-                "Code": -1,
-                "Reason": "Error in sending to robot"
-                }
-    return {"Status": "OK"}
-
-@app.post("/debug/pneumo_close")
-def debug_pneumo_close():
-    """ Отладка: сигнал пневматики """
-    logger.debug("Запрос /master/debug/pneumo_close")
-    if not master.debug_pneumo_close():
-        return {"Status": "Failed",
-                "Code": -1,
-                "Reason": "Error in sending to robot"
-                }
-    return {"Status": "OK"}
-
 
 @app.get("/data")
 def get_data():

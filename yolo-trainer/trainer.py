@@ -62,7 +62,7 @@ if __name__ == '__main__':
         epochs=2000,
         model=YOLO_BASE_MODEL,
         project=RUNS_DIR,
-        batch=0.9,
+        batch=0.9999,
     )
     print(results)
     results = model.val(

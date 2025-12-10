@@ -17,46 +17,6 @@ logger = config_logger("master-service/Master.py")
 
 class Background(Thread):
 
-    def debug_pick(self):
-        logger.debug("Вызов отладки: Pick")
-        resp = requests.post(f"{RS013N_API_URL}/send_pick_data?x=22&y=22&angle=0",
-                    headers={'accept': 'application/json'},
-                    timeout=1)  # Added timeout
-        if resp.status_code != 200:
-            logger.error(f"Ошибка отправки данных захвата на RS013N: {resp.text}")
-        else:
-            logger.info(f"Данные захвата успешно отправлены на RS013N: x=22, y=22, angle=0")
-
-    def debug_intare_sensor_ok(self):
-        logger.debug("Вызов отладки: InTareSensor=OK")
-        self.send_sensor_state("stockerintaresensor", True)
-
-    def debug_outtare_sensor_ok(self):
-        logger.debug("Вызов отладки: OutTareSensor=OK")
-        self.send_sensor_state("stockerouttaresensor", True)
-
-    def debug_pneumo_open(self):
-        logger.debug("Вызов отладки: PNEUMOOPEN")
-        command = f"PNEUMOOPEN;"
-        resp = requests.post(f"{RS013N_API_URL}/send_command?command={command}",
-                            headers={'accept': 'application/json'},
-                            timeout=1)  # Added timeout
-        if resp.status_code != 200:
-            logger.error(f"Ошибка отправки команды на RS013N: {resp.text}")
-        else:
-            logger.info(f"Команда отправлена на RS013N: {command}")
-
-    def debug_pneumo_close(self):
-        logger.debug("Вызов отладки: PNEUMOCLOSE")
-        command = f"PNEUMOCLOSE;"
-        resp = requests.post(f"{RS013N_API_URL}/send_command?command={command}",
-                            headers={'accept': 'application/json'},
-                            timeout=1)  # Added timeout
-        if resp.status_code != 200:
-            logger.error(f"Ошибка отправки команды на RS013N: {resp.text}")
-        else:
-            logger.info(f"Команда отправлена на RS013N: {command}")
-
     def __init__(self, data_collector: DataCollector):
         super().__init__()
         self.__stop_event = Event()
@@ -64,184 +24,168 @@ class Background(Thread):
         self.daemon = True  # не блокировать завершение процесса при незакрытом потоке
         self.first_pick = True
         self.attempts = 0
+        self.in_process = False
+        #
+        self.cycle_delay = 0.1  # Задержка между циклами основного потока в секундах
 
-    def start_process(self, ProductName: str, ProductCount: int, InTareIDs: list, OutTareIDs: list):
-        
+    def send_coordinates_to_robot(self, x: float, y: float, angle: float):
+        response = requests.post(f"{RS013N_API_URL}/send_pick_data?x={x}&y={y}&angle={angle}",
+                                headers={'accept': 'application/json'}, 
+                                timeout=1)
+        if response.status_code != 200:
+            logger.error(f"Ошибка отправки данных захвата на робота RS013N: {response.text}")
+            return False
+        logger.info(f"Данные захвата отправлены на робота RS013N: x={x}, y={y}, angle={angle}")
+        return True
+
+    def send_command_to_robot(self, command: str, robot_name: str, robot_api: str):
+        response = requests.post(f"{robot_api}/send_command?command={command}",
+                                headers={'accept': 'application/json'}, 
+                                timeout=1)
+        if response.status_code != 200:
+            logger.error(f"Ошибка отправки команды на робота {robot_name}: {response.text}")
+            return False
+        logger.info(f"Команда отправлена на робота {robot_name}: {command}")
+        return True
+
+    def get_io_state(self, address):
+        resp = requests.get(f"{IO_API_URL}/input?bit={address}", timeout=8)
+        response_data = resp.json()
+        if resp.status_code != 200:
+            logger.error(f"Ошибка получения состояния с IO-сервиса по адресу {address}: {resp.text}")
+            return False
+        if response_data["Value"] == 1:
+            logger.info(f"Состояние с IO-сервиса по адресу {address}: True")
+            return True
+        logger.info(f"Состояние с IO-сервиса по адресу {address}: False")
+        return False
+
+    def get_object_coordinates(self):
+        resp = requests.get(f"{CV_API_URL}/get_first_object", timeout=1)
+        if resp.status_code != 200:
+            logger.error(f"Ошибка получения координат объекта из CV-сервиса: {resp.text}")
+            return None
+        data = resp.json()
+        if data.get("Status") == "OK" and "Object" in data:
+            pick_object = data["Object"]
+            x = pick_object["pick_point"][0]
+            y = pick_object["pick_point"][1]
+            angle = pick_object["pick_angle"]
+            logger.info(f"Координаты объекта получены из CV-сервиса: x={x}, y={y}, angle={angle}")
+            return (x, y, angle)
+        else:
+            logger.error("Объект не обнаружен в CV-сервисе")
+            return None
+
+    def open_pneumatic(self):
+        resp = requests.post(f"{IO_API_URL}/tare_off", timeout=8)
+        if resp.status_code == 200:
+            logger.info("Команда на открытие пневматики отправлена на IO-сервис")
+            self.in_process = True
+        else:
+            logger.warning("Не удалось отправить команду на открытие пневматики на IO-сервис")
+                            
+    def close_pneumatic(self):
+        resp = requests.post(f"{IO_API_URL}/tare_on", timeout=8)
+        if resp.status_code == 200:
+            logger.info("Команда на закрытие пневматики отправлена на IO-сервис")
+            self.in_process = True
+        else:
+            logger.warning("Не удалось отправить команду на закрытие пневматики на IO-сервис")
+
+    def change_model(self, ProductName: str):
         response = requests.post(f"{CV_API_URL}/change_model?model_name={ProductName}", 
                               headers={'accept': 'application/json'}, 
                               timeout=1)
+
+        if response.status_code != 200:
+            logger.error(f"Ошибка смены модели в CV-сервисе: {response.text}")
+            return False
+        return True
+
+    def start_process(self, ProductName: str, ProductSpec: int, ProductCount: int, InTareIDs: list, OutTareIDs: list):
         
-
-        failed = False
-
-        command = f"START;{ProductName};{ProductCount};"
+        if not self.change_model(ProductName):
+            return False
+        
+        command = f"START;{ProductName};{ProductSpec};{ProductCount};"
         if InTareIDs:
             command += ",".join(str(id) for id in InTareIDs)
             command += ";"
+        else: 
+            return False
+        #
         if OutTareIDs:
             command += ",".join(str(id) for id in OutTareIDs)
             command += ";"
-        response = requests.post(f"{RS013N_API_URL}/send_command?command={command}", 
-                              headers={'accept': 'application/json'}, 
-                              timeout=1)  # Added timeout
-        if response.status_code != 200:
-            logger.error(f"Ошибка отправки команды на RS013N: {response.text}")
-            failed = True
         else:
-            logger.info(f"Команда отправлена на RS013N: {command}")
-
-        response = requests.post(f"{RS007L_API_URL}/send_command?command={command}", 
-                              headers={'accept': 'application/json'}, 
-                              timeout=1)  # Added timeout
-        if response.status_code != 200:
-            logger.error(f"Ошибка отправки команды на RS007L: {response.text}")
-            failed = True
-        else:
-            logger.info(f"Команда отправлена на RS007L: {command}")
+            return False
+        
+        if not self.send_command_to_robot(command, "RS013N", RS013N_API_URL):
+            return False
+        if not self.send_command_to_robot(command, "RS007L", RS007L_API_URL):
+            return False
 
         self.first_pick = True
         self.attempts = 0
-        return not failed
+        return True
 
     def set_speed(self, speed: int):
-        failed = False
         command = f"SPEED;{speed};"
-        response = requests.post(f"{RS013N_API_URL}/send_command?command={command}", 
-                              headers={'accept': 'application/json'}, 
-                              timeout=1)  # Added timeout
-        if response.status_code != 200:
-            logger.error(f"Ошибка отправки команды на RS013N: {response.text}")
-            failed = True
-        else:
-            logger.info(f"Команда отправлена на RS013N: {command}")
-
-        response = requests.post(f"{RS007L_API_URL}/send_command?command={command}", 
-                              headers={'accept': 'application/json'}, 
-                              timeout=1)  # Added timeout
-        if response.status_code != 200:
-            logger.error(f"Ошибка отправки команды на RS007L: {response.text}")
-            failed = True
-        else:
-            logger.info(f"Команда отправлена на RS007L: {command}")
-
-        return not failed
+        if not self.send_command_to_robot(command, "RS013N", RS013N_API_URL):
+            return False
+        if not self.send_command_to_robot(command, "RS007L", RS007L_API_URL):
+            return False
+        return True
 
     def send_sensor_state(self, SensorName: str, State: bool):
-        failed = False
-        command = f"Sensor;{SensorName};{State};"
-        response = requests.post(f"{RS013N_API_URL}/send_command?command={command}", 
-                              headers={'accept': 'application/json'}, 
-                              timeout=1)  # Added timeout
-        if response.status_code != 200:
-            logger.error(f"Ошибка отправки команды на RS013N: {response.text}")
-            failed = True
-        else:
-            logger.info(f"Команда отправлена на RS013N: {command}")
-
-        response = requests.post(f"{RS007L_API_URL}/send_command?command={command}", 
-                              headers={'accept': 'application/json'}, 
-                              timeout=1)  # Added timeout
-        if response.status_code != 200:
-            logger.error(f"Ошибка отправки команды на RS007L: {response.text}")
-            failed = True
-        else:
-            logger.info(f"Команда отправлена на RS007L: {command}")
-
-        return not failed
+        command = f"SENSOR;{SensorName};{State};"
+        if not self.send_command_to_robot(command, "RS013N", RS013N_API_URL):
+            return False
+        if not self.send_command_to_robot(command, "RS007L", RS007L_API_URL):
+            return False
+        return True
 
     def send_measurement_result(self, result: bool):
-        failed = False
-        command = f"Measurement;{result};"
-        response = requests.post(f"{RS007L_API_URL}/send_command?command={command}", 
-                              headers={'accept': 'application/json'}, 
-                              timeout=1)  # Added timeout
-        if response.status_code != 200:
-            logger.error(f"Ошибка отправки команды на RS007L: {response.text}")
-            failed = True
-        else:
-            logger.info(f"Команда отправлена на RS007L: {command}")
-
-        return not failed
+        return self.send_command_to_robot(f"MEASUREMENT;{result};", "RS007L", RS007L_API_URL)
 
     def pause_process(self):
-        failed = False
         command = "PAUSE;"
-        response = requests.post(f"{RS013N_API_URL}/send_command?command={command}", 
-                      headers={'accept': 'application/json'}, 
-                      timeout=1)  # Added timeout
-        if response.status_code != 200:
-            logger.error(f"Ошибка отправки команды на RS013N: {response.text}")
-            failed = True
-        response = requests.post(f"{RS007L_API_URL}/send_command?command={command}", 
-                      headers={'accept': 'application/json'}, 
-                      timeout=1)  # Added timeout
-        if response.status_code != 200:
-            logger.error(f"Ошибка отправки команды на RS007L: {response.text}")
-            failed = True
-        else:
-            logger.info(f"Команда отправлена на RS007L: {command}")
-
-        return not failed
+        if not self.send_command_to_robot(command, "RS013N", RS013N_API_URL):
+            return False
+        if not self.send_command_to_robot(command, "RS007L", RS007L_API_URL):
+            return False
+        return True
 
     def resume_process(self):
-        failed = False
         command = "RESUME;"
-        response = requests.post(f"{RS013N_API_URL}/send_command?command={command}",
-                      headers={'accept': 'application/json'},   
-                      timeout=1)  # Added timeout
-        if response.status_code != 200:
-            logger.error(f"Ошибка отправки команды на RS013N: {response.text}")
-            failed = True
-        else:
-            logger.info(f"Команда отправлена на RS013N: {command}")
-
-        response = requests.post(f"{RS007L_API_URL}/send_command?command={command}",
-                      headers={'accept': 'application/json'},
-                      timeout=1)  # Added timeout
-        if response.status_code != 200:
-            logger.error(f"Ошибка отправки команды на RS007L: {response.text}")
-            failed = True
-        else:
-            logger.info(f"Команда отправлена на RS007L: {command}")
-
-        return not failed
+        if not self.send_command_to_robot(command, "RS013N", RS013N_API_URL):
+            return False
+        if not self.send_command_to_robot(command, "RS007L", RS007L_API_URL):
+            return False
+        return True
 
     def stop_process(self):
-        failed = False
         command = "STOP;"
-        response = requests.post(f"{RS013N_API_URL}/send_command?command={command}",
-                      headers={'accept': 'application/json'},
-                      timeout=1)  # Added timeout
-        if response.status_code != 200:
-            logger.error(f"Ошибка отправки команды на RS013N: {response.text}")
-            failed = True
-        else:
-            logger.info(f"Команда отправлена на RS013N: {command}")
+        if not self.send_command_to_robot(command, "RS013N", RS013N_API_URL):
+            return False
+        if not self.send_command_to_robot(command, "RS007L", RS007L_API_URL):
+            return False
+        return True
 
-        response = requests.post(f"{RS007L_API_URL}/send_command?command={command}",
-                      headers={'accept': 'application/json'},
-                      timeout=1)  # Added timeout
-        if response.status_code != 200:
-            logger.error(f"Ошибка отправки команды на RS007L: {response.text}")
-            failed = True
-        else:
-            logger.info(f"Команда отправлена на RS007L: {command}")
-
-        return not failed
+    def reset_process(self):
+        command = "RESET;"
+        if not self.send_command_to_robot(command, "RS013N", RS013N_API_URL):
+            return False
+        if not self.send_command_to_robot(command, "RS007L", RS007L_API_URL):
+            return False
+        return True
 
     def check_etalon(self, etalon_id: int):
-        failed = False
         command = f"Etalon;{etalon_id};"
-        response = requests.post(f"{RS007L_API_URL}/send_command?command={command}",
-                      headers={'accept': 'application/json'},
-                      timeout=1)  # Added timeout
-        if response.status_code != 200:
-            logger.error(f"Ошибка отправки команды на RS007L: {response.text}")
-            failed = True
-        else:
-            logger.info(f"Команда отправлена на RS007L: {command}")
-
-        return not failed
+        if not self.send_command_to_robot(command, "RS007L", RS007L_API_URL):
+            return False
+        return True
 
     def stop(self):
         """Корректно остановить поток из внешнего кода."""
@@ -250,172 +194,88 @@ class Background(Thread):
     def run(self):
         logger.info(f'Запуск потока сбора данных')
         on_action = False
+        last_rs13n_action = ""
+        last_rs007l_action = ""
         while not self.__stop_event.is_set():
             try:
-                #logger.debug("Проверка команд от роботов")
-                # безопасно получить action (избегаем .lower() у None)
                 rs13_action = self.collector.rs013n["action"]
                 rs7_action = self.collector.rs007l["action"]
 
-                #logger.debug(f"RS013N action: {rs13_action}")
-                #logger.debug(f"RS007L action: {rs7_action}")
+                if rs13_action != last_rs13n_action:
+                    logger.info(f"Новый запрос от робота RS013N: {rs13_action}")
+                    last_rs13n_action = rs13_action
+                if rs7_action != last_rs007l_action:
+                    logger.info(f"Новый запрос от робота RS007L: {rs7_action}")
+                    last_rs007l_action = rs7_action
 
                 if rs13_action.lower() == "waitpneumaticclose":
-                    while True:
-                        rs13_action = self.collector.rs013n["action"]
-                        if rs13_action.lower() != "waitpneumaticclose":
-                            break
-                        logger.info("Команда на закрытие пневматики получена")
-                        resp = requests.post(f"{IO_API_URL}/tare_on", timeout=8)
-                        if resp.status_code == 200:
-                            logger.info("Команда на взвешивание отправлена на IO-сервис")
-                            on_action = True
-                        else:
-                            logger.warning("Не удалось отправить команду на взвешивание на IO-сервис")
-                        resp = requests.get(f"{IO_API_URL}/input?bit=1", timeout=8)
-                        response_data = resp.json()
-                        value = response_data["Value"] 
-                        if resp.status_code == 200 and value  == 1:
-                            logger.info("Пневматика успешно закрыта (сигнал с IO-сервиса)")
-                        else:
-                            logger.warning("Пневматика не закрыта (отсутствует сигнал 1 с IO-сервиса)")
-                            logger.debug(resp)
-                            logger.debug(response_data)
-                            logger.debug(value)
-                            logger.debug(resp.status_code)
-                            time.sleep(2)
-                            continue
-                        #
-                        resp = requests.get(f"{IO_API_URL}/input?bit=7", timeout=8)
-                        response_data = resp.json()
-                        value = response_data["Value"] 
-                        if resp.status_code == 200 and int(value) == 1:
-                            logger.info("Пневматика успешно закрыта (сигнал с IO-сервиса)")
-                        else:
-                            logger.warning("Пневматика не закрыта (отсутствует сигнал 7 с IO-сервиса)")
-                            logger.debug(response_data)
-                            logger.debug(resp.status_code)
-                            time.sleep(2)
-                            continue
-
-                        command = f"PNEUMOCLOSE;"
-                        resp = requests.post(f"{RS013N_API_URL}/send_command?command={command}",
-                                            headers={'accept': 'application/json'},
-                                            timeout=1)  # Added timeout
-                        if resp.status_code != 200:
-                            logger.error(f"Ошибка отправки команды на RS013N: {resp.text}")
-                        else:
-                            logger.info(f"Команда отправлена на RS013N: {command}")
-                        #time.sleep(5)
+                    self.process_pneumatic_close()
                 
                 if rs13_action.lower() == "waitpneumaticopen":
-                    while True:
-                        logger.info("Команда на открытие пневматики получена")
-                        rs13_action = self.collector.rs013n["action"]
-                        if rs13_action.lower() != "waitpneumaticopen":
-                            break
-                        resp = requests.post(f"{IO_API_URL}/tare_off", timeout=8)
-                        if resp.status_code == 200:
-                            logger.info("Команда на снятие взвешивания отправлена на IO-сервис")
-                            on_action = True
-                        else:
-                            logger.warning("Не удалось отправить команду на снятие взвешивания на IO-сервис")
-                            
-                        resp = requests.get(f"{IO_API_URL}/input?bit=0", timeout=8)
-                        response_data = resp.json()
-                        value = response_data["Value"] 
-                        if resp.status_code == 200 and value  == 1:
-                            logger.info("Пневматика успешно открыта (сигнал с IO-сервиса)")
-                        else:
-                            logger.warning("Пневматика не открыта (отсутствует сигнал 0 с IO-сервиса)")
-                            logger.debug(resp)
-                            logger.debug(response_data)
-                            logger.debug(value)
-                            logger.debug(resp.status_code)
-                            time.sleep(1)
-                            continue
-                        resp = requests.get(f"{IO_API_URL}/input?bit=6", timeout=8)
-                        response_data = resp.json()
-                        value = response_data["Value"] 
-                        if resp.status_code == 200 and int(value)  == 1:
-                            logger.info("Пневматика успешно закрыта (сигнал с IO-сервиса)")
-                        else:
-                            logger.warning("Пневматика не закрыта (отсутствует сигнал 6 с IO-сервиса)")
-                            logger.debug(response_data)
-                            logger.debug(resp.status_code)
-                            time.sleep(1)
-                            continue
-                        command = f"PNEUMOOPEN;"
-                        resp = requests.post(f"{RS013N_API_URL}/send_command?command={command}",
-                                            headers={'accept': 'application/json'},
-                                            timeout=1)  # Added timeout
-                        if resp.status_code != 200:
-                            logger.error(f"Ошибка отправки команды на RS013N: {resp.text}")
-                        else:
-                            logger.info(f"Команда отправлена на RS013N: {command}")
-                        on_action = False
+                    self.process_pneumatic_open()
                 
-                if rs13_action.lower() == "waitposfree":
-                    resp = requests.get(f"{IO_API_URL}/input?bit=9", timeout=8)
-                    response_data = resp.json()
-                    value = response_data["Value"] 
-                    if resp.status_code == 200 and value  == 1:
-                        logger.warning("Деталь на позиционере. Ожидай")
-                    else:
-                        command = "ALLOWPUT;"
-                        logger.info("Датчик свободен")
-                        resp = requests.post(f"{RS013N_API_URL}/send_command?command={command}",
-                                            headers={'accept': 'application/json'},
-                                            timeout=1)  # Added timeout
-                        if resp.status_code != 200:
-                            logger.error(f"Ошибка отправки команды на RS013N: {resp.text}")
-                        else:
-                            logger.info(f"Команда отправлена на RS013N: {command}")
+                if rs13_action.lower() == "waitposfree" or rs7_action.lower() == "waitposfull":
+                    self.process_check_positioner()
 
-                if rs13_action.lower() == "waitforpick":
-                    
-                    ###
-                    resp = requests.get(f"{CV_API_URL}/get_first_object", timeout=8)
-                    if resp.status_code == 200:
-                        if self.first_pick:
-                            self.first_pick = False
-                            #time.sleep(2)
-                            continue
-                        data = resp.json()
-                        if data.get("Status") == "OK" and "Object" in data:
-                            self.attempts = 0
-                            pick_object = data["Object"]
-                            x = pick_object["pick_point"][0]
-                            y = pick_object["pick_point"][1]
-                            angle = pick_object["pick_angle"]
-                            logger.info(f"Отправка данных захвата на RS013N: x={x}, y={y}, angle={angle}")
-                            resp = requests.post(f"{RS013N_API_URL}/send_pick_data?x={x}&y={y}&angle={angle}",
-                                        headers={'accept': 'application/json'},
-                                        timeout=1)  # Added timeout
-                            if resp.status_code != 200:
-                                logger.error(f"Ошибка отправки данных захвата на RS013N: {resp.text}")
-                            else:
-                                logger.info(f"Данные захвата успешно отправлены на RS013N: x={x}, y={y}, angle={angle}")
-                            time.sleep(2)
-                        else:
-                            self.attempts = self.attempts + 1
-                            logger.error("Объект не обнаружен, парниша")
-                            if self.attempts  <= 4:
-                                command = f"NOPICK;"
-                                #command = "ffff"
-                                logger.warning("Нет доступных объектов для захвата от CV-сервиса")
-                                resp = requests.post(f"{RS013N_API_URL}/send_command?command={command}",
-                                            headers={'accept': 'application/json'},
-                                            timeout=1)  # Added timeout
-                                if resp.status_code != 200:
-                                    logger.error(f"Ошибка отправки команды на RS013N: {resp.text}")
-                                else:
-                                    logger.info(f"Команда отправлена на RS013N: {command}")
-                            time.sleep(3)
-                #time.sleep(4)
+                if rs13_action.lower() == "waitforpick":   
+                    self.process_waitforpick()
+
             except Exception as e:
                 logger.error("Исключение в потоке Master: ", e)
-            time.sleep(0.1)
+            time.sleep(self.cycle_delay)
 
+    def process_pneumatic_open(self):
+        logger.info("Открытие пневматики")
+        if not self.in_process:
+            self.open_pneumatic()
+        if self.get_io_state(0) and self.get_io_state(6):
+            logger.info("Пневматика успешно открыта")
+            command = "PNEUMOOPEN;"
+            self.send_command_to_robot(command, "RS013N", RS013N_API_URL)
+            self.in_process = False 
 
+    def process_pneumatic_close(self):
+        logger.info("Закрытие пневматики")
+        if not self.in_process:
+            self.close_pneumatic()
+        if self.get_io_state(1) and self.get_io_state(7):
+            logger.info("Пневматика успешно закрыта")
+            command = "PNEUMOCLOSE;"
+            self.send_command_to_robot(command, "RS013N", RS013N_API_URL)
+            self.in_process = False
+        
+    def process_check_positioner(self):
 
+        #if os.environ.get("DEBUG", "True").lower() == "True".lower():
+        # logger.info("Режим отладки включен, пропуск проверки позиционера")
+        # self.send_command_to_robot("POSITIONEREMPTY;", "RS013N", RS013N_API_URL)
+        # self.send_command_to_robot("POSITIONERFULL;", "RS007L", RS007L_API_URL)
+        # return
+
+        if self.get_io_state(9):
+            logger.info("Позиционер занят")
+            command = "POSITIONERFULL;"
+            self.send_command_to_robot(command, "RS007L", RS007L_API_URL)
+        else:
+            logger.info("Позиционер свободен")
+            command = "POSITIONEREMPTY;"
+            self.send_command_to_robot(command, "RS013N", RS013N_API_URL)
+
+    def process_waitforpick(self):
+        x, y, angle = self.get_object_coordinates() or (None, None, None)
+        if x is not None and y is not None and angle is not None: 
+            logger.info(f"Отправка данных захвата на RS013N: x={x}, y={y}, angle={angle}")
+            self.send_coordinates_to_robot(x, y, angle)
+            self.attempts = 0
+            time.sleep(2)
+        else:
+            logger.error("Объект не обнаружен, повтор через 2 секунды")
+            if self.attempts <= 5:
+                command = f"PALLETEMPTY;"
+                logger.warning("Паллета пуста, отправка команды на RS013N")
+                if not self.send_command_to_robot(f"send_command?command={command}", "RS013N", RS013N_API_URL):
+                    logger.error(f"Ошибка отправки команды на RS013N: {command}")
+                else:
+                    logger.info(f"Команда отправлена на RS013N: {command}")
+            self.attempts = self.attempts + 1
+            time.sleep(2)
