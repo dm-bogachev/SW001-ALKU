@@ -46,17 +46,20 @@ class APIDebugger(QMainWindow):
         product_layout.addWidget(QLabel("Count:"))
         self.product_count = QSpinBox()
         self.product_count.setRange(1, 1000)
+        self.product_count.setValue(150)
         product_layout.addWidget(self.product_count)
         
         # Tare IDs
         product_layout.addWidget(QLabel("In Tare IDs (comma-separated):"))
         self.in_tare_ids = QLineEdit()
         self.in_tare_ids.setPlaceholderText("e.g., 1,2,3")
+        self.in_tare_ids.setText("1")
         product_layout.addWidget(self.in_tare_ids)
         
         product_layout.addWidget(QLabel("Out Tare IDs (comma-separated):"))
         self.out_tare_ids = QLineEdit()
         self.out_tare_ids.setPlaceholderText("e.g., 4,5,6")
+        self.out_tare_ids.setText("1")
         product_layout.addWidget(self.out_tare_ids)
         
         start_layout.addLayout(product_layout)

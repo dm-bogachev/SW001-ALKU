@@ -23,7 +23,8 @@ class Background(Thread):
         self.collector = data_collector
         self.daemon = True  # не блокировать завершение процесса при незакрытом потоке
         self.first_pick = True
-        self.attempts = 0
+        self.detect_attempts = 0
+        self.redrops = 0
         self.in_process = False
         #
         self.cycle_delay = 0.1  # Задержка между циклами основного потока в секундах
@@ -78,13 +79,23 @@ class Background(Thread):
             return None
 
     def open_pneumatic(self):
+        self.redrops = 0
         resp = requests.post(f"{IO_API_URL}/tare_off", timeout=8)
         if resp.status_code == 200:
             logger.info("Команда на открытие пневматики отправлена на IO-сервис")
             self.in_process = True
         else:
             logger.warning("Не удалось отправить команду на открытие пневматики на IO-сервис")
-                            
+
+    def shake(self):
+        resp = requests.post(f"{IO_API_URL}/shake", timeout=8)
+        if resp.status_code == 200:
+            logger.info("Отправлена команда на пересброс тары")
+            self.in_process = True
+        else:
+            logger.warning("Не удалось отправить команду на а пересброс тары")
+
+
     def close_pneumatic(self):
         resp = requests.post(f"{IO_API_URL}/tare_on", timeout=8)
         if resp.status_code == 200:
@@ -127,7 +138,8 @@ class Background(Thread):
             return False
 
         self.first_pick = True
-        self.attempts = 0
+        self.detect_attempts = 0
+        self.redrops = 0
         return True
 
     def set_speed(self, speed: int):
@@ -226,8 +238,8 @@ class Background(Thread):
 
     def process_pneumatic_open(self):
         logger.info("Открытие пневматики")
-        if not self.in_process:
-            self.open_pneumatic()
+        #if not self.in_process:
+        self.open_pneumatic()
         if self.get_io_state(0) and self.get_io_state(6):
             logger.info("Пневматика успешно открыта")
             command = "PNEUMOOPEN;"
@@ -236,8 +248,8 @@ class Background(Thread):
 
     def process_pneumatic_close(self):
         logger.info("Закрытие пневматики")
-        if not self.in_process:
-            self.close_pneumatic()
+        #if not self.in_process:
+        self.close_pneumatic()
         if self.get_io_state(1) and self.get_io_state(7):
             logger.info("Пневматика успешно закрыта")
             command = "PNEUMOCLOSE;"
@@ -266,16 +278,21 @@ class Background(Thread):
         if x is not None and y is not None and angle is not None: 
             logger.info(f"Отправка данных захвата на RS013N: x={x}, y={y}, angle={angle}")
             self.send_coordinates_to_robot(x, y, angle)
-            self.attempts = 0
+            self.detect_attempts = 0
             time.sleep(2)
         else:
             logger.error("Объект не обнаружен, повтор через 2 секунды")
-            if self.attempts <= 5:
-                command = f"PALLETEMPTY;"
-                logger.warning("Паллета пуста, отправка команды на RS013N")
-                if not self.send_command_to_robot(f"send_command?command={command}", "RS013N", RS013N_API_URL):
-                    logger.error(f"Ошибка отправки команды на RS013N: {command}")
+            if self.detect_attempts <= 5:
+                if self.redrops < 4:
+                    self.shake()
+                    self.detect_attempts = 2
+                    self.redrops += 1
                 else:
-                    logger.info(f"Команда отправлена на RS013N: {command}")
-            self.attempts = self.attempts + 1
+                    command = f"PALLETEMPTY;"
+                    logger.warning("Паллета пуста, отправка команды на RS013N")
+                    if not self.send_command_to_robot(f"send_command?command={command}", "RS013N", RS013N_API_URL):
+                        logger.error(f"Ошибка отправки команды на RS013N: {command}")
+                    else:
+                        logger.info(f"Команда отправлена на RS013N: {command}")
+            self.detect_attempts = self.detect_attempts + 1
             time.sleep(2)

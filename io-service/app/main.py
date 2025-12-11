@@ -257,6 +257,17 @@ def tare_off():
     io.set_output(0, False)
     return {"Status": "OK"}
 
+@app.post("/shake")
+def shake():
+    if io is None or not io.is_connected():
+        logger.error("Модуль I/O не подключен")
+        return {"Status": "ERROR",
+                "Reason": "Not connected"}, 503
+    io.set_output(2, False)
+    time.sleep(2)
+    io.set_output(2, True)
+
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="127.0.0.1", port=8000)
