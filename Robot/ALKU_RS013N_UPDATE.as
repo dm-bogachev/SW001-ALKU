@@ -1555,7 +1555,6 @@ N_INT300    "s.debug.mode|Debug mode"
 .END
 .PROGRAM state7 () ; Check grippers
   CALL log ("State 7: Check if gripper change is required")
-  $action = "CheckGripperChange"
   ; We are at home at this point. No cases without home!
   IF current.gripper <> pg.gripper THEN
     CALL log ("Selected wrong gripper, perform change")
@@ -1697,7 +1696,9 @@ CALL log ("START with Name:" + $pg.name + "-" + $ENCODE (detail.spec) + " Count:
 .END
 .PROGRAM state105 () ; Program paused
   CALL log("State 105: Program paused")
+  $action = "Paused"
   SWAIT s.cmd.resume
+  $action = " " 
   CALL log("Program resumed")
   SIGNAL -s.cmd.pause
   state = 101
@@ -1709,6 +1710,10 @@ CALL log ("START with Name:" + $pg.name + "-" + $ENCODE (detail.spec) + " Count:
     state = 7
   ELSE
     CALL log ("Wrong program name. Program reset")
+    BREAK
+    $action = "WrongProgramName"
+    TWAIT 10
+    BREAK
     state = 0
   END
 .END
@@ -1931,6 +1936,7 @@ CALL log ("START with Name:" + $pg.name + "-" + $ENCODE (detail.spec) + " Count:
     .$data[2] = .$data[2] + "TAREOUT:" + $ENCODE (count.ot) + ";"
     .$data[2] = .$data[2] + "GRIPPER:" + $ENCODE (current.gripper) + ";"
     .$data[2] = .$data[2] + "PICKCOUNT:" + $ENCODE (count.put) + ";"
+    .$data[2] = .$data[2] + "STATE:" + $ENCODE (state) + ";"
     .$data[2] = .$data[2] + "\n"
     ;
     CALL tcp.send.pc (.$data[], 2)
@@ -2815,6 +2821,8 @@ CALL log ("START with Name:" + $pg.name + "-" + $ENCODE (detail.spec) + " Count:
 	; 6:pos.put:F
 	; .temp 
 	; .det.put 
+	; .lock.zone 
+	; .locked.zone 
 	; Group:States:7
 	; 7:state0:F
 	; .finish 
@@ -2878,6 +2886,8 @@ CALL log ("START with Name:" + $pg.name + "-" + $ENCODE (detail.spec) + " Count:
 	; .i 
 	; 8:pg.select:F
 	; 8:chk.lock:F
+	; .locked.zone 
+	; .work 
 	; 0:a.main:F
 	; Group:TCPIP:9
 	; 9:get.state.pc:B
@@ -2921,6 +2931,7 @@ CALL log ("START with Name:" + $pg.name + "-" + $ENCODE (detail.spec) + " Count:
 	; .detail.put 
 	; .det.picked 
 	; .det.put 
+	; .lock.zone 
 	; 10:set.vars.pc:B
 	; .i 
 	; .n 
