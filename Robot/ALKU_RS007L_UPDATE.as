@@ -249,7 +249,8 @@ N_INT300    "s.debug.mode|Debug mode"
   ;
   POINT .temp = #et.pos.point[.id]
   ;
-  JMOVE .temp + TRANS (0, 0, 30)
+  LMOVE #etalon.safe
+  LMOVE .temp + TRANS (0, 0, 30)
   BREAK
   IF NOT SIG (grip.unclamped) THEN
     PULSE grip.unclamp
@@ -269,6 +270,7 @@ N_INT300    "s.debug.mode|Debug mode"
   LMOVE .temp + TRANS (0, 5, 10)
   ACCURACY 100
   LMOVE .temp + TRANS (0, 0, 200)
+  LMOVE #etalon.safe
   ACCURACY 100
   LMOVE #homyak
   BREAK
@@ -345,7 +347,8 @@ N_INT300    "s.debug.mode|Debug mode"
   ; Part 3 Return Etalon
   JMOVE #safe.machine
   JMOVE #homyak
-  JMOVE .temp + TRANS (0, 0, 30)
+  LMOVE #etalon.safe
+  LMOVE .temp + TRANS (0, 0, 30)
   ;
   SPEED 250 MM/S
   ACCURACY 0.02
@@ -358,6 +361,7 @@ N_INT300    "s.debug.mode|Debug mode"
   LMOVE .temp + TRANS (0, 5, 10)
   ACCURACY 100
   LMOVE .temp + TRANS (0, 0, 200)
+  LMOVE #etalon.safe
   ACCURACY 100
   LMOVE #homyak
 .END
@@ -2024,9 +2028,9 @@ N_INT300    "s.debug.mode|Debug mode"
 	; s.cmd.pick
 	; s.grip.full
 	; @@@ CONNECTION @@@
-	; RS007L
-	; 192.168.7.103
-	; 23
+	; KROSET R02
+	; 127.0.0.1
+	; 9205
 	; @@@ PROGRAM @@@
 	; Group:Etalon:1
 	; 1:a.teach.etalon:F
@@ -2225,6 +2229,7 @@ N_INT300    "s.debug.mode|Debug mode"
 	; #ot.down.right OT down right point
 	; #ot.down.left OT down left point
 	; #machine.pos[] Point in measure machine for object i
+	; #etalon.safe Safe point to move to positioner
 	; @@@ REALS @@@
 	; count.defect Defect details count
 	; count.pick Picked details counter
@@ -2591,6 +2596,7 @@ ot.put[20,7] -465.937042 366.299408 -8.900530 -85.560913 2.096370 85.437073
 #pos.point[6] -24.266603 11.206055 -101.154915 16.572657 -59.693531 126.417831
 #machine.pos[5] -120.855339 35.200932 -129.580521 -148.420029 -76.970901 12.493420
 #machine.pos[6] -120.808754 34.013309 -129.783554 -148.398056 -76.117401 12.009513
+#etalon.safe 89.266120 -4.592290 -112.841700 2.308890 -66.337510 21.642370
 .END
 .REALS
 s.pr.tst.ot = 2249

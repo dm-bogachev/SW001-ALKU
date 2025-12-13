@@ -215,7 +215,7 @@ class APIDebugger(QMainWindow):
     def start_process(self):
         product_name = self.product_combo.currentText()
         product_count = self.product_count.value()
-        product_spec = self.spec.value()
+        product_spec = self.product_spec.value()
         in_tare_ids = [int(tid.strip()) for tid in self.in_tare_ids.text().split(",") if tid.strip()]
         out_tare_ids = [int(tid.strip()) for tid in self.out_tare_ids.text().split(",") if tid.strip()]
         

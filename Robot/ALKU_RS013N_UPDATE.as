@@ -1258,14 +1258,14 @@ N_INT300    "s.debug.mode|Debug mode"
     BREAK
     PULSE release.tare
     TWAIT 0.5
-    PULSE rs13.tare.ack, 15
     SIGNAL s.ot.placed
     ; Move out of put point
     ACCURACY 30
-    LMOVE .ot.put + TRANS (, , 350)
+    LMOVE .ot.put + TRANS (, , 100)
     ;LMOVE #ot.put.safe
     LMOVE #pos.wait
     BREAK
+    PULSE rs13.tare.ack, 5
     ;
   ;  POINT #current.pos = #pos.wait
   ;ELSE
@@ -2701,9 +2701,9 @@ CALL log ("START with Name:" + $pg.name + "-" + $ENCODE (detail.spec) + " Count:
 	; stz.y
 	; stz.x
 	; @@@ CONNECTION @@@
-	; RS013N
-	; 192.168.7.102
-	; 23
+	; KROSET R01
+	; 127.0.0.1
+	; 9105
 	; @@@ PROGRAM @@@
 	; Group:Objects:1
 	; 1:id1:F
