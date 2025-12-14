@@ -429,11 +429,19 @@ N_INT300    "s.debug.mode|Debug mode"
 .END
 .PROGRAM a.test.ot ()
   IF hmi.ot.k <> -1 THEN
-    CALL get.ot.point(hmi.ot.k)
+    .$pg = "id" + $ENCODE (/L, hmi.obj.id)
+    SCALL .$pg
+    IF hmi.obj.id <> round.no THEN
+      CALL calc.grid
+    ELSE
+      CALL calc.grid.rnd
+    END
+    CALL calc.ot
+    CALL get.ot.point (hmi.ot.k)
   END
-  LAPPRO ot.put[ot.x,ot.y], 50
-  LMOVE ot.put[ot.x,ot.y]
-  LAPPRO ot.put[ot.x,ot.y], 50
+  LAPPRO ot.put[ot.x, ot.y], 50
+  LMOVE ot.put[ot.x, ot.y]
+  LAPPRO ot.put[ot.x, ot.y], 50
 .END
 .PROGRAM ot.put ()
   ;
@@ -989,6 +997,11 @@ N_INT300    "s.debug.mode|Debug mode"
 .PROGRAM state7 () ; Deprecated
   state = 5
 .END
+.PROGRAM state8 () ; Check etalon by command
+  CALL log ("State 8: Check etalon by start")
+  CALL etalon.measure (etalon.id)
+  state = 105
+.END
 .PROGRAM state100 () ; Waiting for start
   ;
   CALL log ("State 100: Waiting for start")
@@ -1014,8 +1027,12 @@ N_INT300    "s.debug.mode|Debug mode"
     state = 105
     RETURN
   END
-      ; Priority 2
-  IF SIG(s.cmd.stop) THEN
+  IF SIG(s.cmd.chk.etal) THEN
+    state = 8
+    RETURN
+  END
+  ; Priority 2
+  IF SIG (s.cmd.stop) THEN
     state = 6
     RETURN
   END
@@ -1840,7 +1857,7 @@ N_INT300    "s.debug.mode|Debug mode"
     .$temp = $DECODE (.$data[1], ";",1)
     ; Need to decide where to check etalon!!!!
     ; Decode etalon id
-    etalon.id = VAL($DECODE (.$data[1], ";",0))
+    ;etalon.id = VAL($DECODE (.$data[1], ";",0))
     ;
     SIGNAL s.cmd.chk.etal
   END
@@ -2027,6 +2044,7 @@ N_INT300    "s.debug.mode|Debug mode"
 	; @@@ INSPECTION @@@
 	; s.cmd.pick
 	; s.grip.full
+	; count.pick
 	; @@@ CONNECTION @@@
 	; KROSET R02
 	; 127.0.0.1
@@ -2138,6 +2156,7 @@ N_INT300    "s.debug.mode|Debug mode"
 	; 7:state5:F
 	; 7:state6:F
 	; 7:state7:F
+	; 7:state8:F
 	; 7:state100:F
 	; 7:state101:F
 	; 7:state102:F
