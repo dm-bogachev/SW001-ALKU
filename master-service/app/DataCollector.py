@@ -93,6 +93,7 @@ class DataCollector(Thread):
             "pickcount": 0,
             "defectcount": 0,
             "state": -1,
+            "hour": -1
         }
 
         try:
@@ -122,7 +123,8 @@ class DataCollector(Thread):
                         result[key] = bool(val)
 
             # Integer-like fields
-            for key in ("speed", "ecode", "pickcount", "defectcount", "tarein", "tareout", "gripper", "state"):
+            for key in ("speed", "ecode", "pickcount", "defectcount", "tarein",
+                         "tareout", "gripper", "state", "hour"):
                 if key in rs:
                     try:
                         result[key] = int(rs.get(key))

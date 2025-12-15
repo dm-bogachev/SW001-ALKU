@@ -186,70 +186,6 @@ N_INT300    "s.debug.mode|Debug mode"
 .INTER_PANEL_COLOR_D
 182,3,224,244,28,159,252,255,251,255,0,31,2,241,52,255,
 .END
-.PROGRAM a.align ()
-	;
-	SPEED 250 MM/S ALWAYS
-	ALIGN
-	;
-.END
-.PROGRAM a.home ()
-  ;
-  SPEED 250 MM/S ALWAYS
-  JMOVE #homyak
-  ;
-.END
-.PROGRAM a.main ()
-  ;
-  CALL log ("Main program executed")
-  CALL safe.home
-  ;
-  WHILE TRUE DO
-    .$pg.string = "state" + $ENCODE (/L, state)
-    IF EXISTPGM (.$pg.string) THEN
-      SCALL .$pg.string
-    ELSE
-      CALL log ("Error! Program is in wrong state. Connect Robowizard")
-      RETURN
-    END
-  END
-  ;
-.END
-.PROGRAM a.teach.defect ()
-  IF FALSE THEN
-    SPEED 250 MM/S ALWAYS
-    ACCURACY 0 ALWAYS
-    TOOL tool.pick[hmi.tool.no]
-    ;
-    LMOVE #def.down.right; *** TEACH POINT *** Lower right
-    LMOVE #def.up.right; *** TEACH POINT *** Upper right
-    LMOVE #def.up.left; *** TEACH POINT *** Upper left
-    ;
-    POINT .x = #def.up.right
-    POINT .y = #def.up.left
-    POINT .o = #def.down.right
-    ;
-    BREAK
-    POINT defect.frame = FRAME (.o, .x, .y, .o)
-    ;
-    .k = 1
-    FOR .i = 0 TO 9
-      FOR .j = 0 TO 4
-        POINT #defect.point[.k] = defect.frame + TRANS (.i * 27.8, .j * 55.6)
-        .k = .k + 1
-      END
-    END
-  END
-  SPEED 250 MM/S ALWAYS
-  ACCURACY 0.02 ALWAYS
-  TOOL tool.pick[hmi.tool.no]
-  BREAK
-  ;
-  POINT .defect.pos = #defect.point[hmi.defect.pos]
-  ;
-  LAPPRO .defect.pos, -10
-  LMOVE .defect.pos
-  LAPPRO .defect.pos, -10
-.END
 .PROGRAM a.teach.etalon()@25/12/11 10:43 #0
 ;
   TOOL tool.pick[hmi.tool.no]
@@ -305,38 +241,124 @@ N_INT300    "s.debug.mode|Debug mode"
   LMOVE #et.pos.point[hmi.etalon.id]
   LMOVE .temp+TRANS(0,0,150)
 .END
-.PROGRAM a.teach.machine ()
-  IF FALSE THEN ; For round details
-    TOOL tool.pick[hmi.tool.no]
-    JMOVE #safe.machine
-    JMOVE #before.machine[2]
-    POINT .temp = #machine.pos[hmi.obj.id]
-    JMOVE .temp + TRANS (0, 0, 10)
-    BREAK
-    LMOVE #machine.pos[hmi.obj.id]
-    POINT .temp = #machine.pos[hmi.obj.id]
-    BREAK
-    TWAIT 0.5
-    LMOVE .temp + TRANS (0, 0, 10)
-    BREAK
-    TWAIT 0.5
-    LMOVE #before.machine[2]
-  ELSE
-    TOOL tool.pick[hmi.tool.no]
-    JMOVE #safe.machine
-    JMOVE #before.machine[1]
-    POINT .temp = #machine.pos[hmi.obj.id]
-    JMOVE .temp + TRANS (0, 10, 0)
-    BREAK
-    LMOVE #machine.pos[hmi.obj.id]
-    POINT .temp = #machine.pos[hmi.obj.id]
-    BREAK
-    TWAIT 0.5
-    LMOVE .temp + TRANS (0, 10, 0)
-    BREAK
-    TWAIT 0.5
-    LMOVE #before.machine[1]
+.PROGRAM etalon.measure(.id)@25/12/11 10:43 #6
+  IF FALSE THEN
+    .id = hmi.etalon.id
   END
+  TOOL tool.pick[current.gripper]
+;
+  SPEED 100 ALWAYS
+  ACCURACY 10 ALWAYS
+;
+  POINT .etalon.pos.pt = #et.pos.point[.id]
+  POINT .etalon.mac.pt = #et.mac.point[.id]
+  IF .id==round.no THEN
+    .shift.y = 0
+    .shift.z = 50
+    .p.idx = 2
+  ELSE
+    .shift.y = 50
+    .shift.z = 0
+    .p.idx = 1
+  END
+;
+  IF NOT SIG(grip.unclamped) THEN
+    PULSE grip.unclamp
+    CALL log("Wait for unclamp gripper. State: WaitingGripUnclamped")
+    $action = "WaitingGripUnclamped"
+    WAIT SIG(grip.unclamped) OR SIG(s.force.in[1])
+  END
+; Part 1. Pick etalon
+  .$temp = "Pick detail from etalon (ID:"+$ENCODE(.id)+")"
+  CALL log(.$temp)
+  LMOVE #safe.etalon
+  LMOVE .etalon.pos.pt+TRANS(0,0,30)
+  SPEED 250 MM/S
+  ACCURACY 0.02
+  LMOVE #et.pos.point[.id]
+  BREAK
+  PULSE grip.clamp
+  TWAIT 0.5
+  SIGNAL s.grip.full
+  LMOVE .etalon.pos.pt+TRANS(0,5,10)
+  ACCURACY 100
+  LMOVE .etalon.pos.pt+TRANS(0,0,200)
+  LMOVE #safe.etalon
+  ACCURACY 100
+  LMOVE #homyak
+  BREAK
+; Part 2. Put etalon
+  .$temp = "Measure etalon (ID:"+$ENCODE(.id)+")"
+  CALL log(.$temp)
+; Go to machine
+  JMOVE #safe.machine
+  JMOVE #before.machine[.p.idx]
+  ACCURACY 10
+  LMOVE .etalon.mac.pt+TRANS(0,.shift.y,.shift.z)
+  ACCURACY 5
+  LMOVE .etalon.mac.pt+TRANS(0,.shift.y*0.2,.shift.z*0.2)
+  SPEED 250 MM/S
+  ACCURACY 0.5
+  LMOVE #et.mac.point[.id]
+  BREAK
+  ;CALL log("Send command to enable vacuum")
+  ;$action = "WaitingMMVacuum"
+  PULSE grip.unclamp
+  TWAIT 0.5
+  ACCURACY 5
+  LMOVE .etalon.mac.pt+TRANS(0,.shift.y*0.2,.shift.z*0.2)
+  ACCURACY 10
+  LMOVE .etalon.mac.pt+TRANS(0,.shift.y,.shift.z)
+  LMOVE #before.machine[.p.idx]
+  BREAK
+; Wait result
+  CALL log("Waiting for measurement result")
+  $action = "WaitingCalibrationResult"
+  WAIT SIG(s.measure.ok) OR SIG(s.measure.ng)
+;
+  IF SIG(s.measure.ok) THEN
+    CALL log("Measurement result: OK")
+  ELSE
+    CALL log("Measurement result: DEFECT")
+  END
+  ;SIGNAL -s.measure.ok,-s.measure.ng
+; Pick from machine
+  ACCURACY 10
+  LMOVE .etalon.mac.pt+TRANS(0,.shift.y,.shift.z)
+  ACCURACY 5
+  LMOVE .etalon.mac.pt+TRANS(0,.shift.y*0.2,.shift.z*0.2)
+  SPEED 250 MM/S
+  ACCURACY 0.5
+  LMOVE #et.mac.point[.id]
+  BREAK
+  PULSE grip.clamp
+  TWAIT 0.5
+; Go home
+  ACCURACY 5
+  LMOVE .etalon.mac.pt+TRANS(0,.shift.y*0.2,.shift.z*0.2)
+  ACCURACY 10
+  LMOVE .etalon.mac.pt+TRANS(0,.shift.y,.shift.z)
+  LMOVE #before.machine[.p.idx]
+; Part 3 Return Etalon
+  .$temp = "Return etalon to positioner (ID:"+$ENCODE(.id)+")"
+  CALL log(.$temp)
+  JMOVE #safe.machine
+  JMOVE #homyak
+  LMOVE #safe.etalon
+  LMOVE .etalon.pos.pt+TRANS(0,5,10)
+  SPEED 250 MM/S
+  ACCURACY 0.02
+  LMOVE #et.pos.point[.id]
+  BREAK
+  PULSE grip.unclamp
+  TWAIT 0.5
+  SIGNAL -s.grip.full
+  LMOVE .etalon.pos.pt+TRANS(0,0,30)
+  ACCURACY 100
+  LMOVE .etalon.pos.pt+TRANS(0,0,200)
+  LMOVE #safe.etalon
+  ACCURACY 100
+  LMOVE #homyak
 .END
 .PROGRAM a.teach.ot ()
   SPEED 250 MM/S ALWAYS
@@ -359,64 +381,6 @@ N_INT300    "s.debug.mode|Debug mode"
   ;
   ;JMOVE ot.frame + TRANS (grip.xsh[hmi.tool.no], grip.ysh[hmi.tool.no], grip.zsh[hmi.tool.no])
 
-.END
-.PROGRAM a.teach.pos ()
-  ;
-  TOOL tool.pick[hmi.tool.no]
-  ;
-  POINT .temp = #pos.point[hmi.obj.id]
-  JMOVE .temp + TRANS (0, 0, 50)
-  BREAK
-  LMOVE #pos.point[hmi.obj.id]
-  POINT .temp = #pos.point[hmi.obj.id]
-  BREAK
-  TWAIT 0.5
-  LMOVE .temp + TRANS (0, 5, 10)
-  LMOVE .temp + TRANS (0, 0, 50)
-  BREAK
-  TWAIT 0.5
-  ;
-.END
-.PROGRAM a.test.ot ()
-  IF hmi.ot.k <> -1 THEN
-    .$pg = "id" + $ENCODE (/L, hmi.obj.id)
-    SCALL .$pg
-    IF hmi.obj.id <> round.no THEN
-      CALL calc.grid
-    ELSE
-      CALL calc.grid.rnd
-    END
-    CALL calc.ot
-    CALL get.ot.point (hmi.ot.k)
-  END
-  LAPPRO ot.put[ot.x, ot.y], 50
-  LMOVE ot.put[ot.x, ot.y]
-  LAPPRO ot.put[ot.x, ot.y], 50
-.END
-.PROGRAM autostart.pc ()
-  ;
-  ; System switches
-  CP ON
-  PREFETCH.SIGINS OFF
-  QTOOL OFF
-  REP_ONCE ON
-  HOLD.STEP ON
-  DISP.EXESTEP ON
-  PROG.DATE ON
-  ABS.SPEED ON
-  autostart.pc ON
-  errstart.pc ON  ;
-  ;
-  IFPWPRINT 8, 1, 1, 5, 10 = "Robot: RS007L S/N: C6324", "Controller: F60 S/N: C8174", " ", "Powered by Robowizard Co.Ltd."
-  ;
-  CALL set.io.pc
-  CALL set.vars.pc
-  ;
-  MC PRIME a.main
-  TWAIT 1
-  ;
-  CALL watchdog.pc
-  ;
 .END
 .PROGRAM calc.grid ()
   ; Constants
@@ -453,6 +417,87 @@ N_INT300    "s.debug.mode|Debug mode"
     END
   END
 ;
+.END
+.PROGRAM get.ot.point (.obj.id)
+  ot.x = ms[.obj.id]
+  ot.y = ns[.obj.id]
+.END
+.PROGRAM a.test.ot ()
+  IF hmi.ot.k <> -1 THEN
+    .$pg = "id" + $ENCODE (/L, hmi.obj.id)
+    SCALL .$pg
+    IF hmi.obj.id <> round.no THEN
+      CALL calc.grid
+    ELSE
+      CALL calc.grid.rnd
+    END
+    CALL calc.ot
+    CALL get.ot.point (hmi.ot.k)
+  END
+  LAPPRO ot.put[ot.x, ot.y], 50
+  LMOVE ot.put[ot.x, ot.y]
+  LAPPRO ot.put[ot.x, ot.y], 50
+.END
+.PROGRAM ot.put ()
+  ;
+  SIGNAL rs7.locked.zone
+  IF SIG (rs7.tare.chg) THEN
+    CALL log ("Waiting for new OT")
+    SWAIT -rs7.tare.chg
+    count.put = 0
+  END
+  ;
+  CALL log ("Put to OT detail" + $ENCODE (count.put + 1))
+  ;$action = "PutToTare"
+  ;
+  SPEED 100 ALWAYS
+  ACCURACY 100 ALWAYS
+  TOOL tool.pick[current.gripper]
+  ;
+  CALL get.ot.point (count.put)
+  ;
+  .x = grip.xsh[object.id]
+  .y = grip.ysh[object.id]
+  .z = grip.zsh[object.id]
+  IF object.id <> round.no AND ot.y MOD 2 <> 0 AND SIG (s.opt.flip) THEN
+    .x = grip.180xsh[object.id]
+    .y = grip.180ysh[object.id]
+  END
+  ;
+  POINT .put = ot.put[ot.x, ot.y]
+  ;
+  SIGNAL rs7.locked.zone
+  BREAK
+  CALL log ("Check if positioner is occupied")
+  SWAIT -rs13.lock.zone
+  ;
+  JAPPRO .put, -200
+  ACCURACY 5
+  LAPPRO .put, -20
+  ACCURACY 0.02
+  SPEED 250 MM/S
+  LMOVE .put
+  BREAK
+  ;
+  PULSE grip.unclamp
+  TWAIT 0.5
+  count.put = count.put + 1
+  SIGNAL -s.grip.full
+  $action = "WaitPosFull"
+  ;
+  LAPPRO .put, -20
+  LAPPRO .put, -200
+  ;
+  ;IF NOT SIG (s.cmd.pick) THEN
+  ;  JMOVE #homyak
+  ;  BREAK
+  ;  SIGNAL -rs7.locked.zone
+  ;END
+  ;
+  IF count.put >= max.tare.count THEN
+    SIGNAL rs7.tare.chg
+  END
+  ;
 .END
 .PROGRAM calc.ot ()
   ; Get matrix center
@@ -546,179 +591,46 @@ N_INT300    "s.debug.mode|Debug mode"
   ;  PRINT .$line    ; печатаем всю строку одним вызовом
   ;END
 .END
-.PROGRAM check.disp.pc ()
-	;
-	IF SIG (s.tcp.ena) AND tcp.ena == -1 THEN
-		tcp.ena = tyterm
-	END
-	IF NOT SIG (s.tcp.ena) AND tcp.ena <> -1 THEN
-		tcp.ena = -1
-	END
-	;
-	IF SIG (s.tcp.send.ena) AND tcp.send.ena == -1 THEN
-		tcp.send.ena = tyterm
-	END
-	IF NOT SIG (s.tcp.send.ena) AND tcp.send.ena <> -1 THEN
-		tcp.send.ena = -1
-	END
-	;
-	IF SIG (s.tcp.recv.ena) AND tcp.recv.ena == -1 THEN
-		tcp.recv.ena = tyterm
-	END
-	IF NOT SIG (s.tcp.recv.ena) AND tcp.recv.ena <> -1 THEN
-		tcp.recv.ena = -1
-	END
-	;
+.PROGRAM a.teach.machine ()
+  IF FALSE THEN ; For round details
+    TOOL tool.pick[hmi.tool.no]
+    JMOVE #safe.machine
+    JMOVE #before.machine[2]
+    POINT .temp = #machine.pos[hmi.obj.id]
+    JMOVE .temp + TRANS (0, 0, 10)
+    BREAK
+    LMOVE #machine.pos[hmi.obj.id]
+    POINT .temp = #machine.pos[hmi.obj.id]
+    BREAK
+    TWAIT 0.5
+    LMOVE .temp + TRANS (0, 0, 10)
+    BREAK
+    TWAIT 0.5
+    LMOVE #before.machine[2]
+  ELSE
+    TOOL tool.pick[hmi.tool.no]
+    JMOVE #safe.machine
+    JMOVE #before.machine[1]
+    POINT .temp = #machine.pos[hmi.obj.id]
+    JMOVE .temp + TRANS (0, 10, 0)
+    BREAK
+    LMOVE #machine.pos[hmi.obj.id]
+    POINT .temp = #machine.pos[hmi.obj.id]
+    BREAK
+    TWAIT 0.5
+    LMOVE .temp + TRANS (0, 10, 0)
+    BREAK
+    TWAIT 0.5
+    LMOVE #before.machine[1]
+  END
 .END
-.PROGRAM check.tasks.pc ()
-	;
-	IF TASK (1002) <> 1 THEN
-		PCEXECUTE 2: tcp.client.pc
-		TWAIT 3
-	END
-	IF TASK (1003) <> 1 THEN
-		PCEXECUTE 3: tcp.sender.pc
-		TWAIT 3
-	END
-	;
-.END
-.PROGRAM check.teach.pc ()
-  ;
-  IF SIG (s.hmi.res.state) THEN
-    state = 0
-  END
-  ;
-  IF SIG (s.hmi.res.act) THEN
-    $action = " "
-  END
-  ;
-  IF SIG (s.pr.tch.pos) AND NOT SWITCH (REPEAT) THEN
-    MC PRIME a.teach.pos
-  END
-    ;
-  IF SIG (s.pr.home) AND NOT SWITCH (REPEAT) THEN
-    MC PRIME a.home
-  END
-  ;
-  IF SIG (s.pr.tch.defect) AND NOT SWITCH (REPEAT) THEN
-    MC PRIME a.teach.defect
-  END
-  ;
-  IF SIG (s.pr.tch.meas) AND NOT SWITCH (REPEAT) THEN
-    MC PRIME a.teach.machine
-  END
-  ;
-  IF SIG (s.pr.tch.ot) AND NOT SWITCH (REPEAT) THEN
-    MC PRIME a.teach.ot
-  END
-  ;
-  IF SIG (s.pr.tst.ot) AND NOT SWITCH (REPEAT) THEN
-    MC PRIME a.test.ot
-  END
-  ;
-  IF SIG (s.pr.tch.etal) AND NOT SWITCH (REPEAT) THEN
-    MC PRIME a.teach.etalon
-  END
-  ;
-  ; HMI PANEL OBJECT TEACH DATA
-  IF keep.object <> hmi.obj.id AND hmi.obj.id > 0 AND hmi.obj.id <= 64 THEN
-    hmi.gx = grip.xsh[hmi.obj.id]
-    hmi.gy = grip.ysh[hmi.obj.id]
-    hmi.gz = grip.zsh[hmi.obj.id]
-    hmi.g180x = grip.180xsh[hmi.obj.id]
-    hmi.g180y = grip.180ysh[hmi.obj.id]
-    ;
-    keep.object = hmi.obj.id
-  END
-  IF SIG (s.apply.obj) THEN
-    grip.xsh[hmi.obj.id] = hmi.gx
-    grip.ysh[hmi.obj.id] = hmi.gy
-    grip.zsh[hmi.obj.id] = hmi.gz
-    grip.180xsh[hmi.obj.id] = hmi.g180x
-    grip.180ysh[hmi.obj.id] = hmi.g180y
-  END
-;
-.END
-.PROGRAM check.zone.pc ()
-  ;
-  ;do.work[1] = 17
-  ;rs13.work[1] = 1017
-  ;di.hold = 2009
-  ;s.zone.blocked = 2209
-  ; do.work[1]     rs13.work[1]             s.zone.blocked
-  ;----| |-------------| |----------------------( )
-  ;            |                |
-  ;            | s.zone.blocked |
-  ;            --------|/|-------
-  ;
-  ; s.zone.blocked   rs13.work[1]  do.work[1]   di.hold
-  ;------|/|------------| |---------|  |--------(/)
-  ;
-  SOUT 2209 = 17 AND (NOT 1017 OR 2209)
-  SOUT 2009 = NOT (NOT 2209 AND 1017 AND 17)
-  ;
-.END
-.PROGRAM defect.put ()
-  ;
-  SPEED 100 ALWAYS
-  ACCURACY 100 ALWAYS
-  TOOL tool.pick[current.gripper]
-  ;
-  POINT .temp = #defect.point[count.defect + 1]
-  ;
-  JMOVE #safe.defect
-  ;
-  IF count.defect > 50 THEN
-    CALL log ("Defect tare is full. Waiting for tare clean")
-    $action = "Paused"
-    WAIT count.defect == 1
-    $action = " "
-  END
-  ;
-  CALL log ("Putting to defect tare with No:" + $ENCODE (count.defect + 1))
-  ;
-  ACCURACY 10
-  LAPPRO .temp, -30
-  BREAK
-  ;
-  SPEED 250 MM/S
-  ACCURACY 0.02
-  LMOVE #defect.point[count.defect + 1]
-  BREAK
-  PULSE grip.unclamp
-  TWAIT 0.5
-  count.defect = count.defect + 1
-  SIGNAL -s.grip.full
-  ;
-  ACCURACY 10
-  LAPPRO .temp, -30
-  JMOVE #safe.defect
-  LMOVE #homyak
-  ;
-.END
-.PROGRAM errstart.pc ()
-	;
-	IF ERROR == -34021 OR ERROR == -10100 THEN
-		tcp.socket = -1
-		MC ERESET
-		TWAIT 1
-	END
-	TWAIT 5
-	errstart.pc ON
-	;
-.END
-.PROGRAM etalon.measure(.id)@25/12/11 10:43 #6
+.PROGRAM measure ()
   IF FALSE THEN
-    .id = hmi.etalon.id
+    .pos = hmi.obj.id
   END
-  TOOL tool.pick[current.gripper]
-;
-  SPEED 100 ALWAYS
-  ACCURACY 10 ALWAYS
-;
-  POINT .etalon.pos.pt = #et.pos.point[.id]
-  POINT .etalon.mac.pt = #et.mac.point[.id]
-  IF .id==round.no THEN
+  .pos = object.id
+  ;
+  IF object.id == round.no THEN
     .shift.y = 0
     .shift.z = 50
     .p.idx = 2
@@ -727,195 +639,72 @@ N_INT300    "s.debug.mode|Debug mode"
     .shift.z = 0
     .p.idx = 1
   END
-;
-  IF NOT SIG(grip.unclamped) THEN
-    PULSE grip.unclamp
-    CALL log("Wait for unclamp gripper. State: WaitingGripUnclamped")
-    $action = "WaitingGripUnclamped"
-    WAIT SIG(grip.unclamped) OR SIG(s.force.in[1])
-  END
-; Part 1. Pick etalon
-  .$temp = "Pick detail from etalon (ID:"+$ENCODE(.id)+")"
-  CALL log(.$temp)
-  LMOVE #safe.etalon
-  LMOVE .etalon.pos.pt+TRANS(0,0,30)
-  SPEED 250 MM/S
-  ACCURACY 0.02
-  LMOVE #et.pos.point[.id]
-  BREAK
-  PULSE grip.clamp
-  TWAIT 0.5
-  SIGNAL s.grip.full
-  LMOVE .etalon.pos.pt+TRANS(0,5,10)
-  ACCURACY 100
-  LMOVE .etalon.pos.pt+TRANS(0,0,200)
-  LMOVE #safe.etalon
-  ACCURACY 100
-  LMOVE #homyak
-  BREAK
-; Part 2. Put etalon
-  .$temp = "Measure etalon (ID:"+$ENCODE(.id)+")"
-  CALL log(.$temp)
-; Go to machine
+  ;
+  CALL log ("Move to measure machine")
+  ;$action = "TakingToMM"
+  ;
+  SPEED 100 ALWAYS
+  ACCURACY 100 ALWAYS
+  TOOL tool.pick[current.gripper]
+  ;
+  POINT .machine.pos = #machine.pos[.pos]
+  ; Go to machine
   JMOVE #safe.machine
   JMOVE #before.machine[.p.idx]
   ACCURACY 10
-  LMOVE .etalon.mac.pt+TRANS(0,.shift.y,.shift.z)
+  LMOVE .machine.pos + TRANS (0, .shift.y, .shift.z)
   ACCURACY 5
-  LMOVE .etalon.mac.pt+TRANS(0,.shift.y*0.2,.shift.z*0.2)
+  LMOVE .machine.pos + TRANS (0, .shift.y * 0.2, .shift.z * 0.2)
   SPEED 250 MM/S
   ACCURACY 0.5
-  LMOVE #et.mac.point[.id]
+  LMOVE #machine.pos[.pos]
   BREAK
-  CALL log("Send command to enable vacuum")
-  $action = "WaitingMMVacuum"
+  ;CALL log ("Send command to enable vacuum")
+  ;$action = "WaitingMMVacuum"
   PULSE grip.unclamp
   TWAIT 0.5
+  ;
   ACCURACY 5
-  LMOVE .etalon.mac.pt+TRANS(0,.shift.y*0.2,.shift.z*0.2)
+  LMOVE .machine.pos + TRANS (0, .shift.y * 0.2, .shift.z * 0.2)
   ACCURACY 10
-  LMOVE .etalon.mac.pt+TRANS(0,.shift.y,.shift.z)
+  LMOVE .machine.pos + TRANS (0, .shift.y, .shift.z)
+  ;
   LMOVE #before.machine[.p.idx]
   BREAK
-; Wait result
-  CALL log("Waiting for measurement result")
-  $action = "WaitingMMResult"
-  WAIT SIG(s.measure.ok) OR SIG(s.measure.ng)
-;
-  IF SIG(s.measure.ok) THEN
-    CALL log("Measurement result: OK")
+  ; Wait result
+  CALL log ("Waiting for measurement result")
+  WAIT SIG (s.measure.ok) OR SIG (s.measure.ng)
+  SIGNAL s.cmd.measured
+  ;
+  IF SIG (s.measure.ok) THEN
+    CALL log ("Measurement result: OK")
   ELSE
-    CALL log("Measurement result: DEFECT")
+    CALL log ("Measurement result: DEFECT")
   END
-  SIGNAL -s.measure.ok,-s.measure.ng
-; Pick from machine
+  ;
+  ; Pick from machine
   ACCURACY 10
-  LMOVE .etalon.mac.pt+TRANS(0,.shift.y,.shift.z)
+  LMOVE .machine.pos + TRANS (0, .shift.y, .shift.z)
   ACCURACY 5
-  LMOVE .etalon.mac.pt+TRANS(0,.shift.y*0.2,.shift.z*0.2)
+  LMOVE .machine.pos + TRANS (0, .shift.y * 0.2, .shift.z * 0.2)
   SPEED 250 MM/S
   ACCURACY 0.5
-  LMOVE #et.mac.point[.id]
+  LMOVE #machine.pos[.pos]
   BREAK
   PULSE grip.clamp
   TWAIT 0.5
-; Go home
+  ; Go home
   ACCURACY 5
-  LMOVE .etalon.mac.pt+TRANS(0,.shift.y*0.2,.shift.z*0.2)
+  LMOVE .machine.pos + TRANS (0, .shift.y * 0.2, .shift.z * 0.2)
   ACCURACY 10
-  LMOVE .etalon.mac.pt+TRANS(0,.shift.y,.shift.z)
+  LMOVE .machine.pos + TRANS (0, .shift.y, .shift.z)
+  ;
   LMOVE #before.machine[.p.idx]
-; Part 3 Return Etalon
-  .$temp = "Return etalon to positioner (ID:"+$ENCODE(.id)+")"
-  CALL log(.$temp)
   JMOVE #safe.machine
   JMOVE #homyak
-  LMOVE #safe.etalon
-  LMOVE .etalon.pos.pt+TRANS(0,5,10)
-  SPEED 250 MM/S
-  ACCURACY 0.02
-  LMOVE #et.pos.point[.id]
-  BREAK
-  PULSE grip.unclamp
-  TWAIT 0.5
-  SIGNAL -s.grip.full
-  LMOVE .etalon.pos.pt+TRANS(0,0,30)
-  ACCURACY 100
-  LMOVE .etalon.pos.pt+TRANS(0,0,200)
-  LMOVE #safe.etalon
-  ACCURACY 100
-  LMOVE #homyak
-.END
-.PROGRAM get.ot.point (.obj.id)
-  ot.x = ms[.obj.id]
-  ot.y = ns[.obj.id]
-.END
-.PROGRAM get.state.pc(.$state)@25/11/17 14:11 #210978
-	.$state = "SPEED:" + $ENCODE (/L, MSPEED) + ";"
-	.$state = .$state + "POWER:"
-	IF SWITCH (POWER ) THEN
-		.$state = .$state + "TRUE;"
-	ELSE
-		.$state = .$state + "FALSE;"
-	END
-	; MAX: 12
-	;
-	.$state = .$state + "CS:"
-	IF SWITCH (CS ) THEN
-		.$state = .$state + "TRUE;"
-	ELSE
-		.$state = .$state + "FALSE;"
-	END
-	; MAX 9
-	;
-	.$state = .$state + "TEACH:"
-	IF SWITCH (REPEAT ) THEN
-		.$state = .$state + "FALSE;"
-	ELSE
-		.$state = .$state + "TRUE;"
-	END
-	; MAX 12
-	;
-	.$state = .$state + "TEACHL:"
-	IF SWITCH (TEACH_LOCK ) THEN
-		.$state = .$state + "TRUE;"
-	ELSE
-		.$state = .$state + "FALSE;"
-	END
-	; MAX 13
-	;
-	.$state = .$state + "TPEMG:"
-	IF SWITCH (TP_EMG ) THEN
-		.$state = .$state + "TRUE;"
-	ELSE
-		.$state = .$state + "FALSE;"
-	END
-	; MAX 12
-	;
-	.$state = .$state + "OPEMG:"
-	IF SWITCH (OP_EMG ) THEN
-		.$state = .$state + "TRUE;"
-	ELSE
-		.$state = .$state + "FALSE;"
-	END
-	; MAX 12
-	;
-	.$state = .$state + "EXEMG:"
-	IF SWITCH (EX_EMG ) THEN
-		.$state = .$state + "TRUE;"
-	ELSE
-		.$state = .$state + "FALSE;"
-	END
-	; MAX 12
-	;
-	.$state = .$state + "ERROR:"
-	IF SWITCH (ERROR ) THEN
-		.$state = .$state + "TRUE;"
-	ELSE
-		.$state = .$state + "FALSE;"
-	END
-	; MAX 12
-	;
-	.$state = .$state + "ECODE:"
-	.$state = .$state + $ENCODE (ERROR) + ";"
-	; MAX 12
-	;
-	;.$state = .$state + "HOME:"
-	;IF SIG (do.home1) THEN
-	;  .$state = .$state + "TRUE;"
-	;ELSE
-	;  .$state = .$state + "FALSE;"
-	;END
-	;; MAX 12
-	;;
-	;.$state = .$state + "BATALM:"
-	;IF SIG (do.bat.alm) THEN
-	;  .$state = .$state + "TRUE;"
-	;ELSE
-	;  .$state = .$state + "FALSE;"
-	;END
-	; MAX 12
-	.$state = .$state + "\n"
+  ;BREAK
+  ;JMOVE #safe.machine
+  ;JMOVE #homyak
 .END
 .PROGRAM id1 () ; 312.229.002
   ; Object ID
@@ -995,6 +784,417 @@ N_INT300    "s.debug.mode|Debug mode"
   object.length = 28.5
   ;
 .END
+.PROGRAM pos.pick ()
+  ;
+  .$temp = "Pick detail from positioner (ID:" + $ENCODE (object.id) + ")"
+  CALL log (.$temp)
+  ;
+  TOOL tool.pick[current.gripper]
+  ;
+  SPEED 100 ALWAYS
+  ACCURACY 10 ALWAYS
+  ;
+  POINT .temp = #pos.point[object.id]
+  ;
+  SIGNAL rs7.locked.zone
+  ;
+    IF SIG(do.home) THEN
+    CALL log("Check if positioner is occupied")
+    SWAIT -rs13.lock.zone
+  END
+  ;
+  JMOVE .temp + TRANS (0, 0, 30)
+  BREAK
+  IF NOT SIG (grip.unclamped) THEN
+    PULSE grip.unclamp
+    CALL log ("Wait for unclamp gripper. State: WaitingGripUnclamped")
+    $action = "WaitingGripUnclamped"
+    WAIT SIG (grip.unclamped) OR SIG (s.force.in[1])
+  END
+  ;
+  SPEED 250 MM/S
+  ACCURACY 0.02
+  LMOVE #pos.point[object.id]
+  BREAK
+  PULSE grip.clamp
+  TWAIT 0.5
+  SIGNAL s.grip.full
+  SIGNAL -s.cmd.measured
+  count.pick = count.pick + 1
+  BITS rs7.det.picked[0], 8 = count.pick
+  ;
+  LMOVE .temp + TRANS (0, 5, 10)
+  ACCURACY 100
+  LMOVE .temp + TRANS (0, 0, 200)
+  ACCURACY 100
+  LMOVE #homyak
+  ;
+  BREAK
+  SIGNAL -rs7.locked.zone
+  ;
+.END
+.PROGRAM a.teach.pos ()
+  ;
+  TOOL tool.pick[hmi.tool.no]
+  ;
+  POINT .temp = #pos.point[hmi.obj.id]
+  JMOVE .temp + TRANS (0, 0, 50)
+  BREAK
+  LMOVE #pos.point[hmi.obj.id]
+  POINT .temp = #pos.point[hmi.obj.id]
+  BREAK
+  TWAIT 0.5
+  LMOVE .temp + TRANS (0, 5, 10)
+  LMOVE .temp + TRANS (0, 0, 50)
+  BREAK
+  TWAIT 0.5
+  ;
+.END
+.PROGRAM defect.put ()
+  ;
+  SPEED 100 ALWAYS
+  ACCURACY 100 ALWAYS
+  TOOL tool.pick[current.gripper]
+  ;
+  POINT .temp = #defect.point[count.defect + 1]
+  ;
+  JMOVE #safe.defect
+  ;
+  IF count.defect > 50 THEN
+    CALL log ("Defect tare is full. Waiting for tare clean")
+    $action = "Paused"
+    WAIT count.defect == 1
+    $action = " "
+  END
+  ;
+  CALL log ("Putting to defect tare with No:" + $ENCODE (count.defect + 1))
+  ;
+  ACCURACY 10
+  LAPPRO .temp, -30
+  BREAK
+  ;
+  SPEED 250 MM/S
+  ACCURACY 0.02
+  LMOVE #defect.point[count.defect + 1]
+  BREAK
+  PULSE grip.unclamp
+  TWAIT 0.5
+  count.defect = count.defect + 1
+  SIGNAL -s.grip.full
+  ;
+  ACCURACY 10
+  LAPPRO .temp, -30
+  JMOVE #safe.defect
+  LMOVE #homyak
+  ;
+.END
+.PROGRAM a.teach.defect ()
+  IF FALSE THEN
+    SPEED 250 MM/S ALWAYS
+    ACCURACY 0 ALWAYS
+    TOOL tool.pick[hmi.tool.no]
+    ;
+    LMOVE #def.down.right; *** TEACH POINT *** Lower right
+    LMOVE #def.up.right; *** TEACH POINT *** Upper right
+    LMOVE #def.up.left; *** TEACH POINT *** Upper left
+    ;
+    POINT .x = #def.up.right
+    POINT .y = #def.up.left
+    POINT .o = #def.down.right
+    ;
+    BREAK
+    POINT defect.frame = FRAME (.o, .x, .y, .o)
+    ;
+    .k = 1
+    FOR .i = 0 TO 9
+      FOR .j = 0 TO 4
+        POINT #defect.point[.k] = defect.frame + TRANS (.i * 27.8, .j * 55.6)
+        .k = .k + 1
+      END
+    END
+  END
+  SPEED 250 MM/S ALWAYS
+  ACCURACY 0.02 ALWAYS
+  TOOL tool.pick[hmi.tool.no]
+  BREAK
+  ;
+  POINT .defect.pos = #defect.point[hmi.defect.pos]
+  ;
+  LAPPRO .defect.pos, -10
+  LMOVE .defect.pos
+  LAPPRO .defect.pos, -10
+.END
+.PROGRAM state0 () ; Initialization of parameters
+  ;
+  CALL log ("State 0: Program reset. Initialization of parameters")
+  SIGNAL -s.grip.full, -s.measure.ok, -s.measure.ng, -rs7.tare.chg, -s.cmd.measured
+  SIGNAL -s.cmd.start, -s.cmd.pick, -s.cmd.finish, -rs7.finish.ack, -rs7.locked.zone, -s.cmd.stop
+  count.pick = 0
+  BITS rs7.det.picked[0], 8 = count.pick
+  count.put = 0
+  ;
+  state = 100
+  ;
+.END
+.PROGRAM state1 () ; Pick from positioner
+  CALL log ("State 1: Pick from positioner")
+  ; Check all start positions
+  ; Possible do not needed because robot can be only in HOME or near positioner
+  ;JMOVE #homyak
+  ;
+  CALL pos.pick
+  ;
+  state = 101
+  ;
+.END
+.PROGRAM state2 () ; Measurement process
+  CALL log ("State 2: Measurement process")
+  ; Check all start positions
+  ; Possible do not needed because robot can be only in HOME or near positioner
+  ;JMOVE #homyak
+  ;
+  CALL measure
+  $action = "WaitPosFull"
+  ;
+  state = 101
+  ;
+.END
+.PROGRAM state3 () ; Put detail to OT
+  CALL log ("State 3: Put detail to OT")
+  ; Check all start positions
+  ; Possible do not needed because robot can be only in HOME or near positioner
+  ;JMOVE #homyak
+  ;
+  SIGNAL -s.measure.ok, -s.measure.ng
+  CALL ot.put
+  ;
+  state = 101
+  ;
+.END
+.PROGRAM state4 () ; State 4: Put detail to defect tare
+  CALL log ("State 4: Put detail to defect tare")
+  ; Check all start positions
+  ; Possible do not needed because robot can be only in HOME or near positioner
+  ;JMOVE #homyak
+  ;
+  SIGNAL -s.measure.ok, -s.measure.ng
+  CALL defect.put
+  ;
+  state = 101
+  ;
+.END
+.PROGRAM state5 () ; Check etalon
+  CALL log ("State 5: Check etalon")
+  CALL etalon.measure (etalon.id)
+  IF SIG (s.measure.ok) THEN
+    state = 101
+  ELSE
+    state = 105
+  END
+  SIGNAL -s.measure.ok,-s.measure.ng
+.END
+.PROGRAM state6 () ; Deprecated
+  state = 101
+.END
+.PROGRAM state7 () ; Deprecated
+  state = 5
+.END
+.PROGRAM state8 () ; Check etalon by command
+  CALL log ("State 8: Check etalon by command")
+  CALL etalon.measure (etalon.id)
+  state = 105
+.END
+.PROGRAM state100 () ; Waiting for start
+  ;
+  CALL log ("State 100: Waiting for start")
+  $action = "WaitingForStart"
+  ;
+  WHILE NOT SIG (s.cmd.start)
+    TWAIT 0.5
+  END
+  SIGNAL -s.cmd.start
+  ;
+  CALL log ("START with Name:" + $pg.name + "-" + $ENCODE (detail.spec) + " Count:" + $ENCODE (detail.count) + " OT:" + $ot.data + " OPT:" + $opt.data)
+  ;
+  CALL pg.select
+  state = 106
+.END
+.PROGRAM state101 () ; Auxilary state
+  CALL log ("State 101: Calculating next step")
+  state = 102
+.END
+.PROGRAM state102 () ; Decision making
+  ; Priority 1
+  IF SIG (s.cmd.pause) THEN
+    state = 105
+    RETURN
+  END
+  IF SIG(s.cmd.chk.etal) AND NOT SIG(s.grip.full) THEN
+    state = 5
+    RETURN
+  END
+  ; Priority 2
+  IF SIG (s.cmd.stop) THEN
+    state = 6
+    RETURN
+  END
+  ; Priority 3
+  IF NOT SIG (s.grip.full) THEN
+    $action = "WaitPosFull"
+    IF SIG (s.cmd.pick) AND NOT SIG (rs13.work[1]) AND BITS (rs13.det.put[0], 8) > count.pick THEN
+      state = 1
+      RETURN
+    END
+  END
+  ; Priority 4
+  IF SIG (s.grip.full) AND NOT SIG (s.cmd.measured) THEN
+    state = 2
+    RETURN
+  END
+  ; Priority 5
+  IF SIG (s.grip.full) AND SIG (s.measure.ok) AND NOT SIG (rs7.tare.chg) THEN
+    state = 3
+    RETURN
+  END
+  ; Priority 6
+  IF SIG (s.grip.full) AND SIG (s.measure.ng) THEN
+    state = 4
+    RETURN
+  END
+  ; Priority 7
+  IF SIG (rs13.finish) THEN
+    state = 103
+    RETURN
+  END
+  ; Priority 8
+  IF NOT SIG (s.grip.full); AND NOT SIG (s.cmd.pick) THEN
+    JMOVE #homyak
+    BREAK
+    SIGNAL -rs7.locked.zone
+    RETURN
+  END
+.END
+.PROGRAM state103 () ; Auxilary state
+  CALL log ("State 103: Ending sequence started")
+  state = 104
+  ;
+.END
+.PROGRAM state104 () ; Ending sequence
+  SIGNAL rs7.finish.ack
+  TWAIT 5
+  state = 255
+  RETURN
+  ;
+.END
+.PROGRAM state105 () ; Program paused
+  CALL log("State 105: Program paused")
+  $action = "Paused"
+  SWAIT s.cmd.resume
+  $action = " " 
+  CALL log("Program resumed")
+  SIGNAL -s.cmd.pause
+  state = 101
+  
+.END
+.PROGRAM state106 () ; Check program
+  CALL log ("State 106: Check program")
+  IF $pg.name <> "NULL" THEN
+    CALL log ("Selected program: " + $pg.name)
+    IF object.id == round.no THEN
+      CALL calc.grid.rnd
+    ELSE
+      CALL calc.grid
+    END
+    CALL calc.ot
+    state = 7
+  ELSE
+    CALL log ("Wrong program name. Program reset")
+    BREAK
+    $action = "WrongProgramName"
+    TWAIT 10
+    BREAK
+    state = 0
+  END
+  ;
+.END
+.PROGRAM state255 ()
+  CALL log ("State 255: Program complete")
+  state = 0
+  ;
+.END
+.PROGRAM a.home ()
+  ;
+  SPEED 250 MM/S ALWAYS
+  JMOVE #homyak
+  ;
+.END
+.PROGRAM a.align ()
+	;
+	SPEED 250 MM/S ALWAYS
+	ALIGN
+	;
+.END
+.PROGRAM safe.home ()
+  ;
+  ; Safe zones:
+  ; 1. OT zone: same as for normal work
+  ; 2. Machine zone
+  ; 3. Defect + etalon zone
+  ;
+  IF SIG (do.home) THEN
+    CALL log ("Robot already in home position")
+  ELSE
+    CALL log ("Performing safe motion to home position")
+    ; In measure machine zone!!!
+    ; Move to the height of a before machine point
+    IF SIG (do.work[2]) THEN
+      CALL log ("Move from the measure machine zone")
+      IF object.id <> round.no THEN
+        .idx = 1
+      ELSE
+        .idx = 2
+      END
+      POINT .temp = #before.machine[.idx]
+      DECOMPOSE .s[1] = .temp
+      POINT .temp = HERE
+      DECOMPOSE .c[1] = .temp
+      .dz = .s[3] - .c[3]
+      DRAW 0, 0, .dz
+      LMOVE #before.machine[.idx]
+      JMOVE #safe.machine
+    END
+    ; In defect zone
+    ; Move to the height of a safe point
+    IF SIG (do.work[3]) THEN
+      CALL log ("Move from the defect zone")
+      POINT .temp = #safe.defect
+      DECOMPOSE .s[1] = .temp
+      POINT .temp = HERE
+      DECOMPOSE .c[1] = .temp
+      .dz = .s[3] - .c[3]
+      DRAW 0, 0, .dz
+      LMOVE #safe.defect
+    END
+    ;
+    ; In OT zone
+    ; Move to the height of a home POINT
+    IF SIG (do.work[1]) THEN
+      CALL log ("Move from the OT zone")
+      POINT .temp = #homyak
+      DECOMPOSE .s[1] = .temp
+      POINT .temp = HERE
+      DECOMPOSE .c[1] = .temp
+      .dz = .s[3] - .c[3]
+      DRAW 0, 0, .dz
+      LMOVE #homyak
+    END
+    ;
+    JMOVE #homyak
+    BREAK
+    CALL log ("Robot in home position")
+  END
+  ;
+.END
 .PROGRAM log (.$msg)
 	;
 	; 1 line = 55 symbols max
@@ -1008,149 +1208,6 @@ N_INT300    "s.debug.mode|Debug mode"
 	IFPWPRINT 2, 1, 1, 9, 10 = $log.entry[120], $log.entry[121], $log.entry[122], $log.entry[123]
 	IFPWPRINT 3, 1, 1, 9, 10 = $log.entry[124], $log.entry[125], $log.entry[126], $log.entry[127]
 	;
-.END
-.PROGRAM measure ()
-  IF FALSE THEN
-    .pos = hmi.obj.id
-  END
-  .pos = object.id
-  ;
-  IF object.id == round.no THEN
-    .shift.y = 0
-    .shift.z = 50
-    .p.idx = 2
-  ELSE
-    .shift.y = 50
-    .shift.z = 0
-    .p.idx = 1
-  END
-  ;
-  CALL log ("Move to measure machine")
-  ;$action = "TakingToMM"
-  ;
-  SPEED 100 ALWAYS
-  ACCURACY 100 ALWAYS
-  TOOL tool.pick[current.gripper]
-  ;
-  POINT .machine.pos = #machine.pos[.pos]
-  ; Go to machine
-  JMOVE #safe.machine
-  JMOVE #before.machine[.p.idx]
-  ACCURACY 10
-  LMOVE .machine.pos + TRANS (0, .shift.y, .shift.z)
-  ACCURACY 5
-  LMOVE .machine.pos + TRANS (0, .shift.y * 0.2, .shift.z * 0.2)
-  SPEED 250 MM/S
-  ACCURACY 0.5
-  LMOVE #machine.pos[.pos]
-  BREAK
-  CALL log ("Send command to enable vacuum")
-  $action = "WaitingMMVacuum"
-  PULSE grip.unclamp
-  TWAIT 0.5
-  ;
-  ACCURACY 5
-  LMOVE .machine.pos + TRANS (0, .shift.y * 0.2, .shift.z * 0.2)
-  ACCURACY 10
-  LMOVE .machine.pos + TRANS (0, .shift.y, .shift.z)
-  ;
-  LMOVE #before.machine[.p.idx]
-  BREAK
-  ; Wait result
-  CALL log ("Waiting for measurement result")
-  WAIT SIG (s.measure.ok) OR SIG (s.measure.ng)
-  SIGNAL s.cmd.measured
-  ;
-  IF SIG (s.measure.ok) THEN
-    CALL log ("Measurement result: OK")
-  ELSE
-    CALL log ("Measurement result: DEFECT")
-  END
-  ;
-  ; Pick from machine
-  ACCURACY 10
-  LMOVE .machine.pos + TRANS (0, .shift.y, .shift.z)
-  ACCURACY 5
-  LMOVE .machine.pos + TRANS (0, .shift.y * 0.2, .shift.z * 0.2)
-  SPEED 250 MM/S
-  ACCURACY 0.5
-  LMOVE #machine.pos[.pos]
-  BREAK
-  PULSE grip.clamp
-  TWAIT 0.5
-  ; Go home
-  ACCURACY 5
-  LMOVE .machine.pos + TRANS (0, .shift.y * 0.2, .shift.z * 0.2)
-  ACCURACY 10
-  LMOVE .machine.pos + TRANS (0, .shift.y, .shift.z)
-  ;
-  LMOVE #before.machine[.p.idx]
-  JMOVE #safe.machine
-  JMOVE #homyak
-  ;BREAK
-  ;JMOVE #safe.machine
-  ;JMOVE #homyak
-.END
-.PROGRAM ot.put ()
-  ;
-  SIGNAL rs7.locked.zone
-  IF SIG (rs7.tare.chg) THEN
-    CALL log ("Waiting for new OT")
-    SWAIT -rs7.tare.chg
-    count.put = 0
-  END
-  ;
-  CALL log ("Put to OT detail" + $ENCODE (count.put + 1))
-  ;$action = "PutToTare"
-  ;
-  SPEED 100 ALWAYS
-  ACCURACY 100 ALWAYS
-  TOOL tool.pick[current.gripper]
-  ;
-  CALL get.ot.point (count.put)
-  ;
-  .x = grip.xsh[object.id]
-  .y = grip.ysh[object.id]
-  .z = grip.zsh[object.id]
-  IF object.id <> round.no AND ot.y MOD 2 <> 0 AND SIG (s.opt.flip) THEN
-    .x = grip.180xsh[object.id]
-    .y = grip.180ysh[object.id]
-  END
-  ;
-  POINT .put = ot.put[ot.x, ot.y]
-  ;
-  SIGNAL rs7.locked.zone
-  BREAK
-  CALL log ("Check if positioner is occupied")
-  SWAIT -rs13.lock.zone
-  ;
-  JAPPRO .put, -200
-  ACCURACY 5
-  LAPPRO .put, -20
-  ACCURACY 0.02
-  SPEED 250 MM/S
-  LMOVE .put
-  BREAK
-  ;
-  PULSE grip.unclamp
-  TWAIT 0.5
-  count.put = count.put + 1
-  SIGNAL -s.grip.full
-  $action = "WaitPosFull"
-  ;
-  LAPPRO .put, -20
-  LAPPRO .put, -200
-  ;
-  ;IF NOT SIG (s.cmd.pick) THEN
-  ;  JMOVE #homyak
-  ;  BREAK
-  ;  SIGNAL -rs7.locked.zone
-  ;END
-  ;
-  IF count.put >= max.tare.count THEN
-    SIGNAL rs7.tare.chg
-  END
-  ;
 .END
 .PROGRAM pg.select ()
   SCASE $pg.name OF
@@ -1213,113 +1270,295 @@ N_INT300    "s.debug.mode|Debug mode"
   END
   ;
 .END
-.PROGRAM pos.pick ()
+.PROGRAM a.main ()
   ;
-  .$temp = "Pick detail from positioner (ID:" + $ENCODE (object.id) + ")"
-  CALL log (.$temp)
+  CALL log ("Main program executed")
+  CALL safe.home
   ;
-  TOOL tool.pick[current.gripper]
-  ;
-  SPEED 100 ALWAYS
-  ACCURACY 10 ALWAYS
-  ;
-  POINT .temp = #pos.point[object.id]
-  ;
-  SIGNAL rs7.locked.zone
-  ;
-    IF SIG(do.home) THEN
-    CALL log("Check if positioner is occupied")
-    SWAIT -rs13.lock.zone
+  WHILE TRUE DO
+    .$pg.string = "state" + $ENCODE (/L, state)
+    IF EXISTPGM (.$pg.string) THEN
+      SCALL .$pg.string
+    ELSE
+      CALL log ("Error! Program is in wrong state. Connect Robowizard")
+      RETURN
+    END
+    ;IF manual.mode THEN
+    ;  $action = "WaitNextStep"
+    ;  SWAIT
+    ;END
   END
-  ;
-  JMOVE .temp + TRANS (0, 0, 30)
-  BREAK
-  IF NOT SIG (grip.unclamped) THEN
-    PULSE grip.unclamp
-    CALL log ("Wait for unclamp gripper. State: WaitingGripUnclamped")
-    $action = "WaitingGripUnclamped"
-    WAIT SIG (grip.unclamped) OR SIG (s.force.in[1])
-  END
-  ;
-  SPEED 250 MM/S
-  ACCURACY 0.02
-  LMOVE #pos.point[object.id]
-  BREAK
-  PULSE grip.clamp
-  TWAIT 0.5
-  SIGNAL s.grip.full
-  SIGNAL -s.cmd.measured
-  count.pick = count.pick + 1
-  BITS rs7.det.picked[0], 8 = count.pick
-  ;
-  LMOVE .temp + TRANS (0, 5, 10)
-  ACCURACY 100
-  LMOVE .temp + TRANS (0, 0, 200)
-  ACCURACY 100
-  LMOVE #homyak
-  ;
-  BREAK
-  SIGNAL -rs7.locked.zone
   ;
 .END
-.PROGRAM safe.home ()
+.PROGRAM check.teach.pc ()
   ;
-  ; Safe zones:
-  ; 1. OT zone: same as for normal work
-  ; 2. Machine zone
-  ; 3. Defect + etalon zone
+  IF SIG (s.hmi.res.state) THEN
+    state = 0
+  END
   ;
-  IF SIG (do.home) THEN
-    CALL log ("Robot already in home position")
-  ELSE
-    CALL log ("Performing safe motion to home position")
-    ; In measure machine zone!!!
-    ; Move to the height of a before machine point
-    IF SIG (do.work[2]) THEN
-      CALL log ("Move from the measure machine zone")
-      IF object.id <> round.no THEN
-        .idx = 1
-      ELSE
-        .idx = 2
+  IF SIG (s.hmi.res.act) THEN
+    $action = " "
+  END
+  ;
+  IF SIG (s.pr.tch.pos) AND NOT SWITCH (REPEAT) THEN
+    MC PRIME a.teach.pos
+  END
+    ;
+  IF SIG (s.pr.home) AND NOT SWITCH (REPEAT) THEN
+    MC PRIME a.home
+  END
+  ;
+  IF SIG (s.pr.tch.defect) AND NOT SWITCH (REPEAT) THEN
+    MC PRIME a.teach.defect
+  END
+  ;
+  IF SIG (s.pr.tch.meas) AND NOT SWITCH (REPEAT) THEN
+    MC PRIME a.teach.machine
+  END
+  ;
+  IF SIG (s.pr.tch.ot) AND NOT SWITCH (REPEAT) THEN
+    MC PRIME a.teach.ot
+  END
+  ;
+  IF SIG (s.pr.tst.ot) AND NOT SWITCH (REPEAT) THEN
+    MC PRIME a.test.ot
+  END
+  ;
+  IF SIG (s.pr.tch.etal) AND NOT SWITCH (REPEAT) THEN
+    MC PRIME a.teach.etalon
+  END
+  ;
+  ; HMI PANEL OBJECT TEACH DATA
+  IF keep.object <> hmi.obj.id AND hmi.obj.id > 0 AND hmi.obj.id <= 64 THEN
+    hmi.gx = grip.xsh[hmi.obj.id]
+    hmi.gy = grip.ysh[hmi.obj.id]
+    hmi.gz = grip.zsh[hmi.obj.id]
+    hmi.g180x = grip.180xsh[hmi.obj.id]
+    hmi.g180y = grip.180ysh[hmi.obj.id]
+    ;
+    keep.object = hmi.obj.id
+  END
+  IF SIG (s.apply.obj) THEN
+    grip.xsh[hmi.obj.id] = hmi.gx
+    grip.ysh[hmi.obj.id] = hmi.gy
+    grip.zsh[hmi.obj.id] = hmi.gz
+    grip.180xsh[hmi.obj.id] = hmi.g180x
+    grip.180ysh[hmi.obj.id] = hmi.g180y
+  END
+;
+.END
+.PROGRAM check.zone.pc ()
+  ;
+  ;do.work[1] = 17
+  ;rs13.work[1] = 1017
+  ;di.hold = 2009
+  ;s.zone.blocked = 2209
+  ; do.work[1]     rs13.work[1]             s.zone.blocked
+  ;----| |-------------| |----------------------( )
+  ;            |                |
+  ;            | s.zone.blocked |
+  ;            --------|/|-------
+  ;
+  ; s.zone.blocked   rs13.work[1]  do.work[1]   di.hold
+  ;------|/|------------| |---------|  |--------(/)
+  ;
+  SOUT 2209 = 17 AND (NOT 1017 OR 2209)
+  SOUT 2009 = NOT (NOT 2209 AND 1017 AND 17)
+  ;
+.END
+.PROGRAM check.disp.pc ()
+	;
+	IF SIG (s.tcp.ena) AND tcp.ena == -1 THEN
+		tcp.ena = tyterm
+	END
+	IF NOT SIG (s.tcp.ena) AND tcp.ena <> -1 THEN
+		tcp.ena = -1
+	END
+	;
+	IF SIG (s.tcp.send.ena) AND tcp.send.ena == -1 THEN
+		tcp.send.ena = tyterm
+	END
+	IF NOT SIG (s.tcp.send.ena) AND tcp.send.ena <> -1 THEN
+		tcp.send.ena = -1
+	END
+	;
+	IF SIG (s.tcp.recv.ena) AND tcp.recv.ena == -1 THEN
+		tcp.recv.ena = tyterm
+	END
+	IF NOT SIG (s.tcp.recv.ena) AND tcp.recv.ena <> -1 THEN
+		tcp.recv.ena = -1
+	END
+	;
+.END
+.PROGRAM check.tasks.pc ()
+	;
+	IF TASK (1002) <> 1 THEN
+		PCEXECUTE 2: tcp.client.pc
+		TWAIT 3
+	END
+	IF TASK (1003) <> 1 THEN
+		PCEXECUTE 3: tcp.sender.pc
+		TWAIT 3
+	END
+	;
+.END
+.PROGRAM watchdog.pc ()
+  WHILE TRUE DO
+    ;
+    CALL check.tasks.pc
+    CALL check.disp.pc
+    CALL check.zone.pc
+    ;
+    ;IF SWITCH (CS) AND state > 0 THEN
+    ;  IF BITS (rs13.det.put[0], 8) == count.pick THEN
+    ;    TIMER(1) = 0
+    ;  END
+    ;END
+    ;
+    IF SIG (rs13.tare.ack) THEN
+      IF count.put==max.tare.count THEN
+        count.put = 0
       END
-      POINT .temp = #before.machine[.idx]
-      DECOMPOSE .s[1] = .temp
-      POINT .temp = HERE
-      DECOMPOSE .c[1] = .temp
-      .dz = .s[3] - .c[3]
-      DRAW 0, 0, .dz
-      LMOVE #before.machine[.idx]
-      JMOVE #safe.machine
-    END
-    ; In defect zone
-    ; Move to the height of a safe point
-    IF SIG (do.work[3]) THEN
-      CALL log ("Move from the defect zone")
-      POINT .temp = #safe.defect
-      DECOMPOSE .s[1] = .temp
-      POINT .temp = HERE
-      DECOMPOSE .c[1] = .temp
-      .dz = .s[3] - .c[3]
-      DRAW 0, 0, .dz
-      LMOVE #safe.defect
+      SIGNAL -rs7.tare.chg
     END
     ;
-    ; In OT zone
-    ; Move to the height of a home POINT
-    IF SIG (do.work[1]) THEN
-      CALL log ("Move from the OT zone")
-      POINT .temp = #homyak
-      DECOMPOSE .s[1] = .temp
-      POINT .temp = HERE
-      DECOMPOSE .c[1] = .temp
-      .dz = .s[3] - .c[3]
-      DRAW 0, 0, .dz
-      LMOVE #homyak
+    IF NOT SIG (s.debug.mode) THEN
+      IF SWITCH (REPEAT) AND NOT SWITCH (TEACH_LOCK) AND NOT SWITCH (EMERGENCY ) AND NOT SWITCH (CS ) AND NOT SWITCH (ERROR ) THEN
+        MC ZPOWER ON
+        ;MC PRIME a.main
+        ;WHILE NOT SWITCH(POWER)
+        ;  TWAIT 0.01
+        ;  MC CONTINUE
+        ;END
+      END
     END
     ;
-    JMOVE #homyak
-    BREAK
-    CALL log ("Robot in home position")
+    IF NOT SWITCH (REPEAT) THEN
+      CALL check.teach.pc
+    END
+    TWAIT 0.01
+  END
+  ;
+.END
+.PROGRAM set.vars.pc ()
+  ;
+  ; Constants
+  ;
+  ; Initialize once
+  ;
+  ;
+  IF NOT EXISTREAL ("state") THEN
+    state = 0
+  END
+  ;
+  IF NOT EXISTREAL ("etalon.id") THEN
+    etalon.id = -1
+  END
+  ;
+  IF NOT EXISTREAL ("round.no") THEN
+    round.no = 3
+  END
+  ;
+  IF NOT EXISTCHAR ("$tcp.ip") THEN
+    $tcp.ip = "127.0.0.1"
+  END
+  ;
+  IF NOT EXISTREAL ("tcp.port") THEN
+    tcp.port = 9007
+  END
+  ;
+  IF NOT EXISTREAL ("tcp.ena") THEN
+    tcp.ena = -1
+  END
+  ;
+  IF NOT EXISTREAL ("tcp.recv.ena") THEN
+    tcp.recv.ena = -1
+  END
+  ;
+  IF NOT EXISTREAL ("tcp.send.ena") THEN
+    tcp.send.ena = -1
+  END
+  ;
+  IF NOT EXISTREAL ("tcp.sender.dly") THEN
+    tcp.sender.dly = 0.25
+  END
+  ;
+  IF NOT EXISTREAL ("tyterm") THEN
+    tyterm = 0
+  END
+  ;
+  IF NOT EXISTCHAR ("$log.entry[127]") THEN
+    FOR .i = 0 TO 127
+      $log.entry[.i] = " "
+    END
+  END
+  ;
+  ;IF NOT EXISTJOINT ("#current.pos") THEN
+  ;POINT #current.pos = #homyak
+  ;END
+  ;
+  IF NOT EXISTREAL ("count.pick") THEN
+    count.pick = 0
+  END
+  ;
+  IF NOT EXISTREAL ("count.put") THEN
+    count.put = 0
+  END
+  ;
+  IF NOT EXISTREAL ("count.defect") THEN
+    count.defect = 1
+  END
+  ;
+  IF NOT EXISTREAL ("current.gripper") THEN
+    current.gripper = 1
+  END
+  ;
+  IF NOT EXISTREAL ("pg.gripper") THEN
+    pg.gripper = 0
+  END
+  ;
+  IF NOT EXISTREAL ("hmi.gripper") THEN
+    hmi.gripper = 1
+  END
+  ;
+  IF NOT EXISTREAL ("hmi.obj.id") THEN
+    hmi.obj.id = 1
+  END
+  ;
+  IF NOT EXISTREAL ("hmi.tool.no") THEN
+    hmi.tool.no = 1
+  END
+  ;
+  IF NOT EXISTREAL ("hmi.defect.pos") THEN
+    hmi.defect.pos = 1
+  END
+  ;
+  IF NOT EXISTCHAR ("$action") THEN
+    $action = "Default"
+  END
+  ;
+  ;
+  IF NOT EXISTCHAR ("$pg.name") THEN
+    $pg.name = "Default"
+  END
+  ;
+  IF NOT EXISTREAL ("detail.count") THEN
+    detail.count = 0
+  END
+  ;
+  IF NOT EXISTREAL ("keep.object") THEN
+    keep.object = -1
+  END
+  ;
+  FOR .n = 1 TO 64
+    .$name = "grip.xsh[" + $ENCODE(/L, .n) +"]"
+    IF NOT EXISTREAL (.$name) THEN
+        grip.xsh[.n] = 0
+        grip.ysh[.n] = 0
+        grip.zsh[.n] = 0
+        grip.180xsh[.n] = 0
+        grip.180ysh[.n] = 0
+    END
   END
   ;
 .END
@@ -1463,320 +1702,117 @@ N_INT300    "s.debug.mode|Debug mode"
   ;
   s.debug.mode = 2300
 .END
-.PROGRAM set.vars.pc ()
-  ;
-  ; Constants
-  ;
-  ; Initialize once
-  ;
-  ;
-  IF NOT EXISTREAL ("state") THEN
-    state = 0
-  END
-  ;
-  IF NOT EXISTREAL ("etalon.id") THEN
-    etalon.id = -1
-  END
-  ;
-  IF NOT EXISTREAL ("round.no") THEN
-    round.no = 3
-  END
-  ;
-  IF NOT EXISTCHAR ("$tcp.ip") THEN
-    $tcp.ip = "127.0.0.1"
-  END
-  ;
-  IF NOT EXISTREAL ("tcp.port") THEN
-    tcp.port = 9007
-  END
-  ;
-  IF NOT EXISTREAL ("tcp.ena") THEN
-    tcp.ena = -1
-  END
-  ;
-  IF NOT EXISTREAL ("tcp.recv.ena") THEN
-    tcp.recv.ena = -1
-  END
-  ;
-  IF NOT EXISTREAL ("tcp.send.ena") THEN
-    tcp.send.ena = -1
-  END
-  ;
-  IF NOT EXISTREAL ("tcp.sender.dly") THEN
-    tcp.sender.dly = 0.25
-  END
-  ;
-  IF NOT EXISTREAL ("tyterm") THEN
-    tyterm = 0
-  END
-  ;
-  IF NOT EXISTCHAR ("$log.entry[127]") THEN
-    FOR .i = 0 TO 127
-      $log.entry[.i] = " "
-    END
-  END
-  ;
-  ;IF NOT EXISTJOINT ("#current.pos") THEN
-  ;POINT #current.pos = #homyak
-  ;END
-  ;
-  IF NOT EXISTREAL ("count.pick") THEN
-    count.pick = 0
-  END
-  ;
-  IF NOT EXISTREAL ("count.put") THEN
-    count.put = 0
-  END
-  ;
-  IF NOT EXISTREAL ("count.defect") THEN
-    count.defect = 1
-  END
-  ;
-  IF NOT EXISTREAL ("current.gripper") THEN
-    current.gripper = 1
-  END
-  ;
-  IF NOT EXISTREAL ("pg.gripper") THEN
-    pg.gripper = 0
-  END
-  ;
-  IF NOT EXISTREAL ("hmi.gripper") THEN
-    hmi.gripper = 1
-  END
-  ;
-  IF NOT EXISTREAL ("hmi.obj.id") THEN
-    hmi.obj.id = 1
-  END
-  ;
-  IF NOT EXISTREAL ("hmi.tool.no") THEN
-    hmi.tool.no = 1
-  END
-  ;
-  IF NOT EXISTREAL ("hmi.defect.pos") THEN
-    hmi.defect.pos = 1
-  END
-  ;
-  IF NOT EXISTCHAR ("$action") THEN
-    $action = "Default"
-  END
-  ;
-  ;
-  IF NOT EXISTCHAR ("$pg.name") THEN
-    $pg.name = "Default"
-  END
-  ;
-  IF NOT EXISTREAL ("detail.count") THEN
-    detail.count = 0
-  END
-  ;
-  IF NOT EXISTREAL ("keep.object") THEN
-    keep.object = -1
-  END
-  ;
-  FOR .n = 1 TO 64
-    .$name = "grip.xsh[" + $ENCODE(/L, .n) +"]"
-    IF NOT EXISTREAL (.$name) THEN
-        grip.xsh[.n] = 0
-        grip.ysh[.n] = 0
-        grip.zsh[.n] = 0
-        grip.180xsh[.n] = 0
-        grip.180ysh[.n] = 0
-    END
-  END
-  ;
+.PROGRAM get.state.pc(.$state)@25/11/17 14:11 #210978
+	.$state = "SPEED:" + $ENCODE (/L, MSPEED) + ";"
+	.$state = .$state + "POWER:"
+	IF SWITCH (POWER ) THEN
+		.$state = .$state + "TRUE;"
+	ELSE
+		.$state = .$state + "FALSE;"
+	END
+	; MAX: 12
+	;
+	.$state = .$state + "CS:"
+	IF SWITCH (CS ) THEN
+		.$state = .$state + "TRUE;"
+	ELSE
+		.$state = .$state + "FALSE;"
+	END
+	; MAX 9
+	;
+	.$state = .$state + "TEACH:"
+	IF SWITCH (REPEAT ) THEN
+		.$state = .$state + "FALSE;"
+	ELSE
+		.$state = .$state + "TRUE;"
+	END
+	; MAX 12
+	;
+	.$state = .$state + "TEACHL:"
+	IF SWITCH (TEACH_LOCK ) THEN
+		.$state = .$state + "TRUE;"
+	ELSE
+		.$state = .$state + "FALSE;"
+	END
+	; MAX 13
+	;
+	.$state = .$state + "TPEMG:"
+	IF SWITCH (TP_EMG ) THEN
+		.$state = .$state + "TRUE;"
+	ELSE
+		.$state = .$state + "FALSE;"
+	END
+	; MAX 12
+	;
+	.$state = .$state + "OPEMG:"
+	IF SWITCH (OP_EMG ) THEN
+		.$state = .$state + "TRUE;"
+	ELSE
+		.$state = .$state + "FALSE;"
+	END
+	; MAX 12
+	;
+	.$state = .$state + "EXEMG:"
+	IF SWITCH (EX_EMG ) THEN
+		.$state = .$state + "TRUE;"
+	ELSE
+		.$state = .$state + "FALSE;"
+	END
+	; MAX 12
+	;
+	.$state = .$state + "ERROR:"
+	IF SWITCH (ERROR ) THEN
+		.$state = .$state + "TRUE;"
+	ELSE
+		.$state = .$state + "FALSE;"
+	END
+	; MAX 12
+	;
+	.$state = .$state + "ECODE:"
+	.$state = .$state + $ENCODE (ERROR) + ";"
+	; MAX 12
+	;
+	;.$state = .$state + "HOME:"
+	;IF SIG (do.home1) THEN
+	;  .$state = .$state + "TRUE;"
+	;ELSE
+	;  .$state = .$state + "FALSE;"
+	;END
+	;; MAX 12
+	;;
+	;.$state = .$state + "BATALM:"
+	;IF SIG (do.bat.alm) THEN
+	;  .$state = .$state + "TRUE;"
+	;ELSE
+	;  .$state = .$state + "FALSE;"
+	;END
+	; MAX 12
+	.$state = .$state + "\n"
 .END
-.PROGRAM state0 () ; Initialization of parameters
+.PROGRAM tcp.sender.pc ()
   ;
-  CALL log ("State 0: Program reset. Initialization of parameters")
-  SIGNAL -s.grip.full, -s.measure.ok, -s.measure.ng, -rs7.tare.chg, -s.cmd.measured
-  SIGNAL -s.cmd.start, -s.cmd.pick, -s.cmd.finish, -rs7.finish.ack, -rs7.locked.zone, -s.cmd.stop
-  count.pick = 0
-  BITS rs7.det.picked[0], 8 = count.pick
-  count.put = 0
-  ;
-  state = 100
-  ;
-.END
-.PROGRAM state1 () ; Pick from positioner
-  CALL log ("State 1: Pick from positioner")
-  ; Check all start positions
-  ; Possible do not needed because robot can be only in HOME or near positioner
-  ;JMOVE #homyak
-  ;
-  CALL pos.pick
-  ;
-  state = 101
-  ;
-.END
-.PROGRAM state100 () ; Waiting for start
-  ;
-  CALL log ("State 100: Waiting for start")
-  $action = "WaitingForStart"
-  ;
-  WHILE NOT SIG (s.cmd.start)
-    TWAIT 0.5
-  END
-  SIGNAL -s.cmd.start
-  ;
-  CALL log ("START with Name:" + $pg.name + "-" + $ENCODE (detail.spec) + " Count:" + $ENCODE (detail.count) + " OT:" + $ot.data + " OPT:" + $opt.data)
-  ;
-  CALL pg.select
-  state = 106
-.END
-.PROGRAM state101 () ; Auxilary state
-  CALL log ("State 101: Calculating next step")
-  state = 102
-.END
-.PROGRAM state102 () ; Decision making
-  ; Priority 1
-  IF SIG (s.cmd.pause) THEN
-    state = 105
-    RETURN
-  END
-  IF SIG(s.cmd.chk.etal) AND NOT SIG(s.grip.full) THEN
-    state = 8
-    RETURN
-  END
-  ; Priority 2
-  IF SIG (s.cmd.stop) THEN
-    state = 6
-    RETURN
-  END
-  ; Priority 3
-  IF NOT SIG (s.grip.full) THEN
-    $action = "WaitPosFull"
-    IF SIG (s.cmd.pick) AND NOT SIG (rs13.work[1]) AND BITS (rs13.det.put[0], 8) > count.pick THEN
-      state = 1
-      RETURN
-    END
-  END
-  ; Priority 4
-  IF SIG (s.grip.full) AND NOT SIG (s.cmd.measured) THEN
-    state = 2
-    RETURN
-  END
-  ; Priority 5
-  IF SIG (s.grip.full) AND SIG (s.measure.ok) AND NOT SIG (rs7.tare.chg) THEN
-    state = 3
-    RETURN
-  END
-  ; Priority 6
-  IF SIG (s.grip.full) AND SIG (s.measure.ng) THEN
-    state = 4
-    RETURN
-  END
-  ; Priority 7
-  IF SIG (rs13.finish) THEN
-    state = 103
-    RETURN
-  END
-  ; Priority 8
-  IF NOT SIG (s.grip.full); AND NOT SIG (s.cmd.pick) THEN
-    JMOVE #homyak
-    BREAK
-    SIGNAL -rs7.locked.zone
-    RETURN
-  END
-.END
-.PROGRAM state103 () ; Auxilary state
-  CALL log ("State 103: Ending sequence started")
-  state = 104
-  ;
-.END
-.PROGRAM state104 () ; Ending sequence
-  SIGNAL rs7.finish.ack
-  TWAIT 5
-  state = 255
-  RETURN
-  ;
-.END
-.PROGRAM state105 () ; Program paused
-  CALL log("State 105: Program paused")
-  $action = "Paused"
-  SWAIT s.cmd.resume
-  $action = " " 
-  CALL log("Program resumed")
-  SIGNAL -s.cmd.pause
-  state = 101
-  
-.END
-.PROGRAM state106 () ; Check program
-  CALL log ("State 106: Check program")
-  IF $pg.name <> "NULL" THEN
-    CALL log ("Selected program: " + $pg.name)
-    IF object.id == round.no THEN
-      CALL calc.grid.rnd
+  WHILE TRUE DO
+    ;
+    CALL get.state.pc (.$data[1])
+    .$data[2] = "ACTION:" + $action + ";"
+    .$data[2] = .$data[2] + "GRIPPER:" + $ENCODE (current.gripper) + ";"
+    .$data[2] = .$data[2] + "PICKCOUNT:" + $ENCODE (count.pick) + ";"
+    .$data[2] = .$data[2] + "DEFECTCOUNT:" + $ENCODE (count.defect) + ";"
+    .$data[2] = .$data[2] + "STATE:" + $ENCODE (state) + ";"
+    .$data[2] = .$data[2] + "HOUR:" + $ENCODE(OPEINFO(3)) + ";"
+    ;
+    IF SWITCH(STP_ONCE) THEN
+      .$data[2] = .$data[2] + "MANUALMODE:TRUE;"
     ELSE
-      CALL calc.grid
+      .$data[2] = .$data[2] + "MANUALMODE:FALSE;"
     END
-    CALL calc.ot
-    state = 7
-  ELSE
-    CALL log ("Wrong program name. Program reset")
-    BREAK
-    $action = "WrongProgramName"
-    TWAIT 10
-    BREAK
-    state = 0
+    ;
+    .$data[2] = .$data[2] + "\n"
+    ;
+    CALL tcp.send.pc (.$data[], 2)
+    TWAIT tcp.sender.dly
   END
   ;
-.END
-.PROGRAM state2 () ; Measurement process
-  CALL log ("State 2: Measurement process")
-  ; Check all start positions
-  ; Possible do not needed because robot can be only in HOME or near positioner
-  ;JMOVE #homyak
-  ;
-  CALL measure
-  $action = "WaitPosFull"
-  ;
-  state = 101
-  ;
-.END
-.PROGRAM state255 ()
-  CALL log ("State 255: Program complete")
-  state = 0
-  ;
-.END
-.PROGRAM state3 () ; Put detail to OT
-  CALL log ("State 3: Put detail to OT")
-  ; Check all start positions
-  ; Possible do not needed because robot can be only in HOME or near positioner
-  ;JMOVE #homyak
-  ;
-  SIGNAL -s.measure.ok, -s.measure.ng
-  CALL ot.put
-  ;
-  state = 101
-  ;
-.END
-.PROGRAM state4 () ; State 4: Put detail to defect tare
-  CALL log ("State 4: Put detail to defect tare")
-  ; Check all start positions
-  ; Possible do not needed because robot can be only in HOME or near positioner
-  ;JMOVE #homyak
-  ;
-  SIGNAL -s.measure.ok, -s.measure.ng
-  CALL defect.put
-  ;
-  state = 101
-  ;
-.END
-.PROGRAM state5 () ; Check etalon
-  CALL log ("State 5: Check etalon")
-  CALL etalon.measure(etalon.id)
-  state = 101
-.END
-.PROGRAM state6 () ; Deprecated
-  state = 101
-.END
-.PROGRAM state7 () ; Deprecated
-  state = 5
-.END
-.PROGRAM state8 () ; Check etalon by command
-  CALL log ("State 8: Check etalon by command")
-  CALL etalon.measure (etalon.id)
-  state = 105
 .END
 .PROGRAM tcp.callback.pc(.$data[],.data.length)@25/11/18 16:27 #1195
   .$temp = "Received " + $ENCODE (.data.length) + " strings:"
@@ -2029,60 +2065,41 @@ N_INT300    "s.debug.mode|Debug mode"
 	END
 	;
 .END
-.PROGRAM tcp.sender.pc ()
+.PROGRAM autostart.pc ()
   ;
-  WHILE TRUE DO
-    ;
-    CALL get.state.pc (.$data[1])
-    .$data[2] = "ACTION:" + $action + ";"
-    .$data[2] = .$data[2] + "GRIPPER:" + $ENCODE (current.gripper) + ";"
-    .$data[2] = .$data[2] + "PICKCOUNT:" + $ENCODE (count.pick) + ";"
-    .$data[2] = .$data[2] + "DEFECTCOUNT:" + $ENCODE (count.defect) + ";"
-    .$data[2] = .$data[2] + "STATE:" + $ENCODE (state) + ";"
-    .$data[2] = .$data[2] + "\n"
-    ;
-    CALL tcp.send.pc (.$data[], 2)
-    TWAIT tcp.sender.dly
-  END
+  ; System switches
+  CP ON
+  PREFETCH.SIGINS OFF
+  QTOOL OFF
+  REP_ONCE ON
+  HOLD.STEP ON
+  DISP.EXESTEP ON
+  PROG.DATE ON
+  ABS.SPEED ON
+  autostart.pc ON
+  errstart.pc ON  ;
+  ;
+  IFPWPRINT 8, 1, 1, 5, 10 = "Robot: RS007L S/N: C6324", "Controller: F60 S/N: C8174", " ", "Powered by Robowizard Co.Ltd."
+  ;
+  CALL set.io.pc
+  CALL set.vars.pc
+  ;
+  MC PRIME a.main
+  TWAIT 1
+  ;
+  CALL watchdog.pc
   ;
 .END
-.PROGRAM watchdog.pc ()
-  WHILE TRUE DO
-    ;
-    CALL check.tasks.pc
-    CALL check.disp.pc
-    CALL check.zone.pc
-    ;
-    ;IF SWITCH (CS) AND state > 0 THEN
-    ;  IF BITS (rs13.det.put[0], 8) == count.pick THEN
-    ;    TIMER(1) = 0
-    ;  END
-    ;END
-    ;
-    IF SIG (rs13.tare.ack) THEN
-      IF count.put==max.tare.count THEN
-        count.put = 0
-      END
-      SIGNAL -rs7.tare.chg
-    END
-    ;
-    IF NOT SIG (s.debug.mode) THEN
-      IF SWITCH (REPEAT) AND NOT SWITCH (TEACH_LOCK) AND NOT SWITCH (EMERGENCY ) AND NOT SWITCH (CS ) AND NOT SWITCH (ERROR ) THEN
-        MC ZPOWER ON
-        ;MC PRIME a.main
-        ;WHILE NOT SWITCH(POWER)
-        ;  TWAIT 0.01
-        ;  MC CONTINUE
-        ;END
-      END
-    END
-    ;
-    IF NOT SWITCH (REPEAT) THEN
-      CALL check.teach.pc
-    END
-    TWAIT 0.01
-  END
-  ;
+.PROGRAM errstart.pc ()
+	;
+	IF ERROR == -34021 OR ERROR == -10100 THEN
+		tcp.socket = -1
+		MC ERESET
+		TWAIT 1
+	END
+	TWAIT 5
+	errstart.pc ON
+	;
 .END
 .PROGRAM Comment___ () ; Comments for IDE. Do not use.
 	; @@@ PROJECT @@@
@@ -2100,200 +2117,215 @@ N_INT300    "s.debug.mode|Debug mode"
 	; 127.0.0.1
 	; 9205
 	; @@@ PROGRAM @@@
-	;   Group:Etalon:1
-	;     1:a.teach.etalon:F
-	;     1:etalon.measure:F
-	;   Group:OT:2
-	;     2:a.teach.ot:F
-	;       .ot.down.left 
-	;       .ot.down.right 
-	;       .ot.up.right 
-	;       .ot.orig 
-	;     2:calc.grid:F
-	;       .max 
-	;       .obj.len 
-	;       .obj.len.w.spc 
-	;       .i 
-	;       .j 
-	;     2:calc.grid.rnd:F
-	;       .max 
-	;       .obj.shift 
-	;       .i 
-	;       .j 
-	;     2:get.ot.point:F
-	;       .obj.id 
-	;       .i 
-	;       .x 
-	;       .y 
-	;     2:a.test.ot:F
-	;       .$pg 
-	;     2:ot.put:F
-	;       .x 
-	;       .y 
-	;       .z 
-	;       .put 
-	;       .tare.chg 
-	;       .locked.zone 
-	;     2:calc.ot:F
-	;       .center.col 
-	;       .center.row 
-	;       .cell 
-	;       .i 
-	;       .j 
-	;       .dist 
-	;       .dists 
-	;       .array.size 
-	;       .result 
-	;       .cornerA 
-	;       .cornerB 
-	;       .tmp.dist 
-	;       .tmp.m 
-	;       .tmp.n 
-	;       .n 
-	;       .m 
-	;       .filled 
-	;       .obj.id 
-	;   Group:MeasureMachine:3
-	;     3:a.teach.machine:F
-	;       .temp 
-	;     3:measure:F
-	;       .pos 
-	;       .shift.y 
-	;       .shift.z 
-	;       .p.idx 
-	;       .machine.pos 
-	;   Group:Objects:4
-	;     4:id1:F
-	;     4:id2:F
-	;     4:id3:F
-	;     4:id4:F
-	;     4:id5:F
-	;     4:id6:F
-	;   Group:Positioner:5
-	;     5:pos.pick:F
-	;       .$temp 
-	;       .temp 
-	;       .locked.zone 
-	;       .det.picked 
-	;     5:a.teach.pos:F
-	;       .temp 
-	;   Group:Defect:6
-	;     6:defect.put:F
-	;       .temp 
-	;     6:a.teach.defect:F
-	;       .x 
-	;       .y 
-	;       .o 
-	;       .k 
-	;       .i 
-	;       .j 
-	;       .defect.pos 
-	;   Group:States:7
-	;     7:state0:F
-	;       .tare.chg 
-	;       .finish.ack 
-	;       .locked.zone 
-	;       .det.picked 
-	;     7:state1:F
-	;     7:state2:F
-	;     7:state3:F
-	;     7:state4:F
-	;     7:state5:F
-	;     7:state6:F
-	;     7:state7:F
-	;     7:state8:F
-	;     7:state100:F
-	;     7:state101:F
-	;     7:state102:F
-	;       .work 
-	;       .det.put 
-	;       .finish 
-	;       .tare.chg 
-	;       .locked.zone 
-	;     7:state103:F
-	;     7:state104:F
-	;       .finish.ack 
-	;     7:state105:F
-	;     7:state106:F
-	;     7:state255:F
-	;   Group:Utilities:8
-	;     8:a.home:F
-	;     8:a.align:F
-	;     8:safe.home:F
-	;     8:log:F
-	;       .$msg 
-	;       .i 
-	;     8:pg.select:F
-	;   0:a.main:F
-	;     .$pg.string 
-	;   Group:Watchdog:9
-	;     9:check.teach.pc:B
-	;     9:check.zone.pc:B
-	;     9:check.disp.pc:B
-	;     9:check.tasks.pc:B
-	;     9:watchdog.pc:B
-	;       .tare.ack 
-	;       .tare.chg 
-	;   Group:Initialization:10
-	;     10:set.vars.pc:B
-	;       .i 
-	;       .n 
-	;       .$name 
-	;     10:set.io.pc:B
-	;       .work 
-	;       .tare.ack 
-	;       .detail.put 
-	;       .finish 
-	;       .tare.chg 
-	;       .locked.zone 
-	;       .finish.ack 
-	;       .put.ack 
-	;       .det.put 
-	;       .det.picked 
-	;   Group:TCPIP:11
-	;     11:get.state.pc:B
-	;       .$state 
-	;     11:tcp.sender.pc:B
-	;       .$data 
-	;     11:tcp.callback.pc:B
-	;       .$data 
-	;       .data.length 
-	;       .$temp 
-	;       .i 
-	;       .$sensor.name 
-	;       .$sensor.state 
-	;       .$measurement.state 
-	;       .$spd 
-	;       .speed 
-	;     11:tcp.client.pc:B
-	;       .tcp.retry.count 
-	;       .tcp.connect.tmo 
-	;       .tcp.receive.tmo 
-	;       .number 
-	;       .ports 
-	;       .sockets 
-	;       .errors 
-	;       .suberrors 
-	;       .$ips 
-	;       .i 
-	;       .$temp 
-	;       .status 
-	;       .$tcp.ip.copy 
-	;       .$ip 
-	;       .ip 
-	;       .connected 
-	;       .tcp.error.cnt 
-	;       .$tcp.request 
-	;       .request.size 
-	;     11:tcp.send.pc:B
-	;       .$data 
-	;       .data.length 
-	;       .tcp.send.tmo 
-	;       .status 
-	;       .$temp 
-	;       .i 
-	;   0:autostart.pc:B
-	;   0:errstart.pc:B
+	; Group:Etalon:1
+	; 1:a.teach.etalon:F
+	; .temp 
+	; 1:etalon.measure:F
+	; .id 
+	; .etalon.pos.pt 
+	; .etalon.mac.pt 
+	; .shift.y 
+	; .shift.z 
+	; .p.idx 
+	; Group:OT:2
+	; 2:a.teach.ot:F
+	; .ot.down.left 
+	; .ot.down.right 
+	; .ot.up.right 
+	; .ot.orig 
+	; 2:calc.grid:F
+	; .max 
+	; .obj.len 
+	; .obj.len.w.spc 
+	; .i 
+	; .j 
+	; 2:calc.grid.rnd:F
+	; .max 
+	; .obj.shift 
+	; .i 
+	; .j 
+	; 2:get.ot.point:F
+	; .obj.id 
+	; .i 
+	; .x 
+	; .y 
+	; 2:a.test.ot:F
+	; .$pg 
+	; 2:ot.put:F
+	; .x 
+	; .y 
+	; .z 
+	; .put 
+	; .tare.chg 
+	; .locked.zone 
+	; .lock.zone 
+	; 2:calc.ot:F
+	; .center.col 
+	; .center.row 
+	; .cell 
+	; .i 
+	; .j 
+	; .dist 
+	; .dists 
+	; .array.size 
+	; .result 
+	; .cornerA 
+	; .cornerB 
+	; .tmp.dist 
+	; .tmp.m 
+	; .tmp.n 
+	; .n 
+	; .m 
+	; .filled 
+	; .obj.id 
+	; Group:MeasureMachine:3
+	; 3:a.teach.machine:F
+	; .temp 
+	; 3:measure:F
+	; .pos 
+	; .shift.y 
+	; .shift.z 
+	; .p.idx 
+	; .machine.pos 
+	; Group:Objects:4
+	; 4:id1:F
+	; 4:id2:F
+	; 4:id3:F
+	; 4:id4:F
+	; 4:id5:F
+	; 4:id6:F
+	; Group:Positioner:5
+	; 5:pos.pick:F
+	; .$temp 
+	; .temp 
+	; .locked.zone 
+	; .det.picked 
+	; .lock.zone 
+	; 5:a.teach.pos:F
+	; .temp 
+	; Group:Defect:6
+	; 6:defect.put:F
+	; .temp 
+	; 6:a.teach.defect:F
+	; .x 
+	; .y 
+	; .o 
+	; .k 
+	; .i 
+	; .j 
+	; .defect.pos 
+	; Group:States:7
+	; 7:state0:F
+	; .tare.chg 
+	; .finish.ack 
+	; .locked.zone 
+	; .det.picked 
+	; 7:state1:F
+	; 7:state2:F
+	; 7:state3:F
+	; 7:state4:F
+	; 7:state5:F
+	; 7:state6:F
+	; 7:state7:F
+	; 7:state8:F
+	; 7:state100:F
+	; 7:state101:F
+	; 7:state102:F
+	; .work 
+	; .det.put 
+	; .finish 
+	; .tare.chg 
+	; .locked.zone 
+	; 7:state103:F
+	; 7:state104:F
+	; .finish.ack 
+	; 7:state105:F
+	; 7:state106:F
+	; 7:state255:F
+	; Group:Utilities:8
+	; 8:a.home:F
+	; 8:a.align:F
+	; 8:safe.home:F
+	; .idx 
+	; .temp 
+	; .s 
+	; .c 
+	; .dz 
+	; 8:log:F
+	; .$msg 
+	; .i 
+	; 8:pg.select:F
+	; 0:a.main:F
+	; .$pg.string 
+	; Group:Watchdog:9
+	; 9:check.teach.pc:B
+	; 9:check.zone.pc:B
+	; 9:check.disp.pc:B
+	; 9:check.tasks.pc:B
+	; 9:watchdog.pc:B
+	; .tare.ack 
+	; .tare.chg 
+	; Group:Initialization:10
+	; 10:set.vars.pc:B
+	; .i 
+	; .n 
+	; .$name 
+	; 10:set.io.pc:B
+	; .work 
+	; .tare.ack 
+	; .detail.put 
+	; .finish 
+	; .tare.chg 
+	; .locked.zone 
+	; .finish.ack 
+	; .put.ack 
+	; .det.put 
+	; .det.picked 
+	; .lock.zone 
+	; Group:TCPIP:11
+	; 11:get.state.pc:B
+	; .$state 
+	; 11:tcp.sender.pc:B
+	; .$data 
+	; 11:tcp.callback.pc:B
+	; .$data 
+	; .data.length 
+	; .$temp 
+	; .i 
+	; .$sensor.name 
+	; .$sensor.state 
+	; .$measurement.state 
+	; .$spd 
+	; .speed 
+	; 11:tcp.client.pc:B
+	; .tcp.retry.count 
+	; .tcp.connect.tmo 
+	; .tcp.receive.tmo 
+	; .number 
+	; .ports 
+	; .sockets 
+	; .errors 
+	; .suberrors 
+	; .$ips 
+	; .i 
+	; .$temp 
+	; .status 
+	; .$tcp.ip.copy 
+	; .$ip 
+	; .ip 
+	; .connected 
+	; .tcp.error.cnt 
+	; .$tcp.request 
+	; .request.size 
+	; 11:tcp.send.pc:B
+	; .$data 
+	; .data.length 
+	; .tcp.send.tmo 
+	; .status 
+	; .$temp 
+	; .i 
+	; 0:autostart.pc:B
+	; 0:errstart.pc:B
 	; @@@ TRANS @@@
 	; ot.put[] Calculated OT put point
 	; @@@ JOINTS @@@
@@ -2305,14 +2337,11 @@ N_INT300    "s.debug.mode|Debug mode"
 	; #before.machine[] Point before machine
 	; #defect.point[] Defect point for cell i
 	; #safe.machine Safe point on machine side
-	; #defect.safe 
 	; #ot.up.right OT up.right point
 	; #ot.orig OT up right point
 	; #ot.down.right OT down right point
 	; #ot.down.left OT down left point
 	; #machine.pos[] Point in measure machine for object i
-	; #et.mac.point[] 
-	; #et.pos.point[] 
 	; #safe.defect Safe point before defect tare
 	; #safe.etalon Safe point to move to positioner
 	; @@@ REALS @@@
@@ -2353,15 +2382,12 @@ N_INT300    "s.debug.mode|Debug mode"
 	; tcp.socket TCP socket ID
 	; tyterm Display destination terminal
 	; hmi.gripper HMI gripper No
-	; ms[] 
-	; ns[] 
 	; object.id Object data: object id
 	; ot.x OT put coordinate X
 	; ot.y OT put coordinate Y
 	; round.no ID for round detail
 	; spc.tare.count Object data: Max details in tare with spacer
 	; detail.spec Detail specification
-	; etalon.id 
 	; @@@ STRINGS @@@
 	; $log.entry[] Log entry
 	; $action Current robot action to send
@@ -2436,174 +2462,174 @@ N_INT300    "s.debug.mode|Debug mode"
 .END
 .TRANS
 tool.pick[1] 0.000000 10.000000 120.000000 -22.500000 180.000000 0.000000
-ot.frame -145.166809 539.605957 -5.568207 -84.510590 1.748546 -95.627464
-ot.put[0,0] -145.166809 539.605957 -5.568207 -84.510590 1.748546 -95.627464
-ot.put[0,1] -145.095657 568.592468 -4.687590 -84.510590 1.748546 -95.627464
-ot.put[0,2] -145.024490 597.579041 -3.806973 -84.510590 1.748546 -95.627464
-ot.put[0,3] -144.953339 626.565552 -2.926356 -84.510590 1.748546 -95.627464
-ot.put[0,4] -144.882187 655.552124 -2.045740 -84.510590 1.748546 -95.627464
-ot.put[0,5] -144.811020 684.538635 -1.165123 -84.510590 1.748546 -95.627464
-ot.put[0,6] -144.739868 713.525208 -0.284506 -84.510590 1.748546 -95.627464
+ot.frame -145.551819 540.507935 -3.450490 -85.560913 2.096370 85.437073
+ot.put[0,0] -145.551819 540.507935 -3.450485 -85.560913 2.096370 -94.562935
+ot.put[0,1] -145.487640 569.488586 -2.393016 -85.560913 2.096370 -94.562935
+ot.put[0,2] -145.423447 598.469238 -1.335546 -85.560913 2.096370 -94.562935
+ot.put[0,3] -145.359268 627.449890 -0.278077 -85.560913 2.096370 -94.562935
+ot.put[0,4] -145.295090 656.430542 0.779393 -85.560913 2.096370 -94.562935
+ot.put[0,5] -145.230896 685.411133 1.836862 -85.560913 2.096370 -94.562935
+ot.put[0,6] -145.166718 714.391846 2.894331 -85.560913 2.096370 -94.562935
 ot.put[0,7] -145.939117 365.624725 -9.831766 -85.560913 2.096370 85.437073
-ot.put[1,0] -129.166931 539.568115 -5.616081 -84.510590 1.748546 -95.627464
-ot.put[1,1] -129.095764 568.554688 -4.735464 -84.510590 1.748546 -95.627464
-ot.put[1,2] -129.024612 597.541199 -3.854847 -84.510590 1.748546 -95.627464
-ot.put[1,3] -128.953461 626.527771 -2.974230 -84.510590 1.748546 -95.627464
-ot.put[1,4] -128.882294 655.514282 -2.093614 -84.510590 1.748546 -95.627464
-ot.put[1,5] -128.811142 684.500854 -1.212997 -84.510590 1.748546 -95.627464
-ot.put[1,6] -128.739975 713.487366 -0.332380 -84.510590 1.748546 -95.627464
+ot.put[1,0] -129.551926 540.474182 -3.497047 -85.560913 2.096370 -94.562935
+ot.put[1,1] -129.487732 569.454834 -2.439578 -85.560913 2.096370 -94.562935
+ot.put[1,2] -129.423553 598.435486 -1.382108 -85.560913 2.096370 -94.562935
+ot.put[1,3] -129.359375 627.416138 -0.324639 -85.560913 2.096370 -94.562935
+ot.put[1,4] -129.295197 656.396790 0.732831 -85.560913 2.096370 -94.562935
+ot.put[1,5] -129.231003 685.377441 1.790300 -85.560913 2.096370 -94.562935
+ot.put[1,6] -129.166824 714.358093 2.847770 -85.560913 2.096370 -94.562935
 ot.put[1,7] -161.939011 365.658447 -9.785205 -85.560913 2.096370 85.437073
-ot.put[2,0] -113.167038 539.530334 -5.663955 -84.510590 1.748546 -95.627464
-ot.put[2,1] -113.095886 568.516846 -4.783338 -84.510590 1.748546 -95.627464
-ot.put[2,2] -113.024727 597.503418 -3.902721 -84.510590 1.748546 -95.627464
-ot.put[2,3] -112.953568 626.489929 -3.022104 -84.510590 1.748546 -95.627464
-ot.put[2,4] -112.882416 655.476440 -2.141487 -84.510590 1.748546 -95.627464
-ot.put[2,5] -112.811249 684.463013 -1.260871 -84.510590 1.748546 -95.627464
-ot.put[2,6] -112.740097 713.449524 -0.380254 -84.510590 1.748546 -95.627464
+ot.put[2,0] -113.552025 540.440491 -3.543609 -85.560913 2.096370 -94.562935
+ot.put[2,1] -113.487839 569.421082 -2.486140 -85.560913 2.096370 -94.562935
+ot.put[2,2] -113.423660 598.401733 -1.428670 -85.560913 2.096370 -94.562935
+ot.put[2,3] -113.359474 627.382385 -0.371201 -85.560913 2.096370 -94.562935
+ot.put[2,4] -113.295288 656.363037 0.686269 -85.560913 2.096370 -94.562935
+ot.put[2,5] -113.231110 685.343689 1.743738 -85.560913 2.096370 -94.562935
+ot.put[2,6] -113.166931 714.324341 2.801208 -85.560913 2.096370 -94.562935
 ot.put[2,7] -177.938904 365.692200 -9.738644 -85.560913 2.096370 85.437073
-ot.put[3,0] -97.167160 539.492493 -5.711828 -84.510590 1.748546 -95.627464
-ot.put[3,1] -97.096001 568.479004 -4.831212 -84.510590 1.748546 -95.627464
-ot.put[3,2] -97.024841 597.465576 -3.950595 -84.510590 1.748546 -95.627464
-ot.put[3,3] -96.953690 626.452087 -3.069978 -84.510590 1.748546 -95.627464
-ot.put[3,4] -96.882523 655.438660 -2.189361 -84.510590 1.748546 -95.627464
-ot.put[3,5] -96.811371 684.425171 -1.308744 -84.510590 1.748546 -95.627464
-ot.put[3,6] -96.740211 713.411743 -0.428127 -84.510590 1.748546 -95.627464
+ot.put[3,0] -97.552124 540.406738 -3.590171 -85.560913 2.096370 -94.562935
+ot.put[3,1] -97.487946 569.387390 -2.532701 -85.560913 2.096370 -94.562935
+ot.put[3,2] -97.423767 598.368042 -1.475232 -85.560913 2.096370 -94.562935
+ot.put[3,3] -97.359573 627.348694 -0.417763 -85.560913 2.096370 -94.562935
+ot.put[3,4] -97.295395 656.329346 0.639707 -85.560913 2.096370 -94.562935
+ot.put[3,5] -97.231216 685.309937 1.697176 -85.560913 2.096370 -94.562935
+ot.put[3,6] -97.167030 714.290588 2.754646 -85.560913 2.096370 -94.562935
 ot.put[3,7] -193.938812 365.725922 -9.692081 -85.560913 2.096370 85.437073
-ot.put[4,0] -81.167267 539.454651 -5.759702 -84.510590 1.748546 -95.627464
-ot.put[4,1] -81.096115 568.441223 -4.879086 -84.510590 1.748546 -95.627464
-ot.put[4,2] -81.024956 597.427734 -3.998469 -84.510590 1.748546 -95.627464
-ot.put[4,3] -80.953796 626.414307 -3.117852 -84.510590 1.748546 -95.627464
-ot.put[4,4] -80.882645 655.400818 -2.237235 -84.510590 1.748546 -95.627464
-ot.put[4,5] -80.811485 684.387329 -1.356618 -84.510590 1.748546 -95.627464
-ot.put[4,6] -80.740326 713.373901 -0.476001 -84.510590 1.748546 -95.627464
+ot.put[4,0] -81.552231 540.372986 -3.636733 -85.560913 2.096370 -94.562935
+ot.put[4,1] -81.488045 569.353638 -2.579263 -85.560913 2.096370 -94.562935
+ot.put[4,2] -81.423866 598.334290 -1.521794 -85.560913 2.096370 -94.562935
+ot.put[4,3] -81.359680 627.314941 -0.464324 -85.560913 2.096370 -94.562935
+ot.put[4,4] -81.295502 656.295593 0.593145 -85.560913 2.096370 -94.562935
+ot.put[4,5] -81.231316 685.276245 1.650615 -85.560913 2.096370 -94.562935
+ot.put[4,6] -81.167130 714.256836 2.708084 -85.560913 2.096370 -94.562935
 ot.put[4,7] -209.938705 365.759644 -9.645519 -85.560913 2.096370 85.437073
-ot.put[5,0] -65.167389 539.416870 -5.807576 -84.510590 1.748546 -95.627464
-ot.put[5,1] -65.096230 568.403381 -4.926959 -84.510590 1.748546 -95.627464
-ot.put[5,2] -65.025078 597.389893 -4.046342 -84.510590 1.748546 -95.627464
-ot.put[5,3] -64.953918 626.376465 -3.165726 -84.510590 1.748546 -95.627464
-ot.put[5,4] -64.882759 655.362976 -2.285109 -84.510590 1.748546 -95.627464
-ot.put[5,5] -64.811600 684.349548 -1.404492 -84.510590 1.748546 -95.627464
-ot.put[5,6] -64.740448 713.336060 -0.523875 -84.510590 1.748546 -95.627464
+ot.put[5,0] -65.552338 540.339233 -3.683295 -85.560913 2.096370 -94.562935
+ot.put[5,1] -65.488152 569.319885 -2.625825 -85.560913 2.096370 -94.562935
+ot.put[5,2] -65.423973 598.300537 -1.568356 -85.560913 2.096370 -94.562935
+ot.put[5,3] -65.359787 627.281189 -0.510886 -85.560913 2.096370 -94.562935
+ot.put[5,4] -65.295609 656.261841 0.546583 -85.560913 2.096370 -94.562935
+ot.put[5,5] -65.231422 685.242493 1.604053 -85.560913 2.096370 -94.562935
+ot.put[5,6] -65.167236 714.223145 2.661522 -85.560913 2.096370 -94.562935
 ot.put[5,7] -225.938599 365.793396 -9.598957 -85.560913 2.096370 85.437073
-ot.put[6,0] -49.167503 539.379028 -5.855450 -84.510590 1.748546 -95.627464
-ot.put[6,1] -49.096344 568.365540 -4.974833 -84.510590 1.748546 -95.627464
-ot.put[6,2] -49.025192 597.352112 -4.094216 -84.510590 1.748546 -95.627464
-ot.put[6,3] -48.954033 626.338623 -3.213599 -84.510590 1.748546 -95.627464
-ot.put[6,4] -48.882874 655.325195 -2.332983 -84.510590 1.748546 -95.627464
-ot.put[6,5] -48.811714 684.311707 -1.452366 -84.510590 1.748546 -95.627464
-ot.put[6,6] -48.740562 713.298218 -0.571749 -84.510590 1.748546 -95.627464
+ot.put[6,0] -49.552437 540.305542 -3.729856 -85.560913 2.096370 -94.562935
+ot.put[6,1] -49.488251 569.286194 -2.672387 -85.560913 2.096370 -94.562935
+ot.put[6,2] -49.424072 598.266785 -1.614917 -85.560913 2.096370 -94.562935
+ot.put[6,3] -49.359886 627.247437 -0.557448 -85.560913 2.096370 -94.562935
+ot.put[6,4] -49.295708 656.228088 0.500021 -85.560913 2.096370 -94.562935
+ot.put[6,5] -49.231522 685.208740 1.557491 -85.560913 2.096370 -94.562935
+ot.put[6,6] -49.167336 714.189392 2.614960 -85.560913 2.096370 -94.562935
 ot.put[6,7] -241.938507 365.827148 -9.552396 -85.560913 2.096370 85.437073
-ot.put[7,0] -33.167618 539.341187 -5.903324 -84.510590 1.748546 -95.627464
-ot.put[7,1] -33.096458 568.327759 -5.022707 -84.510590 1.748546 -95.627464
-ot.put[7,2] -33.025307 597.314270 -4.142090 -84.510590 1.748546 -95.627464
-ot.put[7,3] -32.954147 626.300781 -3.261473 -84.510590 1.748546 -95.627464
-ot.put[7,4] -32.882988 655.287354 -2.380857 -84.510590 1.748546 -95.627464
-ot.put[7,5] -32.811829 684.273926 -1.500240 -84.510590 1.748546 -95.627464
-ot.put[7,6] -32.740677 713.260437 -0.619623 -84.510590 1.748546 -95.627464
+ot.put[7,0] -33.552536 540.271790 -3.776418 -85.560913 2.096370 -94.562935
+ot.put[7,1] -33.488350 569.252441 -2.718949 -85.560913 2.096370 -94.562935
+ot.put[7,2] -33.424171 598.233093 -1.661479 -85.560913 2.096370 -94.562935
+ot.put[7,3] -33.359985 627.213745 -0.604010 -85.560913 2.096370 -94.562935
+ot.put[7,4] -33.295807 656.194336 0.453460 -85.560913 2.096370 -94.562935
+ot.put[7,5] -33.231621 685.175049 1.510929 -85.560913 2.096370 -94.562935
+ot.put[7,6] -33.167435 714.155640 2.568398 -85.560913 2.096370 -94.562935
 ot.put[7,7] -257.938416 365.860870 -9.505835 -85.560913 2.096370 85.437073
-ot.put[8,0] -17.167732 539.303345 -5.951198 -84.510590 1.748546 -95.627464
-ot.put[8,1] -17.096573 568.289917 -5.070581 -84.510590 1.748546 -95.627464
-ot.put[8,2] -17.025421 597.276428 -4.189964 -84.510590 1.748546 -95.627464
-ot.put[8,3] -16.954254 626.263000 -3.309347 -84.510590 1.748546 -95.627464
-ot.put[8,4] -16.883102 655.249512 -2.428730 -84.510590 1.748546 -95.627464
-ot.put[8,5] -16.811951 684.236084 -1.548114 -84.510590 1.748546 -95.627464
-ot.put[8,6] -16.740784 713.222595 -0.667497 -84.510590 1.748546 -95.627464
+ot.put[8,0] -17.552643 540.238037 -3.822980 -85.560913 2.096370 -94.562935
+ot.put[8,1] -17.488464 569.218689 -2.765511 -85.560913 2.096370 -94.562935
+ot.put[8,2] -17.424271 598.199341 -1.708041 -85.560913 2.096370 -94.562935
+ot.put[8,3] -17.360092 627.179993 -0.650572 -85.560913 2.096370 -94.562935
+ot.put[8,4] -17.295914 656.160645 0.406898 -85.560913 2.096370 -94.562935
+ot.put[8,5] -17.231720 685.141296 1.464367 -85.560913 2.096370 -94.562935
+ot.put[8,6] -17.167542 714.121948 2.521837 -85.560913 2.096370 -94.562935
 ot.put[8,7] -273.938293 365.894592 -9.459272 -85.560913 2.096370 85.437073
-ot.put[9,0] -1.167847 539.265564 -5.999072 -84.510590 1.748546 -95.627464
-ot.put[9,1] -1.096695 568.252075 -5.118455 -84.510590 1.748546 -95.627464
-ot.put[9,2] -1.025528 597.238647 -4.237838 -84.510590 1.748546 -95.627464
-ot.put[9,3] -0.954376 626.225159 -3.357221 -84.510590 1.748546 -95.627464
-ot.put[9,4] -0.883224 655.211731 -2.476604 -84.510590 1.748546 -95.627464
-ot.put[9,5] -0.812057 684.198242 -1.595988 -84.510590 1.748546 -95.627464
-ot.put[9,6] -0.740906 713.184814 -0.715371 -84.510590 1.748546 -95.627464
+ot.put[9,0] -1.552750 540.204285 -3.869542 -85.560913 2.096370 -94.562935
+ot.put[9,1] -1.488571 569.184937 -2.812073 -85.560913 2.096370 -94.562935
+ot.put[9,2] -1.424377 598.165588 -1.754603 -85.560913 2.096370 -94.562935
+ot.put[9,3] -1.360199 627.146240 -0.697134 -85.560913 2.096370 -94.562935
+ot.put[9,4] -1.296021 656.126892 0.360336 -85.560913 2.096370 -94.562935
+ot.put[9,5] -1.231827 685.107544 1.417805 -85.560913 2.096370 -94.562935
+ot.put[9,6] -1.167648 714.088196 2.475275 -85.560913 2.096370 -94.562935
 ot.put[9,7] -289.938171 365.928345 -9.412710 -85.560913 2.096370 85.437073
-ot.put[10,0] 14.832031 539.227722 -6.046946 -84.510590 1.748546 -95.627464
-ot.put[10,1] 14.903183 568.214294 -5.166328 -84.510590 1.748546 -95.627464
-ot.put[10,2] 14.974350 597.200806 -4.285712 -84.510590 1.748546 -95.627464
-ot.put[10,3] 15.045502 626.187378 -3.405095 -84.510590 1.748546 -95.627464
-ot.put[10,4] 15.116653 655.173889 -2.524478 -84.510590 1.748546 -95.627464
-ot.put[10,5] 15.187820 684.160400 -1.643862 -84.510590 1.748546 -95.627464
-ot.put[10,6] 15.258972 713.146973 -0.763245 -84.510590 1.748546 -95.627464
+ot.put[10,0] 14.447144 540.170593 -3.916104 -85.560913 2.096370 -94.562935
+ot.put[10,1] 14.511322 569.151245 -2.858634 -85.560913 2.096370 -94.562935
+ot.put[10,2] 14.575516 598.131836 -1.801165 -85.560913 2.096370 -94.562935
+ot.put[10,3] 14.639694 627.112549 -0.743695 -85.560913 2.096370 -94.562935
+ot.put[10,4] 14.703873 656.093140 0.313774 -85.560913 2.096370 -94.562935
+ot.put[10,5] 14.768066 685.073792 1.371243 -85.560913 2.096370 -94.562935
+ot.put[10,6] 14.832245 714.054443 2.428713 -85.560913 2.096370 -94.562935
 ot.put[10,7] -305.938080 365.962067 -9.366148 -85.560913 2.096370 85.437073
-ot.put[11,0] 30.831924 539.189880 -6.094819 -84.510590 1.748546 -95.627464
-ot.put[11,1] 30.903076 568.176453 -5.214202 -84.510590 1.748546 -95.627464
-ot.put[11,2] 30.974243 597.162964 -4.333586 -84.510590 1.748546 -95.627464
-ot.put[11,3] 31.045395 626.149536 -3.452969 -84.510590 1.748546 -95.627464
-ot.put[11,4] 31.116547 655.136047 -2.572352 -84.510590 1.748546 -95.627464
-ot.put[11,5] 31.187714 684.122620 -1.691735 -84.510590 1.748546 -95.627464
-ot.put[11,6] 31.258865 713.109131 -0.811118 -84.510590 1.748546 -95.627464
+ot.put[11,0] 30.447052 540.136841 -3.962666 -85.560913 2.096370 -94.562935
+ot.put[11,1] 30.511230 569.117493 -2.905196 -85.560913 2.096370 -94.562935
+ot.put[11,2] 30.575424 598.098145 -1.847727 -85.560913 2.096370 -94.562935
+ot.put[11,3] 30.639603 627.078796 -0.790257 -85.560913 2.096370 -94.562935
+ot.put[11,4] 30.703781 656.059448 0.267212 -85.560913 2.096370 -94.562935
+ot.put[11,5] 30.767975 685.040039 1.324682 -85.560913 2.096370 -94.562935
+ot.put[11,6] 30.832153 714.020752 2.382151 -85.560913 2.096370 -94.562935
 ot.put[11,7] -321.937988 365.995789 -9.319587 -85.560913 2.096370 85.437073
-ot.put[12,0] 46.831802 539.152100 -6.142693 -84.510590 1.748546 -95.627464
-ot.put[12,1] 46.902954 568.138611 -5.262076 -84.510590 1.748546 -95.627464
-ot.put[12,2] 46.974121 597.125183 -4.381459 -84.510590 1.748546 -95.627464
-ot.put[12,3] 47.045273 626.111694 -3.500843 -84.510590 1.748546 -95.627464
-ot.put[12,4] 47.116425 655.098267 -2.620226 -84.510590 1.748546 -95.627464
-ot.put[12,5] 47.187592 684.084778 -1.739609 -84.510590 1.748546 -95.627464
-ot.put[12,6] 47.258743 713.071289 -0.858992 -84.510590 1.748546 -95.627464
+ot.put[12,0] 46.446945 540.103088 -4.009228 -85.560913 2.096370 -94.562935
+ot.put[12,1] 46.511124 569.083740 -2.951758 -85.560913 2.096370 -94.562935
+ot.put[12,2] 46.575317 598.064392 -1.894289 -85.560913 2.096370 -94.562935
+ot.put[12,3] 46.639496 627.045044 -0.836819 -85.560913 2.096370 -94.562935
+ot.put[12,4] 46.703674 656.025696 0.220650 -85.560913 2.096370 -94.562935
+ot.put[12,5] 46.767868 685.006348 1.278120 -85.560913 2.096370 -94.562935
+ot.put[12,6] 46.832047 713.987000 2.335589 -85.560913 2.096370 -94.562935
 ot.put[12,7] -337.937866 366.029541 -9.273026 -85.560913 2.096370 85.437073
-ot.put[13,0] 62.831696 539.114258 -6.190567 -84.510590 1.748546 -95.627464
-ot.put[13,1] 62.902847 568.100830 -5.309950 -84.510590 1.748546 -95.627464
-ot.put[13,2] 62.974014 597.087341 -4.429333 -84.510590 1.748546 -95.627464
-ot.put[13,3] 63.045166 626.073853 -3.548717 -84.510590 1.748546 -95.627464
-ot.put[13,4] 63.116318 655.060425 -2.668100 -84.510590 1.748546 -95.627464
-ot.put[13,5] 63.187485 684.046936 -1.787483 -84.510590 1.748546 -95.627464
-ot.put[13,6] 63.258636 713.033508 -0.906866 -84.510590 1.748546 -95.627464
+ot.put[13,0] 62.446838 540.069397 -4.055789 -85.560913 2.096370 -94.562935
+ot.put[13,1] 62.511017 569.049988 -2.998320 -85.560913 2.096370 -94.562935
+ot.put[13,2] 62.575211 598.030640 -1.940850 -85.560913 2.096370 -94.562935
+ot.put[13,3] 62.639389 627.011292 -0.883381 -85.560913 2.096370 -94.562935
+ot.put[13,4] 62.703568 655.991943 0.174088 -85.560913 2.096370 -94.562935
+ot.put[13,5] 62.767761 684.972595 1.231558 -85.560913 2.096370 -94.562935
+ot.put[13,6] 62.831940 713.953247 2.289027 -85.560913 2.096370 -94.562935
 ot.put[13,7] -353.937775 366.063293 -9.226463 -85.560913 2.096370 85.437073
-ot.put[14,0] 78.831573 539.076416 -6.238441 -84.510590 1.748546 -95.627464
-ot.put[14,1] 78.902725 568.062988 -5.357824 -84.510590 1.748546 -95.627464
-ot.put[14,2] 78.973892 597.049500 -4.477207 -84.510590 1.748546 -95.627464
-ot.put[14,3] 79.045044 626.036072 -3.596590 -84.510590 1.748546 -95.627464
-ot.put[14,4] 79.116196 655.022583 -2.715974 -84.510590 1.748546 -95.627464
-ot.put[14,5] 79.187363 684.009155 -1.835357 -84.510590 1.748546 -95.627464
-ot.put[14,6] 79.258514 712.995667 -0.954740 -84.510590 1.748546 -95.627464
+ot.put[14,0] 78.446747 540.035645 -4.102351 -85.560913 2.096370 -94.562935
+ot.put[14,1] 78.510925 569.016296 -3.044882 -85.560913 2.096370 -94.562935
+ot.put[14,2] 78.575119 597.996948 -1.987412 -85.560913 2.096370 -94.562935
+ot.put[14,3] 78.639297 626.977539 -0.929943 -85.560913 2.096370 -94.562935
+ot.put[14,4] 78.703476 655.958191 0.127527 -85.560913 2.096370 -94.562935
+ot.put[14,5] 78.767670 684.938843 1.184996 -85.560913 2.096370 -94.562935
+ot.put[14,6] 78.831848 713.919495 2.242465 -85.560913 2.096370 -94.562935
 ot.put[14,7] -369.937683 366.097015 -9.179901 -85.560913 2.096370 85.437073
-ot.put[15,0] 94.831467 539.038635 -6.286314 -84.510590 1.748546 -95.627464
-ot.put[15,1] 94.902618 568.025146 -5.405698 -84.510590 1.748546 -95.627464
-ot.put[15,2] 94.973785 597.011719 -4.525081 -84.510590 1.748546 -95.627464
-ot.put[15,3] 95.044937 625.998230 -3.644464 -84.510590 1.748546 -95.627464
-ot.put[15,4] 95.116089 654.984741 -2.763847 -84.510590 1.748546 -95.627464
-ot.put[15,5] 95.187256 683.971313 -1.883231 -84.510590 1.748546 -95.627464
-ot.put[15,6] 95.258408 712.957886 -1.002614 -84.510590 1.748546 -95.627464
+ot.put[15,0] 94.446640 540.001892 -4.148913 -85.560913 2.096370 -94.562935
+ot.put[15,1] 94.510818 568.982544 -3.091444 -85.560913 2.096370 -94.562935
+ot.put[15,2] 94.575012 597.963196 -2.033974 -85.560913 2.096370 -94.562935
+ot.put[15,3] 94.639191 626.943848 -0.976505 -85.560913 2.096370 -94.562935
+ot.put[15,4] 94.703369 655.924500 0.080965 -85.560913 2.096370 -94.562935
+ot.put[15,5] 94.767563 684.905151 1.138434 -85.560913 2.096370 -94.562935
+ot.put[15,6] 94.831741 713.885742 2.195903 -85.560913 2.096370 -94.562935
 ot.put[15,7] -385.937561 366.130737 -9.133339 -85.560913 2.096370 85.437073
-ot.put[16,0] 110.831345 539.000793 -6.334188 -84.510590 1.748546 -95.627464
-ot.put[16,1] 110.902496 567.987305 -5.453572 -84.510590 1.748546 -95.627464
-ot.put[16,2] 110.973663 596.973877 -4.572955 -84.510590 1.748546 -95.627464
-ot.put[16,3] 111.044830 625.960388 -3.692338 -84.510590 1.748546 -95.627464
-ot.put[16,4] 111.115967 654.946960 -2.811721 -84.510590 1.748546 -95.627464
-ot.put[16,5] 111.187134 683.933472 -1.931105 -84.510590 1.748546 -95.627464
-ot.put[16,6] 111.258301 712.920044 -1.050488 -84.510590 1.748546 -95.627464
+ot.put[16,0] 110.446533 539.968140 -4.195475 -85.560913 2.096370 -94.562935
+ot.put[16,1] 110.510712 568.948792 -3.138005 -85.560913 2.096370 -94.562935
+ot.put[16,2] 110.574890 597.929443 -2.080536 -85.560913 2.096370 -94.562935
+ot.put[16,3] 110.639069 626.910095 -1.023067 -85.560913 2.096370 -94.562935
+ot.put[16,4] 110.703278 655.890747 0.034403 -85.560913 2.096370 -94.562935
+ot.put[16,5] 110.767456 684.871399 1.091872 -85.560913 2.096370 -94.562935
+ot.put[16,6] 110.831635 713.852051 2.149342 -85.560913 2.096370 -94.562935
 ot.put[16,7] -401.937469 366.164490 -9.086778 -85.560913 2.096370 85.437073
-ot.put[17,0] 126.831238 538.962952 -6.382062 -84.510590 1.748546 -95.627464
-ot.put[17,1] 126.902405 567.949524 -5.501446 -84.510590 1.748546 -95.627464
-ot.put[17,2] 126.973541 596.936035 -4.620829 -84.510590 1.748546 -95.627464
-ot.put[17,3] 127.044708 625.922607 -3.740212 -84.510590 1.748546 -95.627464
-ot.put[17,4] 127.115875 654.909119 -2.859595 -84.510590 1.748546 -95.627464
-ot.put[17,5] 127.187012 683.895630 -1.978979 -84.510590 1.748546 -95.627464
-ot.put[17,6] 127.258179 712.882202 -1.098361 -84.510590 1.748546 -95.627464
+ot.put[17,0] 126.446442 539.934448 -4.242037 -85.560913 2.096370 -94.562935
+ot.put[17,1] 126.510620 568.915100 -3.184567 -85.560913 2.096370 -94.562935
+ot.put[17,2] 126.574799 597.895691 -2.127098 -85.560913 2.096370 -94.562935
+ot.put[17,3] 126.638977 626.876343 -1.069628 -85.560913 2.096370 -94.562935
+ot.put[17,4] 126.703186 655.856995 -0.012159 -85.560913 2.096370 -94.562935
+ot.put[17,5] 126.767365 684.837646 1.045310 -85.560913 2.096370 -94.562935
+ot.put[17,6] 126.831543 713.818298 2.102780 -85.560913 2.096370 -94.562935
 ot.put[17,7] -417.937378 366.198212 -9.040216 -85.560913 2.096370 85.437073
-ot.put[18,0] 142.831116 538.925171 -6.429936 -84.510590 1.748546 -95.627464
-ot.put[18,1] 142.902283 567.911682 -5.549319 -84.510590 1.748546 -95.627464
-ot.put[18,2] 142.973419 596.898254 -4.668703 -84.510590 1.748546 -95.627464
-ot.put[18,3] 143.044586 625.884766 -3.788086 -84.510590 1.748546 -95.627464
-ot.put[18,4] 143.115753 654.871338 -2.907469 -84.510590 1.748546 -95.627464
-ot.put[18,5] 143.186890 683.857849 -2.026852 -84.510590 1.748546 -95.627464
-ot.put[18,6] 143.258057 712.844360 -1.146235 -84.510590 1.748546 -95.627464
+ot.put[18,0] 142.446320 539.900696 -4.288599 -85.560913 2.096370 -94.562935
+ot.put[18,1] 142.510498 568.881348 -3.231129 -85.560913 2.096370 -94.562935
+ot.put[18,2] 142.574677 597.862000 -2.173660 -85.560913 2.096370 -94.562935
+ot.put[18,3] 142.638855 626.842651 -1.116190 -85.560913 2.096370 -94.562935
+ot.put[18,4] 142.703064 655.823242 -0.058721 -85.560913 2.096370 -94.562935
+ot.put[18,5] 142.767242 684.803955 0.998749 -85.560913 2.096370 -94.562935
+ot.put[18,6] 142.831421 713.784546 2.056218 -85.560913 2.096370 -94.562935
 ot.put[18,7] -433.937256 366.231934 -8.993654 -85.560913 2.096370 85.437073
-ot.put[19,0] 158.830994 538.887329 -6.477810 -84.510590 1.748546 -95.627464
-ot.put[19,1] 158.902161 567.873840 -5.597193 -84.510590 1.748546 -95.627464
-ot.put[19,2] 158.973297 596.860413 -4.716577 -84.510590 1.748546 -95.627464
-ot.put[19,3] 159.044464 625.846924 -3.835959 -84.510590 1.748546 -95.627464
-ot.put[19,4] 159.115631 654.833496 -2.955343 -84.510590 1.748546 -95.627464
-ot.put[19,5] 159.186768 683.820007 -2.074726 -84.510590 1.748546 -95.627464
-ot.put[19,6] 159.257935 712.806580 -1.194109 -84.510590 1.748546 -95.627464
+ot.put[19,0] 158.446228 539.866943 -4.335161 -85.560913 2.096370 -94.562935
+ot.put[19,1] 158.510406 568.847595 -3.277691 -85.560913 2.096370 -94.562935
+ot.put[19,2] 158.574585 597.828247 -2.220222 -85.560913 2.096370 -94.562935
+ot.put[19,3] 158.638763 626.808899 -1.162752 -85.560913 2.096370 -94.562935
+ot.put[19,4] 158.702972 655.789551 -0.105283 -85.560913 2.096370 -94.562935
+ot.put[19,5] 158.767151 684.770203 0.952187 -85.560913 2.096370 -94.562935
+ot.put[19,6] 158.831329 713.750854 2.009656 -85.560913 2.096370 -94.562935
 ot.put[19,7] -449.937164 366.265686 -8.947092 -85.560913 2.096370 85.437073
-ot.put[20,0] 174.830872 538.849487 -6.525684 -84.510590 1.748546 -95.627464
-ot.put[20,1] 174.902039 567.836060 -5.645067 -84.510590 1.748546 -95.627464
-ot.put[20,2] 174.973175 596.822571 -4.764450 -84.510590 1.748546 -95.627464
-ot.put[20,3] 175.044342 625.809143 -3.883833 -84.510590 1.748546 -95.627464
-ot.put[20,4] 175.115509 654.795654 -3.003217 -84.510590 1.748546 -95.627464
-ot.put[20,5] 175.186646 683.782227 -2.122600 -84.510590 1.748546 -95.627464
-ot.put[20,6] 175.257812 712.768738 -1.241983 -84.510590 1.748546 -95.627464
+ot.put[20,0] 174.446106 539.833191 -4.381722 -85.560913 2.096370 -94.562935
+ot.put[20,1] 174.510284 568.813843 -3.324253 -85.560913 2.096370 -94.562935
+ot.put[20,2] 174.574463 597.794495 -2.266783 -85.560913 2.096370 -94.562935
+ot.put[20,3] 174.638641 626.775146 -1.209314 -85.560913 2.096370 -94.562935
+ot.put[20,4] 174.702850 655.755798 -0.151845 -85.560913 2.096370 -94.562935
+ot.put[20,5] 174.767029 684.736450 0.905625 -85.560913 2.096370 -94.562935
+ot.put[20,6] 174.831207 713.717102 1.963094 -85.560913 2.096370 -94.562935
 ot.put[20,7] -465.937042 366.299408 -8.900530 -85.560913 2.096370 85.437073
 .END
 .JOINTS
@@ -2755,10 +2781,10 @@ s.pr.tch.meas = 2253
 s.pr.tch.etal = 2254
 s.apply.obj = 2256
 count.defect = 1
-count.pick = 0
-count.put = 0
+count.pick = 2
+count.put = 1
 current.gripper = 1
-detail.count = 21
+detail.count = 10
 grip.180xsh[1] = 0
 grip.180xsh[2] = 0
 grip.180xsh[3] = 0
@@ -2779,15 +2805,15 @@ hmi.etalon.id = 1
 hmi.g180x = 0
 hmi.g180y = 0
 hmi.gx = -3
-hmi.gy = 3
+hmi.gy = 15
 hmi.gz = 0
-hmi.obj.id = 1
+hmi.obj.id = 2
 hmi.tool.no = 1
-keep.object = 1
+keep.object = 2
 line.width = 210
 lines.count = 21
 lines.shift = 16
-max.tare.count = 8
+max.tare.count = 126
 obj.in.line = 7
 obj.spacer = 1.5
 object.length = 27.5
@@ -3128,10 +3154,10 @@ ns[145] = 0
 ns[146] = 6
 object.id = 1
 ot.x = 10
-ot.y = 2
+ot.y = 3
 round.no = 3
 spc.tare.count = 50
-detail.spec = 1
+detail.spec = 0
 grip.xsh[6] = -3
 grip.xsh[7] = 0
 grip.xsh[8] = 0
@@ -3159,7 +3185,7 @@ grip.xsh[29] = 0
 grip.xsh[30] = 0
 grip.xsh[31] = 0
 grip.xsh[32] = 0
-etalon.id = 1
+etalon.id = -1
 grip.180xsh[33] = 0
 grip.180xsh[34] = 0
 grip.180xsh[35] = 0
@@ -3430,135 +3456,135 @@ grip.zsh[31] = 0
 grip.zsh[32] = 0
 .END
 .STRINGS
-$log.entry[2] = "15:33:50 Send command to enable vacuum"
-$log.entry[1] = "15:33:48 Move to measure machine"
-$log.entry[0] = "15:33:48 State 2: Measurement process"
-$action = "WaitingForStart"
-$log.entry[3] = "15:33:51 Waiting for measurement result"
-$log.entry[4] = "15:33:51 Measurement result: OK"
-$log.entry[5] = "15:33:54 State 101: Calculating next step"
-$log.entry[6] = "15:33:54 State 3: Put detail to OT"
-$log.entry[7] = "15:33:55 Put to OT detail 4"
-$log.entry[8] = "15:33:55 Check if positioner is occupied"
-$log.entry[9] = "15:33:57 State 101: Calculating next step"
-$log.entry[10] = "15:33:57 State 1: Pick from positioner"
-$log.entry[11] = "15:33:57 Pick detail from positioner (ID: 1)"
-$log.entry[12] = "15:33:59 State 101: Calculating next step"
-$log.entry[13] = "15:33:59 State 2: Measurement process"
-$log.entry[14] = "15:34:00 Move to measure machine"
-$log.entry[15] = "15:34:02 Send command to enable vacuum"
-$log.entry[16] = "15:34:03 Waiting for measurement result"
-$log.entry[17] = "15:34:03 Measurement result: OK"
-$log.entry[18] = "15:34:05 State 101: Calculating next step"
-$log.entry[19] = "15:34:06 State 3: Put detail to OT"
-$log.entry[20] = "15:34:07 Put to OT detail 5"
-$log.entry[21] = "15:34:07 Check if positioner is occupied"
-$log.entry[22] = "15:34:08 State 101: Calculating next step"
-$log.entry[23] = "15:34:09 State 1: Pick from positioner"
-$log.entry[24] = "15:34:09 Pick detail from positioner (ID: 1)"
-$log.entry[25] = "15:34:11 State 101: Calculating next step"
-$log.entry[26] = "15:34:11 State 2: Measurement process"
-$log.entry[27] = "15:34:11 Move to measure machine"
-$log.entry[28] = "15:34:14 Send command to enable vacuum"
-$log.entry[29] = "15:34:15 Waiting for measurement result"
-$log.entry[30] = "15:34:15 Measurement result: OK"
-$log.entry[31] = "15:34:17 State 101: Calculating next step"
-$log.entry[32] = "15:34:17 State 3: Put detail to OT"
-$log.entry[33] = "15:34:18 Put to OT detail 6"
-$log.entry[34] = "15:34:18 Check if positioner is occupied"
-$log.entry[35] = "15:34:20 State 101: Calculating next step"
-$log.entry[36] = "15:34:20 State 1: Pick from positioner"
-$log.entry[37] = "15:34:20 Pick detail from positioner (ID: 1)"
-$log.entry[38] = "15:34:23 State 101: Calculating next step"
-$log.entry[39] = "15:34:23 State 2: Measurement process"
-$log.entry[40] = "15:34:23 Move to measure machine"
-$log.entry[41] = "15:34:26 Send command to enable vacuum"
-$log.entry[42] = "15:34:27 Waiting for measurement result"
-$log.entry[43] = "15:34:27 Measurement result: OK"
-$log.entry[44] = "15:34:29 State 101: Calculating next step"
-$log.entry[45] = "15:34:29 State 3: Put detail to OT"
-$log.entry[46] = "15:34:30 Put to OT detail 7"
-$log.entry[47] = "15:34:30 Check if positioner is occupied"
-$log.entry[48] = "15:34:32 State 101: Calculating next step"
-$log.entry[49] = "15:34:32 State 1: Pick from positioner"
-$log.entry[50] = "15:34:32 Pick detail from positioner (ID: 1)"
-$log.entry[51] = "15:34:35 State 101: Calculating next step"
-$log.entry[52] = "15:34:35 State 2: Measurement process"
-$log.entry[53] = "15:34:35 Move to measure machine"
-$log.entry[54] = "15:34:37 Send command to enable vacuum"
-$log.entry[55] = "15:34:38 Waiting for measurement result"
-$log.entry[56] = "15:34:39 Measurement result: OK"
-$log.entry[57] = "15:34:41 State 101: Calculating next step"
-$log.entry[58] = "15:34:41 State 3: Put detail to OT"
-$log.entry[59] = "15:34:42 Put to OT detail 8"
-$log.entry[60] = "15:34:42 Check if positioner is occupied"
-$log.entry[61] = "15:34:44 State 101: Calculating next step"
-$log.entry[62] = "15:34:44 State 1: Pick from positioner"
-$log.entry[63] = "15:34:44 Pick detail from positioner (ID: 1)"
-$log.entry[64] = "15:34:46 State 101: Calculating next step"
-$log.entry[65] = "15:34:47 State 2: Measurement process"
-$log.entry[66] = "15:34:47 Move to measure machine"
-$log.entry[67] = "15:34:49 Send command to enable vacuum"
-$log.entry[68] = "15:34:50 Waiting for measurement result"
-$log.entry[69] = "15:34:50 Measurement result: OK"
-$log.entry[70] = "15:34:53 State 101: Calculating next step"
-$log.entry[71] = "15:34:53 State 3: Put detail to OT"
-$log.entry[72] = "15:34:54 Waiting for new OT"
-$log.entry[73] = "15:35:03 Put to OT detail 1"
-$log.entry[74] = "15:35:03 Check if positioner is occupied"
-$log.entry[75] = "15:35:07 State 101: Calculating next step"
-$log.entry[76] = "15:35:45 State 1: Pick from positioner"
-$log.entry[77] = "15:35:45 Pick detail from positioner (ID: 1)"
-$log.entry[78] = "15:35:48 State 101: Calculating next step"
-$log.entry[79] = "15:35:48 State 2: Measurement process"
-$log.entry[80] = "15:35:48 Move to measure machine"
-$log.entry[81] = "15:35:50 Send command to enable vacuum"
-$log.entry[82] = "15:35:52 Waiting for measurement result"
-$log.entry[83] = "15:35:52 Measurement result: OK"
-$log.entry[84] = "15:35:54 State 101: Calculating next step"
-$log.entry[85] = "15:35:54 State 3: Put detail to OT"
-$log.entry[86] = "15:35:55 Put to OT detail 2"
-$log.entry[87] = "15:35:55 Check if positioner is occupied"
-$log.entry[88] = "15:35:57 State 101: Calculating next step"
-$log.entry[89] = "15:36:00 State 1: Pick from positioner"
-$log.entry[90] = "15:36:00 Pick detail from positioner (ID: 1)"
-$log.entry[91] = "15:36:03 State 101: Calculating next step"
-$log.entry[92] = "15:36:03 State 2: Measurement process"
-$log.entry[93] = "15:36:03 Move to measure machine"
-$log.entry[94] = "15:36:06 Send command to enable vacuum"
-$log.entry[95] = "15:36:07 Waiting for measurement result"
-$log.entry[96] = "15:36:07 Measurement result: OK"
-$log.entry[97] = "15:36:09 State 101: Calculating next step"
-$log.entry[98] = "15:36:09 State 3: Put detail to OT"
-$log.entry[99] = "15:36:10 Put to OT detail 3"
-$log.entry[100] = "15:36:10 Check if positioner is occupied"
-$log.entry[101] = "15:36:12 State 101: Calculating next step"
-$log.entry[102] = "15:36:27 State 103: Ending sequence started"
-$log.entry[103] = "15:36:32 Program complete"
-$log.entry[104] = "15:36:32 State 0: Program reset. Initialization of parameters"
-$log.entry[105] = "15:36:32 State 100: Waiting for start"
-$log.entry[106] = "15:18:48 Performing safe motion to home position"
-$log.entry[107] = "15:18:48 Move from the OT zone"
-$log.entry[108] = "15:19:34 Performing safe motion to home position"
-$log.entry[109] = "15:19:34 Move from the OT zone"
-$log.entry[110] = "15:23:11 Performing safe motion to home position"
-$log.entry[111] = "15:23:11 Move from the measure machine zone"
-$log.entry[112] = "15:23:29 Robot in home position"
-$log.entry[113] = "15:24:30 Performing safe motion to home position"
-$log.entry[114] = "15:24:30 Move from the OT zone"
-$log.entry[115] = "15:24:30 Move from the defect zone"
-$log.entry[116] = "15:24:47 Performing safe motion to home position"
-$log.entry[117] = "15:24:47 Move from the OT zone"
-$log.entry[118] = "15:24:49 Move from the defect zone"
-$log.entry[119] = "15:26:33 Performing safe motion to home position"
-$log.entry[120] = "15:26:33 Move from the defect zone"
-$log.entry[121] = "15:26:49 Robot in home position"
-$log.entry[122] = "15:27:28 Performing safe motion to home position"
-$log.entry[123] = "15:27:28 Move from the defect zone"
-$log.entry[124] = "15:27:30 Move from the OT zone"
-$log.entry[125] = "15:28:13 Performing safe motion to home position"
-$log.entry[126] = "15:28:13 Move from the defect zone"
-$log.entry[127] = "15:28:26 Robot in home position"
-$pg.name = "312.229.002"
+$log.entry[2] = " "
+$log.entry[1] = " "
+$log.entry[0] = " "
+$action = "Default"
+$log.entry[3] = " "
+$log.entry[4] = " "
+$log.entry[5] = " "
+$log.entry[6] = " "
+$log.entry[7] = " "
+$log.entry[8] = " "
+$log.entry[9] = " "
+$log.entry[10] = " "
+$log.entry[11] = " "
+$log.entry[12] = " "
+$log.entry[13] = " "
+$log.entry[14] = " "
+$log.entry[15] = " "
+$log.entry[16] = " "
+$log.entry[17] = " "
+$log.entry[18] = " "
+$log.entry[19] = " "
+$log.entry[20] = " "
+$log.entry[21] = " "
+$log.entry[22] = " "
+$log.entry[23] = " "
+$log.entry[24] = " "
+$log.entry[25] = " "
+$log.entry[26] = " "
+$log.entry[27] = " "
+$log.entry[28] = " "
+$log.entry[29] = " "
+$log.entry[30] = " "
+$log.entry[31] = " "
+$log.entry[32] = " "
+$log.entry[33] = " "
+$log.entry[34] = " "
+$log.entry[35] = " "
+$log.entry[36] = " "
+$log.entry[37] = " "
+$log.entry[38] = " "
+$log.entry[39] = " "
+$log.entry[40] = " "
+$log.entry[41] = " "
+$log.entry[42] = " "
+$log.entry[43] = " "
+$log.entry[44] = " "
+$log.entry[45] = " "
+$log.entry[46] = " "
+$log.entry[47] = " "
+$log.entry[48] = " "
+$log.entry[49] = " "
+$log.entry[50] = " "
+$log.entry[51] = " "
+$log.entry[52] = " "
+$log.entry[53] = " "
+$log.entry[54] = " "
+$log.entry[55] = " "
+$log.entry[56] = " "
+$log.entry[57] = " "
+$log.entry[58] = " "
+$log.entry[59] = " "
+$log.entry[60] = " "
+$log.entry[61] = " "
+$log.entry[62] = " "
+$log.entry[63] = " "
+$log.entry[64] = " "
+$log.entry[65] = " "
+$log.entry[66] = " "
+$log.entry[67] = " "
+$log.entry[68] = " "
+$log.entry[69] = " "
+$log.entry[70] = " "
+$log.entry[71] = " "
+$log.entry[72] = " "
+$log.entry[73] = " "
+$log.entry[74] = " "
+$log.entry[75] = " "
+$log.entry[76] = " "
+$log.entry[77] = " "
+$log.entry[78] = " "
+$log.entry[79] = " "
+$log.entry[80] = " "
+$log.entry[81] = " "
+$log.entry[82] = " "
+$log.entry[83] = " "
+$log.entry[84] = " "
+$log.entry[85] = " "
+$log.entry[86] = " "
+$log.entry[87] = " "
+$log.entry[88] = " "
+$log.entry[89] = " "
+$log.entry[90] = " "
+$log.entry[91] = " "
+$log.entry[92] = " "
+$log.entry[93] = " "
+$log.entry[94] = " "
+$log.entry[95] = " "
+$log.entry[96] = " "
+$log.entry[97] = " "
+$log.entry[98] = " "
+$log.entry[99] = " "
+$log.entry[100] = " "
+$log.entry[101] = " "
+$log.entry[102] = " "
+$log.entry[103] = " "
+$log.entry[104] = " "
+$log.entry[105] = " "
+$log.entry[106] = " "
+$log.entry[107] = " "
+$log.entry[108] = " "
+$log.entry[109] = " "
+$log.entry[110] = " "
+$log.entry[111] = " "
+$log.entry[112] = " "
+$log.entry[113] = " "
+$log.entry[114] = " "
+$log.entry[115] = " "
+$log.entry[116] = " "
+$log.entry[117] = " "
+$log.entry[118] = " "
+$log.entry[119] = " "
+$log.entry[120] = " "
+$log.entry[121] = " "
+$log.entry[122] = " "
+$log.entry[123] = "13:35:28 Main program executed"
+$log.entry[124] = "13:35:28 Performing safe motion to home position"
+$log.entry[125] = "13:35:28 Robot in home position"
+$log.entry[126] = "13:35:28 State 1: Pick from positioner"
+$log.entry[127] = "13:35:28 Pick detail from positioner (ID: 1)"
+$pg.name = "Default"
 $tcp.ip = "192.168.7.100"
 .END
