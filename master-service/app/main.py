@@ -190,6 +190,28 @@ def get_data():
             "Data": data
             }
 
+@app.post("/debug/pneumo_open")
+def debug_pneumo_open():
+    """ Отладка: сигнал пневматики """
+    logger.debug("Запрос /master/debug/pneumo_open")
+    if not master.debug_pneumo_open():
+        return {"Status": "Failed",
+                "Code": -1,
+                "Reason": "Error in sending to robot"
+                }
+    return {"Status": "OK"}
+
+@app.post("/debug/pneumo_close")
+def debug_pneumo_close():
+    """ Отладка: сигнал пневматики """
+    logger.debug("Запрос /master/debug/pneumo_close")
+    if not master.debug_pneumo_close():
+        return {"Status": "Failed",
+                "Code": -1,
+                "Reason": "Error in sending to robot"
+                }
+    return {"Status": "OK"}
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="127.0.0.1", port=8000)

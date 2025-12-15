@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <objects main="1">
   <object name="1" type="KHI.Fortuna.HisuiViewer.StlExtendedData" ver="0">
-    <Color>e0 e0 e0</Color>
+    <Color>40 40 40</Color>
     <Transparency>255</Transparency>
   </object>
 </objects>

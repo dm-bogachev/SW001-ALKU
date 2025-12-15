@@ -998,7 +998,7 @@ N_INT300    "s.debug.mode|Debug mode"
   state = 5
 .END
 .PROGRAM state8 () ; Check etalon by command
-  CALL log ("State 8: Check etalon by start")
+  CALL log ("State 8: Check etalon by command")
   CALL etalon.measure (etalon.id)
   state = 105
 .END
@@ -1027,7 +1027,7 @@ N_INT300    "s.debug.mode|Debug mode"
     state = 105
     RETURN
   END
-  IF SIG(s.cmd.chk.etal) THEN
+  IF SIG(s.cmd.chk.etal) AND NOT SIG(s.grip.full) THEN
     state = 8
     RETURN
   END
@@ -2045,6 +2045,8 @@ N_INT300    "s.debug.mode|Debug mode"
 	; s.cmd.pick
 	; s.grip.full
 	; count.pick
+	; s.cmd.chk.etal
+	; s.cmd.resume
 	; @@@ CONNECTION @@@
 	; KROSET R02
 	; 127.0.0.1

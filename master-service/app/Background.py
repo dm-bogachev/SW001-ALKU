@@ -17,6 +17,16 @@ logger = config_logger("master-service/Master.py")
 
 class Background(Thread):
 
+    def debug_pneumo_open(self):
+        logger.info("DEBUG: Открытие пневматики")
+        command = "PNEUMOOPEN;"
+        self.send_command_to_robot(command, "RS013N", RS013N_API_URL)  
+
+    def debug_pneumo_close(self):
+        logger.info("DEBUG: Закрытие пневматики")
+        command = "PNEUMOCLOSE;"
+        self.send_command_to_robot(command, "RS013N", RS013N_API_URL)
+
     def __init__(self, data_collector: DataCollector):
         super().__init__()
         self.__stop_event = Event()
@@ -50,12 +60,47 @@ class Background(Thread):
         return True
 
     def get_io_state(self, address):
-        resp = requests.get(f"{IO_API_URL}/input?bit={address}", timeout=8)
-        response_data = resp.json()
+        try:
+            resp = requests.get(f"{IO_API_URL}/input?bit={address}", timeout=8)
+        except Exception as e:
+            logger.error(f"Ошибка запроса к IO-сервису по адресу {address}: {e}")
+            return False
+
         if resp.status_code != 200:
             logger.error(f"Ошибка получения состояния с IO-сервиса по адресу {address}: {resp.text}")
             return False
-        if response_data["Value"] == 1:
+
+        try:
+            response_data = resp.json()
+        except Exception:
+            logger.error(f"Невозможно распарсить JSON от IO-сервиса по адресу {address}: {resp.text}")
+            return False
+
+        # response_data can be a dict or a list; normalize to a single item
+        if isinstance(response_data, list):
+            if len(response_data) == 0:
+                logger.error(f"Пустой список в ответе IO-сервиса по адресу {address}")
+                return False
+            item = response_data[0]
+        elif isinstance(response_data, dict):
+            item = response_data
+        else:
+            item = response_data
+
+        # Extract numeric value from possible shapes
+        value = None
+        if isinstance(item, dict):
+            value = item.get("Value") if item.get("Value") is not None else item.get("value")
+        else:
+            value = item
+
+        try:
+            val_int = int(value)
+        except Exception:
+            logger.error(f"Не удалось интерпретировать значение состояния IO по адресу {address}: {value}")
+            return False
+
+        if val_int == 1:
             logger.info(f"Состояние с IO-сервиса по адресу {address}: True")
             return True
         logger.info(f"Состояние с IO-сервиса по адресу {address}: False")
@@ -210,8 +255,13 @@ class Background(Thread):
         last_rs007l_action = ""
         while not self.__stop_event.is_set():
             try:
-                rs13_action = self.collector.rs013n["action"]
-                rs7_action = self.collector.rs007l["action"]
+                # DataCollector may not have populated attributes yet; access safely
+                rs13_action = ""
+                rs7_action = ""
+                rs13 = getattr(self.collector, "rs013n", None) or {}
+                rs7 = getattr(self.collector, "rs007l", None) or {}
+                rs13_action = str(rs13.get("action", "") or "")
+                rs7_action = str(rs7.get("action", "") or "")
 
                 if rs13_action != last_rs13n_action:
                     logger.info(f"Новый запрос от робота RS013N: {rs13_action}")
@@ -260,9 +310,9 @@ class Background(Thread):
 
         #if os.environ.get("DEBUG", "True").lower() == "True".lower():
         # logger.info("Режим отладки включен, пропуск проверки позиционера")
-        # self.send_command_to_robot("POSITIONEREMPTY;", "RS013N", RS013N_API_URL)
-        # self.send_command_to_robot("POSITIONERFULL;", "RS007L", RS007L_API_URL)
-        # return
+        self.send_command_to_robot("POSITIONEREMPTY;", "RS013N", RS013N_API_URL)
+        self.send_command_to_robot("POSITIONERFULL;", "RS007L", RS007L_API_URL)
+        return
 
         if self.get_io_state(9):
             logger.info("Позиционер занят")
