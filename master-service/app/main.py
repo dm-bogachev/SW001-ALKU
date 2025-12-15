@@ -158,6 +158,16 @@ def check_etalon(etalon_id: int):
                 }
     return {"Status": "OK"}
 
+@app.post("/reset_defect_counter")
+def reset_defect_counter():
+    logger.debug("Запрос /master/reset_defect_counter")
+    if not master.reset_defect_counter():
+        return {"Status": "Failed",
+                "Code": -1,
+                "Reason": "Error in sending to robot"
+                }
+    return {"Status": "OK"}
+
 @app.post("/set_speed")
 def set_speed(speed: int):
     """ Установка скорости робота """

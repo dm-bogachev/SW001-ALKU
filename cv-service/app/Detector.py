@@ -56,7 +56,14 @@ class Detector:
             model_config = self.__models[model]
             model_name = model_config.get("ModelName")
             model_file_name = model_config.get("ModelFileName")
-            confidence_threshold = model_config.get("ConfidenceThreshold", 0.5)
+            # Конфиг может хранить порог как строку (чтобы ключи с точками не ломались).
+            # Приводим к float при загрузке, чтобы сравнения с числами работали корректно.
+            raw_threshold = model_config.get("ConfidenceThreshold", 0.5)
+            try:
+                confidence_threshold = float(raw_threshold)
+            except (TypeError, ValueError):
+                logger.warning(f"Неверный ConfidenceThreshold для модели {model}: {raw_threshold}, используем 0.5")
+                confidence_threshold = 0.5
             model_type = model_config.get("ModelType", "yolo-pose")
             processor_file = model_config.get("ModelProcessor", None)
 
@@ -245,8 +252,22 @@ class Detector:
         if model_name not in self.__models:
             logger.error(f"Модель {model_name} не найдена в списке доступных моделей")
             return False
-        self.__models[model_name].confidence_threshold = new_threshold
-        Config.set(f"Models.{model_name}.ConfidenceThreshold", new_threshold)
+        # Обновляем внутреннее значение как float для корректных сравнений
+        try:
+            numeric_threshold = float(new_threshold)
+        except (TypeError, ValueError):
+            logger.error(f"Неверное значение порога: {new_threshold}")
+            return False
+        self.__models[model_name].confidence_threshold = numeric_threshold
+
+        # Обновляем конфигурацию безопасно, не разбивая имя модели по точкам.
+        models_cfg = Config.get("Models") or {}
+        if model_name not in models_cfg:
+            models_cfg[model_name] = {}
+        # Сохраняем значение как строку, чтобы формат вроде "x.y.z" не ломал структуру
+        models_cfg[model_name]["ConfidenceThreshold"] = str(new_threshold)
+
+        Config.set("Models", models_cfg)
         Config.save()
         logger.info(f"Порог уверенности модели {model_name} изменен на {new_threshold}")
         return True

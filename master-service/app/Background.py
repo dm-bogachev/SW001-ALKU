@@ -39,6 +39,11 @@ class Background(Thread):
         #
         self.cycle_delay = 0.1  # Задержка между циклами основного потока в секундах
 
+    def reset_defect_counter(self):
+        if not self.send_command_to_robot("CLEANDEFECT;", "RS007L", RS007L_API_URL):
+            return False
+        return True
+
     def send_coordinates_to_robot(self, x: float, y: float, angle: float):
         response = requests.post(f"{RS013N_API_URL}/send_pick_data?x={x}&y={y}&angle={angle}",
                                 headers={'accept': 'application/json'}, 
@@ -139,7 +144,6 @@ class Background(Thread):
             self.in_process = True
         else:
             logger.warning("Не удалось отправить команду на а пересброс тары")
-
 
     def close_pneumatic(self):
         resp = requests.post(f"{IO_API_URL}/tare_on", timeout=8)

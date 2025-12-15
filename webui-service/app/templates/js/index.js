@@ -701,7 +701,8 @@ function showEasterEgg() {
 document.addEventListener('DOMContentLoaded', () => {
     setStreamImage();
     loadSettings();
-    
+    const sel = document.getElementById('model-select');
+    if (sel) sel.addEventListener('change', updateConfidenceInputFromSelect);
     document.querySelectorAll('.tab').forEach(tab => {
         tab.addEventListener('click', () => switchTab(tab.getAttribute('data-tab')));
     });
@@ -808,4 +809,41 @@ async function sendRobotCommand(robotType, command) {
             actionElement.className = 'robot-status-action';
         }, 500);
     }
+}
+
+async function updateConfidenceInputFromSelect() {
+    const sel = document.getElementById('model-select');
+    const input = document.getElementById('confidence-input');
+    if (!sel || !input) return;
+
+    const opt = sel.options[sel.selectedIndex];
+    const selectedModel = sel.value;
+
+    // If option has data-threshold, prefer it (fast)
+    if (opt && opt.dataset && opt.dataset.threshold) {
+        input.value = parseFloat(opt.dataset.threshold);
+        return;
+    }
+
+    // Otherwise try to load from config endpoint
+    try {
+        const response = await fetch(`${WEBUI_API_URL}/config`);
+        if (response.ok) {
+            const config = await response.json();
+            if (config.Models && config.Models[selectedModel] && typeof config.Models[selectedModel].ConfidenceThreshold !== 'undefined') {
+                const threshold = parseFloat(config.Models[selectedModel].ConfidenceThreshold);
+                input.value = threshold;
+                // cache on option for faster future selection changes
+                if (opt) opt.dataset.threshold = threshold;
+                return;
+            }
+        } else {
+            console.error('Failed to fetch config:', response.status);
+        }
+    } catch (err) {
+        console.error('Error loading config for confidence:', err);
+    }
+
+    // Fallback default
+    input.value = '0.5';
 }

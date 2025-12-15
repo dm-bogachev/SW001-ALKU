@@ -1,6 +1,7 @@
 import cv2
 import redis
 import logging
+import os, sys
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("camerasim")
@@ -22,7 +23,9 @@ details = {
 
 def set_detail(id):
     DETAIL_NAME = details.get(id)[0]
-    DETAIL_PATH = details.get(id)[1]
+
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+    DETAIL_PATH =  os.path.join(BASE_DIR, details.get(id)[1])
     DETAIL_OK_NAME = details.get(id)[2]
     DETAIL_NG_NAME = details.get(id)[3]
     return DETAIL_NAME, DETAIL_PATH, DETAIL_OK_NAME, DETAIL_NG_NAME
