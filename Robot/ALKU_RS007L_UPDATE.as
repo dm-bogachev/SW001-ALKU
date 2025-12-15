@@ -1263,16 +1263,65 @@ N_INT300    "s.debug.mode|Debug mode"
   ;
 .END
 .PROGRAM safe.home ()
-	;
-	IF SIG (do.home) THEN
-		CALL log ("Robot already in home position")
-	ELSE
-		CALL log ("Performing safe motion to home position")
-		JMOVE #homyak
-		BREAK
-		CALL log ("Robot in home position")
-	END
-	;
+  ;
+  ; Safe zones:
+  ; 1. OT zone: same as for normal work
+  ; 2. Machine zone
+  ; 3. Defect + etalon zone
+  ;
+  IF SIG (do.home) THEN
+    CALL log ("Robot already in home position")
+  ELSE
+    CALL log ("Performing safe motion to home position")
+    ; In measure machine zone!!!
+    ; Move to the height of a before machine point
+    IF SIG (do.work[2]) THEN
+      CALL log ("Move from the measure machine zone")
+      IF object.id <> round.no THEN
+        .idx = 1
+      ELSE
+        .idx = 2
+      END
+      POINT .temp = #before.machine[.idx]
+      DECOMPOSE .s[1] = .temp
+      POINT .temp = HERE
+      DECOMPOSE .c[1] = .temp
+      .dz = .s[3] - .c[3]
+      DRAW 0, 0, .dz
+      LMOVE #before.machine[.idx]
+      JMOVE #safe.machine
+    END
+    ; In defect zone
+    ; Move to the height of a safe point
+    IF SIG (do.work[3]) THEN
+      CALL log ("Move from the defect zone")
+      POINT .temp = #safe.defect
+      DECOMPOSE .s[1] = .temp
+      POINT .temp = HERE
+      DECOMPOSE .c[1] = .temp
+      .dz = .s[3] - .c[3]
+      DRAW 0, 0, .dz
+      LMOVE #safe.defect
+    END
+    ;
+    ; In OT zone
+    ; Move to the height of a home POINT
+    IF SIG (do.work[1]) THEN
+      CALL log ("Move from the OT zone")
+      POINT .temp = #homyak
+      DECOMPOSE .s[1] = .temp
+      POINT .temp = HERE
+      DECOMPOSE .c[1] = .temp
+      .dz = .s[3] - .c[3]
+      DRAW 0, 0, .dz
+      LMOVE #homyak
+    END
+    ;
+    JMOVE #homyak
+    BREAK
+    CALL log ("Robot in home position")
+  END
+  ;
 .END
 .PROGRAM set.io.pc ()
   ; Gripper IO
@@ -2256,6 +2305,7 @@ N_INT300    "s.debug.mode|Debug mode"
 	; #before.machine[] Point before machine
 	; #defect.point[] Defect point for cell i
 	; #safe.machine Safe point on machine side
+	; #defect.safe 
 	; #ot.up.right OT up.right point
 	; #ot.orig OT up right point
 	; #ot.down.right OT down right point
@@ -2566,6 +2616,7 @@ ot.put[20,7] -465.937042 366.299408 -8.900530 -85.560913 2.096370 85.437073
 #before.machine[1] -121.615997 4.829000 -127.328003 -137.613007 -51.009998 -8.870000
 #defect.point[50] 79.791443 47.037457 -59.593079 -0.403593 -71.823288 124.406555
 #safe.machine -104.177643 -37.185425 -123.196983 -0.000879 -93.836975 -146.334885
+#defect.safe 109.729698 -37.185059 -123.196548 -0.002640 -93.839722 38.109039
 #defect.point[49] 83.799706 45.730595 -61.840870 -0.290479 -70.859146 120.369057
 #defect.point[48] 87.885941 44.976620 -63.127308 -0.171942 -70.310989 116.247017
 #defect.point[47] 92.010063 44.762142 -63.487003 -0.050480 -70.158150 112.083687
@@ -2628,12 +2679,19 @@ ot.put[20,7] -465.937042 366.299408 -8.900530 -85.560913 2.096370 85.437073
 #machine.pos[4] -120.810501 34.656010 -129.709488 -148.471008 -76.604927 12.318366
 #et.mac.point[99] -116.219101 48.973022 -118.426521 -153.258408 -78.901749 15.482635
 #et.pos.point[99] 42.590481 27.213867 -85.643173 19.667286 -94.327240 -118.745911
-#safe.defect 109.729698 -37.185059 -123.196548 -0.002640 -93.839722 38.109039
+#safe.defect 85.119003 -2.381104 -89.948692 -0.003516 -93.840416 25.192408
 #pos.point[5] -27.062403 3.609741 -109.914543 17.690626 -57.549133 128.931549
 #pos.point[6] -24.266603 11.206055 -101.154915 16.572657 -59.693531 126.417831
 #machine.pos[5] -120.855339 35.200932 -129.580521 -148.420029 -76.970901 12.493420
 #machine.pos[6] -120.808754 34.013309 -129.783554 -148.398056 -76.117401 12.009513
-#safe.etalon 89.266120 -4.592290 -112.841700 2.308890 -66.337510 21.642370
+#safe.etalon 89.266121 -4.592290 -112.841698 2.308890 -66.337509 21.642370
+#et.mac.point[1] -120.900589 34.739502 -129.595703 -148.167786 -76.755989 12.907508
+#et.mac.point[2] -121.084282 32.413334 -129.866989 -147.280975 -75.143738 11.431330
+#et.mac.point[3] -108.429352 28.302614 -91.449318 0.007031 -59.981922 -142.099304
+#et.mac.point[4] -120.810501 34.656010 -129.709488 -148.471008 -76.604927 12.318366
+#et.mac.point[5] -120.855339 35.200932 -129.580521 -148.420029 -76.970901 12.493420
+#et.mac.point[6] -120.808754 34.013309 -129.783554 -148.398056 -76.117401 12.009513
+#et.pos.point[1] 31.232376 48.891357 -54.666561 26.100002 -90.973671 77.298569
 .END
 .REALS
 s.pr.tst.ot = 2249
