@@ -7,7 +7,7 @@
         "440.00.026": {
             "ModelName": "440.00.026",
             "ModelFileName": "model_440.00.026.pt",
-            "ConfidenceThreshold": "0.6",
+            "ConfidenceThreshold": "0.8",
             "ModelType": "yolo-pose",
             "ModelProcessor": "proc_440.00.026.py"
         },
@@ -51,7 +51,7 @@
         "BBOX": true,
         "COORDINATES": true,
         "KEYPOINTS": false,
-        "LABELS": false,
+        "LABELS": true,
         "SCORES": false,
         "POINTS": true,
         "PICK_ANGLE": false,

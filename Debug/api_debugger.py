@@ -40,7 +40,7 @@ class APIDebugger(QMainWindow):
         
         product_layout.addWidget(QLabel("Spec:"))
         self.product_spec = QSpinBox()
-        self.product_spec.setRange(1, 32)
+        self.product_spec.setRange(0, 32)
         product_layout.addWidget(self.product_spec)
 
         product_layout.addWidget(QLabel("Count:"))
