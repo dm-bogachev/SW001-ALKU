@@ -159,6 +159,15 @@ class APIDebugger(QMainWindow):
         robot_group = QGroupBox("Robot Control")
         robot_layout = QVBoxLayout()
         
+        # Robot ID (for step/auto/next)
+        robotid_layout = QHBoxLayout()
+        robotid_layout.addWidget(QLabel("Robot ID:"))
+        self.robot_id = QSpinBox()
+        self.robot_id.setRange(0, 1000)
+        self.robot_id.setValue(0)
+        robotid_layout.addWidget(self.robot_id)
+        robot_layout.addLayout(robotid_layout)
+        
         # Check Etalon
         etalon_layout = QHBoxLayout()
         etalon_layout.addWidget(QLabel("Etalon ID:"))
@@ -181,6 +190,19 @@ class APIDebugger(QMainWindow):
         speed_layout.addWidget(self.speed)
         speed_layout.addWidget(speed_btn)
         robot_layout.addLayout(speed_layout)
+
+        # Step/Auto/Next controls
+        step_layout = QHBoxLayout()
+        set_step_btn = QPushButton("Set Step Mode")
+        set_step_btn.clicked.connect(lambda: self.set_step_mode(True))
+        set_auto_btn = QPushButton("Set Auto Mode")
+        set_auto_btn.clicked.connect(lambda: self.set_step_mode(False))
+        next_step_btn = QPushButton("Next Step")
+        next_step_btn.clicked.connect(self.next_step)
+        step_layout.addWidget(set_step_btn)
+        step_layout.addWidget(set_auto_btn)
+        step_layout.addWidget(next_step_btn)
+        robot_layout.addLayout(step_layout)
         
         robot_group.setLayout(robot_layout)
         layout.addWidget(robot_group)
@@ -260,6 +282,17 @@ class APIDebugger(QMainWindow):
     def set_speed(self):
         speed = self.speed.value()
         self.send_request(f"/master/set_speed?speed={speed}", "POST", {})
+    
+    def set_step_mode(self, mode: bool):
+        """Установить режим шаг/авто для выбранного робота (mode=True -> step)"""
+        robot = self.robot_id.value()
+        # отправляем через query для совместимости с текущим сервером
+        self.send_request(f"/master/set_step_mode?mode={str(mode).lower()}&robot={robot}", "POST", {})
+
+    def next_step(self):
+        """Запрос на переход к следующему шагу для выбранного робота"""
+        robot = self.robot_id.value()
+        self.send_request(f"/master/next_step?robot={robot}", "POST", {})
     
     def send_request(self, endpoint, method, data):
         try:

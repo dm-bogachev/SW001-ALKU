@@ -37,7 +37,29 @@ class Background(Thread):
         self.redrops = 0
         self.in_process = False
         #
-        self.cycle_delay = 0.1  # Задержка между циклами основного потока в секундах
+        self.cycle_delay = 0.25  # Задержка между циклами основного потока в секундах
+
+    def next_step(self, robot_id: int):
+        robot_name = "RS013N" if robot_id == 1 else "RS007L"
+        robot_api = RS013N_API_URL if robot_id == 1 else RS007L_API_URL
+        logger.info(f"Запрос следующего шага для робота {robot_id}")
+        command = f"NEXTSTEP;"
+        if not self.send_command_to_robot(command, robot_name, robot_api):
+            return False
+        return True
+
+    def set_step_mode(self, enabled: bool, robot_id: int):
+        if enabled:
+            logger.info(f"Включение пошагового режима для робота {robot_id}")
+            command = f"STEPMODE;TRUE;"
+        else:
+            command = f"STEPMODE;FALSE;"
+            logger.info(f"Выключение пошагового режима для робота {robot_id}")
+        robot_name = "RS013N" if robot_id == 1 else "RS007L"
+        robot_api = RS013N_API_URL if robot_id == 1 else RS007L_API_URL
+        if not self.send_command_to_robot(command, robot_name, robot_api):
+            return False
+        return True
 
     def reset_defect_counter(self):
         if not self.send_command_to_robot("CLEANDEFECT;", "RS007L", RS007L_API_URL):
@@ -279,9 +301,12 @@ class Background(Thread):
                 
                 if rs13_action.lower() == "waitpneumaticopen":
                     self.process_pneumatic_open()
-                
-                if rs13_action.lower() == "waitposfree" or rs7_action.lower() == "waitposfull":
-                    self.process_check_positioner()
+
+                if rs13_action.lower() == "waitposfree":
+                    self.process_check_positioner(RS013N_API_URL)
+
+                if rs7_action.lower() == "waitposfull":
+                    self.process_check_positioner(RS007L_API_URL)
 
                 if rs13_action.lower() == "waitforpick":   
                     self.process_waitforpick()
@@ -310,22 +335,25 @@ class Background(Thread):
             self.send_command_to_robot(command, "RS013N", RS013N_API_URL)
             self.in_process = False
         
-    def process_check_positioner(self):
+    def process_check_positioner(self, ROBOT_API_URL):
 
         #if os.environ.get("DEBUG", "True").lower() == "True".lower():
         # logger.info("Режим отладки включен, пропуск проверки позиционера")
-        self.send_command_to_robot("POSITIONEREMPTY;", "RS013N", RS013N_API_URL)
-        self.send_command_to_robot("POSITIONERFULL;", "RS007L", RS007L_API_URL)
-        return
+        # self.send_command_to_robot("POSITIONEREMPTY;", "RS013N", RS013N_API_URL)
+        # self.send_command_to_robot("POSITIONERFULL;", "RS007L", RS007L_API_URL)
+        # return
 
-        if self.get_io_state(9):
-            logger.info("Позиционер занят")
-            command = "POSITIONERFULL;"
-            self.send_command_to_robot(command, "RS007L", RS007L_API_URL)
-        else:
-            logger.info("Позиционер свободен")
-            command = "POSITIONEREMPTY;"
-            self.send_command_to_robot(command, "RS013N", RS013N_API_URL)
+        if ROBOT_API_URL == RS007L_API_URL:
+            logger.info("Проверка состояния позиционера для RS007L")
+            if self.get_io_state(9):
+                logger.info("Позиционер занят")
+                command = "POSITIONERFULL;"
+                self.send_command_to_robot(command, "RS007L", RS007L_API_URL)
+        if ROBOT_API_URL == RS013N_API_URL:
+            if not self.get_io_state(9):
+                logger.info("Позиционер свободен")
+                command = "POSITIONEREMPTY;"
+                self.send_command_to_robot(command, "RS013N", RS013N_API_URL)
 
     def process_waitforpick(self):
         x, y, angle = self.get_object_coordinates() or (None, None, None)

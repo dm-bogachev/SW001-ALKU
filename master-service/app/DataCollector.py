@@ -93,7 +93,8 @@ class DataCollector(Thread):
             "pickcount": 0,
             "defectcount": 0,
             "state": -1,
-            "hour": -1
+            "hour": -1,
+            "stepmode": False
         }
 
         try:
@@ -108,7 +109,8 @@ class DataCollector(Thread):
 
             # Boolean-like fields
             for key in ("connected", "power", "teach", "cs", "error",
-                        "teachl", "tpemg", "opemg", "exemg", "home", "batalm"):
+                        "teachl", "tpemg", "opemg", "exemg", "home", "batalm",
+                        "stepmode"):
                 if key in rs:
                     val = rs.get(key)
                     if isinstance(val, str):
@@ -131,7 +133,13 @@ class DataCollector(Thread):
                     except (TypeError, ValueError):
                         # keep default on parse failure
                         pass
-
+            if key in ("hour",):
+                if key in rs:
+                    try:
+                        result[key] = float(rs.get(key))
+                    except (TypeError, ValueError):
+                        # keep default on parse failure
+                        pass
             # Action / others
             if "action" in rs:
                 result["action"] = str(rs.get("action") or "")
