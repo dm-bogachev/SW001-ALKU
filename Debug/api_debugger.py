@@ -152,6 +152,24 @@ class APIDebugger(QMainWindow):
         measure_layout.addLayout(auto_layout)
         measure_layout.addWidget(self.send_btn)
         
+        # Etalon Result Buttons
+        etalon_result_layout = QHBoxLayout()
+        etalon_result_layout.addWidget(QLabel("Etalon Result:"))
+        
+        etalon_ok_btn = QPushButton("Send Etalon OK")
+        etalon_ok_btn.clicked.connect(lambda: self.send_etalon_result(0))
+        etalon_result_layout.addWidget(etalon_ok_btn)
+        
+        etalon_retry_btn = QPushButton("Send Etalon Retry")
+        etalon_retry_btn.clicked.connect(lambda: self.send_etalon_result(-1))
+        etalon_result_layout.addWidget(etalon_retry_btn)
+        
+        etalon_ng_btn = QPushButton("Send Etalon NG")
+        etalon_ng_btn.clicked.connect(lambda: self.send_etalon_result(-2))
+        etalon_result_layout.addWidget(etalon_ng_btn)
+        
+        measure_layout.addLayout(etalon_result_layout)
+        
         measure_group.setLayout(measure_layout)
         layout.addWidget(measure_group)
         
@@ -293,6 +311,10 @@ class APIDebugger(QMainWindow):
         """Запрос на переход к следующему шагу для выбранного робота"""
         robot = self.robot_id.value()
         self.send_request(f"/master/next_step?robot={robot}", "POST", {})
+    
+    def send_etalon_result(self, result: int):
+        """Отправить результат проверки эталона (0=OK, -1=Retry, -2=NG)"""
+        self.send_request(f"/master/etalon_result?result={result}", "POST", {})
     
     def send_request(self, endpoint, method, data):
         try:

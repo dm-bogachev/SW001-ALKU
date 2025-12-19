@@ -232,6 +232,19 @@ class Background(Thread):
     def send_measurement_result(self, result: bool):
         return self.send_command_to_robot(f"MEASUREMENT;{result};", "RS007L", RS007L_API_URL)
 
+    def send_etalon_result(self, result: int):
+        send_result = ""
+        if result == 0:
+            logger.info("Измерение эталона прошло успешно")
+            send_result = "OK"
+        elif result == -1:
+            logger.info("Требуется повторное измерение эталона")
+            send_result = "RETRY"
+        elif result == -2:
+            logger.info("Измерение эталона завершилось ошибкой")
+            send_result = "FAILED"
+        return self.send_command_to_robot(f"ETALONRESULT;{send_result};", "RS007L", RS007L_API_URL)
+
     def pause_process(self):
         command = "PAUSE;"
         if not self.send_command_to_robot(command, "RS013N", RS013N_API_URL):

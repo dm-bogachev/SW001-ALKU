@@ -103,6 +103,22 @@ def set_measurement_result(result: bool):
                 }
     return {"Status": "OK"}
 
+@app.post("/etalon_result")
+def set_etalon_result(result: int):
+    """ Получение результата проверки эталона """
+    logger.debug(f"Запрос /master/etalon_result")
+    if result not in [0, -1, -2]:
+        return {"Status": "Failed",
+                "Code": -2,
+                "Reason": "Wrong etalon result"
+                }
+    if not master.send_etalon_result(result):
+        return {"Status": "Failed",
+                "Code": -1,
+                "Reason": "Error in sending to robot"
+                }
+    return {"Status": "OK"}
+
 @app.post("/pause")
 def pause_process():
     """ Пауза процесса """
