@@ -201,10 +201,10 @@ def set_speed(speed: int):
     return {"Status": "OK"}
 
 @app.post("/set_step_mode")
-def set_step_mode(mode: bool, robot: int):
+def set_step_mode(mode: bool):
     """ Отправка команды на смену режима авто/шаг"""
     logger.debug("Запрос /master/set_step_mode")
-    if not master.set_step_mode(mode, robot):
+    if not master.set_step_mode(mode):
         return {"Status": "Failed",
                 "Code": -1,
                 "Reason": "Error in sending to robot"
@@ -216,6 +216,17 @@ def next_step(robot: int):
     """ Отправка команды на следующий шаг режима авто/шаг"""
     logger.debug("Запрос /master/next_step")
     if not master.next_step(robot):
+        return {"Status": "Failed",
+                "Code": -1,
+                "Reason": "Error in sending to robot"
+                }
+    return {"Status": "OK"}
+
+@app.post("/cycle_on")
+def cycle_on():
+    """ Запуск циклов на роботе """
+    logger.debug("Запрос /master/cycle_on")
+    if not master.cycle_on():
         return {"Status": "Failed",
                 "Code": -1,
                 "Reason": "Error in sending to robot"

@@ -7,7 +7,7 @@
         "440.00.026": {
             "ModelName": "440.00.026",
             "ModelFileName": "model_440.00.026.pt",
-            "ConfidenceThreshold": "0.8",
+            "ConfidenceThreshold": "0.6",
             "ModelType": "yolo-pose",
             "ModelProcessor": "proc_440.00.026.py"
         },

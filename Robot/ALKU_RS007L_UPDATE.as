@@ -42,6 +42,7 @@ N_INT8    "di.ifp.page[8]|Open IFP page i"
 N_INT9    "di.hold|Set hold mode"
 N_INT10    "do.home|Robot in home position"
 N_INT11    "do.bat.alm|Battery low alarm"
+N_INT12    "do.automatic|Robot in automatic mode"
 N_INT201    "s.tcp.send.ena|Display TCP send prints"
 N_INT202    "s.tcp.recv.ena|Display TCP receive prints"
 N_INT203    "s.tcp.ena|Display TCP connect prints"
@@ -124,6 +125,7 @@ N_INT300    "s.debug.mode|Debug mode"
 77,2,"","   MAIN","<---------","",10,4,11,2001,0
 79,7,"  RS007L","COUNT PICK",10,15,4,0,0,25,8,1
 80,7,"  RS013N","COUNT PUT",10,15,4,0,0,1025,8,1
+82,8,"max.defect.cnt","Max defect","tare count",10,15,2,1,0
 84,2,"  ","  PRIME","  HOME","",10,4,11,2250,0
 85,8,"hmi.obj.id","  OBJECT","    ID",10,2,2,1,0
 86,8,"hmi.tool.no","    HMI","  GRIPPER ",10,2,2,1,0
@@ -269,15 +271,15 @@ N_INT300    "s.debug.mode|Debug mode"
 ;
   TOOL tool.pick[hmi.tool.no]
 ; Pick etalon
-  POINT .temp = #et.pos.point[hmi.etalon.id]
-  JMOVE .temp+TRANS(0,0,50)
+  POINT .et.pos.point = #et.pos.point[hmi.etalon.id]
+  JMOVE .et.pos.point+TRANS(0,0,50)
   BREAK
   LMOVE #et.pos.point[hmi.etalon.id]; *** TEACH POINT ***
-  POINT .temp = #et.pos.point[hmi.etalon.id]
+  POINT .et.pos.point = #et.pos.point[hmi.etalon.id]
   BREAK
   TWAIT 0.5
-  LMOVE .temp+TRANS(0,5,10)
-  LMOVE .temp+TRANS(0,0,150)
+  LMOVE .et.pos.point+TRANS(0,5,10)
+  LMOVE .et.pos.point+TRANS(0,0,150)
   LMOVE #homyak
   BREAK
   TWAIT 0.5
@@ -286,14 +288,14 @@ N_INT300    "s.debug.mode|Debug mode"
     TOOL tool.pick[hmi.tool.no]
     JMOVE #safe.machine
     JMOVE #before.machine[2]
-    POINT .temp = #et.mac.point[hmi.etalon.id]
-    JMOVE .temp+TRANS(0,0,10)
+    POINT .et.mac.poin = #et.mac.point[hmi.etalon.id]
+    JMOVE .et.mac.poin+TRANS(0,0,10)
     BREAK
     LMOVE #et.mac.point[hmi.etalon.id]; *** TEACH POINT ***
-    POINT .temp = #et.mac.point[hmi.etalon.id]
+    POINT .et.mac.poin = #et.mac.point[hmi.etalon.id]
     BREAK
     TWAIT 0.5
-    LMOVE .temp+TRANS(0,0,10)
+    LMOVE .et.mac.poin+TRANS(0,0,10)
     BREAK
     TWAIT 0.5
     LMOVE #before.machine[2]
@@ -301,24 +303,25 @@ N_INT300    "s.debug.mode|Debug mode"
     TOOL tool.pick[hmi.tool.no]
     JMOVE #safe.machine
     JMOVE #before.machine[1]
-    POINT .temp = #et.mac.point[hmi.etalon.id]
-    JMOVE .temp+TRANS(0,10,0)
+    POINT .et.mac.poin = #et.mac.point[hmi.etalon.id]
+    JMOVE .et.mac.poin+TRANS(0,10,0)
     BREAK
     LMOVE #et.mac.point[hmi.etalon.id]; *** TEACH POINT ***
-    POINT .temp = #et.mac.point[hmi.etalon.id]
+    POINT .et.mac.poin = #et.mac.point[hmi.etalon.id]
     BREAK
     TWAIT 0.5
-    LMOVE .temp+TRANS(0,10,0)
+    LMOVE .et.mac.poin+TRANS(0,10,0)
     BREAK
     TWAIT 0.5
     LMOVE #before.machine[1]
   END
-;
+  ;
+  LMOVE #safe.machine
   LMOVE #homyak
-  LMOVE .temp+TRANS(0,0,150)
-  LMOVE .temp+TRANS(0,5,10)
+  LMOVE .et.pos.point+TRANS(0,0,150)
+  LMOVE .et.pos.point+TRANS(0,5,10)
   LMOVE #et.pos.point[hmi.etalon.id]
-  LMOVE .temp+TRANS(0,0,150)
+  LMOVE .et.pos.point+TRANS(0,0,150)
 .END
 .PROGRAM a.teach.machine ()
   IF FALSE THEN ; For round details
@@ -684,6 +687,13 @@ N_INT300    "s.debug.mode|Debug mode"
 .END
 .PROGRAM defect.put ()
   ;
+  IF count.defect >= max.defect.cnt THEN
+    CALL log ("Defect tare is full. Waiting for tare clean")
+    $action = "Paused"
+    WAIT count.defect == 0
+    $action = " "
+  END
+  ;
   SPEED 100 ALWAYS
   ACCURACY 100 ALWAYS
   TOOL tool.pick[current.gripper]
@@ -691,13 +701,6 @@ N_INT300    "s.debug.mode|Debug mode"
   POINT .temp = #defect.point[count.defect + 1]
   ;
   JMOVE #safe.defect
-  ;
-  IF count.defect > 50 THEN
-    CALL log ("Defect tare is full. Waiting for tare clean")
-    $action = "Paused"
-    WAIT count.defect == 1
-    $action = " "
-  END
   ;
   CALL log ("Putting to defect tare with No:" + $ENCODE (count.defect + 1))
   ;
@@ -953,7 +956,7 @@ N_INT300    "s.debug.mode|Debug mode"
   ; Working gripper
   pg.gripper = 2
   ; Max objects in output tare
-  max.tare.count = 8;147
+  max.tare.count = 12;147
   spc.tare.count = 50
   ; Object length
   object.length = 27.5
@@ -1428,6 +1431,7 @@ N_INT300    "s.debug.mode|Debug mode"
   ;
   do.home = 2010
   do.bat.alm = 2011
+  do.automatic = 2012
   ;
   ;
   ; Internal logic 2201 - 2960
@@ -1511,6 +1515,10 @@ N_INT300    "s.debug.mode|Debug mode"
   ;
   recv.etalon = -1
   ;
+  IF NOT EXISTREAL("max.defect.cnt") THEN
+    max.defect.cnt = 50
+  END
+  ;
   IF NOT EXISTREAL ("state") THEN
     state = 0
   END
@@ -1570,7 +1578,7 @@ N_INT300    "s.debug.mode|Debug mode"
   END
   ;
   IF NOT EXISTREAL ("count.defect") THEN
-    count.defect = 1
+    count.defect = 0
   END
   ;
   IF NOT EXISTREAL ("current.gripper") THEN
@@ -1630,7 +1638,7 @@ N_INT300    "s.debug.mode|Debug mode"
   ;
   CALL log ("State 0: Program reset. Initialization of parameters")
   SIGNAL -s.grip.full, -s.measure.ok, -s.measure.ng, -rs7.tare.chg, -s.cmd.measured
-  SIGNAL -s.cmd.start, -s.cmd.pick, -s.cmd.finish, -rs7.finish.ack, -rs7.locked.zone, -s.cmd.stop
+  SIGNAL -s.cmd.start, -s.cmd.pick, -s.cmd.finish, -rs7.locked.zone, -s.cmd.stop
   SIGNAL -s.cmd.chk.etal, -rs7.etalon.stop
   SIGNAL -s.etalon.ok, -s.etalon.ret, -s.etalon.ng
   count.pick = 0
@@ -1709,18 +1717,18 @@ N_INT300    "s.debug.mode|Debug mode"
     state = 4
     RETURN
   END
+    ; Priority 8
+  IF NOT SIG (s.grip.full); AND NOT SIG (s.cmd.pick) THEN
+    JMOVE #homyak
+    BREAK
+    SIGNAL -rs7.locked.zone
+  END
   ; Priority 7
   IF SIG (rs13.finish) AND NOT SIG (s.grip.full) AND NOT (BITS (rs13.det.put[0], 8) > count.pick) THEN
     state = 103
     RETURN
   END
-  ; Priority 8
-  IF NOT SIG (s.grip.full); AND NOT SIG (s.cmd.pick) THEN
-    JMOVE #homyak
-    BREAK
-    SIGNAL -rs7.locked.zone
-    RETURN
-  END
+
 .END
 .PROGRAM state103 () ; Auxilary state
   CALL log ("State 103: Ending sequence started")
@@ -1811,6 +1819,7 @@ N_INT300    "s.debug.mode|Debug mode"
   ; TEMPORARY!!!!!!!!
   ;state = 101 
   ;RETURN
+  SIGNAL -s.etalon.ok, -s.etalon.ret, -s.etalon.ng
   IF recv.etalon == 99 THEN
     CALL etalon.measure (99)
   ELSE
@@ -1831,7 +1840,6 @@ N_INT300    "s.debug.mode|Debug mode"
   SIGNAL -s.cmd.chk.etal
   ;IF SIG (s.measure.ok) THEN
   ;  state = 101
-  ;  SIGNAL -s.measure.ok, -s.measure.ng, -s.cmd.chk.etal
   ;ELSE
   ;  state = 105
   ;END
@@ -1991,7 +1999,7 @@ N_INT300    "s.debug.mode|Debug mode"
   ; CLEANDEFECT;
   ;
   IF INSTR (.$data[1] , "CLEANDEFECT") THEN
-    count.defect = 1
+    count.defect = 0
   END
   ;
   ; PAUSE COMMAND
@@ -2018,12 +2026,22 @@ N_INT300    "s.debug.mode|Debug mode"
     SIGNAL s.cmd.stop
   END
   ;
-  ; RESET COMMAND
+  ; STOP COMMAND
   ; String format:
-  ; RESET;
+  ; STOP;
   ;
-  IF INSTR (.$data[1] , "RESET") THEN
-    state = 0
+  IF INSTR (.$data[1] , "STOP") THEN
+    SIGNAL s.cmd.stop
+  END
+  ;
+  ; CYCLEON COMMAND
+  ; String format:
+  ; CYCLEON;
+  ;
+  IF INSTR (.$data[1] , "CYCLEON") THEN
+    IF SIG(do.automatic) THEN
+      MC CONTINUE
+    END
   END
   ;
   ; STEPMODE COMMAND
@@ -2246,10 +2264,12 @@ N_INT300    "s.debug.mode|Debug mode"
 	; >TY BITS (rs13.det.put[0], 8)|0|1|1|0|0|0
 	; s.measure.ok
 	; s.force.defect
+	; count.defect
+	; max.defect.cnt
 	; @@@ CONNECTION @@@
-	; KROSET R02
-	; 127.0.0.1
-	; 9205
+	; RS007L
+	; 192.168.7.103
+	; 23
 	; @@@ PROGRAM @@@
 	;   Group:Etalon:1
 	;     1:a.teach.etalon:F
@@ -2379,7 +2399,6 @@ N_INT300    "s.debug.mode|Debug mode"
 	;     7:state104:F
 	;       .finish.ack 
 	;     7:state105:F
-	;       .was.etalon.chk 
 	;     7:state106:F
 	;     7:state255:F
 	;   Group:Utilities:8
@@ -2435,10 +2454,10 @@ N_INT300    "s.debug.mode|Debug mode"
 	;       .i 
 	;       .$sensor.name 
 	;       .$sensor.state 
+	;       .$state 
 	;       .$measurement.state 
 	;       .$spd 
 	;       .speed 
-	;       .$state 
 	;     11:tcp.client.pc:B
 	;       .tcp.retry.count 
 	;       .tcp.connect.tmo 
@@ -2540,6 +2559,7 @@ N_INT300    "s.debug.mode|Debug mode"
 	; detail.spec Detail specification
 	; etalon.id 
 	; recv.etalon Received etalon id
+	; max.defect.cnt Maximum value of defect cell
 	; @@@ STRINGS @@@
 	; $log.entry[] Log entry
 	; $action Current robot action to send
@@ -2605,6 +2625,7 @@ N_INT300    "s.debug.mode|Debug mode"
 	; s.etalon.ret Etalon result: RETRY
 	; s.etalon.ng Etalon result: NG
 	; rs7.etalon.stop Etalon measurement was bad, need to stop
+	; do.automatic Robot in automatic mode
 	; @@@ TOOLS @@@
 	; tool.pick[] Gripper tool
 	; @@@ BASE @@@
@@ -2863,7 +2884,7 @@ ot.put[20,7] 175.260284 713.768311 -1.211617 -84.510590 1.748546 -95.627464
 #machine.pos[4] -120.810501 34.656010 -129.709488 -148.471008 -76.604927 12.318366
 #et.mac.point[99] -116.219101 48.973022 -118.426521 -153.258408 -78.901749 15.482635
 #et.pos.point[99] 42.590481 27.213867 -85.643173 19.667286 -94.327240 -118.745911
-#safe.defect 85.119003 -2.381104 -89.948692 -0.003516 -93.840416 25.192408
+#safe.defect 85.116364 -1.856690 -101.774261 -0.002637 -81.495209 25.192118
 #pos.point[5] -27.062403 3.609741 -109.914543 17.690626 -57.549133 128.931549
 #pos.point[6] -24.266603 11.206055 -101.154915 16.572657 -59.693531 126.417831
 #machine.pos[5] -120.855339 35.200932 -129.580521 -148.420029 -76.970901 12.493420
@@ -2872,7 +2893,7 @@ ot.put[20,7] 175.260284 713.768311 -1.211617 -84.510590 1.748546 -95.627464
 #et.mac.point[1] -120.900589 34.739502 -129.595703 -148.167786 -76.755989 12.907508
 #et.mac.point[2] -121.084282 32.413334 -129.866989 -147.280975 -75.143738 11.431330
 #et.mac.point[3] -108.429352 28.302614 -91.449318 0.007031 -59.981922 -142.099304
-#et.mac.point[4] -120.810501 34.656010 -129.709488 -148.471008 -76.604927 12.318366
+#et.mac.point[4] -120.886086 34.728882 -129.602844 -148.186249 -76.743622 12.912149
 #et.mac.point[5] -120.855339 35.200932 -129.580521 -148.420029 -76.970901 12.493420
 #et.mac.point[6] -120.808754 34.013309 -129.783554 -148.398056 -76.117401 12.009513
 #et.pos.point[1] 31.232376 48.891357 -54.666561 26.100002 -90.973671 77.298569
@@ -2938,9 +2959,9 @@ s.pr.tch.defect = 2252
 s.pr.tch.meas = 2253
 s.pr.tch.etal = 2254
 s.apply.obj = 2256
-count.defect = 10
-count.pick = 19
-count.put = 19
+count.defect = 8
+count.pick = 0
+count.put = 0
 current.gripper = 1
 detail.count = 150
 grip.180xsh[1] = 0
@@ -2952,32 +2973,32 @@ grip.180ysh[3] = 0
 grip.xsh[1] = 16
 grip.xsh[2] = -3
 grip.xsh[3] = 0
-grip.ysh[1] = 0
+grip.ysh[1] = 2
 grip.ysh[2] = 15
 grip.ysh[3] = 0
-grip.zsh[1] = -18
+grip.zsh[1] = -15
 grip.zsh[2] = 0
 grip.zsh[3] = 0
 hmi.defect.pos = 5
-hmi.etalon.id = 1
+hmi.etalon.id = 4
 hmi.g180x = 0
 hmi.g180y = 0
 hmi.gx = 16
 hmi.gy = 0
-hmi.gz = -18
-hmi.obj.id = 1
+hmi.gz = -15
+hmi.obj.id = 4
 hmi.tool.no = 1
-keep.object = 1
+keep.object = 4
 line.width = 210
 lines.count = 21
 lines.shift = 16
-max.tare.count = 168
+max.tare.count = 12
 obj.in.line = 7
 obj.spacer = 1.5
 object.length = 27.5
 pg.gripper = 2
 rs13.work[1] = 1017
-state = 102
+state = 100
 tcp.ena = -1
 tcp.port = 9007
 tcp.recv.ena = -1
@@ -3008,11 +3029,11 @@ grip.180xsh[4] = 0
 grip.180xsh[5] = 0
 grip.180ysh[4] = 0
 grip.180ysh[5] = 0
-grip.xsh[4] = 0
+grip.xsh[4] = 16
 grip.xsh[5] = -3
 grip.ysh[4] = 0
 grip.ysh[5] = 0
-grip.zsh[4] = -18
+grip.zsh[4] = -15
 grip.zsh[5] = 0
 s.cmd.measured = 2234
 hmi.gripper = 1
@@ -3312,7 +3333,7 @@ ns[145] = 0
 ns[146] = 6
 object.id = 1
 ot.x = 11
-ot.y = 5
+ot.y = 2
 round.no = 3
 spc.tare.count = 50
 detail.spec = 0
@@ -3619,137 +3640,139 @@ s.etalon.ok = 2272
 s.etalon.ret = 2273
 s.etalon.ng = 2274
 rs7.etalon.stop = 33
+max.defect.cnt = 25
+do.automatic = 2012
 .END
 .STRINGS
-$log.entry[2] = "17:04:05 POSITIONERFULL;\n"
-$log.entry[1] = "17:04:04 MEASUREMENT;TRUE;\nPOSITIONERFULL;\n"
-$log.entry[0] = "17:04:04 POSITIONERFULL;\n"
-$action = "WaitPosFull"
-$log.entry[3] = "17:04:05 POSITIONERFULL;\n"
-$log.entry[4] = "17:04:05 MEASUREMENT;TRUE;\n"
-$log.entry[5] = "17:04:06 MEASUREMENT;TRUE;\n"
-$log.entry[6] = "17:04:07 State 101: Calculating next step"
-$log.entry[7] = "17:04:07 State 2: Measurement process"
-$log.entry[8] = "17:04:07 Move to measure machine"
-$log.entry[9] = "17:04:07 MEASUREMENT;TRUE;\n"
-$log.entry[10] = "17:04:08 MEASUREMENT;TRUE;\n"
-$log.entry[11] = "17:04:09 POSITIONERFULL;\n"
-$log.entry[12] = "17:04:09 MEASUREMENT;TRUE;\n"
-$log.entry[13] = "17:04:10 POSITIONERFULL;\n"
-$log.entry[14] = "17:04:10 POSITIONERFULL;\n"
-$log.entry[15] = "17:04:10 POSITIONERFULL;\n"
-$log.entry[16] = "17:04:10 POSITIONERFULL;\n"
-$log.entry[17] = "17:04:10 MEASUREMENT;TRUE;\n"
-$log.entry[18] = "17:04:11 POSITIONERFULL;\n"
-$log.entry[19] = "17:04:11 POSITIONERFULL;\n"
-$log.entry[20] = "17:04:11 POSITIONERFULL;\n"
-$log.entry[21] = "17:04:11 Waiting for measurement result"
-$log.entry[22] = "17:04:11 Measurement result: OK"
-$log.entry[23] = "17:04:11 POSITIONERFULL;\n"
-$log.entry[24] = "17:04:11 MEASUREMENT;TRUE;\n"
-$log.entry[25] = "17:04:12 MEASUREMENT;TRUE;\n"
-$log.entry[26] = "17:04:13 MEASUREMENT;TRUE;\n"
-$log.entry[27] = "17:04:14 State 101: Calculating next step"
-$log.entry[28] = "17:04:14 State 3: Put detail to OT"
-$log.entry[29] = "17:04:14 MEASUREMENT;TRUE;\n"
-$log.entry[30] = "17:04:15 MEASUREMENT;TRUE;\n"
-$log.entry[31] = "17:04:15 Put to OT detail 18"
-$log.entry[32] = "17:04:16 Check if positioner is occupied"
-$log.entry[33] = "17:04:16 POSITIONERFULL;\n"
-$log.entry[34] = "17:04:16 MEASUREMENT;TRUE;\n"
-$log.entry[35] = "17:04:17 MEASUREMENT;TRUE;\n"
-$log.entry[36] = "17:04:17 State 101: Calculating next step"
-$log.entry[37] = "17:04:18 State 1: Pick from positioner"
-$log.entry[38] = "17:04:18 Pick detail from positioner (ID: 1)"
-$log.entry[39] = "17:04:18 MEASUREMENT;TRUE;\n"
-$log.entry[40] = "17:04:19 MEASUREMENT;TRUE;\n"
-$log.entry[41] = "17:04:20 MEASUREMENT;TRUE;\n"
-$log.entry[42] = "17:04:20 State 101: Calculating next step"
-$log.entry[43] = "17:04:21 State 2: Measurement process"
-$log.entry[44] = "17:04:21 Move to measure machine"
-$log.entry[45] = "17:04:21 MEASUREMENT;TRUE;\n"
-$log.entry[46] = "17:04:22 MEASUREMENT;TRUE;\n"
-$log.entry[47] = "17:04:23 MEASUREMENT;TRUE;\n"
-$log.entry[48] = "17:04:24 MEASUREMENT;TRUE;\n"
-$log.entry[49] = "17:04:25 Waiting for measurement result"
-$log.entry[50] = "17:04:25 Measurement result: OK"
-$log.entry[51] = "17:04:25 MEASUREMENT;TRUE;\n"
-$log.entry[52] = "17:04:26 MEASUREMENT;TRUE;\n"
-$log.entry[53] = "17:04:27 MEASUREMENT;TRUE;\n"
-$log.entry[54] = "17:04:28 State 101: Calculating next step"
-$log.entry[55] = "17:04:28 State 3: Put detail to OT"
-$log.entry[56] = "17:04:28 MEASUREMENT;TRUE;\n"
-$log.entry[57] = "17:04:29 MEASUREMENT;TRUE;\n"
-$log.entry[58] = "17:04:29 Put to OT detail 19"
-$log.entry[59] = "17:04:30 Check if positioner is occupied"
-$log.entry[60] = "17:04:30 MEASUREMENT;TRUE;\n"
-$log.entry[61] = "17:04:31 MEASUREMENT;TRUE;\n"
-$log.entry[62] = "17:04:32 State 101: Calculating next step"
-$log.entry[63] = "17:04:32 MEASUREMENT;TRUE;\n"
-$log.entry[64] = "17:04:33 MEASUREMENT;TRUE;\n"
-$log.entry[65] = "17:04:34 MEASUREMENT;TRUE;\n"
-$log.entry[66] = "17:04:35 MEASUREMENT;TRUE;\n"
-$log.entry[67] = "17:04:36 MEASUREMENT;TRUE;\n"
-$log.entry[68] = "17:04:37 MEASUREMENT;TRUE;\n"
-$log.entry[69] = "17:04:38 MEASUREMENT;TRUE;\n"
-$log.entry[70] = "17:04:39 MEASUREMENT;TRUE;\n"
-$log.entry[71] = "17:04:40 MEASUREMENT;TRUE;\n"
-$log.entry[72] = "17:04:41 MEASUREMENT;TRUE;\n"
-$log.entry[73] = "17:04:42 MEASUREMENT;TRUE;\n"
-$log.entry[74] = "17:04:43 MEASUREMENT;TRUE;\n"
-$log.entry[75] = "17:04:44 MEASUREMENT;TRUE;\n"
-$log.entry[76] = "17:04:45 MEASUREMENT;TRUE;\n"
-$log.entry[77] = "17:04:46 MEASUREMENT;TRUE;\n"
-$log.entry[78] = "17:04:47 MEASUREMENT;TRUE;\n"
-$log.entry[79] = "17:04:48 MEASUREMENT;TRUE;\n"
-$log.entry[80] = "17:04:49 MEASUREMENT;TRUE;\n"
-$log.entry[81] = "17:04:50 MEASUREMENT;TRUE;\n"
-$log.entry[82] = "17:04:51 MEASUREMENT;TRUE;\n"
-$log.entry[83] = "17:04:52 MEASUREMENT;TRUE;\n"
-$log.entry[84] = "17:04:53 MEASUREMENT;TRUE;\n"
-$log.entry[85] = "17:04:54 MEASUREMENT;TRUE;\n"
-$log.entry[86] = "17:04:55 MEASUREMENT;TRUE;\n"
-$log.entry[87] = "17:04:56 MEASUREMENT;TRUE;\n"
-$log.entry[88] = "17:04:57 MEASUREMENT;TRUE;\n"
-$log.entry[89] = "17:04:58 MEASUREMENT;TRUE;\n"
-$log.entry[90] = "17:04:59 MEASUREMENT;TRUE;\n"
-$log.entry[91] = "17:05:00 MEASUREMENT;TRUE;\n"
-$log.entry[92] = "17:05:01 MEASUREMENT;TRUE;\n"
-$log.entry[93] = "17:05:02 MEASUREMENT;TRUE;\n"
-$log.entry[94] = "17:05:03 MEASUREMENT;TRUE;\n"
-$log.entry[95] = "17:05:04 MEASUREMENT;TRUE;\n"
-$log.entry[96] = "17:05:05 MEASUREMENT;TRUE;\n"
-$log.entry[97] = "17:05:06 MEASUREMENT;TRUE;\n"
-$log.entry[98] = "17:05:07 MEASUREMENT;TRUE;\n"
-$log.entry[99] = "17:05:08 MEASUREMENT;TRUE;\n"
-$log.entry[100] = "17:05:09 MEASUREMENT;TRUE;\n"
-$log.entry[101] = "17:05:10 MEASUREMENT;TRUE;\n"
-$log.entry[102] = "17:05:11 MEASUREMENT;TRUE;\n"
-$log.entry[103] = "17:05:12 MEASUREMENT;TRUE;\n"
-$log.entry[104] = "17:05:13 MEASUREMENT;TRUE;\n"
-$log.entry[105] = "17:05:14 MEASUREMENT;TRUE;\n"
-$log.entry[106] = "17:05:15 MEASUREMENT;TRUE;\n"
-$log.entry[107] = "17:05:16 MEASUREMENT;TRUE;\n"
-$log.entry[108] = "17:05:17 MEASUREMENT;TRUE;\n"
-$log.entry[109] = "17:05:18 MEASUREMENT;TRUE;\n"
-$log.entry[110] = "17:05:19 MEASUREMENT;TRUE;\n"
-$log.entry[111] = "17:05:20 MEASUREMENT;TRUE;\n"
-$log.entry[112] = "17:05:21 MEASUREMENT;TRUE;\n"
-$log.entry[113] = "17:05:22 MEASUREMENT;TRUE;\n"
-$log.entry[114] = "17:05:23 MEASUREMENT;TRUE;\n"
-$log.entry[115] = "17:05:24 MEASUREMENT;TRUE;\n"
-$log.entry[116] = "17:05:25 MEASUREMENT;TRUE;\n"
-$log.entry[117] = "17:05:26 MEASUREMENT;TRUE;\n"
-$log.entry[118] = "17:05:27 MEASUREMENT;TRUE;\n"
-$log.entry[119] = "17:05:28 MEASUREMENT;TRUE;\n"
-$log.entry[120] = "17:05:29 MEASUREMENT;TRUE;\n"
-$log.entry[121] = "17:05:30 MEASUREMENT;TRUE;\n"
-$log.entry[122] = "17:05:31 MEASUREMENT;TRUE;\n"
-$log.entry[123] = "17:05:32 MEASUREMENT;TRUE;\n"
-$log.entry[124] = "17:05:33 MEASUREMENT;TRUE;\n"
-$log.entry[125] = "17:05:34 MEASUREMENT;TRUE;\n"
-$log.entry[126] = "17:05:35 MEASUREMENT;TRUE;\n"
-$log.entry[127] = "17:05:36 MEASUREMENT;TRUE;\n"
+$log.entry[2] = "16:53:55 Put to OT detail 11"
+$log.entry[1] = "16:53:54 State 3: Put detail to OT"
+$log.entry[0] = "16:53:54 State 101: Calculating next step"
+$action = "WaitingForStart"
+$log.entry[3] = "16:53:56 Check if positioner is occupied"
+$log.entry[4] = "16:53:57 State 101: Calculating next step"
+$log.entry[5] = "16:53:57 State 1: Pick from positioner"
+$log.entry[6] = "16:53:57 Pick detail from positioner (ID: 1)"
+$log.entry[7] = "16:54:00 State 101: Calculating next step"
+$log.entry[8] = "16:54:00 State 2: Measurement process"
+$log.entry[9] = "16:54:00 Move to measure machine"
+$log.entry[10] = "16:54:04 Waiting for measurement result"
+$log.entry[11] = "16:54:04 Measurement result: OK"
+$log.entry[12] = "16:54:06 State 101: Calculating next step"
+$log.entry[13] = "16:54:06 State 3: Put detail to OT"
+$log.entry[14] = "16:54:07 Put to OT detail 12"
+$log.entry[15] = "16:54:08 Check if positioner is occupied"
+$log.entry[16] = "16:54:10 State 101: Calculating next step"
+$log.entry[17] = "16:54:10 State 1: Pick from positioner"
+$log.entry[18] = "16:54:10 Pick detail from positioner (ID: 1)"
+$log.entry[19] = "16:54:12 State 101: Calculating next step"
+$log.entry[20] = "16:54:12 State 2: Measurement process"
+$log.entry[21] = "16:54:12 Move to measure machine"
+$log.entry[22] = "16:54:16 Waiting for measurement result"
+$log.entry[23] = "16:54:17 Measurement result: OK"
+$log.entry[24] = "16:54:19 State 101: Calculating next step"
+$log.entry[25] = "16:54:40 State 3: Put detail to OT"
+$log.entry[26] = "16:54:40 Put to OT detail 1"
+$log.entry[27] = "16:54:40 Check if positioner is occupied"
+$log.entry[28] = "16:54:42 State 101: Calculating next step"
+$log.entry[29] = "16:55:45 State 1: Pick from positioner"
+$log.entry[30] = "16:55:46 Pick detail from positioner (ID: 1)"
+$log.entry[31] = "16:55:48 State 101: Calculating next step"
+$log.entry[32] = "16:55:49 State 2: Measurement process"
+$log.entry[33] = "16:55:49 Move to measure machine"
+$log.entry[34] = "16:55:52 Waiting for measurement result"
+$log.entry[35] = "16:55:53 Measurement result: OK"
+$log.entry[36] = "16:55:55 State 101: Calculating next step"
+$log.entry[37] = "16:55:55 State 3: Put detail to OT"
+$log.entry[38] = "16:55:56 Put to OT detail 2"
+$log.entry[39] = "16:55:56 Check if positioner is occupied"
+$log.entry[40] = "16:55:58 State 101: Calculating next step"
+$log.entry[41] = "16:55:58 State 1: Pick from positioner"
+$log.entry[42] = "16:55:58 Pick detail from positioner (ID: 1)"
+$log.entry[43] = "16:56:00 State 101: Calculating next step"
+$log.entry[44] = "16:56:01 State 2: Measurement process"
+$log.entry[45] = "16:56:01 Move to measure machine"
+$log.entry[46] = "16:56:04 Waiting for measurement result"
+$log.entry[47] = "16:56:05 Measurement result: OK"
+$log.entry[48] = "16:56:07 State 101: Calculating next step"
+$log.entry[49] = "16:56:07 State 3: Put detail to OT"
+$log.entry[50] = "16:56:08 Put to OT detail 3"
+$log.entry[51] = "16:56:08 Check if positioner is occupied"
+$log.entry[52] = "16:56:10 State 101: Calculating next step"
+$log.entry[53] = "16:56:10 State 1: Pick from positioner"
+$log.entry[54] = "16:56:10 Pick detail from positioner (ID: 1)"
+$log.entry[55] = "16:56:12 State 101: Calculating next step"
+$log.entry[56] = "16:56:13 State 2: Measurement process"
+$log.entry[57] = "16:56:13 Move to measure machine"
+$log.entry[58] = "16:56:16 Waiting for measurement result"
+$log.entry[59] = "16:56:17 Measurement result: DEFECT"
+$log.entry[60] = "16:56:19 State 101: Calculating next step"
+$log.entry[61] = "16:56:19 State 4: Put detail to defect tare"
+$log.entry[62] = "16:56:20 Putting to defect tare with No: 8"
+$log.entry[63] = "16:56:23 State 101: Calculating next step"
+$log.entry[64] = "16:56:23 State 1: Pick from positioner"
+$log.entry[65] = "16:56:23 Pick detail from positioner (ID: 1)"
+$log.entry[66] = "16:56:26 State 101: Calculating next step"
+$log.entry[67] = "16:56:26 State 2: Measurement process"
+$log.entry[68] = "16:56:26 Move to measure machine"
+$log.entry[69] = "16:56:29 Waiting for measurement result"
+$log.entry[70] = "16:56:30 Measurement result: OK"
+$log.entry[71] = "16:56:32 State 101: Calculating next step"
+$log.entry[72] = "16:56:32 State 3: Put detail to OT"
+$log.entry[73] = "16:56:33 Put to OT detail 4"
+$log.entry[74] = "16:56:33 Check if positioner is occupied"
+$log.entry[75] = "16:56:35 State 101: Calculating next step"
+$log.entry[76] = "16:56:35 State 1: Pick from positioner"
+$log.entry[77] = "16:56:36 Pick detail from positioner (ID: 1)"
+$log.entry[78] = "16:56:38 State 101: Calculating next step"
+$log.entry[79] = "16:56:38 State 2: Measurement process"
+$log.entry[80] = "16:56:38 Move to measure machine"
+$log.entry[81] = "16:56:42 Waiting for measurement result"
+$log.entry[82] = "16:56:42 Measurement result: OK"
+$log.entry[83] = "16:56:44 State 101: Calculating next step"
+$log.entry[84] = "16:56:44 State 3: Put detail to OT"
+$log.entry[85] = "16:56:45 Put to OT detail 5"
+$log.entry[86] = "16:56:46 Check if positioner is occupied"
+$log.entry[87] = "16:56:47 State 101: Calculating next step"
+$log.entry[88] = "16:56:47 State 1: Pick from positioner"
+$log.entry[89] = "16:56:48 Pick detail from positioner (ID: 1)"
+$log.entry[90] = "16:56:50 State 101: Calculating next step"
+$log.entry[91] = "16:56:50 State 2: Measurement process"
+$log.entry[92] = "16:56:50 Move to measure machine"
+$log.entry[93] = "16:56:54 Waiting for measurement result"
+$log.entry[94] = "16:56:54 Measurement result: OK"
+$log.entry[95] = "16:56:56 State 101: Calculating next step"
+$log.entry[96] = "16:56:56 State 3: Put detail to OT"
+$log.entry[97] = "16:56:57 Put to OT detail 6"
+$log.entry[98] = "16:56:58 Check if positioner is occupied"
+$log.entry[99] = "16:56:59 State 101: Calculating next step"
+$log.entry[100] = "16:56:59 State 1: Pick from positioner"
+$log.entry[101] = "16:56:59 Pick detail from positioner (ID: 1)"
+$log.entry[102] = "16:57:02 State 101: Calculating next step"
+$log.entry[103] = "16:57:02 State 2: Measurement process"
+$log.entry[104] = "16:57:02 Move to measure machine"
+$log.entry[105] = "16:57:06 Waiting for measurement result"
+$log.entry[106] = "16:57:06 Measurement result: OK"
+$log.entry[107] = "16:57:08 State 101: Calculating next step"
+$log.entry[108] = "16:57:08 State 3: Put detail to OT"
+$log.entry[109] = "16:57:09 Put to OT detail 7"
+$log.entry[110] = "16:57:10 Check if positioner is occupied"
+$log.entry[111] = "16:57:11 State 101: Calculating next step"
+$log.entry[112] = "16:57:11 State 1: Pick from positioner"
+$log.entry[113] = "16:57:12 Pick detail from positioner (ID: 1)"
+$log.entry[114] = "16:57:14 State 101: Calculating next step"
+$log.entry[115] = "16:57:14 State 2: Measurement process"
+$log.entry[116] = "16:57:14 Move to measure machine"
+$log.entry[117] = "16:57:18 Waiting for measurement result"
+$log.entry[118] = "16:57:18 Measurement result: OK"
+$log.entry[119] = "16:57:20 State 101: Calculating next step"
+$log.entry[120] = "16:57:20 State 3: Put detail to OT"
+$log.entry[121] = "16:57:21 Put to OT detail 8"
+$log.entry[122] = "16:57:22 Check if positioner is occupied"
+$log.entry[123] = "16:57:23 State 101: Calculating next step"
+$log.entry[124] = "16:57:45 State 103: Ending sequence started"
+$log.entry[125] = "16:57:45 State 255: Program complete"
+$log.entry[126] = "16:57:46 State 0: Program reset. Initialization of parameters"
+$log.entry[127] = "16:57:46 State 100: Waiting for start"
 $pg.name = "312.229.002"
 $tcp.ip = "192.168.7.100"
 .END

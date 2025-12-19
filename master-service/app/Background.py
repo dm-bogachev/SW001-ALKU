@@ -39,25 +39,34 @@ class Background(Thread):
         #
         self.cycle_delay = 0.25  # Задержка между циклами основного потока в секундах
 
-    def next_step(self, robot_id: int):
-        robot_name = "RS013N" if robot_id == 1 else "RS007L"
-        robot_api = RS013N_API_URL if robot_id == 1 else RS007L_API_URL
-        logger.info(f"Запрос следующего шага для робота {robot_id}")
+    def next_step(self):
+        logger.info(f"Запрос следующего шага для робота")
         command = f"NEXTSTEP;"
-        if not self.send_command_to_robot(command, robot_name, robot_api):
+        if not self.send_command_to_robot(command, "RS013N", RS013N_API_URL):
+            return False
+        if not self.send_command_to_robot(command, "RS007L", RS007L_API_URL):
             return False
         return True
 
-    def set_step_mode(self, enabled: bool, robot_id: int):
+    def set_step_mode(self, enabled: bool):
         if enabled:
-            logger.info(f"Включение пошагового режима для робота {robot_id}")
+            logger.info(f"Включение пошагового режима")
             command = f"STEPMODE;TRUE;"
         else:
             command = f"STEPMODE;FALSE;"
-            logger.info(f"Выключение пошагового режима для робота {robot_id}")
-        robot_name = "RS013N" if robot_id == 1 else "RS007L"
-        robot_api = RS013N_API_URL if robot_id == 1 else RS007L_API_URL
-        if not self.send_command_to_robot(command, robot_name, robot_api):
+            logger.info(f"Выключение пошагового режима")
+        if not self.send_command_to_robot(command, "RS013N", RS013N_API_URL):
+            return False
+        if not self.send_command_to_robot(command, "RS007L", RS007L_API_URL):
+            return False
+        return True
+
+    def cycle_on(self):
+        logger.info(f"Запуск циклов на роботах")
+        command = f"CYCLEON;"
+        if not self.send_command_to_robot(command, "RS013N", RS013N_API_URL):
+            return False
+        if not self.send_command_to_robot(command, "RS007L", RS007L_API_URL):
             return False
         return True
 

@@ -10,7 +10,7 @@ class APIDebugger(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("API Debugger")
-        self.setMinimumSize(1024, 768)
+        self.setMinimumSize(1400, 900)  # Увеличена минимальная ширина
         self.base_url = "http://127.0.0.1/api"
         self.setup_ui()
         
@@ -20,22 +20,39 @@ class APIDebugger(QMainWindow):
         self.setCentralWidget(main_widget)
         main_layout = QVBoxLayout(main_widget)
         
-        # Create scroll area
+        # Create scroll area with horizontal layout for two columns
         scroll = QScrollArea()
         scroll.setWidgetResizable(True)
         scroll_widget = QWidget()
         scroll.setWidget(scroll_widget)
-        layout = QVBoxLayout(scroll_widget)
+        scroll_layout = QHBoxLayout(scroll_widget)
+        
+        # Left column - scroll area for left side
+        left_scroll = QScrollArea()
+        left_scroll.setWidgetResizable(True)
+        left_scroll.setMinimumWidth(300)
+        left_widget = QWidget()
+        left_scroll.setWidget(left_widget)
+        layout = QVBoxLayout(left_widget)
+        
+        # Right column - scroll area for right side
+        right_scroll = QScrollArea()
+        right_scroll.setWidgetResizable(True)
+        right_scroll.setMinimumWidth(450)
+        right_widget = QWidget()
+        right_scroll.setWidget(right_widget)
+        right_layout = QVBoxLayout(right_widget)
         
         # 1. Start Process Section
         start_group = QGroupBox("Start Process")
         start_layout = QVBoxLayout()
         
         # Product Selection
-        product_layout = QHBoxLayout()
+        product_layout = QVBoxLayout()
+        
         product_layout.addWidget(QLabel("Product:"))
         self.product_combo = QComboBox()
-        self.product_combo.addItems(["312.229.002", "0401.17.02.023", "312.229.001", "440.00.026", "440.00.111", "0401.28.02.063"])  # Add more products as needed
+        self.product_combo.addItems(["312.229.002", "0401.17.02.023", "312.229.001", "440.00.026", "440.00.111", "0401.28.02.063"])
         product_layout.addWidget(self.product_combo)
         
         product_layout.addWidget(QLabel("Spec:"))
@@ -90,6 +107,10 @@ class APIDebugger(QMainWindow):
         self.reset_btn = QPushButton("Reset")
         self.reset_btn.clicked.connect(lambda: self.send_request("/master/reset", "POST", {}))
         control_layout.addWidget(self.reset_btn)
+        
+        self.cycle_on_btn = QPushButton("Cycle ON")
+        self.cycle_on_btn.clicked.connect(lambda: self.send_request("/master/cycle_on", "POST", {}))
+        control_layout.addWidget(self.cycle_on_btn)
 
         control_group.setLayout(control_layout)
         layout.addWidget(control_group)
@@ -152,28 +173,64 @@ class APIDebugger(QMainWindow):
         measure_layout.addLayout(auto_layout)
         measure_layout.addWidget(self.send_btn)
         
-        # Etalon Result Buttons
-        etalon_result_layout = QHBoxLayout()
-        etalon_result_layout.addWidget(QLabel("Etalon Result:"))
+        # # Etalon Result Buttons
+        # etalon_result_layout = QHBoxLayout()
+        # etalon_result_layout.addWidget(QLabel("Etalon Result:"))
         
-        etalon_ok_btn = QPushButton("Send Etalon OK")
-        etalon_ok_btn.clicked.connect(lambda: self.send_etalon_result(0))
-        etalon_result_layout.addWidget(etalon_ok_btn)
+        # etalon_ok_btn = QPushButton("Send Etalon OK")
+        # etalon_ok_btn.clicked.connect(lambda: self.send_etalon_result(0))
+        # etalon_result_layout.addWidget(etalon_ok_btn)
         
-        etalon_retry_btn = QPushButton("Send Etalon Retry")
-        etalon_retry_btn.clicked.connect(lambda: self.send_etalon_result(-1))
-        etalon_result_layout.addWidget(etalon_retry_btn)
+        # etalon_retry_btn = QPushButton("Send Etalon Retry")
+        # etalon_retry_btn.clicked.connect(lambda: self.send_etalon_result(-1))
+        # etalon_result_layout.addWidget(etalon_retry_btn)
         
-        etalon_ng_btn = QPushButton("Send Etalon NG")
-        etalon_ng_btn.clicked.connect(lambda: self.send_etalon_result(-2))
-        etalon_result_layout.addWidget(etalon_ng_btn)
+        # etalon_ng_btn = QPushButton("Send Etalon NG")
+        # etalon_ng_btn.clicked.connect(lambda: self.send_etalon_result(-2))
+        # etalon_result_layout.addWidget(etalon_ng_btn)
         
-        measure_layout.addLayout(etalon_result_layout)
+        # measure_layout.addLayout(etalon_result_layout)
         
         measure_group.setLayout(measure_layout)
         layout.addWidget(measure_group)
         
-        # 5. Robot Control Section
+        # Add stretch to left column
+        layout.addStretch()
+        
+        # 4.5 Auto Monitor Section (RIGHT COLUMN)
+        monitor_group = QGroupBox("Auto Monitor")
+        monitor_layout = QVBoxLayout()
+        
+        monitor_auto_layout = QHBoxLayout()
+        self.auto_monitor = QCheckBox("Enable Auto Monitor")
+        self.auto_monitor.toggled.connect(self.toggle_auto_monitor)
+        monitor_auto_layout.addWidget(self.auto_monitor)
+        
+        monitor_auto_layout.addWidget(QLabel("Interval (ms):"))
+        self.monitor_interval = QSpinBox()
+        self.monitor_interval.setRange(100, 10000)
+        self.monitor_interval.setValue(500)
+        monitor_auto_layout.addWidget(self.monitor_interval)
+        
+        monitor_layout.addLayout(monitor_auto_layout)
+        
+        # Status display
+        status_layout = QHBoxLayout()
+        status_layout.addWidget(QLabel("RS013N Action:"))
+        self.rs013n_action_label = QLabel("—")
+        self.rs013n_action_label.setStyleSheet("color: gray;")
+        status_layout.addWidget(self.rs013n_action_label)
+        
+        status_layout.addWidget(QLabel("RS007L Action:"))
+        self.rs007l_action_label = QLabel("—")
+        self.rs007l_action_label.setStyleSheet("color: gray;")
+        status_layout.addWidget(self.rs007l_action_label)
+        
+        monitor_layout.addLayout(status_layout)
+        monitor_group.setLayout(monitor_layout)
+        right_layout.addWidget(monitor_group)
+        
+        # 5. Robot Control Section (RIGHT COLUMN)
         robot_group = QGroupBox("Robot Control")
         robot_layout = QVBoxLayout()
         
@@ -196,6 +253,24 @@ class APIDebugger(QMainWindow):
         etalon_layout.addWidget(self.etalon_id)
         etalon_layout.addWidget(etalon_btn)
         robot_layout.addLayout(etalon_layout)
+        
+        # Etalon Result
+        etalon_result_layout = QHBoxLayout()
+        etalon_result_layout.addWidget(QLabel("Etalon Result:"))
+        
+        etalon_ok_btn = QPushButton("OK (0)")
+        etalon_ok_btn.clicked.connect(lambda: self.send_etalon_result(0))
+        etalon_result_layout.addWidget(etalon_ok_btn)
+        
+        etalon_retry_btn = QPushButton("Retry (-1)")
+        etalon_retry_btn.clicked.connect(lambda: self.send_etalon_result(-1))
+        etalon_result_layout.addWidget(etalon_retry_btn)
+        
+        etalon_ng_btn = QPushButton("NG (-2)")
+        etalon_ng_btn.clicked.connect(lambda: self.send_etalon_result(-2))
+        etalon_result_layout.addWidget(etalon_ng_btn)
+        
+        robot_layout.addLayout(etalon_result_layout)
         
         # Set Speed
         speed_layout = QHBoxLayout()
@@ -223,9 +298,9 @@ class APIDebugger(QMainWindow):
         robot_layout.addLayout(step_layout)
         
         robot_group.setLayout(robot_layout)
-        layout.addWidget(robot_group)
+        right_layout.addWidget(robot_group)
         
-        # 6. Debug Section
+        # 6. Debug Section (RIGHT COLUMN)
         debug_group = QGroupBox("Debug")
         debug_layout = QHBoxLayout()
         
@@ -240,10 +315,14 @@ class APIDebugger(QMainWindow):
         debug_layout.addWidget(self.pneumo_open_btn)
         debug_layout.addWidget(self.pneumo_close_btn)
         debug_group.setLayout(debug_layout)
-        layout.addWidget(debug_group)
+        right_layout.addWidget(debug_group)
         
-        # Add stretch to push everything to the top
-        layout.addStretch()
+        # Add stretch to right column
+        right_layout.addStretch()
+        
+        # Add both columns to the scroll layout with stretch factors
+        scroll_layout.addWidget(left_scroll, 1)  # Give left column less stretch
+        scroll_layout.addWidget(right_scroll, 1)  # Give right column equal stretch
         
         # Set the main layout
         main_layout.addWidget(scroll)
@@ -251,6 +330,10 @@ class APIDebugger(QMainWindow):
         # Initialize timer for auto-send
         self.measurement_timer = QTimer()
         self.measurement_timer.timeout.connect(self.send_measurement)
+        
+        # Initialize timer for auto-monitor
+        self.monitor_timer = QTimer()
+        self.monitor_timer.timeout.connect(self.auto_monitor_tick)
     
     def start_process(self):
         product_name = self.product_combo.currentText()
@@ -292,6 +375,59 @@ class APIDebugger(QMainWindow):
             self.measurement_timer.start(self.interval.value())
         else:
             self.measurement_timer.stop()
+    
+    def toggle_auto_monitor(self, checked):
+        if checked:
+            self.monitor_timer.start(self.monitor_interval.value())
+        else:
+            self.monitor_timer.stop()
+    
+    def auto_monitor_tick(self):
+        """Периодическая проверка данных и автоматическое управление"""
+        try:
+            # Получить данные с сервера
+            url = f"{self.base_url}/master/data"
+            headers = {"accept": "application/json"}
+            response = requests.get(url, headers=headers)
+            
+            if response.status_code != 200:
+                return
+            
+            data = response.json()
+            if data.get("Status") != "OK":
+                return
+            
+            data_dict = data.get("Data", {})
+            
+            # Мониторинг RS013N
+            rs013n = data_dict.get("rs013n", {})
+            rs013n_action = rs013n.get("action", "")
+            
+            # Обновить отображение action
+            self.rs013n_action_label.setText(rs013n_action if rs013n_action else "—")
+            
+            if rs013n_action == "WaitOutStockerSensor":
+                self.send_sensor_state("stockerouttaresensor", True)
+            elif rs013n_action == "WaitInStockerSensor":
+                self.send_sensor_state("stockerintaresensor", True)
+            
+            # Мониторинг RS007L
+            rs007l = data_dict.get("rs007l", {})
+            rs007l_action = rs007l.get("action", "")
+            
+            # Обновить отображение action
+            self.rs007l_action_label.setText(rs007l_action if rs007l_action else "—")
+            
+            if rs007l_action == "WaitingMMResult":
+                # Отправить Measurement Result с вероятностью 80% true
+                result_value = random.random() < 0.8  # 80% вероятность true
+                self.send_request(f"/master/measurement_result?result={str(result_value).lower()}", "POST", {})
+            elif rs007l_action == "WaitingCalibrrationResult":
+                # Отправить etalon_result=0
+                self.send_etalon_result(0)
+                
+        except Exception as e:
+            pass  # Игнорировать ошибки и продолжать
     
     def check_etalon(self):
         etalon_id = self.etalon_id.value()
