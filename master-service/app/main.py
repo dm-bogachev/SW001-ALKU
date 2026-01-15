@@ -233,6 +233,17 @@ def cycle_on():
                 }
     return {"Status": "OK"}
 
+@app.post("/error_reset")
+def ereset():
+    """ Сброс ошибки на роботе """
+    logger.debug("Запрос /master/ereset")
+    if not master.ereset():
+        return {"Status": "Failed",
+                "Code": -1,
+                "Reason": "Error in sending to robot"
+                }
+    return {"Status": "OK"}
+
 @app.get("/data")
 def get_data():
     """ Получение собранных данных """

@@ -92,6 +92,10 @@ class APIDebugger(QMainWindow):
         control_group = QGroupBox("Process Control")
         control_layout = QHBoxLayout()
         
+        self.ereset = QPushButton("ERESET")
+        self.ereset.clicked.connect(lambda: self.send_request("/master/error_reset", "POST", {}))
+        control_layout.addWidget(self.ereset)
+
         self.pause_btn = QPushButton("Pause")
         self.pause_btn.clicked.connect(lambda: self.send_request("/master/pause", "POST", {}))
         control_layout.addWidget(self.pause_btn)

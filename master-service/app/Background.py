@@ -292,6 +292,14 @@ class Background(Thread):
             return False
         return True
 
+    def ereset(self):
+        command = "ERESET;"
+        if not self.send_command_to_robot(command, "RS013N", RS013N_API_URL):
+            return False
+        if not self.send_command_to_robot(command, "RS007L", RS007L_API_URL):
+            return False
+        return True
+
     def stop(self):
         """Корректно остановить поток из внешнего кода."""
         self.__stop_event.set()

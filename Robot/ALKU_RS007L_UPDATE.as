@@ -270,6 +270,19 @@ N_INT300    "s.debug.mode|Debug mode"
 .PROGRAM a.teach.etalon()@25/12/11 10:43 #0
 ;
   TOOL tool.pick[hmi.tool.no]
+    ;
+  IF hmi.etalon.id == round.no THEN
+    .eshift.x = 0
+    .eshift.y = 0
+  ELSE
+    IF hmi.etalon.id == pawn.no THEN
+      .eshift.x = 0
+      .eshift.y = 0
+    ELSE
+      .eshift.x = 0
+      .eshift.y = 5
+    END
+  END
 ; Pick etalon
   POINT .et.pos.point = #et.pos.point[hmi.etalon.id]
   JMOVE .et.pos.point+TRANS(0,0,50)
@@ -278,8 +291,8 @@ N_INT300    "s.debug.mode|Debug mode"
   POINT .et.pos.point = #et.pos.point[hmi.etalon.id]
   BREAK
   TWAIT 0.5
-  LMOVE .et.pos.point+TRANS(0,5,10)
-  LMOVE .et.pos.point+TRANS(0,0,150)
+  LMOVE .et.pos.point+TRANS(.eshift.x,.eshift.y,10)
+  LMOVE .et.pos.point+TRANS(0,0,50)
   LMOVE #homyak
   BREAK
   TWAIT 0.5
@@ -318,10 +331,10 @@ N_INT300    "s.debug.mode|Debug mode"
   ;
   LMOVE #safe.machine
   LMOVE #homyak
-  LMOVE .et.pos.point+TRANS(0,0,150)
-  LMOVE .et.pos.point+TRANS(0,5,10)
+  LMOVE .et.pos.point+TRANS(0,0,50)
+  LMOVE .et.pos.point+TRANS(.eshift.x,.eshift.y,10)
   LMOVE #et.pos.point[hmi.etalon.id]
-  LMOVE .et.pos.point+TRANS(0,0,150)
+  LMOVE .et.pos.point+TRANS(0,0,50)
 .END
 .PROGRAM a.teach.machine ()
   IF FALSE THEN ; For round details
@@ -380,6 +393,19 @@ N_INT300    "s.debug.mode|Debug mode"
 .END
 .PROGRAM a.teach.pos ()
   ;
+  IF hmi.obj.id == round.no THEN
+    .shift.x = 0
+    .shift.y = 0
+  ELSE
+    IF hmi.obj.id == pawn.no THEN
+      .shift.x = 0
+      .shift.y = 0
+    ELSE
+      .shift.x = 0
+      .shift.y = 5
+    END
+  END
+  ;
   TOOL tool.pick[hmi.tool.no]
   ;
   POINT .temp = #pos.point[hmi.obj.id]
@@ -389,7 +415,7 @@ N_INT300    "s.debug.mode|Debug mode"
   POINT .temp = #pos.point[hmi.obj.id]
   BREAK
   TWAIT 0.5
-  LMOVE .temp + TRANS (0, 5, 10)
+  LMOVE .temp + TRANS (.shift.x, .shift.y, 10)
   LMOVE .temp + TRANS (0, 0, 50)
   BREAK
   TWAIT 0.5
@@ -734,7 +760,7 @@ N_INT300    "s.debug.mode|Debug mode"
 	errstart.pc ON
 	;
 .END
-.PROGRAM etalon.measure(.id)@25/12/11 10:43 #6
+.PROGRAM etalon.measure(.id)@26/01/15 13:04 #15
   IF FALSE THEN
     .id = hmi.etalon.id
   END
@@ -755,6 +781,19 @@ N_INT300    "s.debug.mode|Debug mode"
     .p.idx = 1
   END
 ;
+  IF .id==round.no THEN
+    .eshift.x = 0
+    .eshift.y = 0
+  ELSE
+    IF .id==pawn.no THEN
+      .eshift.x = 0
+      .eshift.y = 0
+    ELSE
+      .eshift.x = 0
+      .eshift.y = 5
+    END
+  END
+;
   IF NOT SIG(grip.unclamped) THEN
     PULSE grip.unclamp
     CALL log("Wait for unclamp gripper. State: WaitingGripUnclamped")
@@ -765,7 +804,7 @@ N_INT300    "s.debug.mode|Debug mode"
   .$temp = "Pick detail from etalon (ID:"+$ENCODE(.id)+")"
   CALL log(.$temp)
   LMOVE #safe.etalon
-  LMOVE .etalon.pos.pt+TRANS(0,0,100)
+  LMOVE .etalon.pos.pt+TRANS(0,0,50)
   LMOVE .etalon.pos.pt+TRANS(0,0,30)
   SPEED 250 MM/S
   ACCURACY 0.02
@@ -774,9 +813,9 @@ N_INT300    "s.debug.mode|Debug mode"
   PULSE grip.clamp
   TWAIT 0.5
   SIGNAL s.grip.full
-  LMOVE .etalon.pos.pt+TRANS(0,5,10)
+  LMOVE .etalon.pos.pt+TRANS(.eshift.x,.eshift.y,10)
   ACCURACY 100
-  LMOVE .etalon.pos.pt+TRANS(0,0,200)
+  LMOVE .etalon.pos.pt+TRANS(0,0,50)
   LMOVE #safe.etalon
   ACCURACY 100
   LMOVE #homyak
@@ -841,9 +880,9 @@ N_INT300    "s.debug.mode|Debug mode"
   JMOVE #safe.machine
   JMOVE #homyak
   LMOVE #safe.etalon
-  LMOVE .etalon.pos.pt+TRANS(0,0,100)
-  LMOVE .etalon.pos.pt+TRANS(0,5,30)
-  LMOVE .etalon.pos.pt+TRANS(0,5,10)
+  LMOVE .etalon.pos.pt+TRANS(0,0,50)
+  LMOVE .etalon.pos.pt+TRANS(.eshift.x,.eshift.y,30)
+  LMOVE .etalon.pos.pt+TRANS(.eshift.x,.eshift.y,10)
   SPEED 250 MM/S
   ACCURACY 0.02
   LMOVE #et.pos.point[.id]
@@ -853,7 +892,7 @@ N_INT300    "s.debug.mode|Debug mode"
   SIGNAL -s.grip.full
   LMOVE .etalon.pos.pt+TRANS(0,0,30)
   ACCURACY 100
-  LMOVE .etalon.pos.pt+TRANS(0,0,200)
+  LMOVE .etalon.pos.pt+TRANS(0,0,50)
   LMOVE #safe.etalon
   ACCURACY 100
   LMOVE #homyak
@@ -863,169 +902,169 @@ N_INT300    "s.debug.mode|Debug mode"
   ot.y = ns[.obj.id]
 .END
 .PROGRAM get.state.pc(.$state)@25/11/17 14:11 #210978
-	.$state = "SPEED:" + $ENCODE (/L, MSPEED) + ";"
-	.$state = .$state + "POWER:"
-	IF SWITCH (POWER ) THEN
-		.$state = .$state + "TRUE;"
-	ELSE
-		.$state = .$state + "FALSE;"
-	END
-	; MAX: 12
-	;
-	.$state = .$state + "CS:"
-	IF SWITCH (CS ) THEN
-		.$state = .$state + "TRUE;"
-	ELSE
-		.$state = .$state + "FALSE;"
-	END
-	; MAX 9
-	;
-	.$state = .$state + "TEACH:"
-	IF SWITCH (REPEAT ) THEN
-		.$state = .$state + "FALSE;"
-	ELSE
-		.$state = .$state + "TRUE;"
-	END
-	; MAX 12
-	;
-	.$state = .$state + "TEACHL:"
-	IF SWITCH (TEACH_LOCK ) THEN
-		.$state = .$state + "TRUE;"
-	ELSE
-		.$state = .$state + "FALSE;"
-	END
-	; MAX 13
-	;
-	.$state = .$state + "TPEMG:"
-	IF SWITCH (TP_EMG ) THEN
-		.$state = .$state + "TRUE;"
-	ELSE
-		.$state = .$state + "FALSE;"
-	END
-	; MAX 12
-	;
-	.$state = .$state + "OPEMG:"
-	IF SWITCH (OP_EMG ) THEN
-		.$state = .$state + "TRUE;"
-	ELSE
-		.$state = .$state + "FALSE;"
-	END
-	; MAX 12
-	;
-	.$state = .$state + "EXEMG:"
-	IF SWITCH (EX_EMG ) THEN
-		.$state = .$state + "TRUE;"
-	ELSE
-		.$state = .$state + "FALSE;"
-	END
-	; MAX 12
-	;
-	.$state = .$state + "ERROR:"
-	IF SWITCH (ERROR ) THEN
-		.$state = .$state + "TRUE;"
-	ELSE
-		.$state = .$state + "FALSE;"
-	END
-	; MAX 12
-	;
-	.$state = .$state + "ECODE:"
-	.$state = .$state + $ENCODE (ERROR) + ";"
-	; MAX 12
-	;
-	;.$state = .$state + "HOME:"
-	;IF SIG (do.home1) THEN
-	;  .$state = .$state + "TRUE;"
-	;ELSE
-	;  .$state = .$state + "FALSE;"
-	;END
-	;; MAX 12
-	;;
-	;.$state = .$state + "BATALM:"
-	;IF SIG (do.bat.alm) THEN
-	;  .$state = .$state + "TRUE;"
-	;ELSE
-	;  .$state = .$state + "FALSE;"
-	;END
-	; MAX 12
-	.$state = .$state + "\n"
+  .$state = "SPEED:" + $ENCODE (/L, MSPEED) + ";"
+  .$state = .$state + "POWER:"
+  IF SWITCH (POWER ) THEN
+    .$state = .$state + "TRUE;"
+  ELSE
+    .$state = .$state + "FALSE;"
+  END
+  ; MAX: 12
+  ;
+  .$state = .$state + "CS:"
+  IF SWITCH (CS ) THEN
+    .$state = .$state + "TRUE;"
+  ELSE
+    .$state = .$state + "FALSE;"
+  END
+  ; MAX 9
+  ;
+  .$state = .$state + "TEACH:"
+  IF SWITCH (REPEAT ) THEN
+    .$state = .$state + "FALSE;"
+  ELSE
+    .$state = .$state + "TRUE;"
+  END
+  ; MAX 12
+  ;
+  .$state = .$state + "TEACHL:"
+  IF SWITCH (TEACH_LOCK ) THEN
+    .$state = .$state + "TRUE;"
+  ELSE
+    .$state = .$state + "FALSE;"
+  END
+  ; MAX 13
+  ;
+  .$state = .$state + "TPEMG:"
+  IF SWITCH (TP_EMG ) THEN
+    .$state = .$state + "TRUE;"
+  ELSE
+    .$state = .$state + "FALSE;"
+  END
+  ; MAX 12
+  ;
+  .$state = .$state + "OPEMG:"
+  IF SWITCH (OP_EMG ) THEN
+    .$state = .$state + "TRUE;"
+  ELSE
+    .$state = .$state + "FALSE;"
+  END
+  ; MAX 12
+  ;
+  .$state = .$state + "EXEMG:"
+  IF SWITCH (EX_EMG ) THEN
+    .$state = .$state + "TRUE;"
+  ELSE
+    .$state = .$state + "FALSE;"
+  END
+  ; MAX 12
+  ;
+  .$state = .$state + "ERROR:"
+  IF SWITCH (ERROR ) THEN
+    .$state = .$state + "TRUE;"
+  ELSE
+    .$state = .$state + "FALSE;"
+  END
+  ; MAX 12
+  ;
+  .$state = .$state + "ECODE:"
+  .$state = .$state + $ENCODE (ERROR) + ";"
+  ; MAX 12
+  ;
+  .$state = .$state + "HOME:"
+  IF SIG (do.home) THEN
+    .$state = .$state + "TRUE;"
+  ELSE
+    .$state = .$state + "FALSE;"
+  END
+  ;; MAX 12
+  ;;
+  .$state = .$state + "BATALM:"
+  IF SIG (do.bat.alm) THEN
+    .$state = .$state + "TRUE;"
+  ELSE
+    .$state = .$state + "FALSE;"
+  END
+  ; MAX 12
+  .$state = .$state + "\n"
 .END
-.PROGRAM id1 () ; 312.229.002
-  ; Object ID
+.PROGRAM id1()@26/01/15 08:27 #34; 312.229.002
+; Object ID
   object.id = 1
   etalon.id = 1 ; Can be object.id <> etalon.id
-  ; Working gripper
+; Working gripper
   pg.gripper = 2
-  ; Max objects in output tare
-  max.tare.count = 12;147
+; Max objects in output tare
+  max.tare.count = 3 ;126
   spc.tare.count = 50
-  ; Object length
+; Object length
   object.length = 27.5
-  ;
+;
 .END
-.PROGRAM id2 () ; 0401.17.02.023-02
-  ; Object ID
+.PROGRAM id2()@26/01/15 08:27 #0; 0401.17.02.023-02
+; Object ID
   object.id = 2
   etalon.id = 2 ; Can be object.id <> etalon.id
-  ; Working gripper
+; Working gripper
   pg.gripper = 2
-  ; Max objects in output tare
-  max.tare.count = 84
+; Max objects in output tare
+  max.tare.count = 84 ;84
   spc.tare.count = 50
-  ; Object length
+; Object length
   object.length = 40
-  ;
+;
 .END
-.PROGRAM id3 () ; 312.229.001
-  ; Object ID
+.PROGRAM id3()@26/01/15 08:27 #0; 312.229.001
+; Object ID
   object.id = 3
   etalon.id = 3 ; Can be object.id <> etalon.id
-  ; Working gripper
+; Working gripper
   pg.gripper = 3
-  ; Max objects in output tare
-  max.tare.count = 77
+; Max objects in output tare
+  max.tare.count = 77 ;77
   spc.tare.count = 77
-  ; Object length
+; Object length
   object.length = 40
-  ;
+;
 .END
-.PROGRAM id4 () ; 440.00.026
-  ; Object ID
+.PROGRAM id4()@26/01/15 08:27 #3; 440.00.026
+; Object ID
   object.id = 4
   etalon.id = 4 ; Can be object.id <> etalon.id
-  ; Working gripper
+; Working gripper
   pg.gripper = 1
-  ; Max objects in output tare
-  max.tare.count = 8;168
+; Max objects in output tare
+  max.tare.count = 147 ;147
   spc.tare.count = 50
-  ; Object length
+; Object length
   object.length = 23.5
-  ;
+;
 .END
-.PROGRAM id5 () ; 440.00.111
-  ; Object ID
+.PROGRAM id5()@26/01/15 08:27 #0; 440.00.111
+; Object ID
   object.id = 5
   etalon.id = 5 ; Can be object.id <> etalon.id
-  ; Working gripper
+; Working gripper
   pg.gripper = 1
-  ; Max objects in output tare
-  max.tare.count = 273
+; Max objects in output tare
+  max.tare.count = 231 ;231
   spc.tare.count = 50
-  ; Object length
+; Object length
   object.length = 13.5
-  ;
+;
 .END
-.PROGRAM id6 () ; 0401.28.02.063
-  ; Object ID
+.PROGRAM id6()@26/01/15 08:27 #0; 0401.28.02.063
+; Object ID
   object.id = 6
   etalon.id = 6 ; Can be object.id <> etalon.id
-  ; Working gripper
+; Working gripper
   pg.gripper = 1
-  ; Max objects in output tare
-  max.tare.count = 126
+; Max objects in output tare
+  max.tare.count = 126 ;126
   spc.tare.count = 50
-  ; Object length
+; Object length
   object.length = 28.5
-  ;
+;
 .END
 .PROGRAM log (.$msg)
 	;
@@ -1196,7 +1235,7 @@ N_INT300    "s.debug.mode|Debug mode"
           $pg.name = "NULL"
       END
       ;
-    SVALUE "0401.17.02.023":
+    SVALUE "0401.17.02.023-02":
       CASE detail.spec OF
         VALUE 0:
           CALL id2; idX_1
@@ -1263,10 +1302,23 @@ N_INT300    "s.debug.mode|Debug mode"
   ;
   POINT .temp = #pos.point[object.id]
   ;
+  IF object.id == round.no THEN
+    .shift.x = 0
+    .shift.y = 0
+  ELSE
+    IF object.id == pawn.no THEN
+      .shift.x = 0
+      .shift.y = 0
+    ELSE
+      .shift.x = 0
+      .shift.y = 5
+    END
+  END
+  ;
   SIGNAL rs7.locked.zone
   ;
-    IF SIG(do.home) THEN
-    CALL log("Check if positioner is occupied")
+  IF SIG (do.home) THEN
+    CALL log ("Check if positioner is occupied")
     SWAIT -rs13.lock.zone
   END
   ;
@@ -1290,7 +1342,7 @@ N_INT300    "s.debug.mode|Debug mode"
   count.pick = count.pick + 1
   BITS rs7.det.picked[0], 8 = count.pick
   ;
-  LMOVE .temp + TRANS (0, 5, 10)
+  LMOVE .temp + TRANS (.shift.x, .shift.y, 10)
   ACCURACY 100
   LMOVE .temp + TRANS (0, 0, 200)
   ACCURACY 100
@@ -1529,6 +1581,7 @@ N_INT300    "s.debug.mode|Debug mode"
   ;
   IF NOT EXISTREAL ("round.no") THEN
     round.no = 3
+    pawn.no = 5
   END
   ;
   IF NOT EXISTCHAR ("$tcp.ip") THEN
@@ -1668,6 +1721,7 @@ N_INT300    "s.debug.mode|Debug mode"
     TWAIT 0.5
   END
   SIGNAL -s.cmd.start
+  SIGNAL -s.cmd.stop
   SIGNAL -rs7.finish.ack
   ;
   CALL log ("START with Name:" + $pg.name + "-" + $ENCODE (detail.spec) + " Count:" + $ENCODE (detail.count) + " OT:" + $ot.data + " OPT:" + $opt.data)
@@ -1814,16 +1868,17 @@ N_INT300    "s.debug.mode|Debug mode"
   state = 101
   ;
 .END
-.PROGRAM state5 () ; Check etalon
-  CALL log ("State 5: Check etalon")
+.PROGRAM state5()@26/01/15 08:27 #561; Check etalon
+  CALL log("State 5: Check etalon")
   ; TEMPORARY!!!!!!!!
-  ;state = 101 
-  ;RETURN
-  SIGNAL -s.etalon.ok, -s.etalon.ret, -s.etalon.ng
-  IF recv.etalon == 99 THEN
-    CALL etalon.measure (99)
+   state = 101
+    SIGNAL -s.cmd.chk.etal
+    RETURN
+  SIGNAL -s.etalon.ok,-s.etalon.ret,-s.etalon.ng
+  IF recv.etalon==99 THEN
+    CALL etalon.measure(99)
   ELSE
-    CALL etalon.measure (etalon.id)
+    CALL etalon.measure(etalon.id)
   END
   ;
   IF SIG(s.etalon.ok) THEN
@@ -1834,7 +1889,7 @@ N_INT300    "s.debug.mode|Debug mode"
   END
   IF SIG(s.etalon.ng) THEN
     SIGNAL rs7.etalon.stop
-    ;SIGNAL s.force.defect
+  ;SIGNAL s.force.defect
     state = 101
   END
   SIGNAL -s.cmd.chk.etal
@@ -1857,219 +1912,227 @@ N_INT300    "s.debug.mode|Debug mode"
   CALL etalon.measure (etalon.id)
   state = 105
 .END
-.PROGRAM tcp.callback.pc(.$data[],.data.length)@25/11/18 16:27 #1195
-  .$temp = "Received " + $ENCODE (.data.length) + " strings:"
+.PROGRAM tcp.callback.pc(.$data[],.data.length)@26/01/15 10:51 #14121
+  .$temp = "Received "+$ENCODE(.data.length)+" strings:"
   PRINT tcp.recv.ena: .$temp
   FOR .i = 1 TO .data.length
     PRINT tcp.recv.ena: .$data[.i]
   END
-  ;
-  CALL tcp.log.pc (.$data[1])
-  ; Strings for parsing
-  ;
-  ; START COMMAND
-  ; String format:
-  ; START;DETAILNAME;DETAILSPEC;DETAILCOUNT;[INTAREID1,INTAREID2,..];[OTAREID1,INTAREID2,..];
-  IF INSTR (.$data[1] , "START") THEN
-    ; Decode command
-    .$temp = $DECODE (.$data[1], ";",0)
-    .$temp = $DECODE (.$data[1], ";",1)
-    ; Decode detail type
-    $pg.name = $DECODE (.$data[1], ";",0)
-    .$temp = $DECODE (.$data[1], ";",1)
-    ; Decode detail spec
-    detail.spec = VAL ($DECODE (.$data[1], ";",0))
-    .$temp = $DECODE (.$data[1], ";",1)
-    ; Decode detail count
-    detail.count = VAL ($DECODE (.$data[1], ";",0))
-    .$temp = $DECODE (.$data[1], ";",1)
-    ; Decode intare ids
-    $ot.data = $DECODE (.$data[1], ";",0)
-    ; Decode outtare ids
-    .$temp = $DECODE (.$data[1], ";",1)
-    $opt.data = $DECODE (.$data[1], ";",0)
-    PULSE s.cmd.start, 5
+;
+  CALL tcp.log.pc(.$data[1])
+; Strings for parsing
+;
+; START COMMAND
+; String format:
+; START;DETAILNAME;DETAILSPEC;DETAILCOUNT;[INTAREID1,INTAREID2,..];[OTAREID1,INTAREID2,..];
+  IF INSTR(.$data[1] , "START") THEN
+; Decode command
+    .$temp = $DECODE(.$data[1],";",0)
+    .$temp = $DECODE(.$data[1],";",1)
+; Decode detail type
+    $pg.name = $DECODE(.$data[1],";",0)
+    .$temp = $DECODE(.$data[1],";",1)
+; Decode detail spec
+    detail.spec = VAL($DECODE(.$data[1],";",0))
+    .$temp = $DECODE(.$data[1],";",1)
+; Decode detail count
+    detail.count = VAL($DECODE(.$data[1],";",0))
+    .$temp = $DECODE(.$data[1],";",1)
+; Decode intare ids
+    $ot.data = $DECODE(.$data[1],";",0)
+; Decode outtare ids
+    .$temp = $DECODE(.$data[1],";",1)
+    $opt.data = $DECODE(.$data[1],";",0)
+    PULSE s.cmd.start,5
   END
-  ;
-  ; SENSOR COMMAND
-  ; String format:
-  ; SENSOR;SENSORNAME;STATE;
-  IF INSTR (.$data[1] , "SENSOR") THEN
-    ; Decode command
-    .$temp = $DECODE (.$data[1], ";",0)
-    .$temp = $DECODE (.$data[1], ";",1)
-    ; Decode sensor name
-    .$sensor.name = $DECODE (.$data[1], ";",0)
-    .$temp = $DECODE (.$data[1], ";",1)
-    ; Decode sensor state
-    .$sensor.state = $DECODE (.$data[1], ";",0)
-    ;
-    IF INSTR (.$sensor.state , "TRUE") THEN
-      IF .$sensor.name == "DEFECTPALLETSENSOR" THEN
-        PULSE s.defect.pal.ok, 5
+;
+; SENSOR COMMAND
+; String format:
+; SENSOR;SENSORNAME;STATE;
+  IF INSTR(.$data[1] , "SENSOR") THEN
+; Decode command
+    .$temp = $DECODE(.$data[1],";",0)
+    .$temp = $DECODE(.$data[1],";",1)
+; Decode sensor name
+    .$sensor.name = $DECODE(.$data[1],";",0)
+    .$temp = $DECODE(.$data[1],";",1)
+; Decode sensor state
+    .$sensor.state = $DECODE(.$data[1],";",0)
+;
+    IF INSTR(.$sensor.state , "TRUE") THEN
+      IF .$sensor.name=="DEFECTPALLETSENSOR" THEN
+        PULSE s.defect.pal.ok,5
       END
     ELSE
-      IF .$sensor.name == "DEFECTPALLETSENSOR" THEN
-        PULSE s.defect.pal.ng, 5
+      IF .$sensor.name=="DEFECTPALLETSENSOR" THEN
+        PULSE s.defect.pal.ng,5
       END
     END
   END
-  ;
-  ;ETALONRESULT COMMAND
-  ; String format:
-  ;ETALONRESULT;RESULT;
-  IF INSTR (.$data[1], "ETALONRESULT") THEN
-    ; Decode command
-    .$temp = $DECODE (.$data[1], ";",0)
-    .$temp = $DECODE (.$data[1], ";",1)
-    ; Decode state
-    .$state = $DECODE (.$data[1], ";",0)
-    .$temp = $DECODE (.$data[1], ";",1)
-    ;
-    IF .$state == "OK" THEN
+;
+;ETALONRESULT COMMAND
+; String format:
+;ETALONRESULT;RESULT;
+  IF INSTR(.$data[1] , "ETALONRESULT") THEN
+; Decode command
+    .$temp = $DECODE(.$data[1],";",0)
+    .$temp = $DECODE(.$data[1],";",1)
+; Decode state
+    .$state = $DECODE(.$data[1],";",0)
+    .$temp = $DECODE(.$data[1],";",1)
+;
+    IF .$state=="OK" THEN
       SIGNAL s.etalon.ok
     END
-    IF .$state == "RETRY" THEN
+    IF .$state=="RETRY" THEN
       SIGNAL s.etalon.ret
     END
-    IF .$state == "FAILED" THEN
+    IF .$state=="FAILED" THEN
       SIGNAL s.etalon.ng
     END
   END
-  ;
-  ; MEASUREMENT COMMAND
-  ; String format:
-  ; MEASUREMENT;STATE;
-  IF INSTR (.$data[1], "MEASUREMENT") THEN
-    ; Decode command
-    .$temp = $DECODE (.$data[1], ";", 0)
-    .$temp = $DECODE (.$data[1], ";", 1)
-    ; Decode measurement result
-    .$measurement.state = $DECODE (.$data[1], ";", 0)
-    IF INSTR (.$measurement.state, "TRUE") THEN
+;
+; MEASUREMENT COMMAND
+; String format:
+; MEASUREMENT;STATE;
+  IF INSTR(.$data[1] , "MEASUREMENT") THEN
+; Decode command
+    .$temp = $DECODE(.$data[1],";",0)
+    .$temp = $DECODE(.$data[1],";",1)
+; Decode measurement result
+    .$measurement.sta = $DECODE(.$data[1],";",0)
+    IF INSTR(.$measurement.sta , "TRUE") THEN
       SIGNAL s.measure.ok
     END
-    IF INSTR (.$measurement.state, "FALSE") THEN
+    IF INSTR(.$measurement.sta , "FALSE") THEN
       SIGNAL s.measure.ng
     END
   END
-  ;
-  ; SPEED COMMAND
-  ; String format:
-  ; SPEED;VALUE;
-  ;
-  IF INSTR (.$data[1] , "SPEED") THEN
-    .$temp = $DECODE (.$data[1], ";",0)
-    .$temp = $DECODE (.$data[1], ";",1)
-    .$spd = $DECODE (.$data[1], ";",0)
-    .speed = VAL (.$spd)
-    IF .speed <=0 THEN
+;
+; SPEED COMMAND
+; String format:
+; SPEED;VALUE;
+;
+  IF INSTR(.$data[1] , "SPEED") THEN
+    .$temp = $DECODE(.$data[1],";",0)
+    .$temp = $DECODE(.$data[1],";",1)
+    .$spd = $DECODE(.$data[1],";",0)
+    .speed = VAL(.$spd)
+    IF .speed<=0 THEN
       .speed = 1
     END
-    IF .speed > 100 THEN
+    IF .speed>100 THEN
       .speed = 100
     END
     MON_SPEED (.speed)
   END
-  ;
-  ; POSITIONERFULL COMMAND
-  ; String format
-  ; POSITIONERFULL;
-  IF INSTR (.$data[1] , "POSITIONERFULL") THEN
-    PULSE s.cmd.pick, 5
+;
+; POSITIONERFULL COMMAND
+; String format
+; POSITIONERFULL;
+  IF INSTR(.$data[1] , "POSITIONERFULL") THEN
+    PULSE s.cmd.pick,5
   END
-  ;
-  ; ETALON COMMAND
-  ; String format:
-  ; ETALON;ID;
-  ;
-  IF INSTR (.$data[1] , "ETALON") THEN
-    ; Decode command
-    .$temp = $DECODE (.$data[1], ";",0)
-    .$temp = $DECODE (.$data[1], ";",1)
-    ; Need to decide where to check etalon!!!!
-    ; Decode etalon id
-    recv.etalon = VAL ($DECODE (.$data[1], ";",0))
-    ;
+;
+; ETALON COMMAND
+; String format:
+; ETALON;ID;
+;
+  IF INSTR(.$data[1] , "ETALON") THEN
+; Decode command
+    .$temp = $DECODE(.$data[1],";",0)
+    .$temp = $DECODE(.$data[1],";",1)
+; Need to decide where to check etalon!!!!
+; Decode etalon id
+    recv.etalon = VAL($DECODE(.$data[1],";",0))
+;
     SIGNAL s.cmd.chk.etal
   END
-  ;
-  ; CLEANDEFECT COMMAND
-  ; String format:
-  ; CLEANDEFECT;
-  ;
-  IF INSTR (.$data[1] , "CLEANDEFECT") THEN
+;
+; CLEANDEFECT COMMAND
+; String format:
+; CLEANDEFECT;
+;
+  IF INSTR(.$data[1] , "CLEANDEFECT") THEN
     count.defect = 0
   END
-  ;
-  ; PAUSE COMMAND
-  ; String format:
-  ; PAUSE;
-  ;
-  IF INSTR (.$data[1] , "PAUSE") THEN
+;
+; PAUSE COMMAND
+; String format:
+; PAUSE;
+;
+  IF INSTR(.$data[1] , "PAUSE") THEN
     SIGNAL s.cmd.pause
   END
-  ;
-  ; RESUME COMMAND
-  ; String format:
-  ; RESUME;
-  ;
-  IF INSTR (.$data[1] , "RESUME") THEN
-    PULSE s.cmd.resume, 5
+;
+; RESUME COMMAND
+; String format:
+; RESUME;
+;
+  IF INSTR(.$data[1] , "RESUME") THEN
+    PULSE s.cmd.resume,5
   END
-  ;
-  ; STOP COMMAND
-  ; String format:
-  ; STOP;
-  ;
-  IF INSTR (.$data[1] , "STOP") THEN
+;
+; STOP COMMAND
+; String format:
+; STOP;
+;
+  IF INSTR(.$data[1] , "STOP") THEN
     SIGNAL s.cmd.stop
   END
-  ;
-  ; STOP COMMAND
-  ; String format:
-  ; STOP;
-  ;
-  IF INSTR (.$data[1] , "STOP") THEN
+;
+; STOP COMMAND
+; String format:
+; STOP;
+;
+  IF INSTR(.$data[1] , "STOP") THEN
     SIGNAL s.cmd.stop
   END
-  ;
-  ; CYCLEON COMMAND
-  ; String format:
-  ; CYCLEON;
-  ;
-  IF INSTR (.$data[1] , "CYCLEON") THEN
-    IF SIG(do.automatic) THEN
+;
+; CYCLEON COMMAND
+; String format:
+; CYCLEON;
+;
+  IF INSTR(.$data[1] , "CYCLEON") THEN
+    IF SIG(do.automatic) AND NOT SWITCH(CS) THEN
       MC CONTINUE
     END
   END
-  ;
-  ; STEPMODE COMMAND
-  ; String format:
-  ; STEPMODE;VALUE
-  ;
-  IF INSTR (.$data[1] , "STEPMODE") THEN
-    ; Decode command
-    .$temp = $DECODE (.$data[1], ";", 0)
-    .$temp = $DECODE (.$data[1], ";", 1)
-    ; Decode measurement result
-    .$state = $DECODE (.$data[1], ";", 0)
-    IF INSTR (.$state, "TRUE") THEN
+;
+; STEPMODE COMMAND
+; String format:
+; STEPMODE;VALUE
+;
+  IF INSTR(.$data[1] , "STEPMODE") THEN
+; Decode command
+    .$temp = $DECODE(.$data[1],";",0)
+    .$temp = $DECODE(.$data[1],";",1)
+; Decode measurement result
+    .$state = $DECODE(.$data[1],";",0)
+    IF INSTR(.$state , "TRUE") THEN
       STP_ONCE ON
     END
-    IF INSTR (.$state, "FALSE") THEN
+    IF INSTR(.$state , "FALSE") THEN
       STP_ONCE OFF
     END
   END
-  ;
-  ; NEXTSTEP COMMAND
-  ; String format:
-  ; NEXTSTEP;
-  ;
-  IF INSTR (.$data[1] , "NEXTSTEP") THEN
+;
+; NEXTSTEP COMMAND
+; String format:
+; NEXTSTEP;
+;
+  IF INSTR(.$data[1] , "NEXTSTEP") THEN
     STPNEXT
   END
-  ;
+;
+; ERESET COMMAND
+; String format:
+; ERESET;
+;
+  IF INSTR(.$data[1] , "ERESET") THEN
+    MC ERESET
+  END
+;
   .$data[1] = ""
 .END
 .PROGRAM tcp.client.pc()@25/11/17 14:11 #0
@@ -2254,18 +2317,8 @@ N_INT300    "s.debug.mode|Debug mode"
 	; ALKU_RS007L_UPDATE
 	; @@@ HISTORY @@@
 	; @@@ INSPECTION @@@
-	; s.cmd.pick
-	; s.grip.full
-	; count.pick
-	; s.cmd.chk.etal
-	; s.cmd.resume
-	; $action
-	; rs13.finish
-	; >TY BITS (rs13.det.put[0], 8)|0|1|1|0|0|0
-	; s.measure.ok
-	; s.force.defect
-	; count.defect
-	; max.defect.cnt
+	; s.cmd.stop
+	; obj.in.line
 	; @@@ CONNECTION @@@
 	; RS007L
 	; 192.168.7.103
@@ -2273,7 +2326,8 @@ N_INT300    "s.debug.mode|Debug mode"
 	; @@@ PROGRAM @@@
 	;   Group:Etalon:1
 	;     1:a.teach.etalon:F
-	;       .temp 
+	;       .et.pos.point 
+	;       .et.mac.poin 
 	;     1:etalon.measure:F
 	;       .id 
 	;       .etalon.pos.pt 
@@ -2281,6 +2335,8 @@ N_INT300    "s.debug.mode|Debug mode"
 	;       .shift.y 
 	;       .shift.z 
 	;       .p.idx 
+	;       .eshift.x 
+	;       .eshift.y 
 	;       .$temp 
 	;   Group:OT:2
 	;     2:a.teach.ot:F
@@ -2376,7 +2432,6 @@ N_INT300    "s.debug.mode|Debug mode"
 	;   Group:States:7
 	;     7:state0:F
 	;       .tare.chg 
-	;       .finish.ack 
 	;       .locked.zone 
 	;       .det.picked 
 	;     7:state1:F
@@ -2455,9 +2510,10 @@ N_INT300    "s.debug.mode|Debug mode"
 	;       .$sensor.name 
 	;       .$sensor.state 
 	;       .$state 
-	;       .$measurement.state 
+	;       .$measurement.sta 
 	;       .$spd 
 	;       .speed 
+	;       .$measurement.state 
 	;     11:tcp.client.pc:B
 	;       .tcp.retry.count 
 	;       .tcp.connect.tmo 
@@ -2560,11 +2616,14 @@ N_INT300    "s.debug.mode|Debug mode"
 	; etalon.id 
 	; recv.etalon Received etalon id
 	; max.defect.cnt Maximum value of defect cell
+	; pawn.no Number of pawn detail
 	; @@@ STRINGS @@@
 	; $log.entry[] Log entry
 	; $action Current robot action to send
 	; $pg.name Program name (same as in machine)
 	; $tcp.ip Server PC IP address
+	; $opt.data 
+	; $ot.data 
 	; @@@ INTEGER @@@
 	; @@@ SIGNALS @@@
 	; s.pr.tst.ot Prime test OT program
@@ -3642,137 +3701,140 @@ s.etalon.ng = 2274
 rs7.etalon.stop = 33
 max.defect.cnt = 25
 do.automatic = 2012
+pawn.no = 5
 .END
 .STRINGS
-$log.entry[2] = "16:53:55 Put to OT detail 11"
-$log.entry[1] = "16:53:54 State 3: Put detail to OT"
-$log.entry[0] = "16:53:54 State 101: Calculating next step"
+$log.entry[2] = "16:57:21 MEASUREMENT;TRUE;\n"
+$log.entry[1] = "16:57:20 MEASUREMENT;TRUE;\n"
+$log.entry[0] = "16:57:19 MEASUREMENT;TRUE;\n"
 $action = "WaitingForStart"
-$log.entry[3] = "16:53:56 Check if positioner is occupied"
-$log.entry[4] = "16:53:57 State 101: Calculating next step"
-$log.entry[5] = "16:53:57 State 1: Pick from positioner"
-$log.entry[6] = "16:53:57 Pick detail from positioner (ID: 1)"
-$log.entry[7] = "16:54:00 State 101: Calculating next step"
-$log.entry[8] = "16:54:00 State 2: Measurement process"
-$log.entry[9] = "16:54:00 Move to measure machine"
-$log.entry[10] = "16:54:04 Waiting for measurement result"
-$log.entry[11] = "16:54:04 Measurement result: OK"
-$log.entry[12] = "16:54:06 State 101: Calculating next step"
-$log.entry[13] = "16:54:06 State 3: Put detail to OT"
-$log.entry[14] = "16:54:07 Put to OT detail 12"
-$log.entry[15] = "16:54:08 Check if positioner is occupied"
-$log.entry[16] = "16:54:10 State 101: Calculating next step"
-$log.entry[17] = "16:54:10 State 1: Pick from positioner"
-$log.entry[18] = "16:54:10 Pick detail from positioner (ID: 1)"
-$log.entry[19] = "16:54:12 State 101: Calculating next step"
-$log.entry[20] = "16:54:12 State 2: Measurement process"
-$log.entry[21] = "16:54:12 Move to measure machine"
-$log.entry[22] = "16:54:16 Waiting for measurement result"
-$log.entry[23] = "16:54:17 Measurement result: OK"
-$log.entry[24] = "16:54:19 State 101: Calculating next step"
-$log.entry[25] = "16:54:40 State 3: Put detail to OT"
-$log.entry[26] = "16:54:40 Put to OT detail 1"
-$log.entry[27] = "16:54:40 Check if positioner is occupied"
-$log.entry[28] = "16:54:42 State 101: Calculating next step"
-$log.entry[29] = "16:55:45 State 1: Pick from positioner"
-$log.entry[30] = "16:55:46 Pick detail from positioner (ID: 1)"
-$log.entry[31] = "16:55:48 State 101: Calculating next step"
-$log.entry[32] = "16:55:49 State 2: Measurement process"
-$log.entry[33] = "16:55:49 Move to measure machine"
-$log.entry[34] = "16:55:52 Waiting for measurement result"
-$log.entry[35] = "16:55:53 Measurement result: OK"
-$log.entry[36] = "16:55:55 State 101: Calculating next step"
-$log.entry[37] = "16:55:55 State 3: Put detail to OT"
-$log.entry[38] = "16:55:56 Put to OT detail 2"
-$log.entry[39] = "16:55:56 Check if positioner is occupied"
-$log.entry[40] = "16:55:58 State 101: Calculating next step"
-$log.entry[41] = "16:55:58 State 1: Pick from positioner"
-$log.entry[42] = "16:55:58 Pick detail from positioner (ID: 1)"
-$log.entry[43] = "16:56:00 State 101: Calculating next step"
-$log.entry[44] = "16:56:01 State 2: Measurement process"
-$log.entry[45] = "16:56:01 Move to measure machine"
-$log.entry[46] = "16:56:04 Waiting for measurement result"
-$log.entry[47] = "16:56:05 Measurement result: OK"
-$log.entry[48] = "16:56:07 State 101: Calculating next step"
-$log.entry[49] = "16:56:07 State 3: Put detail to OT"
-$log.entry[50] = "16:56:08 Put to OT detail 3"
-$log.entry[51] = "16:56:08 Check if positioner is occupied"
-$log.entry[52] = "16:56:10 State 101: Calculating next step"
-$log.entry[53] = "16:56:10 State 1: Pick from positioner"
-$log.entry[54] = "16:56:10 Pick detail from positioner (ID: 1)"
-$log.entry[55] = "16:56:12 State 101: Calculating next step"
-$log.entry[56] = "16:56:13 State 2: Measurement process"
-$log.entry[57] = "16:56:13 Move to measure machine"
-$log.entry[58] = "16:56:16 Waiting for measurement result"
-$log.entry[59] = "16:56:17 Measurement result: DEFECT"
-$log.entry[60] = "16:56:19 State 101: Calculating next step"
-$log.entry[61] = "16:56:19 State 4: Put detail to defect tare"
-$log.entry[62] = "16:56:20 Putting to defect tare with No: 8"
-$log.entry[63] = "16:56:23 State 101: Calculating next step"
-$log.entry[64] = "16:56:23 State 1: Pick from positioner"
-$log.entry[65] = "16:56:23 Pick detail from positioner (ID: 1)"
-$log.entry[66] = "16:56:26 State 101: Calculating next step"
-$log.entry[67] = "16:56:26 State 2: Measurement process"
-$log.entry[68] = "16:56:26 Move to measure machine"
-$log.entry[69] = "16:56:29 Waiting for measurement result"
-$log.entry[70] = "16:56:30 Measurement result: OK"
-$log.entry[71] = "16:56:32 State 101: Calculating next step"
-$log.entry[72] = "16:56:32 State 3: Put detail to OT"
-$log.entry[73] = "16:56:33 Put to OT detail 4"
-$log.entry[74] = "16:56:33 Check if positioner is occupied"
-$log.entry[75] = "16:56:35 State 101: Calculating next step"
-$log.entry[76] = "16:56:35 State 1: Pick from positioner"
-$log.entry[77] = "16:56:36 Pick detail from positioner (ID: 1)"
-$log.entry[78] = "16:56:38 State 101: Calculating next step"
-$log.entry[79] = "16:56:38 State 2: Measurement process"
-$log.entry[80] = "16:56:38 Move to measure machine"
-$log.entry[81] = "16:56:42 Waiting for measurement result"
-$log.entry[82] = "16:56:42 Measurement result: OK"
-$log.entry[83] = "16:56:44 State 101: Calculating next step"
-$log.entry[84] = "16:56:44 State 3: Put detail to OT"
-$log.entry[85] = "16:56:45 Put to OT detail 5"
-$log.entry[86] = "16:56:46 Check if positioner is occupied"
-$log.entry[87] = "16:56:47 State 101: Calculating next step"
-$log.entry[88] = "16:56:47 State 1: Pick from positioner"
-$log.entry[89] = "16:56:48 Pick detail from positioner (ID: 1)"
-$log.entry[90] = "16:56:50 State 101: Calculating next step"
-$log.entry[91] = "16:56:50 State 2: Measurement process"
-$log.entry[92] = "16:56:50 Move to measure machine"
-$log.entry[93] = "16:56:54 Waiting for measurement result"
-$log.entry[94] = "16:56:54 Measurement result: OK"
-$log.entry[95] = "16:56:56 State 101: Calculating next step"
-$log.entry[96] = "16:56:56 State 3: Put detail to OT"
-$log.entry[97] = "16:56:57 Put to OT detail 6"
-$log.entry[98] = "16:56:58 Check if positioner is occupied"
-$log.entry[99] = "16:56:59 State 101: Calculating next step"
-$log.entry[100] = "16:56:59 State 1: Pick from positioner"
-$log.entry[101] = "16:56:59 Pick detail from positioner (ID: 1)"
-$log.entry[102] = "16:57:02 State 101: Calculating next step"
-$log.entry[103] = "16:57:02 State 2: Measurement process"
-$log.entry[104] = "16:57:02 Move to measure machine"
-$log.entry[105] = "16:57:06 Waiting for measurement result"
-$log.entry[106] = "16:57:06 Measurement result: OK"
-$log.entry[107] = "16:57:08 State 101: Calculating next step"
-$log.entry[108] = "16:57:08 State 3: Put detail to OT"
-$log.entry[109] = "16:57:09 Put to OT detail 7"
-$log.entry[110] = "16:57:10 Check if positioner is occupied"
-$log.entry[111] = "16:57:11 State 101: Calculating next step"
-$log.entry[112] = "16:57:11 State 1: Pick from positioner"
-$log.entry[113] = "16:57:12 Pick detail from positioner (ID: 1)"
-$log.entry[114] = "16:57:14 State 101: Calculating next step"
-$log.entry[115] = "16:57:14 State 2: Measurement process"
-$log.entry[116] = "16:57:14 Move to measure machine"
-$log.entry[117] = "16:57:18 Waiting for measurement result"
-$log.entry[118] = "16:57:18 Measurement result: OK"
-$log.entry[119] = "16:57:20 State 101: Calculating next step"
-$log.entry[120] = "16:57:20 State 3: Put detail to OT"
-$log.entry[121] = "16:57:21 Put to OT detail 8"
-$log.entry[122] = "16:57:22 Check if positioner is occupied"
-$log.entry[123] = "16:57:23 State 101: Calculating next step"
-$log.entry[124] = "16:57:45 State 103: Ending sequence started"
-$log.entry[125] = "16:57:45 State 255: Program complete"
-$log.entry[126] = "16:57:46 State 0: Program reset. Initialization of parameters"
-$log.entry[127] = "16:57:46 State 100: Waiting for start"
-$pg.name = "312.229.002"
+$log.entry[3] = "16:57:22 MEASUREMENT;TRUE;\n"
+$log.entry[4] = "16:57:23 MEASUREMENT;TRUE;\n"
+$log.entry[5] = "16:57:24 MEASUREMENT;TRUE;\n"
+$log.entry[6] = "16:57:25 MEASUREMENT;TRUE;\n"
+$log.entry[7] = "16:57:26 MEASUREMENT;TRUE;\n"
+$log.entry[8] = "16:57:27 MEASUREMENT;TRUE;\n"
+$log.entry[9] = "16:57:28 MEASUREMENT;TRUE;\n"
+$log.entry[10] = "16:57:29 MEASUREMENT;TRUE;\n"
+$log.entry[11] = "16:57:30 MEASUREMENT;TRUE;\n"
+$log.entry[12] = "16:57:31 MEASUREMENT;TRUE;\n"
+$log.entry[13] = "16:57:32 MEASUREMENT;TRUE;\n"
+$log.entry[14] = "16:57:33 MEASUREMENT;TRUE;\n"
+$log.entry[15] = "16:57:34 MEASUREMENT;TRUE;\n"
+$log.entry[16] = "16:57:35 MEASUREMENT;TRUE;\n"
+$log.entry[17] = "16:57:36 MEASUREMENT;TRUE;\n"
+$log.entry[18] = "16:57:37 MEASUREMENT;TRUE;\n"
+$log.entry[19] = "16:57:38 MEASUREMENT;TRUE;\n"
+$log.entry[20] = "16:57:39 MEASUREMENT;TRUE;\n"
+$log.entry[21] = "16:57:40 MEASUREMENT;TRUE;\n"
+$log.entry[22] = "16:57:41 MEASUREMENT;TRUE;\n"
+$log.entry[23] = "16:57:42 MEASUREMENT;TRUE;\n"
+$log.entry[24] = "16:57:43 MEASUREMENT;TRUE;\n"
+$log.entry[25] = "16:57:44 MEASUREMENT;TRUE;\n"
+$log.entry[26] = "16:57:45 MEASUREMENT;TRUE;\n"
+$log.entry[27] = "16:57:46 MEASUREMENT;TRUE;\n"
+$log.entry[28] = "16:57:47 MEASUREMENT;TRUE;\n"
+$log.entry[29] = "16:57:48 MEASUREMENT;TRUE;\n"
+$log.entry[30] = "16:57:49 MEASUREMENT;TRUE;\n"
+$log.entry[31] = "16:57:50 MEASUREMENT;TRUE;\n"
+$log.entry[32] = "16:57:51 MEASUREMENT;TRUE;\n"
+$log.entry[33] = "16:57:52 MEASUREMENT;TRUE;\n"
+$log.entry[34] = "16:57:53 MEASUREMENT;TRUE;\n"
+$log.entry[35] = "16:57:54 MEASUREMENT;TRUE;\n"
+$log.entry[36] = "16:57:55 MEASUREMENT;TRUE;\n"
+$log.entry[37] = "16:57:56 MEASUREMENT;TRUE;\n"
+$log.entry[38] = "16:57:57 MEASUREMENT;TRUE;\n"
+$log.entry[39] = "16:57:58 MEASUREMENT;TRUE;\n"
+$log.entry[40] = "16:57:59 MEASUREMENT;TRUE;\n"
+$log.entry[41] = "16:58:00 MEASUREMENT;TRUE;\n"
+$log.entry[42] = "16:58:01 MEASUREMENT;TRUE;\n"
+$log.entry[43] = "16:58:02 MEASUREMENT;TRUE;\n"
+$log.entry[44] = "16:58:03 MEASUREMENT;TRUE;\n"
+$log.entry[45] = "16:58:04 MEASUREMENT;TRUE;\n"
+$log.entry[46] = "16:58:05 MEASUREMENT;TRUE;\n"
+$log.entry[47] = "16:58:06 MEASUREMENT;TRUE;\n"
+$log.entry[48] = "16:58:07 MEASUREMENT;TRUE;\n"
+$log.entry[49] = "16:58:08 MEASUREMENT;TRUE;\n"
+$log.entry[50] = "16:58:09 MEASUREMENT;TRUE;\n"
+$log.entry[51] = "16:58:10 SPEED;5;\n"
+$log.entry[52] = "16:58:10 MEASUREMENT;TRUE;\n"
+$log.entry[53] = "16:58:11 MEASUREMENT;TRUE;\n"
+$log.entry[54] = "16:58:12 MEASUREMENT;TRUE;\n"
+$log.entry[55] = "16:58:12 CYCLEON;\n"
+$log.entry[56] = "16:58:13 Main program executed"
+$log.entry[57] = "16:58:13 Robot already in home position"
+$log.entry[58] = "16:58:13 MEASUREMENT;TRUE;\n"
+$log.entry[59] = "16:58:13 State 0: Program reset. Initialization of parameters"
+$log.entry[60] = "16:58:13 State 100: Waiting for start"
+$log.entry[61] = "16:58:14 MEASUREMENT;TRUE;\n"
+$log.entry[62] = "16:58:15 MEASUREMENT;TRUE;\n"
+$log.entry[63] = "16:58:16 MEASUREMENT;TRUE;\n"
+$log.entry[64] = "16:58:17 MEASUREMENT;TRUE;\n"
+$log.entry[65] = "16:58:18 MEASUREMENT;TRUE;\n"
+$log.entry[66] = "16:58:19 MEASUREMENT;TRUE;\n"
+$log.entry[67] = "16:58:20 MEASUREMENT;TRUE;\n"
+$log.entry[68] = "16:58:21 MEASUREMENT;TRUE;\n"
+$log.entry[69] = "16:58:22 MEASUREMENT;TRUE;\n"
+$log.entry[70] = "16:58:23 MEASUREMENT;TRUE;\n"
+$log.entry[71] = "16:58:24 MEASUREMENT;TRUE;\n"
+$log.entry[72] = "16:58:25 MEASUREMENT;TRUE;\n"
+$log.entry[73] = "16:58:26 MEASUREMENT;TRUE;\n"
+$log.entry[74] = "16:58:27 MEASUREMENT;TRUE;\n"
+$log.entry[75] = "16:58:27 SPEED;15;\n"
+$log.entry[76] = "16:58:28 MEASUREMENT;TRUE;\n"
+$log.entry[77] = "16:58:29 MEASUREMENT;TRUE;\n"
+$log.entry[78] = "16:58:30 MEASUREMENT;TRUE;\n"
+$log.entry[79] = "16:58:31 MEASUREMENT;TRUE;\n"
+$log.entry[80] = "16:58:32 MEASUREMENT;TRUE;\n"
+$log.entry[81] = "16:58:33 MEASUREMENT;TRUE;\n"
+$log.entry[82] = "16:58:34 MEASUREMENT;TRUE;\n"
+$log.entry[83] = "16:58:35 MEASUREMENT;TRUE;\n"
+$log.entry[84] = "16:58:36 MEASUREMENT;TRUE;\n"
+$log.entry[85] = "16:58:37 MEASUREMENT;TRUE;\n"
+$log.entry[86] = "16:58:38 MEASUREMENT;TRUE;\n"
+$log.entry[87] = "16:58:39 MEASUREMENT;TRUE;\n"
+$log.entry[88] = "16:58:40 MEASUREMENT;TRUE;\n"
+$log.entry[89] = "16:58:41 MEASUREMENT;TRUE;\n"
+$log.entry[90] = "16:58:42 MEASUREMENT;TRUE;\n"
+$log.entry[91] = "16:58:43 MEASUREMENT;TRUE;\n"
+$log.entry[92] = "16:58:44 MEASUREMENT;TRUE;\n"
+$log.entry[93] = "16:58:45 MEASUREMENT;TRUE;\n"
+$log.entry[94] = "16:58:46 MEASUREMENT;TRUE;\n"
+$log.entry[95] = "16:58:47 MEASUREMENT;TRUE;\n"
+$log.entry[96] = "16:58:48 MEASUREMENT;TRUE;\n"
+$log.entry[97] = "16:58:49 MEASUREMENT;TRUE;\n"
+$log.entry[98] = "16:58:50 MEASUREMENT;TRUE;\n"
+$log.entry[99] = "16:58:51 MEASUREMENT;TRUE;\n"
+$log.entry[100] = "16:58:52 MEASUREMENT;TRUE;\n"
+$log.entry[101] = "16:58:53 MEASUREMENT;TRUE;\n"
+$log.entry[102] = "16:58:54 MEASUREMENT;TRUE;\n"
+$log.entry[103] = "16:58:55 MEASUREMENT;TRUE;\n"
+$log.entry[104] = "16:58:56 MEASUREMENT;TRUE;\n"
+$log.entry[105] = "16:58:57 MEASUREMENT;TRUE;\n"
+$log.entry[106] = "16:58:58 MEASUREMENT;TRUE;\n"
+$log.entry[107] = "16:58:59 MEASUREMENT;TRUE;\n"
+$log.entry[108] = "16:59:00 MEASUREMENT;TRUE;\n"
+$log.entry[109] = "16:59:01 MEASUREMENT;TRUE;\n"
+$log.entry[110] = "16:59:02 MEASUREMENT;TRUE;\n"
+$log.entry[111] = "16:59:03 MEASUREMENT;TRUE;\n"
+$log.entry[112] = "16:59:04 MEASUREMENT;TRUE;\n"
+$log.entry[113] = "16:59:05 MEASUREMENT;TRUE;\n"
+$log.entry[114] = "16:59:06 MEASUREMENT;TRUE;\n"
+$log.entry[115] = "16:59:07 MEASUREMENT;TRUE;\n"
+$log.entry[116] = "16:59:08 MEASUREMENT;TRUE;\n"
+$log.entry[117] = "16:59:09 MEASUREMENT;TRUE;\n"
+$log.entry[118] = "16:59:10 MEASUREMENT;TRUE;\n"
+$log.entry[119] = "16:59:11 MEASUREMENT;TRUE;\n"
+$log.entry[120] = "16:59:12 MEASUREMENT;TRUE;\n"
+$log.entry[121] = "16:59:13 MEASUREMENT;TRUE;\n"
+$log.entry[122] = "17:00:44 Main program executed"
+$log.entry[123] = "17:00:44 Robot already in home position"
+$log.entry[124] = "17:00:44 State 0: Program reset. Initialization of parameters"
+$log.entry[125] = "17:00:44 ETALON;1;\n"
+$log.entry[126] = "17:00:45 State 100: Waiting for start"
+$log.entry[127] = "17:00:45 MEASUREMENT;FALSE;\n"
+$pg.name = "0401.17.02.023-02"
 $tcp.ip = "192.168.7.100"
+$opt.data = "1"
+$ot.data = "1"
 .END
