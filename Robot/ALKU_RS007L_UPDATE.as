@@ -151,13 +151,13 @@ N_INT300    "s.debug.mode|Debug mode"
 140,2,"  ","  PRIME","  HOME","",10,4,11,2250,0
 141,8,"hmi.obj.id","  OBJECT","    ID",10,2,2,1,0
 142,8,"hmi.tool.no","    HMI","  GRIPPER ",10,2,2,1,0
-143,8,"hmi.gx","GRIPPER N"," X SHIFT",10,3,4,2,0
-144,8,"hmi.gy","GRIPPER N"," Y SHIFT",10,3,4,2,0
-145,8,"hmi.gz","GRIPPER N"," Z SHIFT",10,3,4,2,0
+143,8,"hmi.gx","OBJECT N"," X SHIFT",10,3,4,2,0
+144,8,"hmi.gy","OBJECT N"," Y SHIFT",10,3,4,2,0
+145,8,"hmi.gz","OBJECT N"," Z SHIFT",10,3,4,2,0
 146,2,"","   Open ","  gripper","",10,4,5,3,0
 147,2,"   PRIME","","   TEACH","  MACHINE",10,4,11,2251,0
-150,8,"hmi.g180x","GRIPPER N","180X SHIFT",10,3,4,2,0
-151,8,"hmi.g180y","GRIPPER N","180Y SHIFT",10,3,4,2,0
+150,8,"hmi.g180x","OBJECT N","180X SHIFT",10,3,4,2,0
+151,8,"hmi.g180y","OBJECT N","180Y SHIFT",10,3,4,2,0
 152,2,""," APPLY FOR"," N OBJECT","",10,4,14,2256,0
 153,2,"","   Close","  gripper","",10,4,5,4,0
 154,2,"   PRIME","","    TEST","    OT",10,4,11,2249,0
@@ -680,6 +680,7 @@ N_INT300    "s.debug.mode|Debug mode"
     hmi.gz = grip.zsh[hmi.obj.id]
     hmi.g180x = grip.180xsh[hmi.obj.id]
     hmi.g180y = grip.180ysh[hmi.obj.id]
+    hmi.gmidy = grip.midysh[hmi.obj.id]
     ;
     keep.object = hmi.obj.id
   END
@@ -689,6 +690,7 @@ N_INT300    "s.debug.mode|Debug mode"
     grip.zsh[hmi.obj.id] = hmi.gz
     grip.180xsh[hmi.obj.id] = hmi.g180x
     grip.180ysh[hmi.obj.id] = hmi.g180y
+    grip.midysh[hmi.obj.id] = hmi.gmidy
   END
 ;
 .END
@@ -897,7 +899,12 @@ N_INT300    "s.debug.mode|Debug mode"
   ACCURACY 100
   LMOVE #homyak
 .END
-.PROGRAM get.ot.point (.obj.id)
+.PROGRAM get.ot.point(.obj.id)@26/01/15 08:27 #597
+  IF object.id == pawn.no THEN
+    ot.x = .obj.id MOD lines.count
+    ot.y = INT(.obj.id/lines.count)
+    RETURN
+  END
   ot.x = ms[.obj.id]
   ot.y = ns[.obj.id]
 .END
@@ -1050,7 +1057,7 @@ N_INT300    "s.debug.mode|Debug mode"
   max.tare.count = 231 ;231
   spc.tare.count = 50
 ; Object length
-  object.length = 13.5
+  object.length = 15
 ;
 .END
 .PROGRAM id6()@26/01/15 08:27 #0; 0401.28.02.063
@@ -1235,7 +1242,7 @@ N_INT300    "s.debug.mode|Debug mode"
           $pg.name = "NULL"
       END
       ;
-    SVALUE "0401.17.02.023-02":
+    SVALUE "0401.17.02.023":
       CASE detail.spec OF
         VALUE 0:
           CALL id2; idX_1
@@ -1685,6 +1692,7 @@ N_INT300    "s.debug.mode|Debug mode"
         grip.180ysh[.n] = 0
     END
   END
+    
   ;
 .END
 .PROGRAM state0 () ; Initialization of parameters
@@ -1724,7 +1732,7 @@ N_INT300    "s.debug.mode|Debug mode"
   SIGNAL -s.cmd.stop
   SIGNAL -rs7.finish.ack
   ;
-  CALL log ("START with Name:" + $pg.name + "-" + $ENCODE (detail.spec) + " Count:" + $ENCODE (detail.count) + " OT:" + $ot.data + " OPT:" + $opt.data)
+  CALL log ("START with Name:" + $pg.name + "-" + $ENCODE (/L, detail.spec) + " Count:" + $ENCODE (detail.count) + " OT:" + $ot.data + " OPT:" + $opt.data)
   ;
   CALL pg.select
   state = 106
@@ -1734,7 +1742,7 @@ N_INT300    "s.debug.mode|Debug mode"
   state = 102
 .END
 .PROGRAM state102 () ; Decision making
-  ; Priority 1
+   ; Priority 1
   IF SIG (s.cmd.pause) THEN
     state = 105
     RETURN
@@ -2317,8 +2325,10 @@ N_INT300    "s.debug.mode|Debug mode"
 	; ALKU_RS007L_UPDATE
 	; @@@ HISTORY @@@
 	; @@@ INSPECTION @@@
-	; s.cmd.stop
-	; obj.in.line
+	; s.measure.ng
+	; s.measure.ok
+	; ot.x
+	; ot.y
 	; @@@ CONNECTION @@@
 	; RS007L
 	; 192.168.7.103
@@ -2326,6 +2336,8 @@ N_INT300    "s.debug.mode|Debug mode"
 	; @@@ PROGRAM @@@
 	;   Group:Etalon:1
 	;     1:a.teach.etalon:F
+	;       .eshift.x 
+	;       .eshift.y 
 	;       .et.pos.point 
 	;       .et.mac.poin 
 	;     1:etalon.measure:F
@@ -2413,10 +2425,14 @@ N_INT300    "s.debug.mode|Debug mode"
 	;     5:pos.pick:F
 	;       .$temp 
 	;       .temp 
+	;       .shift.x 
+	;       .shift.y 
 	;       .locked.zone 
 	;       .det.picked 
 	;       .lock.zone 
 	;     5:a.teach.pos:F
+	;       .shift.x 
+	;       .shift.y 
 	;       .temp 
 	;   Group:Defect:6
 	;     6:defect.put:F
@@ -2513,7 +2529,6 @@ N_INT300    "s.debug.mode|Debug mode"
 	;       .$measurement.sta 
 	;       .$spd 
 	;       .speed 
-	;       .$measurement.state 
 	;     11:tcp.client.pc:B
 	;       .tcp.retry.count 
 	;       .tcp.connect.tmo 
@@ -2617,6 +2632,8 @@ N_INT300    "s.debug.mode|Debug mode"
 	; recv.etalon Received etalon id
 	; max.defect.cnt Maximum value of defect cell
 	; pawn.no Number of pawn detail
+	; hmi.gmidy HMI panel mid y shift
+	; grip.midysh[] 
 	; @@@ STRINGS @@@
 	; $log.entry[] Log entry
 	; $action Current robot action to send
@@ -2708,7 +2725,7 @@ ot.put[0,3] -144.953339 626.565552 -2.926356 -84.510590 1.748546 -95.627464
 ot.put[0,4] -144.882187 655.552124 -2.045740 -84.510590 1.748546 -95.627464
 ot.put[0,5] -144.811020 684.538635 -1.165123 -84.510590 1.748546 -95.627464
 ot.put[0,6] -144.739868 713.525208 -0.284506 -84.510590 1.748546 -95.627464
-ot.put[0,7] -144.737411 714.524719 -0.254140 -84.510590 1.748546 -95.627464
+ot.put[0,7] -144.866226 662.049072 -1.848360 -84.510590 1.748546 -95.627464
 ot.put[1,0] -129.166931 539.568115 -5.616081 -84.510590 1.748546 -95.627464
 ot.put[1,1] -129.095764 568.554688 -4.735464 -84.510590 1.748546 -95.627464
 ot.put[1,2] -129.024612 597.541199 -3.854847 -84.510590 1.748546 -95.627464
@@ -2716,7 +2733,7 @@ ot.put[1,3] -128.953461 626.527771 -2.974230 -84.510590 1.748546 -95.627464
 ot.put[1,4] -128.882294 655.514282 -2.093614 -84.510590 1.748546 -95.627464
 ot.put[1,5] -128.811142 684.500854 -1.212997 -84.510590 1.748546 -95.627464
 ot.put[1,6] -128.739975 713.487366 -0.332380 -84.510590 1.748546 -95.627464
-ot.put[1,7] -128.737518 714.486938 -0.302014 -84.510590 1.748546 -95.627464
+ot.put[1,7] -128.866348 662.011292 -1.896234 -84.510590 1.748546 -95.627464
 ot.put[2,0] -113.167038 539.530334 -5.663955 -84.510590 1.748546 -95.627464
 ot.put[2,1] -113.095886 568.516846 -4.783338 -84.510590 1.748546 -95.627464
 ot.put[2,2] -113.024727 597.503418 -3.902721 -84.510590 1.748546 -95.627464
@@ -2724,7 +2741,7 @@ ot.put[2,3] -112.953568 626.489929 -3.022104 -84.510590 1.748546 -95.627464
 ot.put[2,4] -112.882416 655.476440 -2.141487 -84.510590 1.748546 -95.627464
 ot.put[2,5] -112.811249 684.463013 -1.260871 -84.510590 1.748546 -95.627464
 ot.put[2,6] -112.740097 713.449524 -0.380254 -84.510590 1.748546 -95.627464
-ot.put[2,7] -112.737640 714.449097 -0.349888 -84.510590 1.748546 -95.627464
+ot.put[2,7] -112.866463 661.973450 -1.944108 -84.510590 1.748546 -95.627464
 ot.put[3,0] -97.167160 539.492493 -5.711828 -84.510590 1.748546 -95.627464
 ot.put[3,1] -97.096001 568.479004 -4.831212 -84.510590 1.748546 -95.627464
 ot.put[3,2] -97.024841 597.465576 -3.950595 -84.510590 1.748546 -95.627464
@@ -2732,7 +2749,7 @@ ot.put[3,3] -96.953690 626.452087 -3.069978 -84.510590 1.748546 -95.627464
 ot.put[3,4] -96.882523 655.438660 -2.189361 -84.510590 1.748546 -95.627464
 ot.put[3,5] -96.811371 684.425171 -1.308744 -84.510590 1.748546 -95.627464
 ot.put[3,6] -96.740211 713.411743 -0.428127 -84.510590 1.748546 -95.627464
-ot.put[3,7] -96.737762 714.411255 -0.397761 -84.510590 1.748546 -95.627464
+ot.put[3,7] -96.866577 661.935608 -1.991982 -84.510590 1.748546 -95.627464
 ot.put[4,0] -81.167267 539.454651 -5.759702 -84.510590 1.748546 -95.627464
 ot.put[4,1] -81.096115 568.441223 -4.879086 -84.510590 1.748546 -95.627464
 ot.put[4,2] -81.024956 597.427734 -3.998469 -84.510590 1.748546 -95.627464
@@ -2740,7 +2757,7 @@ ot.put[4,3] -80.953796 626.414307 -3.117852 -84.510590 1.748546 -95.627464
 ot.put[4,4] -80.882645 655.400818 -2.237235 -84.510590 1.748546 -95.627464
 ot.put[4,5] -80.811485 684.387329 -1.356618 -84.510590 1.748546 -95.627464
 ot.put[4,6] -80.740326 713.373901 -0.476001 -84.510590 1.748546 -95.627464
-ot.put[4,7] -80.737869 714.373413 -0.445635 -84.510590 1.748546 -95.627464
+ot.put[4,7] -80.866692 661.897827 -2.039855 -84.510590 1.748546 -95.627464
 ot.put[5,0] -65.167389 539.416870 -5.807576 -84.510590 1.748546 -95.627464
 ot.put[5,1] -65.096230 568.403381 -4.926959 -84.510590 1.748546 -95.627464
 ot.put[5,2] -65.025078 597.389893 -4.046342 -84.510590 1.748546 -95.627464
@@ -2748,7 +2765,7 @@ ot.put[5,3] -64.953918 626.376465 -3.165726 -84.510590 1.748546 -95.627464
 ot.put[5,4] -64.882759 655.362976 -2.285109 -84.510590 1.748546 -95.627464
 ot.put[5,5] -64.811600 684.349548 -1.404492 -84.510590 1.748546 -95.627464
 ot.put[5,6] -64.740448 713.336060 -0.523875 -84.510590 1.748546 -95.627464
-ot.put[5,7] -64.737991 714.335632 -0.493509 -84.510590 1.748546 -95.627464
+ot.put[5,7] -64.866814 661.859985 -2.087729 -84.510590 1.748546 -95.627464
 ot.put[6,0] -49.167503 539.379028 -5.855450 -84.510590 1.748546 -95.627464
 ot.put[6,1] -49.096344 568.365540 -4.974833 -84.510590 1.748546 -95.627464
 ot.put[6,2] -49.025192 597.352112 -4.094216 -84.510590 1.748546 -95.627464
@@ -2756,7 +2773,7 @@ ot.put[6,3] -48.954033 626.338623 -3.213599 -84.510590 1.748546 -95.627464
 ot.put[6,4] -48.882874 655.325195 -2.332983 -84.510590 1.748546 -95.627464
 ot.put[6,5] -48.811714 684.311707 -1.452366 -84.510590 1.748546 -95.627464
 ot.put[6,6] -48.740562 713.298218 -0.571749 -84.510590 1.748546 -95.627464
-ot.put[6,7] -48.738106 714.297791 -0.541383 -84.510590 1.748546 -95.627464
+ot.put[6,7] -48.866928 661.822144 -2.135603 -84.510590 1.748546 -95.627464
 ot.put[7,0] -33.167618 539.341187 -5.903324 -84.510590 1.748546 -95.627464
 ot.put[7,1] -33.096458 568.327759 -5.022707 -84.510590 1.748546 -95.627464
 ot.put[7,2] -33.025307 597.314270 -4.142090 -84.510590 1.748546 -95.627464
@@ -2764,7 +2781,7 @@ ot.put[7,3] -32.954147 626.300781 -3.261473 -84.510590 1.748546 -95.627464
 ot.put[7,4] -32.882988 655.287354 -2.380857 -84.510590 1.748546 -95.627464
 ot.put[7,5] -32.811829 684.273926 -1.500240 -84.510590 1.748546 -95.627464
 ot.put[7,6] -32.740677 713.260437 -0.619623 -84.510590 1.748546 -95.627464
-ot.put[7,7] -32.738220 714.260010 -0.589257 -84.510590 1.748546 -95.627464
+ot.put[7,7] -32.867043 661.784363 -2.183477 -84.510590 1.748546 -95.627464
 ot.put[8,0] -17.167732 539.303345 -5.951198 -84.510590 1.748546 -95.627464
 ot.put[8,1] -17.096573 568.289917 -5.070581 -84.510590 1.748546 -95.627464
 ot.put[8,2] -17.025421 597.276428 -4.189964 -84.510590 1.748546 -95.627464
@@ -2772,7 +2789,7 @@ ot.put[8,3] -16.954254 626.263000 -3.309347 -84.510590 1.748546 -95.627464
 ot.put[8,4] -16.883102 655.249512 -2.428730 -84.510590 1.748546 -95.627464
 ot.put[8,5] -16.811951 684.236084 -1.548114 -84.510590 1.748546 -95.627464
 ot.put[8,6] -16.740784 713.222595 -0.667497 -84.510590 1.748546 -95.627464
-ot.put[8,7] -16.738327 714.222168 -0.637131 -84.510590 1.748546 -95.627464
+ot.put[8,7] -16.867157 661.746521 -2.231351 -84.510590 1.748546 -95.627464
 ot.put[9,0] -1.167847 539.265564 -5.999072 -84.510590 1.748546 -95.627464
 ot.put[9,1] -1.096695 568.252075 -5.118455 -84.510590 1.748546 -95.627464
 ot.put[9,2] -1.025528 597.238647 -4.237838 -84.510590 1.748546 -95.627464
@@ -2780,7 +2797,7 @@ ot.put[9,3] -0.954376 626.225159 -3.357221 -84.510590 1.748546 -95.627464
 ot.put[9,4] -0.883224 655.211731 -2.476604 -84.510590 1.748546 -95.627464
 ot.put[9,5] -0.812057 684.198242 -1.595988 -84.510590 1.748546 -95.627464
 ot.put[9,6] -0.740906 713.184814 -0.715371 -84.510590 1.748546 -95.627464
-ot.put[9,7] -0.738449 714.184326 -0.685005 -84.510590 1.748546 -95.627464
+ot.put[9,7] -0.867264 661.708679 -2.279225 -84.510590 1.748546 -95.627464
 ot.put[10,0] 14.832031 539.227722 -6.046946 -84.510590 1.748546 -95.627464
 ot.put[10,1] 14.903183 568.214294 -5.166328 -84.510590 1.748546 -95.627464
 ot.put[10,2] 14.974350 597.200806 -4.285712 -84.510590 1.748546 -95.627464
@@ -2788,7 +2805,7 @@ ot.put[10,3] 15.045502 626.187378 -3.405095 -84.510590 1.748546 -95.627464
 ot.put[10,4] 15.116653 655.173889 -2.524478 -84.510590 1.748546 -95.627464
 ot.put[10,5] 15.187820 684.160400 -1.643862 -84.510590 1.748546 -95.627464
 ot.put[10,6] 15.258972 713.146973 -0.763245 -84.510590 1.748546 -95.627464
-ot.put[10,7] 15.261429 714.146484 -0.732879 -84.510590 1.748546 -95.627464
+ot.put[10,7] 15.132614 661.670898 -2.327099 -84.510590 1.748546 -95.627464
 ot.put[11,0] 30.831924 539.189880 -6.094819 -84.510590 1.748546 -95.627464
 ot.put[11,1] 30.903076 568.176453 -5.214202 -84.510590 1.748546 -95.627464
 ot.put[11,2] 30.974243 597.162964 -4.333586 -84.510590 1.748546 -95.627464
@@ -2796,7 +2813,7 @@ ot.put[11,3] 31.045395 626.149536 -3.452969 -84.510590 1.748546 -95.627464
 ot.put[11,4] 31.116547 655.136047 -2.572352 -84.510590 1.748546 -95.627464
 ot.put[11,5] 31.187714 684.122620 -1.691735 -84.510590 1.748546 -95.627464
 ot.put[11,6] 31.258865 713.109131 -0.811118 -84.510590 1.748546 -95.627464
-ot.put[11,7] 31.261322 714.108704 -0.780752 -84.510590 1.748546 -95.627464
+ot.put[11,7] 31.132507 661.633057 -2.374972 -84.510590 1.748546 -95.627464
 ot.put[12,0] 46.831802 539.152100 -6.142693 -84.510590 1.748546 -95.627464
 ot.put[12,1] 46.902954 568.138611 -5.262076 -84.510590 1.748546 -95.627464
 ot.put[12,2] 46.974121 597.125183 -4.381459 -84.510590 1.748546 -95.627464
@@ -2804,7 +2821,7 @@ ot.put[12,3] 47.045273 626.111694 -3.500843 -84.510590 1.748546 -95.627464
 ot.put[12,4] 47.116425 655.098267 -2.620226 -84.510590 1.748546 -95.627464
 ot.put[12,5] 47.187592 684.084778 -1.739609 -84.510590 1.748546 -95.627464
 ot.put[12,6] 47.258743 713.071289 -0.858992 -84.510590 1.748546 -95.627464
-ot.put[12,7] 47.261200 714.070862 -0.828626 -84.510590 1.748546 -95.627464
+ot.put[12,7] 47.132385 661.595215 -2.422846 -84.510590 1.748546 -95.627464
 ot.put[13,0] 62.831696 539.114258 -6.190567 -84.510590 1.748546 -95.627464
 ot.put[13,1] 62.902847 568.100830 -5.309950 -84.510590 1.748546 -95.627464
 ot.put[13,2] 62.974014 597.087341 -4.429333 -84.510590 1.748546 -95.627464
@@ -2812,7 +2829,7 @@ ot.put[13,3] 63.045166 626.073853 -3.548717 -84.510590 1.748546 -95.627464
 ot.put[13,4] 63.116318 655.060425 -2.668100 -84.510590 1.748546 -95.627464
 ot.put[13,5] 63.187485 684.046936 -1.787483 -84.510590 1.748546 -95.627464
 ot.put[13,6] 63.258636 713.033508 -0.906866 -84.510590 1.748546 -95.627464
-ot.put[13,7] 63.261093 714.033020 -0.876500 -84.510590 1.748546 -95.627464
+ot.put[13,7] 63.132278 661.557373 -2.470720 -84.510590 1.748546 -95.627464
 ot.put[14,0] 78.831573 539.076416 -6.238441 -84.510590 1.748546 -95.627464
 ot.put[14,1] 78.902725 568.062988 -5.357824 -84.510590 1.748546 -95.627464
 ot.put[14,2] 78.973892 597.049500 -4.477207 -84.510590 1.748546 -95.627464
@@ -2820,7 +2837,7 @@ ot.put[14,3] 79.045044 626.036072 -3.596590 -84.510590 1.748546 -95.627464
 ot.put[14,4] 79.116196 655.022583 -2.715974 -84.510590 1.748546 -95.627464
 ot.put[14,5] 79.187363 684.009155 -1.835357 -84.510590 1.748546 -95.627464
 ot.put[14,6] 79.258514 712.995667 -0.954740 -84.510590 1.748546 -95.627464
-ot.put[14,7] 79.260971 713.995239 -0.924374 -84.510590 1.748546 -95.627464
+ot.put[14,7] 79.132156 661.519592 -2.518594 -84.510590 1.748546 -95.627464
 ot.put[15,0] 94.831467 539.038635 -6.286314 -84.510590 1.748546 -95.627464
 ot.put[15,1] 94.902618 568.025146 -5.405698 -84.510590 1.748546 -95.627464
 ot.put[15,2] 94.973785 597.011719 -4.525081 -84.510590 1.748546 -95.627464
@@ -2828,7 +2845,7 @@ ot.put[15,3] 95.044937 625.998230 -3.644464 -84.510590 1.748546 -95.627464
 ot.put[15,4] 95.116089 654.984741 -2.763847 -84.510590 1.748546 -95.627464
 ot.put[15,5] 95.187256 683.971313 -1.883231 -84.510590 1.748546 -95.627464
 ot.put[15,6] 95.258408 712.957886 -1.002614 -84.510590 1.748546 -95.627464
-ot.put[15,7] 95.260864 713.957397 -0.972248 -84.510590 1.748546 -95.627464
+ot.put[15,7] 95.132050 661.481750 -2.566468 -84.510590 1.748546 -95.627464
 ot.put[16,0] 110.831345 539.000793 -6.334188 -84.510590 1.748546 -95.627464
 ot.put[16,1] 110.902496 567.987305 -5.453572 -84.510590 1.748546 -95.627464
 ot.put[16,2] 110.973663 596.973877 -4.572955 -84.510590 1.748546 -95.627464
@@ -2836,7 +2853,7 @@ ot.put[16,3] 111.044830 625.960388 -3.692338 -84.510590 1.748546 -95.627464
 ot.put[16,4] 111.115967 654.946960 -2.811721 -84.510590 1.748546 -95.627464
 ot.put[16,5] 111.187134 683.933472 -1.931105 -84.510590 1.748546 -95.627464
 ot.put[16,6] 111.258301 712.920044 -1.050488 -84.510590 1.748546 -95.627464
-ot.put[16,7] 111.260742 713.919556 -1.020122 -84.510590 1.748546 -95.627464
+ot.put[16,7] 111.131927 661.443970 -2.614342 -84.510590 1.748546 -95.627464
 ot.put[17,0] 126.831238 538.962952 -6.382062 -84.510590 1.748546 -95.627464
 ot.put[17,1] 126.902405 567.949524 -5.501446 -84.510590 1.748546 -95.627464
 ot.put[17,2] 126.973541 596.936035 -4.620829 -84.510590 1.748546 -95.627464
@@ -2844,7 +2861,7 @@ ot.put[17,3] 127.044708 625.922607 -3.740212 -84.510590 1.748546 -95.627464
 ot.put[17,4] 127.115875 654.909119 -2.859595 -84.510590 1.748546 -95.627464
 ot.put[17,5] 127.187012 683.895630 -1.978979 -84.510590 1.748546 -95.627464
 ot.put[17,6] 127.258179 712.882202 -1.098361 -84.510590 1.748546 -95.627464
-ot.put[17,7] 127.260651 713.881714 -1.067996 -84.510590 1.748546 -95.627464
+ot.put[17,7] 127.131805 661.406128 -2.662216 -84.510590 1.748546 -95.627464
 ot.put[18,0] 142.831116 538.925171 -6.429936 -84.510590 1.748546 -95.627464
 ot.put[18,1] 142.902283 567.911682 -5.549319 -84.510590 1.748546 -95.627464
 ot.put[18,2] 142.973419 596.898254 -4.668703 -84.510590 1.748546 -95.627464
@@ -2852,7 +2869,7 @@ ot.put[18,3] 143.044586 625.884766 -3.788086 -84.510590 1.748546 -95.627464
 ot.put[18,4] 143.115753 654.871338 -2.907469 -84.510590 1.748546 -95.627464
 ot.put[18,5] 143.186890 683.857849 -2.026852 -84.510590 1.748546 -95.627464
 ot.put[18,6] 143.258057 712.844360 -1.146235 -84.510590 1.748546 -95.627464
-ot.put[18,7] 143.260529 713.843933 -1.115870 -84.510590 1.748546 -95.627464
+ot.put[18,7] 143.131683 661.368286 -2.710089 -84.510590 1.748546 -95.627464
 ot.put[19,0] 158.830994 538.887329 -6.477810 -84.510590 1.748546 -95.627464
 ot.put[19,1] 158.902161 567.873840 -5.597193 -84.510590 1.748546 -95.627464
 ot.put[19,2] 158.973297 596.860413 -4.716577 -84.510590 1.748546 -95.627464
@@ -2860,7 +2877,7 @@ ot.put[19,3] 159.044464 625.846924 -3.835959 -84.510590 1.748546 -95.627464
 ot.put[19,4] 159.115631 654.833496 -2.955343 -84.510590 1.748546 -95.627464
 ot.put[19,5] 159.186768 683.820007 -2.074726 -84.510590 1.748546 -95.627464
 ot.put[19,6] 159.257935 712.806580 -1.194109 -84.510590 1.748546 -95.627464
-ot.put[19,7] 159.260406 713.806091 -1.163743 -84.510590 1.748546 -95.627464
+ot.put[19,7] 159.131561 661.330444 -2.757963 -84.510590 1.748546 -95.627464
 ot.put[20,0] 174.830872 538.849487 -6.525684 -84.510590 1.748546 -95.627464
 ot.put[20,1] 174.902039 567.836060 -5.645067 -84.510590 1.748546 -95.627464
 ot.put[20,2] 174.973175 596.822571 -4.764450 -84.510590 1.748546 -95.627464
@@ -2868,18 +2885,18 @@ ot.put[20,3] 175.044342 625.809143 -3.883833 -84.510590 1.748546 -95.627464
 ot.put[20,4] 175.115509 654.795654 -3.003217 -84.510590 1.748546 -95.627464
 ot.put[20,5] 175.186646 683.782227 -2.122600 -84.510590 1.748546 -95.627464
 ot.put[20,6] 175.257812 712.768738 -1.241983 -84.510590 1.748546 -95.627464
-ot.put[20,7] 175.260284 713.768311 -1.211617 -84.510590 1.748546 -95.627464
+ot.put[20,7] 175.131439 661.292664 -2.805837 -84.510590 1.748546 -95.627464
 .END
 .JOINTS
 #homyak 13.751370 -37.185059 -123.196098 -0.000880 -93.838348 7.315490
-#pos.point[1] -15.713965 35.412598 -67.587135 20.550589 -72.001648 121.858429
-#pos.point[4] -21.391262 18.831665 -91.545250 16.562988 -62.277378 126.711113
+#pos.point[1] -15.731983 35.304565 -67.762489 20.557617 -71.934357 121.850998
+#pos.point[4] -21.510353 18.792847 -91.561760 16.545412 -62.268452 126.837639
 #def.up.right 95.497124 60.880005 -34.419159 -0.026367 -82.819756 109.634010
 #def.up.left 81.402985 65.901131 -25.071423 -0.397266 -87.192314 123.740898
 #def.down.right 96.876129 30.063354 -87.202248 0.017578 -60.928806 108.241516
 #before.machine[1] -121.615997 4.829000 -127.328003 -137.613007 -51.009998 -8.870000
 #defect.point[50] 79.791443 47.037457 -59.593079 -0.403593 -71.823288 124.406555
-#safe.machine -104.177643 -37.185425 -123.196983 -0.000879 -93.836975 -146.334885
+#safe.machine -95.088432 -19.149536 -113.268288 -0.002637 -85.693367 -155.432388
 #defect.safe 109.729698 -37.185059 -123.196548 -0.002640 -93.839722 38.109039
 #defect.point[49] 84.835213 73.208214 -11.169748 0.016636 -95.337646 119.109566
 #defect.point[48] 88.335648 70.712921 -15.949306 0.011370 -93.055199 115.607513
@@ -2936,26 +2953,26 @@ ot.put[20,7] 175.260284 713.768311 -1.211617 -84.510590 1.748546 -95.627464
 #ot.down.right 20.170900 20.364260 -104.057533 -0.065918 -55.349121 1.423169
 #ot.down.left -17.771484 19.531130 -105.070885 -0.043066 -55.206303 39.353027
 #pos.point[2] -17.943750 27.158203 -80.301994 20.984768 -67.090767 120.775612
-#pos.point[3] -14.039650 43.860355 -55.270287 18.441212 -76.891945 31.769417
-#machine.pos[1] -120.900589 34.739502 -129.595703 -148.167786 -76.755989 12.907508
-#machine.pos[2] -121.084282 32.413334 -129.866989 -147.280975 -75.143738 11.431330
-#machine.pos[3] -108.429352 28.302614 -91.449318 0.007031 -59.981922 -142.099304
-#machine.pos[4] -120.810501 34.656010 -129.709488 -148.471008 -76.604927 12.318366
+#pos.point[3] -14.150831 43.650146 -55.638863 18.434181 -76.634453 31.826199
+#machine.pos[1] -120.949371 34.905396 -129.671097 -148.149338 -76.963348 13.025310
+#machine.pos[2] -121.163826 32.506714 -129.904922 -147.218567 -75.263901 11.481661
+#machine.pos[3] -108.353333 28.362671 -91.546143 0.006152 -59.827423 -142.175323
+#machine.pos[4] -120.879936 34.424194 -129.780426 -148.328629 -76.511543 12.364180
 #et.mac.point[99] -116.219101 48.973022 -118.426521 -153.258408 -78.901749 15.482635
 #et.pos.point[99] 42.590481 27.213867 -85.643173 19.667286 -94.327240 -118.745911
 #safe.defect 85.116364 -1.856690 -101.774261 -0.002637 -81.495209 25.192118
-#pos.point[5] -27.062403 3.609741 -109.914543 17.690626 -57.549133 128.931549
-#pos.point[6] -24.266603 11.206055 -101.154915 16.572657 -59.693531 126.417831
-#machine.pos[5] -120.855339 35.200932 -129.580521 -148.420029 -76.970901 12.493420
-#machine.pos[6] -120.808754 34.013309 -129.783554 -148.398056 -76.117401 12.009513
+#pos.point[5] -27.177980 3.375732 -110.184494 17.676563 -57.491459 129.040359
+#pos.point[6] -24.299122 11.133912 -101.249069 16.570900 -59.667442 126.440331
+#machine.pos[5] -120.899719 35.180420 -129.649246 -148.381348 -77.014160 12.506836
+#machine.pos[6] -120.854446 33.975590 -129.856735 -148.358505 -76.151733 12.022010
 #safe.etalon 89.266121 -4.592290 -112.841698 2.308890 -66.337509 21.642370
-#et.mac.point[1] -120.900589 34.739502 -129.595703 -148.167786 -76.755989 12.907508
-#et.mac.point[2] -121.084282 32.413334 -129.866989 -147.280975 -75.143738 11.431330
-#et.mac.point[3] -108.429352 28.302614 -91.449318 0.007031 -59.981922 -142.099304
-#et.mac.point[4] -120.886086 34.728882 -129.602844 -148.186249 -76.743622 12.912149
-#et.mac.point[5] -120.855339 35.200932 -129.580521 -148.420029 -76.970901 12.493420
-#et.mac.point[6] -120.808754 34.013309 -129.783554 -148.398056 -76.117401 12.009513
-#et.pos.point[1] 31.232376 48.891357 -54.666561 26.100002 -90.973671 77.298569
+#et.mac.point[1] -120.963432 34.931763 -129.659500 -148.136139 -76.977768 13.028316
+#et.mac.point[2] -121.172615 32.299805 -129.927231 -147.186050 -75.110779 11.377057
+#et.mac.point[3] -108.412216 28.074831 -91.393982 0.006152 -60.268940 -142.117126
+#et.mac.point[4] -120.930481 34.692265 -129.674683 -148.143173 -76.775215 12.918110
+#et.mac.point[5] -120.886536 35.369019 -129.605957 -148.409485 -77.136391 12.587888
+#et.mac.point[6] -120.843903 33.930908 -129.819702 -148.358505 -76.080322 11.975099
+#et.pos.point[1] 31.180521 49.063847 -54.365814 26.111427 -91.069794 77.397720
 .END
 .REALS
 s.pr.tst.ot = 2249
@@ -3018,11 +3035,11 @@ s.pr.tch.defect = 2252
 s.pr.tch.meas = 2253
 s.pr.tch.etal = 2254
 s.apply.obj = 2256
-count.defect = 8
+count.defect = 14
 count.pick = 0
 count.put = 0
 current.gripper = 1
-detail.count = 150
+detail.count = 6
 grip.180xsh[1] = 0
 grip.180xsh[2] = 0
 grip.180xsh[3] = 0
@@ -3030,28 +3047,28 @@ grip.180ysh[1] = 0
 grip.180ysh[2] = 0
 grip.180ysh[3] = 0
 grip.xsh[1] = 16
-grip.xsh[2] = -3
-grip.xsh[3] = 0
+grip.xsh[2] = 14
+grip.xsh[3] = -11
 grip.ysh[1] = 2
-grip.ysh[2] = 15
-grip.ysh[3] = 0
+grip.ysh[2] = 2
+grip.ysh[3] = -5
 grip.zsh[1] = -15
-grip.zsh[2] = 0
-grip.zsh[3] = 0
-hmi.defect.pos = 5
-hmi.etalon.id = 4
+grip.zsh[2] = -17
+grip.zsh[3] = -18
+hmi.defect.pos = 1
+hmi.etalon.id = 3
 hmi.g180x = 0
 hmi.g180y = 0
-hmi.gx = 16
-hmi.gy = 0
-hmi.gz = -15
-hmi.obj.id = 4
+hmi.gx = 14
+hmi.gy = 7
+hmi.gz = -18
+hmi.obj.id = 5
 hmi.tool.no = 1
-keep.object = 4
+keep.object = 5
 line.width = 210
 lines.count = 21
 lines.shift = 16
-max.tare.count = 12
+max.tare.count = 3
 obj.in.line = 7
 obj.spacer = 1.5
 object.length = 27.5
@@ -3063,7 +3080,7 @@ tcp.port = 9007
 tcp.recv.ena = -1
 tcp.send.ena = -1
 tcp.sender.dly = 0.25
-tcp.socket = 34
+tcp.socket = 35
 tyterm = 0
 s.cmd.pick = 2233
 s.opt.spacer = 2270
@@ -3089,11 +3106,11 @@ grip.180xsh[5] = 0
 grip.180ysh[4] = 0
 grip.180ysh[5] = 0
 grip.xsh[4] = 16
-grip.xsh[5] = -3
-grip.ysh[4] = 0
-grip.ysh[5] = 0
-grip.zsh[4] = -15
-grip.zsh[5] = 0
+grip.xsh[5] = 14
+grip.ysh[4] = 2
+grip.ysh[5] = 7
+grip.zsh[4] = -16
+grip.zsh[5] = -18
 s.cmd.measured = 2234
 hmi.gripper = 1
 ms[0] = 10
@@ -3391,12 +3408,12 @@ ns[144] = 6
 ns[145] = 0
 ns[146] = 6
 object.id = 1
-ot.x = 11
+ot.x = 10
 ot.y = 2
 round.no = 3
 spc.tare.count = 50
 detail.spec = 0
-grip.xsh[6] = -3
+grip.xsh[6] = 14
 grip.xsh[7] = 0
 grip.xsh[8] = 0
 grip.xsh[9] = 0
@@ -3638,7 +3655,7 @@ grip.180ysh[29] = 0
 grip.180ysh[30] = 0
 grip.180ysh[31] = 0
 grip.180ysh[32] = 0
-grip.ysh[6] = 5
+grip.ysh[6] = 2
 grip.ysh[7] = 0
 grip.ysh[8] = 0
 grip.ysh[9] = 0
@@ -3665,7 +3682,7 @@ grip.ysh[29] = 0
 grip.ysh[30] = 0
 grip.ysh[31] = 0
 grip.ysh[32] = 0
-grip.zsh[6] = 0
+grip.zsh[6] = -15
 grip.zsh[7] = 0
 grip.zsh[8] = 0
 grip.zsh[9] = 0
@@ -3702,138 +3719,203 @@ rs7.etalon.stop = 33
 max.defect.cnt = 25
 do.automatic = 2012
 pawn.no = 5
+hmi.gmidy = 0
+grip.midysh[1] = 0
+grip.midysh[2] = 0
+grip.midysh[3] = 0
+grip.midysh[4] = 0
+grip.midysh[5] = 0
+grip.midysh[6] = 0
+grip.midysh[7] = 0
+grip.midysh[8] = 0
+grip.midysh[9] = 0
+grip.midysh[10] = 0
+grip.midysh[11] = 0
+grip.midysh[12] = 0
+grip.midysh[13] = 0
+grip.midysh[14] = 0
+grip.midysh[15] = 0
+grip.midysh[16] = 0
+grip.midysh[17] = 0
+grip.midysh[18] = 0
+grip.midysh[19] = 0
+grip.midysh[20] = 0
+grip.midysh[21] = 0
+grip.midysh[22] = 0
+grip.midysh[23] = 0
+grip.midysh[24] = 0
+grip.midysh[25] = 0
+grip.midysh[26] = 0
+grip.midysh[27] = 0
+grip.midysh[28] = 0
+grip.midysh[29] = 0
+grip.midysh[30] = 0
+grip.midysh[31] = 0
+grip.midysh[32] = 0
+grip.midysh[33] = 0
+grip.midysh[34] = 0
+grip.midysh[35] = 0
+grip.midysh[36] = 0
+grip.midysh[37] = 0
+grip.midysh[38] = 0
+grip.midysh[39] = 0
+grip.midysh[40] = 0
+grip.midysh[41] = 0
+grip.midysh[42] = 0
+grip.midysh[43] = 0
+grip.midysh[44] = 0
+grip.midysh[45] = 0
+grip.midysh[46] = 0
+grip.midysh[47] = 0
+grip.midysh[48] = 0
+grip.midysh[49] = 0
+grip.midysh[50] = 0
+grip.midysh[51] = 0
+grip.midysh[52] = 0
+grip.midysh[53] = 0
+grip.midysh[54] = 0
+grip.midysh[55] = 0
+grip.midysh[56] = 0
+grip.midysh[57] = 0
+grip.midysh[58] = 0
+grip.midysh[59] = 0
+grip.midysh[60] = 0
+grip.midysh[61] = 0
+grip.midysh[62] = 0
+grip.midysh[63] = 0
+grip.midysh[64] = 0
 .END
 .STRINGS
-$log.entry[2] = "16:57:21 MEASUREMENT;TRUE;\n"
-$log.entry[1] = "16:57:20 MEASUREMENT;TRUE;\n"
-$log.entry[0] = "16:57:19 MEASUREMENT;TRUE;\n"
+$log.entry[2] = "16:48:12 POSITIONERFULL;\n"
+$log.entry[1] = "16:48:12 POSITIONERFULL;\n"
+$log.entry[0] = "16:48:12 POSITIONERFULL;\n"
 $action = "WaitingForStart"
-$log.entry[3] = "16:57:22 MEASUREMENT;TRUE;\n"
-$log.entry[4] = "16:57:23 MEASUREMENT;TRUE;\n"
-$log.entry[5] = "16:57:24 MEASUREMENT;TRUE;\n"
-$log.entry[6] = "16:57:25 MEASUREMENT;TRUE;\n"
-$log.entry[7] = "16:57:26 MEASUREMENT;TRUE;\n"
-$log.entry[8] = "16:57:27 MEASUREMENT;TRUE;\n"
-$log.entry[9] = "16:57:28 MEASUREMENT;TRUE;\n"
-$log.entry[10] = "16:57:29 MEASUREMENT;TRUE;\n"
-$log.entry[11] = "16:57:30 MEASUREMENT;TRUE;\n"
-$log.entry[12] = "16:57:31 MEASUREMENT;TRUE;\n"
-$log.entry[13] = "16:57:32 MEASUREMENT;TRUE;\n"
-$log.entry[14] = "16:57:33 MEASUREMENT;TRUE;\n"
-$log.entry[15] = "16:57:34 MEASUREMENT;TRUE;\n"
-$log.entry[16] = "16:57:35 MEASUREMENT;TRUE;\n"
-$log.entry[17] = "16:57:36 MEASUREMENT;TRUE;\n"
-$log.entry[18] = "16:57:37 MEASUREMENT;TRUE;\n"
-$log.entry[19] = "16:57:38 MEASUREMENT;TRUE;\n"
-$log.entry[20] = "16:57:39 MEASUREMENT;TRUE;\n"
-$log.entry[21] = "16:57:40 MEASUREMENT;TRUE;\n"
-$log.entry[22] = "16:57:41 MEASUREMENT;TRUE;\n"
-$log.entry[23] = "16:57:42 MEASUREMENT;TRUE;\n"
-$log.entry[24] = "16:57:43 MEASUREMENT;TRUE;\n"
-$log.entry[25] = "16:57:44 MEASUREMENT;TRUE;\n"
-$log.entry[26] = "16:57:45 MEASUREMENT;TRUE;\n"
-$log.entry[27] = "16:57:46 MEASUREMENT;TRUE;\n"
-$log.entry[28] = "16:57:47 MEASUREMENT;TRUE;\n"
-$log.entry[29] = "16:57:48 MEASUREMENT;TRUE;\n"
-$log.entry[30] = "16:57:49 MEASUREMENT;TRUE;\n"
-$log.entry[31] = "16:57:50 MEASUREMENT;TRUE;\n"
-$log.entry[32] = "16:57:51 MEASUREMENT;TRUE;\n"
-$log.entry[33] = "16:57:52 MEASUREMENT;TRUE;\n"
-$log.entry[34] = "16:57:53 MEASUREMENT;TRUE;\n"
-$log.entry[35] = "16:57:54 MEASUREMENT;TRUE;\n"
-$log.entry[36] = "16:57:55 MEASUREMENT;TRUE;\n"
-$log.entry[37] = "16:57:56 MEASUREMENT;TRUE;\n"
-$log.entry[38] = "16:57:57 MEASUREMENT;TRUE;\n"
-$log.entry[39] = "16:57:58 MEASUREMENT;TRUE;\n"
-$log.entry[40] = "16:57:59 MEASUREMENT;TRUE;\n"
-$log.entry[41] = "16:58:00 MEASUREMENT;TRUE;\n"
-$log.entry[42] = "16:58:01 MEASUREMENT;TRUE;\n"
-$log.entry[43] = "16:58:02 MEASUREMENT;TRUE;\n"
-$log.entry[44] = "16:58:03 MEASUREMENT;TRUE;\n"
-$log.entry[45] = "16:58:04 MEASUREMENT;TRUE;\n"
-$log.entry[46] = "16:58:05 MEASUREMENT;TRUE;\n"
-$log.entry[47] = "16:58:06 MEASUREMENT;TRUE;\n"
-$log.entry[48] = "16:58:07 MEASUREMENT;TRUE;\n"
-$log.entry[49] = "16:58:08 MEASUREMENT;TRUE;\n"
-$log.entry[50] = "16:58:09 MEASUREMENT;TRUE;\n"
-$log.entry[51] = "16:58:10 SPEED;5;\n"
-$log.entry[52] = "16:58:10 MEASUREMENT;TRUE;\n"
-$log.entry[53] = "16:58:11 MEASUREMENT;TRUE;\n"
-$log.entry[54] = "16:58:12 MEASUREMENT;TRUE;\n"
-$log.entry[55] = "16:58:12 CYCLEON;\n"
-$log.entry[56] = "16:58:13 Main program executed"
-$log.entry[57] = "16:58:13 Robot already in home position"
-$log.entry[58] = "16:58:13 MEASUREMENT;TRUE;\n"
-$log.entry[59] = "16:58:13 State 0: Program reset. Initialization of parameters"
-$log.entry[60] = "16:58:13 State 100: Waiting for start"
-$log.entry[61] = "16:58:14 MEASUREMENT;TRUE;\n"
-$log.entry[62] = "16:58:15 MEASUREMENT;TRUE;\n"
-$log.entry[63] = "16:58:16 MEASUREMENT;TRUE;\n"
-$log.entry[64] = "16:58:17 MEASUREMENT;TRUE;\n"
-$log.entry[65] = "16:58:18 MEASUREMENT;TRUE;\n"
-$log.entry[66] = "16:58:19 MEASUREMENT;TRUE;\n"
-$log.entry[67] = "16:58:20 MEASUREMENT;TRUE;\n"
-$log.entry[68] = "16:58:21 MEASUREMENT;TRUE;\n"
-$log.entry[69] = "16:58:22 MEASUREMENT;TRUE;\n"
-$log.entry[70] = "16:58:23 MEASUREMENT;TRUE;\n"
-$log.entry[71] = "16:58:24 MEASUREMENT;TRUE;\n"
-$log.entry[72] = "16:58:25 MEASUREMENT;TRUE;\n"
-$log.entry[73] = "16:58:26 MEASUREMENT;TRUE;\n"
-$log.entry[74] = "16:58:27 MEASUREMENT;TRUE;\n"
-$log.entry[75] = "16:58:27 SPEED;15;\n"
-$log.entry[76] = "16:58:28 MEASUREMENT;TRUE;\n"
-$log.entry[77] = "16:58:29 MEASUREMENT;TRUE;\n"
-$log.entry[78] = "16:58:30 MEASUREMENT;TRUE;\n"
-$log.entry[79] = "16:58:31 MEASUREMENT;TRUE;\n"
-$log.entry[80] = "16:58:32 MEASUREMENT;TRUE;\n"
-$log.entry[81] = "16:58:33 MEASUREMENT;TRUE;\n"
-$log.entry[82] = "16:58:34 MEASUREMENT;TRUE;\n"
-$log.entry[83] = "16:58:35 MEASUREMENT;TRUE;\n"
-$log.entry[84] = "16:58:36 MEASUREMENT;TRUE;\n"
-$log.entry[85] = "16:58:37 MEASUREMENT;TRUE;\n"
-$log.entry[86] = "16:58:38 MEASUREMENT;TRUE;\n"
-$log.entry[87] = "16:58:39 MEASUREMENT;TRUE;\n"
-$log.entry[88] = "16:58:40 MEASUREMENT;TRUE;\n"
-$log.entry[89] = "16:58:41 MEASUREMENT;TRUE;\n"
-$log.entry[90] = "16:58:42 MEASUREMENT;TRUE;\n"
-$log.entry[91] = "16:58:43 MEASUREMENT;TRUE;\n"
-$log.entry[92] = "16:58:44 MEASUREMENT;TRUE;\n"
-$log.entry[93] = "16:58:45 MEASUREMENT;TRUE;\n"
-$log.entry[94] = "16:58:46 MEASUREMENT;TRUE;\n"
-$log.entry[95] = "16:58:47 MEASUREMENT;TRUE;\n"
-$log.entry[96] = "16:58:48 MEASUREMENT;TRUE;\n"
-$log.entry[97] = "16:58:49 MEASUREMENT;TRUE;\n"
-$log.entry[98] = "16:58:50 MEASUREMENT;TRUE;\n"
-$log.entry[99] = "16:58:51 MEASUREMENT;TRUE;\n"
-$log.entry[100] = "16:58:52 MEASUREMENT;TRUE;\n"
-$log.entry[101] = "16:58:53 MEASUREMENT;TRUE;\n"
-$log.entry[102] = "16:58:54 MEASUREMENT;TRUE;\n"
-$log.entry[103] = "16:58:55 MEASUREMENT;TRUE;\n"
-$log.entry[104] = "16:58:56 MEASUREMENT;TRUE;\n"
-$log.entry[105] = "16:58:57 MEASUREMENT;TRUE;\n"
-$log.entry[106] = "16:58:58 MEASUREMENT;TRUE;\n"
-$log.entry[107] = "16:58:59 MEASUREMENT;TRUE;\n"
-$log.entry[108] = "16:59:00 MEASUREMENT;TRUE;\n"
-$log.entry[109] = "16:59:01 MEASUREMENT;TRUE;\n"
-$log.entry[110] = "16:59:02 MEASUREMENT;TRUE;\n"
-$log.entry[111] = "16:59:03 MEASUREMENT;TRUE;\n"
-$log.entry[112] = "16:59:04 MEASUREMENT;TRUE;\n"
-$log.entry[113] = "16:59:05 MEASUREMENT;TRUE;\n"
-$log.entry[114] = "16:59:06 MEASUREMENT;TRUE;\n"
-$log.entry[115] = "16:59:07 MEASUREMENT;TRUE;\n"
-$log.entry[116] = "16:59:08 MEASUREMENT;TRUE;\n"
-$log.entry[117] = "16:59:09 MEASUREMENT;TRUE;\n"
-$log.entry[118] = "16:59:10 MEASUREMENT;TRUE;\n"
-$log.entry[119] = "16:59:11 MEASUREMENT;TRUE;\n"
-$log.entry[120] = "16:59:12 MEASUREMENT;TRUE;\n"
-$log.entry[121] = "16:59:13 MEASUREMENT;TRUE;\n"
-$log.entry[122] = "17:00:44 Main program executed"
-$log.entry[123] = "17:00:44 Robot already in home position"
-$log.entry[124] = "17:00:44 State 0: Program reset. Initialization of parameters"
-$log.entry[125] = "17:00:44 ETALON;1;\n"
-$log.entry[126] = "17:00:45 State 100: Waiting for start"
-$log.entry[127] = "17:00:45 MEASUREMENT;FALSE;\n"
-$pg.name = "0401.17.02.023-02"
+$log.entry[3] = "16:48:13 POSITIONERFULL;\n"
+$log.entry[4] = "16:48:13 POSITIONERFULL;\n"
+$log.entry[5] = "16:48:13 POSITIONERFULL;\n"
+$log.entry[6] = "16:48:13 POSITIONERFULL;\n"
+$log.entry[7] = "16:48:14 POSITIONERFULL;\n"
+$log.entry[8] = "16:48:14 POSITIONERFULL;\n"
+$log.entry[9] = "16:48:14 POSITIONERFULL;\n"
+$log.entry[10] = "16:48:15 POSITIONERFULL;\n"
+$log.entry[11] = "16:48:15 POSITIONERFULL;\n"
+$log.entry[12] = "16:48:15 POSITIONERFULL;\n"
+$log.entry[13] = "16:48:15 POSITIONERFULL;\n"
+$log.entry[14] = "16:48:16 POSITIONERFULL;\n"
+$log.entry[15] = "16:48:16 Measure etalon (ID: 1)"
+$log.entry[16] = "16:48:16 POSITIONERFULL;\n"
+$log.entry[17] = "16:48:16 POSITIONERFULL;\n"
+$log.entry[18] = "16:48:16 POSITIONERFULL;\n"
+$log.entry[19] = "16:48:17 POSITIONERFULL;\n"
+$log.entry[20] = "16:48:17 POSITIONERFULL;\n"
+$log.entry[21] = "16:48:17 POSITIONERFULL;\n"
+$log.entry[22] = "16:48:17 POSITIONERFULL;\n"
+$log.entry[23] = "16:48:18 POSITIONERFULL;\n"
+$log.entry[24] = "16:48:18 POSITIONERFULL;\n"
+$log.entry[25] = "16:48:18 POSITIONERFULL;\n"
+$log.entry[26] = "16:48:18 POSITIONERFULL;\n"
+$log.entry[27] = "16:48:19 POSITIONERFULL;\n"
+$log.entry[28] = "16:48:19 POSITIONERFULL;\n"
+$log.entry[29] = "16:48:19 POSITIONERFULL;\n"
+$log.entry[30] = "16:48:19 POSITIONERFULL;\n"
+$log.entry[31] = "16:48:20 POSITIONERFULL;\n"
+$log.entry[32] = "16:48:20 POSITIONERFULL;\n"
+$log.entry[33] = "16:48:20 POSITIONERFULL;\n"
+$log.entry[34] = "16:48:20 POSITIONERFULL;\n"
+$log.entry[35] = "16:48:21 POSITIONERFULL;\n"
+$log.entry[36] = "16:48:21 POSITIONERFULL;\n"
+$log.entry[37] = "16:48:21 Waiting for measurement result"
+$log.entry[38] = "16:48:21 POSITIONERFULL;\n"
+$log.entry[39] = "16:49:56 ETALONRESULT;OK;\n"
+$log.entry[40] = "16:49:56 Measurement etalon: OK"
+$log.entry[41] = "16:49:57 Return etalon to positioner (ID: 1)"
+$log.entry[42] = "16:50:05 State 101: Calculating next step"
+$log.entry[43] = "16:50:05 POSITIONERFULL;\n"
+$log.entry[44] = "16:50:06 State 1: Pick from positioner"
+$log.entry[45] = "16:50:06 POSITIONERFULL;\n"
+$log.entry[46] = "16:50:06 Pick detail from positioner (ID: 1)"
+$log.entry[47] = "16:50:06 Check if positioner is occupied"
+$log.entry[48] = "16:50:06 POSITIONERFULL;\n"
+$log.entry[49] = "16:50:06 POSITIONERFULL;\n"
+$log.entry[50] = "16:50:06 POSITIONERFULL;\n"
+$log.entry[51] = "16:50:07 POSITIONERFULL;\n"
+$log.entry[52] = "16:50:07 POSITIONERFULL;\n"
+$log.entry[53] = "16:50:07 POSITIONERFULL;\n"
+$log.entry[54] = "16:50:07 POSITIONERFULL;\n"
+$log.entry[55] = "16:50:08 POSITIONERFULL;\n"
+$log.entry[56] = "16:50:08 POSITIONERFULL;\n"
+$log.entry[57] = "16:50:10 State 101: Calculating next step"
+$log.entry[58] = "16:50:10 State 2: Measurement process"
+$log.entry[59] = "16:50:10 Move to measure machine"
+$log.entry[60] = "16:50:12 POSITIONERFULL;\n"
+$log.entry[61] = "16:50:13 POSITIONERFULL;\n"
+$log.entry[62] = "16:50:13 POSITIONERFULL;\n"
+$log.entry[63] = "16:50:13 POSITIONERFULL;\n"
+$log.entry[64] = "16:50:13 POSITIONERFULL;\n"
+$log.entry[65] = "16:50:14 POSITIONERFULL;\n"
+$log.entry[66] = "16:50:14 POSITIONERFULL;\n"
+$log.entry[67] = "16:50:14 POSITIONERFULL;\n"
+$log.entry[68] = "16:50:14 POSITIONERFULL;\n"
+$log.entry[69] = "16:50:15 POSITIONERFULL;\n"
+$log.entry[70] = "16:50:15 POSITIONERFULL;\n"
+$log.entry[71] = "16:50:15 POSITIONERFULL;\n"
+$log.entry[72] = "16:50:15 Waiting for measurement result"
+$log.entry[73] = "16:50:15 POSITIONERFULL;\n"
+$log.entry[74] = "16:50:16 POSITIONERFULL;\n"
+$log.entry[75] = "16:50:19 MEASUREMENT;TRUE;\n"
+$log.entry[76] = "16:50:19 MEASUREMENT;TRUE;\n"
+$log.entry[77] = "16:50:22 State 101: Calculating next step"
+$log.entry[78] = "16:50:23 State 3: Put detail to OT"
+$log.entry[79] = "16:50:24 POSITIONERFULL;\n"
+$log.entry[80] = "16:50:24 POSITIONERFULL;\n"
+$log.entry[81] = "16:50:24 POSITIONERFULL;\n"
+$log.entry[82] = "16:50:24 POSITIONERFULL;\n"
+$log.entry[83] = "16:50:25 Put to OT detail 2"
+$log.entry[84] = "16:50:25 POSITIONERFULL;\n"
+$log.entry[85] = "16:50:25 Check if positioner is occupied"
+$log.entry[86] = "16:50:25 POSITIONERFULL;\n"
+$log.entry[87] = "16:50:25 POSITIONERFULL;\n"
+$log.entry[88] = "16:50:25 POSITIONERFULL;\n"
+$log.entry[89] = "16:50:26 POSITIONERFULL;\n"
+$log.entry[90] = "16:50:26 POSITIONERFULL;\n"
+$log.entry[91] = "16:50:26 POSITIONERFULL;\n"
+$log.entry[92] = "16:50:27 POSITIONERFULL;\n"
+$log.entry[93] = "16:50:27 POSITIONERFULL;\n"
+$log.entry[94] = "16:50:27 POSITIONERFULL;\n"
+$log.entry[95] = "16:50:27 State 101: Calculating next step"
+$log.entry[96] = "16:50:27 State 1: Pick from positioner"
+$log.entry[97] = "16:50:27 Pick detail from positioner (ID: 1)"
+$log.entry[98] = "16:50:27 POSITIONERFULL;\n"
+$log.entry[99] = "16:50:28 POSITIONERFULL;\n"
+$log.entry[100] = "16:50:28 POSITIONERFULL;\n"
+$log.entry[101] = "16:50:28 POSITIONERFULL;\n"
+$log.entry[102] = "16:50:28 POSITIONERFULL;\n"
+$log.entry[103] = "16:50:29 POSITIONERFULL;\n"
+$log.entry[104] = "16:50:29 POSITIONERFULL;\n"
+$log.entry[105] = "16:50:31 State 101: Calculating next step"
+$log.entry[106] = "16:50:31 State 2: Measurement process"
+$log.entry[107] = "16:50:31 Move to measure machine"
+$log.entry[108] = "16:50:36 Waiting for measurement result"
+$log.entry[109] = "16:50:40 MEASUREMENT;TRUE;\n"
+$log.entry[110] = "16:50:40 Measurement result: OK"
+$log.entry[111] = "16:50:43 State 101: Calculating next step"
+$log.entry[112] = "16:50:43 State 3: Put detail to OT"
+$log.entry[113] = "16:50:45 Put to OT detail 3"
+$log.entry[114] = "16:50:45 Check if positioner is occupied"
+$log.entry[115] = "16:50:48 State 101: Calculating next step"
+$log.entry[116] = "16:50:49 State 103: Ending sequence started"
+$log.entry[117] = "16:50:49 State 255: Program complete"
+$log.entry[118] = "16:50:50 State 0: Program reset. Initialization of parameters"
+$log.entry[119] = "16:50:50 State 100: Waiting for start"
+$log.entry[120] = "16:51:45 STOP;\n"
+$log.entry[121] = "16:52:10 CYCLEON;\n"
+$log.entry[122] = "16:52:20 CYCLEON;\n"
+$log.entry[123] = "16:52:31 CYCLEON;\n"
+$log.entry[124] = "16:52:41 CYCLEON;\n"
+$log.entry[125] = "16:52:51 CYCLEON;\n"
+$log.entry[126] = "16:53:01 CYCLEON;\n"
+$log.entry[127] = "16:53:11 CYCLEON;\n"
+$pg.name = "312.229.002"
 $tcp.ip = "192.168.7.100"
 $opt.data = "1"
 $ot.data = "1"
