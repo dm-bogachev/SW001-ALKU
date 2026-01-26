@@ -793,7 +793,7 @@ N_INT300    "s.debug.mode|Debug mode"
   .$temp = "Pick gripper"+$ENCODE(.gripper.no)
   CALL log(.$temp)
 ; Set default motion parameters
-  SPEED 100 ALWAYS
+  SPEED 10 ALWAYS
   ACCURACY 100 ALWAYS
   TOOL tool.pick[.gripper.no]
 ; Calculate points
@@ -814,7 +814,7 @@ N_INT300    "s.debug.mode|Debug mode"
   TWAIT 0.5
   current.gripper = .gripper.no
 ;
-  SPEED 100 ALWAYS
+  SPEED 10 ALWAYS
   ACCURACY 1
   LMOVE .temp+TRANS(0,0,200)
 ;
@@ -838,7 +838,7 @@ N_INT300    "s.debug.mode|Debug mode"
   .$temp = "Put gripper"+$ENCODE(.gripper.no)
   CALL log(.$temp)
 ; Set default motion parameters
-  SPEED 100 ALWAYS
+  SPEED 10 ALWAYS
   ACCURACY 100 ALWAYS
   TOOL tool.pick[.gripper.no]
 ; Calculate points
@@ -859,7 +859,7 @@ N_INT300    "s.debug.mode|Debug mode"
   TWAIT 0.5
   current.gripper = 0
 ;
-  SPEED 100 ALWAYS
+  SPEED 10 ALWAYS
   ACCURACY 1
   LMOVE .temp+TRANS(0,0,200)
 ;
@@ -1275,7 +1275,7 @@ N_INT300    "s.debug.mode|Debug mode"
     LMOVE .opt.put+TRANS(50)
 ; Move to put point
     ACCURACY 0.02
-    SPEED 100 MM/S
+    SPEED 30 MM/S
     LMOVE #opt.put
     BREAK
     PULSE release.tare
@@ -2164,7 +2164,7 @@ N_INT300    "s.debug.mode|Debug mode"
   END
 ;
 ; Priority 4
-  IF NOT SIG(s.opt.placed) AND SIG(s.ot.placed) THEN
+  IF NOT SIG(s.opt.placed) AND SIG(s.ot.placed) AND NOT (count.put==detail.count) THEN
     state = 2
     RETURN
   END
@@ -2500,7 +2500,7 @@ N_INT300    "s.debug.mode|Debug mode"
   END
   ACCURACY 20
   LAPPRO .pick,-30
-  SPEED 100 MM/S
+  SPEED 40 MM/S
   ACCURACY 0.02
   LMOVE .pick
   BREAK
@@ -2513,6 +2513,8 @@ N_INT300    "s.debug.mode|Debug mode"
 ;
   ACCURACY 5
   LAPPRO .pick,-30
+  BREAK
+  TWAIT 0.1
 ;
   LMOVE .#pick.in
   LMOVE #stz.wait

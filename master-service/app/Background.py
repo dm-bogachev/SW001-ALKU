@@ -231,6 +231,12 @@ class Background(Thread):
         self.detect_attempts = 0
         self.redrops = 0
         self.current_product = ProductName
+        #
+        try:
+            requests.post(f"{IO_API_URL}/check_stz", timeout=0.1)
+        except Exception as e:
+            pass
+        #
         return True
 
     def set_speed(self, speed: int):

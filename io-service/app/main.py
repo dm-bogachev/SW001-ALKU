@@ -223,6 +223,7 @@ def tare_off_async():
 
 @app.post("/tare_on")
 def tare_on():
+    logger.debug("Запрос /tare_on")
     if io is None or not io.is_connected():
         logger.error("Модуль I/O не подключен")
         return {"Status": "ERROR",
@@ -244,7 +245,7 @@ def tare_on():
 
 @app.post("/tare_off")
 def tare_off():
-
+    logger.debug("Запрос /tare_off")
     if io is None or not io.is_connected():
         logger.error("Модуль I/O не подключен")
         return {"Status": "ERROR",
@@ -260,6 +261,7 @@ def tare_off():
 
 @app.post("/shake_fast")
 def shake_fast():
+    logger.debug("Запрос /shake_fast")  
     if io is None or not io.is_connected():
         logger.error("Модуль I/O не подключен")
         return {"Status": "ERROR",
@@ -273,6 +275,7 @@ def shake_fast():
     
 @app.post("/shake_slow")
 def shake_slow():
+    logger.debug("Запрос /shake_slow")
     if io is None or not io.is_connected():
         logger.error("Модуль I/O не подключен")
         return {"Status": "ERROR",
@@ -284,7 +287,25 @@ def shake_slow():
     time.sleep(2)
     io.set_output(2, True)
     
-
+@app.post("/check_stz")
+def chech_stz():
+    logger.debug("Запрос /check_stz")
+    if io is None or not io.is_connected():
+        logger.error("Модуль I/O не подключен")
+        return {"Status": "ERROR",
+                "Reason": "Not connected"}, 503
+    io.set_output(4, False)
+    io.set_output(3, True)
+    io.set_output(0, True)
+    io.set_output(1, True)
+    io.set_output(2, True)
+    time.sleep(2)
+    io.set_output(4, False)
+    io.set_output(3, True)
+    io.set_output(2, False)
+    io.set_output(1, False)
+    io.set_output(0, False)
+    return {"Status": "OK"}
 
 if __name__ == "__main__":
     import uvicorn

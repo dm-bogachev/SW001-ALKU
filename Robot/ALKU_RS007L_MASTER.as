@@ -842,7 +842,7 @@ N_INT300    "s.debug.mode|Debug mode"
   END
   TOOL tool.pick[current.gripper]
 ;
-  SPEED 100 ALWAYS
+  SPEED 20 ALWAYS
   ACCURACY 10 ALWAYS
 ;
   POINT .etalon.pos.pt = #et.pos.point[.id]
@@ -883,7 +883,7 @@ N_INT300    "s.debug.mode|Debug mode"
   LMOVE #safe.etalon
   LMOVE .etalon.pos.pt+TRANS(0,0,50)
   LMOVE .etalon.pos.pt+TRANS(0,0,30)
-  SPEED 150 MM/S
+  SPEED 50 MM/S
   ACCURACY 0.02
   LMOVE #et.pos.point[.id]
   BREAK
@@ -908,7 +908,7 @@ N_INT300    "s.debug.mode|Debug mode"
   LMOVE .etalon.mac.pt+TRANS(0,.shift.y,.shift.z)
   ACCURACY 5
   LMOVE .etalon.mac.pt+TRANS(0,.shift.y*0.2,.shift.z*0.2)
-  SPEED 150 MM/S
+  SPEED 50 MM/S
   ACCURACY 0.5
   LMOVE #et.mac.point[.id]
   BREAK
@@ -941,7 +941,7 @@ N_INT300    "s.debug.mode|Debug mode"
   LMOVE .etalon.mac.pt+TRANS(0,.shift.y,.shift.z)
   ACCURACY 5
   LMOVE .etalon.mac.pt+TRANS(0,.shift.y*0.2,.shift.z*0.2)
-  SPEED 150 MM/S
+  SPEED 50 MM/S
   ACCURACY 0.5
   LMOVE #et.mac.point[.id]
   BREAK
