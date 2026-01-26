@@ -92,6 +92,7 @@ class DataCollector(Thread):
             "gripper": None,
             "pickcount": 0,
             "defectcount": 0,
+            "putcount": 0,
             "state": -1,
             "hour": -1,
             "stepmode": False
@@ -125,7 +126,7 @@ class DataCollector(Thread):
                         result[key] = bool(val)
 
             # Integer-like fields
-            for key in ("speed", "ecode", "pickcount", "defectcount", "tarein",
+            for key in ("speed", "ecode", "pickcount", "putcount", "defectcount", "tarein",
                          "tareout", "gripper", "state", "hour"):
                 if key in rs:
                     try:

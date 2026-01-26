@@ -36,6 +36,7 @@ class Background(Thread):
         self.detect_attempts = 0
         self.redrops = 0
         self.in_process = False
+        self.current_product = ""
         #
         self.cycle_delay = 0.25  # Задержка между циклами основного потока в секундах
 
@@ -168,10 +169,19 @@ class Background(Thread):
         else:
             logger.warning("Не удалось отправить команду на открытие пневматики на IO-сервис")
 
-    def shake(self):
-        resp = requests.post(f"{IO_API_URL}/shake", timeout=8)
+    def shake_fast(self):
+        resp = requests.post(f"{IO_API_URL}/shake_fast", timeout=8)
         if resp.status_code == 200:
-            logger.info("Отправлена команда на пересброс тары")
+            logger.info("Отправлена команда на быстрый пересброс тары")
+            self.in_process = True
+        else:
+            logger.warning("Не удалось отправить команду на а пересброс тары")
+
+
+    def shake_slow(self):
+        resp = requests.post(f"{IO_API_URL}/shake_slow", timeout=8)
+        if resp.status_code == 200:
+            logger.info("Отправлена команда на медленный пересброс тары")
             self.in_process = True
         else:
             logger.warning("Не удалось отправить команду на а пересброс тары")
@@ -220,6 +230,7 @@ class Background(Thread):
         self.first_pick = True
         self.detect_attempts = 0
         self.redrops = 0
+        self.current_product = ProductName
         return True
 
     def set_speed(self, speed: int):
@@ -396,7 +407,10 @@ class Background(Thread):
             logger.error("Объект не обнаружен, повтор через 2 секунды")
             if self.detect_attempts <= 5:
                 if self.redrops < 4:
-                    self.shake()
+                    if self.current_product == "312.229.001":
+                        self.shake_fast()
+                    else:
+                        self.shake_slow()
                     self.detect_attempts = 2
                     self.redrops += 1
                 else:

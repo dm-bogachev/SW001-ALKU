@@ -16,11 +16,11 @@
 .NETCONF     192.168.1.4,"fcon",255.255.255.0,0.0.0.0,0.0.0.0,0.0.0.0,""
 .NETCONF2     192.168.7.103,255.255.255.0,0.0.0.0
 .ROBOTDATA1
-ZROBOT.TYPE    30  10   6 6324      -95551   RS007L-B001 ( 2025-12-15 16:09 )
+ZROBOT.TYPE    30  10   6 6324      -95551   RS007L-B001 ( 2026-01-22 18:20 )
 ZSYSTEM         1   5         -91
 ZLINEAR         0   0   0   0   0   0  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1         179
 CONT_CODE     701      -10516
-ZZERO         268466747 268333916 268159364 268435456 268298794 268427090 268435456 268435456 268435456 268435456 268435456 268435456 268435456 268435456 268435456 268435456 268435456 268435456   544241446
+ZZERO         268466748 268333916 268159364 268435457 268298794 268427090 268435456 268435456 268435456 268435456 268435456 268435456 268435456 268435456 268435456 268435456 268435456 268435456   544241416
 ENDLESS_POS   0 100 1       -1516
 LANGUAGE      2
 ZSIGSPEC       16  16 960      -14881
@@ -56,7 +56,7 @@ ZSETKVFF_SVSPEC5    1.000   1.000   1.000   1.000   1.000   1.000  -1.000  -1.00
 ZSETKVFFACC_SVSPEC5    0.000   0.000   0.000   0.000   0.000   0.000 -11.000 -11.000 -11.000 -11.000 -11.000 -11.000 -11.000 -11.000 -11.000 -11.000 -11.000 -11.000 -1832648705
 ZSETKVFFJRK_SVSPEC5    0.000   0.000   0.000   0.000   0.000   0.000 -11.000 -11.000 -11.000 -11.000 -11.000 -11.000 -11.000 -11.000 -11.000 -11.000 -11.000 -11.000 -1832648705
 ZSETKAFF2_SVSPEC5    1.000   1.000   1.000   1.000   1.000   1.000  -1.000  -1.000  -1.000  -1.000  -1.000  -1.000  -1.000  -1.000  -1.000  -1.000  -1.000  -1.000 -1262485505
-ZSAVEMR             65515       65525       65533           0       65531           1           0           0           0           0           0           0           0           0           0           0           0           0    -3931576
+ZSAVEMR                 0           0           0           0           0           0           0           0           0           0           0           0           0           0           0           0           0           0          -1
 ZRADIUS        1177.645  1177.645   722.645   247.645   247.645   145.674     1.000     1.000     1.000     1.000     1.000     1.000     1.000     1.000     1.000     1.000     1.000     1.000  -287946702
 ZJTSPEED        370.000   310.000   410.000   550.000   550.000  1000.000    10.000    10.000    10.000    10.000    10.000    10.000    10.000    10.000    10.000    10.000    10.000    10.000  -262086657
 ZACCTIME          0.400     0.600     0.400     0.200     0.200     0.200     0.384     0.384     0.384     0.384     0.384     0.384     0.384     0.384     0.384     0.384     0.384     0.384   865872138
@@ -1335,9 +1335,9 @@ ZSWITCH ZFIX_CALL_1STEPPG ON   -523
 .END
 .OPE_INFO1
 OPEINFO  30 10 6 6324  1723231961  ;(24/8/10 4:32:41) RS007L-B001 
-CONT_TIM  250.6 
+CONT_TIM  250.7 
 SERV_TIM  58.8 
-MTON_CNT  1844 
+MTON_CNT  1845 
 ESTP_CNT  8 
 BRKE_CNT  1920 
 CON_PWR  18.061 
@@ -1346,15 +1346,15 @@ REG_PWR  0.000
 MOVE_TJT  16.1 21.2 17.1 11.5 16.7 19.4 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 
 DIST_DJT  969.259 1050.077 663.494 1361.657 1034.952 2336.299 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 
 DIST_DJT_PLUS  483.614 524.602 332.255 680.807 516.868 1167.395 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 
-OPEINFO TP_BKLIGHT  0 119.2 50000 
+OPEINFO TP_BKLIGHT  0 119.3 50000 
 OPEINFO MC  0 0 2000000 
 OPEINFO PARTS1  0 0 0 0 0 0 0 0 0 0 0 
 OPEINFO PARTS2  0 0 0 0 0 0 0 0 0 0 0 
 OPEINFO PARTS3  0 0 0 0 0 0 0 0 0 0 0 
 M_OPEINFO  30 10 6 6324  1713957146  ;(24/4/24 20:12:26) RS007L-B001 
-M_CONT_TIM  310.2 
+M_CONT_TIM  310.3 
 M_SERV_TIM  73.1 
-M_MTON_CNT  2972 
+M_MTON_CNT  2973 
 M_ESTP_CNT  12 
 M_BRKE_CNT  3159 
 M_CON_PWR  22.335 
@@ -1366,7 +1366,7 @@ M_DIST_DJT_PLUS  483.614 524.602 332.255 680.807 516.868 1167.395 0.000 0.000 0.
 M_MOVE_TJT_OVERDRIVE  0.0 0.0 0.0 0.0 0.0 0.0 
 M_DIST_DJT_OVERDRIVE  0.000 0.000 0.000 0.000 0.000 0.000 
 M_WARN_CJT_OVERDRIVE  0 0 0 0 0 0 
-HOUR_MTR  310.2 
+HOUR_MTR  310.3 
 .END
 .SYSDATA
 REG_POINT       0
@@ -2458,11 +2458,11 @@ SWITCH SLOW_REP_MM     OFF
 .END
 .CONDITION
 AS_VER       ASF_01000001G
-ELOG_NUM            148
+ELOG_NUM            116
 CHK_ONCE      255
 MAN_SPEED     1
 CHK_SPEED     1
-MON_SPEED        25.000
+MON_SPEED       100.000
 PRG_ACCEL       100.000
 PRG_SPEED       100.000
 PRG_DECEL       100.000
@@ -2491,9 +2491,9 @@ CINT_PRM_ACCEL    100.000
 CINT_PRG_ACCEL    100.000
 CINT_PRM_DECEL    100.000
 CINT_PRG_DECEL    100.000
-PRG_ACCEL_ORG    100.000
-PRG_SPEED_ORG    100.000
-PRG_DECEL_ORG    100.000
+PRG_ACCEL_ORG      0.000
+PRG_SPEED_ORG      0.000
+PRG_DECEL_ORG      0.000
 PRG_JT_ACCEL    100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000
 PRG_JT_DECEL    100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000
 PRM_JT_ACCEL    100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000
@@ -2503,9 +2503,9 @@ STEP1ENV_PRG_STEP          1
 STEP2ENV0_CALL_PRGNAME autostart.pc
 STEP2ENV0_PRG_STEP          1
 STEP2ENV1_CALL_PRGNAME tcp.client.pc
-STEP2ENV1_PRG_STEP         43
+STEP2ENV1_PRG_STEP         33
 STEP2ENV2_CALL_PRGNAME tcp.sender.pc
-STEP2ENV2_PRG_STEP         12
+STEP2ENV2_PRG_STEP          1
 STEP2ENV4_CALL_PRGNAME errstart.pc
 STEP2ENV4_PRG_STEP          9
 USR_DO1      00000000000000000000000000000000
@@ -2545,8 +2545,8 @@ USR_INTERNAL3 00000000000000000000000000000000
 USR_INTERNAL4 00000000000000000000000000000000
 USR_INTERNAL5 00000000000000000000000000000000
 USR_INTERNAL6 00000000000000000000000000000000
-USR_INTERNAL7 00010000000000000000000000000000
-USR_INTERNAL8 00000000000000000000000000000001
+USR_INTERNAL7 00000000000000000000000000000000
+USR_INTERNAL8 00000000000000000000000000000000
 USR_INTERNAL9 00000000000000000000000000000000
 USR_INTERNAL10 00000000000000000000000000000000
 USR_INTERNAL11 00000000000000000000000000000000
@@ -2589,31 +2589,16 @@ USR_ADO2_7         0      0      0      0      0      0      0      0      0    
 USR_ADO2_8         0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0
 UCINDENT1          0
 UCLINE1            0
-UCFGCOLOR1        11
-UCBGCOLOR1        10
-UCCHARWINSTR1 17:29:34 Send command to enable vacuum
-17:29:35 Waiting for measurement result
-17:29:35 Measurement result: OK
-17:29:37 State 101: Calculating next step
-
+UCFGCOLOR1         0
+UCBGCOLOR1         0
 UCINDENT2          0
 UCLINE2            0
-UCFGCOLOR2        11
-UCBGCOLOR2        10
-UCCHARWINSTR2 17:29:37 State 3: Put detail to OT
-17:29:38 Put to OT detail 4
-17:29:39 Check if positioner is occupied
-17:29:40 State 101: Calculating next step
-
+UCFGCOLOR2         0
+UCBGCOLOR2         0
 UCINDENT3          0
 UCLINE3            0
-UCFGCOLOR3        11
-UCBGCOLOR3        10
-UCCHARWINSTR3 17:29:42 State 103: Ending sequence started
-17:29:47 Program complete
-17:29:47 State 0: Program reset. Initialization of parameters
-17:29:47 State 100: Waiting for start
-
+UCFGCOLOR3         0
+UCBGCOLOR3         0
 UCINDENT4          0
 UCLINE4            0
 UCFGCOLOR4         0
@@ -3448,19 +3433,19 @@ TP_RECINHI      0   0   0
 .END
 .SIG_COMMENT
 .END
-.PROGRAM a.align()@25/12/15 16:09 #0
+.PROGRAM a.align()@26/01/22 18:19 #0
 ;
   SPEED 250 MM/S ALWAYS
   ALIGN
 ;
 .END
-.PROGRAM a.home()@25/12/15 16:09 #0
+.PROGRAM a.home()@26/01/22 18:19 #0
 ;
   SPEED 250 MM/S ALWAYS
   JMOVE #homyak
 ;
 .END
-.PROGRAM a.main()@25/12/15 16:09 #4
+.PROGRAM a.main()@26/01/22 18:19 #4
 ;
   CALL log("Main program executed")
   CALL safe.home
@@ -3476,7 +3461,7 @@ TP_RECINHI      0   0   0
   END
 ;
 .END
-.PROGRAM a.teach.defect()@25/12/15 16:09 #0
+.PROGRAM a.teach.defect()@26/01/22 18:19 #0
   IF FALSE THEN
     SPEED 250 MM/S ALWAYS
     ACCURACY 0 ALWAYS
@@ -3512,7 +3497,7 @@ TP_RECINHI      0   0   0
   LMOVE .defect.pos
   LAPPRO .defect.pos,-10
 .END
-.PROGRAM a.teach.etalon()@25/12/15 16:09 #0
+.PROGRAM a.teach.etalon()@26/01/22 18:19 #0
 ;
   TOOL tool.pick[hmi.tool.no]
 ; Pick etalon
@@ -3567,7 +3552,7 @@ TP_RECINHI      0   0   0
   LMOVE #et.pos.point[hmi.etalon.id]
   LMOVE .temp+TRANS(0,0,150)
 .END
-.PROGRAM a.teach.machine()@25/12/15 16:09 #0
+.PROGRAM a.teach.machine()@26/01/22 18:19 #0
   IF FALSE THEN ; For round details
     TOOL tool.pick[hmi.tool.no]
     JMOVE #safe.machine
@@ -3600,7 +3585,7 @@ TP_RECINHI      0   0   0
     LMOVE #before.machine[1]
   END
 .END
-.PROGRAM a.teach.ot()@25/12/15 16:09 #0
+.PROGRAM a.teach.ot()@26/01/22 18:19 #0
   SPEED 250 MM/S ALWAYS
   ACCURACY 0 ALWAYS
   TOOL tool.pick[hmi.tool.no]
@@ -3621,7 +3606,7 @@ TP_RECINHI      0   0   0
 ;
 ;JMOVE ot.frame + TRANS (grip.xsh[hmi.tool.no], grip.ysh[hmi.tool.no], grip.zsh[hmi.tool.no])
 .END
-.PROGRAM a.teach.pos()@25/12/15 16:09 #0
+.PROGRAM a.teach.pos()@26/01/22 18:19 #0
 ;
   TOOL tool.pick[hmi.tool.no]
 ;
@@ -3638,7 +3623,7 @@ TP_RECINHI      0   0   0
   TWAIT 0.5
 ;
 .END
-.PROGRAM a.test.ot()@25/12/15 16:09 #0
+.PROGRAM a.test.ot()@26/01/22 18:19 #0
   IF hmi.ot.k<>-1 THEN
     CALL get.ot.point(hmi.ot.k)
   END
@@ -3646,7 +3631,7 @@ TP_RECINHI      0   0   0
   LMOVE ot.put[ot.x,ot.y]
   LAPPRO ot.put[ot.x,ot.y],50
 .END
-.PROGRAM autostart.pc()@25/12/15 16:09 #0
+.PROGRAM autostart.pc()@26/01/22 18:19 #0
 ;
 ; System switches
   CP ON
@@ -3671,7 +3656,7 @@ TP_RECINHI      0   0   0
   CALL watchdog.pc
 ;
 .END
-.PROGRAM calc.grid()@25/12/15 16:09 #13
+.PROGRAM calc.grid()@26/01/22 18:19 #13
 ; Constants
   line.width = 210; 210; mm
   lines.count = 21
@@ -3691,7 +3676,7 @@ TP_RECINHI      0   0   0
   END
 ;
 .END
-.PROGRAM calc.grid.rnd()@25/12/15 16:09 #0
+.PROGRAM calc.grid.rnd()@26/01/22 18:19 #0
 ; Constants
   lines.count = 11
   obj.in.line = 7
@@ -3707,7 +3692,7 @@ TP_RECINHI      0   0   0
   END
 ;
 .END
-.PROGRAM calc.ot()@25/12/15 16:09 #13
+.PROGRAM calc.ot()@26/01/22 18:19 #13
 ; Get matrix center
   .center.col = INT(lines.count/2)
   .center.row = INT(obj.in.line/2)
@@ -3797,7 +3782,7 @@ TP_RECINHI      0   0   0
 ;  PRINT .$line    ; Ð¿Ðµ¡¦Ð°¡¦Ð°ÐµÐ¼ Ð²¡¦¡¦ ¡¦¡¦¡¦Ð¾Ðº¡¦ Ð¾Ð´Ð½Ð¸Ð¼ Ð²¡¦Ð·Ð¾Ð²Ð¾Ð¼
 ;END
 .END
-.PROGRAM check.disp.pc()@25/12/15 16:09 #3618159
+.PROGRAM check.disp.pc()@26/01/22 18:19 #3633643
 ;
   IF SIG(s.tcp.ena) AND tcp.ena==-1 THEN
     tcp.ena = tyterm
@@ -3821,7 +3806,7 @@ TP_RECINHI      0   0   0
   END
 ;
 .END
-.PROGRAM check.tasks.pc()@25/12/15 16:09 #3618159
+.PROGRAM check.tasks.pc()@26/01/22 18:19 #3633643
 ;
   IF TASK(1002)<>1 THEN
     PCEXECUTE 2: tcp.client.pc
@@ -3833,7 +3818,7 @@ TP_RECINHI      0   0   0
   END
 ;
 .END
-.PROGRAM check.teach.pc()@25/12/15 16:09 #1512792
+.PROGRAM check.teach.pc()@26/01/22 18:19 #1512792
 ;
   IF SIG(s.hmi.res.state) THEN
     state = 0
@@ -3890,7 +3875,7 @@ TP_RECINHI      0   0   0
   END
 ;
 .END
-.PROGRAM check.zone.pc()@25/12/15 16:09 #3618160
+.PROGRAM check.zone.pc()@26/01/22 18:19 #3633644
 ;
 ;do.work[1] = 17
 ;rs13.work[1] = 1017
@@ -3909,7 +3894,7 @@ TP_RECINHI      0   0   0
   SOUT 2009 = NOT (NOT 2209 AND 1017 AND 17)
 ;
 .END
-.PROGRAM defect.put()@25/12/15 16:09 #0
+.PROGRAM defect.put()@26/01/22 18:19 #0
 ;
   SPEED 100 ALWAYS
   ACCURACY 100 ALWAYS
@@ -3945,7 +3930,7 @@ TP_RECINHI      0   0   0
   LMOVE #homyak
 ;
 .END
-.PROGRAM errstart.pc()@25/12/15 16:09 #625
+.PROGRAM errstart.pc()@26/01/22 18:19 #626
 ;
   IF ERROR==-34021 OR ERROR==-10100 THEN
     tcp.socket = -1
@@ -3956,7 +3941,7 @@ TP_RECINHI      0   0   0
   ERRSTART.PC ON
 ;
 .END
-.PROGRAM etalon.measure(.id)@25/12/15 16:09 #8
+.PROGRAM etalon.measure(.id)@26/01/22 18:19 #8
   IF FALSE THEN
     .id = hmi.etalon.id
   END
@@ -4087,11 +4072,11 @@ TP_RECINHI      0   0   0
   ACCURACY 100
   LMOVE #homyak
 .END
-.PROGRAM get.ot.point(.obj.id)@25/12/15 16:09 #151
+.PROGRAM get.ot.point(.obj.id)@26/01/22 18:19 #151
   ot.x = ms[.obj.id]
   ot.y = ns[.obj.id]
 .END
-.PROGRAM get.state.pc(.$state)@25/12/15 16:09 #359484
+.PROGRAM get.state.pc(.$state)@26/01/22 18:19 #359521
   .$state = "SPEED:"+$ENCODE(/L,MSPEED)+";"
   .$state = .$state+"POWER:"
   IF SWITCH(POWER ) THEN
@@ -4178,7 +4163,7 @@ TP_RECINHI      0   0   0
 ; MAX 12
   .$state = .$state+"\n"
 .END
-.PROGRAM id1()@25/12/15 16:09 #10; 312.229.002
+.PROGRAM id1()@26/01/22 18:19 #10; 312.229.002
 ; Object ID
   object.id = 1
   etalon.id = 1
@@ -4191,7 +4176,7 @@ TP_RECINHI      0   0   0
   object.length = 27.5
 ;
 .END
-.PROGRAM id2()@25/12/15 16:09 #0; 0401.17.02.023-02
+.PROGRAM id2()@26/01/22 18:19 #0; 0401.17.02.023-02
 ; Object ID
   object.id = 2
   etalon.id = 2
@@ -4204,7 +4189,7 @@ TP_RECINHI      0   0   0
   object.length = 40
 ;
 .END
-.PROGRAM id3()@25/12/15 16:09 #0; 312.229.001
+.PROGRAM id3()@26/01/22 18:19 #0; 312.229.001
 ; Object ID
   object.id = 3
   etalon.id = 3
@@ -4217,7 +4202,7 @@ TP_RECINHI      0   0   0
   object.length = 40
 ;
 .END
-.PROGRAM id4()@25/12/15 16:09 #0; 440.00.026
+.PROGRAM id4()@26/01/22 18:19 #0; 440.00.026
 ; Object ID
   object.id = 4
   etalon.id = 4
@@ -4230,7 +4215,7 @@ TP_RECINHI      0   0   0
   object.length = 23.5
 ;
 .END
-.PROGRAM id5()@25/12/15 16:09 #0; 440.00.111
+.PROGRAM id5()@26/01/22 18:19 #0; 440.00.111
 ; Object ID
   object.id = 5
   etalon.id = 5
@@ -4243,7 +4228,7 @@ TP_RECINHI      0   0   0
   object.length = 13.5
 ;
 .END
-.PROGRAM id6()@25/12/15 16:09 #0; 0401.28.02.063
+.PROGRAM id6()@26/01/22 18:19 #0; 0401.28.02.063
 ; Object ID
   object.id = 6
   etalon.id = 6
@@ -4256,7 +4241,7 @@ TP_RECINHI      0   0   0
   object.length = 28.5
 ;
 .END
-.PROGRAM log(.$msg)@25/12/15 16:09 #2270
+.PROGRAM log(.$msg)@26/01/22 18:19 #2270
 ;
 ; 1 line = 55 symbols max
 ;
@@ -4270,7 +4255,7 @@ TP_RECINHI      0   0   0
   IFPWPRINT 3,1,1,9,10=$log.entry[124],$log.entry[125],$log.entry[126],$log.entry[127]
 ;
 .END
-.PROGRAM measure()@25/12/15 16:09 #141
+.PROGRAM measure()@26/01/22 18:19 #141
   IF FALSE THEN
     .pos = hmi.obj.id
   END
@@ -4353,7 +4338,7 @@ TP_RECINHI      0   0   0
 ;JMOVE #safe.machine
 ;JMOVE #homyak
 .END
-.PROGRAM ot.put()@25/12/15 16:09 #114
+.PROGRAM ot.put()@26/01/22 18:19 #114
 ;
   SIGNAL rs7.locked.zone
   IF SIG(rs7.tare.chg) THEN
@@ -4414,7 +4399,7 @@ TP_RECINHI      0   0   0
   END
 ;
 .END
-.PROGRAM pg.select()@25/12/15 16:09 #14
+.PROGRAM pg.select()@26/01/22 18:19 #14
   SCASE $pg.name OF
    SVALUE "312.229.002":
     CASE detail.spec OF
@@ -4475,7 +4460,7 @@ TP_RECINHI      0   0   0
   END
 ;
 .END
-.PROGRAM pos.pick()@25/12/15 16:09 #131
+.PROGRAM pos.pick()@26/01/22 18:19 #131
 ;
   .$temp = "Pick detail from positioner (ID:"+$ENCODE(object.id)+")"
   CALL log(.$temp)
@@ -4524,7 +4509,7 @@ TP_RECINHI      0   0   0
   SIGNAL -rs7.locked.zone
 ;
 .END
-.PROGRAM safe.home()@25/12/15 16:09 #17
+.PROGRAM safe.home()@26/01/22 18:19 #17
 ;
   IF SIG(do.home) THEN
     CALL log("Robot already in home position")
@@ -4536,7 +4521,7 @@ TP_RECINHI      0   0   0
   END
 ;
 .END
-.PROGRAM set.io.pc()@25/12/15 16:09 #5
+.PROGRAM set.io.pc()@26/01/22 18:19 #6
 ; Gripper IO
 ;
 ; Gripper
@@ -4676,7 +4661,7 @@ TP_RECINHI      0   0   0
 ;
   s.debug.mode = 2300
 .END
-.PROGRAM set.vars.pc()@25/12/15 16:09 #7
+.PROGRAM set.vars.pc()@26/01/22 18:19 #8
 ;
 ; Constants
 ;
@@ -4798,7 +4783,7 @@ TP_RECINHI      0   0   0
   END
 ;
 .END
-.PROGRAM state0()@25/12/15 16:09 #15; Initialization of parameters
+.PROGRAM state0()@26/01/22 18:19 #15; Initialization of parameters
 ;
   CALL log("State 0: Program reset. Initialization of parameters")
   SIGNAL -s.grip.full,-s.measure.ok,-s.measure.ng,-rs7.tare.chg,-s.cmd.measured
@@ -4810,7 +4795,7 @@ TP_RECINHI      0   0   0
   state = 100
 ;
 .END
-.PROGRAM state1()@25/12/15 16:09 #152
+.PROGRAM state1()@26/01/22 18:19 #152
   CALL log("State 1: Pick from positioner")
 ; Check all start positions
 ; Possible do not needed because robot can be only in HOME or near positioner
@@ -4821,7 +4806,7 @@ TP_RECINHI      0   0   0
   state = 101
 ;
 .END
-.PROGRAM state100()@25/12/15 16:09 #14; Waiting for start
+.PROGRAM state100()@26/01/22 18:19 #14; Waiting for start
 ;
   CALL log("State 100: Waiting for start")
   $action = "WaitingForStart"
@@ -4836,11 +4821,11 @@ TP_RECINHI      0   0   0
   CALL pg.select
   state = 106
 .END
-.PROGRAM state101()@25/12/15 16:09 #466; Auxilary state
+.PROGRAM state101()@26/01/22 18:19 #466; Auxilary state
   CALL log("State 101: Calculating next step")
   state = 102
 .END
-.PROGRAM state102()@25/12/15 17:06 #181402
+.PROGRAM state102()@26/01/22 18:19 #181402
 ; Priority 1
   IF SIG(s.cmd.pause) THEN
     state = 105
@@ -4891,12 +4876,12 @@ TP_RECINHI      0   0   0
     RETURN
   END
 .END
-.PROGRAM state103()@25/12/15 16:09 #6
+.PROGRAM state103()@26/01/22 18:19 #6
   CALL log("State 103: Ending sequence started")
   state = 104
 ;
 .END
-.PROGRAM state104()@25/12/15 16:09 #6
+.PROGRAM state104()@26/01/22 18:19 #6
   SIGNAL rs7.finish.ack
   TWAIT 5
   CALL log("Program complete")
@@ -4904,14 +4889,14 @@ TP_RECINHI      0   0   0
   RETURN
 ;
 .END
-.PROGRAM state105()@25/12/15 16:09 #3
+.PROGRAM state105()@26/01/22 18:19 #3
   CALL log("State 105: Program paused")
   SWAIT s.cmd.resume
   CALL log("Program resumed")
   SIGNAL -s.cmd.pause
   state = 101
 .END
-.PROGRAM state106()@25/12/15 16:09 #14
+.PROGRAM state106()@26/01/22 18:19 #14
   CALL log("State 106: Check program")
   IF $pg.name<>"NULL" THEN
     CALL log("Selected program: "+$pg.name)
@@ -4928,7 +4913,7 @@ TP_RECINHI      0   0   0
   END
 ;
 .END
-.PROGRAM state2()@25/12/15 16:09 #151
+.PROGRAM state2()@26/01/22 18:19 #151
   CALL log("State 2: Measurement process")
 ; Check all start positions
 ; Possible do not needed because robot can be only in HOME or near positioner
@@ -4940,12 +4925,12 @@ TP_RECINHI      0   0   0
   state = 101
 ;
 .END
-.PROGRAM state255()@25/12/15 16:09 #0
+.PROGRAM state255()@26/01/22 18:19 #0
   CALL log("State 255: Program complete")
   state = 0
 ;
 .END
-.PROGRAM state3()@25/12/15 16:09 #149
+.PROGRAM state3()@26/01/22 18:19 #149
   CALL log("State 3: Put detail to OT")
 ; Check all start positions
 ; Possible do not needed because robot can be only in HOME or near positioner
@@ -4957,7 +4942,7 @@ TP_RECINHI      0   0   0
   state = 101
 ;
 .END
-.PROGRAM state4()@25/12/15 16:09 #0
+.PROGRAM state4()@26/01/22 18:19 #0
   CALL log("State 4: Put detail to defect tare")
 ; Check all start positions
 ; Possible do not needed because robot can be only in HOME or near positioner
@@ -4969,12 +4954,12 @@ TP_RECINHI      0   0   0
   state = 101
 ;
 .END
-.PROGRAM state5()@25/12/15 16:09 #10
+.PROGRAM state5()@26/01/22 18:19 #10
   CALL log("State 5: Check etalon")
   CALL etalon.measure(etalon.id)
   state = 101
 .END
-.PROGRAM state6()@25/12/15 16:09 #0
+.PROGRAM state6()@26/01/22 18:19 #0
 ; *******************************************************************
 ;
 ; Program:      state6
@@ -4986,16 +4971,16 @@ TP_RECINHI      0   0   0
 ; *******************************************************************
 ;
 .END
-.PROGRAM state7()@25/12/15 16:09 #13; Deprecated
+.PROGRAM state7()@26/01/22 18:19 #13; Deprecated
   state = 5
 .END
-.PROGRAM state8()@25/12/15 17:18 #2; Check etalon by command
+.PROGRAM state8()@26/01/22 18:19 #2; Check etalon by command
   CALL log("State 8: Check etalon by command")
   SIGNAL -s.cmd.chk.etal
   CALL etalon.measure(etalon.id)
   state = 105
 .END
-.PROGRAM tcp.callback.pc(.$data[],.data.length)@25/12/15 16:09 #39636
+.PROGRAM tcp.callback.pc(.$data[],.data.length)@26/01/22 18:19 #39636
   .$temp = "Received "+$ENCODE(.data.length)+" strings:"
   PRINT tcp.recv.ena: .$temp
   FOR .i = 1 TO .data.length
@@ -5150,7 +5135,7 @@ TP_RECINHI      0   0   0
 ;
   .$data[1] = ""
 .END
-.PROGRAM tcp.client.pc()@25/12/15 16:09 #0
+.PROGRAM tcp.client.pc()@26/01/22 18:19 #0
 ;
   tcp.socket = -1
   .tcp.retry.count = 10
@@ -5223,7 +5208,7 @@ TP_RECINHI      0   0   0
     TWAIT 0.05
   END
 .END
-.PROGRAM tcp.send.pc(.$data[],.data.length)@25/12/15 16:09 #148503
+.PROGRAM tcp.send.pc(.$data[],.data.length)@26/01/22 18:19 #148539
 ;
   .tcp.send.tmo = 5
 ;
@@ -5246,7 +5231,7 @@ TP_RECINHI      0   0   0
   END
 ;
 .END
-.PROGRAM tcp.sender.pc()@25/12/15 16:09 #0
+.PROGRAM tcp.sender.pc()@26/01/22 18:19 #0
 ;
   WHILE TRUE DO
 ;
@@ -5262,7 +5247,7 @@ TP_RECINHI      0   0   0
   END
 ;
 .END
-.PROGRAM watchdog.pc()@25/12/15 16:09 #0
+.PROGRAM watchdog.pc()@26/01/22 18:19 #0
   WHILE TRUE DO
 ;
     CALL check.tasks.pc
@@ -6293,7 +6278,7 @@ tcp.port = 9007
 tcp.recv.ena = -1
 tcp.send.ena = -1
 tcp.sender.dly = 0.25
-tcp.socket = 608
+tcp.socket = -34024
 tyterm = 0
 .END
 .STRINGS

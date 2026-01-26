@@ -7,7 +7,7 @@
         "440.00.026": {
             "ModelName": "440.00.026",
             "ModelFileName": "model_440.00.026.pt",
-            "ConfidenceThreshold": "0.6",
+            "ConfidenceThreshold": "0.7",
             "ModelType": "yolo-pose",
             "ModelProcessor": "proc_440.00.026.py"
         },
@@ -21,28 +21,28 @@
         "312.229.001": {
             "ModelName": "312.229.001",
             "ModelFileName": "model_312.229.001.pt",
-            "ConfidenceThreshold": "0.5",
+            "ConfidenceThreshold": "0.6",
             "ModelType": "yolo-detect",
             "ModelProcessor": "proc_312.229.001.py"
         },
         "0401.17.02.023": {
             "ModelName": "0401.17.02.023",
             "ModelFileName": "model_0401.17.02.023.pt",
-            "ConfidenceThreshold": "0.5",
+            "ConfidenceThreshold": "0.7",
             "ModelType": "yolo-pose",
             "ModelProcessor": "proc_0401.17.02.023.py"
         },
         "0401.28.02.063": {
             "ModelName": "0401.28.02.063",
             "ModelFileName": "model_0401.28.02.063.pt",
-            "ConfidenceThreshold": "0.5",
+            "ConfidenceThreshold": "0.7",
             "ModelType": "yolo-pose",
             "ModelProcessor": "proc_0401.28.02.063.py"
         },
         "440.00.111": {
             "ModelName": "440.00.111",
             "ModelFileName": "model_440.00.111.pt",
-            "ConfidenceThreshold": "0.5",
+            "ConfidenceThreshold": "0.7",
             "ModelType": "yolo-pose",
             "ModelProcessor": "proc_440.00.111.py"
         }

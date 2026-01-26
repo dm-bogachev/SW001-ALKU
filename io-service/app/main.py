@@ -229,6 +229,7 @@ def tare_on():
                 "Reason": "Not connected"}, 503
     io.set_output(4, False)
     io.set_output(3, True)
+    time.sleep(1)
     io.set_output(0, True)
     time.sleep(1)
     io.set_output(1, True)
@@ -257,15 +258,32 @@ def tare_off():
     io.set_output(0, False)
     return {"Status": "OK"}
 
-@app.post("/shake")
-def shake():
+@app.post("/shake_fast")
+def shake_fast():
     if io is None or not io.is_connected():
         logger.error("Модуль I/O не подключен")
         return {"Status": "ERROR",
                 "Reason": "Not connected"}, 503
+    io.set_output(4, True)
+    io.set_output(3, False)
+    time.sleep(1)
     io.set_output(2, False)
     time.sleep(2)
     io.set_output(2, True)
+    
+@app.post("/shake_slow")
+def shake_slow():
+    if io is None or not io.is_connected():
+        logger.error("Модуль I/O не подключен")
+        return {"Status": "ERROR",
+                "Reason": "Not connected"}, 503
+    io.set_output(4, False)
+    io.set_output(3, True)
+    time.sleep(1)
+    io.set_output(2, False)
+    time.sleep(2)
+    io.set_output(2, True)
+    
 
 
 if __name__ == "__main__":
