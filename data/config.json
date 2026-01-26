@@ -21,7 +21,7 @@
         "312.229.001": {
             "ModelName": "312.229.001",
             "ModelFileName": "model_312.229.001.pt",
-            "ConfidenceThreshold": "0.6",
+            "ConfidenceThreshold": "0.7",
             "ModelType": "yolo-detect",
             "ModelProcessor": "proc_312.229.001.py"
         },
@@ -77,7 +77,7 @@
     },
     "Process": {
         "ProcessingDelay": 0.0,
-        "LastModel": "312.229.002",
+        "LastModel": "312.229.001",
         "FirstObjectCriteria": "Probability"
     },
     "IO": {
