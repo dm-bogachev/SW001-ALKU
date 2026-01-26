@@ -995,9 +995,6 @@ N_INT300    "s.debug.mode|Debug mode"
   END
 ;
 .END
-.PROGRAM lock()@26/01/15 08:39 #0
-  SWAIT -rs7.locked.zone
-.END
 .PROGRAM log(.$msg)@26/01/15 08:39 #22922
 ;
 ; 1 line = 55 symbols max
@@ -2916,7 +2913,7 @@ N_INT300    "s.debug.mode|Debug mode"
 .PROGRAM Comment___ () ; Comments for IDE. Do not use.
 	; @@@ PROJECT @@@
 	; @@@ PROJECTNAME @@@
-	; ALKU_RS013N_UPDATE
+	; ALKU_RS013N_MASTER
 	; @@@ HISTORY @@@
 	; @@@ INSPECTION @@@
 	; count.opt
@@ -3141,7 +3138,6 @@ N_INT300    "s.debug.mode|Debug mode"
 	;   0:a.main:F
 	;     .$pg.string 
 	;   0:pg0:F
-	;   0:lock:F
 	;   Group:TCPIP:9
 	;     9:get.state.pc:B
 	;       .$state 
