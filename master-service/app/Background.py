@@ -408,6 +408,7 @@ class Background(Thread):
             logger.info(f"Отправка данных захвата на RS013N: x={x}, y={y}, angle={angle}")
             self.send_coordinates_to_robot(x, y, angle)
             self.detect_attempts = 0
+            self.redrops = 0
             time.sleep(2)
         else:
             logger.error("Объект не обнаружен, повтор через 2 секунды")

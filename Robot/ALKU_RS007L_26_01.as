@@ -391,7 +391,7 @@ N_INT300    "s.debug.mode|Debug mode"
 ;
 ;JMOVE ot.frame + TRANS (grip.xsh[hmi.tool.no], grip.ysh[hmi.tool.no], grip.zsh[hmi.tool.no])
 .END
-.PROGRAM a.teach.pos()@26/01/27 10:24 #0
+.PROGRAM a.teach.pos()@26/01/21 14:55 #0
 ;
   IF hmi.obj.id==round.no THEN
     .shift.x = 0
@@ -471,7 +471,7 @@ N_INT300    "s.debug.mode|Debug mode"
   CALL watchdog.pc
 ;
 .END
-.PROGRAM calc.grid()@26/01/22 13:44 #90
+.PROGRAM calc.grid()@26/01/22 13:44 #74
 ; Constants
   line.width = 210; 210; mm
   lines.count = 21
@@ -494,7 +494,7 @@ N_INT300    "s.debug.mode|Debug mode"
   END
 ;
 .END
-.PROGRAM calc.grid.rnd()@26/01/21 14:55 #11
+.PROGRAM calc.grid.rnd()@26/01/21 14:55 #5
 ; Constants
   lines.count = 11
   obj.in.line = 7
@@ -510,7 +510,7 @@ N_INT300    "s.debug.mode|Debug mode"
   END
 ;
 .END
-.PROGRAM calc.ot()@26/01/22 13:07 #116
+.PROGRAM calc.ot()@26/01/22 13:07 #94
 ; Get matrix center
   .center.col = INT(lines.count/2)
   .center.row = INT(obj.in.line/2)
@@ -672,7 +672,7 @@ N_INT300    "s.debug.mode|Debug mode"
 ;  PRINT .$line    ; печатаем всю строку одним вызовом
 ;END
 .END
-.PROGRAM check.disp.pc()@26/01/21 14:55 #51733063
+.PROGRAM check.disp.pc()@26/01/21 14:55 #48060711
 ;
   IF SIG(s.tcp.ena) AND tcp.ena==-1 THEN
     tcp.ena = tyterm
@@ -696,7 +696,7 @@ N_INT300    "s.debug.mode|Debug mode"
   END
 ;
 .END
-.PROGRAM check.tasks.pc()@26/01/21 14:55 #51733072
+.PROGRAM check.tasks.pc()@26/01/21 14:55 #48060720
 ;
   IF TASK(1002)<>1 THEN
     PCEXECUTE 2: tcp.client.pc
@@ -708,7 +708,7 @@ N_INT300    "s.debug.mode|Debug mode"
   END
 ;
 .END
-.PROGRAM check.teach.pc()@26/01/21 14:55 #11289320
+.PROGRAM check.teach.pc()@26/01/21 14:55 #10863426
 ;
   IF SIG(s.hmi.res.state) THEN
     state = 0
@@ -767,7 +767,7 @@ N_INT300    "s.debug.mode|Debug mode"
   END
 ;
 .END
-.PROGRAM check.zone.pc()@26/01/21 14:55 #51733091
+.PROGRAM check.zone.pc()@26/01/21 14:55 #48060739
 ;
 ;do.work[1] = 17
 ;rs13.work[1] = 1017
@@ -786,7 +786,7 @@ N_INT300    "s.debug.mode|Debug mode"
   SOUT 2009 = NOT (NOT 2209 AND 1017 AND 17)
 ;
 .END
-.PROGRAM defect.put()@26/01/23 15:56 #326
+.PROGRAM defect.put()@26/01/23 15:56 #259
 ;
   IF count.defect>=max.defect.cnt THEN
     CALL log("Defect tare is full. Waiting for tare clean")
@@ -825,7 +825,7 @@ N_INT300    "s.debug.mode|Debug mode"
   LMOVE #homyak
 ;
 .END
-.PROGRAM errstart.pc()@26/01/21 14:55 #199
+.PROGRAM errstart.pc()@26/01/21 14:55 #198
 ;
   IF ERROR==-34021 OR ERROR==-10100 THEN
     tcp.socket = -1
@@ -836,7 +836,7 @@ N_INT300    "s.debug.mode|Debug mode"
   errstart.pc ON
 ;
 .END
-.PROGRAM etalon.measure(.id)@26/01/26 14:33 #86
+.PROGRAM etalon.measure(.id)@26/01/23 16:34 #62
   IF FALSE THEN
     .id = hmi.etalon.id
   END
@@ -981,7 +981,7 @@ N_INT300    "s.debug.mode|Debug mode"
   ACCURACY 100
   LMOVE #homyak
 .END
-.PROGRAM get.ot.point(.obj.id)@26/01/21 14:55 #1697
+.PROGRAM get.ot.point(.obj.id)@26/01/21 14:55 #1229
   ot.x = ms[.obj.id]
   ot.y = ns[.obj.id]
 .END
@@ -994,7 +994,7 @@ N_INT300    "s.debug.mode|Debug mode"
   ot.x = ms[.obj.id]
   ot.y = ns[.obj.id]
 .END
-.PROGRAM get.state.pc(.$state)@26/01/21 14:55 #1365067
+.PROGRAM get.state.pc(.$state)@26/01/21 14:55 #1230744
   .$state = "SPEED:"+$ENCODE(/L,MSPEED)+";"
   .$state = .$state+"POWER:"
   IF SWITCH(POWER ) THEN
@@ -1081,14 +1081,14 @@ N_INT300    "s.debug.mode|Debug mode"
 ; MAX 12
   .$state = .$state+"\n"
 .END
-.PROGRAM id1()@26/01/27 10:30 #97; 312.229.002
+.PROGRAM id1()@26/01/26 07:55 #94; 312.229.002
 ; Object ID
   object.id = 1
   etalon.id = 1 ; Can be object.id <> etalon.id
 ; Working gripper
   pg.gripper = 2
 ; Max objects in output tare
-  max.tare.count = 147;126
+  max.tare.count = 10 ;126
   spc.tare.count = 50
 ; Object length
   object.length = 27.5
@@ -1096,14 +1096,14 @@ N_INT300    "s.debug.mode|Debug mode"
   direction = 1; -1 for reverse
 ;
 .END
-.PROGRAM id2()@26/01/27 10:30 #7; 0401.17.02.023-02
+.PROGRAM id2()@26/01/22 13:06 #7; 0401.17.02.023-02
 ; Object ID
   object.id = 2
   etalon.id = 2 ; Can be object.id <> etalon.id
 ; Working gripper
   pg.gripper = 2
 ; Max objects in output tare
-  max.tare.count = 105;84
+  max.tare.count = 10 ;84
   spc.tare.count = 50
 ; Object length
   object.length = 40
@@ -1111,14 +1111,14 @@ N_INT300    "s.debug.mode|Debug mode"
   direction = 1; -1 for reverse
 ;
 .END
-.PROGRAM id3()@26/01/27 10:30 #10; 312.229.001
+.PROGRAM id3()@26/01/22 13:06 #5; 312.229.001
 ; Object ID
   object.id = 3
   etalon.id = 3 ; Can be object.id <> etalon.id
 ; Working gripper
   pg.gripper = 3
 ; Max objects in output tare
-  max.tare.count = 77
+  max.tare.count = 77;10 ;77
   spc.tare.count = 77
 ; Object length
   object.length = 40
@@ -1126,7 +1126,7 @@ N_INT300    "s.debug.mode|Debug mode"
   direction = 1; -1 for reverse
 ;
 .END
-.PROGRAM id4()@26/01/27 10:30 #15; 440.00.026
+.PROGRAM id4()@26/01/24 19:17 #15; 440.00.026
 ; Object ID
   object.id = 4
   etalon.id = 4 ; Can be object.id <> etalon.id
@@ -1141,7 +1141,7 @@ N_INT300    "s.debug.mode|Debug mode"
   direction = 1; -1 for reverse
 ;
 .END
-.PROGRAM id5()@26/01/27 10:30 #11; 440.00.111
+.PROGRAM id5()@26/01/25 17:08 #5; 440.00.111
 ; Object ID
   object.id = 5
   etalon.id = 5 ; Can be object.id <> etalon.id
@@ -1156,14 +1156,14 @@ N_INT300    "s.debug.mode|Debug mode"
   direction = 1; -1 for reverse
 ;
 .END
-.PROGRAM id6()@26/01/27 10:30 #27; 0401.28.02.063
+.PROGRAM id6()@26/01/26 07:55 #25; 0401.28.02.063
 ; Object ID
   object.id = 6
   etalon.id = 6 ; Can be object.id <> etalon.id
 ; Working gripper
   pg.gripper = 1
 ; Max objects in output tare
-  max.tare.count = 126 ;126
+  max.tare.count = 10 ;126
   spc.tare.count = 50
 ; Object length
   object.length = 28.5
@@ -1171,7 +1171,7 @@ N_INT300    "s.debug.mode|Debug mode"
   direction = 1; -1 for reverse
 ;
 .END
-.PROGRAM log(.$msg)@26/01/21 14:55 #29477
+.PROGRAM log(.$msg)@26/01/21 14:55 #22624
 ;
 ; 1 line = 55 symbols max
 ;
@@ -1185,7 +1185,7 @@ N_INT300    "s.debug.mode|Debug mode"
   IFPWPRINT 3,1,1,9,10=$log.entry[124],$log.entry[125],$log.entry[126],$log.entry[127]
 ;
 .END
-.PROGRAM measure()@26/01/23 16:34 #1968
+.PROGRAM measure()@26/01/23 16:34 #1435
   IF FALSE THEN
     .pos = hmi.obj.id
   END
@@ -1271,7 +1271,7 @@ N_INT300    "s.debug.mode|Debug mode"
 ;JMOVE #safe.machine
 ;JMOVE #homyak
 .END
-.PROGRAM ot.put()@26/01/23 16:34 #913
+.PROGRAM ot.put()@26/01/23 16:34 #445
 ;
   SIGNAL rs7.locked.zone
   IF SIG(rs7.tare.chg) THEN
@@ -1334,7 +1334,7 @@ N_INT300    "s.debug.mode|Debug mode"
   END
 ;
 .END
-.PROGRAM pg.select()@26/01/25 17:14 #137
+.PROGRAM pg.select()@26/01/25 17:14 #115
   SCASE $pg.name OF
    SVALUE "312.229.002":
     CASE detail.spec OF
@@ -1415,7 +1415,7 @@ N_INT300    "s.debug.mode|Debug mode"
   state = 0
   CALL a.main
 .END
-.PROGRAM pos.pick()@26/01/23 16:34 #1435
+.PROGRAM pos.pick()@26/01/23 16:34 #896
 ;
   .$temp = "Pick detail from positioner (ID:"+$ENCODE(object.id)+")"
   CALL log(.$temp)
@@ -1479,7 +1479,7 @@ N_INT300    "s.debug.mode|Debug mode"
   SIGNAL -rs7.locked.zone
 ;
 .END
-.PROGRAM safe.home()@26/01/22 12:37 #132
+.PROGRAM safe.home()@26/01/22 12:37 #118
 ;
 ; Safe zones:
 ; 1. OT zone: same as for normal work
@@ -1540,7 +1540,7 @@ N_INT300    "s.debug.mode|Debug mode"
   END
 ;
 .END
-.PROGRAM set.io.pc()@26/01/21 14:55 #44
+.PROGRAM set.io.pc()@26/01/21 14:55 #42
 ; Gripper IO
 ;
 ; Gripper
@@ -1685,7 +1685,7 @@ N_INT300    "s.debug.mode|Debug mode"
 ;
   s.debug.mode = 2300
 .END
-.PROGRAM set.vars.pc()@26/01/21 14:55 #18
+.PROGRAM set.vars.pc()@26/01/21 14:55 #16
 ;
 ; Constants
 ;
@@ -1814,7 +1814,7 @@ N_INT300    "s.debug.mode|Debug mode"
   END
 ;
 .END
-.PROGRAM state0()@26/01/22 14:37 #121; Initialization of parameters
+.PROGRAM state0()@26/01/22 14:37 #97; Initialization of parameters
 ;
   CALL log("State 0: Program reset. Initialization of parameters")
   SIGNAL -s.grip.full,-s.measure.ok,-s.measure.ng,-rs7.tare.chg,-s.cmd.measured
@@ -1829,7 +1829,7 @@ N_INT300    "s.debug.mode|Debug mode"
   state = 100
 ;
 .END
-.PROGRAM state1()@26/01/21 14:55 #2102; Pick from positioner
+.PROGRAM state1()@26/01/21 14:55 #1563; Pick from positioner
   CALL log("State 1: Pick from positioner")
 ; Check all start positions
 ; Possible do not needed because robot can be only in HOME or near positioner
@@ -1840,7 +1840,7 @@ N_INT300    "s.debug.mode|Debug mode"
   state = 101
 ;
 .END
-.PROGRAM state100()@26/01/22 14:37 #98; Waiting for start
+.PROGRAM state100()@26/01/22 14:37 #76; Waiting for start
 ;
   CALL log("State 100: Waiting for start")
   $action = "WaitingForStart"
@@ -1858,11 +1858,11 @@ N_INT300    "s.debug.mode|Debug mode"
   CALL pg.select
   state = 106
 .END
-.PROGRAM state101()@26/01/21 14:55 #7020; Auxilary state
+.PROGRAM state101()@26/01/21 14:55 #5380; Auxilary state
   CALL log("State 101: Calculating next step")
   state = 102
 .END
-.PROGRAM state102()@26/01/21 14:55 #454390; Decision making
+.PROGRAM state102()@26/01/21 14:55 #415890; Decision making
 ; Priority 1
   IF SIG(s.cmd.pause) THEN
     state = 105
@@ -1912,19 +1912,19 @@ N_INT300    "s.debug.mode|Debug mode"
     RETURN
   END
 .END
-.PROGRAM state103()@26/01/21 14:55 #126; Auxilary state
+.PROGRAM state103()@26/01/21 14:55 #115; Auxilary state
   CALL log("State 103: Ending sequence started")
   state = 104
 ;
 .END
-.PROGRAM state104()@26/01/21 14:55 #126; Ending sequence
+.PROGRAM state104()@26/01/21 14:55 #115; Ending sequence
 ;
   SIGNAL rs7.finish.ack
   state = 255
   RETURN
 ;
 .END
-.PROGRAM state105()@26/01/21 14:55 #17; Program paused
+.PROGRAM state105()@26/01/21 14:55 #8; Program paused
   CALL log("State 105: Program paused")
   $action = "Paused"
   SWAIT s.cmd.resume
@@ -1933,7 +1933,7 @@ N_INT300    "s.debug.mode|Debug mode"
   SIGNAL -s.cmd.pause
   state = 101
 .END
-.PROGRAM state106()@26/01/21 14:55 #210; Check program
+.PROGRAM state106()@26/01/21 14:55 #188; Check program
   CALL log("State 106: Check program")
   IF $pg.name<>"NULL" THEN
     CALL log("Selected program: "+$pg.name)
@@ -1954,7 +1954,7 @@ N_INT300    "s.debug.mode|Debug mode"
   END
 ;
 .END
-.PROGRAM state2()@26/01/21 14:55 #2072; Measurement process
+.PROGRAM state2()@26/01/21 14:55 #1539; Measurement process
   CALL log("State 2: Measurement process")
 ; Check all start positions
 ; Possible do not needed because robot can be only in HOME or near positioner
@@ -1966,12 +1966,12 @@ N_INT300    "s.debug.mode|Debug mode"
   state = 101
 ;
 .END
-.PROGRAM state255()@26/01/21 14:55 #126
+.PROGRAM state255()@26/01/21 14:55 #115
   CALL log("State 255: Program complete")
   state = 0
 ;
 .END
-.PROGRAM state3()@26/01/21 14:55 #1728; Put detail to OT
+.PROGRAM state3()@26/01/21 14:55 #1260; Put detail to OT
   CALL log("State 3: Put detail to OT")
 ; Check all start positions
 ; Possible do not needed because robot can be only in HOME or near positioner
@@ -1983,7 +1983,7 @@ N_INT300    "s.debug.mode|Debug mode"
   state = 101
 ;
 .END
-.PROGRAM state4()@26/01/21 14:55 #354; State 4: Put detail to defect tare
+.PROGRAM state4()@26/01/21 14:55 #287; State 4: Put detail to defect tare
   CALL log("State 4: Put detail to defect tare")
 ; Check all start positions
 ; Possible do not needed because robot can be only in HOME or near positioner
@@ -1995,7 +1995,7 @@ N_INT300    "s.debug.mode|Debug mode"
   state = 101
 ;
 .END
-.PROGRAM state5()@26/01/24 19:18 #722; Check etalon
+.PROGRAM state5()@26/01/24 19:18 #698; Check etalon
   CALL log("State 5: Check etalon")
 ; TEMPORARY!!!!!!!!
 ;  state = 101
@@ -2030,7 +2030,7 @@ N_INT300    "s.debug.mode|Debug mode"
 .PROGRAM state6()@26/01/21 14:55 #0; Deprecated
   state = 103
 .END
-.PROGRAM state7()@26/01/21 14:55 #200; Deprecated
+.PROGRAM state7()@26/01/21 14:55 #178; Deprecated
   SIGNAL s.cmd.chk.etal
   state = 5
 .END
@@ -2039,7 +2039,7 @@ N_INT300    "s.debug.mode|Debug mode"
   CALL etalon.measure(etalon.id)
   state = 105
 .END
-.PROGRAM tcp.callback.pc(.$data[],.data.length)@26/01/22 13:52 #48774
+.PROGRAM tcp.callback.pc(.$data[],.data.length)@26/01/22 13:52 #34113
   .$temp = "Received "+$ENCODE(.data.length)+" strings:"
   PRINT tcp.recv.ena: .$temp
   FOR .i = 1 TO .data.length
@@ -2335,7 +2335,7 @@ N_INT300    "s.debug.mode|Debug mode"
     TWAIT 0.05
   END
 .END
-.PROGRAM tcp.log.pc(.$msg)@26/01/21 14:55 #67907
+.PROGRAM tcp.log.pc(.$msg)@26/01/21 14:55 #53246
   IF NOT SIG(s.tcp.log) THEN
     RETURN
   END
@@ -2352,7 +2352,7 @@ N_INT300    "s.debug.mode|Debug mode"
   IFPWPRINT 3,1,1,9,10=$log.entry[124],$log.entry[125],$log.entry[126],$log.entry[127]
 ;
 .END
-.PROGRAM tcp.send.pc(.$data[],.data.length)@26/01/21 14:55 #1877321
+.PROGRAM tcp.send.pc(.$data[],.data.length)@26/01/21 14:55 #1742997
 ;
   .tcp.send.tmo = 5
 ;
@@ -2497,7 +2497,6 @@ N_INT300    "s.debug.mode|Debug mode"
 	;       .y 
 	;       .z 
 	;       .put 
-	;     2:get.ot.point.ol:F
 	;     2:ot.put:F
 	;       .x 
 	;       .y 

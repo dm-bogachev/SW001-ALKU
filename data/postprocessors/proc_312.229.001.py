@@ -18,113 +18,51 @@ def process(frame, yolo_data: list):
         if data.class_id == 0:
             cv2.rectangle(drawframe, (int(x1), int(y1)), (int(x2), int(y2)), (0, 0, 255), 2)
             continue    
+        #cv2.line(frame, (x1, y1), (x1-(x2-x1), y1), (0,255,0), 3, 3)
         
-        center = (x1 + x2) / 2, (y1 + y2) / 2
-        data.pick_point = center
-        data.pick_angle = 0#__get_gripper_angle(data, yolo_data)
-        result.append(data)
-        # frame = cv2.circle(frame, (int(center[0]), int(center[1])), int(abs(x1-x2)), (0, 255, 0), 2)
+        area = (x2-x1)*(y2-y1)
+        logger.debug(f"Area: { area}")
+        
+        # Определяем расширенный прямоугольник для текущей детали (уменьшенный на половину)
+        width = (x2 - x1) / 2
+        height = (y2 - y1) / 2
+        rect_left = int(x1 - 0.7*width)
+        rect_right = int(x2 + 0.7*width)
+        rect_top = int(y1+0.2*height)
+        rect_bottom = int(y2-0.2*height)
+        
+        # Проверяем, есть ли другие детали в этом прямоугольнике
+        has_intersection = False
+        for other_data in yolo_data:
+            if other_data is data:  # Пропускаем саму деталь
+                continue
+            
+            other_x1, other_y1, other_x2, other_y2 = other_data.xyxy
+            
+            # Проверяем пересечение: является ли центр или часть другой детали в нашем прямоугольнике
+            other_center_x = (other_x1 + other_x2) / 2
+            other_center_y = (other_y1 + other_y2) / 2
+            
+            # Проверяем пересечение прямоугольников
+            if not (other_x2 < rect_left or other_x1 > rect_right or 
+                    other_y2 < rect_top or other_y1 > rect_bottom):
+                # Есть пересечение - подсвечиваем фиолетовым
+                cv2.rectangle(drawframe, (int(other_x1), int(other_y1)), 
+                            (int(other_x2), int(other_y2)), (255, 0, 255), 2)
+                has_intersection = True
+        
+
+        # Если нет пересечений, добавляем в результат
+        if not has_intersection:
+            cv2.line(drawframe, (rect_left, rect_top), (rect_right, rect_top), (0, 255, 0), 13)
+            cv2.line(drawframe, (rect_left, rect_bottom), (rect_right, rect_bottom), (0, 255, 0), 13)
+
+            center = (x1 + x2) / 2, (y1 + y2) / 2
+            data.pick_point = center
+            #cv2.circle(drawframe, (int(center[0]), int(center[1])), 150, (0,255,0), 10)
+            data.pick_angle = 0#__get_gripper_angle(data, yolo_data)
+            if area < 18000 or area > 30000:
+                continue
+            result.append(data)
+            # frame = cv2.circle(frame, (int(center[0]), int(center[1])), int(abs(x1-x2)), (0, 255, 0), 2)
     return drawframe, result
-
-def __check_intersection(line1, line2):
-        x11, y11, x12, y12 = line1
-        x21, y21, x22, y22 = line2
-        # Equation of line 1: a1*x + b1*y + c1 = 0
-        a1 = y11 - y12
-        b1 = x12 - x11
-        c1 = x11 * y12 - x12 * y11
-        # Equation of line 2: a2*x + b2*y + c2 = 0
-        a2 = y21 - y22
-        b2 = x22 - x21
-        c2 = x21 * y22 - x22 * y21
-
-        # Determinant
-        det = a1 * b2 - a2 * b1
-        if det == 0:
-            return None
-        else:
-            x = (b1 * c2 - b2 * c1) / det
-            y = (a2 * c1 - a1 * c2) / det
-            if min(x11, x12) < x < max(x11, x12) and min(y11, y12) < y < max(y11, y12) and \
-               min(x21, x22) < x < max(x21, x22) and min(y21, y22) < y < max(y21, y22):
-                return True
-            else:
-                return False
-
-def __get_gripper_angle(selected_object, objects):
-    gt2 = 14
-    gl2 = 28
-    bb_lines = []   
-    logger.info("Checking 0 angle")
-    # Get all lines on screen
-    for obj in objects:
-        if obj == selected_object:
-            continue
-        xmin, ymin, xmax, ymax = obj.xyxy
-        lines = (
-            (xmin, ymin, xmax, ymax),
-            (xmin, ymin, xmin, ymax),
-            (xmax, ymax, xmax, ymin),
-            (xmax, ymax, xmin, ymax)
-        )
-        for line in lines:
-            bb_lines.append(line)
-    # Get basic line
-    x0, y0, _ = selected_object.pick_point
-    gripper_lines = (
-        (x0*10 - gl2, y0*10 - gt2, x0*10 + gl2, y0*10 - gt2),
-        (x0*10 - gl2, y0*10 + gt2, x0*10 + gl2, y0*10 + gt2)
-    )
-    intersection = False
-    for line in gripper_lines:
-        for bb_line in bb_lines:
-            if __check_intersection(line, bb_line):
-                intersection = True
-    # If crossing, get new angle
-    new_angle = -1
-    angles = [90, -45, 45, -60, 60, -30, 30]
-    if intersection:
-        logger.info("Intersection found")
-        for angle in angles:
-            logger.info(f"Checking {angle} angle")
-            # Get new coordinates
-            glinex11, gliney11 = __rotate_point(
-                (x0, y0), (x0*10 - gl2, y0*10 - gt2), angle)
-            glinex12, gliney12 = __rotate_point(
-                (x0, y0), (x0*10 + gl2, y0*10 - gt2), angle)
-            glinex21, gliney21 = __rotate_point(
-                (x0, y0), (x0*10 - gl2, y0*10 + gt2), angle)
-            glinex22, gliney22 = __rotate_point(
-                (x0, y0), (x0*10 + gl2, y0*10 + gt2), angle)
-            gripper_lines = (
-                (glinex11, gliney11, glinex12, gliney12),
-                (glinex21, gliney21, glinex22, gliney22)
-            )
-            intersection = False
-            for line in gripper_lines:
-                for bb_line in bb_lines:
-                    if __check_intersection(line, bb_line):
-                        intersection = True
-            if not intersection:
-                new_angle = angle
-                logger.info("Success")
-                return new_angle
-            logger.info("Intersection found")
-    else:
-        return 0
-    
-def __rotate_point(center, point, angle):
-    cx, cy = center
-    px, py = point
-    # Convert angle to radians
-    angle_rad = angle * (3.141592653589793 / 180.0)
-    # Translate point to origin
-    temp_x = px - cx
-    temp_y = py - cy
-    # Rotate point
-    rotated_x = temp_x * math.cos(angle_rad) - temp_y * math.sin(angle_rad)
-    rotated_y = temp_x * math.sin(angle_rad) + temp_y * math.cos(angle_rad)
-    # Translate point back
-    new_x = rotated_x + cx
-    new_y = rotated_y + cy
-    return new_x, new_y
