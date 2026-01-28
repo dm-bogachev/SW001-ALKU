@@ -1141,7 +1141,7 @@ N_INT300    "s.debug.mode|Debug mode"
   object.id = 2
   etalon.id = 2 ; Can be object.id <> etalon.id
 ; Working gripper
-  pg.gripper = 2
+  pg.gripper = 1
 ; Max objects in output tare
   max.tare.count = 105;84
   spc.tare.count = 50

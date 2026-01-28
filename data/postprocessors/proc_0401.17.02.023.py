@@ -21,10 +21,10 @@ def process(frame, yolo_data):
         logger.debug(f"Ключевые точки: {data.keypoints}")
         if data.keypoints[0][1] < data.keypoints[1][1]:
             data.pick_angle = 180
-            data.pick_point = (data.pick_point[0], data.pick_point[1] + (0.6)*abs(data.keypoints[0][1] - data.keypoints[1][1]))
+            data.pick_point = (data.pick_point[0], data.pick_point[1] - (0.6)*abs(data.keypoints[0][1] - data.keypoints[1][1]))
         else:
             data.pick_angle = 0
-            data.pick_point = (data.pick_point[0], data.pick_point[1] - (0.6)*abs(data.keypoints[0][1] - data.keypoints[1][1]))
+            data.pick_point = (data.pick_point[0], data.pick_point[1] + (0.6)*abs(data.keypoints[0][1] - data.keypoints[1][1]))
         logger.debug(f"Угол забора: {data.pick_angle}")
         result.append(data)
                 

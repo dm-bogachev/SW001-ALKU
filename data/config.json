@@ -50,7 +50,7 @@
     "Display": {
         "BBOX": true,
         "COORDINATES": false,
-        "KEYPOINTS": true,
+        "KEYPOINTS": false,
         "LABELS": true,
         "SCORES": true,
         "POINTS": true,
