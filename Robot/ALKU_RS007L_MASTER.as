@@ -511,76 +511,116 @@ N_INT300    "s.debug.mode|Debug mode"
 ;
 .END
 .PROGRAM calc.ot()@26/01/22 13:07 #116
-; Get matrix center
-  .center.col = INT(lines.count/2)
-  .center.row = INT(obj.in.line/2)
+  ; Get matrix center
+  .center.col = INT (lines.count / 2)
+  .center.row = INT (obj.in.line / 2)
   .cell = 0
-;
-  IF direction==1 THEN
-;
-    FOR .offset = 0 TO lines.count
-      .left = .center.col-.offset
-      .right = .center.col+.offset
-; Left column
-      IF .left>=0 THEN
-        FOR .row = 0 TO obj.in.line-1
-          ms[.cell] = .left
-          ns[.cell] = .row
-          .cell = .cell+1
-        END
+  ;
+  IF direction == 1 THEN
+    ;
+    ; Stage 1: Add extreme columns (left and right edges)
+    FOR .row = 0 TO obj.in.line - 1
+      ms[.cell] = 0
+      ns[.cell] = .row
+      .cell = .cell + 1
+    END
+    IF lines.count > 1 THEN
+      FOR .row = 0 TO obj.in.line - 1
+        ms[.cell] = lines.count - 1
+        ns[.cell] = .row
+        .cell = .cell + 1
       END
-; Right column
-      IF .right<lines.count AND .right<>.left THEN
-        FOR .row = 0 TO obj.in.line-1
+    END
+    ;
+    ; Stage 2: Add center column
+    FOR .row = 0 TO obj.in.line - 1
+      ms[.cell] = .center.col
+      ns[.cell] = .row
+      .cell = .cell + 1
+    END
+    ;
+    ; Stage 3: Add from center outward (excluding center and edges)
+    FOR .offset = 1 TO .center.col - 1
+      .left = .center.col - .offset
+      .right = .center.col + .offset
+      ; Left column
+      FOR .row = 0 TO obj.in.line - 1
+        ms[.cell] = .left
+        ns[.cell] = .row
+        .cell = .cell + 1
+      END
+      ; Right column
+      IF .right < lines.count AND .right <> .left THEN
+        FOR .row = 0 TO obj.in.line - 1
           ms[.cell] = .right
           ns[.cell] = .row
-          .cell = .cell+1
+          .cell = .cell + 1
         END
       END
     END
   ELSE
-;
-    FOR .offset = 0 TO lines.count
-      .left = .center.col-.offset
-      .right = .center.col+.offset
-; Left column
-      IF .left>=0 THEN
-        FOR .row = obj.in.line-1 TO 0 STEP -1
-          ms[.cell] = .left
-          ns[.cell] = .row
-          .cell = .cell+1
-        END
+    ;
+    ; Stage 1: Add extreme columns (left and right edges)
+    FOR .row = obj.in.line - 1 TO 0 STEP -1
+      ms[.cell] = 0
+      ns[.cell] = .row
+      .cell = .cell + 1
+    END
+    IF lines.count > 1 THEN
+      FOR .row = obj.in.line - 1 TO 0 STEP -1
+        ms[.cell] = lines.count - 1
+        ns[.cell] = .row
+        .cell = .cell + 1
       END
-; Right column
-      IF .right<lines.count AND .right<>.left THEN
-        FOR .row = obj.in.line-1 TO 0 STEP -1
+    END
+    ;
+    ; Stage 2: Add center column
+    FOR .row = obj.in.line - 1 TO 0 STEP -1
+      ms[.cell] = .center.col
+      ns[.cell] = .row
+      .cell = .cell + 1
+    END
+    ;
+    ; Stage 3: Add from center outward (excluding center and edges)
+    FOR .offset = 1 TO .center.col - 1
+      .left = .center.col - .offset
+      .right = .center.col + .offset
+      ; Left column
+      FOR .row = obj.in.line - 1 TO 0 STEP -1
+        ms[.cell] = .left
+        ns[.cell] = .row
+        .cell = .cell + 1
+      END
+      ; Right column
+      IF .right < lines.count AND .right <> .left THEN
+        FOR .row = obj.in.line - 1 TO 0 STEP -1
           ms[.cell] = .right
           ns[.cell] = .row
-          .cell = .cell+1
+          .cell = .cell + 1
         END
       END
     END
   END
-;
-; Debug print
-;PRINT "ASCII grid"
-;FOR .n = 0 TO obj.in.line-1
-;  .$line = ""        ; буфер строки
-;  FOR .m = 0 TO lines.count-1
-;    .filled = 0
-;    FOR .i = 0 TO hmi.obj.id
-;      IF ms[.i] == .m AND ns[.i] == .n THEN
-;        .filled = 1
-;      END
-;    END
-;    IF .filled == 1 THEN
-;      .$line = .$line + "X "
-;    ELSE
-;      .$line = .$line + ". "
-;    END
-;  END
-;  PRINT .$line    ; печатаем всю строку одним вызовом
-;END
+  ;
+  ; Debug print
+  ;PRINT "ASCII grid"
+  ;FOR .n = 0 TO obj.in.line-1
+  ;  .$line = ""        ; буфер строки
+  ;  FOR .m = 0 TO lines.count-1
+  ;    .filled = 0
+  ;    FOR .i = 0 TO hmi.obj.id
+  ;      IF ms[.i] == .m AND ns[.i] == .n THEN
+  ;        .filled = 1
+  ;      END
+  ;    END
+  ;    IF .filled == 1 THEN
+  ;      .$line = .$line + "X "
+  ;    ELSE
+  ;      .$line = .$line + ". "
+  ;    END
+  ;  END
+  ;  PRINT .$line    ; печатаем всю строку одним вызовом
+  ;END
 .END
 .PROGRAM calc.ot.old()@26/01/22 12:20 #0
 ; Get matrix center
@@ -2498,6 +2538,7 @@ N_INT300    "s.debug.mode|Debug mode"
 	;       .z 
 	;       .put 
 	;     2:get.ot.point.ol:F
+	;       .obj.id 
 	;     2:ot.put:F
 	;       .x 
 	;       .y 
@@ -2507,14 +2548,9 @@ N_INT300    "s.debug.mode|Debug mode"
 	;       .locked.zone 
 	;       .lock.zone 
 	;     2:calc.ot.old:F
-	;     2:calc.ot:F
 	;       .center.col 
 	;       .center.row 
 	;       .cell 
-	;       .offset 
-	;       .left 
-	;       .right 
-	;       .row 
 	;       .i 
 	;       .j 
 	;       .dist 
@@ -2526,6 +2562,15 @@ N_INT300    "s.debug.mode|Debug mode"
 	;       .tmp.dist 
 	;       .tmp.m 
 	;       .tmp.n 
+	;     2:calc.ot:F
+	;       .center.col 
+	;       .center.row 
+	;       .cell 
+	;       .offset 
+	;       .left 
+	;       .right 
+	;       .row 
+	;       .i 
 	;       .n 
 	;       .m 
 	;       .filled 
