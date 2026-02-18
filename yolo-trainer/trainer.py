@@ -5,8 +5,8 @@ import shutil
 from datetime import datetime
 from ultralytics import YOLO
 
-YOLO_BASE_DETECT_MODEL = 'yolo11m.pt'
-YOLO_BASE_POSE_MODEL = 'yolo11m-pose.pt'
+YOLO_BASE_DETECT_MODEL = 'yolo26m.pt'
+YOLO_BASE_POSE_MODEL = 'yolo26m-pose.pt'
 PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
 DATASETS_DIR = os.path.join(PROJECT_DIR, 'datasets')
 RUNS_DIR = os.path.join(PROJECT_DIR, 'runs')
