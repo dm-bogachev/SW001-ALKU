@@ -35,3 +35,6 @@ Calibration/data/*
 # K-ROSET
 Robot/KROSET/ALKU/temporary/**/*.txt
 DatasetGrabber/images/**/*
+DatasetGrabber/imagesold/**/*
+DatasetGrabber/images.tar.xz
+DatasetGrabber.tar.xz

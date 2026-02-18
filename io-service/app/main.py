@@ -303,7 +303,7 @@ def chech_stz():
     io.set_output(4, False)
     io.set_output(3, True)
     io.set_output(2, False)
-    io.set_output(11, False)
+    io.set_output(1, False)
     io.set_output(0, False)
     return {"Status": "OK"}
 
