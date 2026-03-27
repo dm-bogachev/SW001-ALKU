@@ -204,12 +204,12 @@ class Background(Thread):
             return False
         return True
 
-    def start_process(self, ProductName: str, ProductSpec: int, ProductCount: int, InTareIDs: list, OutTareIDs: list):
+    def start_process(self, ProductName: str, ProductSpec: int, ProductCount: int, InTareIDs: list, OutTareIDs: list, Layout: int):
         
         if not self.change_model(ProductName):
             return False
         
-        command = f"START;{ProductName};{ProductSpec};{ProductCount};"
+        command = f"START;{ProductName};{ProductSpec};{ProductCount};{Layout};"
         if InTareIDs:
             command += ",".join(str(id) for id in InTareIDs)
             command += ";"

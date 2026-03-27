@@ -216,6 +216,208 @@ N_INT300    "s.debug.mode"
 .INTER_PANEL_COLOR_D
 182,3,224,244,28,159,252,255,251,255,0,31,2,241,52,255,
 .END
+.PROGRAM layout0 ()
+  ; Get matrix center
+  .center.col = INT (lines.count / 2)
+  .center.row = INT (obj.in.line / 2)
+  .cell = 0
+  ;
+  IF direction == 1 THEN
+    ;
+    ; Stage 1: Add extreme columns (left and right edges)
+    FOR .row = 0 TO obj.in.line - 1
+      ms[.cell] = 0
+      ns[.cell] = .row
+      .cell = .cell + 1
+    END
+    IF lines.count > 1 THEN
+      FOR .row = 0 TO obj.in.line - 1
+        ms[.cell] = lines.count - 1
+        ns[.cell] = .row
+        .cell = .cell + 1
+      END
+    END
+    ;
+    ; Stage 2: Add center column
+    FOR .row = 0 TO obj.in.line - 1
+      ms[.cell] = .center.col
+      ns[.cell] = .row
+      .cell = .cell + 1
+    END
+    ;
+    ; Stage 3: Add from center outward (excluding center and edges)
+    FOR .offset = 1 TO .center.col - 1
+      .left = .center.col - .offset
+      .right = .center.col + .offset
+      ; Left column
+      FOR .row = 0 TO obj.in.line - 1
+        ms[.cell] = .left
+        ns[.cell] = .row
+        .cell = .cell + 1
+      END
+      ; Right column
+      IF .right < lines.count AND .right <> .left THEN
+        FOR .row = 0 TO obj.in.line - 1
+          ms[.cell] = .right
+          ns[.cell] = .row
+          .cell = .cell + 1
+        END
+      END
+    END
+  ELSE
+    ;
+    ; Stage 1: Add extreme columns (left and right edges)
+    FOR .row = obj.in.line - 1 TO 0 STEP -1
+      ms[.cell] = 0
+      ns[.cell] = .row
+      .cell = .cell + 1
+    END
+    IF lines.count > 1 THEN
+      FOR .row = obj.in.line - 1 TO 0 STEP -1
+        ms[.cell] = lines.count - 1
+        ns[.cell] = .row
+        .cell = .cell + 1
+      END
+    END
+    ;
+    ; Stage 2: Add center column
+    FOR .row = obj.in.line - 1 TO 0 STEP -1
+      ms[.cell] = .center.col
+      ns[.cell] = .row
+      .cell = .cell + 1
+    END
+    ;
+    ; Stage 3: Add from center outward (excluding center and edges)
+    FOR .offset = 1 TO .center.col - 1
+      .left = .center.col - .offset
+      .right = .center.col + .offset
+      ; Left column
+      FOR .row = obj.in.line - 1 TO 0 STEP -1
+        ms[.cell] = .left
+        ns[.cell] = .row
+        .cell = .cell + 1
+      END
+      ; Right column
+      IF .right < lines.count AND .right <> .left THEN
+        FOR .row = obj.in.line - 1 TO 0 STEP -1
+          ms[.cell] = .right
+          ns[.cell] = .row
+          .cell = .cell + 1
+        END
+      END
+    END
+  END
+  ;
+  ; Debug print
+  ;PRINT "ASCII grid"
+  ;FOR .n = 0 TO obj.in.line-1
+  ;  .$line = ""        ; буфер строки
+  ;  FOR .m = 0 TO lines.count-1
+  ;    .filled = 0
+  ;    FOR .i = 0 TO hmi.obj.id
+  ;      IF ms[.i] == .m AND ns[.i] == .n THEN
+  ;        .filled = 1
+  ;      END
+  ;    END
+  ;    IF .filled == 1 THEN
+  ;      .$line = .$line + "X "
+  ;    ELSE
+  ;      .$line = .$line + ". "
+  ;    END
+  ;  END
+  ;  PRINT .$line    ; печатаем всю строку одним вызовом
+  ;END
+.END
+.PROGRAM layout1 ()
+  ; Get matrix center
+  .center.col = INT (lines.count / 2)
+  .center.row = INT (obj.in.line / 2)
+  ; Get Manhattan distances matrix
+  .cell = 0
+  FOR .i = 0 TO lines.count - 1
+    FOR .j = 0 TO obj.in.line - 1
+      .dist = ABS (.i - .center.col) + ABS (.j - .center.row)
+      .dists[.cell] = .dist
+      ms[.cell] = .i
+      ns[.cell] = .j
+      .cell = .cell + 1
+    END
+  END
+  .array.size = .cell - 1
+  ; Bubble sort distances array
+  FOR .i = 0 TO .array.size - 1
+    FOR .j = 0 TO .array.size - .i - 1
+      ; Compare by angular distances
+      ; I don't want to make it
+      IF .dists[.j] <> .dists[.j + 1] THEN
+        .result = .dists[.j] - .dists[.j + 1]
+      ELSE
+        .cornerA = ABS (ms[.j] - .center.col)
+        IF ABS (ns[.j] - .center.row) > .cornerA THEN
+          .cornerA = ABS (ns[.j] - .center.row)
+        END
+        .cornerB = ABS (ms[.j + 1] - .center.col)
+        IF ABS (ns[.j + 1] - .center.row) > .cornerB THEN
+          .cornerB = ABS (ns[.j + 1] - .center.row)
+        END
+        IF .cornerA <> .cornerB THEN
+          .result = .cornerA - .cornerB
+        ELSE
+          IF ms[.j] <> ms[.j + 1] THEN
+            .result = ms[.j] - ms[.j + 1]
+          ELSE
+            .result = ns[.j] - ns[.j + 1]
+          END
+        END
+      END
+      ; Simple compare. Commented in case of troubles
+      ;IF .dists[.j] <> .dists[.j + 1]
+      ;  .result = .dists[.j] - .dists[.j + 1]
+      ;ELSE
+      ;  IF ms[.j] <> ms[.j + 1]
+      ;    .result = ms[.j] - ms[.j + 1]
+      ;  ELSE
+      ;    .result = ns[.j] - ns[.j + 1]
+      ;  END
+      ;END
+      ;
+      IF .result > 0 THEN
+        ;
+        .tmp.dist = .dists[.j]
+        .tmp.m = ms[.j]
+        .tmp.n = ns[.j]
+        ;
+        .dists[.j] = .dists[.j + 1]
+        ms[.j] = ms[.j + 1]
+        ns[.j] = ns[.j + 1]
+        ;
+        .dists[.j + 1] = .tmp.dist
+        ms[.j + 1] = .tmp.m
+        ns[.j + 1] = .tmp.n
+      END
+    END
+  END
+  ;
+  ; Debug print
+  ;PRINT "ASCII grid"
+  ;FOR .n = 0 TO obj.in.line-1
+  ;  .$line = ""        ; буфер строки
+  ;  FOR .m = 0 TO lines.count-1
+  ;    .filled = 0
+  ;    FOR .i = 0 TO .obj.id
+  ;      IF ms[.i] == .m AND ns[.i] == .n THEN
+  ;        .filled = 1
+  ;      END
+  ;    END
+  ;    IF .filled == 1 THEN
+  ;      .$line = .$line + "X "
+  ;    ELSE
+  ;      .$line = .$line + ". "
+  ;    END
+  ;  END
+  ;  PRINT .$line    ; печатаем всю строку одним вызовом
+  ;END
+.END
 .PROGRAM a.test.gripper()@26/01/15 08:39 #0
 	;
 	CALL gripper.pick (hmi.gripper)
@@ -649,15 +851,6 @@ N_INT300    "s.debug.mode"
   LMOVE .put
   LAPPRO .put,-50
 .END
-.PROGRAM get.ot.point.ol(.obj.id)@26/01/22 12:20 #0
-  IF object.id==pawn.no THEN
-    ot.x = .obj.id MOD lines.count
-    ot.y = INT(.obj.id/lines.count)
-    RETURN
-  END
-  ot.x = ms[.obj.id]
-  ot.y = ns[.obj.id]
-.END
 .PROGRAM ot.put()@26/01/23 16:34 #913
 ;
   SIGNAL rs7.locked.zone
@@ -721,207 +914,17 @@ N_INT300    "s.debug.mode"
   END
 ;
 .END
-.PROGRAM calc.ot.old()@26/01/22 12:20 #0
-; Get matrix center
-  .center.col = INT(lines.count/2)
-  .center.row = INT(obj.in.line/2)
-; Get Manhattan distances matrix
-  .cell = 0
-  FOR .i = 0 TO lines.count-1
-    FOR .j = 0 TO obj.in.line-1
-      .dist = ABS(.i-.center.col)+ABS(.j-.center.row)
-      .dists[.cell] = .dist
-      ms[.cell] = .i
-      ns[.cell] = .j
-      .cell = .cell+1
-    END
-  END
-  .array.size = .cell-1
-; Bubble sort distances array
-  FOR .i = 0 TO .array.size-1
-    FOR .j = 0 TO .array.size-.i-1
-; Compare by angular distances
-; I don't want to make it 
-      IF .dists[.j]<>.dists[.j+1] THEN
-        .result = .dists[.j]-.dists[.j+1]
-      ELSE
-        .cornerA = ABS(ms[.j]-.center.col)
-        IF ABS(ns[.j]-.center.row)>.cornerA THEN
-          .cornerA = ABS(ns[.j]-.center.row)
-        END
-        .cornerB = ABS(ms[.j+1]-.center.col)
-        IF ABS(ns[.j+1]-.center.row)>.cornerB THEN
-          .cornerB = ABS(ns[.j+1]-.center.row)
-        END
-        IF .cornerA<>.cornerB THEN
-          .result = .cornerA-.cornerB
-        ELSE
-          IF ms[.j]<>ms[.j+1] THEN
-            .result = ms[.j]-ms[.j+1]
-          ELSE
-            .result = ns[.j]-ns[.j+1]
-          END
-        END
-      END
-; Simple compare. Commented in case of troubles
-;IF .dists[.j] <> .dists[.j + 1]
-;  .result = .dists[.j] - .dists[.j + 1]
-;ELSE
-;  IF ms[.j] <> ms[.j + 1]
-;    .result = ms[.j] - ms[.j + 1]
-;  ELSE
-;    .result = ns[.j] - ns[.j + 1]
-;  END
-;END
-;
-      IF .result>0 THEN
-;
-        .tmp.dist = .dists[.j]
-        .tmp.m = ms[.j]
-        .tmp.n = ns[.j]
-;
-        .dists[.j] = .dists[.j+1]
-        ms[.j] = ms[.j+1]
-        ns[.j] = ns[.j+1]
-;
-        .dists[.j+1] = .tmp.dist
-        ms[.j+1] = .tmp.m
-        ns[.j+1] = .tmp.n
-      END
-    END
-  END
-;
-; Debug print
-;PRINT "ASCII grid"
-;FOR .n = 0 TO obj.in.line-1
-;  .$line = ""        ; буфер строки
-;  FOR .m = 0 TO lines.count-1
-;    .filled = 0
-;    FOR .i = 0 TO .obj.id
-;      IF ms[.i] == .m AND ns[.i] == .n THEN
-;        .filled = 1
-;      END
-;    END
-;    IF .filled == 1 THEN
-;      .$line = .$line + "X "
-;    ELSE
-;      .$line = .$line + ". "
-;    END
-;  END
-;  PRINT .$line    ; печатаем всю строку одним вызовом
-;END
-.END
 .PROGRAM calc.ot()@26/01/22 13:07 #116
-  ; Get matrix center
-  .center.col = INT (lines.count / 2)
-  .center.row = INT (obj.in.line / 2)
-  .cell = 0
   ;
-  IF direction == 1 THEN
-    ;
-    ; Stage 1: Add extreme columns (left and right edges)
-    FOR .row = 0 TO obj.in.line - 1
-      ms[.cell] = 0
-      ns[.cell] = .row
-      .cell = .cell + 1
-    END
-    IF lines.count > 1 THEN
-      FOR .row = 0 TO obj.in.line - 1
-        ms[.cell] = lines.count - 1
-        ns[.cell] = .row
-        .cell = .cell + 1
-      END
-    END
-    ;
-    ; Stage 2: Add center column
-    FOR .row = 0 TO obj.in.line - 1
-      ms[.cell] = .center.col
-      ns[.cell] = .row
-      .cell = .cell + 1
-    END
-    ;
-    ; Stage 3: Add from center outward (excluding center and edges)
-    FOR .offset = 1 TO .center.col - 1
-      .left = .center.col - .offset
-      .right = .center.col + .offset
-      ; Left column
-      FOR .row = 0 TO obj.in.line - 1
-        ms[.cell] = .left
-        ns[.cell] = .row
-        .cell = .cell + 1
-      END
-      ; Right column
-      IF .right < lines.count AND .right <> .left THEN
-        FOR .row = 0 TO obj.in.line - 1
-          ms[.cell] = .right
-          ns[.cell] = .row
-          .cell = .cell + 1
-        END
-      END
-    END
+  .$calc.pg = "layout" + $ENCODE (/L, layout)
+  IF EXISTPGM (.$calc.pg) THEN
+    SCALL .$calc.pg
   ELSE
-    ;
-    ; Stage 1: Add extreme columns (left and right edges)
-    FOR .row = obj.in.line - 1 TO 0 STEP -1
-      ms[.cell] = 0
-      ns[.cell] = .row
-      .cell = .cell + 1
-    END
-    IF lines.count > 1 THEN
-      FOR .row = obj.in.line - 1 TO 0 STEP -1
-        ms[.cell] = lines.count - 1
-        ns[.cell] = .row
-        .cell = .cell + 1
-      END
-    END
-    ;
-    ; Stage 2: Add center column
-    FOR .row = obj.in.line - 1 TO 0 STEP -1
-      ms[.cell] = .center.col
-      ns[.cell] = .row
-      .cell = .cell + 1
-    END
-    ;
-    ; Stage 3: Add from center outward (excluding center and edges)
-    FOR .offset = 1 TO .center.col - 1
-      .left = .center.col - .offset
-      .right = .center.col + .offset
-      ; Left column
-      FOR .row = obj.in.line - 1 TO 0 STEP -1
-        ms[.cell] = .left
-        ns[.cell] = .row
-        .cell = .cell + 1
-      END
-      ; Right column
-      IF .right < lines.count AND .right <> .left THEN
-        FOR .row = obj.in.line - 1 TO 0 STEP -1
-          ms[.cell] = .right
-          ns[.cell] = .row
-          .cell = .cell + 1
-        END
-      END
-    END
+    CALL log ("Error! Wrong layout. Connect Robowizard")
+    state = 255
+    RETURN
   END
   ;
-  ; Debug print
-  ;PRINT "ASCII grid"
-  ;FOR .n = 0 TO obj.in.line-1
-  ;  .$line = ""        ; буфер строки
-  ;  FOR .m = 0 TO lines.count-1
-  ;    .filled = 0
-  ;    FOR .i = 0 TO hmi.obj.id
-  ;      IF ms[.i] == .m AND ns[.i] == .n THEN
-  ;        .filled = 1
-  ;      END
-  ;    END
-  ;    IF .filled == 1 THEN
-  ;      .$line = .$line + "X "
-  ;    ELSE
-  ;      .$line = .$line + ". "
-  ;    END
-  ;  END
-  ;  PRINT .$line    ; печатаем всю строку одним вызовом
-  ;END
 .END
 .PROGRAM a.teach.machine()@26/01/21 14:55 #0
   IF FALSE THEN ; For round details
@@ -1530,7 +1533,12 @@ N_INT300    "s.debug.mode"
     ELSE
       CALL calc.grid
     END
+    ;
     CALL calc.ot
+    IF state = 255 THEN
+      RETURN
+    END
+    ;
     state = 7
   ELSE
     CALL log("Wrong program name. Program reset")
@@ -2309,6 +2317,9 @@ N_INT300    "s.debug.mode"
 ; Decode outtare ids
       .$temp = $DECODE(.$data[1],";",1)
       $opt.data = $DECODE(.$data[1],";",0)
+      ; Decode layout
+      .$temp = $DECODE(.$data[1],";",1)
+      layout = $DECODE(.$data[1],";",0)
       PULSE s.cmd.start,5
     END
 ;
@@ -2665,18 +2676,21 @@ N_INT300    "s.debug.mode"
 	; 127.0.0.1
 	; 9205
 	; @@@ PROGRAM @@@
-	; Group:Gripper:1
-	; 1:a.test.gripper:F
-	; 1:gripper.pick:F
-	; 1:gripper.put:F
-	; 1:a.teach.gripper:F
-	; Group:Etalon:2
-	; 2:a.teach.etalon:F
+	; Group:Layouts:1
+	; 1:layout0:F
+	; 1:layout1:F
+	; Group:Gripper:2
+	; 2:a.test.gripper:F
+	; 2:gripper.pick:F
+	; 2:gripper.put:F
+	; 2:a.teach.gripper:F
+	; Group:Etalon:3
+	; 3:a.teach.etalon:F
 	; .eshift.x 
 	; .eshift.y 
 	; .et.pos.point 
 	; .et.mac.poin 
-	; 2:etalon.measure:F
+	; 3:etalon.measure:F
 	; .id 
 	; .etalon.pos.pt 
 	; .etalon.mac.pt 
@@ -2687,37 +2701,35 @@ N_INT300    "s.debug.mode"
 	; .eshift.y 
 	; .$temp 
 	; .work 
-	; Group:OT:3
-	; 3:a.teach.ot:F
+	; Group:OT:4
+	; 4:a.teach.ot:F
 	; .ot.down.left 
 	; .ot.down.right 
 	; .ot.up.right 
 	; .ot.orig 
-	; 3:calc.grid:F
+	; 4:calc.grid:F
 	; .max 
 	; .obj.len 
 	; .obj.len.w.spc 
 	; .i 
 	; .j 
-	; 3:calc.grid.rnd:F
+	; 4:calc.grid.rnd:F
 	; .max 
 	; .obj.shift 
 	; .i 
 	; .j 
-	; 3:get.ot.point:F
+	; 4:get.ot.point:F
 	; .obj.id 
 	; .i 
 	; .x 
 	; .y 
-	; 3:a.test.ot:F
+	; 4:a.test.ot:F
 	; .$pg 
 	; .x 
 	; .y 
 	; .z 
 	; .put 
-	; 3:get.ot.point.ol:F
-	; .obj.id 
-	; 3:ot.put:F
+	; 4:ot.put:F
 	; .x 
 	; .y 
 	; .z 
@@ -2725,22 +2737,7 @@ N_INT300    "s.debug.mode"
 	; .tare.chg 
 	; .locked.zone 
 	; .lock.zone 
-	; 3:calc.ot.old:F
-	; .center.col 
-	; .center.row 
-	; .cell 
-	; .i 
-	; .j 
-	; .dist 
-	; .dists 
-	; .array.size 
-	; .result 
-	; .cornerA 
-	; .cornerB 
-	; .tmp.dist 
-	; .tmp.m 
-	; .tmp.n 
-	; 3:calc.ot:F
+	; 4:calc.ot:F
 	; .center.col 
 	; .center.row 
 	; .cell 
@@ -2753,24 +2750,24 @@ N_INT300    "s.debug.mode"
 	; .m 
 	; .filled 
 	; .obj.id 
-	; Group:MeasureMachine:4
-	; 4:a.teach.machine:F
+	; Group:MeasureMachine:5
+	; 5:a.teach.machine:F
 	; .temp 
-	; 4:measure:F
+	; 5:measure:F
 	; .pos 
 	; .shift.y 
 	; .shift.z 
 	; .p.idx 
 	; .machine.pos 
-	; Group:Objects:5
-	; 5:id1:F
-	; 5:id2:F
-	; 5:id3:F
-	; 5:id4:F
-	; 5:id5:F
-	; 5:id6:F
-	; Group:Positioner:6
-	; 6:pos.pick:F
+	; Group:Objects:6
+	; 6:id1:F
+	; 6:id2:F
+	; 6:id3:F
+	; 6:id4:F
+	; 6:id5:F
+	; 6:id6:F
+	; Group:Positioner:7
+	; 7:pos.pick:F
 	; .$temp 
 	; .temp 
 	; .shift.x 
@@ -2778,14 +2775,14 @@ N_INT300    "s.debug.mode"
 	; .locked.zone 
 	; .det.picked 
 	; .lock.zone 
-	; 6:a.teach.pos:F
+	; 7:a.teach.pos:F
 	; .shift.x 
 	; .shift.y 
 	; .temp 
-	; Group:Defect:7
-	; 7:defect.put:F
+	; Group:Defect:8
+	; 8:defect.put:F
 	; .temp 
-	; 7:a.teach.defect:F
+	; 8:a.teach.defect:F
 	; .x 
 	; .y 
 	; .o 
@@ -2793,67 +2790,67 @@ N_INT300    "s.debug.mode"
 	; .i 
 	; .j 
 	; .defect.pos 
-	; Group:States:8
-	; 8:state0:F
+	; Group:States:9
+	; 9:state0:F
 	; .tare.chg 
 	; .locked.zone 
 	; .det.picked 
 	; .etalon.stop 
-	; 8:state1:F
-	; 8:state2:F
-	; 8:state3:F
-	; 8:state4:F
-	; 8:state5:F
+	; 9:state1:F
+	; 9:state2:F
+	; 9:state3:F
+	; 9:state4:F
+	; 9:state5:F
 	; .etalon.stop 
-	; 8:state6:F
-	; 8:state7:F
-	; 8:state8:F
-	; 8:state100:F
+	; 9:state6:F
+	; 9:state7:F
+	; 9:state8:F
+	; 9:state100:F
 	; .finish.ack 
-	; 8:state101:F
-	; 8:state102:F
+	; 9:state101:F
+	; 9:state102:F
 	; .work 
 	; .det.put 
 	; .finish 
 	; .tare.chg 
 	; .locked.zone 
 	; .etalon.stop 
-	; 8:state103:F
-	; 8:state104:F
+	; 9:state103:F
+	; 9:state104:F
 	; .finish.ack 
-	; 8:state105:F
-	; 8:state106:F
-	; 8:state255:F
-	; Group:Utilities:9
-	; 9:a.home:F
-	; 9:a.align:F
-	; 9:safe.home:F
+	; 9:state105:F
+	; 9:state106:F
+	; 9:state255:F
+	; Group:Utilities:10
+	; 10:a.home:F
+	; 10:a.align:F
+	; 10:safe.home:F
 	; .idx 
 	; .temp 
 	; .s 
 	; .c 
 	; .dz 
-	; 9:log:F
+	; 10:log:F
 	; .$msg 
 	; .i 
-	; 9:pg.select:F
+	; 10:pg.select:F
 	; 0:a.main:F
 	; .$pg.string 
 	; 0:pg0:F
-	; Group:Watchdog:10
-	; 10:check.teach.pc:B
-	; 10:check.zone.pc:B
-	; 10:check.disp.pc:B
-	; 10:check.tasks.pc:B
-	; 10:watchdog.pc:B
+	; Group:Watchdog:11
+	; 11:check.teach.pc:B
+	; 11:check.zone.pc:B
+	; 11:check.disp.pc:B
+	; 11:check.tasks.pc:B
+	; 11:watchdog.pc:B
 	; .tare.ack 
 	; .tare.chg 
-	; Group:Initialization:11
-	; 11:set.vars.pc:B
+	; Group:Initialization:12
+	; 12:set.vars.pc:B
 	; .i 
 	; .n 
 	; .$name 
-	; 11:set.io.pc:B
+	; 12:set.io.pc:B
 	; .work 
 	; .tare.ack 
 	; .detail.put 
@@ -2866,12 +2863,12 @@ N_INT300    "s.debug.mode"
 	; .det.picked 
 	; .lock.zone 
 	; .etalon.stop 
-	; Group:TCPIP:12
-	; 12:get.state.pc:B
+	; Group:TCPIP:13
+	; 13:get.state.pc:B
 	; .$state 
-	; 12:tcp.sender.pc:B
+	; 13:tcp.sender.pc:B
 	; .$data 
-	; 12:tcp.callback.pc:B
+	; 13:tcp.callback.pc:B
 	; .$data 
 	; .data.length 
 	; .$temp 
@@ -2882,8 +2879,7 @@ N_INT300    "s.debug.mode"
 	; .$measurement.sta 
 	; .$spd 
 	; .speed 
-	; .$measurement.state 
-	; 12:tcp.client.pc:B
+	; 13:tcp.client.pc:B
 	; .tcp.retry.count 
 	; .tcp.connect.tmo 
 	; .tcp.receive.tmo 
@@ -2903,14 +2899,14 @@ N_INT300    "s.debug.mode"
 	; .tcp.error.cnt 
 	; .$tcp.request 
 	; .request.size 
-	; 12:tcp.send.pc:B
+	; 13:tcp.send.pc:B
 	; .$data 
 	; .data.length 
 	; .tcp.send.tmo 
 	; .status 
 	; .$temp 
 	; .i 
-	; 12:tcp.log.pc:B
+	; 13:tcp.log.pc:B
 	; .$msg 
 	; .i 
 	; 0:autostart.pc:B
@@ -2984,6 +2980,7 @@ N_INT300    "s.debug.mode"
 	; hmi.gmidy HMI panel mid y shift
 	; max.count.put Maximum number of put details per count
 	; pg7.gripper Object data: Gripper in current program for RS007
+	; layout Put layout
 	; @@@ STRINGS @@@
 	; $log.entry[] Log entry
 	; $action Current robot action to send
@@ -4139,6 +4136,7 @@ grip.midysh[64] = 0
 max.count.put = 15
 pg7.gripper = 1
 s.pr.tch.grip = 2260
+layout = 0
 .END
 .STRINGS
 $log.entry[2] = "15:27:47 CYCLEON;\n"

@@ -7,6 +7,7 @@ class ProcessRequest(BaseModel):
     ProductCount: int
     InTareIDs: List[int] = []
     OutTareIDs: List[int] = []
+    Layout: int = 0
     
 class SensorState(BaseModel):
     SensorName: str
