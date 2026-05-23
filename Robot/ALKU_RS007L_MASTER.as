@@ -31,6 +31,7 @@ N_WX29    "rs13.det.put[4]"
 N_WX30    "rs13.det.put[5]"
 N_WX31    "rs13.det.put[6]"
 N_WX32    "rs13.det.put[7]"
+N_WX33    "rs13.no.ot.stop"
 N_INT1    "di.ifp.page[1]"
 N_INT2    "di.ifp.page[2]"
 N_INT3    "di.ifp.page[3]"
@@ -216,207 +217,257 @@ N_INT300    "s.debug.mode"
 .INTER_PANEL_COLOR_D
 182,3,224,244,28,159,252,255,251,255,0,31,2,241,52,255,
 .END
-.PROGRAM layout0 ()
-  ; Get matrix center
-  .center.col = INT (lines.count / 2)
-  .center.row = INT (obj.in.line / 2)
-  .cell = 0
-  ;
-  IF direction == 1 THEN
-    ;
-    ; Stage 1: Add extreme columns (left and right edges)
-    FOR .row = 0 TO obj.in.line - 1
-      ms[.cell] = 0
-      ns[.cell] = .row
-      .cell = .cell + 1
-    END
-    IF lines.count > 1 THEN
-      FOR .row = 0 TO obj.in.line - 1
-        ms[.cell] = lines.count - 1
-        ns[.cell] = .row
-        .cell = .cell + 1
-      END
-    END
-    ;
-    ; Stage 2: Add center column
-    FOR .row = 0 TO obj.in.line - 1
-      ms[.cell] = .center.col
-      ns[.cell] = .row
-      .cell = .cell + 1
-    END
-    ;
-    ; Stage 3: Add from center outward (excluding center and edges)
-    FOR .offset = 1 TO .center.col - 1
-      .left = .center.col - .offset
-      .right = .center.col + .offset
-      ; Left column
-      FOR .row = 0 TO obj.in.line - 1
-        ms[.cell] = .left
-        ns[.cell] = .row
-        .cell = .cell + 1
-      END
-      ; Right column
-      IF .right < lines.count AND .right <> .left THEN
-        FOR .row = 0 TO obj.in.line - 1
-          ms[.cell] = .right
-          ns[.cell] = .row
-          .cell = .cell + 1
-        END
-      END
-    END
-  ELSE
-    ;
-    ; Stage 1: Add extreme columns (left and right edges)
-    FOR .row = obj.in.line - 1 TO 0 STEP -1
-      ms[.cell] = 0
-      ns[.cell] = .row
-      .cell = .cell + 1
-    END
-    IF lines.count > 1 THEN
-      FOR .row = obj.in.line - 1 TO 0 STEP -1
-        ms[.cell] = lines.count - 1
-        ns[.cell] = .row
-        .cell = .cell + 1
-      END
-    END
-    ;
-    ; Stage 2: Add center column
-    FOR .row = obj.in.line - 1 TO 0 STEP -1
-      ms[.cell] = .center.col
-      ns[.cell] = .row
-      .cell = .cell + 1
-    END
-    ;
-    ; Stage 3: Add from center outward (excluding center and edges)
-    FOR .offset = 1 TO .center.col - 1
-      .left = .center.col - .offset
-      .right = .center.col + .offset
-      ; Left column
-      FOR .row = obj.in.line - 1 TO 0 STEP -1
-        ms[.cell] = .left
-        ns[.cell] = .row
-        .cell = .cell + 1
-      END
-      ; Right column
-      IF .right < lines.count AND .right <> .left THEN
-        FOR .row = obj.in.line - 1 TO 0 STEP -1
-          ms[.cell] = .right
-          ns[.cell] = .row
-          .cell = .cell + 1
-        END
-      END
-    END
-  END
-  ;
-  ; Debug print
-  ;PRINT "ASCII grid"
-  ;FOR .n = 0 TO obj.in.line-1
-  ;  .$line = ""        ; буфер строки
-  ;  FOR .m = 0 TO lines.count-1
-  ;    .filled = 0
-  ;    FOR .i = 0 TO hmi.obj.id
-  ;      IF ms[.i] == .m AND ns[.i] == .n THEN
-  ;        .filled = 1
-  ;      END
-  ;    END
-  ;    IF .filled == 1 THEN
-  ;      .$line = .$line + "X "
-  ;    ELSE
-  ;      .$line = .$line + ". "
-  ;    END
-  ;  END
-  ;  PRINT .$line    ; печатаем всю строку одним вызовом
-  ;END
+.PROGRAM a.align()@26/01/21 14:55 #0
+	;
+	SPEED 250 MM/S ALWAYS
+	ALIGN
+	;
 .END
-.PROGRAM layout1 ()
-  ; Get matrix center
-  .center.col = INT (lines.count / 2)
-  .center.row = INT (obj.in.line / 2)
-  ; Get Manhattan distances matrix
-  .cell = 0
-  FOR .i = 0 TO lines.count - 1
-    FOR .j = 0 TO obj.in.line - 1
-      .dist = ABS (.i - .center.col) + ABS (.j - .center.row)
-      .dists[.cell] = .dist
-      ms[.cell] = .i
-      ns[.cell] = .j
-      .cell = .cell + 1
-    END
-  END
-  .array.size = .cell - 1
-  ; Bubble sort distances array
-  FOR .i = 0 TO .array.size - 1
-    FOR .j = 0 TO .array.size - .i - 1
-      ; Compare by angular distances
-      ; I don't want to make it
-      IF .dists[.j] <> .dists[.j + 1] THEN
-        .result = .dists[.j] - .dists[.j + 1]
-      ELSE
-        .cornerA = ABS (ms[.j] - .center.col)
-        IF ABS (ns[.j] - .center.row) > .cornerA THEN
-          .cornerA = ABS (ns[.j] - .center.row)
-        END
-        .cornerB = ABS (ms[.j + 1] - .center.col)
-        IF ABS (ns[.j + 1] - .center.row) > .cornerB THEN
-          .cornerB = ABS (ns[.j + 1] - .center.row)
-        END
-        IF .cornerA <> .cornerB THEN
-          .result = .cornerA - .cornerB
-        ELSE
-          IF ms[.j] <> ms[.j + 1] THEN
-            .result = ms[.j] - ms[.j + 1]
-          ELSE
-            .result = ns[.j] - ns[.j + 1]
-          END
-        END
-      END
-      ; Simple compare. Commented in case of troubles
-      ;IF .dists[.j] <> .dists[.j + 1]
-      ;  .result = .dists[.j] - .dists[.j + 1]
-      ;ELSE
-      ;  IF ms[.j] <> ms[.j + 1]
-      ;    .result = ms[.j] - ms[.j + 1]
-      ;  ELSE
-      ;    .result = ns[.j] - ns[.j + 1]
-      ;  END
-      ;END
-      ;
-      IF .result > 0 THEN
-        ;
-        .tmp.dist = .dists[.j]
-        .tmp.m = ms[.j]
-        .tmp.n = ns[.j]
-        ;
-        .dists[.j] = .dists[.j + 1]
-        ms[.j] = ms[.j + 1]
-        ns[.j] = ns[.j + 1]
-        ;
-        .dists[.j + 1] = .tmp.dist
-        ms[.j + 1] = .tmp.m
-        ns[.j + 1] = .tmp.n
-      END
-    END
-  END
-  ;
-  ; Debug print
-  ;PRINT "ASCII grid"
-  ;FOR .n = 0 TO obj.in.line-1
-  ;  .$line = ""        ; буфер строки
-  ;  FOR .m = 0 TO lines.count-1
-  ;    .filled = 0
-  ;    FOR .i = 0 TO .obj.id
-  ;      IF ms[.i] == .m AND ns[.i] == .n THEN
-  ;        .filled = 1
-  ;      END
-  ;    END
-  ;    IF .filled == 1 THEN
-  ;      .$line = .$line + "X "
-  ;    ELSE
-  ;      .$line = .$line + ". "
-  ;    END
-  ;  END
-  ;  PRINT .$line    ; печатаем всю строку одним вызовом
-  ;END
+.PROGRAM a.home()@26/01/21 14:55 #0
+	;
+	SPEED 250 MM/S ALWAYS
+	JMOVE #homyak
+	;
+.END
+.PROGRAM a.main()@26/01/21 14:55 #0
+	;
+	CALL log ("Main program executed")
+	CALL safe.home
+	;
+	WHILE TRUE DO
+		.$pg.string = "state" + $ENCODE (/L, state)
+		IF EXISTPGM (.$pg.string) THEN
+			SCALL .$pg.string
+		ELSE
+			CALL log ("Error! Program is in wrong state. Connect Robowizard")
+			RETURN
+		END
+		;IF manual.mode THEN
+		;  $action = "WaitNextStep"
+		;  SWAIT
+		;END
+	END
+	;
+.END
+.PROGRAM a.teach.defect()@26/01/22 12:32 #0
+	IF FALSE THEN
+		SPEED 250 MM/S ALWAYS
+		ACCURACY 0 ALWAYS
+		TOOL tool.pick[hmi.tool.no]
+		;
+		LMOVE #def.down.right; *** TEACH POINT *** Lower right
+		LMOVE #def.up.right; *** TEACH POINT *** Upper right
+		LMOVE #def.up.left; *** TEACH POINT *** Upper left
+		;
+		POINT .x = #def.up.right
+		POINT .y = #def.up.left
+		POINT .o = #def.down.right
+		;
+		BREAK
+		POINT defect.frame = FRAME (.o, .x, .y, .o)
+		;
+		.k = 1
+		FOR .i = 0 TO 9
+			FOR .j = 0 TO 4
+				POINT #defect.point[.k] = defect.frame + TRANS (.i * 27.8, .j * 55.6)
+				.k = .k + 1
+			END
+		END
+	END
+	SPEED 250 MM/S ALWAYS
+	ACCURACY 0.02 ALWAYS
+	TOOL tool.pick[hmi.tool.no]
+	BREAK
+	;
+	POINT .defect.pos = #defect.point[hmi.defect.pos]
+	;
+	LAPPRO .defect.pos, -10
+	LMOVE .defect.pos
+	LAPPRO .defect.pos, -10
+.END
+.PROGRAM a.teach.etalon()@26/01/21 14:55 #0
+	;
+	TOOL tool.pick[hmi.tool.no]
+	;
+	IF hmi.etalon.id == round.no THEN
+		.eshift.x = 0
+		.eshift.y = 0
+	ELSE
+		IF hmi.etalon.id == pawn.no THEN
+			.eshift.x = 0
+			.eshift.y = 0
+		ELSE
+			.eshift.x = 0
+			.eshift.y = 5
+		END
+	END
+	; Pick etalon
+	POINT .et.pos.point = #et.pos.point[hmi.etalon.id]
+	JMOVE .et.pos.point + TRANS (0, 0, 50)
+	BREAK
+	LMOVE #et.pos.point[hmi.etalon.id]; *** TEACH POINT ***
+	POINT .et.pos.point = #et.pos.point[hmi.etalon.id]
+	BREAK
+	TWAIT 0.5
+	LMOVE .et.pos.point + TRANS (.eshift.x, .eshift.y, 10)
+	LMOVE .et.pos.point + TRANS (0, 0, 50)
+	LMOVE #homyak
+	BREAK
+	TWAIT 0.5
+	; Measure etalon
+	IF FALSE THEN ; For round details
+		TOOL tool.pick[hmi.tool.no]
+		JMOVE #safe.machine
+		JMOVE #before.machine[2]
+		POINT .et.mac.poin = #et.mac.point[hmi.etalon.id]
+		JMOVE .et.mac.poin + TRANS (0, 0, 10)
+		BREAK
+		LMOVE #et.mac.point[hmi.etalon.id]; *** TEACH POINT ***
+		POINT .et.mac.poin = #et.mac.point[hmi.etalon.id]
+		BREAK
+		TWAIT 0.5
+		LMOVE .et.mac.poin + TRANS (0, 0, 10)
+		BREAK
+		TWAIT 0.5
+		LMOVE #before.machine[2]
+	ELSE
+		TOOL tool.pick[hmi.tool.no]
+		JMOVE #safe.machine
+		JMOVE #before.machine[1]
+		POINT .et.mac.poin = #et.mac.point[hmi.etalon.id]
+		JMOVE .et.mac.poin + TRANS (0, 10, 0)
+		BREAK
+		LMOVE #et.mac.point[hmi.etalon.id]; *** TEACH POINT ***
+		POINT .et.mac.poin = #et.mac.point[hmi.etalon.id]
+		BREAK
+		TWAIT 0.5
+		LMOVE .et.mac.poin + TRANS (0, 10, 0)
+		BREAK
+		TWAIT 0.5
+		LMOVE #before.machine[1]
+	END
+	;
+	LMOVE #safe.machine
+	LMOVE #homyak
+	LMOVE .et.pos.point + TRANS (0, 0, 50)
+	LMOVE .et.pos.point + TRANS (.eshift.x, .eshift.y, 10)
+	LMOVE #et.pos.point[hmi.etalon.id]
+	LMOVE .et.pos.point + TRANS (0, 0, 50)
+.END
+.PROGRAM a.teach.gripper()@26/01/15 08:39 #0
+	;
+	TOOL tool.pick[hmi.gripper]
+	;
+	POINT .temp = #tool.point[hmi.gripper]
+	JMOVE .temp + TRANS (0, 0, 50)
+	BREAK
+	;
+	LMOVE #tool.point[hmi.gripper]; *** TEACH POINT ***
+	BREAK
+	PULSE capture.grip
+	TWAIT 0.5
+	current.gripper = hmi.gripper
+	;
+	LMOVE .temp + TRANS (0, 0, 200)
+	BREAK
+	JMOVE #safe.defect
+	;
+	LMOVE .temp + TRANS (0, 0, 200)
+	LMOVE .temp + TRANS (0, 0, 50)
+	BREAK
+	LMOVE #tool.point[hmi.gripper]
+	BREAK
+	PULSE release.grip
+	TWAIT 0.5
+	current.gripper = 0
+	;
+	LMOVE .temp + TRANS (0, 0, 50)
+	LMOVE .temp + TRANS (0, 0, 200)
+	;
+.END
+.PROGRAM a.teach.machine()@26/01/21 14:55 #0
+	IF FALSE THEN ; For round details
+		TOOL tool.pick[hmi.tool.no]
+		JMOVE #safe.machine
+		JMOVE #before.machine[2]
+		POINT .temp = #machine.pos[hmi.obj.id]
+		JMOVE .temp + TRANS (0, 0, 10)
+		BREAK
+		LMOVE #machine.pos[hmi.obj.id]
+		POINT .temp = #machine.pos[hmi.obj.id]
+		BREAK
+		TWAIT 0.5
+		LMOVE .temp + TRANS (0, 0, 10)
+		BREAK
+		TWAIT 0.5
+		LMOVE #before.machine[2]
+	ELSE
+		TOOL tool.pick[hmi.tool.no]
+		JMOVE #safe.machine
+		JMOVE #before.machine[1]
+		POINT .temp = #machine.pos[hmi.obj.id]
+		JMOVE .temp + TRANS (0, 10, 0)
+		BREAK
+		LMOVE #machine.pos[hmi.obj.id]
+		POINT .temp = #machine.pos[hmi.obj.id]
+		BREAK
+		TWAIT 0.5
+		LMOVE .temp + TRANS (0, 10, 0)
+		BREAK
+		TWAIT 0.5
+		LMOVE #before.machine[1]
+	END
+.END
+.PROGRAM a.teach.ot()@26/01/23 18:09 #0
+	SPEED 250 MM/S ALWAYS
+	ACCURACY 0 ALWAYS
+	TOOL tool.pick[hmi.tool.no]
+	;
+	LMOVE #ot.down.left; *** TEACH POINT *** Left bottom
+	LMOVE #ot.down.right; *** TEACH POINT *** Right bottom
+	LMOVE #ot.up.right; *** TEACH POINT *** Right top
+	LMOVE #ot.orig; *** TEACH POINT *** Zero point ~
+	;
+	POINT .ot.down.left = #ot.down.left
+	POINT .ot.down.right = #ot.down.right
+	POINT .ot.up.right = #ot.up.right
+	POINT .ot.orig = #ot.orig
+	;
+	BREAK
+	POINT ot.frame = FRAME (.ot.down.left, .ot.down.right, .ot.up.right, .ot.orig)
+	POINT ot.frame = ot.frame + RZ (-180)
+	;
+	;JMOVE ot.frame + TRANS (grip.xsh[hmi.tool.no], grip.ysh[hmi.tool.no], grip.zsh[hmi.tool.no])
+.END
+.PROGRAM a.teach.pos()@26/01/27 10:24 #0
+	;
+	IF hmi.obj.id == round.no THEN
+		.shift.x = 0
+		.shift.y = 0
+	ELSE
+		IF hmi.obj.id == pawn.no THEN
+			.shift.x = 0
+			.shift.y = 0
+		ELSE
+			.shift.x = 0
+			.shift.y = 5
+		END
+	END
+	;
+	TOOL tool.pick[hmi.tool.no]
+	;
+	POINT .temp = #pos.point[hmi.obj.id]
+	JMOVE .temp + TRANS (0, 0, 50)
+	BREAK
+	LMOVE #pos.point[hmi.obj.id]
+	POINT .temp = #pos.point[hmi.obj.id]
+	BREAK
+	TWAIT 0.5
+	LMOVE .temp + TRANS (.shift.x, .shift.y, 10)
+	LMOVE .temp + TRANS (0, 0, 50)
+	BREAK
+	TWAIT 0.5
+	;
 .END
 .PROGRAM a.test.gripper()@26/01/15 08:39 #0
 	;
@@ -424,51 +475,556 @@ N_INT300    "s.debug.mode"
 	CALL gripper.put (hmi.gripper)
 	; detail.type
 .END
+.PROGRAM a.test.ot()@26/01/21 14:55 #0
+	IF hmi.ot.k <> -1 THEN
+		.$pg = "id" + $ENCODE (/L, hmi.obj.id)
+		SCALL .$pg
+		IF hmi.obj.id <> round.no THEN
+			CALL calc.grid
+		ELSE
+			CALL calc.grid.rnd
+		END
+		CALL calc.ot
+		CALL get.ot.point (hmi.ot.k)
+	END
+	.x = grip.xsh[hmi.obj.id]
+	.y = grip.ysh[hmi.obj.id]
+	.z = grip.zsh[hmi.obj.id]
+	IF object.id <> round.no AND ot.y MOD 2 <> 0 AND SIG (s.opt.flip) THEN
+		.x = grip.180xsh[hmi.obj.id]
+		.y = grip.180ysh[hmi.obj.id]
+	END
+	;
+	POINT .put = ot.put[ot.x, ot.y] + TRANS (.x, .y, .z)
+	LAPPRO .put, -50
+	LMOVE .put
+	LAPPRO .put, -50
+.END
+.PROGRAM autostart.pc()@26/01/21 14:55 #0
+	;
+	; System switches
+	CP ON
+	PREFETCH.SIGINS OFF
+	QTOOL OFF
+	REP_ONCE ON
+	HOLD.STEP ON
+	DISP.EXESTEP ON
+	PROG.DATE ON
+	ABS.SPEED ON
+	autostart.pc ON
+	errstart.pc ON  ;
+	;
+	IFPWPRINT 8, 1, 1, 5, 10 = "Robot: RS007L S/N: C6324", "Controller: F60 S/N: C8174", " ", "Powered by Robowizard Co.Ltd."
+	;
+	CALL set.io.pc
+	CALL set.vars.pc
+	;
+	MC PRIME a.main
+	TWAIT 1
+	;
+	CALL watchdog.pc
+	;
+.END
+.PROGRAM calc.grid()@26/01/22 13:44 #90
+	; Constants
+	line.width = 210; 210; mm
+	lines.count = 21
+	lines.shift = 16; mm
+	obj.spacer = 1.5; mm
+	;
+	.max = max.tare.count
+	.obj.len = object.length
+	;
+	.obj.len.w.spc = object.length + obj.spacer
+	obj.in.line = INT ((line.width - obj.spacer) / .obj.len.w.spc);
+	;
+	; If you need to put details by max.tare.count
+	;obj.in.line = INT(max.tare.count/21);
+	;
+	FOR .i = 0 TO lines.count - 1
+		FOR .j = 0 TO obj.in.line - 1
+			POINT ot.put[.i, .j] = ot.frame + TRANS (-.i * lines.shift, -.j * .obj.len.w.spc)
+		END
+	END
+	;
+.END
+.PROGRAM calc.grid.rnd()@26/01/21 14:55 #11
+	; Constants
+	lines.count = 11
+	obj.in.line = 7
+	lines.shift = 27; mm
+	;
+	.max = 77
+	.obj.shift = 27 ; mm
+	;
+	FOR .i = 0 TO lines.count - 1
+		FOR .j = 0 TO obj.in.line - 1
+			POINT ot.put[.i, .j] = ot.frame + TRANS (-.i * lines.shift, -.j * .obj.shift)
+		END
+	END
+	;
+.END
+.PROGRAM calc.ot()@26/01/22 13:07 #116
+	;
+	.$calc.pg = "layout" + $ENCODE (/L, layout)
+	IF EXISTPGM (.$calc.pg) THEN
+		SCALL .$calc.pg
+	ELSE
+		CALL log ("Error! Wrong layout. Connect Robowizard")
+		state = 255
+		RETURN
+	END
+	;
+.END
+.PROGRAM check.disp.pc()@26/01/21 14:55 #51733063
+	;
+	IF SIG (s.tcp.ena) AND tcp.ena == -1 THEN
+		tcp.ena = tyterm
+	END
+	IF NOT SIG (s.tcp.ena) AND tcp.ena <> -1 THEN
+		tcp.ena = -1
+	END
+	;
+	IF SIG (s.tcp.send.ena) AND tcp.send.ena == -1 THEN
+		tcp.send.ena = tyterm
+	END
+	IF NOT SIG (s.tcp.send.ena) AND tcp.send.ena <> -1 THEN
+		tcp.send.ena = -1
+	END
+	;
+	IF SIG (s.tcp.recv.ena) AND tcp.recv.ena == -1 THEN
+		tcp.recv.ena = tyterm
+	END
+	IF NOT SIG (s.tcp.recv.ena) AND tcp.recv.ena <> -1 THEN
+		tcp.recv.ena = -1
+	END
+	;
+.END
+.PROGRAM check.tasks.pc()@26/01/21 14:55 #51733072
+	;
+	IF TASK (1002) <> 1 THEN
+		PCEXECUTE 2: tcp.client.pc
+		TWAIT 3
+	END
+	IF TASK (1003) <> 1 THEN
+		PCEXECUTE 3: tcp.sender.pc
+		TWAIT 3
+	END
+	;
+.END
+.PROGRAM check.teach.pc()@26/01/21 14:55 #11289320
+	;
+	IF SIG (s.hmi.res.state) THEN
+		state = 0
+	END
+	;
+	IF SIG (s.hmi.res.act) THEN
+		$action = " "
+	END
+	;
+	IF SIG (s.pr.tch.pos) AND NOT SWITCH (REPEAT ) THEN
+		MC PRIME a.teach.pos
+	END
+	;
+	IF SIG (s.pr.home) AND NOT SWITCH (REPEAT ) THEN
+		MC PRIME a.home
+	END
+	;
+	IF SIG (s.pr.tch.defect) AND NOT SWITCH (REPEAT ) THEN
+		MC PRIME a.teach.defect
+	END
+	;
+	IF SIG (s.pr.tch.meas) AND NOT SWITCH (REPEAT ) THEN
+		MC PRIME a.teach.machine
+	END
+	;
+	IF SIG (s.pr.tch.ot) AND NOT SWITCH (REPEAT ) THEN
+		MC PRIME a.teach.ot
+	END
+	;
+	IF SIG (s.pr.tst.ot) AND NOT SWITCH (REPEAT ) THEN
+		MC PRIME a.test.ot
+	END
+	;
+	IF SIG (s.pr.tch.etal) AND NOT SWITCH (REPEAT ) THEN
+		MC PRIME a.teach.etalon
+	END
+	;
+	IF SIG (s.pr.tch.grip) AND NOT SWITCH (REPEAT ) THEN
+		MC PRIME a.teach.gripper
+	END
+	;
+	; HMI PANEL OBJECT TEACH DATA
+	IF keep.object <> hmi.obj.id AND hmi.obj.id > 0 AND hmi.obj.id <= 64 THEN
+		hmi.gx = grip.xsh[hmi.obj.id]
+		hmi.gy = grip.ysh[hmi.obj.id]
+		hmi.gz = grip.zsh[hmi.obj.id]
+		hmi.g180x = grip.180xsh[hmi.obj.id]
+		hmi.g180y = grip.180ysh[hmi.obj.id]
+		hmi.gmidy = grip.midysh[hmi.obj.id]
+		;
+		keep.object = hmi.obj.id
+	END
+	IF SIG (s.apply.obj) THEN
+		grip.xsh[hmi.obj.id] = hmi.gx
+		grip.ysh[hmi.obj.id] = hmi.gy
+		grip.zsh[hmi.obj.id] = hmi.gz
+		grip.180xsh[hmi.obj.id] = hmi.g180x
+		grip.180ysh[hmi.obj.id] = hmi.g180y
+		grip.midysh[hmi.obj.id] = hmi.gmidy
+	END
+	;
+.END
+.PROGRAM check.zone.pc()@26/01/21 14:55 #51733091
+	;
+	;do.work[1] = 17
+	;rs13.work[1] = 1017
+	;di.hold = 2009
+	;s.zone.blocked = 2209
+	; do.work[1]     rs13.work[1]             s.zone.blocked
+	;----| |-------------| |----------------------( )
+	;            |                |
+	;            | s.zone.blocked |
+	;            --------|/|-------
+	;
+	; s.zone.blocked   rs13.work[1]  do.work[1]   di.hold
+	;------|/|------------| |---------|  |--------(/)
+	;
+	SOUT 2209 = 17 AND (NOT 1017 OR 2209)
+	SOUT 2009 = NOT (NOT 2209 AND 1017 AND 17)
+	;
+.END
+.PROGRAM defect.put()@26/01/23 15:56 #326
+	;
+	IF count.defect >= max.defect.cnt THEN
+		CALL log ("Defect tare is full. Waiting for tare clean")
+		$action = "Paused"
+		WAIT count.defect == 0
+		$action = " "
+	END
+	;
+	SPEED 100 ALWAYS
+	ACCURACY 100 ALWAYS
+	TOOL tool.pick[current.gripper]
+	;
+	POINT .temp = #defect.point[count.defect + 1]
+	;
+	JMOVE #safe.defect
+	;
+	CALL log ("Putting to defect tare with No:" + $ENCODE (count.defect + 1))
+	;
+	ACCURACY 10
+	LAPPRO .temp, -30
+	BREAK
+	;
+	SPEED 150 MM/S
+	ACCURACY 0.02
+	LMOVE #defect.point[count.defect + 1]
+	BREAK
+	TWAIT 0.3
+	PULSE grip.unclamp
+	TWAIT 0.3
+	count.defect = count.defect + 1
+	SIGNAL -s.grip.full
+	;
+	ACCURACY 10
+	LAPPRO .temp, -30
+	JMOVE #safe.defect
+	LMOVE #homyak
+	;
+.END
+.PROGRAM errstart.pc()@26/01/21 14:55 #199
+	;
+	IF ERROR == -34021 OR ERROR == -10100 THEN
+		tcp.socket = -1
+		MC ERESET
+		TWAIT 1
+	END
+	TWAIT 5
+	errstart.pc ON
+	;
+.END
+.PROGRAM etalon.measure(.id)@26/01/26 14:33 #86
+	IF FALSE THEN
+		.id = hmi.etalon.id
+	END
+	TOOL tool.pick[current.gripper]
+	;
+	SPEED 20 ALWAYS
+	ACCURACY 10 ALWAYS
+	;
+	POINT .etalon.pos.pt = #et.pos.point[.id]
+	POINT .etalon.mac.pt = #et.mac.point[.id]
+	IF .id == round.no THEN
+		.shift.y = 0
+		.shift.z = 50
+		.p.idx = 2
+	ELSE
+		.shift.y = 50
+		.shift.z = 0
+		.p.idx = 1
+	END
+	;
+	IF .id == round.no THEN
+		.eshift.x = 0
+		.eshift.y = 0
+	ELSE
+		IF .id == pawn.no THEN
+			.eshift.x = 0
+			.eshift.y = 0
+		ELSE
+			.eshift.x = 0
+			.eshift.y = 5
+		END
+	END
+	;
+	IF NOT SIG (grip.unclamped) THEN
+		PULSE grip.unclamp
+		TWAIT 0.5
+		CALL log ("Wait for unclamp gripper. State: WaitingGripUnclamped")
+		$action = "WaitingGripUnclamped"
+		WAIT SIG (grip.unclamped) OR SIG (s.force.in[1])
+	END
+	; Part 1. Pick etalon
+	.$temp = "Pick detail from etalon (ID:" + $ENCODE (.id) + ")"
+	CALL log (.$temp)
+	LMOVE #safe.etalon
+	LMOVE .etalon.pos.pt + TRANS (0, 0, 50)
+	LMOVE .etalon.pos.pt + TRANS (0, 0, 30)
+	SPEED 50 MM/S
+	ACCURACY 0.02
+	LMOVE #et.pos.point[.id]
+	BREAK
+	TWAIT 0.1
+	PULSE grip.clamp
+	TWAIT 0.3
+	SIGNAL s.grip.full
+	LMOVE .etalon.pos.pt + TRANS (.eshift.x, .eshift.y, 10)
+	ACCURACY 100
+	LMOVE .etalon.pos.pt + TRANS (0, 0, 50)
+	LMOVE #safe.etalon
+	ACCURACY 100
+	LMOVE #homyak
+	BREAK
+	; Part 2. Put etalon
+	.$temp = "Measure etalon (ID:" + $ENCODE (.id) + ")"
+	CALL log (.$temp)
+	; Go to machine
+	JMOVE #safe.machine
+	JMOVE #before.machine[.p.idx]
+	ACCURACY 10
+	LMOVE .etalon.mac.pt + TRANS (0, .shift.y, .shift.z)
+	ACCURACY 5
+	LMOVE .etalon.mac.pt + TRANS (0, .shift.y * 0.2, .shift.z * 0.2)
+	SPEED 50 MM/S
+	ACCURACY 0.5
+	LMOVE #et.mac.point[.id]
+	BREAK
+	TWAIT 0.1
+	PULSE grip.unclamp
+	TWAIT 0.3
+	ACCURACY 5
+	LMOVE .etalon.mac.pt + TRANS (0, .shift.y * 0.2, .shift.z * 0.2)
+	ACCURACY 10
+	LMOVE .etalon.mac.pt + TRANS (0, .shift.y, .shift.z)
+	LMOVE #before.machine[.p.idx]
+	BREAK
+	; Wait result
+	CALL log ("Waiting for measurement result")
+	$action = "WaitingCalibrationResult"
+	WAIT SIG (s.etalon.ok) OR SIG (s.etalon.ret) OR SIG (s.etalon.ng)
+	;
+	IF SIG (s.etalon.ok) THEN
+		CALL log ("Measurement etalon: OK")
+	END
+	IF SIG (s.etalon.ret) THEN
+		CALL log ("Measurement result: RETRY")
+	END
+	IF SIG (s.etalon.ng) THEN
+		CALL log ("Measurement result: NG")
+	END
+	$action = ""
+	; Pick from machine
+	ACCURACY 10
+	LMOVE .etalon.mac.pt + TRANS (0, .shift.y, .shift.z)
+	ACCURACY 5
+	LMOVE .etalon.mac.pt + TRANS (0, .shift.y * 0.2, .shift.z * 0.2)
+	SPEED 50 MM/S
+	ACCURACY 0.5
+	LMOVE #et.mac.point[.id]
+	BREAK
+	TWAIT 0.1
+	PULSE grip.clamp
+	TWAIT 0.3
+	; Go home
+	ACCURACY 5
+	LMOVE .etalon.mac.pt + TRANS (0, .shift.y * 0.2, .shift.z * 0.2)
+	ACCURACY 10
+	LMOVE .etalon.mac.pt + TRANS (0, .shift.y, .shift.z)
+	LMOVE #before.machine[.p.idx]
+	;
+	; Wait for zone FREE
+	SWAIT -rs13.work[1]
+	; Part 3 Return Etalon
+	.$temp = "Return etalon to positioner (ID:" + $ENCODE (.id) + ")"
+	CALL log (.$temp)
+	JMOVE #safe.machine
+	JMOVE #homyak
+	LMOVE #safe.etalon
+	LMOVE .etalon.pos.pt + TRANS (0, 0, 50)
+	LMOVE .etalon.pos.pt + TRANS (.eshift.x, .eshift.y, 30)
+	LMOVE .etalon.pos.pt + TRANS (.eshift.x, .eshift.y, 10)
+	SPEED 150 MM/S
+	ACCURACY 0.02
+	LMOVE #et.pos.point[.id]
+	BREAK
+	TWAIT 0.1
+	PULSE grip.unclamp
+	TWAIT 0.3
+	SIGNAL -s.grip.full
+	LMOVE .etalon.pos.pt + TRANS (0, 0, 30)
+	ACCURACY 100
+	LMOVE .etalon.pos.pt + TRANS (0, 0, 50)
+	LMOVE #safe.etalon
+	ACCURACY 100
+	LMOVE #homyak
+.END
+.PROGRAM get.ot.point(.obj.id)@26/01/21 14:55 #1697
+	ot.x = ms[.obj.id]
+	ot.y = ns[.obj.id]
+.END
+.PROGRAM get.state.pc(.$state)@26/01/21 14:55 #1365067
+	.$state = "SPEED:" + $ENCODE (/L, MSPEED) + ";"
+	.$state = .$state + "POWER:"
+	IF SWITCH (POWER ) THEN
+		.$state = .$state + "TRUE;"
+	ELSE
+		.$state = .$state + "FALSE;"
+	END
+	; MAX: 12
+	;
+	.$state = .$state + "CS:"
+	IF SWITCH (CS ) THEN
+		.$state = .$state + "TRUE;"
+	ELSE
+		.$state = .$state + "FALSE;"
+	END
+	; MAX 9
+	;
+	.$state = .$state + "TEACH:"
+	IF SWITCH (REPEAT ) THEN
+		.$state = .$state + "FALSE;"
+	ELSE
+		.$state = .$state + "TRUE;"
+	END
+	; MAX 12
+	;
+	.$state = .$state + "TEACHL:"
+	IF SWITCH (TEACH_LOCK ) THEN
+		.$state = .$state + "TRUE;"
+	ELSE
+		.$state = .$state + "FALSE;"
+	END
+	; MAX 13
+	;
+	.$state = .$state + "TPEMG:"
+	IF SWITCH (TP_EMG ) THEN
+		.$state = .$state + "TRUE;"
+	ELSE
+		.$state = .$state + "FALSE;"
+	END
+	; MAX 12
+	;
+	.$state = .$state + "OPEMG:"
+	IF SWITCH (OP_EMG ) THEN
+		.$state = .$state + "TRUE;"
+	ELSE
+		.$state = .$state + "FALSE;"
+	END
+	; MAX 12
+	;
+	.$state = .$state + "EXEMG:"
+	IF SWITCH (EX_EMG ) THEN
+		.$state = .$state + "TRUE;"
+	ELSE
+		.$state = .$state + "FALSE;"
+	END
+	; MAX 12
+	;
+	.$state = .$state + "ERROR:"
+	IF SWITCH (ERROR ) THEN
+		.$state = .$state + "TRUE;"
+	ELSE
+		.$state = .$state + "FALSE;"
+	END
+	; MAX 12
+	;
+	.$state = .$state + "ECODE:"
+	.$state = .$state + $ENCODE (ERROR) + ";"
+	; MAX 12
+	;
+	.$state = .$state + "HOME:"
+	IF SIG (do.home) THEN
+		.$state = .$state + "TRUE;"
+	ELSE
+		.$state = .$state + "FALSE;"
+	END
+	;; MAX 12
+	;;
+	.$state = .$state + "BATALM:"
+	IF SIG (do.bat.alm) THEN
+		.$state = .$state + "TRUE;"
+	ELSE
+		.$state = .$state + "FALSE;"
+	END
+	; MAX 12
+	.$state = .$state + "\n"
+.END
 .PROGRAM gripper.pick(.gripper.no)@26/01/26 14:41 #70
-  ;
-  ; Start from step 3 to manual check
-  IF FALSE THEN
-    .gripper.no = hmi.gripper
-  END
-  ; Safety check
-  IF current.gripper <> 0 THEN
-    CALL log ("Some gripper is already in robot\'s hand")
-    RETURN
-  END
-  PULSE release.grip
-  ; Log info
-  .$temp = "Pick gripper" + $ENCODE (.gripper.no)
-  CALL log (.$temp)
-  ; Set default motion parameters
-  SPEED 10 ALWAYS
-  ACCURACY 100 ALWAYS
-  TOOL tool.pick[.gripper.no]
-  ; Calculate points
-  POINT .temp = #tool.point[.gripper.no]
-  ; Motion
-  LMOVE .temp + TRANS (0, 0, 200)
-  ;
-  ACCURACY 5
-  LMOVE .temp + TRANS (0, 0, 50)
-  BREAK
-  ;
-  SPEED 50 MM/S ALWAYS
-  ACCURACY 0.02
-  LMOVE #tool.point[.gripper.no]
-  BREAK
-  ; Capture tool
-  PULSE capture.grip
-  TWAIT 0.5
-  current.gripper = .gripper.no
-  ;
-  SPEED 10 ALWAYS
-  ACCURACY 1
-  LMOVE .temp + TRANS (0, 0, 200)
-  ;
-  ; Log info
-  .$temp = "Gripper" + $ENCODE (.gripper.no) + " picked"
-  CALL log (.$temp)
-  ;
+	;
+	; Start from step 3 to manual check
+	IF FALSE THEN
+		.gripper.no = hmi.gripper
+	END
+	; Safety check
+	IF current.gripper <> 0 THEN
+		CALL log ("Some gripper is already in robot\'s hand")
+		RETURN
+	END
+	PULSE release.grip
+	; Log info
+	.$temp = "Pick gripper" + $ENCODE (.gripper.no)
+	CALL log (.$temp)
+	; Set default motion parameters
+	SPEED 10 ALWAYS
+	ACCURACY 100 ALWAYS
+	TOOL tool.pick[.gripper.no]
+	; Calculate points
+	POINT .temp = #tool.point[.gripper.no]
+	; Motion
+	LMOVE .temp + TRANS (0, 0, 200)
+	;
+	ACCURACY 5
+	LMOVE .temp + TRANS (0, 0, 50)
+	BREAK
+	;
+	SPEED 50 MM/S ALWAYS
+	ACCURACY 0.02
+	LMOVE #tool.point[.gripper.no]
+	BREAK
+	; Capture tool
+	PULSE capture.grip
+	TWAIT 0.5
+	current.gripper = .gripper.no
+	;
+	SPEED 10 ALWAYS
+	ACCURACY 1
+	LMOVE .temp + TRANS (0, 0, 200)
+	;
+	; Log info
+	.$temp = "Gripper" + $ENCODE (.gripper.no) + " picked"
+	CALL log (.$temp)
+	;
 .END
 .PROGRAM gripper.put(.gripper.no)@26/01/26 14:41 #70
 	;
@@ -517,2150 +1073,1603 @@ N_INT300    "s.debug.mode"
 	BREAK
 	;
 .END
-.PROGRAM a.teach.gripper()@26/01/15 08:39 #0
-  ;
-  TOOL tool.pick[hmi.gripper]
-  ;
-  POINT .temp = #tool.point[hmi.gripper]
-  JMOVE .temp + TRANS (0, 0, 50)
-  BREAK
-  ;
-  LMOVE #tool.point[hmi.gripper]; *** TEACH POINT ***
-  BREAK
-  PULSE capture.grip
-  TWAIT 0.5
-  current.gripper = hmi.gripper
-  ;
-  LMOVE .temp + TRANS (0, 0, 200)
-  BREAK
-  JMOVE #safe.defect
-  ;
-  LMOVE .temp + TRANS (0, 0, 200)
-  LMOVE .temp + TRANS (0, 0, 50)
-  BREAK
-  LMOVE #tool.point[hmi.gripper]
-  BREAK
-  PULSE release.grip
-  TWAIT 0.5
-  current.gripper = 0
-  ;
-  LMOVE .temp + TRANS (0, 0, 50)
-  LMOVE .temp + TRANS (0, 0, 200)
-  ;
-.END
-.PROGRAM a.teach.etalon()@26/01/21 14:55 #0
-;
-  TOOL tool.pick[hmi.tool.no]
-;
-  IF hmi.etalon.id==round.no THEN
-    .eshift.x = 0
-    .eshift.y = 0
-  ELSE
-    IF hmi.etalon.id==pawn.no THEN
-      .eshift.x = 0
-      .eshift.y = 0
-    ELSE
-      .eshift.x = 0
-      .eshift.y = 5
-    END
-  END
-; Pick etalon
-  POINT .et.pos.point = #et.pos.point[hmi.etalon.id]
-  JMOVE .et.pos.point+TRANS(0,0,50)
-  BREAK
-  LMOVE #et.pos.point[hmi.etalon.id]; *** TEACH POINT ***
-  POINT .et.pos.point = #et.pos.point[hmi.etalon.id]
-  BREAK
-  TWAIT 0.5
-  LMOVE .et.pos.point+TRANS(.eshift.x,.eshift.y,10)
-  LMOVE .et.pos.point+TRANS(0,0,50)
-  LMOVE #homyak
-  BREAK
-  TWAIT 0.5
-; Measure etalon
-  IF FALSE THEN ; For round details
-    TOOL tool.pick[hmi.tool.no]
-    JMOVE #safe.machine
-    JMOVE #before.machine[2]
-    POINT .et.mac.poin = #et.mac.point[hmi.etalon.id]
-    JMOVE .et.mac.poin+TRANS(0,0,10)
-    BREAK
-    LMOVE #et.mac.point[hmi.etalon.id]; *** TEACH POINT ***
-    POINT .et.mac.poin = #et.mac.point[hmi.etalon.id]
-    BREAK
-    TWAIT 0.5
-    LMOVE .et.mac.poin+TRANS(0,0,10)
-    BREAK
-    TWAIT 0.5
-    LMOVE #before.machine[2]
-  ELSE
-    TOOL tool.pick[hmi.tool.no]
-    JMOVE #safe.machine
-    JMOVE #before.machine[1]
-    POINT .et.mac.poin = #et.mac.point[hmi.etalon.id]
-    JMOVE .et.mac.poin+TRANS(0,10,0)
-    BREAK
-    LMOVE #et.mac.point[hmi.etalon.id]; *** TEACH POINT ***
-    POINT .et.mac.poin = #et.mac.point[hmi.etalon.id]
-    BREAK
-    TWAIT 0.5
-    LMOVE .et.mac.poin+TRANS(0,10,0)
-    BREAK
-    TWAIT 0.5
-    LMOVE #before.machine[1]
-  END
-;
-  LMOVE #safe.machine
-  LMOVE #homyak
-  LMOVE .et.pos.point+TRANS(0,0,50)
-  LMOVE .et.pos.point+TRANS(.eshift.x,.eshift.y,10)
-  LMOVE #et.pos.point[hmi.etalon.id]
-  LMOVE .et.pos.point+TRANS(0,0,50)
-.END
-.PROGRAM etalon.measure(.id)@26/01/26 14:33 #86
-  IF FALSE THEN
-    .id = hmi.etalon.id
-  END
-  TOOL tool.pick[current.gripper]
-;
-  SPEED 20 ALWAYS
-  ACCURACY 10 ALWAYS
-;
-  POINT .etalon.pos.pt = #et.pos.point[.id]
-  POINT .etalon.mac.pt = #et.mac.point[.id]
-  IF .id==round.no THEN
-    .shift.y = 0
-    .shift.z = 50
-    .p.idx = 2
-  ELSE
-    .shift.y = 50
-    .shift.z = 0
-    .p.idx = 1
-  END
-;
-  IF .id==round.no THEN
-    .eshift.x = 0
-    .eshift.y = 0
-  ELSE
-    IF .id==pawn.no THEN
-      .eshift.x = 0
-      .eshift.y = 0
-    ELSE
-      .eshift.x = 0
-      .eshift.y = 5
-    END
-  END
-;
-  IF NOT SIG(grip.unclamped) THEN
-    PULSE grip.unclamp
-    TWAIT 0.5
-    CALL log("Wait for unclamp gripper. State: WaitingGripUnclamped")
-    $action = "WaitingGripUnclamped"
-    WAIT SIG(grip.unclamped) OR SIG(s.force.in[1])
-  END
-; Part 1. Pick etalon
-  .$temp = "Pick detail from etalon (ID:"+$ENCODE(.id)+")"
-  CALL log(.$temp)
-  LMOVE #safe.etalon
-  LMOVE .etalon.pos.pt+TRANS(0,0,50)
-  LMOVE .etalon.pos.pt+TRANS(0,0,30)
-  SPEED 50 MM/S
-  ACCURACY 0.02
-  LMOVE #et.pos.point[.id]
-  BREAK
-  TWAIT 0.1
-  PULSE grip.clamp
-  TWAIT 0.3
-  SIGNAL s.grip.full
-  LMOVE .etalon.pos.pt+TRANS(.eshift.x,.eshift.y,10)
-  ACCURACY 100
-  LMOVE .etalon.pos.pt+TRANS(0,0,50)
-  LMOVE #safe.etalon
-  ACCURACY 100
-  LMOVE #homyak
-  BREAK
-; Part 2. Put etalon
-  .$temp = "Measure etalon (ID:"+$ENCODE(.id)+")"
-  CALL log(.$temp)
-; Go to machine
-  JMOVE #safe.machine
-  JMOVE #before.machine[.p.idx]
-  ACCURACY 10
-  LMOVE .etalon.mac.pt+TRANS(0,.shift.y,.shift.z)
-  ACCURACY 5
-  LMOVE .etalon.mac.pt+TRANS(0,.shift.y*0.2,.shift.z*0.2)
-  SPEED 50 MM/S
-  ACCURACY 0.5
-  LMOVE #et.mac.point[.id]
-  BREAK
-  TWAIT 0.1
-  PULSE grip.unclamp
-  TWAIT 0.3
-  ACCURACY 5
-  LMOVE .etalon.mac.pt+TRANS(0,.shift.y*0.2,.shift.z*0.2)
-  ACCURACY 10
-  LMOVE .etalon.mac.pt+TRANS(0,.shift.y,.shift.z)
-  LMOVE #before.machine[.p.idx]
-  BREAK
-; Wait result
-  CALL log("Waiting for measurement result")
-  $action = "WaitingCalibrationResult"
-  WAIT SIG(s.etalon.ok) OR SIG(s.etalon.ret) OR SIG(s.etalon.ng)
-;
-  IF SIG(s.etalon.ok) THEN
-    CALL log("Measurement etalon: OK")
-  END
-  IF SIG(s.etalon.ret) THEN
-    CALL log("Measurement result: RETRY")
-  END
-  IF SIG(s.etalon.ng) THEN
-    CALL log("Measurement result: NG")
-  END
-  $action = ""
-; Pick from machine
-  ACCURACY 10
-  LMOVE .etalon.mac.pt+TRANS(0,.shift.y,.shift.z)
-  ACCURACY 5
-  LMOVE .etalon.mac.pt+TRANS(0,.shift.y*0.2,.shift.z*0.2)
-  SPEED 50 MM/S
-  ACCURACY 0.5
-  LMOVE #et.mac.point[.id]
-  BREAK
-  TWAIT 0.1
-  PULSE grip.clamp
-  TWAIT 0.3
-; Go home
-  ACCURACY 5
-  LMOVE .etalon.mac.pt+TRANS(0,.shift.y*0.2,.shift.z*0.2)
-  ACCURACY 10
-  LMOVE .etalon.mac.pt+TRANS(0,.shift.y,.shift.z)
-  LMOVE #before.machine[.p.idx]
-;
-; Wait for zone FREE
-  SWAIT -rs13.work[1]
-; Part 3 Return Etalon
-  .$temp = "Return etalon to positioner (ID:"+$ENCODE(.id)+")"
-  CALL log(.$temp)
-  JMOVE #safe.machine
-  JMOVE #homyak
-  LMOVE #safe.etalon
-  LMOVE .etalon.pos.pt+TRANS(0,0,50)
-  LMOVE .etalon.pos.pt+TRANS(.eshift.x,.eshift.y,30)
-  LMOVE .etalon.pos.pt+TRANS(.eshift.x,.eshift.y,10)
-  SPEED 150 MM/S
-  ACCURACY 0.02
-  LMOVE #et.pos.point[.id]
-  BREAK
-  TWAIT 0.1
-  PULSE grip.unclamp
-  TWAIT 0.3
-  SIGNAL -s.grip.full
-  LMOVE .etalon.pos.pt+TRANS(0,0,30)
-  ACCURACY 100
-  LMOVE .etalon.pos.pt+TRANS(0,0,50)
-  LMOVE #safe.etalon
-  ACCURACY 100
-  LMOVE #homyak
-.END
-.PROGRAM a.teach.ot()@26/01/23 18:09 #0
-  SPEED 250 MM/S ALWAYS
-  ACCURACY 0 ALWAYS
-  TOOL tool.pick[hmi.tool.no]
-;
-  LMOVE #ot.down.left; *** TEACH POINT *** Left bottom
-  LMOVE #ot.down.right; *** TEACH POINT *** Right bottom
-  LMOVE #ot.up.right; *** TEACH POINT *** Right top
-  LMOVE #ot.orig; *** TEACH POINT *** Zero point ~
-;
-  POINT .ot.down.left = #ot.down.left
-  POINT .ot.down.right = #ot.down.right
-  POINT .ot.up.right = #ot.up.right
-  POINT .ot.orig = #ot.orig
-;
-  BREAK
-  POINT ot.frame = FRAME(.ot.down.left,.ot.down.right,.ot.up.right,.ot.orig)
-  POINT ot.frame = ot.frame+RZ(-180)
-;
-;JMOVE ot.frame + TRANS (grip.xsh[hmi.tool.no], grip.ysh[hmi.tool.no], grip.zsh[hmi.tool.no])
-.END
-.PROGRAM calc.grid()@26/01/22 13:44 #90
-; Constants
-  line.width = 210; 210; mm
-  lines.count = 21
-  lines.shift = 16; mm
-  obj.spacer = 1.5; mm
-;
-  .max = max.tare.count
-  .obj.len = object.length
-; 
-  .obj.len.w.spc = object.length+obj.spacer
-  obj.in.line = INT((line.width-obj.spacer)/.obj.len.w.spc);
-;
-; If you need to put details by max.tare.count
-;obj.in.line = INT(max.tare.count/21);
-;
-  FOR .i = 0 TO lines.count-1
-    FOR .j = 0 TO obj.in.line-1
-      POINT ot.put[.i,.j] = ot.frame+TRANS(-.i*lines.shift,-.j*.obj.len.w.spc)
-    END
-  END
-;
-.END
-.PROGRAM calc.grid.rnd()@26/01/21 14:55 #11
-; Constants
-  lines.count = 11
-  obj.in.line = 7
-  lines.shift = 27; mm
-;
-  .max = 77
-  .obj.shift = 27 ; mm
-;
-  FOR .i = 0 TO lines.count-1
-    FOR .j = 0 TO obj.in.line-1
-      POINT ot.put[.i,.j] = ot.frame+TRANS(-.i*lines.shift,-.j*.obj.shift)
-    END
-  END
-;
-.END
-.PROGRAM get.ot.point(.obj.id)@26/01/21 14:55 #1697
-  ot.x = ms[.obj.id]
-  ot.y = ns[.obj.id]
-.END
-.PROGRAM a.test.ot()@26/01/21 14:55 #0
-  IF hmi.ot.k<>-1 THEN
-    .$pg = "id"+$ENCODE(/L,hmi.obj.id)
-    SCALL .$pg
-    IF hmi.obj.id<>round.no THEN
-      CALL calc.grid
-    ELSE
-      CALL calc.grid.rnd
-    END
-    CALL calc.ot
-    CALL get.ot.point(hmi.ot.k)
-  END
-  .x = grip.xsh[hmi.obj.id]
-  .y = grip.ysh[hmi.obj.id]
-  .z = grip.zsh[hmi.obj.id]
-  IF object.id<>round.no AND ot.y MOD 2<>0 AND SIG(s.opt.flip) THEN
-    .x = grip.180xsh[hmi.obj.id]
-    .y = grip.180ysh[hmi.obj.id]
-  END
-;
-  POINT .put = ot.put[ot.x,ot.y]+TRANS(.x,.y,.z)
-  LAPPRO .put,-50
-  LMOVE .put
-  LAPPRO .put,-50
-.END
-.PROGRAM ot.put()@26/01/23 16:34 #913
-;
-  SIGNAL rs7.locked.zone
-  IF SIG(rs7.tare.chg) THEN
-    CALL log("Waiting for new OT")
-    SWAIT -rs7.tare.chg
-    count.put = 0
-  END
-;
-  CALL log("Put to OT detail"+$ENCODE(count.put+1))
-;$action = "PutToTare"
-;
-  SPEED 100 ALWAYS
-  ACCURACY 100 ALWAYS
-  TOOL tool.pick[current.gripper]
-;
-  CALL get.ot.point(count.put)
-;
-  .x = grip.xsh[object.id]
-  .y = grip.ysh[object.id]
-  .z = grip.zsh[object.id]
-  IF object.id<>round.no AND ot.y MOD 2<>0 AND SIG(s.opt.flip) THEN
-    .x = grip.180xsh[object.id]
-    .y = grip.180ysh[object.id]
-  END
-;
-  POINT .put = ot.put[ot.x,ot.y]+TRANS(.x,.y,.z)
-;
-  SIGNAL rs7.locked.zone
-  BREAK
-  CALL log("Check if positioner is occupied")
-  SWAIT -rs13.lock.zone
-;
-  JAPPRO .put,-200
-  ACCURACY 5
-  LAPPRO .put,-20
-  ACCURACY 0.02
-  SPEED 150 MM/S
-  LMOVE .put
-  BREAK
-;
-  TWAIT 0.1
-  PULSE grip.unclamp
-  TWAIT 0.3
-  count.put = count.put+1
-  max.count.put = max.count.put+1
-  SIGNAL -s.grip.full
-  $action = "WaitPosFull"
-;
-  LAPPRO .put,-20
-  LAPPRO .put,-200
-;
-;IF NOT SIG (s.cmd.pick) THEN
-;  JMOVE #homyak
-;  BREAK
-;  SIGNAL -rs7.locked.zone
-;END
-;
-  IF count.put>=max.tare.count THEN
-    SIGNAL rs7.tare.chg
-  END
-;
-.END
-.PROGRAM calc.ot()@26/01/22 13:07 #116
-  ;
-  .$calc.pg = "layout" + $ENCODE (/L, layout)
-  IF EXISTPGM (.$calc.pg) THEN
-    SCALL .$calc.pg
-  ELSE
-    CALL log ("Error! Wrong layout. Connect Robowizard")
-    state = 255
-    RETURN
-  END
-  ;
-.END
-.PROGRAM a.teach.machine()@26/01/21 14:55 #0
-  IF FALSE THEN ; For round details
-    TOOL tool.pick[hmi.tool.no]
-    JMOVE #safe.machine
-    JMOVE #before.machine[2]
-    POINT .temp = #machine.pos[hmi.obj.id]
-    JMOVE .temp+TRANS(0,0,10)
-    BREAK
-    LMOVE #machine.pos[hmi.obj.id]
-    POINT .temp = #machine.pos[hmi.obj.id]
-    BREAK
-    TWAIT 0.5
-    LMOVE .temp+TRANS(0,0,10)
-    BREAK
-    TWAIT 0.5
-    LMOVE #before.machine[2]
-  ELSE
-    TOOL tool.pick[hmi.tool.no]
-    JMOVE #safe.machine
-    JMOVE #before.machine[1]
-    POINT .temp = #machine.pos[hmi.obj.id]
-    JMOVE .temp+TRANS(0,10,0)
-    BREAK
-    LMOVE #machine.pos[hmi.obj.id]
-    POINT .temp = #machine.pos[hmi.obj.id]
-    BREAK
-    TWAIT 0.5
-    LMOVE .temp+TRANS(0,10,0)
-    BREAK
-    TWAIT 0.5
-    LMOVE #before.machine[1]
-  END
-.END
-.PROGRAM measure()@26/01/23 16:34 #1968
-  IF FALSE THEN
-    .pos = hmi.obj.id
-  END
-  .pos = object.id
-;
-  IF object.id==round.no THEN
-    .shift.y = 0
-    .shift.z = 50
-    .p.idx = 2
-  ELSE
-    .shift.y = 50
-    .shift.z = 0
-    .p.idx = 1
-  END
-;
-  CALL log("Move to measure machine")
-;$action = "TakingToMM"
-;
-  SPEED 100 ALWAYS
-  ACCURACY 100 ALWAYS
-  TOOL tool.pick[current.gripper]
-;
-  POINT .machine.pos = #machine.pos[.pos]
-; Go to machine
-  JMOVE #safe.machine
-  JMOVE #before.machine[.p.idx]
-  ACCURACY 10
-  LMOVE .machine.pos+TRANS(0,.shift.y,.shift.z)
-  ACCURACY 5
-  LMOVE .machine.pos+TRANS(0,.shift.y*0.2,.shift.z*0.2)
-  SPEED 150 MM/S
-  ACCURACY 0.5
-  LMOVE #machine.pos[.pos]
-  BREAK
-;CALL log ("Send command to enable vacuum")
-;$action = "WaitingMMVacuum"
-  TWAIT 0.1
-  PULSE grip.unclamp
-  TWAIT 0.3
-;
-  ACCURACY 5
-  LMOVE .machine.pos+TRANS(0,.shift.y*0.2,.shift.z*0.2)
-  ACCURACY 10
-  LMOVE .machine.pos+TRANS(0,.shift.y,.shift.z)
-;
-  LMOVE #before.machine[.p.idx]
-  BREAK
-; Wait result
-  CALL log("Waiting for measurement result")
-  $action = "WaitingMMResult"
-  WAIT SIG(s.measure.ok) OR SIG(s.measure.ng)
-  SIGNAL s.cmd.measured
-;
-  IF SIG(s.measure.ok) THEN
-    CALL log("Measurement result: OK")
-  ELSE
-    CALL log("Measurement result: DEFECT")
-  END
-  $action = ""
-;
-; Pick from machine
-  ACCURACY 10
-  LMOVE .machine.pos+TRANS(0,.shift.y,.shift.z)
-  ACCURACY 5
-  LMOVE .machine.pos+TRANS(0,.shift.y*0.2,.shift.z*0.2)
-  SPEED 150 MM/S
-  ACCURACY 0.5
-  LMOVE #machine.pos[.pos]
-  BREAK
-  TWAIT 0.1
-  PULSE grip.clamp
-  TWAIT 0.3
-; Go home
-  ACCURACY 5
-  LMOVE .machine.pos+TRANS(0,.shift.y*0.2,.shift.z*0.2)
-  ACCURACY 10
-  LMOVE .machine.pos+TRANS(0,.shift.y,.shift.z)
-;
-  LMOVE #before.machine[.p.idx]
-  JMOVE #safe.machine
-  JMOVE #homyak
-;BREAK
-;JMOVE #safe.machine
-;JMOVE #homyak
-.END
 .PROGRAM id1()@26/01/27 10:30 #97; 312.229.002
-; Object ID
-  object.id = 1
-  etalon.id = 1 ; Can be object.id <> etalon.id
-; Working gripper
-  pg13.gripper = 2
-  pg7.gripper = 1
-; Max objects in output tare
-  max.tare.count = 147;126
-  spc.tare.count = 50
-; Object length
-  object.length = 27.5
-;
-  direction = 1; -1 for reverse
-;
+	; Object ID
+	object.id = 1
+	etalon.id = 1 ; Can be object.id <> etalon.id
+	; Working gripper
+	pg13.gripper = 2
+	pg7.gripper = 1
+	; Max objects in output tare
+	max.tare.count = 147;126
+	spc.tare.count = 50
+	; Object length
+	object.length = 27.5
+	;
+	direction = 1; -1 for reverse
+	;
 .END
 .PROGRAM id2()@26/01/27 10:30 #7; 0401.17.02.023-02
-; Object ID
-  object.id = 2
-  etalon.id = 2 ; Can be object.id <> etalon.id
-; Working gripper
-  pg13.gripper = 1
-  pg7.gripper = 1
-; Max objects in output tare
-  max.tare.count = 105;84
-  spc.tare.count = 50
-; Object length
-  object.length = 40
-;
-  direction = 1; -1 for reverse
-;
+	; Object ID
+	object.id = 2
+	etalon.id = 2 ; Can be object.id <> etalon.id
+	; Working gripper
+	pg13.gripper = 1
+	pg7.gripper = 1
+	; Max objects in output tare
+	max.tare.count = 105;84
+	spc.tare.count = 50
+	; Object length
+	object.length = 40
+	;
+	direction = 1; -1 for reverse
+	;
 .END
 .PROGRAM id3()@26/01/27 10:30 #10; 312.229.001
-; Object ID
-  object.id = 3
-  etalon.id = 3 ; Can be object.id <> etalon.id
-; Working gripper
-  pg13.gripper = 3
-  pg7.gripper = 1
-; Max objects in output tare
-  max.tare.count = 77
-  spc.tare.count = 77
-; Object length
-  object.length = 40
-;
-  direction = 1; -1 for reverse
-;
+	; Object ID
+	object.id = 3
+	etalon.id = 3 ; Can be object.id <> etalon.id
+	; Working gripper
+	pg13.gripper = 3
+	pg7.gripper = 1
+	; Max objects in output tare
+	max.tare.count = 77
+	spc.tare.count = 77
+	; Object length
+	object.length = 40
+	;
+	direction = 1; -1 for reverse
+	;
 .END
 .PROGRAM id4()@26/01/27 10:30 #15; 440.00.026
-; Object ID
-  object.id = 4
-  etalon.id = 4 ; Can be object.id <> etalon.id
-; Working gripper
-  pg13.gripper = 1
-  pg7.gripper = 1
-; Max objects in output tare
-  max.tare.count = 168 ;147
-  spc.tare.count = 50
-; Object length
-  object.length = 23.5
-;
-  direction = 1; -1 for reverse
-;
+	; Object ID
+	object.id = 4
+	etalon.id = 4 ; Can be object.id <> etalon.id
+	; Working gripper
+	pg13.gripper = 1
+	pg7.gripper = 1
+	; Max objects in output tare
+	max.tare.count = 168 ;147
+	spc.tare.count = 50
+	; Object length
+	object.length = 23.5
+	;
+	direction = 1; -1 for reverse
+	;
 .END
 .PROGRAM id5()@26/01/27 10:30 #11; 440.00.111
-; Object ID
-  object.id = 5
-  etalon.id = 5 ; Can be object.id <> etalon.id
-; Working gripper
-  pg13.gripper = 1
-  pg7.gripper = 1
-; Max objects in output tare
-  max.tare.count = 231 ;231
-  spc.tare.count = 50
-; Object length
-  object.length = 16
-;
-  direction = 1; -1 for reverse
-;
+	; Object ID
+	object.id = 5
+	etalon.id = 5 ; Can be object.id <> etalon.id
+	; Working gripper
+	pg13.gripper = 1
+	pg7.gripper = 1
+	; Max objects in output tare
+	max.tare.count = 231 ;231
+	spc.tare.count = 50
+	; Object length
+	object.length = 16
+	;
+	direction = 1; -1 for reverse
+	;
 .END
 .PROGRAM id6()@26/01/27 10:30 #27; 0401.28.02.063
-; Object ID
-  object.id = 6
-  etalon.id = 6 ; Can be object.id <> etalon.id
-; Working gripper
-  pg13.gripper = 1
-  pg7.gripper = 1
-; Max objects in output tare
-  max.tare.count = 126 ;126
-  spc.tare.count = 50
-; Object length
-  object.length = 28.5
-;
-  direction = 1; -1 for reverse
-;
+	; Object ID
+	object.id = 6
+	etalon.id = 6 ; Can be object.id <> etalon.id
+	; Working gripper
+	pg13.gripper = 1
+	pg7.gripper = 1
+	; Max objects in output tare
+	max.tare.count = 126 ;126
+	spc.tare.count = 50
+	; Object length
+	object.length = 28.5
+	;
+	direction = 1; -1 for reverse
+	;
+.END
+.PROGRAM layout0 ()
+	; Get matrix center
+	.center.col = INT (lines.count / 2)
+	.center.row = INT (obj.in.line / 2)
+	.cell = 0
+	;
+	IF direction == 1 THEN
+		;
+		; Stage 1: Add extreme columns (left and right edges)
+		FOR .row = 0 TO obj.in.line - 1
+			ms[.cell] = 0
+			ns[.cell] = .row
+			.cell = .cell + 1
+		END
+		IF lines.count > 1 THEN
+			FOR .row = 0 TO obj.in.line - 1
+				ms[.cell] = lines.count - 1
+				ns[.cell] = .row
+				.cell = .cell + 1
+			END
+		END
+		;
+		; Stage 2: Add center column
+		FOR .row = 0 TO obj.in.line - 1
+			ms[.cell] = .center.col
+			ns[.cell] = .row
+			.cell = .cell + 1
+		END
+		;
+		; Stage 3: Add from center outward (excluding center and edges)
+		FOR .offset = 1 TO .center.col - 1
+			.left = .center.col - .offset
+			.right = .center.col + .offset
+			; Left column
+			FOR .row = 0 TO obj.in.line - 1
+				ms[.cell] = .left
+				ns[.cell] = .row
+				.cell = .cell + 1
+			END
+			; Right column
+			IF .right < lines.count AND .right <> .left THEN
+				FOR .row = 0 TO obj.in.line - 1
+					ms[.cell] = .right
+					ns[.cell] = .row
+					.cell = .cell + 1
+				END
+			END
+		END
+	ELSE
+		;
+		; Stage 1: Add extreme columns (left and right edges)
+		FOR .row = obj.in.line - 1 TO 0 STEP -1
+			ms[.cell] = 0
+			ns[.cell] = .row
+			.cell = .cell + 1
+		END
+		IF lines.count > 1 THEN
+			FOR .row = obj.in.line - 1 TO 0 STEP -1
+				ms[.cell] = lines.count - 1
+				ns[.cell] = .row
+				.cell = .cell + 1
+			END
+		END
+		;
+		; Stage 2: Add center column
+		FOR .row = obj.in.line - 1 TO 0 STEP -1
+			ms[.cell] = .center.col
+			ns[.cell] = .row
+			.cell = .cell + 1
+		END
+		;
+		; Stage 3: Add from center outward (excluding center and edges)
+		FOR .offset = 1 TO .center.col - 1
+			.left = .center.col - .offset
+			.right = .center.col + .offset
+			; Left column
+			FOR .row = obj.in.line - 1 TO 0 STEP -1
+				ms[.cell] = .left
+				ns[.cell] = .row
+				.cell = .cell + 1
+			END
+			; Right column
+			IF .right < lines.count AND .right <> .left THEN
+				FOR .row = obj.in.line - 1 TO 0 STEP -1
+					ms[.cell] = .right
+					ns[.cell] = .row
+					.cell = .cell + 1
+				END
+			END
+		END
+	END
+	;
+	; Debug print
+	;PRINT "ASCII grid"
+	;FOR .n = 0 TO obj.in.line-1
+	;  .$line = ""        ; буфер строки
+	;  FOR .m = 0 TO lines.count-1
+	;    .filled = 0
+	;    FOR .i = 0 TO hmi.obj.id
+	;      IF ms[.i] == .m AND ns[.i] == .n THEN
+	;        .filled = 1
+	;      END
+	;    END
+	;    IF .filled == 1 THEN
+	;      .$line = .$line + "X "
+	;    ELSE
+	;      .$line = .$line + ". "
+	;    END
+	;  END
+	;  PRINT .$line    ; печатаем всю строку одним вызовом
+	;END
+.END
+.PROGRAM layout1 ()
+	; Get matrix center
+	.center.col = INT (lines.count / 2)
+	.center.row = INT (obj.in.line / 2)
+	; Get Manhattan distances matrix
+	.cell = 0
+	FOR .i = 0 TO lines.count - 1
+		FOR .j = 0 TO obj.in.line - 1
+			.dist = ABS (.i - .center.col) + ABS (.j - .center.row)
+			.dists[.cell] = .dist
+			ms[.cell] = .i
+			ns[.cell] = .j
+			.cell = .cell + 1
+		END
+	END
+	.array.size = .cell - 1
+	; Bubble sort distances array
+	FOR .i = 0 TO .array.size - 1
+		FOR .j = 0 TO .array.size - .i - 1
+			; Compare by angular distances
+			; I don't want to make it
+			IF .dists[.j] <> .dists[.j + 1] THEN
+				.result = .dists[.j] - .dists[.j + 1]
+			ELSE
+				.cornerA = ABS (ms[.j] - .center.col)
+				IF ABS (ns[.j] - .center.row) > .cornerA THEN
+					.cornerA = ABS (ns[.j] - .center.row)
+				END
+				.cornerB = ABS (ms[.j + 1] - .center.col)
+				IF ABS (ns[.j + 1] - .center.row) > .cornerB THEN
+					.cornerB = ABS (ns[.j + 1] - .center.row)
+				END
+				IF .cornerA <> .cornerB THEN
+					.result = .cornerA - .cornerB
+				ELSE
+					IF ms[.j] <> ms[.j + 1] THEN
+						.result = ms[.j] - ms[.j + 1]
+					ELSE
+						.result = ns[.j] - ns[.j + 1]
+					END
+				END
+			END
+			; Simple compare. Commented in case of troubles
+			;IF .dists[.j] <> .dists[.j + 1]
+			;  .result = .dists[.j] - .dists[.j + 1]
+			;ELSE
+			;  IF ms[.j] <> ms[.j + 1]
+			;    .result = ms[.j] - ms[.j + 1]
+			;  ELSE
+			;    .result = ns[.j] - ns[.j + 1]
+			;  END
+			;END
+			;
+			IF .result > 0 THEN
+				;
+				.tmp.dist = .dists[.j]
+				.tmp.m = ms[.j]
+				.tmp.n = ns[.j]
+				;
+				.dists[.j] = .dists[.j + 1]
+				ms[.j] = ms[.j + 1]
+				ns[.j] = ns[.j + 1]
+				;
+				.dists[.j + 1] = .tmp.dist
+				ms[.j + 1] = .tmp.m
+				ns[.j + 1] = .tmp.n
+			END
+		END
+	END
+	;
+	; Debug print
+	;PRINT "ASCII grid"
+	;FOR .n = 0 TO obj.in.line-1
+	;  .$line = ""        ; буфер строки
+	;  FOR .m = 0 TO lines.count-1
+	;    .filled = 0
+	;    FOR .i = 0 TO .obj.id
+	;      IF ms[.i] == .m AND ns[.i] == .n THEN
+	;        .filled = 1
+	;      END
+	;    END
+	;    IF .filled == 1 THEN
+	;      .$line = .$line + "X "
+	;    ELSE
+	;      .$line = .$line + ". "
+	;    END
+	;  END
+	;  PRINT .$line    ; печатаем всю строку одним вызовом
+	;END
+.END
+.PROGRAM log(.$msg)@26/01/21 14:55 #29477
+	;
+	; 1 line = 55 symbols max
+	;
+	FOR .i = 0 TO 126
+		$log.entry[.i] = $log.entry[.i + 1]
+	END
+	$log.entry[127] = $TIME + " " + .$msg
+	;
+	IFPWPRINT 1, 1, 1, 9, 10 = $log.entry[116], $log.entry[117], $log.entry[118], $log.entry[119]
+	IFPWPRINT 2, 1, 1, 9, 10 = $log.entry[120], $log.entry[121], $log.entry[122], $log.entry[123]
+	IFPWPRINT 3, 1, 1, 9, 10 = $log.entry[124], $log.entry[125], $log.entry[126], $log.entry[127]
+	;
+.END
+.PROGRAM measure()@26/01/23 16:34 #1968
+	IF FALSE THEN
+		.pos = hmi.obj.id
+	END
+	.pos = object.id
+	;
+	IF object.id == round.no THEN
+		.shift.y = 0
+		.shift.z = 50
+		.p.idx = 2
+	ELSE
+		.shift.y = 50
+		.shift.z = 0
+		.p.idx = 1
+	END
+	;
+	CALL log ("Move to measure machine")
+	;$action = "TakingToMM"
+	;
+	SPEED 100 ALWAYS
+	ACCURACY 100 ALWAYS
+	TOOL tool.pick[current.gripper]
+	;
+	POINT .machine.pos = #machine.pos[.pos]
+	; Go to machine
+	JMOVE #safe.machine
+	JMOVE #before.machine[.p.idx]
+	ACCURACY 10
+	LMOVE .machine.pos + TRANS (0, .shift.y, .shift.z)
+	ACCURACY 5
+	LMOVE .machine.pos + TRANS (0, .shift.y * 0.2, .shift.z * 0.2)
+	SPEED 150 MM/S
+	ACCURACY 0.5
+	LMOVE #machine.pos[.pos]
+	BREAK
+	;CALL log ("Send command to enable vacuum")
+	;$action = "WaitingMMVacuum"
+	TWAIT 0.1
+	PULSE grip.unclamp
+	TWAIT 0.3
+	;
+	ACCURACY 5
+	LMOVE .machine.pos + TRANS (0, .shift.y * 0.2, .shift.z * 0.2)
+	ACCURACY 10
+	LMOVE .machine.pos + TRANS (0, .shift.y, .shift.z)
+	;
+	LMOVE #before.machine[.p.idx]
+	BREAK
+	; Wait result
+	CALL log ("Waiting for measurement result")
+	$action = "WaitingMMResult"
+	WAIT SIG (s.measure.ok) OR SIG (s.measure.ng)
+	SIGNAL s.cmd.measured
+	;
+	IF SIG (s.measure.ok) THEN
+		CALL log ("Measurement result: OK")
+	ELSE
+		CALL log ("Measurement result: DEFECT")
+	END
+	$action = ""
+	;
+	; Pick from machine
+	ACCURACY 10
+	LMOVE .machine.pos + TRANS (0, .shift.y, .shift.z)
+	ACCURACY 5
+	LMOVE .machine.pos + TRANS (0, .shift.y * 0.2, .shift.z * 0.2)
+	SPEED 150 MM/S
+	ACCURACY 0.5
+	LMOVE #machine.pos[.pos]
+	BREAK
+	TWAIT 0.1
+	PULSE grip.clamp
+	TWAIT 0.3
+	; Go home
+	ACCURACY 5
+	LMOVE .machine.pos + TRANS (0, .shift.y * 0.2, .shift.z * 0.2)
+	ACCURACY 10
+	LMOVE .machine.pos + TRANS (0, .shift.y, .shift.z)
+	;
+	LMOVE #before.machine[.p.idx]
+	JMOVE #safe.machine
+	JMOVE #homyak
+	;BREAK
+	;JMOVE #safe.machine
+	;JMOVE #homyak
+.END
+.PROGRAM ot.put()@26/01/23 16:34 #913
+	;
+	SIGNAL rs7.locked.zone
+	IF SIG (rs7.tare.chg) THEN
+		CALL log ("Waiting for new OT")
+		SWAIT -rs7.tare.chg
+		count.put = 0
+	END
+	;
+	CALL log ("Put to OT detail" + $ENCODE (count.put + 1))
+	;$action = "PutToTare"
+	;
+	SPEED 100 ALWAYS
+	ACCURACY 100 ALWAYS
+	TOOL tool.pick[current.gripper]
+	;
+	CALL get.ot.point (count.put)
+	;
+	.x = grip.xsh[object.id]
+	.y = grip.ysh[object.id]
+	.z = grip.zsh[object.id]
+	IF object.id <> round.no AND ot.y MOD 2 <> 0 AND SIG (s.opt.flip) THEN
+		.x = grip.180xsh[object.id]
+		.y = grip.180ysh[object.id]
+	END
+	;
+	POINT .put = ot.put[ot.x, ot.y] + TRANS (.x, .y, .z)
+	;
+	SIGNAL rs7.locked.zone
+	BREAK
+	CALL log ("Check if positioner is occupied")
+	SWAIT -rs13.lock.zone
+	;
+	JAPPRO .put, -200
+	ACCURACY 5
+	LAPPRO .put, -20
+	ACCURACY 0.02
+	SPEED 150 MM/S
+	LMOVE .put
+	BREAK
+	;
+	TWAIT 0.1
+	PULSE grip.unclamp
+	TWAIT 0.3
+	count.put = count.put + 1
+	max.count.put = max.count.put + 1
+	SIGNAL -s.grip.full
+	$action = "WaitPosFull"
+	;
+	LAPPRO .put, -20
+	LAPPRO .put, -200
+	;
+	;IF NOT SIG (s.cmd.pick) THEN
+	;  JMOVE #homyak
+	;  BREAK
+	;  SIGNAL -rs7.locked.zone
+	;END
+	;
+	IF count.put >= max.tare.count THEN
+		SIGNAL rs7.tare.chg
+	END
+	;
+.END
+.PROGRAM pg.select()@26/01/25 17:14 #137
+	SCASE $pg.name OF
+		SVALUE "312.229.002":
+			CASE detail.spec OF
+				VALUE 0:
+					CALL id1; idX_1
+				VALUE 1:
+					CALL id1
+				VALUE 2:
+					CALL id1
+				ANY :
+					$pg.name = "NULL"
+			END
+			;
+		SVALUE "0401.17.02.023":
+			CASE detail.spec OF
+				VALUE 0:
+					CALL id2; idX_1
+				VALUE 1:
+					CALL id2
+				VALUE 2:
+					CALL id2
+				ANY :
+					$pg.name = "NULL"
+			END
+			;
+		SVALUE "312.229.001":
+			CASE detail.spec OF
+				VALUE 0:
+					CALL id3; idX_1
+				ANY :
+					$pg.name = "NULL"
+			END
+			;
+		SVALUE "440.00.026":
+			CASE detail.spec OF
+				VALUE 0:
+					CALL id4; idX_1
+				VALUE 1:
+					CALL id4
+				VALUE 2:
+					CALL id4
+				VALUE 3:
+					CALL id4
+				ANY :
+					$pg.name = "NULL"
+			END
+			;
+		SVALUE "440.00.111":
+			CASE detail.spec OF
+				VALUE 0:
+					CALL id5; idX_1
+				VALUE 2:
+					CALL id5
+				VALUE 3:
+					CALL id5
+				ANY :
+					$pg.name = "NULL"
+			END
+			;
+		SVALUE "0401.28.02.063":
+			CASE detail.spec OF
+				VALUE 0:
+					CALL id6; idX_1
+				VALUE 1:
+					CALL id6
+				ANY :
+					$pg.name = "NULL"
+			END
+			;
+			;
+		ANY :
+			$pg.name = "NULL"
+			RETURN
+	END
+	;
+.END
+.PROGRAM pg0()@26/01/21 14:55 #0
+	state = 0
+	CALL a.main
 .END
 .PROGRAM pos.pick()@26/01/23 16:34 #1435
-;
-  .$temp = "Pick detail from positioner (ID:"+$ENCODE(object.id)+")"
-  CALL log(.$temp)
-;
-  TOOL tool.pick[current.gripper]
-;
-  SPEED 100 ALWAYS
-  ACCURACY 10 ALWAYS
-;
-  POINT .temp = #pos.point[object.id]
-;
-  IF object.id==round.no THEN
-    .shift.x = 0
-    .shift.y = 0
-  ELSE
-    IF object.id==pawn.no THEN
-      .shift.x = 0
-      .shift.y = 0
-    ELSE
-      .shift.x = 0
-      .shift.y = 5
-    END
-  END
-;
-  SIGNAL rs7.locked.zone
-;
-  IF SIG(do.home) THEN
-    CALL log("Check if positioner is occupied")
-    SWAIT -rs13.lock.zone
-  END
-;
-  JMOVE .temp+TRANS(0,0,30)
-  BREAK
-  IF NOT SIG(grip.unclamped) THEN
-    PULSE grip.unclamp
-    TWAIT 0.5
-    CALL log("Wait for unclamp gripper. State: WaitingGripUnclamped")
-    $action = "WaitingGripUnclamped"
-    WAIT SIG(grip.unclamped) OR SIG(s.force.in[1])
-  END
-;
-  SPEED 150 MM/S
-  ACCURACY 0.02
-  LMOVE #pos.point[object.id]
-  BREAK
-  TWAIT 0.1
-  PULSE grip.clamp
-  TWAIT 0.3
-  SIGNAL s.grip.full
-  SIGNAL -s.cmd.measured
-  count.pick = count.pick+1
-  BITS rs7.det.picked[0],8 = count.pick
-;
-  LMOVE .temp+TRANS(.shift.x,.shift.y,10)
-  ACCURACY 100
-  LMOVE .temp+TRANS(0,0,200)
-  ACCURACY 100
-  LMOVE #homyak
-;
-  BREAK
-  SIGNAL -rs7.locked.zone
-;
+	;
+	.$temp = "Pick detail from positioner (ID:" + $ENCODE (object.id) + ")"
+	CALL log (.$temp)
+	;
+	TOOL tool.pick[current.gripper]
+	;
+	SPEED 100 ALWAYS
+	ACCURACY 10 ALWAYS
+	;
+	POINT .temp = #pos.point[object.id]
+	;
+	IF object.id == round.no THEN
+		.shift.x = 0
+		.shift.y = 0
+	ELSE
+		IF object.id == pawn.no THEN
+			.shift.x = 0
+			.shift.y = 0
+		ELSE
+			.shift.x = 0
+			.shift.y = 5
+		END
+	END
+	;
+	SIGNAL rs7.locked.zone
+	;
+	IF SIG (do.home) THEN
+		CALL log ("Check if positioner is occupied")
+		SWAIT -rs13.lock.zone
+	END
+	;
+	JMOVE .temp + TRANS (0, 0, 30)
+	BREAK
+	IF NOT SIG (grip.unclamped) THEN
+		PULSE grip.unclamp
+		TWAIT 0.5
+		CALL log ("Wait for unclamp gripper. State: WaitingGripUnclamped")
+		$action = "WaitingGripUnclamped"
+		WAIT SIG (grip.unclamped) OR SIG (s.force.in[1])
+	END
+	;
+	SPEED 150 MM/S
+	ACCURACY 0.02
+	LMOVE #pos.point[object.id]
+	BREAK
+	TWAIT 0.1
+	PULSE grip.clamp
+	TWAIT 0.3
+	SIGNAL s.grip.full
+	SIGNAL -s.cmd.measured
+	count.pick = count.pick + 1
+	BITS rs7.det.picked[0], 8 = count.pick
+	;
+	LMOVE .temp + TRANS (.shift.x, .shift.y, 10)
+	ACCURACY 100
+	LMOVE .temp + TRANS (0, 0, 200)
+	ACCURACY 100
+	LMOVE #homyak
+	;
+	BREAK
+	SIGNAL -rs7.locked.zone
+	;
 .END
-.PROGRAM a.teach.pos()@26/01/27 10:24 #0
-;
-  IF hmi.obj.id==round.no THEN
-    .shift.x = 0
-    .shift.y = 0
-  ELSE
-    IF hmi.obj.id==pawn.no THEN
-      .shift.x = 0
-      .shift.y = 0
-    ELSE
-      .shift.x = 0
-      .shift.y = 5
-    END
-  END
-;
-  TOOL tool.pick[hmi.tool.no]
-;
-  POINT .temp = #pos.point[hmi.obj.id]
-  JMOVE .temp+TRANS(0,0,50)
-  BREAK
-  LMOVE #pos.point[hmi.obj.id]
-  POINT .temp = #pos.point[hmi.obj.id]
-  BREAK
-  TWAIT 0.5
-  LMOVE .temp+TRANS(.shift.x,.shift.y,10)
-  LMOVE .temp+TRANS(0,0,50)
-  BREAK
-  TWAIT 0.5
-;
+.PROGRAM safe.home()@26/01/22 12:37 #132
+	;
+	; Safe zones:
+	; 1. OT zone: same as for normal work
+	; 2. Machine zone
+	; 3. Defect + etalon zone
+	;
+	IF SIG (do.home) THEN
+		CALL log ("Robot already in home position")
+	ELSE
+		CALL log ("Performing safe motion to home position")
+		; In measure machine zone!!!
+		; Move to the height of a before machine point
+		IF SIG (do.work[2]) THEN
+			CALL log ("Move from the measure machine zone")
+			IF object.id <> round.no THEN
+				.idx = 1
+			ELSE
+				.idx = 2
+			END
+			POINT .temp = #before.machine[.idx]
+			DECOMPOSE .s[1] = .temp
+			POINT .temp = HERE
+			DECOMPOSE .c[1] = .temp
+			.dz = .s[3] - .c[3]
+			DRAW 0, 0, .dz
+			LMOVE #before.machine[.idx]
+			JMOVE #safe.machine
+		END
+		; In defect zone
+		; Move to the height of a safe point
+		IF SIG (do.work[3]) THEN
+			CALL log ("Move from the defect zone")
+			POINT .temp = #safe.defect
+			DECOMPOSE .s[1] = .temp
+			POINT .temp = HERE
+			DECOMPOSE .c[1] = .temp
+			.dz = .s[3] - .c[3]
+			DRAW 0, 0, .dz
+			LMOVE #safe.defect
+		END
+		;
+		; In OT zone
+		; Move to the height of a home POINT
+		IF SIG (do.work[1]) THEN
+			CALL log ("Move from the OT zone")
+			POINT .temp = #homyak
+			DECOMPOSE .s[1] = .temp
+			POINT .temp = HERE
+			DECOMPOSE .c[1] = .temp
+			.dz = .s[3] - .c[3]
+			DRAW 0, 0, .dz
+			LMOVE #homyak
+		END
+		;
+		JMOVE #homyak
+		BREAK
+		CALL log ("Robot in home position")
+	END
+	;
 .END
-.PROGRAM defect.put()@26/01/23 15:56 #326
-;
-  IF count.defect>=max.defect.cnt THEN
-    CALL log("Defect tare is full. Waiting for tare clean")
-    $action = "Paused"
-    WAIT count.defect==0
-    $action = " "
-  END
-;
-  SPEED 100 ALWAYS
-  ACCURACY 100 ALWAYS
-  TOOL tool.pick[current.gripper]
-;
-  POINT .temp = #defect.point[count.defect+1]
-;
-  JMOVE #safe.defect
-;
-  CALL log("Putting to defect tare with No:"+$ENCODE(count.defect+1))
-;
-  ACCURACY 10
-  LAPPRO .temp,-30
-  BREAK
-;
-  SPEED 150 MM/S
-  ACCURACY 0.02
-  LMOVE #defect.point[count.defect+1]
-  BREAK
-  TWAIT 0.3
-  PULSE grip.unclamp
-  TWAIT 0.3
-  count.defect = count.defect+1
-  SIGNAL -s.grip.full
-;
-  ACCURACY 10
-  LAPPRO .temp,-30
-  JMOVE #safe.defect
-  LMOVE #homyak
-;
+.PROGRAM set.io.pc()@26/01/21 14:55 #44
+	; Gripper IO
+	;
+	; Gripper
+	release.grip = 1
+	capture.grip = 2
+	; Clamp
+	grip.unclamped = 1001
+	grip.clamped = 1002
+	grip.unclamp = 3
+	grip.clamp = 4
+	;
+	; Ethernet I/P IO (17-32)
+	;
+	; Inputs
+	;
+	rs13.work[1] = 1017
+	rs13.tare.ack = 1018
+	rs13.detail.put = 1019
+	rs13.finish = 1020
+	rs13.lock.zone = 1022
+	;rs13.put.ack = 1021
+	rs13.det.put[0] = 1025
+	rs13.det.put[1] = 1026
+	rs13.det.put[2] = 1027
+	rs13.det.put[3] = 1028
+	rs13.det.put[4] = 1029
+	rs13.det.put[5] = 1030
+	rs13.det.put[6] = 1031
+	rs13.det.put[7] = 1032
+	;
+	rs13.no.ot.stop = 1033
+	;
+	; Outputs
+	;
+	do.work[1] = 17
+	rs7.tare.chg = 18
+	rs7.locked.zone = 19
+	rs7.finish.ack = 20
+	;rs7.put.ack = 21
+	;rs13.detail.put = 21
+	rs7.det.picked[0] = 25
+	rs7.det.picked[1] = 26
+	rs7.det.picked[2] = 27
+	rs7.det.picked[3] = 28
+	rs7.det.picked[4] = 29
+	rs7.det.picked[5] = 30
+	rs7.det.picked[6] = 31
+	rs7.det.picked[7] = 32
+	;
+	rs7.etalon.stop = 33
+	;
+	; Internal IO
+	;
+	; Dedicated inputs 2001 - 2064
+	;
+	; IFP page change 2001-2008
+	di.ifp.page[1] = 2001
+	di.ifp.page[2] = 2002
+	di.ifp.page[3] = 2003
+	di.ifp.page[4] = 2004
+	di.ifp.page[5] = 2005
+	di.ifp.page[6] = 2006
+	di.ifp.page[7] = 2007
+	di.ifp.page[8] = 2008
+	;
+	di.hold = 2009
+	;
+	; Dedicated outputs 2101-2164
+	;
+	do.home = 2010
+	do.bat.alm = 2011
+	do.automatic = 2012
+	;
+	;
+	; Internal logic 2201 - 2960
+	;
+	; TCP/IP display flags
+	s.tcp.send.ena = 2201
+	s.tcp.recv.ena = 2202
+	s.tcp.ena = 2203
+	s.tcp.log = 2204
+	;
+	s.zone.blocked = 2209
+	;
+	; Workspaces
+	do.work[2] = 2212
+	do.work[3] = 2213
+	do.work[4] = 2214
+	do.work[5] = 2215
+	do.work[6] = 2216
+	do.work[7] = 2217
+	do.work[8] = 2218
+	;
+	s.force.in[1] = 2221
+	s.force.in[2] = 2222
+	;
+	s.defect.pal.ok = 2223
+	s.defect.pal.ng = 2224
+	s.measure.ok = 2225
+	s.measure.ng = 2226
+	;s.force.defect = 2227
+	;
+	;s.stock.opt.ng = 2226
+	;s.ot.pos.ok = 2227
+	;s.ot.pos.ng = 2228
+	;
+	;s.ot.placed = 2229
+	;s.opt.placed = 2230
+	;
+	s.grip.full = 2231
+	;
+	s.cmd.start = 2232
+	s.cmd.pick = 2233
+	s.cmd.measured = 2234
+	;s.cmd.pneum.op = 2235
+	;s.cmd.pneum.cl = 2236
+	s.cmd.chk.etal = 2237
+	s.cmd.finish = 2238
+	s.cmd.pause = 2239
+	s.cmd.resume = 2240
+	s.cmd.stop = 2241
+	;
+	s.pr.home = 2250
+	s.pr.tch.ot = 2251
+	s.pr.tch.defect = 2252
+	s.pr.tch.meas = 2253
+	s.pr.tch.etal = 2254
+	s.pr.tch.pos = 2255
+	s.pr.tch.grip = 2260
+	;
+	s.apply.obj = 2256
+	;s.apply.cv = 2257
+	s.pr.tst.ot = 2249
+	;
+	s.opt.spacer = 2270
+	s.opt.flip = 2271
+	s.etalon.ok = 2272
+	s.etalon.ret = 2273
+	s.etalon.ng = 2274
+	;s.hmi.pneum.op = 2258
+	;s.hmi.pneum.cl = 2259
+	;s.hmi.get.cv = 2260
+	s.hmi.res.state = 2261
+	s.hmi.res.act = 2262
+	;
+	s.debug.mode = 2300
 .END
-.PROGRAM a.teach.defect()@26/01/22 12:32 #0
-  IF FALSE THEN
-    SPEED 250 MM/S ALWAYS
-    ACCURACY 0 ALWAYS
-    TOOL tool.pick[hmi.tool.no]
-;
-    LMOVE #def.down.right; *** TEACH POINT *** Lower right
-    LMOVE #def.up.right; *** TEACH POINT *** Upper right
-    LMOVE #def.up.left; *** TEACH POINT *** Upper left
-;
-    POINT .x = #def.up.right
-    POINT .y = #def.up.left
-    POINT .o = #def.down.right
-;
-    BREAK
-    POINT defect.frame = FRAME(.o,.x,.y,.o)
-;
-    .k = 1
-    FOR .i = 0 TO 9
-      FOR .j = 0 TO 4
-        POINT #defect.point[.k] = defect.frame+TRANS(.i*27.8,.j*55.6)
-        .k = .k+1
-      END
-    END
-  END
-  SPEED 250 MM/S ALWAYS
-  ACCURACY 0.02 ALWAYS
-  TOOL tool.pick[hmi.tool.no]
-  BREAK
-;
-  POINT .defect.pos = #defect.point[hmi.defect.pos]
-;
-  LAPPRO .defect.pos,-10
-  LMOVE .defect.pos
-  LAPPRO .defect.pos,-10
+.PROGRAM set.vars.pc()@26/01/21 14:55 #18
+	;
+	; Constants
+	;
+	; Initialize once
+	;
+	;
+	recv.etalon = -1
+	;
+	IF NOT EXISTREAL ("max.defect.cnt") THEN
+		max.defect.cnt = 50
+	END
+	;
+	IF NOT EXISTREAL ("state") THEN
+		state = 0
+	END
+	;
+	IF NOT EXISTREAL ("etalon.id") THEN
+		etalon.id = -1
+	END
+	;
+	IF NOT EXISTREAL ("round.no") THEN
+		round.no = 3
+		pawn.no = 5
+	END
+	;
+	IF NOT EXISTCHAR ("$tcp.ip") THEN
+		$tcp.ip = "127.0.0.1"
+	END
+	;
+	IF NOT EXISTREAL ("tcp.port") THEN
+		tcp.port = 9007
+	END
+	;
+	IF NOT EXISTREAL ("tcp.ena") THEN
+		tcp.ena = -1
+	END
+	;
+	IF NOT EXISTREAL ("tcp.recv.ena") THEN
+		tcp.recv.ena = -1
+	END
+	;
+	IF NOT EXISTREAL ("tcp.send.ena") THEN
+		tcp.send.ena = -1
+	END
+	;
+	IF NOT EXISTREAL ("tcp.sender.dly") THEN
+		tcp.sender.dly = 0.25
+	END
+	;
+	IF NOT EXISTREAL ("tyterm") THEN
+		tyterm = 0
+	END
+	;
+	IF NOT EXISTCHAR ("$log.entry[127]") THEN
+		FOR .i = 0 TO 127
+			$log.entry[.i] = " "
+		END
+	END
+	;
+	;IF NOT EXISTJOINT ("#current.pos") THEN
+	;POINT #current.pos = #homyak
+	;END
+	;
+	IF NOT EXISTREAL ("count.pick") THEN
+		count.pick = 0
+	END
+	;
+	IF NOT EXISTREAL ("count.put") THEN
+		count.put = 0
+	END
+	;
+	IF NOT EXISTREAL ("count.defect") THEN
+		count.defect = 0
+	END
+	;
+	IF NOT EXISTREAL ("current.gripper") THEN
+		current.gripper = 1
+	END
+	;
+	IF NOT EXISTREAL ("pg.gripper") THEN
+		pg13.gripper = 0
+	END
+	;
+	IF NOT EXISTREAL ("hmi.gripper") THEN
+		hmi.gripper = 1
+	END
+	;
+	IF NOT EXISTREAL ("hmi.obj.id") THEN
+		hmi.obj.id = 1
+	END
+	;
+	IF NOT EXISTREAL ("hmi.tool.no") THEN
+		hmi.tool.no = 1
+	END
+	;
+	IF NOT EXISTREAL ("hmi.defect.pos") THEN
+		hmi.defect.pos = 1
+	END
+	;
+	IF NOT EXISTCHAR ("$action") THEN
+		$action = "Default"
+	END
+	;
+	;
+	IF NOT EXISTCHAR ("$pg.name") THEN
+		$pg.name = "Default"
+	END
+	;
+	IF NOT EXISTREAL ("detail.count") THEN
+		detail.count = 0
+	END
+	;
+	IF NOT EXISTREAL ("keep.object") THEN
+		keep.object = -1
+	END
+	;
+	FOR .n = 1 TO 64
+		.$name = "grip.xsh[" + $ENCODE (/L, .n) + "]"
+		IF NOT EXISTREAL (.$name) THEN
+			grip.xsh[.n] = 0
+			grip.ysh[.n] = 0
+			grip.zsh[.n] = 0
+			grip.180xsh[.n] = 0
+			grip.180ysh[.n] = 0
+		END
+	END
+	;
 .END
 .PROGRAM state0()@26/01/22 14:37 #121; Initialization of parameters
-;
-  CALL log("State 0: Program reset. Initialization of parameters")
-  SIGNAL -s.grip.full,-s.measure.ok,-s.measure.ng,-rs7.tare.chg,-s.cmd.measured
-  SIGNAL -s.cmd.start,-s.cmd.pick,-s.cmd.finish,-rs7.locked.zone,-s.cmd.stop
-  SIGNAL -s.cmd.chk.etal,-rs7.etalon.stop,-s.cmd.pause
-  SIGNAL -s.etalon.ok,-s.etalon.ret,-s.etalon.ng
-  count.pick = 0
-  BITS rs7.det.picked[0],8 = count.pick
-  count.put = 0
-;max.count.put = 0
-;
-  state = 100
-;
+	;
+	CALL log ("State 0: Program reset. Initialization of parameters")
+	SIGNAL -s.grip.full, -s.measure.ok, -s.measure.ng, -rs7.tare.chg, -s.cmd.measured
+	SIGNAL -s.cmd.start, -s.cmd.pick, -s.cmd.finish, -rs7.locked.zone, -s.cmd.stop
+	SIGNAL -s.cmd.chk.etal, -rs7.etalon.stop, -s.cmd.pause
+	SIGNAL -s.etalon.ok, -s.etalon.ret, -s.etalon.ng
+	count.pick = 0
+	BITS rs7.det.picked[0], 8 = count.pick
+	count.put = 0
+	;max.count.put = 0
+	;
+	state = 100
+	;
 .END
 .PROGRAM state1()@26/01/21 14:55 #2102; Pick from positioner
-  CALL log("State 1: Pick from positioner")
-; Check all start positions
-; Possible do not needed because robot can be only in HOME or near positioner
-;JMOVE #homyak
-;
-  CALL pos.pick
-;
-  state = 101
-;
-.END
-.PROGRAM state2()@26/01/21 14:55 #2072; Measurement process
-  CALL log("State 2: Measurement process")
-; Check all start positions
-; Possible do not needed because robot can be only in HOME or near positioner
-;JMOVE #homyak
-;
-  CALL measure
-  $action = "WaitPosFull"
-;
-  state = 101
-;
-.END
-.PROGRAM state3()@26/01/21 14:55 #1728; Put detail to OT
-  CALL log("State 3: Put detail to OT")
-; Check all start positions
-; Possible do not needed because robot can be only in HOME or near positioner
-;JMOVE #homyak
-;
-  SIGNAL -s.measure.ok,-s.measure.ng
-  CALL ot.put
-;
-  state = 101
-;
-.END
-.PROGRAM state4()@26/01/21 14:55 #354; State 4: Put detail to defect tare
-  CALL log("State 4: Put detail to defect tare")
-; Check all start positions
-; Possible do not needed because robot can be only in HOME or near positioner
-;JMOVE #homyak
-;
-  SIGNAL -s.measure.ok,-s.measure.ng
-  CALL defect.put
-;
-  state = 101
-;
-.END
-.PROGRAM state5()@26/01/24 19:18 #722; Check etalon
-  CALL log("State 5: Check etalon")
-; TEMPORARY!!!!!!!!
-;  state = 101
-;  SIGNAL -s.cmd.chk.etal
-;  RETURN
-  SIGNAL -s.etalon.ok,-s.etalon.ret,-s.etalon.ng
-  IF recv.etalon==99 THEN
-    CALL etalon.measure(99)
-  ELSE
-    CALL etalon.measure(etalon.id)
-  END
-;
-  IF SIG(s.etalon.ok) THEN
-    state = 101
-  END
-  IF SIG(s.etalon.ret) THEN
-    state = 5
-  END
-  IF SIG(s.etalon.ng) THEN
-    SIGNAL rs7.etalon.stop
-;SIGNAL s.force.defect
-    state = 101
-  END
-  SIGNAL -s.cmd.chk.etal
-;IF SIG (s.measure.ok) THEN
-;  state = 101
-;ELSE
-;  state = 105
-;END
-;
-.END
-.PROGRAM state6()@26/01/21 14:55 #0; Deprecated
-  state = 103
-.END
-.PROGRAM state7()@26/01/21 14:55 #200; Deprecated
-  CALL log ("State 7: Check if gripper change is required")
-  ; We are at home at this point. No cases without home!
-  IF current.gripper <> pg7.gripper THEN
-    CALL log ("Selected wrong gripper, perform change")
-    JMOVE #defect.safe
-    IF current.gripper <> 0 THEN
-      CALL gripper.put (current.gripper)
-    END
-    CALL gripper.pick (pg13.gripper)
-    JMOVE #defect.safe
-    ;LMOVE #homyak
-  ELSE
-    CALL log ("Program gripper is the same as current gripper")
-  END
-  ;
-  SIGNAL s.cmd.chk.etal
-  state = 5
-.END
-.PROGRAM state8()@26/01/21 14:55 #0; Check etalon by command
-  CALL log("State 8: Check etalon by command")
-  CALL etalon.measure(etalon.id)
-  state = 105
+	CALL log ("State 1: Pick from positioner")
+	; Check all start positions
+	; Possible do not needed because robot can be only in HOME or near positioner
+	;JMOVE #homyak
+	;
+	CALL pos.pick
+	;
+	state = 101
+	;
 .END
 .PROGRAM state100()@26/01/22 14:37 #98; Waiting for start
-;
-  CALL log("State 100: Waiting for start")
-  $action = "WaitingForStart"
-;
-  WHILE NOT SIG(s.cmd.start) DO
-    TWAIT 0.5
-  END
-  SIGNAL -s.cmd.start
-  SIGNAL -s.cmd.stop
-  SIGNAL -rs7.finish.ack
-  max.count.put = 0
-;
-  CALL log("START with Name:"+$pg.name+"-"+$ENCODE(/L,detail.spec)+" Count:"+$ENCODE(detail.count)+" OT:"+$ot.data+" OPT:"+$opt.data)
-;
-  CALL pg.select
-  state = 106
+	;
+	CALL log ("State 100: Waiting for start")
+	$action = "WaitingForStart"
+	;
+	WHILE NOT SIG (s.cmd.start) DO
+		TWAIT 0.5
+	END
+	SIGNAL -s.cmd.start
+	SIGNAL -s.cmd.stop
+	SIGNAL -rs7.finish.ack
+	max.count.put = 0
+	;
+	CALL log ("START with Name:" + $pg.name + "-" + $ENCODE (/L, detail.spec) + " Count:" + $ENCODE (detail.count) + " OT:" + $ot.data + " OPT:" + $opt.data)
+	;
+	CALL pg.select
+	state = 106
 .END
 .PROGRAM state101()@26/01/21 14:55 #7020; Auxilary state
-  CALL log("State 101: Calculating next step")
-  state = 102
+	CALL log ("State 101: Calculating next step")
+	state = 102
 .END
 .PROGRAM state102()@26/01/21 14:55 #454390; Decision making
-; Priority 1
-  IF SIG(s.cmd.pause) THEN
+  ; Priority 1
+  IF SIG (s.cmd.pause) THEN
     state = 105
     RETURN
   END
-  IF SIG(s.cmd.chk.etal) AND NOT SIG(s.grip.full) THEN
+  IF SIG (s.cmd.chk.etal) AND NOT SIG (s.grip.full) THEN
     state = 5
     RETURN
   END
-; Priority 2
-;IF SIG (s.cmd.stop) AND BITS (rs13.det.put[0], 8) <= count.pick THEN
-;  state = 6
-;  RETURN
-;END
-; Priority 3
-  IF NOT SIG(s.grip.full) THEN
+  ; Priority 2
+  ;IF SIG (s.cmd.stop) AND BITS (rs13.det.put[0], 8) <= count.pick THEN
+  ;  state = 6
+  ;  RETURN
+  ;END
+  ; Priority 3
+  IF NOT SIG (s.grip.full) THEN
     $action = "WaitPosFull"
-    IF SIG(s.cmd.pick) AND NOT SIG(rs13.work[1]) AND BITS(rs13.det.put[0],8)>count.pick THEN
+    IF SIG (s.cmd.pick) AND NOT SIG (rs13.work[1]) AND BITS (rs13.det.put[0], 8) > count.pick THEN
       state = 1
       RETURN
     END
   END
-; Priority 4
-  IF SIG(s.grip.full) AND NOT SIG(s.cmd.measured) AND NOT SIG(rs7.etalon.stop) THEN
+  ; Priority 4
+  IF SIG (s.grip.full) AND NOT SIG (s.cmd.measured) AND NOT SIG (rs7.etalon.stop) THEN
     state = 2
     RETURN
   END
-; Priority 5
-  IF SIG(s.grip.full) AND SIG(s.measure.ok) AND NOT SIG(rs7.tare.chg) AND NOT SIG(rs7.etalon.stop) THEN
+  ; Priority 5
+  IF SIG (s.grip.full) AND SIG (s.measure.ok) AND NOT SIG (rs7.tare.chg) AND NOT SIG (rs7.etalon.stop) THEN
     state = 3
     RETURN
   END
-; Priority 6
-  IF SIG(s.grip.full) AND (SIG(s.measure.ng) OR SIG(rs7.etalon.stop)) THEN
+  ; Priority 6
+  IF SIG (s.grip.full) AND (SIG (s.measure.ng) OR SIG (rs7.etalon.stop)) THEN
     state = 4
     RETURN
   END
-; Priority 8
-  IF NOT SIG(s.grip.full) THEN; AND NOT SIG (s.cmd.pick) THEN
+  ; Priority 8
+  IF NOT SIG (s.grip.full) THEN; AND NOT SIG (s.cmd.pick) THEN
     JMOVE #homyak
     BREAK
     SIGNAL -rs7.locked.zone
   END
-; Priority 7
-  IF SIG(rs13.finish) AND NOT SIG(s.grip.full) AND NOT (BITS(rs13.det.put[0],8)>count.pick) THEN
+  ; Priority 7
+  IF SIG (rs13.finish) AND NOT SIG (s.grip.full) AND NOT (BITS (rs13.det.put[0], 8) > count.pick) THEN
     state = 103
     RETURN
   END
+  ;
+  IF SIG (rs13.no.ot.stop) THEN
+    state = 103
+    RETURN
+  END
+  ;
 .END
 .PROGRAM state103()@26/01/21 14:55 #126; Auxilary state
-  CALL log("State 103: Ending sequence started")
-  state = 104
-;
+	CALL log ("State 103: Ending sequence started")
+	state = 104
+	;
 .END
 .PROGRAM state104()@26/01/21 14:55 #126; Ending sequence
-;
-  SIGNAL rs7.finish.ack
-  state = 255
-  RETURN
-;
+	;
+	SIGNAL rs7.finish.ack
+	state = 255
+	RETURN
+	;
 .END
 .PROGRAM state105()@26/01/21 14:55 #17; Program paused
-  CALL log("State 105: Program paused")
-  $action = "Paused"
-  SWAIT s.cmd.resume
-  $action = " "
-  CALL log("Program resumed")
-  SIGNAL -s.cmd.pause
-  state = 101
+	CALL log ("State 105: Program paused")
+	$action = "Paused"
+	SWAIT s.cmd.resume
+	$action = " "
+	CALL log ("Program resumed")
+	SIGNAL -s.cmd.pause
+	state = 101
 .END
 .PROGRAM state106()@26/01/21 14:55 #210; Check program
-  CALL log("State 106: Check program")
-  IF $pg.name<>"NULL" THEN
-    CALL log("Selected program: "+$pg.name)
-    IF object.id==round.no THEN
-      CALL calc.grid.rnd
-    ELSE
-      CALL calc.grid
-    END
-    ;
-    CALL calc.ot
-    IF state = 255 THEN
-      RETURN
-    END
-    ;
-    state = 7
-  ELSE
-    CALL log("Wrong program name. Program reset")
-    BREAK
-    $action = "WrongProgramName"
-    TWAIT 10
-    BREAK
-    state = 0
-  END
-;
+	CALL log ("State 106: Check program")
+	IF $pg.name <> "NULL" THEN
+		CALL log ("Selected program: " + $pg.name)
+		IF object.id == round.no THEN
+			CALL calc.grid.rnd
+		ELSE
+			CALL calc.grid
+		END
+		;
+		CALL calc.ot
+		IF state = 255 THEN
+			RETURN
+		END
+		;
+		state = 7
+	ELSE
+		CALL log ("Wrong program name. Program reset")
+		BREAK
+		$action = "WrongProgramName"
+		TWAIT 10
+		BREAK
+		state = 0
+	END
+	;
+.END
+.PROGRAM state2()@26/01/21 14:55 #2072; Measurement process
+	CALL log ("State 2: Measurement process")
+	; Check all start positions
+	; Possible do not needed because robot can be only in HOME or near positioner
+	;JMOVE #homyak
+	;
+	CALL measure
+	$action = "WaitPosFull"
+	;
+	state = 101
+	;
 .END
 .PROGRAM state255()@26/01/21 14:55 #126
-  CALL log("State 255: Program complete")
-  state = 0
-;
+	CALL log ("State 255: Program complete")
+	state = 0
+	;
 .END
-.PROGRAM a.home()@26/01/21 14:55 #0
-;
-  SPEED 250 MM/S ALWAYS
-  JMOVE #homyak
-;
+.PROGRAM state3()@26/01/21 14:55 #1728; Put detail to OT
+	CALL log ("State 3: Put detail to OT")
+	; Check all start positions
+	; Possible do not needed because robot can be only in HOME or near positioner
+	;JMOVE #homyak
+	;
+	SIGNAL -s.measure.ok, -s.measure.ng
+	CALL ot.put
+	;
+	state = 101
+	;
 .END
-.PROGRAM a.align()@26/01/21 14:55 #0
-;
-  SPEED 250 MM/S ALWAYS
-  ALIGN
-;
+.PROGRAM state4()@26/01/21 14:55 #354; State 4: Put detail to defect tare
+	CALL log ("State 4: Put detail to defect tare")
+	; Check all start positions
+	; Possible do not needed because robot can be only in HOME or near positioner
+	;JMOVE #homyak
+	;
+	SIGNAL -s.measure.ok, -s.measure.ng
+	CALL defect.put
+	;
+	state = 101
+	;
 .END
-.PROGRAM safe.home()@26/01/22 12:37 #132
-;
-; Safe zones:
-; 1. OT zone: same as for normal work
-; 2. Machine zone
-; 3. Defect + etalon zone
-;
-  IF SIG(do.home) THEN
-    CALL log("Robot already in home position")
-  ELSE
-    CALL log("Performing safe motion to home position")
-; In measure machine zone!!!
-; Move to the height of a before machine point
-    IF SIG(do.work[2]) THEN
-      CALL log("Move from the measure machine zone")
-      IF object.id<>round.no THEN
-        .idx = 1
-      ELSE
-        .idx = 2
-      END
-      POINT .temp = #before.machine[.idx]
-      DECOMPOSE .s[1] = .temp
-      POINT .temp = HERE
-      DECOMPOSE .c[1] = .temp
-      .dz = .s[3]-.c[3]
-      DRAW 0,0,.dz
-      LMOVE #before.machine[.idx]
-      JMOVE #safe.machine
-    END
-; In defect zone
-; Move to the height of a safe point
-    IF SIG(do.work[3]) THEN
-      CALL log("Move from the defect zone")
-      POINT .temp = #safe.defect
-      DECOMPOSE .s[1] = .temp
-      POINT .temp = HERE
-      DECOMPOSE .c[1] = .temp
-      .dz = .s[3]-.c[3]
-      DRAW 0,0,.dz
-      LMOVE #safe.defect
-    END
-;
-; In OT zone
-; Move to the height of a home POINT
-    IF SIG(do.work[1]) THEN
-      CALL log("Move from the OT zone")
-      POINT .temp = #homyak
-      DECOMPOSE .s[1] = .temp
-      POINT .temp = HERE
-      DECOMPOSE .c[1] = .temp
-      .dz = .s[3]-.c[3]
-      DRAW 0,0,.dz
-      LMOVE #homyak
-    END
-;
-    JMOVE #homyak
-    BREAK
-    CALL log("Robot in home position")
-  END
-;
+.PROGRAM state5()@26/01/24 19:18 #722; Check etalon
+	CALL log ("State 5: Check etalon")
+	; TEMPORARY!!!!!!!!
+	;  state = 101
+	;  SIGNAL -s.cmd.chk.etal
+	;  RETURN
+	SIGNAL -s.etalon.ok, -s.etalon.ret, -s.etalon.ng
+	IF recv.etalon == 99 THEN
+		CALL etalon.measure (99)
+	ELSE
+		CALL etalon.measure (etalon.id)
+	END
+	;
+	IF SIG (s.etalon.ok) THEN
+		state = 101
+	END
+	IF SIG (s.etalon.ret) THEN
+		state = 5
+	END
+	IF SIG (s.etalon.ng) THEN
+		SIGNAL rs7.etalon.stop
+		;SIGNAL s.force.defect
+		state = 101
+	END
+	SIGNAL -s.cmd.chk.etal
+	;IF SIG (s.measure.ok) THEN
+	;  state = 101
+	;ELSE
+	;  state = 105
+	;END
+	;
 .END
-.PROGRAM log(.$msg)@26/01/21 14:55 #29477
-;
-; 1 line = 55 symbols max
-;
-  FOR .i = 0 TO 126
-    $log.entry[.i] = $log.entry[.i+1]
-  END
-  $log.entry[127] = $TIME+" "+.$msg
-;
-  IFPWPRINT 1,1,1,9,10=$log.entry[116],$log.entry[117],$log.entry[118],$log.entry[119]
-  IFPWPRINT 2,1,1,9,10=$log.entry[120],$log.entry[121],$log.entry[122],$log.entry[123]
-  IFPWPRINT 3,1,1,9,10=$log.entry[124],$log.entry[125],$log.entry[126],$log.entry[127]
-;
+.PROGRAM state6()@26/01/21 14:55 #0; Deprecated
+	state = 103
 .END
-.PROGRAM pg.select()@26/01/25 17:14 #137
-  SCASE $pg.name OF
-   SVALUE "312.229.002":
-    CASE detail.spec OF
-     VALUE 0:
-      CALL id1; idX_1
-     VALUE 1:
-      CALL id1
-     VALUE 2:
-      CALL id1
-     ANY :
-      $pg.name = "NULL"
-    END
-;
-   SVALUE "0401.17.02.023":
-    CASE detail.spec OF
-     VALUE 0:
-      CALL id2; idX_1
-     VALUE 1:
-      CALL id2
-     VALUE 2:
-      CALL id2
-     ANY :
-      $pg.name = "NULL"
-    END
-;
-   SVALUE "312.229.001":
-    CASE detail.spec OF
-     VALUE 0:
-      CALL id3; idX_1
-     ANY :
-      $pg.name = "NULL"
-    END
-;
-   SVALUE "440.00.026":
-    CASE detail.spec OF
-     VALUE 0:
-      CALL id4; idX_1
-     VALUE 1:
-      CALL id4
-     VALUE 2:
-      CALL id4
-     VALUE 3:
-      CALL id4
-     ANY :
-      $pg.name = "NULL"
-    END
-;
-   SVALUE "440.00.111":
-    CASE detail.spec OF
-     VALUE 0:
-      CALL id5; idX_1
-     VALUE 2:
-      CALL id5
-     VALUE 3:
-      CALL id5
-     ANY :
-      $pg.name = "NULL"
-    END
-;
-   SVALUE "0401.28.02.063":
-    CASE detail.spec OF
-     VALUE 0:
-      CALL id6; idX_1
-     VALUE 1:
-      CALL id6
-     ANY :
-      $pg.name = "NULL"
-    END
-;
-;
-   ANY :
-    $pg.name = "NULL"
-    RETURN
-  END
-;
+.PROGRAM state7()@26/01/21 14:55 #200; Deprecated
+	CALL log ("State 7: Check if gripper change is required")
+	; We are at home at this point. No cases without home!
+	IF current.gripper <> pg7.gripper THEN
+		CALL log ("Selected wrong gripper, perform change")
+		JMOVE #defect.safe
+		IF current.gripper <> 0 THEN
+			CALL gripper.put (current.gripper)
+		END
+		CALL gripper.pick (pg13.gripper)
+		JMOVE #defect.safe
+		;LMOVE #homyak
+	ELSE
+		CALL log ("Program gripper is the same as current gripper")
+	END
+	;
+	SIGNAL s.cmd.chk.etal
+	state = 5
 .END
-.PROGRAM a.main()@26/01/21 14:55 #0
-;
-  CALL log("Main program executed")
-  CALL safe.home
-;
-  WHILE TRUE DO
-    .$pg.string = "state"+$ENCODE(/L,state)
-    IF EXISTPGM(.$pg.string) THEN
-      SCALL .$pg.string
-    ELSE
-      CALL log("Error! Program is in wrong state. Connect Robowizard")
-      RETURN
-    END
-;IF manual.mode THEN
-;  $action = "WaitNextStep"
-;  SWAIT
-;END
-  END
-;
-.END
-.PROGRAM pg0()@26/01/21 14:55 #0
-  state = 0
-  CALL a.main
-.END
-.PROGRAM check.teach.pc()@26/01/21 14:55 #11289320
-  ;
-  IF SIG (s.hmi.res.state) THEN
-    state = 0
-  END
-  ;
-  IF SIG (s.hmi.res.act) THEN
-    $action = " "
-  END
-  ;
-  IF SIG (s.pr.tch.pos) AND NOT SWITCH (REPEAT ) THEN
-    MC PRIME a.teach.pos
-  END
-  ;
-  IF SIG (s.pr.home) AND NOT SWITCH (REPEAT ) THEN
-    MC PRIME a.home
-  END
-  ;
-  IF SIG (s.pr.tch.defect) AND NOT SWITCH (REPEAT ) THEN
-    MC PRIME a.teach.defect
-  END
-  ;
-  IF SIG (s.pr.tch.meas) AND NOT SWITCH (REPEAT ) THEN
-    MC PRIME a.teach.machine
-  END
-  ;
-  IF SIG (s.pr.tch.ot) AND NOT SWITCH (REPEAT ) THEN
-    MC PRIME a.teach.ot
-  END
-  ;
-  IF SIG (s.pr.tst.ot) AND NOT SWITCH (REPEAT ) THEN
-    MC PRIME a.test.ot
-  END
-  ;
-  IF SIG (s.pr.tch.etal) AND NOT SWITCH (REPEAT ) THEN
-    MC PRIME a.teach.etalon
-  END
-  ;
-  IF SIG (s.pr.tch.grip) AND NOT SWITCH (REPEAT ) THEN
-    MC PRIME a.teach.gripper
-  END
-  ;
-  ; HMI PANEL OBJECT TEACH DATA
-  IF keep.object <> hmi.obj.id AND hmi.obj.id > 0 AND hmi.obj.id <= 64 THEN
-    hmi.gx = grip.xsh[hmi.obj.id]
-    hmi.gy = grip.ysh[hmi.obj.id]
-    hmi.gz = grip.zsh[hmi.obj.id]
-    hmi.g180x = grip.180xsh[hmi.obj.id]
-    hmi.g180y = grip.180ysh[hmi.obj.id]
-    hmi.gmidy = grip.midysh[hmi.obj.id]
-    ;
-    keep.object = hmi.obj.id
-  END
-  IF SIG (s.apply.obj) THEN
-    grip.xsh[hmi.obj.id] = hmi.gx
-    grip.ysh[hmi.obj.id] = hmi.gy
-    grip.zsh[hmi.obj.id] = hmi.gz
-    grip.180xsh[hmi.obj.id] = hmi.g180x
-    grip.180ysh[hmi.obj.id] = hmi.g180y
-    grip.midysh[hmi.obj.id] = hmi.gmidy
-  END
-  ;
-.END
-.PROGRAM check.zone.pc()@26/01/21 14:55 #51733091
-;
-;do.work[1] = 17
-;rs13.work[1] = 1017
-;di.hold = 2009
-;s.zone.blocked = 2209
-; do.work[1]     rs13.work[1]             s.zone.blocked
-;----| |-------------| |----------------------( )
-;            |                |
-;            | s.zone.blocked |
-;            --------|/|-------
-;
-; s.zone.blocked   rs13.work[1]  do.work[1]   di.hold
-;------|/|------------| |---------|  |--------(/)
-;
-  SOUT 2209 = 17 AND (NOT 1017 OR 2209)
-  SOUT 2009 = NOT (NOT 2209 AND 1017 AND 17)
-;
-.END
-.PROGRAM check.disp.pc()@26/01/21 14:55 #51733063
-;
-  IF SIG(s.tcp.ena) AND tcp.ena==-1 THEN
-    tcp.ena = tyterm
-  END
-  IF NOT SIG(s.tcp.ena) AND tcp.ena<>-1 THEN
-    tcp.ena = -1
-  END
-;
-  IF SIG(s.tcp.send.ena) AND tcp.send.ena==-1 THEN
-    tcp.send.ena = tyterm
-  END
-  IF NOT SIG(s.tcp.send.ena) AND tcp.send.ena<>-1 THEN
-    tcp.send.ena = -1
-  END
-;
-  IF SIG(s.tcp.recv.ena) AND tcp.recv.ena==-1 THEN
-    tcp.recv.ena = tyterm
-  END
-  IF NOT SIG(s.tcp.recv.ena) AND tcp.recv.ena<>-1 THEN
-    tcp.recv.ena = -1
-  END
-;
-.END
-.PROGRAM check.tasks.pc()@26/01/21 14:55 #51733072
-;
-  IF TASK(1002)<>1 THEN
-    PCEXECUTE 2: tcp.client.pc
-    TWAIT 3
-  END
-  IF TASK(1003)<>1 THEN
-    PCEXECUTE 3: tcp.sender.pc
-    TWAIT 3
-  END
-;
-.END
-.PROGRAM watchdog.pc()@26/01/21 14:55 #0
-  WHILE TRUE DO
-;
-    CALL check.tasks.pc
-    CALL check.disp.pc
-    CALL check.zone.pc
-;
-;IF SWITCH (CS) AND state > 0 THEN
-;  IF BITS (rs13.det.put[0], 8) == count.pick THEN
-;    TIMER(1) = 0
-;  END
-;END
-;
-    IF SIG(rs13.tare.ack) THEN
-      IF count.put==max.tare.count THEN
-        count.put = 0
-      END
-      SIGNAL -rs7.tare.chg
-    END
-;
-    IF NOT SIG(s.debug.mode) THEN
-      IF SWITCH(REPEAT ) AND NOT SWITCH(TEACH_LOCK ) AND NOT SWITCH(EMERGENCY ) AND NOT SWITCH(CS ) AND NOT SWITCH(ERROR ) THEN
-        MC ZPOWER ON
-;MC PRIME a.main
-;WHILE NOT SWITCH(POWER)
-;  TWAIT 0.01
-;  MC CONTINUE
-;END
-      END
-    END
-;
-    IF NOT SWITCH(REPEAT ) THEN
-      CALL check.teach.pc
-    END
-    TWAIT 0.01
-  END
-;
-.END
-.PROGRAM set.vars.pc()@26/01/21 14:55 #18
-;
-; Constants
-;
-; Initialize once
-;
-;
-  recv.etalon = -1
-;
-  IF NOT EXISTREAL("max.defect.cnt") THEN
-    max.defect.cnt = 50
-  END
-;
-  IF NOT EXISTREAL("state") THEN
-    state = 0
-  END
-;
-  IF NOT EXISTREAL("etalon.id") THEN
-    etalon.id = -1
-  END
-;
-  IF NOT EXISTREAL("round.no") THEN
-    round.no = 3
-    pawn.no = 5
-  END
-;
-  IF NOT EXISTCHAR("$tcp.ip") THEN
-    $tcp.ip = "127.0.0.1"
-  END
-;
-  IF NOT EXISTREAL("tcp.port") THEN
-    tcp.port = 9007
-  END
-;
-  IF NOT EXISTREAL("tcp.ena") THEN
-    tcp.ena = -1
-  END
-;
-  IF NOT EXISTREAL("tcp.recv.ena") THEN
-    tcp.recv.ena = -1
-  END
-;
-  IF NOT EXISTREAL("tcp.send.ena") THEN
-    tcp.send.ena = -1
-  END
-;
-  IF NOT EXISTREAL("tcp.sender.dly") THEN
-    tcp.sender.dly = 0.25
-  END
-;
-  IF NOT EXISTREAL("tyterm") THEN
-    tyterm = 0
-  END
-;
-  IF NOT EXISTCHAR("$log.entry[127]") THEN
-    FOR .i = 0 TO 127
-      $log.entry[.i] = " "
-    END
-  END
-;
-;IF NOT EXISTJOINT ("#current.pos") THEN
-;POINT #current.pos = #homyak
-;END
-;
-  IF NOT EXISTREAL("count.pick") THEN
-    count.pick = 0
-  END
-;
-  IF NOT EXISTREAL("count.put") THEN
-    count.put = 0
-  END
-;
-  IF NOT EXISTREAL("count.defect") THEN
-    count.defect = 0
-  END
-;
-  IF NOT EXISTREAL("current.gripper") THEN
-    current.gripper = 1
-  END
-;
-  IF NOT EXISTREAL("pg.gripper") THEN
-    pg13.gripper = 0
-  END
-;
-  IF NOT EXISTREAL("hmi.gripper") THEN
-    hmi.gripper = 1
-  END
-;
-  IF NOT EXISTREAL("hmi.obj.id") THEN
-    hmi.obj.id = 1
-  END
-;
-  IF NOT EXISTREAL("hmi.tool.no") THEN
-    hmi.tool.no = 1
-  END
-;
-  IF NOT EXISTREAL("hmi.defect.pos") THEN
-    hmi.defect.pos = 1
-  END
-;
-  IF NOT EXISTCHAR("$action") THEN
-    $action = "Default"
-  END
-;
-;
-  IF NOT EXISTCHAR("$pg.name") THEN
-    $pg.name = "Default"
-  END
-;
-  IF NOT EXISTREAL("detail.count") THEN
-    detail.count = 0
-  END
-;
-  IF NOT EXISTREAL("keep.object") THEN
-    keep.object = -1
-  END
-;
-  FOR .n = 1 TO 64
-    .$name = "grip.xsh["+$ENCODE(/L,.n)+"]"
-    IF NOT EXISTREAL(.$name) THEN
-      grip.xsh[.n] = 0
-      grip.ysh[.n] = 0
-      grip.zsh[.n] = 0
-      grip.180xsh[.n] = 0
-      grip.180ysh[.n] = 0
-    END
-  END
-;
-.END
-.PROGRAM set.io.pc()@26/01/21 14:55 #44
-; Gripper IO
-;
-; Gripper
-  release.grip = 1
-  capture.grip = 2
-; Clamp
-  grip.unclamped = 1001
-  grip.clamped = 1002
-  grip.unclamp = 3
-  grip.clamp = 4
-;
-; Ethernet I/P IO (17-32)
-;
-; Inputs
-;
-  rs13.work[1] = 1017
-  rs13.tare.ack = 1018
-  rs13.detail.put = 1019
-  rs13.finish = 1020
-  rs13.lock.zone = 1022
-;rs13.put.ack = 1021
-  rs13.det.put[0] = 1025
-  rs13.det.put[1] = 1026
-  rs13.det.put[2] = 1027
-  rs13.det.put[3] = 1028
-  rs13.det.put[4] = 1029
-  rs13.det.put[5] = 1030
-  rs13.det.put[6] = 1031
-  rs13.det.put[7] = 1032
-;
-; Outputs
-;
-  do.work[1] = 17
-  rs7.tare.chg = 18
-  rs7.locked.zone = 19
-  rs7.finish.ack = 20
-;rs7.put.ack = 21
-;rs13.detail.put = 21
-  rs7.det.picked[0] = 25
-  rs7.det.picked[1] = 26
-  rs7.det.picked[2] = 27
-  rs7.det.picked[3] = 28
-  rs7.det.picked[4] = 29
-  rs7.det.picked[5] = 30
-  rs7.det.picked[6] = 31
-  rs7.det.picked[7] = 32
-;
-  rs7.etalon.stop = 33
-;
-; Internal IO
-;
-; Dedicated inputs 2001 - 2064
-;
-; IFP page change 2001-2008
-  di.ifp.page[1] = 2001
-  di.ifp.page[2] = 2002
-  di.ifp.page[3] = 2003
-  di.ifp.page[4] = 2004
-  di.ifp.page[5] = 2005
-  di.ifp.page[6] = 2006
-  di.ifp.page[7] = 2007
-  di.ifp.page[8] = 2008
-;
-  di.hold = 2009
-;
-; Dedicated outputs 2101-2164
-;
-  do.home = 2010
-  do.bat.alm = 2011
-  do.automatic = 2012
-;
-;
-; Internal logic 2201 - 2960
-;
-; TCP/IP display flags
-  s.tcp.send.ena = 2201
-  s.tcp.recv.ena = 2202
-  s.tcp.ena = 2203
-  s.tcp.log = 2204
-;
-  s.zone.blocked = 2209
-;
-; Workspaces
-  do.work[2] = 2212
-  do.work[3] = 2213
-  do.work[4] = 2214
-  do.work[5] = 2215
-  do.work[6] = 2216
-  do.work[7] = 2217
-  do.work[8] = 2218
-;
-  s.force.in[1] = 2221
-  s.force.in[2] = 2222
-;
-  s.defect.pal.ok = 2223
-  s.defect.pal.ng = 2224
-  s.measure.ok = 2225
-  s.measure.ng = 2226
-;s.force.defect = 2227
-;
-;s.stock.opt.ng = 2226
-;s.ot.pos.ok = 2227
-;s.ot.pos.ng = 2228
-;
-;s.ot.placed = 2229
-;s.opt.placed = 2230
-;
-  s.grip.full = 2231
-;
-  s.cmd.start = 2232
-  s.cmd.pick = 2233
-  s.cmd.measured = 2234
-;s.cmd.pneum.op = 2235
-;s.cmd.pneum.cl = 2236
-  s.cmd.chk.etal = 2237
-  s.cmd.finish = 2238
-  s.cmd.pause = 2239
-  s.cmd.resume = 2240
-  s.cmd.stop = 2241
-;
-  s.pr.home = 2250
-  s.pr.tch.ot = 2251
-  s.pr.tch.defect = 2252
-  s.pr.tch.meas = 2253
-  s.pr.tch.etal = 2254
-  s.pr.tch.pos = 2255
-  s.pr.tch.grip = 2260
-;
-  s.apply.obj = 2256
-;s.apply.cv = 2257
-  s.pr.tst.ot = 2249
-;
-  s.opt.spacer = 2270
-  s.opt.flip = 2271
-  s.etalon.ok = 2272
-  s.etalon.ret = 2273
-  s.etalon.ng = 2274
-;s.hmi.pneum.op = 2258
-;s.hmi.pneum.cl = 2259
-;s.hmi.get.cv = 2260
-  s.hmi.res.state = 2261
-  s.hmi.res.act = 2262
-;
-  s.debug.mode = 2300
-.END
-.PROGRAM get.state.pc(.$state)@26/01/21 14:55 #1365067
-  .$state = "SPEED:"+$ENCODE(/L,MSPEED)+";"
-  .$state = .$state+"POWER:"
-  IF SWITCH(POWER ) THEN
-    .$state = .$state+"TRUE;"
-  ELSE
-    .$state = .$state+"FALSE;"
-  END
-; MAX: 12
-;
-  .$state = .$state+"CS:"
-  IF SWITCH(CS ) THEN
-    .$state = .$state+"TRUE;"
-  ELSE
-    .$state = .$state+"FALSE;"
-  END
-; MAX 9
-;
-  .$state = .$state+"TEACH:"
-  IF SWITCH(REPEAT ) THEN
-    .$state = .$state+"FALSE;"
-  ELSE
-    .$state = .$state+"TRUE;"
-  END
-; MAX 12
-;
-  .$state = .$state+"TEACHL:"
-  IF SWITCH(TEACH_LOCK ) THEN
-    .$state = .$state+"TRUE;"
-  ELSE
-    .$state = .$state+"FALSE;"
-  END
-; MAX 13
-;
-  .$state = .$state+"TPEMG:"
-  IF SWITCH(TP_EMG ) THEN
-    .$state = .$state+"TRUE;"
-  ELSE
-    .$state = .$state+"FALSE;"
-  END
-; MAX 12
-;
-  .$state = .$state+"OPEMG:"
-  IF SWITCH(OP_EMG ) THEN
-    .$state = .$state+"TRUE;"
-  ELSE
-    .$state = .$state+"FALSE;"
-  END
-; MAX 12
-;
-  .$state = .$state+"EXEMG:"
-  IF SWITCH(EX_EMG ) THEN
-    .$state = .$state+"TRUE;"
-  ELSE
-    .$state = .$state+"FALSE;"
-  END
-; MAX 12
-;
-  .$state = .$state+"ERROR:"
-  IF SWITCH(ERROR ) THEN
-    .$state = .$state+"TRUE;"
-  ELSE
-    .$state = .$state+"FALSE;"
-  END
-; MAX 12
-;
-  .$state = .$state+"ECODE:"
-  .$state = .$state+$ENCODE(ERROR)+";"
-; MAX 12
-;
-  .$state = .$state+"HOME:"
-  IF SIG(do.home) THEN
-    .$state = .$state+"TRUE;"
-  ELSE
-    .$state = .$state+"FALSE;"
-  END
-;; MAX 12
-;;
-  .$state = .$state+"BATALM:"
-  IF SIG(do.bat.alm) THEN
-    .$state = .$state+"TRUE;"
-  ELSE
-    .$state = .$state+"FALSE;"
-  END
-; MAX 12
-  .$state = .$state+"\n"
-.END
-.PROGRAM tcp.sender.pc()@26/01/22 12:56 #0
-;
-  WHILE TRUE DO
-;
-    CALL get.state.pc(.$data[1])
-    .$data[2] = "ACTION:"+$action+";"
-    .$data[2] = .$data[2]+"GRIPPER:"+$ENCODE(current.gripper)+";"
-    .$data[2] = .$data[2]+"PICKCOUNT:"+$ENCODE(count.pick)+";"
-    .$data[2] = .$data[2]+"DEFECTCOUNT:"+$ENCODE(count.defect)+";"
-    .$data[2] = .$data[2]+"PUTCOUNT:"+$ENCODE(max.count.put)+";"
-    .$data[2] = .$data[2]+"STATE:"+$ENCODE(state)+";"
-    .$data[2] = .$data[2]+"HOUR:"+$ENCODE(OPEINFO(3))+";"
-;
-    IF SWITCH(STP_ONCE) THEN
-      .$data[2] = .$data[2]+"STEPMODE:TRUE;"
-    ELSE
-      .$data[2] = .$data[2]+"STEPMODE:FALSE;"
-    END
-;
-    .$data[2] = .$data[2]+"\n"
-;
-    CALL tcp.send.pc(.$data[],2)
-    TWAIT tcp.sender.dly
-  END
-;
+.PROGRAM state8()@26/01/21 14:55 #0; Check etalon by command
+	CALL log ("State 8: Check etalon by command")
+	CALL etalon.measure (etalon.id)
+	state = 105
 .END
 .PROGRAM tcp.callback.pc(.$data[],.data.length)@26/01/22 13:52 #48774
-  .$temp = "Received "+$ENCODE(.data.length)+" strings:"
-  PRINT tcp.recv.ena: .$temp
-  FOR .i = 1 TO .data.length
-    PRINT tcp.recv.ena: .$data[.i]
-    CALL tcp.log.pc(.$data[.i])
-;
-; Strings for parsing
-;
-; START COMMAND
-; String format:
-; START;DETAILNAME;DETAILSPEC;DETAILCOUNT;[INTAREID1,INTAREID2,..];[OTAREID1,INTAREID2,..];
-    IF INSTR(.$data[.i] , "START") THEN
-; Decode command
-      .$temp = $DECODE(.$data[1],";",0)
-      .$temp = $DECODE(.$data[1],";",1)
-; Decode detail type
-      $pg.name = $DECODE(.$data[1],";",0)
-      .$temp = $DECODE(.$data[1],";",1)
-; Decode detail spec
-      detail.spec = VAL($DECODE(.$data[1],";",0))
-      .$temp = $DECODE(.$data[1],";",1)
-; Decode detail count
-      detail.count = VAL($DECODE(.$data[1],";",0))
-      .$temp = $DECODE(.$data[1],";",1)
-; Decode intare ids
-      $ot.data = $DECODE(.$data[1],";",0)
-; Decode outtare ids
-      .$temp = $DECODE(.$data[1],";",1)
-      $opt.data = $DECODE(.$data[1],";",0)
-      ; Decode layout
-      .$temp = $DECODE(.$data[1],";",1)
-      layout = $DECODE(.$data[1],";",0)
-      PULSE s.cmd.start,5
-    END
-;
-; SENSOR COMMAND
-; String format:
-; SENSOR;SENSORNAME;STATE;
-    IF INSTR(.$data[.i] , "SENSOR") THEN
-; Decode command
-      .$temp = $DECODE(.$data[1],";",0)
-      .$temp = $DECODE(.$data[1],";",1)
-; Decode sensor name
-      .$sensor.name = $DECODE(.$data[1],";",0)
-      .$temp = $DECODE(.$data[1],";",1)
-; Decode sensor state
-      .$sensor.state = $DECODE(.$data[1],";",0)
-;
-      IF INSTR(.$sensor.state , "TRUE") THEN
-        IF .$sensor.name=="DEFECTPALLETSENSOR" THEN
-          PULSE s.defect.pal.ok,5
-        END
-      ELSE
-        IF .$sensor.name=="DEFECTPALLETSENSOR" THEN
-          PULSE s.defect.pal.ng,5
-        END
-      END
-    END
-;
-;ETALONRESULT COMMAND
-; String format:
-;ETALONRESULT;RESULT;
-    IF INSTR(.$data[.i] , "ETALONRESULT") THEN
-; Decode command
-      .$temp = $DECODE(.$data[1],";",0)
-      .$temp = $DECODE(.$data[1],";",1)
-; Decode state
-      .$state = $DECODE(.$data[1],";",0)
-      .$temp = $DECODE(.$data[1],";",1)
-;
-      IF .$state=="OK" THEN
-        SIGNAL s.etalon.ok
-      END
-      IF .$state=="RETRY" THEN
-        SIGNAL s.etalon.ret
-      END
-      IF .$state=="FAILED" THEN
-        SIGNAL s.etalon.ng
-      END
-    END
-;
-; MEASUREMENT COMMAND
-; String format:
-; MEASUREMENT;STATE;
-    IF INSTR(.$data[.i] , "MEASUREMENT") THEN
-; Decode command
-      .$temp = $DECODE(.$data[1],";",0)
-      .$temp = $DECODE(.$data[1],";",1)
-; Decode measurement result
-      .$measurement.sta = $DECODE(.$data[1],";",0)
-      IF INSTR(.$measurement.sta , "TRUE") THEN
-        SIGNAL s.measure.ok
-      END
-      IF INSTR(.$measurement.sta , "FALSE") THEN
-        SIGNAL s.measure.ng
-      END
-    END
-;
-; SPEED COMMAND
-; String format:
-; SPEED;VALUE;
-;
-    IF INSTR(.$data[.i] , "SPEED") THEN
-      .$temp = $DECODE(.$data[1],";",0)
-      .$temp = $DECODE(.$data[1],";",1)
-      .$spd = $DECODE(.$data[1],";",0)
-      .speed = VAL(.$spd)
-      IF .speed<=0 THEN
-        .speed = 1
-      END
-      IF .speed>100 THEN
-        .speed = 100
-      END
-      MON_SPEED (.speed)
-    END
-;
-; POSITIONERFULL COMMAND
-; String format
-; POSITIONERFULL;
-    IF INSTR(.$data[.i] , "POSITIONERFULL") THEN
-      PULSE s.cmd.pick,5
-    END
-;
-; ETALON COMMAND
-; String format:
-; ETALON;ID;
-;
-    IF INSTR(.$data[.i] , "ETALON") THEN
-; Decode command
-      .$temp = $DECODE(.$data[1],";",0)
-      .$temp = $DECODE(.$data[1],";",1)
-; Need to decide where to check etalon!!!!
-; Decode etalon id
-      recv.etalon = VAL($DECODE(.$data[1],";",0))
-;
-      SIGNAL s.cmd.chk.etal
-    END
-;
-; CLEANDEFECT COMMAND
-; String format:
-; CLEANDEFECT;
-;
-    IF INSTR(.$data[.i] , "CLEANDEFECT") THEN
-      count.defect = 0
-    END
-;
-; PAUSE COMMAND
-; String format:
-; PAUSE;
-;
-    IF INSTR(.$data[.i] , "PAUSE") THEN
-      SIGNAL s.cmd.pause
-    END
-;
-; RESUME COMMAND
-; String format:
-; RESUME;
-;
-    IF INSTR(.$data[.i] , "RESUME") THEN
-      PULSE s.cmd.resume,5
-    END
-;
-; STOP COMMAND
-; String format:
-; STOP;
-;
-    IF INSTR(.$data[.i] , "STOP") THEN
-      SIGNAL s.cmd.stop
-    END
-;
-; STOP COMMAND
-; String format:
-; STOP;
-;
-    IF INSTR(.$data[.i] , "STOP") THEN
-      SIGNAL s.cmd.stop
-    END
-;
-; CYCLEON COMMAND
-; String format:
-; CYCLEON;
-;
-    IF INSTR(.$data[.i] , "CYCLEON") THEN
-      IF SIG(do.automatic) AND NOT SWITCH(CS ) THEN
-        MC CONTINUE
-      END
-    END
-;
-; STEPMODE COMMAND
-; String format:
-; STEPMODE;VALUE
-;
-    IF INSTR(.$data[.i] , "STEPMODE") THEN
-; Decode command
-      .$temp = $DECODE(.$data[1],";",0)
-      .$temp = $DECODE(.$data[1],";",1)
-; Decode measurement result
-      .$state = $DECODE(.$data[1],";",0)
-      IF INSTR(.$state , "TRUE") THEN
-        STP_ONCE ON
-      END
-      IF INSTR(.$state , "FALSE") THEN
-        STP_ONCE OFF
-      END
-    END
-;
-; NEXTSTEP COMMAND
-; String format:
-; NEXTSTEP;
-;
-    IF INSTR(.$data[.i] , "NEXTSTEP") THEN
-      STPNEXT
-    END
-;
-; ERESET COMMAND
-; String format:
-; ERESET;
-;
-    IF INSTR(.$data[.i] , "ERESET") THEN
-      MC ERESET
-    END
-;
-    .$data[.i] = ""
-  END
+	.$temp = "Received " + $ENCODE (.data.length) + " strings:"
+	PRINT tcp.recv.ena: .$temp
+	FOR .i = 1 TO .data.length
+		PRINT tcp.recv.ena: .$data[.i]
+		CALL tcp.log.pc (.$data[.i])
+		;
+		; Strings for parsing
+		;
+		; START COMMAND
+		; String format:
+		; START;DETAILNAME;DETAILSPEC;DETAILCOUNT;[INTAREID1,INTAREID2,..];[OTAREID1,INTAREID2,..];
+		IF INSTR (.$data[.i] , "START") THEN
+			; Decode command
+			.$temp = $DECODE (.$data[1], ";",0)
+			.$temp = $DECODE (.$data[1], ";",1)
+			; Decode detail type
+			$pg.name = $DECODE (.$data[1], ";",0)
+			.$temp = $DECODE (.$data[1], ";",1)
+			; Decode detail spec
+			detail.spec = VAL ($DECODE (.$data[1], ";",0))
+			.$temp = $DECODE (.$data[1], ";",1)
+			; Decode detail count
+			detail.count = VAL ($DECODE (.$data[1], ";",0))
+			.$temp = $DECODE (.$data[1], ";",1)
+			; Decode intare ids
+			$ot.data = $DECODE (.$data[1], ";",0)
+			; Decode outtare ids
+			.$temp = $DECODE (.$data[1], ";",1)
+			$opt.data = $DECODE (.$data[1], ";",0)
+			; Decode layout
+			.$temp = $DECODE (.$data[1], ";",1)
+			layout = $DECODE (.$data[1], ";",0)
+			PULSE s.cmd.start, 5
+		END
+		;
+		; SENSOR COMMAND
+		; String format:
+		; SENSOR;SENSORNAME;STATE;
+		IF INSTR (.$data[.i] , "SENSOR") THEN
+			; Decode command
+			.$temp = $DECODE (.$data[1], ";",0)
+			.$temp = $DECODE (.$data[1], ";",1)
+			; Decode sensor name
+			.$sensor.name = $DECODE (.$data[1], ";",0)
+			.$temp = $DECODE (.$data[1], ";",1)
+			; Decode sensor state
+			.$sensor.state = $DECODE (.$data[1], ";",0)
+			;
+			IF INSTR (.$sensor.state , "TRUE") THEN
+				IF .$sensor.name == "DEFECTPALLETSENSOR" THEN
+					PULSE s.defect.pal.ok, 5
+				END
+			ELSE
+				IF .$sensor.name == "DEFECTPALLETSENSOR" THEN
+					PULSE s.defect.pal.ng, 5
+				END
+			END
+		END
+		;
+		;ETALONRESULT COMMAND
+		; String format:
+		;ETALONRESULT;RESULT;
+		IF INSTR (.$data[.i] , "ETALONRESULT") THEN
+			; Decode command
+			.$temp = $DECODE (.$data[1], ";",0)
+			.$temp = $DECODE (.$data[1], ";",1)
+			; Decode state
+			.$state = $DECODE (.$data[1], ";",0)
+			.$temp = $DECODE (.$data[1], ";",1)
+			;
+			IF .$state == "OK" THEN
+				SIGNAL s.etalon.ok
+			END
+			IF .$state == "RETRY" THEN
+				SIGNAL s.etalon.ret
+			END
+			IF .$state == "FAILED" THEN
+				SIGNAL s.etalon.ng
+			END
+		END
+		;
+		; MEASUREMENT COMMAND
+		; String format:
+		; MEASUREMENT;STATE;
+		IF INSTR (.$data[.i] , "MEASUREMENT") THEN
+			; Decode command
+			.$temp = $DECODE (.$data[1], ";",0)
+			.$temp = $DECODE (.$data[1], ";",1)
+			; Decode measurement result
+			.$measurement.sta = $DECODE (.$data[1], ";",0)
+			IF INSTR (.$measurement.sta , "TRUE") THEN
+				SIGNAL s.measure.ok
+			END
+			IF INSTR (.$measurement.sta , "FALSE") THEN
+				SIGNAL s.measure.ng
+			END
+		END
+		;
+		; SPEED COMMAND
+		; String format:
+		; SPEED;VALUE;
+		;
+		IF INSTR (.$data[.i] , "SPEED") THEN
+			.$temp = $DECODE (.$data[1], ";",0)
+			.$temp = $DECODE (.$data[1], ";",1)
+			.$spd = $DECODE (.$data[1], ";",0)
+			.speed = VAL (.$spd)
+			IF .speed <= 0 THEN
+				.speed = 1
+			END
+			IF .speed > 100 THEN
+				.speed = 100
+			END
+			MON_SPEED (.speed)
+		END
+		;
+		; POSITIONERFULL COMMAND
+		; String format
+		; POSITIONERFULL;
+		IF INSTR (.$data[.i] , "POSITIONERFULL") THEN
+			PULSE s.cmd.pick, 5
+		END
+		;
+		; ETALON COMMAND
+		; String format:
+		; ETALON;ID;
+		;
+		IF INSTR (.$data[.i] , "ETALON") THEN
+			; Decode command
+			.$temp = $DECODE (.$data[1], ";",0)
+			.$temp = $DECODE (.$data[1], ";",1)
+			; Need to decide where to check etalon!!!!
+			; Decode etalon id
+			recv.etalon = VAL ($DECODE (.$data[1], ";",0))
+			;
+			SIGNAL s.cmd.chk.etal
+		END
+		;
+		; CLEANDEFECT COMMAND
+		; String format:
+		; CLEANDEFECT;
+		;
+		IF INSTR (.$data[.i] , "CLEANDEFECT") THEN
+			count.defect = 0
+		END
+		;
+		; PAUSE COMMAND
+		; String format:
+		; PAUSE;
+		;
+		IF INSTR (.$data[.i] , "PAUSE") THEN
+			SIGNAL s.cmd.pause
+		END
+		;
+		; RESUME COMMAND
+		; String format:
+		; RESUME;
+		;
+		IF INSTR (.$data[.i] , "RESUME") THEN
+			PULSE s.cmd.resume, 5
+		END
+		;
+		; STOP COMMAND
+		; String format:
+		; STOP;
+		;
+		IF INSTR (.$data[.i] , "STOP") THEN
+			SIGNAL s.cmd.stop
+		END
+		;
+		; STOP COMMAND
+		; String format:
+		; STOP;
+		;
+		IF INSTR (.$data[.i] , "STOP") THEN
+			SIGNAL s.cmd.stop
+		END
+		;
+		; CYCLEON COMMAND
+		; String format:
+		; CYCLEON;
+		;
+		IF INSTR (.$data[.i] , "CYCLEON") THEN
+			IF SIG (do.automatic) AND NOT SWITCH (CS ) THEN
+				MC CONTINUE
+			END
+		END
+		;
+		; STEPMODE COMMAND
+		; String format:
+		; STEPMODE;VALUE
+		;
+		IF INSTR (.$data[.i] , "STEPMODE") THEN
+			; Decode command
+			.$temp = $DECODE (.$data[1], ";",0)
+			.$temp = $DECODE (.$data[1], ";",1)
+			; Decode measurement result
+			.$state = $DECODE (.$data[1], ";",0)
+			IF INSTR (.$state , "TRUE") THEN
+				STP_ONCE ON
+			END
+			IF INSTR (.$state , "FALSE") THEN
+				STP_ONCE OFF
+			END
+		END
+		;
+		; NEXTSTEP COMMAND
+		; String format:
+		; NEXTSTEP;
+		;
+		IF INSTR (.$data[.i] , "NEXTSTEP") THEN
+			STPNEXT
+		END
+		;
+		; ERESET COMMAND
+		; String format:
+		; ERESET;
+		;
+		IF INSTR (.$data[.i] , "ERESET") THEN
+			MC ERESET
+		END
+		;
+		.$data[.i] = ""
+	END
 .END
 .PROGRAM tcp.client.pc()@26/01/21 14:55 #0
-;
-  tcp.socket = -1
-  .tcp.retry.count = 10
-  .tcp.connect.tmo = 5
-  .tcp.receive.tmo = 5
-;
-  WHILE TRUE DO
-; Checking for active sockets and closing them
-    PRINT tcp.ena: "Checking for active sockets and closing them"
-    TCP_STATUS .number,.ports[0],.sockets[0],.errors[0],.suberrors[0],.$ips[0]
-    IF .number>0 THEN
-      FOR .i = 0 TO .number-1
-        IF .sockets[.i]<>0 THEN
-          .$temp = "Closing socket with id: "+$ENCODE(.sockets[.i])
-          PRINT tcp.ena: .$temp
-          TCP_CLOSE .status,.sockets[.i]
-        END
-      END
-    END
-; Get IP from string
-    .$tcp.ip.copy = $tcp.ip
-    FOR .i = 1 TO 4
-      .$ip = $DECODE(.$tcp.ip.copy,".")
-      .ip[.i] = VAL(.$ip)
-      IF .i<4 THEN
-        .$ip = $DECODE(.$tcp.ip.copy,".",1)
-      END
-    END
-;
-; Connect to server
-    .$temp = "Connecting to server with ip: "+$tcp.ip
-    PRINT tcp.ena: .$temp
-    TCP_CONNECT tcp.socket,tcp.port,.ip[1],.tcp.connect.tmo
-;
-; Start data processing cycle
-    IF tcp.socket>=0 THEN
-      .$temp = "Connection established with socket id:"+$ENCODE(tcp.socket)
-      PRINT tcp.ena: .$temp
-      .connected = TRUE
-; Start receiving data cycle
-      .tcp.error.cnt = 0
-      WHILE .connected AND .tcp.error.cnt<=.tcp.retry.count DO
-        TCP_RECV .status,tcp.socket,.$tcp.request[1],.request.size,.tcp.receive.tmo,255
-        IF .status>=0 THEN
-          IF .request.size==0 THEN
-            .tcp.error.cnt = .tcp.error.cnt+1
-            .$temp = "Received data with 0 length. Error count:"+$ENCODE(.tcp.error.cnt)
-            PRINT tcp.ena: .$temp
-          ELSE
-            CALL tcp.callback.pc(.$tcp.request[],.request.size)
-          END
-        ELSE
-          IF .status==-34024 THEN
-            PRINT tcp.ena: "Timeout in receive, it\'s ok"
-          ELSE
-            .tcp.error.cnt = .tcp.error.cnt+1
-            .$temp = "Failed to receive data with error:"+$ENCODE(.status)+". Error count:"+$ENCODE(.tcp.error.cnt)
-            PRINT tcp.ena: .$temp
-          END
-        END
-        TWAIT 0.05
-      END
-    ELSE
-      .$temp = "Connection failed with error:"+$ENCODE(tcp.socket)
-      PRINT tcp.ena: .$temp
-      IF tcp.socket>0 THEN
-        TCP_CLOSE .status,tcp.socket
-      END
-    END
-    TWAIT 0.05
-  END
-.END
-.PROGRAM tcp.send.pc(.$data[],.data.length)@26/01/21 14:55 #1877321
-;
-  .tcp.send.tmo = 5
-;
-  IF tcp.socket>0 THEN
-    TCP_SEND .status,tcp.socket,.$data[1],.data.length,.tcp.send.tmo
-    IF .status>=0 THEN
-      .$temp = "Sent "+$ENCODE(.data.length)+" strings"
-      PRINT tcp.send.ena: .$temp
-      FOR .i = 1 TO .data.length
-        PRINT tcp.send.ena: .$data[.i]
-      END
-    ELSE
-      .$temp = "Failed to send data with error:"+$ENCODE(.status)
-      PRINT tcp.send.ena: .$temp
-      tcp.socket = -1
-    END
-  ELSE
-    PRINT tcp.send.ena: "Failed to send data. Socket is not opened. Waiting for 5 seconds"
-    TWAIT 5
-  END
-;
+	;
+	tcp.socket = -1
+	.tcp.retry.count = 10
+	.tcp.connect.tmo = 5
+	.tcp.receive.tmo = 5
+	;
+	WHILE TRUE DO
+		; Checking for active sockets and closing them
+		PRINT tcp.ena: "Checking for active sockets and closing them"
+		TCP_STATUS .number, .ports[0], .sockets[0], .errors[0], .suberrors[0], .$ips[0]
+		IF .number > 0 THEN
+			FOR .i = 0 TO .number - 1
+				IF .sockets[.i] <> 0 THEN
+					.$temp = "Closing socket with id: " + $ENCODE (.sockets[.i])
+					PRINT tcp.ena: .$temp
+					TCP_CLOSE .status, .sockets[.i]
+				END
+			END
+		END
+		; Get IP from string
+		.$tcp.ip.copy = $tcp.ip
+		FOR .i = 1 TO 4
+			.$ip = $DECODE (.$tcp.ip.copy, ".")
+			.ip[.i] = VAL (.$ip)
+			IF .i < 4 THEN
+				.$ip = $DECODE (.$tcp.ip.copy, ".", 1)
+			END
+		END
+		;
+		; Connect to server
+		.$temp = "Connecting to server with ip: " + $tcp.ip
+		PRINT tcp.ena: .$temp
+		TCP_CONNECT tcp.socket, tcp.port, .ip[1], .tcp.connect.tmo
+		;
+		; Start data processing cycle
+		IF tcp.socket >= 0 THEN
+			.$temp = "Connection established with socket id:" + $ENCODE (tcp.socket)
+			PRINT tcp.ena: .$temp
+			.connected = TRUE
+			; Start receiving data cycle
+			.tcp.error.cnt = 0
+			WHILE .connected AND .tcp.error.cnt <= .tcp.retry.count DO
+				TCP_RECV .status, tcp.socket, .$tcp.request[1], .request.size, .tcp.receive.tmo, 255
+				IF .status >= 0 THEN
+					IF .request.size == 0 THEN
+						.tcp.error.cnt = .tcp.error.cnt + 1
+						.$temp = "Received data with 0 length. Error count:" + $ENCODE (.tcp.error.cnt)
+						PRINT tcp.ena: .$temp
+					ELSE
+						CALL tcp.callback.pc (.$tcp.request[], .request.size)
+					END
+				ELSE
+					IF .status == -34024 THEN
+						PRINT tcp.ena: "Timeout in receive, it\'s ok"
+					ELSE
+						.tcp.error.cnt = .tcp.error.cnt + 1
+						.$temp = "Failed to receive data with error:" + $ENCODE (.status) + ". Error count:" + $ENCODE (.tcp.error.cnt)
+						PRINT tcp.ena: .$temp
+					END
+				END
+				TWAIT 0.05
+			END
+		ELSE
+			.$temp = "Connection failed with error:" + $ENCODE (tcp.socket)
+			PRINT tcp.ena: .$temp
+			IF tcp.socket > 0 THEN
+				TCP_CLOSE .status, tcp.socket
+			END
+		END
+		TWAIT 0.05
+	END
 .END
 .PROGRAM tcp.log.pc(.$msg)@26/01/21 14:55 #67907
-  IF NOT SIG(s.tcp.log) THEN
-    RETURN
-  END
-;
-; 1 line = 55 symbols max
-;
-  FOR .i = 0 TO 126
-    $log.entry[.i] = $log.entry[.i+1]
-  END
-  $log.entry[127] = $TIME+" "+.$msg
-;
-  IFPWPRINT 1,1,1,9,10=$log.entry[116],$log.entry[117],$log.entry[118],$log.entry[119]
-  IFPWPRINT 2,1,1,9,10=$log.entry[120],$log.entry[121],$log.entry[122],$log.entry[123]
-  IFPWPRINT 3,1,1,9,10=$log.entry[124],$log.entry[125],$log.entry[126],$log.entry[127]
-;
+	IF NOT SIG (s.tcp.log) THEN
+		RETURN
+	END
+	;
+	; 1 line = 55 symbols max
+	;
+	FOR .i = 0 TO 126
+		$log.entry[.i] = $log.entry[.i + 1]
+	END
+	$log.entry[127] = $TIME + " " + .$msg
+	;
+	IFPWPRINT 1, 1, 1, 9, 10 = $log.entry[116], $log.entry[117], $log.entry[118], $log.entry[119]
+	IFPWPRINT 2, 1, 1, 9, 10 = $log.entry[120], $log.entry[121], $log.entry[122], $log.entry[123]
+	IFPWPRINT 3, 1, 1, 9, 10 = $log.entry[124], $log.entry[125], $log.entry[126], $log.entry[127]
+	;
 .END
-.PROGRAM autostart.pc()@26/01/21 14:55 #0
-;
-; System switches
-  CP ON
-  PREFETCH.SIGINS OFF
-  QTOOL OFF
-  REP_ONCE ON
-  HOLD.STEP ON
-  DISP.EXESTEP ON
-  PROG.DATE ON
-  ABS.SPEED ON
-  autostart.pc ON
-  errstart.pc ON  ;
-;
-  IFPWPRINT 8,1,1,5,10="Robot: RS007L S/N: C6324","Controller: F60 S/N: C8174"," ","Powered by Robowizard Co.Ltd."
-;
-  CALL set.io.pc
-  CALL set.vars.pc
-;
-  MC PRIME a.main
-  TWAIT 1
-;
-  CALL watchdog.pc
-;
+.PROGRAM tcp.send.pc(.$data[],.data.length)@26/01/21 14:55 #1877321
+	;
+	.tcp.send.tmo = 5
+	;
+	IF tcp.socket > 0 THEN
+		TCP_SEND .status, tcp.socket, .$data[1], .data.length, .tcp.send.tmo
+		IF .status >= 0 THEN
+			.$temp = "Sent " + $ENCODE (.data.length) + " strings"
+			PRINT tcp.send.ena: .$temp
+			FOR .i = 1 TO .data.length
+				PRINT tcp.send.ena: .$data[.i]
+			END
+		ELSE
+			.$temp = "Failed to send data with error:" + $ENCODE (.status)
+			PRINT tcp.send.ena: .$temp
+			tcp.socket = -1
+		END
+	ELSE
+		PRINT tcp.send.ena: "Failed to send data. Socket is not opened. Waiting for 5 seconds"
+		TWAIT 5
+	END
+	;
 .END
-.PROGRAM errstart.pc()@26/01/21 14:55 #199
-;
-  IF ERROR==-34021 OR ERROR==-10100 THEN
-    tcp.socket = -1
-    MC ERESET
-    TWAIT 1
-  END
-  TWAIT 5
-  errstart.pc ON
-;
+.PROGRAM tcp.sender.pc()@26/01/22 12:56 #0
+	;
+	WHILE TRUE DO
+		;
+		CALL get.state.pc (.$data[1])
+		.$data[2] = "ACTION:" + $action + ";"
+		.$data[2] = .$data[2] + "GRIPPER:" + $ENCODE (current.gripper) + ";"
+		.$data[2] = .$data[2] + "PICKCOUNT:" + $ENCODE (count.pick) + ";"
+		.$data[2] = .$data[2] + "DEFECTCOUNT:" + $ENCODE (count.defect) + ";"
+		.$data[2] = .$data[2] + "PUTCOUNT:" + $ENCODE (max.count.put) + ";"
+		.$data[2] = .$data[2] + "STATE:" + $ENCODE (state) + ";"
+		.$data[2] = .$data[2] + "HOUR:" + $ENCODE (OPEINFO (3)) + ";"
+		;
+		IF SWITCH (STP_ONCE) THEN
+			.$data[2] = .$data[2] + "STEPMODE:TRUE;"
+		ELSE
+			.$data[2] = .$data[2] + "STEPMODE:FALSE;"
+		END
+		;
+		.$data[2] = .$data[2] + "\n"
+		;
+		CALL tcp.send.pc (.$data[], 2)
+		TWAIT tcp.sender.dly
+	END
+	;
+.END
+.PROGRAM watchdog.pc()@26/01/21 14:55 #0
+	WHILE TRUE DO
+		;
+		CALL check.tasks.pc
+		CALL check.disp.pc
+		CALL check.zone.pc
+		;
+		;IF SWITCH (CS) AND state > 0 THEN
+		;  IF BITS (rs13.det.put[0], 8) == count.pick THEN
+		;    TIMER(1) = 0
+		;  END
+		;END
+		;
+		IF SIG (rs13.tare.ack) THEN
+			IF count.put == max.tare.count THEN
+				count.put = 0
+			END
+			SIGNAL -rs7.tare.chg
+		END
+		;
+		IF NOT SIG (s.debug.mode) THEN
+			IF SWITCH (REPEAT ) AND NOT SWITCH (TEACH_LOCK ) AND NOT SWITCH (EMERGENCY ) AND NOT SWITCH (CS ) AND NOT SWITCH (ERROR ) THEN
+				MC ZPOWER ON
+				;MC PRIME a.main
+				;WHILE NOT SWITCH(POWER)
+				;  TWAIT 0.01
+				;  MC CONTINUE
+				;END
+			END
+		END
+		;
+		IF NOT SWITCH (REPEAT ) THEN
+			CALL check.teach.pc
+		END
+		TWAIT 0.01
+	END
+	;
 .END
 .PROGRAM Comment___ () ; Comments for IDE. Do not use.
 	; @@@ PROJECT @@@
@@ -2676,241 +2685,270 @@ N_INT300    "s.debug.mode"
 	; 127.0.0.1
 	; 9205
 	; @@@ PROGRAM @@@
-	; Group:Layouts:1
-	; 1:layout0:F
-	; 1:layout1:F
-	; Group:Gripper:2
-	; 2:a.test.gripper:F
-	; 2:gripper.pick:F
-	; 2:gripper.put:F
-	; 2:a.teach.gripper:F
-	; Group:Etalon:3
-	; 3:a.teach.etalon:F
-	; .eshift.x 
-	; .eshift.y 
-	; .et.pos.point 
-	; .et.mac.poin 
-	; 3:etalon.measure:F
-	; .id 
-	; .etalon.pos.pt 
-	; .etalon.mac.pt 
-	; .shift.y 
-	; .shift.z 
-	; .p.idx 
-	; .eshift.x 
-	; .eshift.y 
-	; .$temp 
-	; .work 
-	; Group:OT:4
-	; 4:a.teach.ot:F
-	; .ot.down.left 
-	; .ot.down.right 
-	; .ot.up.right 
-	; .ot.orig 
-	; 4:calc.grid:F
-	; .max 
-	; .obj.len 
-	; .obj.len.w.spc 
-	; .i 
-	; .j 
-	; 4:calc.grid.rnd:F
-	; .max 
-	; .obj.shift 
-	; .i 
-	; .j 
-	; 4:get.ot.point:F
-	; .obj.id 
-	; .i 
-	; .x 
-	; .y 
-	; 4:a.test.ot:F
-	; .$pg 
-	; .x 
-	; .y 
-	; .z 
-	; .put 
-	; 4:ot.put:F
-	; .x 
-	; .y 
-	; .z 
-	; .put 
-	; .tare.chg 
-	; .locked.zone 
-	; .lock.zone 
-	; 4:calc.ot:F
-	; .center.col 
-	; .center.row 
-	; .cell 
-	; .offset 
-	; .left 
-	; .right 
-	; .row 
-	; .i 
-	; .n 
-	; .m 
-	; .filled 
-	; .obj.id 
-	; Group:MeasureMachine:5
-	; 5:a.teach.machine:F
-	; .temp 
-	; 5:measure:F
-	; .pos 
-	; .shift.y 
-	; .shift.z 
-	; .p.idx 
-	; .machine.pos 
-	; Group:Objects:6
-	; 6:id1:F
-	; 6:id2:F
-	; 6:id3:F
-	; 6:id4:F
-	; 6:id5:F
-	; 6:id6:F
-	; Group:Positioner:7
-	; 7:pos.pick:F
-	; .$temp 
-	; .temp 
-	; .shift.x 
-	; .shift.y 
-	; .locked.zone 
-	; .det.picked 
-	; .lock.zone 
-	; 7:a.teach.pos:F
-	; .shift.x 
-	; .shift.y 
-	; .temp 
-	; Group:Defect:8
-	; 8:defect.put:F
-	; .temp 
-	; 8:a.teach.defect:F
-	; .x 
-	; .y 
-	; .o 
-	; .k 
-	; .i 
-	; .j 
-	; .defect.pos 
-	; Group:States:9
-	; 9:state0:F
-	; .tare.chg 
-	; .locked.zone 
-	; .det.picked 
-	; .etalon.stop 
-	; 9:state1:F
-	; 9:state2:F
-	; 9:state3:F
-	; 9:state4:F
-	; 9:state5:F
-	; .etalon.stop 
-	; 9:state6:F
-	; 9:state7:F
-	; 9:state8:F
-	; 9:state100:F
-	; .finish.ack 
-	; 9:state101:F
-	; 9:state102:F
-	; .work 
-	; .det.put 
-	; .finish 
-	; .tare.chg 
-	; .locked.zone 
-	; .etalon.stop 
-	; 9:state103:F
-	; 9:state104:F
-	; .finish.ack 
-	; 9:state105:F
-	; 9:state106:F
-	; 9:state255:F
-	; Group:Utilities:10
-	; 10:a.home:F
-	; 10:a.align:F
-	; 10:safe.home:F
-	; .idx 
-	; .temp 
-	; .s 
-	; .c 
-	; .dz 
-	; 10:log:F
-	; .$msg 
-	; .i 
-	; 10:pg.select:F
-	; 0:a.main:F
-	; .$pg.string 
-	; 0:pg0:F
-	; Group:Watchdog:11
-	; 11:check.teach.pc:B
-	; 11:check.zone.pc:B
-	; 11:check.disp.pc:B
-	; 11:check.tasks.pc:B
-	; 11:watchdog.pc:B
-	; .tare.ack 
-	; .tare.chg 
-	; Group:Initialization:12
-	; 12:set.vars.pc:B
-	; .i 
-	; .n 
-	; .$name 
-	; 12:set.io.pc:B
-	; .work 
-	; .tare.ack 
-	; .detail.put 
-	; .finish 
-	; .tare.chg 
-	; .locked.zone 
-	; .finish.ack 
-	; .put.ack 
-	; .det.put 
-	; .det.picked 
-	; .lock.zone 
-	; .etalon.stop 
-	; Group:TCPIP:13
-	; 13:get.state.pc:B
-	; .$state 
-	; 13:tcp.sender.pc:B
-	; .$data 
-	; 13:tcp.callback.pc:B
-	; .$data 
-	; .data.length 
-	; .$temp 
-	; .i 
-	; .$sensor.name 
-	; .$sensor.state 
-	; .$state 
-	; .$measurement.sta 
-	; .$spd 
-	; .speed 
-	; 13:tcp.client.pc:B
-	; .tcp.retry.count 
-	; .tcp.connect.tmo 
-	; .tcp.receive.tmo 
-	; .number 
-	; .ports 
-	; .sockets 
-	; .errors 
-	; .suberrors 
-	; .$ips 
-	; .i 
-	; .$temp 
-	; .status 
-	; .$tcp.ip.copy 
-	; .$ip 
-	; .ip 
-	; .connected 
-	; .tcp.error.cnt 
-	; .$tcp.request 
-	; .request.size 
-	; 13:tcp.send.pc:B
-	; .$data 
-	; .data.length 
-	; .tcp.send.tmo 
-	; .status 
-	; .$temp 
-	; .i 
-	; 13:tcp.log.pc:B
-	; .$msg 
-	; .i 
-	; 0:autostart.pc:B
-	; 0:errstart.pc:B
+	;   Group:Layouts:1
+	;     1:layout0:F
+	;       .center.col 
+	;       .center.row 
+	;       .cell 
+	;       .row 
+	;       .offset 
+	;       .left 
+	;       .right 
+	;     1:layout1:F
+	;       .center.col 
+	;       .center.row 
+	;       .cell 
+	;       .i 
+	;       .j 
+	;       .dist 
+	;       .dists 
+	;       .array.size 
+	;       .result 
+	;       .cornerA 
+	;       .cornerB 
+	;       .tmp.dist 
+	;       .tmp.m 
+	;       .tmp.n 
+	;   Group:Gripper:2
+	;     2:a.test.gripper:F
+	;     2:gripper.pick:F
+	;       .gripper.no 
+	;       .$temp 
+	;       .temp 
+	;     2:gripper.put:F
+	;       .gripper.no 
+	;       .$temp 
+	;       .temp 
+	;     2:a.teach.gripper:F
+	;       .temp 
+	;   Group:Etalon:3
+	;     3:a.teach.etalon:F
+	;       .eshift.x 
+	;       .eshift.y 
+	;       .et.pos.point 
+	;       .et.mac.poin 
+	;     3:etalon.measure:F
+	;       .id 
+	;       .etalon.pos.pt 
+	;       .etalon.mac.pt 
+	;       .shift.y 
+	;       .shift.z 
+	;       .p.idx 
+	;       .eshift.x 
+	;       .eshift.y 
+	;       .$temp 
+	;       .work 
+	;   Group:OT:4
+	;     4:a.teach.ot:F
+	;       .ot.down.left 
+	;       .ot.down.right 
+	;       .ot.up.right 
+	;       .ot.orig 
+	;     4:calc.grid:F
+	;       .max 
+	;       .obj.len 
+	;       .obj.len.w.spc 
+	;       .i 
+	;       .j 
+	;     4:calc.grid.rnd:F
+	;       .max 
+	;       .obj.shift 
+	;       .i 
+	;       .j 
+	;     4:get.ot.point:F
+	;       .obj.id 
+	;       .i 
+	;       .x 
+	;       .y 
+	;     4:a.test.ot:F
+	;       .$pg 
+	;       .x 
+	;       .y 
+	;       .z 
+	;       .put 
+	;     4:ot.put:F
+	;       .x 
+	;       .y 
+	;       .z 
+	;       .put 
+	;       .tare.chg 
+	;       .locked.zone 
+	;       .lock.zone 
+	;     4:calc.ot:F
+	;       .$calc.pg 
+	;       .center.col 
+	;       .center.row 
+	;       .cell 
+	;       .offset 
+	;       .left 
+	;       .right 
+	;       .row 
+	;       .i 
+	;       .n 
+	;       .m 
+	;       .filled 
+	;       .obj.id 
+	;   Group:MeasureMachine:5
+	;     5:a.teach.machine:F
+	;       .temp 
+	;     5:measure:F
+	;       .pos 
+	;       .shift.y 
+	;       .shift.z 
+	;       .p.idx 
+	;       .machine.pos 
+	;   Group:Objects:6
+	;     6:id1:F
+	;     6:id2:F
+	;     6:id3:F
+	;     6:id4:F
+	;     6:id5:F
+	;     6:id6:F
+	;   Group:Positioner:7
+	;     7:pos.pick:F
+	;       .$temp 
+	;       .temp 
+	;       .shift.x 
+	;       .shift.y 
+	;       .locked.zone 
+	;       .det.picked 
+	;       .lock.zone 
+	;     7:a.teach.pos:F
+	;       .shift.x 
+	;       .shift.y 
+	;       .temp 
+	;   Group:Defect:8
+	;     8:defect.put:F
+	;       .temp 
+	;     8:a.teach.defect:F
+	;       .x 
+	;       .y 
+	;       .o 
+	;       .k 
+	;       .i 
+	;       .j 
+	;       .defect.pos 
+	;   Group:States:9
+	;     9:state0:F
+	;       .tare.chg 
+	;       .locked.zone 
+	;       .det.picked 
+	;       .etalon.stop 
+	;     9:state1:F
+	;     9:state2:F
+	;     9:state3:F
+	;     9:state4:F
+	;     9:state5:F
+	;       .etalon.stop 
+	;     9:state6:F
+	;     9:state7:F
+	;     9:state8:F
+	;     9:state100:F
+	;       .finish.ack 
+	;     9:state101:F
+	;     9:state102:F
+	;       .work 
+	;       .det.put 
+	;       .finish 
+	;       .tare.chg 
+	;       .locked.zone 
+	;       .etalon.stop 
+	;     9:state103:F
+	;     9:state104:F
+	;       .finish.ack 
+	;     9:state105:F
+	;     9:state106:F
+	;     9:state255:F
+	;   Group:Utilities:10
+	;     10:a.home:F
+	;     10:a.align:F
+	;     10:safe.home:F
+	;       .idx 
+	;       .temp 
+	;       .s 
+	;       .c 
+	;       .dz 
+	;     10:log:F
+	;       .$msg 
+	;       .i 
+	;     10:pg.select:F
+	;   0:a.main:F
+	;     .$pg.string 
+	;   0:pg0:F
+	;   Group:Watchdog:11
+	;     11:check.teach.pc:B
+	;     11:check.zone.pc:B
+	;     11:check.disp.pc:B
+	;     11:check.tasks.pc:B
+	;     11:watchdog.pc:B
+	;       .tare.ack 
+	;       .tare.chg 
+	;   Group:Initialization:12
+	;     12:set.vars.pc:B
+	;       .i 
+	;       .n 
+	;       .$name 
+	;     12:set.io.pc:B
+	;       .work 
+	;       .tare.ack 
+	;       .detail.put 
+	;       .finish 
+	;       .tare.chg 
+	;       .locked.zone 
+	;       .finish.ack 
+	;       .put.ack 
+	;       .det.put 
+	;       .det.picked 
+	;       .lock.zone 
+	;       .etalon.stop 
+	;   Group:TCPIP:13
+	;     13:get.state.pc:B
+	;       .$state 
+	;     13:tcp.sender.pc:B
+	;       .$data 
+	;     13:tcp.callback.pc:B
+	;       .$data 
+	;       .data.length 
+	;       .$temp 
+	;       .i 
+	;       .$sensor.name 
+	;       .$sensor.state 
+	;       .$state 
+	;       .$measurement.sta 
+	;       .$spd 
+	;       .speed 
+	;     13:tcp.client.pc:B
+	;       .tcp.retry.count 
+	;       .tcp.connect.tmo 
+	;       .tcp.receive.tmo 
+	;       .number 
+	;       .ports 
+	;       .sockets 
+	;       .errors 
+	;       .suberrors 
+	;       .$ips 
+	;       .i 
+	;       .$temp 
+	;       .status 
+	;       .$tcp.ip.copy 
+	;       .$ip 
+	;       .ip 
+	;       .connected 
+	;       .tcp.error.cnt 
+	;       .$tcp.request 
+	;       .request.size 
+	;     13:tcp.send.pc:B
+	;       .$data 
+	;       .data.length 
+	;       .tcp.send.tmo 
+	;       .status 
+	;       .$temp 
+	;       .i 
+	;     13:tcp.log.pc:B
+	;       .$msg 
+	;       .i 
+	;   0:autostart.pc:B
+	;   0:errstart.pc:B
 	; @@@ TRANS @@@
 	; ot.put[] Calculated OT put point
 	; @@@ JOINTS @@@
@@ -2922,11 +2960,14 @@ N_INT300    "s.debug.mode"
 	; #before.machine[] Point before machine
 	; #defect.point[] Defect point for cell i
 	; #safe.machine Safe point on machine side
+	; #defect.safe 
 	; #ot.up.right OT up.right point
 	; #ot.orig OT up right point
 	; #ot.down.right OT down right point
 	; #ot.down.left OT down left point
 	; #machine.pos[] Point in measure machine for object i
+	; #et.mac.point[] 
+	; #et.pos.point[] 
 	; #safe.defect Safe point before defect tare
 	; #safe.etalon Safe point to move to positioner
 	; #tool.point[] Point for pick gripper i
@@ -2968,16 +3009,20 @@ N_INT300    "s.debug.mode"
 	; tcp.socket TCP socket ID
 	; tyterm Display destination terminal
 	; hmi.gripper HMI gripper No
+	; ms[] 
+	; ns[] 
 	; object.id Object data: object id
 	; ot.x OT put coordinate X
 	; ot.y OT put coordinate Y
 	; round.no ID for round detail
 	; spc.tare.count Object data: Max details in tare with spacer
 	; detail.spec Detail specification
+	; etalon.id 
 	; recv.etalon Received etalon id
 	; max.defect.cnt Maximum value of defect cell
 	; pawn.no Number of pawn detail
 	; hmi.gmidy HMI panel mid y shift
+	; grip.midysh[] 
 	; max.count.put Maximum number of put details per count
 	; pg7.gripper Object data: Gripper in current program for RS007
 	; layout Put layout
@@ -2986,6 +3031,8 @@ N_INT300    "s.debug.mode"
 	; $action Current robot action to send
 	; $pg.name Program name (same as in machine)
 	; $tcp.ip Server PC IP address
+	; $opt.data 
+	; $ot.data 
 	; @@@ INTEGER @@@
 	; @@@ SIGNALS @@@
 	; s.pr.tst.ot Prime test OT program
@@ -3048,6 +3095,7 @@ N_INT300    "s.debug.mode"
 	; rs7.etalon.stop Etalon measurement was bad, need to stop
 	; do.automatic Robot in automatic mode
 	; s.pr.tch.grip Prime teach gripper
+	; rs13.no.ot.stop No OT found when it should be
 	; @@@ TOOLS @@@
 	; tool.pick[] Gripper tool
 	; @@@ BASE @@@
@@ -4137,6 +4185,7 @@ max.count.put = 15
 pg7.gripper = 1
 s.pr.tch.grip = 2260
 layout = 0
+rs13.no.ot.stop = 1033
 .END
 .STRINGS
 $log.entry[2] = "15:27:47 CYCLEON;\n"

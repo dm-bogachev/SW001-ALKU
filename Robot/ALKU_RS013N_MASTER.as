@@ -18,6 +18,7 @@ N_OX29    "rs13.det.put[4]"
 N_OX30    "rs13.det.put[5]"
 N_OX31    "rs13.det.put[6]"
 N_OX32    "rs13.det.put[7]"
+N_OX34    "rs13.no.ot.stop"
 N_WX1    "grip.unclamped"
 N_WX2    "grip.clamped"
 N_WX17    "rs7.work[1]"
@@ -79,6 +80,7 @@ N_INT238    "s.cmd.finish"
 N_INT239    "s.cmd.pause"
 N_INT240    "s.cmd.resume"
 N_INT241    "s.cmd.stop"
+N_INT242    "s.cmd.n.op.stop"
 N_INT247    "s.pr.tst.opt"
 N_INT248    "s.pr.tst.stz"
 N_INT249    "s.pr.tst.ot"
@@ -243,2684 +245,2705 @@ N_INT300    "s.debug.mode"
 .INTER_PANEL_COLOR_D
 182,3,225,244,28,159,252,255,251,255,0,31,2,241,52,255,
 .END
-.PROGRAM id1()@26/01/27 10:41 #133; 312.229.002
-; Object ID
-  object.id = 1
-  etalon.id = 1
-; Working gripper
-  pg13.gripper = 2
-  pg7.gripper = 1
-; Max objects in output tare
-  max.tare.count = 147;10 ;126
-  spc.tare.count = 50
-; Object length
-  object.length = 27.5
-;
-  direction = 1; -1 for reverse
-;
-.END
-.PROGRAM id2()@26/01/27 10:41 #8; 0401.17.02.023-02
-; Object ID
-  object.id = 2
-  etalon.id = 2
-; Working gripper
-  pg13.gripper = 1
-  pg7.gripper = 1
-; Max objects in output tare
-  max.tare.count = 105 ;84
-  spc.tare.count = 50
-; Object length
-  object.length = 40
-;
-  direction = 1; -1 for reverse
-;
-.END
-.PROGRAM id3()@26/01/27 10:41 #10; 312.229.001
-; Object ID
-  object.id = 3
-  etalon.id = 3
-; Working gripper
-  pg13.gripper = 3
-  pg7.gripper = 1
-; Max objects in output tare
-  max.tare.count = 77;10 ;77
-  spc.tare.count = 77
-; Object length
-  object.length = 40
-;
-  direction = 1; -1 for reverse
-;
-.END
-.PROGRAM id4()@26/01/27 10:41 #20; 440.00.026
-; Object ID
-  object.id = 4
-  etalon.id = 4
-; Working gripper
-  pg13.gripper = 1
-  pg7.gripper = 1
-; Max objects in output tare
-  max.tare.count = 168 ;147
-  spc.tare.count = 50
-; Object length
-  object.length = 23.5
-;
-  direction = 1; -1 for reverse
-;
-.END
-.PROGRAM id5()@26/01/27 10:41 #11; 440.00.111
-; Object ID
-  object.id = 5
-  etalon.id = 5
-; Working gripper
-  pg13.gripper = 1
-  pg7.gripper = 1
-; Max objects in output tare
-  max.tare.count = 231 ;231
-  spc.tare.count = 50
-; Object length
-  object.length = 15
-;
-  direction = 1; -1 for reverse
-;
-.END
-.PROGRAM id6()@26/01/27 10:41 #25; 0401.28.02.063
-; Object ID
-  object.id = 6
-  etalon.id = 6
-; Working gripper
-  pg13.gripper = 1
-  pg7.gripper = 1
-; Max objects in output tare
-  max.tare.count = 126 ;126
-  spc.tare.count = 50
-; Object length
-  object.length = 28.5
-;
-  direction = 1; -1 for reverse
-;
-.END
-.PROGRAM a.teach.stz()@26/01/15 08:39 #0
-;
-  TOOL tool.pin
-;
-  LMOVE #plb; *** TEACH POINT *** Left bottom
-  LMOVE #plt; *** TEACH POINT *** Left top
-  LMOVE #prt; *** TEACH POINT *** Right top
-  LMOVE #prb; *** TEACH POINT *** Right bottom
-;
-  POINT .plb = #plb
-  POINT .plt = #plt
-  POINT .prt = #prt
-  POINT .prb = #prb
-;
-  .dx1 = DISTANCE(.plt,.plb) ; DX1
-  .dx2 = DISTANCE(.prt,.prb) ; DX2
-  .dy1 = DISTANCE(.plt,.prt) ; DY1
-  .dy2 = DISTANCE(.plb,.prb) ; DY2
-;
-  PRINT 0: "DX1 =",.dx1
-  PRINT 0: "DX2 =",.dx2
-  PRINT 0: "DY1 =",.dy1
-  PRINT 0: "DY2 =",.dy2
-  PRINT 0: "AVEX =",(.dx1+.dx2)/2
-  PRINT 0: "AVEY =",(.dy1+.dy2)/2
-;
-  BREAK
-  POINT stz.frame = FRAME(.plb,.prb,.prt,.plt)
-  POINT stz.frame = stz.frame+RZ(-90)
-; CIR1 = 100, 100 CIR2 = 148, 250
-; CIR3 = 248, 300 CIR4 = 148; 450
-  BREAK
-  LMOVE stz.frame+TRANS(stz.x,stz.y,10)
-;
-.END
-.PROGRAM stz.pick()@26/01/26 14:41 #2158
-;
-  .$temp = "Pick detail from stz ("+$ENCODE(/L,stz.x)+", "+$ENCODE(/L,stz.y)+", "+$ENCODE(/L,stz.a)+")"
-  CALL log(.$temp)
-;
-  SPEED 100 ALWAYS
-  ACCURACY 100 ALWAYS
-  TOOL tool.pick[current.gripper]
-; Raw coordinates
-  .x = stz.x
-  .y = stz.y
-  .a = stz.a
-;
-  IF .x==0 OR .y==0 THEN
-    CALL log("Unexpected 0 coordinate")
-    RETURN
-  END
-;
-; Gripper shift
-  .xsh = grip.xsh[current.gripper]
-  .ysh = grip.ysh[current.gripper]
-  .zsh = grip.zsh[current.gripper]
-  IF .a==180 THEN
-    .xsh = grip.180xsh[current.gripper]
-    .ysh = grip.180ysh[current.gripper]
-  END
-; CV correction
-  .xp = cv.x.plus[object.id]
-  .xm = cv.x.minus[object.id]
-  .yp = cv.y.plus[object.id]
-  .ym = cv.y.minus[object.id]
-;
-  IF .x>center.x+10 THEN
-    .x = .x-.xp*(.x-center.x)
-  END
-  IF .x<center.x-10 THEN
-    .x = .x+.xm*(-.x+center.x)
-  END
-  IF .y>center.y+10 THEN
-    .y = .y-.yp*(.y-center.y)
-  END
-  IF .y<center.y-10 THEN
-    .y = .y+.ym*(-.y+center.y)
-  END
-;
-  POINT .pick = stz.frame+TRANS(.x+.xsh,.y+.ysh,.zsh)+RZ(.a)
-  DECOMPOSE .c[1] = #pick.in
-  POINT .#pick.in = #PPOINT(.c[1],.c[2],.c[3],.c[4],.c[5],.c[6]-.a)
-;
-  LMOVE #stz.wait
-  ACCURACY 20
-  LMOVE .#pick.in
-  IF NOT SIG(grip.unclamped) THEN
-    PULSE grip.unclamp
-    CALL log("Wait for unclamp gripper")
-    $action = "WaitingGripUnclamped"
-    WAIT SIG(grip.unclamped) OR SIG(s.force.in[1])
-  END
-  ACCURACY 20
-  LAPPRO .pick,-30
-  SPEED 40 MM/S
-  ACCURACY 0.02
-  LMOVE .pick
-  BREAK
-;
-  TWAIT 0.5
-  PULSE grip.clamp
-  TWAIT 0.5
-  SIGNAL s.grip.full
-  $action = "WaitPosFree"
-;
-  ACCURACY 5
-  LAPPRO .pick,-30
-  BREAK
-  TWAIT 0.1
-;
-  LMOVE .#pick.in
-  LMOVE #stz.wait
-  LMOVE #pos.wait
-;
-.END
-.PROGRAM a.test.stz()@26/01/15 08:39 #0
-  .$temp = "Pick detail from stz ("+$ENCODE(/L,stz.x)+", "+$ENCODE(/L,stz.y)+", "+$ENCODE(/L,stz.a)+")"
-  CALL log(.$temp)
-;
-  SPEED 100 ALWAYS
-  ACCURACY 100 ALWAYS
-  TOOL tool.pick[hmi.gripper]
-; Raw coordinates
-  .x = stz.x
-  .y = stz.y
-  .a = stz.a
-;
-; Gripper shift
-  .xsh = grip.xsh[hmi.gripper]
-  .ysh = grip.ysh[hmi.gripper]
-  .zsh = grip.zsh[hmi.gripper]
-  IF .a==180 THEN
-    .xsh = grip.180xsh[hmi.gripper]
-    .ysh = grip.180ysh[hmi.gripper]
-  END
-; CV correction
-  .xp = cv.x.plus[hmi.obj.id]
-  .xm = cv.x.minus[hmi.obj.id]
-  .yp = cv.y.plus[hmi.obj.id]
-  .ym = cv.y.minus[hmi.obj.id]
-;
-  IF .x>center.x+10 THEN
-    .x = .x-.xp*(.x-center.x)
-  END
-  IF .x<center.x-10 THEN
-    .x = .x+.xm*(-.x+center.x)
-  END
-  IF .y>center.y+10 THEN
-    .y = .y-.yp*(.y-center.y)
-  END
-  IF .y<center.y-10 THEN
-    .y = .y+.ym*(-.y+center.y)
-  END
-;
-  POINT .pick = stz.frame+TRANS(.x+.xsh,.y+.ysh,.zsh)+RZ(.a)
-  DECOMPOSE .c[1] = #pick.in
-  POINT .#pick.in = #PPOINT(.c[1],.c[2],.c[3],.c[4],.c[5],.c[6]-.a)
-;
-  LMOVE #stz.wait
-  ACCURACY 20
-  LMOVE .#pick.in
-  IF NOT SIG(grip.unclamped) THEN
-    PULSE grip.unclamp
-    CALL log("Wait for unclamp gripper")
-    $action = "WaitingGripUnclamped"
-    WAIT SIG(grip.unclamped) OR SIG(s.force.in[1])
-  END
-  ACCURACY 20
-  LAPPRO .pick,-30
-  SPEED 250 MM/S
-  ACCURACY 0.02
-  LMOVE .pick
-  BREAK
-;
-  PULSE grip.clamp
-  TWAIT 0.5
-  SIGNAL s.grip.full
-  $action = "WaitPosFree"
-;
-  ACCURACY 20
-  LAPPRO .pick,-30
-;
-  LMOVE .#pick.in
-  LMOVE #stz.wait
-  LMOVE #pos.wait
-;
-.END
-.PROGRAM load.opt.data()@26/01/15 08:39 #227
-;
-  CALL log("Load OPT IDs from string: "+$opt.data)
-  max.count.opt = 0
-  WHILE TRUE DO
-    max.count.opt = max.count.opt+1
-    IF INSTR($opt.data , ",") THEN
-      .id = VAL($DECODE($opt.data,",",0))
-      CALL opt.table(.id)
-      .temp = VAL($DECODE($opt.data,",",1))
-    ELSE
-      .id = VAL($opt.data)
-      CALL opt.table(.id)
-      RETURN
-    END
-  END
-;
-.END
-.PROGRAM opt.table(.id)@26/01/15 08:39 #227
-;
-  .$temp = "Processing OPT with ID: "+$ENCODE(/L,.id)
-  CALL log(.$temp)
-  CASE .id OF
-   VALUE 1:
-    opt.cell[max.count.opt,1] = 3;
-    opt.cell[max.count.opt,2] = 1;
-    max.count.opt = max.count.opt+1;
-    opt.cell[max.count.opt,1] = 3;
-    opt.cell[max.count.opt,2] = 2;
-;
-   VALUE 2:
-    opt.cell[max.count.opt,1] = 2;
-    opt.cell[max.count.opt,2] = 1;
-    max.count.opt = max.count.opt+1;
-    opt.cell[max.count.opt,1] = 2;
-    opt.cell[max.count.opt,2] = 2;
-;
-;
-   VALUE 3:
-    opt.cell[max.count.opt,1] = 1;
-    opt.cell[max.count.opt,2] = 1;
-    max.count.opt = max.count.opt+1;
-    opt.cell[max.count.opt,1] = 1;
-    opt.cell[max.count.opt,2] = 2;
-;
-;
-   VALUE 4:
-    opt.cell[max.count.opt,1] = 3;
-    opt.cell[max.count.opt,2] = 3;
-    max.count.opt = max.count.opt+1;
-    opt.cell[max.count.opt,1] = 3;
-    opt.cell[max.count.opt,2] = 4;
-;
-;
-   VALUE 5:
-    opt.cell[max.count.opt,1] = 2;
-    opt.cell[max.count.opt,2] = 3;
-    max.count.opt = max.count.opt+1;
-    opt.cell[max.count.opt,1] = 2;
-    opt.cell[max.count.opt,2] = 4;
-;
-;
-   VALUE 6:
-    opt.cell[max.count.opt,1] = 1;
-    opt.cell[max.count.opt,2] = 3;
-    max.count.opt = max.count.opt+1;
-    opt.cell[max.count.opt,1] = 1;
-    opt.cell[max.count.opt,2] = 4;
-;
-;
-   VALUE 7:
-    opt.cell[max.count.opt,1] = 3;
-    opt.cell[max.count.opt,2] = 5;
-    max.count.opt = max.count.opt+1;
-    opt.cell[max.count.opt,1] = 3;
-    opt.cell[max.count.opt,2] = 6;
-;
-;
-   VALUE 8:
-    opt.cell[max.count.opt,1] = 2;
-    opt.cell[max.count.opt,2] = 5;
-    max.count.opt = max.count.opt+1;
-    opt.cell[max.count.opt,1] = 2;
-    opt.cell[max.count.opt,2] = 6;
-;
-;
-   VALUE 9:
-    opt.cell[max.count.opt,1] = 1;
-    opt.cell[max.count.opt,2] = 5;
-    max.count.opt = max.count.opt+1;
-    opt.cell[max.count.opt,1] = 1;
-    opt.cell[max.count.opt,2] = 6;
-;
-;
-   VALUE 10:
-    opt.cell[max.count.opt,1] = 3;
-    opt.cell[max.count.opt,2] = 7;
-    max.count.opt = max.count.opt+1;
-    opt.cell[max.count.opt,1] = 3;
-    opt.cell[max.count.opt,2] = 8;
-;
-;
-   VALUE 11:
-    opt.cell[max.count.opt,1] = 2;
-    opt.cell[max.count.opt,2] = 7;
-    max.count.opt = max.count.opt+1;
-    opt.cell[max.count.opt,1] = 2;
-    opt.cell[max.count.opt,2] = 8;
-;
-;
-   VALUE 12:
-    opt.cell[max.count.opt,1] = 1;
-    opt.cell[max.count.opt,2] = 7;
-    max.count.opt = max.count.opt+1;
-    opt.cell[max.count.opt,1] = 1;
-    opt.cell[max.count.opt,2] = 8;
-;
-;
-   VALUE 13:
-    opt.cell[max.count.opt,1] = 3;
-    opt.cell[max.count.opt,2] = 9;
-    max.count.opt = max.count.opt+1;
-    opt.cell[max.count.opt,1] = 3;
-    opt.cell[max.count.opt,2] = 10;
-;
-;
-   VALUE 14:
-    opt.cell[max.count.opt,1] = 2;
-    opt.cell[max.count.opt,2] = 9;
-    max.count.opt = max.count.opt+1;
-    opt.cell[max.count.opt,1] = 2;
-    opt.cell[max.count.opt,2] = 10;
-;
-;
-   VALUE 15:
-    opt.cell[max.count.opt,1] = 1;
-    opt.cell[max.count.opt,2] = 9;
-    max.count.opt = max.count.opt+1;
-    opt.cell[max.count.opt,1] = 1;
-    opt.cell[max.count.opt,2] = 10;
-;
-  END
-  .$i1 = $ENCODE(/L,opt.cell[max.count.opt-1,1])
-  .$i2 = $ENCODE(/L,opt.cell[max.count.opt-1,2])
-  .$i3 = $ENCODE(/L,opt.cell[max.count.opt,1])
-  .$i4 = $ENCODE(/L,opt.cell[max.count.opt,2])
-  .$temp = "OPT indicies: (i:"+.$i1+", j:"+.$i2+"), "
-  .$temp = .$temp+"(i:"+.$i3+", j:"+.$i4+")"
-  CALL log(.$temp)
-;
-.END
-.PROGRAM opt.take(.i,.j)@26/01/26 14:54 #233
-  IF FALSE THEN
-    .i = hmi.st.in.i
-    .j = hmi.st.in.j
-  END
-  .$temp = "Take OT from (i: "+$ENCODE(/L,.i)+", j: "+$ENCODE(/L,.j)+")"
-  CALL log(.$temp)
-; Set default motion parameters
-  TOOL tool.pin
-  SPEED 10 ALWAYS
-  ACCURACY 100 ALWAYS
-  ACCEL 5 ALWAYS
-  DECEL 5 ALWAYS
-; Calculate points
-  POINT .opt.take.safe = #opt.take.safe
-  DECOMPOSE .ct1[1] = .opt.take.safe
-  DECOMPOSE .ct2[1] = opt.point[.i,.j]
-  POINT .mid.point = TRANS(.ct2[1],.ct1[2],.ct2[3],.ct1[4],.ct1[5],.ct1[6])
-  POINT .opt.put = #opt.put
-; Release tare
-  PULSE release.tare
-; Motion
-;
-; Move before OPT
-  LMOVE opt.point[.i,.j]+TRANS(0,0,200)
-  ACCURACY 5
-  LMOVE opt.point[.i,.j]+TRANS(0,0,50)
-; Move to OPT
-  ACCURACY 0.02
-  SPEED 100 MM/S
-  LMOVE opt.point[.i,.j]
-  BREAK
-  PULSE capture.tare
-  count.opt = count.opt+1
-  TWAIT 0.5
-; Move up
-  ACCURACY 0.02
-  SPEED 100 MM/S
-  ACCEL 50
-  LMOVE opt.point[.i,.j]+TRANS(20)
-; Move to sensor position
-  SPEED 100 MM/S
-  ACCURACY 0
-  LMOVE opt.point[.i,.j]+TRANS(20,0,100)
-  BREAK
-; Wait sensor
-  CALL log("Wait OPT sensor state")
-  WHILE NOT SIG(s.stock.opt.ok) AND NOT SIG(s.stock.opt.ng) DO
-    $action = "WaitInStockerSensor"
-    TWAIT 0.5
-  END
-  IF SIG(s.stock.opt.ok) THEN
-    CALL log("OPT exists, continue")
-    LMOVE opt.point[.i,.j]+TRANS(20,0,500)
-; Move to aux point
-    LMOVE .mid.point
-    LMOVE #opt.take.safe
-    LMOVE #opt.put.safe
-; Move before put point
-    ACCURACY 20
-    LMOVE .opt.put+TRANS(50)
-; Move to put point
-    ACCURACY 0.02
-    SPEED 30 MM/S
-    LMOVE #opt.put
-    BREAK
-    PULSE release.tare
-    TWAIT 0.5
-    SIGNAL s.opt.placed
-; Move out of put point
-    ACCURACY 30
-    LMOVE .opt.put+TRANS(,,50)
-    BREAK
-; Wait pneumatics
-    CALL log("Wait pneumatics close")
-    WHILE NOT SIG(s.cmd.pneum.cl) DO
-      $action = "WaitPneumaticClose"
-      TWAIT 0.5
-    END
-    CALL log(.$temp)
-; Move out of put point
-    LMOVE #opt.put.safe
-    LMOVE #stz.wait
-;POINT #current.pos = #stz.wait
-  ELSE
-    CALL log("OPT do not exists, move to next")
-    ACCURACY 0.02
-    SPEED 100 MM/S
-    LMOVE opt.point[.i,.j]+TRANS(20)
-    ACCURACY 0.02
-    SPEED 100 MM/S
-    LMOVE opt.point[.i,.j]
-    BREAK
-    PULSE release.tare
-    TWAIT 0.5
-    ACCURACY 5
-    LMOVE opt.point[.i,.j]+TRANS(0,0,50)
-    LMOVE opt.point[.i,.j]+TRANS(0,0,200)
-;  POINT #current.pos = #HERE
-  END
-  ACCEL 100 ALWAYS
-  DECEL 100 ALWAYS
-.END
-.PROGRAM a.teach.opt()@26/01/21 13:57 #0
-; Use this for first teach
-  IF FALSE THEN
-    TOOL tool.pin
-    JMOVE opt.point[1,1]+TRANS(0,0,50)
-    LMOVE opt.point[1,1]
-    FOR .i = 0 TO 2
-      FOR .j = 0 TO 9
-        PRINT 0: .i,.j
-        POINT opt.point[.i+1,.j+1] = opt.point[1,1]+TRANS(-80*.j,-610*.i)
-      END
-    END
-  END
-; Correct point
-  TOOL tool.pin
-  .i = hmi.opt.i
-  .j = hmi.opt.j
-  JMOVE opt.point[.i,.j]+TRANS(0,0,50)
-  LMOVE opt.point[.i,.j]; *** TEACH POINT ***
-  LMOVE opt.point[.i,.j]+TRANS(0,0,50)
-  LMOVE opt.point[.i,.j]
-  LMOVE opt.point[.i,.j]+TRANS(0,0,50)
-;
-.END
-.PROGRAM a.test.opt()@26/01/15 08:39 #0
-;
-  .i = hmi.opt.i
-  .j = hmi.opt.j
-  CALL opt.take(.i,.j)
-  CALL opt.return(.i,.j)
-;
-.END
-.PROGRAM opt.return(.i,.j)@26/01/15 08:39 #187
-  IF FALSE THEN
-    .i = hmi.opt.i
-    .j = hmi.opt.j
-  END
-  .$temp = "Return OPT with (i: "+$ENCODE(/L,.i)+", j: "+$ENCODE(/L,.j)+")"
-  CALL log(.$temp)
-;
-  ACCURACY 100 ALWAYS
-  SPEED 10 ALWAYS
-  ACCEL 5 ALWAYS
-  DECEL 5 ALWAYS
-;
-  PULSE release.tare
-;
-  TOOL tool.pin
-;
-  POINT .post.tare.in = #opt.take.safe
-  DECOMPOSE .ct1[1] = .post.tare.in
-  DECOMPOSE .ct2[1] = opt.point[.i,.j]
-  POINT .mid.point = TRANS(.ct2[1],.ct1[2],.ct2[3],.ct1[4],.ct1[5],.ct1[6])
-  POINT .put.stz = #opt.put
-;
-  ACCURACY 20
-  LMOVE .put.stz+TRANS(,,50)
-;
-  CALL log("Wait pneumatics open")
-  WHILE NOT SIG(s.cmd.pneum.op) DO
-    $action = "WaitPneumaticOpen"
-    TWAIT 0.5
-  END
-  SIGNAL -s.cmd.pneum.op
-;
-  ACCURACY 0.02
-  SPEED 100 MM/S
-  LMOVE #opt.put
-  BREAK
-  PULSE capture.tare
-  TWAIT 0.5
-;
-  ACCURACY 0.02
-  SPEED 100 MM/S
-  LMOVE .put.stz+TRANS(50)
-;
-;SPEED 80 ALWAYS
-;ACCURACY 5
-  LMOVE #opt.put.safe
-  LMOVE #ot.put.safe
-  LMOVE opt.point[.i,.j]+TRANS(20,0,500)
-;
-  ACCURACY 0.02
-  SPEED 100 MM/S
-  LMOVE opt.point[.i,.j]+TRANS(20)
-  BREAK
-;
-  ACCURACY 0.02
-  SPEED 100 MM/S
-  LMOVE opt.point[.i,.j]
-  BREAK
-  PULSE release.tare
-  TWAIT 0.5
-  SIGNAL -s.opt.placed
-;
-  ACCURACY 30
-  LMOVE opt.point[.i,.j]+TRANS(0,0,50)
-  LMOVE opt.point[.i,.j]+TRANS(0,0,200)
-;
-  ACCEL 100 ALWAYS
-  DECEL 100 ALWAYS
-.END
-.PROGRAM a.test.gripper()@26/01/15 08:39 #0
-;
-  CALL gripper.pick(hmi.gripper)
-  CALL gripper.put(hmi.gripper)
-; detail.type
-.END
-.PROGRAM gripper.pick(.gripper.no)@26/01/26 14:41 #70
-;
-; Start from step 3 to manual check
-  IF FALSE THEN
-    .gripper.no = hmi.gripper
-  END
-; Safety check
-  IF current.gripper<>0 THEN
-    CALL log("Some gripper is already in robot\'s hand")
-    RETURN
-  END
-  PULSE release.grip
-; Log info
-  .$temp = "Pick gripper"+$ENCODE(.gripper.no)
-  CALL log(.$temp)
-; Set default motion parameters
-  SPEED 10 ALWAYS
-  ACCURACY 100 ALWAYS
-  TOOL tool.pick[.gripper.no]
-; Calculate points
-  POINT .temp = #tool.point[.gripper.no]
-; Motion
-  LMOVE .temp+TRANS(0,0,200)
-;
-  ACCURACY 5
-  LMOVE .temp+TRANS(0,0,50)
-  BREAK
-;
-  SPEED 50 MM/S ALWAYS
-  ACCURACY 0.02
-  LMOVE #tool.point[.gripper.no]
-  BREAK
-; Capture tool
-  PULSE capture.grip
-  TWAIT 0.5
-  current.gripper = .gripper.no
-;
-  SPEED 10 ALWAYS
-  ACCURACY 1
-  LMOVE .temp+TRANS(0,0,200)
-;
-; Log info
-  .$temp = "Gripper"+$ENCODE(.gripper.no)+" picked"
-  CALL log(.$temp)
-;
-.END
-.PROGRAM gripper.put(.gripper.no)@26/01/26 14:41 #70
-;
-; Start from step 3 to manual check
-  IF FALSE THEN
-    .gripper.no = hmi.gripper
-  END
-; Safety check
-  IF current.gripper==0 THEN
-    CALL log("There is no gripper")
-    RETURN
-  END
-; Log info
-  .$temp = "Put gripper"+$ENCODE(.gripper.no)
-  CALL log(.$temp)
-; Set default motion parameters
-  SPEED 10 ALWAYS
-  ACCURACY 100 ALWAYS
-  TOOL tool.pick[.gripper.no]
-; Calculate points
-  POINT .temp = #tool.point[.gripper.no]
-; Motion
-  LMOVE .temp+TRANS(0,0,200)
-;
-  ACCURACY 5
-  LMOVE .temp+TRANS(0,0,50)
-  BREAK
-;
-  SPEED 50 MM/S ALWAYS
-  ACCURACY 0.02
-  LMOVE #tool.point[.gripper.no]
-  BREAK
-; Capture tool
-  PULSE release.grip
-  TWAIT 0.5
-  current.gripper = 0
-;
-  SPEED 10 ALWAYS
-  ACCURACY 1
-  LMOVE .temp+TRANS(0,0,200)
-;
-; Log info
-  .$temp = "Gripper"+$ENCODE(.gripper.no)+" put"
-  CALL log(.$temp)
-  .gripper.no = 0
-  BREAK
-;
-.END
-.PROGRAM a.teach.gripper()@26/01/15 08:39 #0
-;
-  TOOL tool.pick[hmi.gripper]
-;
-  POINT .temp = #tool.point[hmi.gripper]
-  JMOVE .temp+TRANS(0,0,50)
-  BREAK
-;
-  LMOVE #tool.point[hmi.gripper]; *** TEACH POINT ***
-  BREAK
-  PULSE capture.grip
-  TWAIT 0.5
-  current.gripper = hmi.gripper
-;
-  LMOVE .temp+TRANS(0,0,200)
-  BREAK
-  JMOVE #stz.wait
-;
-  LMOVE .temp+TRANS(0,0,200)
-  LMOVE .temp+TRANS(0,0,50)
-  BREAK
-  LMOVE #tool.point[hmi.gripper]
-  BREAK
-  PULSE release.grip
-  TWAIT 0.5
-  current.gripper = 0
-;
-  LMOVE .temp+TRANS(0,0,50)
-  LMOVE .temp+TRANS(0,0,200)
-;
-.END
-.PROGRAM a.test.ot()@26/01/15 08:39 #0
-;
-  .i = hmi.ot.i
-  .j = hmi.ot.j
-  CALL ot.take(.i,.j)
-  CALL ot.return(.i,.j)
-;
-.END
-.PROGRAM a.teach.ot()@26/01/21 11:02 #0
-; Use this for first teach
-  IF FALSE THEN
-    TOOL tool.pin
-    JMOVE ot.point[1,1]+TRANS(0,0,50)
-    LMOVE ot.point[1,1]
-    FOR .i = 0 TO 3
-      FOR .j = 0 TO 11
-        PRINT 0: .i,.j
-        POINT ot.point[.i+1,.j+1] = ot.point[1,1]+TRANS(-100*.j,-490*.i)
-      END
-    END
-  END
-  TOOL tool.pin
-; Correct point
-  .i = hmi.ot.i
-  .j = hmi.ot.j
-  JMOVE ot.point[.i,.j]+TRANS(0,0,50)
-  LMOVE ot.point[.i,.j]; *** TEACH POINT ***
-  LMOVE ot.point[.i,.j]+TRANS(0,0,50)
-  LMOVE ot.point[.i,.j]
-  LMOVE ot.point[.i,.j]+TRANS(0,0,50)
-;
-.END
-.PROGRAM load.ot.data()@26/01/15 08:39 #227
-;
-  max.count.ot = 0
-  WHILE TRUE DO
-    max.count.ot = max.count.ot+1
-    IF INSTR($ot.data , ",") THEN
-      .id = VAL($DECODE($ot.data,",",0))
-      CALL ot.table(.id)
-      .temp = VAL($DECODE($ot.data,",",1))
-    ELSE
-      .id = VAL($ot.data)
-      CALL ot.table(.id)
-      RETURN
-    END
-  END
-;
-.END
-.PROGRAM ot.table(.id)@26/01/15 08:39 #227
-;
-  .$temp = "Processing OT with ID: "+$ENCODE(/L,.id)
-  CALL log(.$temp)
-  CASE .id OF
-   VALUE 1:
-    ot.cell[max.count.ot,1] = 4;
-    ot.cell[max.count.ot,2] = 1;
-    max.count.ot = max.count.ot+1;
-    ot.cell[max.count.ot,1] = 4;
-    ot.cell[max.count.ot,2] = 2;
-    max.count.ot = max.count.ot+1;
-    ot.cell[max.count.ot,1] = 4;
-    ot.cell[max.count.ot,2] = 3;
-;
-   VALUE 2:
-    ot.cell[max.count.ot,1] = 3;
-    ot.cell[max.count.ot,2] = 1;
-    max.count.ot = max.count.ot+1;
-    ot.cell[max.count.ot,1] = 3;
-    ot.cell[max.count.ot,2] = 2;
-    max.count.ot = max.count.ot+1;
-    ot.cell[max.count.ot,1] = 3;
-    ot.cell[max.count.ot,2] = 3;
-;
-   VALUE 3:
-    ot.cell[max.count.ot,1] = 2;
-    ot.cell[max.count.ot,2] = 1;
-    max.count.ot = max.count.ot+1;
-    ot.cell[max.count.ot,1] = 2;
-    ot.cell[max.count.ot,2] = 2;
-    max.count.ot = max.count.ot+1;
-    ot.cell[max.count.ot,1] = 2;
-    ot.cell[max.count.ot,2] = 3;
-;
-   VALUE 4:
-    ot.cell[max.count.ot,1] = 1;
-    ot.cell[max.count.ot,2] = 1;
-    max.count.ot = max.count.ot+1;
-    ot.cell[max.count.ot,1] = 1;
-    ot.cell[max.count.ot,2] = 2;
-    max.count.ot = max.count.ot+1;
-    ot.cell[max.count.ot,1] = 1;
-    ot.cell[max.count.ot,2] = 3;
-;
-   VALUE 5:
-    ot.cell[max.count.ot,1] = 4;
-    ot.cell[max.count.ot,2] = 4;
-    max.count.ot = max.count.ot+1;
-    ot.cell[max.count.ot,1] = 4;
-    ot.cell[max.count.ot,2] = 5;
-    max.count.ot = max.count.ot+1;
-    ot.cell[max.count.ot,1] = 4;
-    ot.cell[max.count.ot,2] = 6;
-;
-   VALUE 6:
-    ot.cell[max.count.ot,1] = 3;
-    ot.cell[max.count.ot,2] = 4;
-    max.count.ot = max.count.ot+1;
-    ot.cell[max.count.ot,1] = 3;
-    ot.cell[max.count.ot,2] = 5;
-    max.count.ot = max.count.ot+1;
-    ot.cell[max.count.ot,1] = 3;
-    ot.cell[max.count.ot,2] = 6;
-;
-   VALUE 7:
-    ot.cell[max.count.ot,1] = 2;
-    ot.cell[max.count.ot,2] = 4;
-    max.count.ot = max.count.ot+1;
-    ot.cell[max.count.ot,1] = 2;
-    ot.cell[max.count.ot,2] = 5;
-    max.count.ot = max.count.ot+1;
-    ot.cell[max.count.ot,1] = 2;
-    ot.cell[max.count.ot,2] = 6;
-;
-   VALUE 8:
-    ot.cell[max.count.ot,1] = 1;
-    ot.cell[max.count.ot,2] = 4;
-    max.count.ot = max.count.ot+1;
-    ot.cell[max.count.ot,1] = 1;
-    ot.cell[max.count.ot,2] = 5;
-    max.count.ot = max.count.ot+1;
-    ot.cell[max.count.ot,1] = 1;
-    ot.cell[max.count.ot,2] = 6;
-;
-   VALUE 9:
-    ot.cell[max.count.ot,1] = 4;
-    ot.cell[max.count.ot,2] = 7;
-    max.count.ot = max.count.ot+1;
-    ot.cell[max.count.ot,1] = 4;
-    ot.cell[max.count.ot,2] = 8;
-    max.count.ot = max.count.ot+1;
-    ot.cell[max.count.ot,1] = 4;
-    ot.cell[max.count.ot,2] = 9;
-;
-   VALUE 10:
-    ot.cell[max.count.ot,1] = 3;
-    ot.cell[max.count.ot,2] = 7;
-    max.count.ot = max.count.ot+1;
-    ot.cell[max.count.ot,1] = 3;
-    ot.cell[max.count.ot,2] = 8;
-    max.count.ot = max.count.ot+1;
-    ot.cell[max.count.ot,1] = 3;
-    ot.cell[max.count.ot,2] = 9;
-;
-   VALUE 11:
-    ot.cell[max.count.ot,1] = 2;
-    ot.cell[max.count.ot,2] = 7;
-    max.count.ot = max.count.ot+1;
-    ot.cell[max.count.ot,1] = 2;
-    ot.cell[max.count.ot,2] = 8;
-    max.count.ot = max.count.ot+1;
-    ot.cell[max.count.ot,1] = 2;
-    ot.cell[max.count.ot,2] = 9;
-;
-   VALUE 12:
-    ot.cell[max.count.ot,1] = 1;
-    ot.cell[max.count.ot,2] = 7;
-    max.count.ot = max.count.ot+1;
-    ot.cell[max.count.ot,1] = 1;
-    ot.cell[max.count.ot,2] = 8;
-    max.count.ot = max.count.ot+1;
-    ot.cell[max.count.ot,1] = 1;
-    ot.cell[max.count.ot,2] = 9;
-;
-   VALUE 13:
-    ot.cell[max.count.ot,1] = 4;
-    ot.cell[max.count.ot,2] = 10;
-    max.count.ot = max.count.ot+1;
-    ot.cell[max.count.ot,1] = 4;
-    ot.cell[max.count.ot,2] = 11;
-    max.count.ot = max.count.ot+1;
-    ot.cell[max.count.ot,1] = 4;
-    ot.cell[max.count.ot,2] = 12;
-;
-   VALUE 14:
-    ot.cell[max.count.ot,1] = 3;
-    ot.cell[max.count.ot,2] = 10;
-    max.count.ot = max.count.ot+1;
-    ot.cell[max.count.ot,1] = 3;
-    ot.cell[max.count.ot,2] = 11;
-    max.count.ot = max.count.ot+1;
-    ot.cell[max.count.ot,1] = 3;
-    ot.cell[max.count.ot,2] = 12;
-;
-   VALUE 15:
-    ot.cell[max.count.ot,1] = 2;
-    ot.cell[max.count.ot,2] = 10;
-    max.count.ot = max.count.ot+1;
-    ot.cell[max.count.ot,1] = 2;
-    ot.cell[max.count.ot,2] = 11;
-    max.count.ot = max.count.ot+1;
-    ot.cell[max.count.ot,1] = 2;
-    ot.cell[max.count.ot,2] = 12;
-;
-   VALUE 16:
-    ot.cell[max.count.ot,1] = 1;
-    ot.cell[max.count.ot,2] = 10;
-    max.count.ot = max.count.ot+1;
-    ot.cell[max.count.ot,1] = 1;
-    ot.cell[max.count.ot,2] = 11;
-    max.count.ot = max.count.ot+1;
-    ot.cell[max.count.ot,1] = 1;
-    ot.cell[max.count.ot,2] = 12;
-;
-  END
-  .$i1 = $ENCODE(/L,ot.cell[max.count.ot-2,1])
-  .$i2 = $ENCODE(/L,ot.cell[max.count.ot-2,2])
-  .$i3 = $ENCODE(/L,ot.cell[max.count.ot-1,1])
-  .$i4 = $ENCODE(/L,ot.cell[max.count.ot-1,2])
-  .$i5 = $ENCODE(/L,ot.cell[max.count.ot,1])
-  .$i6 = $ENCODE(/L,ot.cell[max.count.ot,2])
-  .$temp = "OT indicies: (i:"+.$i1+", j:"+.$i2+"), "
-  .$temp = .$temp+"(i:"+.$i3+", j:"+.$i4+"), "
-  .$temp = .$temp+"(i:"+.$i3+", j:"+.$i4+")"
-  CALL log(.$temp)
-;
-.END
-.PROGRAM ot.take(.i,.j)@26/01/16 10:56 #247
-; Start from step 3 to manual check
-  IF FALSE THEN
-    .i = hmi.st.out.i
-    .j = hmi.st.out.j
-  END
-; Log info
-  .$temp = "Take OT from (i: "+$ENCODE(/L,.i)+", j: "+$ENCODE(/L,.j)+")"
-  CALL log(.$temp)
-; Set default motion parameters
-  TOOL tool.pin
-  SPEED 10 ALWAYS
-  ACCURACY 100 ALWAYS
-  ACCEL 5 ALWAYS
-  DECEL 5 ALWAYS
-; Calculate points
-  POINT .ot.take.safe = #ot.take.safe
-  DECOMPOSE .ct1[1] = .ot.take.safe
-  DECOMPOSE .ct2[1] = ot.point[.i,.j]
-  POINT .mid.point = TRANS(.ct1[1],.ct2[2],.ct2[3],.ct1[4],.ct1[5],.ct1[6])
-  POINT .ot.put = #ot.put
-; Release tare
-  PULSE release.tare
-; Motion
-; Ensure that we are in home position!!!
-;
-; Move before OT
-  LMOVE ot.point[.i,.j]+TRANS(0,0,200)
-  ACCURACY 5
-  LMOVE ot.point[.i,.j]+TRANS(0,0,50)
-; Move to OT
-  ACCURACY 0.02
-  SPEED 100 MM/S
-  LMOVE ot.point[.i,.j]
-  BREAK
-  PULSE capture.tare
-  TWAIT 0.5
-  count.ot = count.ot+1
-; Move up
-  ACCURACY 0.02
-  SPEED 100 MM/S
-  LMOVE ot.point[.i,.j]+TRANS(20)
-; Move to sensor position
-  ACCURACY 0.02
-  SPEED 100 MM/S
-  LMOVE ot.point[.i,.j]+TRANS(20,0,100)
-  BREAK
-; Wait sensor
-  CALL log("Wait OT sensor state")
-  WHILE NOT SIG(s.stock.ot.ok) AND NOT SIG(s.stock.ot.ng) DO
-    $action = "WaitOutStockerSensor"
-    TWAIT 0.5
-  END
-  CALL log(.$temp)
-; Check if OK
-  IF SIG(s.stock.ot.ok) THEN
-    CALL log("OT exists, continue")
-    LMOVE ot.point[.i,.j]+TRANS(20,0,500)
-    LMOVE .mid.point
-    LMOVE #ot.take.safe
-; Move to aux point
-    LMOVE #ot.put.safe
-; Move before put point
-    ACCURACY 20
-    LMOVE .ot.put+TRANS(100)
-; Move to put point
-    ACCURACY 0.02
-    SPEED 100 MM/S
-    LMOVE #ot.put
-    BREAK
-    PULSE release.tare
-    TWAIT 0.5
-    SIGNAL s.ot.placed
-; Move out of put point
-    ACCURACY 30
-    LMOVE .ot.put+TRANS(,,100)
-;LMOVE #ot.put.safe
-    LMOVE #pos.wait
-    BREAK
-    PULSE rs13.tare.ack,5
-;
-;  POINT #current.pos = #pos.wait
-  ELSE
-    CALL log("OT do not exists, move to next")
-    ACCURACY 0.02
-    SPEED 100 MM/S
-    LMOVE ot.point[.i,.j]+TRANS(20)
-    ACCURACY 0.02
-    SPEED 100 MM/S
-    LMOVE ot.point[.i,.j]
-    BREAK
-    PULSE release.tare
-    TWAIT 0.5
-    ACCURACY 5
-    LMOVE ot.point[.i,.j]+TRANS(0,0,50)
-    LMOVE ot.point[.i,.j]+TRANS(0,0,200)
-;  POINT #current.pos = #HERE
-  END
-;
-  ACCEL 100 ALWAYS
-  DECEL 100 ALWAYS
-;
-.END
-.PROGRAM ot.return(.i,.j)@26/01/15 08:39 #185
-  IF FALSE THEN
-    .i = hmi.ot.i
-    .j = hmi.ot.j
-  END
-  .$temp = "Return OT with (i: "+$ENCODE(/L,.i)+", j: "+$ENCODE(/L,.j)+")"
-  CALL log(.$temp)
-;
-  ACCURACY 100 ALWAYS
-  ACCEL 5 ALWAYS
-  DECEL 5 ALWAYS
-  SPEED 10 ALWAYS
-;
-  PULSE release.tare
-;
-  TOOL tool.pin
-;
-  POINT .post.tare.out = #ot.take.safe
-  DECOMPOSE .ct1[1] = .post.tare.out
-  DECOMPOSE .ct2[1] = ot.point[.i,.j]
-  POINT .mid.point = TRANS(.ct2[1],.ct1[2],.ct2[3],.ct1[4],.ct1[5],.ct1[6])
-  POINT .put.outpal = #ot.put
-;
-  LMOVE #pos.wait
-  ACCURACY 20
-  LMOVE .put.outpal+TRANS(,,50)
-;
-  ACCURACY 0.02
-  SPEED 100 MM/S
-  LMOVE #ot.put
-  BREAK
-;
-  PULSE capture.tare
-  TWAIT 0.5
-;
-  ACCURACY 0.02
-  SPEED 100 MM/S
-  LMOVE .put.outpal+TRANS(150)
-;
-  LMOVE #ot.take.safe
-  LMOVE ot.point[.i,.j]+TRANS(20,0,500)
-;
-  ACCURACY 0.02
-  SPEED 100 MM/S
-  LMOVE ot.point[.i,.j]+TRANS(20)
-  BREAK
-;
-  ACCURACY 0.02
-  SPEED 100 MM/S
-  LMOVE ot.point[.i,.j]
-  BREAK
-  PULSE release.tare
-  TWAIT 0.5
-  SIGNAL -s.ot.placed
-;
-  ACCURACY 10
-  LMOVE ot.point[.i,.j]+TRANS(0,0,50)
-;
-  ACCEL 100 ALWAYS
-  DECEL 100 ALWAYS
-.END
-.PROGRAM a.teach.pos()@26/01/26 21:43 #0
-;
-  TOOL tool.pick[hmi.gripper]
-;
-  POINT .temp = #pos.point[hmi.obj.id]
-  LMOVE .temp+TRANS(10,0,50)
-  LMOVE .temp+TRANS(10,0,20)
-  BREAK
-  LMOVE #pos.point[hmi.obj.id]; *** TEACH POINT ***
-  BREAK
-  TWAIT 0.5
-  POINT .temp = #pos.point[hmi.obj.id]
-  LMOVE .temp+TRANS(10,0,20)
-  LMOVE .temp+TRANS(0,0,50)
-  BREAK
-  TWAIT 0.5
-;
-.END
-.PROGRAM pos.put()@26/01/23 15:32 #1411
-;
-  .$temp = "Put detail to positioner (ID:"+$ENCODE(object.id)+")"
-  CALL log(.$temp)
-;
-  SPEED 30 ALWAYS
-  ACCURACY 100 ALWAYS
-  TOOL tool.pick[current.gripper]
-;
-  POINT .temp = #pos.point[object.id]
-  ACCURACY 20
-;SIGNAL rs13.lock.zone ; TEST
-  LMOVE #pos.wait
-  BREAK
-  SIGNAL rs13.lock.zone
-  CALL log("Check if positioner is occupied")
-  SWAIT -rs7.locked.zone
-;
-  LMOVE .temp+TRANS(10,0,50)
-  ACCURACY 5
-  LMOVE .temp+TRANS(10,0,20)
-  ACCURACY 0.02
-  LMOVE .temp+TRANS(10,0,3)
-  BREAK
-;
-  SPEED 100 MM/S
-  ACCURACY 0.02
-  LMOVE #pos.point[object.id]
-  BREAK
-  TWAIT 0.5
-  PULSE grip.unclamp
-  TWAIT 0.5
-  SIGNAL -s.grip.full
-  count.put = count.put+1
-  BITS rs13.det.put[0],8 = count.put
-  CALL log("Detail counter:"+$ENCODE(count.put))
-  $action = "WaitForPick"
-;
-  LMOVE .temp+TRANS(0,0,200)
-;SIGNAL rs13.det.put
-  LMOVE #pos.wait
-  BREAK
-  SIGNAL -rs13.lock.zone
-;LMOVE #stz.wait
-.END
-.PROGRAM state0()@26/01/22 14:46 #118; Initialization of parameters
-;
-  CALL log("State 0: Program reset. Initialization of parameters")
-  SIGNAL -s.opt.placed,-s.ot.placed,-s.grip.full
-  SIGNAL -s.cmd.start,-s.cmd.pick,-s.cmd.finish,-rs13.finish,-s.cmd.stop
-  SIGNAL -s.cmd.chg.opt,-s.cmd.pause
-  count.put = 0
-  BITS rs13.det.put[0],8 = count.put
-;count.ot = 0
-;count.opt = 0
-;$loaded.pg = "None"
-;
-  state = 100
-;
-.END
-.PROGRAM state1()@26/01/15 08:39 #264; Pick OT from stocker
-;
-  CALL log("State 1: Pick OT")
-  IF count.ot>=max.count.ot THEN
-    CALL log("Reached out of maximum tare count")
-    LMOVE #homyak
-    state = 255
-    RETURN
-  END
-; Check all start positions
-  POINT .current.pos = #HERE
-  POINT .stz.wait = #stz.wait
-  POINT .pos.wait = #pos.wait
-; Move to start position
-  IF SIG(do.home) THEN
-    LMOVE #ot.take.safe
-  END
-  IF DISTANCE(.current.pos,.stz.wait)<=25 THEN
-    LMOVE #pos.wait
-    LMOVE #ot.take.safe
-  END
-  IF DISTANCE(.current.pos,.pos.wait)<=25 THEN
-    LMOVE #ot.take.safe
-  END
-; #ot.take.safe -> take -> put -> pos.wait
-; #ot.take.safe -> take
-  .i = ot.cell[count.ot+1,1]
-  .j = ot.cell[count.ot+1,2]
-  CALL ot.take(.i,.j); count.ot + 1
-;
-  state = 101
-;
-.END
-.PROGRAM state2()@26/01/16 11:34 #170; Pick OPT from stocker
-;
-  CALL log("State 2: Pick OPT")
-  IF count.opt>=max.count.opt THEN
-    CALL log("Reached out of maximum tare count")
-    LMOVE #homyak
-    state = 104 ;!!!
-    RETURN
-  END
-; Check all start positions
-  POINT .current.pos = #HERE
-  POINT .stz.wait = #stz.wait
-  POINT .pos.wait = #pos.wait
-; Move to start position
-  IF DISTANCE(.current.pos,.stz.wait)<=25 THEN
-    LMOVE #pos.wait
-  END
-; home -> take -> put -> stz.wait
-; pos.wait -> take -> put -> stz.wait
-  .i = opt.cell[count.opt+1,1]
-  .j = opt.cell[count.opt+1,2]
-  CALL opt.take(.i,.j); count.opt + 1
-;
-;POINT #current.pos = #stz.wait
-;
-  SIGNAL -s.cmd.chg.opt
-;
-  state = 101
-;
-.END
-.PROGRAM state3()@26/01/15 08:39 #2243; Pick from STZ
-;
-  CALL log("State 3: Pick from STZ")
-; Check all start positions
-  POINT .current.pos = #HERE
-  POINT .stz.wait = #stz.wait
-  POINT .pos.wait = #pos.wait
-  IF SIG(do.home) THEN
-    LMOVE #opt.take.safe
-    LMOVE #opt.put.safe
-    LMOVE #stz.wait
-  END
-  IF DISTANCE(.current.pos,.pos.wait)<=25 THEN
-    LMOVE #stz.wait
-  END
-; stz.wait -> pick -> pos.wait
-  CALL stz.pick
-;
-;POINT #current.pos = #pos.wait
-;
-  state = 101
-;
-.END
-.PROGRAM state4()@26/01/15 08:39 #2205; Put detail to positioner
-  CALL log("State 4: Put detail to positioner")
-; Check all start positions
-  POINT .current.pos = #HERE
-  POINT .stz.wait = #stz.wait
-  POINT .pos.wait = #pos.wait
-  IF SIG(do.home) THEN
-    LMOVE #opt.take.safe
-    LMOVE #pos.wait
-  END
-  IF DISTANCE(.current.pos,.stz.wait)<=25 THEN
-    LMOVE #pos.wait
-  END
-; pos.wait -> put -> pos.wait
-  CALL pos.put
-;
-;POINT #current.pos = #pos.wait JMOVE
-;
-  IF SIG(s.cmd.stop) OR SIG(rs7.etalon.stop) THEN
-    state = 104
-  ELSE
-    state = 101
-  END
-;
-.END
-.PROGRAM state5()@26/01/15 08:39 #199; Return OT
-  CALL log("State 5: Return OT")
-; Check all start positions
-  POINT .current.pos = #HERE
-  POINT .stz.wait = #stz.wait
-  POINT .pos.wait = #pos.wait
-  IF DISTANCE(.current.pos,.stz.wait)<=25 THEN
-    LMOVE #pos.wait
-  END
-;
-  SWAIT -rs7.work[1]
-; pos.wait -> take -> put -> Decide
-  .i = ot.cell[count.ot,1]
-  .j = ot.cell[count.ot,2]
-  CALL ot.return(.i,.j); count.ot + 1
-;
-;POINT #current.pos = #HERE
-  state = 8
-;
-.END
-.PROGRAM state6()@26/01/15 14:43 #144; Return OPT
-  CALL log("State 6: Return OPT")
-; Check all start positions
-  POINT .current.pos = #HERE
-  POINT .stz.wait = #stz.wait
-  POINT .pos.wait = #pos.wait
-  IF SIG(do.home) THEN
-    LMOVE #opt.take.safe
-    LMOVE #opt.put.safe
-    LMOVE #stz.wait
-  END
-  IF DISTANCE(.current.pos,.pos.wait)<=25 THEN
-    LMOVE #stz.wait
-  END
-;
-  SIGNAL -s.cmd.chg.opt
-; stz.wait -> take -> put -> Decide
-  .i = opt.cell[count.opt,1]
-  .j = opt.cell[count.opt,2]
-  CALL opt.return(.i,.j); count.ot + 1
-;
-;POINT #current.pos = #HERE
-  SIGNAL -s.cmd.chg.opt
-  state = 9
-;
-.END
-.PROGRAM state7()@26/01/15 08:39 #217; Check grippers
-  CALL log("State 7: Check if gripper change is required")
-; We are at home at this point. No cases without home!
-  IF current.gripper<>pg13.gripper THEN
-    CALL log("Selected wrong gripper, perform change")
-    LMOVE #opt.take.safe
-    LMOVE #stz.wait
-    IF current.gripper<>0 THEN
-      CALL gripper.put(current.gripper)
-    END
-    CALL gripper.pick(pg13.gripper)
-    LMOVE #opt.take.safe
-    LMOVE #homyak
-  ELSE
-    CALL log("Program gripper is the same as current gripper")
-  END
-  state = 1
-.END
-.PROGRAM state8()@26/01/15 08:39 #199; Decide if pick next OT
-  CALL log("State 8: Decide if pick next OT")
-  IF count.ot>=max.count.ot OR SIG(s.cmd.finish) THEN
-    LMOVE #ot.take.safe
-    LMOVE #homyak
-;
-;POINT #current.pos = #homyak
-    state = 104
-  ELSE
-    state = 1
-  END
-.END
-.PROGRAM state9()@26/01/26 14:41 #201; Decide if pick next OPT
-  CALL log("State 9: Decide if pick next OPT")
-  IF count.opt>=max.count.opt OR count.put==detail.count OR SIG(s.cmd.stop) OR SIG(rs7.etalon.stop) THEN
-    LMOVE #homyak
-;
-;POINT #current.pos = #homyak
-    state = 104
-  ELSE
-    state = 2
-  END
-.END
-.PROGRAM state100()@26/01/22 14:46 #96; Waiting for start
-;
-  CALL log("State 100: Waiting for start")
-  $action = "WaitingForStart"
-;
-  WHILE NOT SIG(s.cmd.start) DO
-    TWAIT 0.5
-  END
-  count.ot = 0
-  count.opt = 0
-  SIGNAL -s.cmd.stop
-  SIGNAL -s.cmd.start
-;
-  CALL log("START with Name:"+$pg.name+"-"+$ENCODE(detail.spec)+" Count:"+$ENCODE(detail.count)+" OT:"+$ot.data+" OPT:"+$opt.data);
-  CALL load.opt.data
-  CALL load.ot.data
-  CALL pg.select
-  state = 106
-;
-.END
-.PROGRAM state101()@26/01/15 08:39 #4964; Auxilary state
-  CALL log("State 101: Calculating next step")
-  state = 102
-.END
-.PROGRAM state102()@26/01/26 14:41 #7144245; Decision making
-; Priority 1
-  IF SIG(s.cmd.pause) THEN
-    state = 105
-    RETURN
-  END
-;
-; Priority 2
-  IF SIG(s.cmd.stop) OR SIG(rs7.etalon.stop) THEN
-    state = 103;6
-    RETURN
-  END
-; Priority 3
-  IF NOT SIG(s.ot.placed) THEN
-    state = 1
-    RETURN
-  END
-;
-; Priority 4
-  IF NOT SIG(s.opt.placed) AND SIG(s.ot.placed) AND NOT (count.put==detail.count) THEN
-    state = 2
-    RETURN
-  END
-; Priority 5
-  IF SIG(rs7.tare.chg) THEN
-    state = 5
-    RETURN
-  END
-; Priority 6
-  IF SIG(s.ot.placed) AND SIG(s.opt.placed) AND NOT SIG(s.grip.full) THEN
-    $action = "WaitForPick"
-    IF stz.x>=0 AND SIG(s.cmd.pick) THEN ;AND NOT SIG (rs7.tare.chg) THEN
-      SIGNAL -s.cmd.pick
-      $action = " "
-      state = 3
-      RETURN
-    END
-  END
-; Priority 7
-  IF SIG(s.ot.placed) AND SIG(s.opt.placed) AND SIG(s.grip.full) AND BITS(rs7.det.picked[0],8)==count.put THEN
-    $action = "WaitPosFree"
-    IF NOT SIG(rs7.work[1]) AND SIG(s.cmd.put) AND NOT SIG(rs7.locked.zone) THEN
-      state = 4
-      RETURN
-    END
-  END
-; Priority 8
-  IF SIG(s.cmd.chg.opt) OR count.put==detail.count THEN
-    state = 6
-    $action = "ChangeOPT"
-    RETURN
-  END
-.END
-.PROGRAM state103()@26/01/15 08:39 #21; Auxilary state
-  CALL log("State 103: Ending sequence started")
-  state = 104
-.END
-.PROGRAM state104()@26/01/22 14:18 #554295; Ending sequence
-;
-  IF SIG(s.ot.placed) AND SIG(s.grip.full) AND BITS(rs7.det.picked[0],8)==count.put THEN
-    $action = "WaitPosFree"
-    IF NOT SIG(rs7.work[1]) AND SIG(s.cmd.put) AND NOT SIG(rs7.locked.zone) THEN
-      state = 4
-      RETURN
-    END
-  END
-;
-  IF NOT SIG(s.grip.full) AND SIG(s.opt.placed) THEN
-    state = 6
-    RETURN
-  END
-;
-; Priority 5
-  IF SIG(rs7.tare.chg) THEN
-    state = 5
-    RETURN
-  END
-;
-  .m1 = NOT SIG(s.grip.full) AND SIG(s.ot.placed) AND NOT SIG(rs7.tare.chg)
-  .m2 = count.opt>=max.count.opt OR count.put==detail.count
-  .m3 = SIG(s.cmd.stop) OR SIG(rs7.etalon.stop)
-  IF .m1 AND (.m2 OR .m3) THEN
-    SIGNAL s.cmd.finish
-    SIGNAL rs13.finish
-    CALL log("Wait for RS007L finish task")
-    SWAIT rs7.finish.ack
-    state = 5
-    RETURN
-  END
-;
-  IF NOT SIG(s.grip.full) AND SIG(s.cmd.finish) THEN
-    CALL log("Program complete")
-    state = 255
-    RETURN
-  END
-;
-  IF NOT SIG(s.grip.full) AND count.ot>=max.count.ot THEN
-    CALL log("Unexpected behaviour!")
-    state = 255
-    RETURN
-  END
-;
-.END
-.PROGRAM state105()@26/01/15 08:39 #18; Program paused
-  CALL log("State 105: Program paused")
-  $action = "Paused"
-  SWAIT s.cmd.resume
-  $action = " "
-  CALL log("Program resumed")
-  SIGNAL -s.cmd.pause
-  state = 101
-.END
-.PROGRAM state106()@26/01/15 08:39 #227; Check program
-  CALL log("State 106: Check program")
-  IF $pg.name<>"NULL" THEN
-    CALL log("Selected program: "+$pg.name)
-    state = 7
-  ELSE
-    CALL log("Wrong program name. Program reset")
-    BREAK
-    $action = "WrongProgramName"
-    TWAIT 10
-    BREAK
-    state = 0
-  END
-.END
-.PROGRAM state255()@26/01/15 08:39 #145; Program complete
-  CALL log("State 255: Program complete")
-  state = 0
+.PROGRAM a.align()@26/01/15 08:39 #0
+	;
+	SPEED 250 MM/S ALWAYS
+	ALIGN
+	;
 .END
 .PROGRAM a.home()@26/01/15 08:39 #0
-;
-  SPEED 250 MM/S ALWAYS
-  JMOVE #homyak
-;
-.END
-.PROGRAM a.align()@26/01/15 08:39 #0
-;
-  SPEED 250 MM/S ALWAYS
-  ALIGN
-;
-.END
-.PROGRAM safe.home()@26/01/15 08:39 #133
-;
-  IF SIG(do.home) THEN
-    CALL log("Robot already in home position")
-    RETURN
-  END
-  CALL log("Performing safe motion to home position")
-;
-; In STZ zone
-; Move to the height of a pos.wait
-  IF SIG(do.work[2]) THEN
-    POINT .temp = #stz.wait
-    DECOMPOSE .s[1] = .temp
-    POINT .temp = HERE
-    DECOMPOSE .c[1] = .temp
-    .dz = .s[3]-.c[3]
-    DRAW 0,0,.dz
-    LMOVE #stz.wait
-    LMOVE #pos.wait
-    LMOVE #homyak
-  END
-; In OT zone
-; Move to the height of a home POINT
-  JMOVE #homyak
-  BREAK
-  CALL log("Robot in home position")
-;
-.END
-.PROGRAM log(.$msg)@26/01/15 08:39 #28691
-;
-; 1 line = 55 symbols max
-;
-  FOR .i = 0 TO 126
-    $log.entry[.i] = $log.entry[.i+1]
-  END
-  $log.entry[127] = $TIME+" "+.$msg
-;
-  IFPWPRINT 1,1,1,9,10=$log.entry[116],$log.entry[117],$log.entry[118],$log.entry[119]
-  IFPWPRINT 2,1,1,9,10=$log.entry[120],$log.entry[121],$log.entry[122],$log.entry[123]
-  IFPWPRINT 3,1,1,9,10=$log.entry[124],$log.entry[125],$log.entry[126],$log.entry[127]
-;
-.END
-.PROGRAM pg.select()@26/01/25 17:23 #137
-  SCASE $pg.name OF
-   SVALUE "312.229.002":
-    CASE detail.spec OF
-     VALUE 0:
-      CALL id1; idX_1
-     VALUE 1:
-      CALL id1
-     VALUE 2:
-      CALL id1
-     ANY :
-      $pg.name = "NULL"
-    END
-;
-   SVALUE "0401.17.02.023":
-    CASE detail.spec OF
-     VALUE 0:
-      CALL id2; idX_1
-     VALUE 1:
-      CALL id2
-     VALUE 2:
-      CALL id2
-     ANY :
-      $pg.name = "NULL"
-    END
-;
-   SVALUE "312.229.001":
-    CASE detail.spec OF
-     VALUE 0:
-      CALL id3; idX_1
-     ANY :
-      $pg.name = "NULL"
-    END
-;
-   SVALUE "440.00.026":
-    CASE detail.spec OF
-     VALUE 0:
-      CALL id4; idX_1
-     VALUE 1:
-      CALL id4
-     VALUE 2:
-      CALL id4
-     VALUE 3:
-      CALL id4
-     ANY :
-      $pg.name = "NULL"
-    END
-;
-   SVALUE "440.00.111":
-    CASE detail.spec OF
-     VALUE 0:
-      CALL id5; idX_1
-     VALUE 2:
-      CALL id5
-     VALUE 3:
-      CALL id5
-     ANY :
-      $pg.name = "NULL"
-    END
-;
-   SVALUE "0401.28.02.063":
-    CASE detail.spec OF
-     VALUE 0:
-      CALL id6; idX_1
-     VALUE 1:
-      CALL id6
-     ANY :
-      $pg.name = "NULL"
-    END
-;
-;
-   ANY :
-    $pg.name = "NULL"
-    RETURN
-  END
-;
-.END
-.PROGRAM chk.lock()@26/01/15 08:39 #0
-  SWAIT -rs7.locked.zone,-rs7.work[1]
+	;
+	SPEED 250 MM/S ALWAYS
+	JMOVE #homyak
+	;
 .END
 .PROGRAM a.main()@26/01/15 08:39 #0
-;
-  CALL log("Main program executed")
-  CALL safe.home
-;
-  WHILE TRUE DO
-    .$pg.string = "state"+$ENCODE(/L,state)
-    IF EXISTPGM(.$pg.string) THEN
-      SCALL .$pg.string
-    ELSE
-      CALL log("Error! Program is in wrong state. Connect Robowizard")
-      RETURN
-    END
-  END
-;
+	;
+	CALL log ("Main program executed")
+	CALL safe.home
+	;
+	WHILE TRUE DO
+		.$pg.string = "state" + $ENCODE (/L, state)
+		IF EXISTPGM (.$pg.string) THEN
+			SCALL .$pg.string
+		ELSE
+			CALL log ("Error! Program is in wrong state. Connect Robowizard")
+			RETURN
+		END
+	END
+	;
 .END
-.PROGRAM pg0()@26/01/15 08:39 #0
-  state = 0
-  CALL a.main
+.PROGRAM a.teach.gripper()@26/01/15 08:39 #0
+	;
+	TOOL tool.pick[hmi.gripper]
+	;
+	POINT .temp = #tool.point[hmi.gripper]
+	JMOVE .temp + TRANS (0, 0, 50)
+	BREAK
+	;
+	LMOVE #tool.point[hmi.gripper]; *** TEACH POINT ***
+	BREAK
+	PULSE capture.grip
+	TWAIT 0.5
+	current.gripper = hmi.gripper
+	;
+	LMOVE .temp + TRANS (0, 0, 200)
+	BREAK
+	JMOVE #stz.wait
+	;
+	LMOVE .temp + TRANS (0, 0, 200)
+	LMOVE .temp + TRANS (0, 0, 50)
+	BREAK
+	LMOVE #tool.point[hmi.gripper]
+	BREAK
+	PULSE release.grip
+	TWAIT 0.5
+	current.gripper = 0
+	;
+	LMOVE .temp + TRANS (0, 0, 50)
+	LMOVE .temp + TRANS (0, 0, 200)
+	;
 .END
-.PROGRAM get.state.pc(.$state)@26/01/15 15:42 #368234
-  .$state = "SPEED:"+$ENCODE(/L,MSPEED)+";"
-  .$state = .$state+"POWER:"
-  IF SWITCH(POWER ) THEN
-    .$state = .$state+"TRUE;"
-  ELSE
-    .$state = .$state+"FALSE;"
-  END
-; MAX: 12
-;
-  .$state = .$state+"CS:"
-  IF SWITCH(CS ) THEN
-    .$state = .$state+"TRUE;"
-  ELSE
-    .$state = .$state+"FALSE;"
-  END
-; MAX 9
-;
-  .$state = .$state+"TEACH:"
-  IF SWITCH(REPEAT ) THEN
-    .$state = .$state+"FALSE;"
-  ELSE
-    .$state = .$state+"TRUE;"
-  END
-; MAX 12
-;
-  .$state = .$state+"TEACHL:"
-  IF SWITCH(TEACH_LOCK ) THEN
-    .$state = .$state+"TRUE;"
-  ELSE
-    .$state = .$state+"FALSE;"
-  END
-; MAX 13
-;
-  .$state = .$state+"TPEMG:"
-  IF SWITCH(TP_EMG ) THEN
-    .$state = .$state+"TRUE;"
-  ELSE
-    .$state = .$state+"FALSE;"
-  END
-; MAX 12
-;
-  .$state = .$state+"OPEMG:"
-  IF SWITCH(OP_EMG ) THEN
-    .$state = .$state+"TRUE;"
-  ELSE
-    .$state = .$state+"FALSE;"
-  END
-; MAX 12
-;
-  .$state = .$state+"EXEMG:"
-  IF SWITCH(EX_EMG ) THEN
-    .$state = .$state+"TRUE;"
-  ELSE
-    .$state = .$state+"FALSE;"
-  END
-; MAX 12
-;
-  .$state = .$state+"ERROR:"
-  IF SWITCH(ERROR ) THEN
-    .$state = .$state+"TRUE;"
-  ELSE
-    .$state = .$state+"FALSE;"
-  END
-; MAX 12
-;
-  .$state = .$state+"ECODE:"
-  .$state = .$state+$ENCODE(ERROR)+";"
-; MAX 12
-;
-  .$state = .$state+"HOME:"
-  IF SIG(do.home) THEN
-    .$state = .$state+"TRUE;"
-  ELSE
-    .$state = .$state+"FALSE;"
-  END
-;; MAX 12
-;;
-  .$state = .$state+"BATALM:"
-  IF SIG(do.bat.alm) THEN
-    .$state = .$state+"TRUE;"
-  ELSE
-    .$state = .$state+"FALSE;"
-  END
-; MAX 12
-  .$state = .$state+"\n"
+.PROGRAM a.teach.opt()@26/01/21 13:57 #0
+	; Use this for first teach
+	IF FALSE THEN
+		TOOL tool.pin
+		JMOVE opt.point[1, 1] + TRANS (0, 0, 50)
+		LMOVE opt.point[1, 1]
+		FOR .i = 0 TO 2
+			FOR .j = 0 TO 9
+				PRINT 0: .i, .j
+				POINT opt.point[.i + 1, .j + 1] = opt.point[1, 1] + TRANS (-80 * .j, -610 * .i)
+			END
+		END
+	END
+	; Correct point
+	TOOL tool.pin
+	.i = hmi.opt.i
+	.j = hmi.opt.j
+	JMOVE opt.point[.i, .j] + TRANS (0, 0, 50)
+	LMOVE opt.point[.i, .j]; *** TEACH POINT ***
+	LMOVE opt.point[.i, .j] + TRANS (0, 0, 50)
+	LMOVE opt.point[.i, .j]
+	LMOVE opt.point[.i, .j] + TRANS (0, 0, 50)
+	;
 .END
-.PROGRAM tcp.sender.pc()@26/01/15 08:39 #0
-;
-  WHILE TRUE DO
-;
-    CALL get.state.pc(.$data[1])
-    .$data[2] = "ACTION:"+$action+";"
-    .$data[2] = .$data[2]+"TAREIN:"+$ENCODE(count.opt)+";"
-    .$data[2] = .$data[2]+"TAREOUT:"+$ENCODE(count.ot)+";"
-    .$data[2] = .$data[2]+"GRIPPER:"+$ENCODE(current.gripper)+";"
-    .$data[2] = .$data[2]+"PICKCOUNT:"+$ENCODE(count.put)+";"
-    .$data[2] = .$data[2]+"STATE:"+$ENCODE(state)+";"
-    .$data[2] = .$data[2]+"HOUR:"+$ENCODE(OPEINFO(3))+";"
-;
-    IF SWITCH(STP_ONCE) THEN
-      .$data[2] = .$data[2]+"STEPMODE:TRUE;"
-    ELSE
-      .$data[2] = .$data[2]+"STEPMODE:FALSE;"
-    END
-;
-;
-    .$data[2] = .$data[2]+"\n"
-;
-    CALL tcp.send.pc(.$data[],2)
-    TWAIT tcp.sender.dly
-  END
-;
+.PROGRAM a.teach.ot()@26/01/21 11:02 #0
+	; Use this for first teach
+	IF FALSE THEN
+		TOOL tool.pin
+		JMOVE ot.point[1, 1] + TRANS (0, 0, 50)
+		LMOVE ot.point[1, 1]
+		FOR .i = 0 TO 3
+			FOR .j = 0 TO 11
+				PRINT 0: .i, .j
+				POINT ot.point[.i + 1, .j + 1] = ot.point[1, 1] + TRANS (-100 * .j, -490 * .i)
+			END
+		END
+	END
+	TOOL tool.pin
+	; Correct point
+	.i = hmi.ot.i
+	.j = hmi.ot.j
+	JMOVE ot.point[.i, .j] + TRANS (0, 0, 50)
+	LMOVE ot.point[.i, .j]; *** TEACH POINT ***
+	LMOVE ot.point[.i, .j] + TRANS (0, 0, 50)
+	LMOVE ot.point[.i, .j]
+	LMOVE ot.point[.i, .j] + TRANS (0, 0, 50)
+	;
 .END
-.PROGRAM tcp.callback.pc(.$data[],.data.length)@26/01/22 14:00 #61354
-  .$temp = "Received " + $ENCODE (.data.length) + " strings:"
-  PRINT tcp.recv.ena: .$temp
-  FOR .i = 1 TO .data.length
-    PRINT tcp.recv.ena: .$data[.i]
-    CALL tcp.log.pc (.$data[.i])
-    ; Strings for parsing
-    ;
-    ; START COMMAND
-    ; String format:
-    ; START;DETAILNAME;DETAILCOUNT;[INTAREID1,INTAREID2,..];[OTAREID1,INTAREID2,..];
-    IF INSTR (.$data[.i] , "START") THEN
-      ; Decode command
-      .$temp = $DECODE (.$data[1], ";",0)
-      .$temp = $DECODE (.$data[1], ";",1)
-      ; Decode detail type
-      $pg.name = $DECODE (.$data[1], ";",0)
-      .$temp = $DECODE (.$data[1], ";",1)
-      ; Decode detail spec
-      detail.spec = VAL ($DECODE (.$data[1], ";",0))
-      .$temp = $DECODE (.$data[1], ";",1)
-      ; Decode detail count
-      detail.count = VAL ($DECODE (.$data[1], ";",0))
-      .$temp = $DECODE (.$data[1], ";",1)
-      ; Decode intare ids
-      $ot.data = $DECODE (.$data[1], ";",0)
-      ; Decode outtare ids
-      .$temp = $DECODE (.$data[1], ";",1)
-      $opt.data = $DECODE (.$data[1], ";",0)
-      ; Decode layout
-      .$temp = $DECODE (.$data[1], ";",1)
-      layout = $DECODE (.$data[1], ";",0)
-      ;
-      stz.x = -1
-      stz.y = -1
-      PULSE s.cmd.start, 5
-    END
-    ;
-    ; SENSOR COMMAND
-    ; String format:
-    ; SENSOR;SENSORNAME;STATE;
-    IF INSTR (.$data[.i] , "SENSOR") THEN
-      ; Decode command
-      .$temp = $DECODE (.$data[1], ";",0)
-      .$temp = $DECODE (.$data[1], ";",1)
-      ; Decode sensor name
-      .$sensor.name = $DECODE (.$data[1], ";",0)
-      .$temp = $DECODE (.$data[1], ";",1)
-      ; Decode sensor state
-      .$sensor.state = $DECODE (.$data[1], ";",0)
-      ;CALL tcp.log.pc(.$sensor.state)
-      ;
-      IF INSTR (.$sensor.state , "TRUE") THEN
-        IF .$sensor.name == "STOCKERINTARESENSOR" THEN
-          PULSE s.stock.opt.ok, 5
-        END
-        ;
-        IF .$sensor.name == "STOCKEROUTTARESENSOR" THEN
-          PULSE s.stock.ot.ok, 5
-        END
-        ;
-        IF .$sensor.name == "OUTPALLETSENSOR" THEN
-          PULSE s.ot.pos.ok, 5
-        END
-      END
-      IF INSTR (.$sensor.state , "FALSE") THEN
-        IF .$sensor.name == "STOCKERINTARESENSOR" THEN
-          PULSE s.stock.opt.ng, 5
-        END
-        ;
-        IF .$sensor.name == "STOCKEROUTTARESENSOR" THEN
-          PULSE s.stock.ot.ng, 5
-        END
-        ;
-        IF .$sensor.name == "OUTPALLETSENSOR" THEN
-          PULSE s.ot.pos.ng, 5
-        END
-      END
-    END
-    ;
-    ; PNEUMOOPEN COMMAND
-    ; String format:
-    ; PNEUMOOPEN;
-    IF INSTR (.$data[.i] , "PNEUMOOPEN") THEN
-      $action = " "
-      PULSE s.cmd.pneum.op, 5
-    END
-    ;
-    ; PNEUMOCLOSE COMMAND
-    ; String format:
-    ; PNEUMOCLOSE;
-    IF INSTR (.$data[.i] , "PNEUMOCLOSE") THEN
-      $action = " "
-      PULSE s.cmd.pneum.cl, 5
-    END
-    ;
-    ; PICK COMMAND
-    ; String format
-    ; PICK;x;y;a;
-    IF INSTR (.$data[.i] , "PICK") THEN
-      .$temp = $DECODE (.$data[1], ";",0)
-      .$temp = $DECODE (.$data[1], ";",1)
-      .$x = $DECODE (.$data[1], ",", 0)
-      .$temp = $DECODE (.$data[1], ",", 1)
-      .$y = $DECODE (.$data[1], ",", 0)
-      .$temp = $DECODE (.$data[1], ",", 1)
-      .$a = .$data[1]
-      stz.y = VAL (.$x) / 10
-      stz.x = VAL (.$y) / 10
-      stz.a = VAL (.$a)
-      PULSE s.cmd.pick, 5
-      ;$action = " "
-      ;s.cmd.put
-    END
-    ;
-    ; POSITIONEREMPTY COMMAND
-    ; String format
-    ; POSITIONEREMPTY;
-    IF INSTR (.$data[.i] , "POSITIONEREMPTY") THEN
-      PULSE s.cmd.put, 5
-    END
-    ;
-    ; PALLETEMPTY COMMAND
-    ; String format:
-    ; PALLETEMPTY;
-    IF INSTR (.$data[.i] , "PALLETEMPTY") THEN
-      SIGNAL s.cmd.chg.opt
-    END
-    ;
-    ; SPEED COMMAND
-    ; String format:
-    ; SPEED;VALUE;
-    ;
-    IF INSTR (.$data[.i] , "SPEED") THEN
-      .$temp = $DECODE (.$data[1], ";",0)
-      .$temp = $DECODE (.$data[1], ";",1)
-      .$spd = $DECODE (.$data[1], ";",0)
-      .speed = VAL (.$spd)
-      IF .speed <= 0 THEN
-        .speed = 1
-      END
-      IF .speed > 100 THEN
-        .speed = 100
-      END
-      MON_SPEED (.speed)
-    END
-    ;
-    ; PAUSE COMMAND
-    ; String format:
-    ; PAUSE;
-    ;
-    IF INSTR (.$data[.i] , "PAUSE") THEN
-      SIGNAL s.cmd.pause
-    END
-    ;
-    ; RESUME COMMAND
-    ; String format:
-    ; RESUME;
-    ;
-    IF INSTR (.$data[.i] , "RESUME") THEN
-      PULSE s.cmd.resume, 5
-    END
-    ;
-    ; STOP COMMAND
-    ; String format:
-    ; STOP;
-    ;
-    IF INSTR (.$data[.i] , "STOP") THEN
-      SIGNAL s.cmd.stop
-    END
-    ;
-    ; RESET COMMAND
-    ; String format:
-    ; RESET;
-    ;
-    IF INSTR (.$data[.i] , "RESET") THEN
-      state = 0
-    END
-    ;
-    ; CYCLEON COMMAND
-    ; String format:
-    ; CYCLEON;
-    ;
-    IF INSTR (.$data[.i] , "CYCLEON") AND NOT SWITCH (CS ) THEN
-      IF SIG (do.automatic) THEN
-        MC CONTINUE
-      END
-    END
-    ;
-    ; STEPMODE COMMAND
-    ; String format:
-    ; STEPMODE;VALUE
-    ;
-    IF INSTR (.$data[.i] , "STEPMODE") THEN
-      ; Decode command
-      .$temp = $DECODE (.$data[1], ";",0)
-      .$temp = $DECODE (.$data[1], ";",1)
-      ; Decode measurement result
-      .$state = $DECODE (.$data[1], ";",0)
-      IF INSTR (.$state , "TRUE") THEN
-        STP_ONCE ON
-      END
-      IF INSTR (.$state , "FALSE") THEN
-        STP_ONCE OFF
-      END
-    END
-    ;
-    ; NEXTSTEP COMMAND
-    ; String format:
-    ; NEXTSTEP;
-    ;
-    IF INSTR (.$data[.i] , "NEXTSTEP") THEN
-      STPNEXT
-    END
-    ;
-    ; ERESET COMMAND
-    ; String format:
-    ; ERESET;
-    ;
-    IF INSTR (.$data[.i] , "ERESET") THEN
-      MC ERESET
-    END
-    ;
-    .$data[.i] = ""
-  END
+.PROGRAM a.teach.pos()@26/01/26 21:43 #0
+	;
+	TOOL tool.pick[hmi.gripper]
+	;
+	POINT .temp = #pos.point[hmi.obj.id]
+	LMOVE .temp + TRANS (10, 0, 50)
+	LMOVE .temp + TRANS (10, 0, 20)
+	BREAK
+	LMOVE #pos.point[hmi.obj.id]; *** TEACH POINT ***
+	BREAK
+	TWAIT 0.5
+	POINT .temp = #pos.point[hmi.obj.id]
+	LMOVE .temp + TRANS (10, 0, 20)
+	LMOVE .temp + TRANS (0, 0, 50)
+	BREAK
+	TWAIT 0.5
+	;
 .END
-.PROGRAM tcp.client.pc()@26/01/15 08:39 #0
-;
-  tcp.socket = -1
-  .tcp.retry.count = 10
-  .tcp.connect.tmo = 5
-  .tcp.receive.tmo = 5
-;
-  WHILE TRUE DO
-; Checking for active sockets and closing them
-    PRINT tcp.ena: "Checking for active sockets and closing them"
-    TCP_STATUS .number,.ports[0],.sockets[0],.errors[0],.suberrors[0],.$ips[0]
-    IF .number>0 THEN
-      FOR .i = 0 TO .number-1
-        IF .sockets[.i]<>0 THEN
-          .$temp = "Closing socket with id: "+$ENCODE(.sockets[.i])
-          PRINT tcp.ena: .$temp
-          TCP_CLOSE .status,.sockets[.i]
-        END
-      END
-    END
-; Get IP from string
-    .$tcp.ip.copy = $tcp.ip
-    FOR .i = 1 TO 4
-      .$ip = $DECODE(.$tcp.ip.copy,".")
-      .ip[.i] = VAL(.$ip)
-      IF .i<4 THEN
-        .$ip = $DECODE(.$tcp.ip.copy,".",1)
-      END
-    END
-;
-; Connect to server
-    .$temp = "Connecting to server with ip: "+$tcp.ip
-    PRINT tcp.ena: .$temp
-    TCP_CONNECT tcp.socket,tcp.port,.ip[1],.tcp.connect.tmo
-;
-; Start data processing cycle
-    IF tcp.socket>=0 THEN
-      .$temp = "Connection established with socket id:"+$ENCODE(tcp.socket)
-      PRINT tcp.ena: .$temp
-      .connected = TRUE
-; Start receiving data cycle
-      .tcp.error.cnt = 0
-      WHILE .connected AND .tcp.error.cnt<=.tcp.retry.count DO
-        TCP_RECV .status,tcp.socket,.$tcp.request[1],.request.size,.tcp.receive.tmo,255
-        IF .status>=0 THEN
-          IF .request.size==0 THEN
-            .tcp.error.cnt = .tcp.error.cnt+1
-            .$temp = "Received data with 0 length. Error count:"+$ENCODE(.tcp.error.cnt)
-            PRINT tcp.ena: .$temp
-          ELSE
-            CALL tcp.callback.pc(.$tcp.request[],.request.size)
-          END
-        ELSE
-          IF .status==-34024 THEN
-            PRINT tcp.ena: "Timeout in receive, it\'s ok"
-          ELSE
-            .tcp.error.cnt = .tcp.error.cnt+1
-            .$temp = "Failed to receive data with error:"+$ENCODE(.status)+". Error count:"+$ENCODE(.tcp.error.cnt)
-            PRINT tcp.ena: .$temp
-          END
-        END
-        TWAIT 0.05
-      END
-    ELSE
-      .$temp = "Connection failed with error:"+$ENCODE(tcp.socket)
-      PRINT tcp.ena: .$temp
-      IF tcp.socket>0 THEN
-        TCP_CLOSE .status,tcp.socket
-      END
-    END
-    TWAIT 0.05
-  END
+.PROGRAM a.teach.stz()@26/01/15 08:39 #0
+	;
+	TOOL tool.pin
+	;
+	LMOVE #plb; *** TEACH POINT *** Left bottom
+	LMOVE #plt; *** TEACH POINT *** Left top
+	LMOVE #prt; *** TEACH POINT *** Right top
+	LMOVE #prb; *** TEACH POINT *** Right bottom
+	;
+	POINT .plb = #plb
+	POINT .plt = #plt
+	POINT .prt = #prt
+	POINT .prb = #prb
+	;
+	.dx1 = DISTANCE (.plt, .plb) ; DX1
+	.dx2 = DISTANCE (.prt, .prb) ; DX2
+	.dy1 = DISTANCE (.plt, .prt) ; DY1
+	.dy2 = DISTANCE (.plb, .prb) ; DY2
+	;
+	PRINT 0: "DX1 =", .dx1
+	PRINT 0: "DX2 =", .dx2
+	PRINT 0: "DY1 =", .dy1
+	PRINT 0: "DY2 =", .dy2
+	PRINT 0: "AVEX =", (.dx1 + .dx2) / 2
+	PRINT 0: "AVEY =", (.dy1 + .dy2) / 2
+	;
+	BREAK
+	POINT stz.frame = FRAME (.plb, .prb, .prt, .plt)
+	POINT stz.frame = stz.frame + RZ (-90)
+	; CIR1 = 100, 100 CIR2 = 148, 250
+	; CIR3 = 248, 300 CIR4 = 148; 450
+	BREAK
+	LMOVE stz.frame + TRANS (stz.x, stz.y, 10)
+	;
 .END
-.PROGRAM tcp.send.pc(.$data[],.data.length)@26/01/15 08:39 #285228
-;
-  .tcp.send.tmo = 5
-;
-  IF tcp.socket>0 THEN
-    TCP_SEND .status,tcp.socket,.$data[1],.data.length,.tcp.send.tmo
-    IF .status>=0 THEN
-      .$temp = "Sent "+$ENCODE(.data.length)+" strings"
-      PRINT tcp.send.ena: .$temp
-      FOR .i = 1 TO .data.length
-        PRINT tcp.send.ena: .$data[.i]
-      END
-    ELSE
-      .$temp = "Failed to send data with error:"+$ENCODE(.status)
-      PRINT tcp.send.ena: .$temp
-      tcp.socket = -1
-    END
-  ELSE
-    PRINT tcp.send.ena: "Failed to send data. Socket is not opened. Waiting for 5 seconds"
-    TWAIT 5
-  END
-;
+.PROGRAM a.test.gripper()@26/01/15 08:39 #0
+	;
+	CALL gripper.pick (hmi.gripper)
+	CALL gripper.put (hmi.gripper)
+	; detail.type
 .END
-.PROGRAM tcp.log.pc(.$msg)@26/01/15 08:39 #128421
-  IF NOT SIG(s.tcp.log) THEN
-    RETURN
-  END
-;
-; 1 line = 55 symbols max
-;
-  FOR .i = 0 TO 126
-    $log.entry[.i] = $log.entry[.i+1]
-  END
-  $log.entry[127] = $TIME+" "+.$msg
-;
-  IFPWPRINT 1,1,1,9,10=$log.entry[116],$log.entry[117],$log.entry[118],$log.entry[119]
-  IFPWPRINT 2,1,1,9,10=$log.entry[120],$log.entry[121],$log.entry[122],$log.entry[123]
-  IFPWPRINT 3,1,1,9,10=$log.entry[124],$log.entry[125],$log.entry[126],$log.entry[127]
-;
+.PROGRAM a.test.opt()@26/01/15 08:39 #0
+	;
+	.i = hmi.opt.i
+	.j = hmi.opt.j
+	CALL opt.take (.i, .j)
+	CALL opt.return (.i, .j)
+	;
+.END
+.PROGRAM a.test.ot()@26/01/15 08:39 #0
+	;
+	.i = hmi.ot.i
+	.j = hmi.ot.j
+	CALL ot.take (.i, .j)
+	CALL ot.return (.i, .j)
+	;
+.END
+.PROGRAM a.test.stz()@26/01/15 08:39 #0
+	.$temp = "Pick detail from stz (" + $ENCODE (/L, stz.x) + ", " + $ENCODE (/L, stz.y) + ", " + $ENCODE (/L, stz.a) + ")"
+	CALL log (.$temp)
+	;
+	SPEED 100 ALWAYS
+	ACCURACY 100 ALWAYS
+	TOOL tool.pick[hmi.gripper]
+	; Raw coordinates
+	.x = stz.x
+	.y = stz.y
+	.a = stz.a
+	;
+	; Gripper shift
+	.xsh = grip.xsh[hmi.gripper]
+	.ysh = grip.ysh[hmi.gripper]
+	.zsh = grip.zsh[hmi.gripper]
+	IF .a == 180 THEN
+		.xsh = grip.180xsh[hmi.gripper]
+		.ysh = grip.180ysh[hmi.gripper]
+	END
+	; CV correction
+	.xp = cv.x.plus[hmi.obj.id]
+	.xm = cv.x.minus[hmi.obj.id]
+	.yp = cv.y.plus[hmi.obj.id]
+	.ym = cv.y.minus[hmi.obj.id]
+	;
+	IF .x > center.x + 10 THEN
+		.x = .x - .xp * (.x - center.x)
+	END
+	IF .x < center.x - 10 THEN
+		.x = .x + .xm * (-.x + center.x)
+	END
+	IF .y > center.y + 10 THEN
+		.y = .y - .yp * (.y - center.y)
+	END
+	IF .y < center.y - 10 THEN
+		.y = .y + .ym * (-.y + center.y)
+	END
+	;
+	POINT .pick = stz.frame + TRANS (.x + .xsh, .y + .ysh, .zsh) + RZ (.a)
+	DECOMPOSE .c[1] = #pick.in
+	POINT .#pick.in = #PPOINT (.c[1], .c[2], .c[3], .c[4], .c[5], .c[6] - .a)
+	;
+	LMOVE #stz.wait
+	ACCURACY 20
+	LMOVE .#pick.in
+	IF NOT SIG (grip.unclamped) THEN
+		PULSE grip.unclamp
+		CALL log ("Wait for unclamp gripper")
+		$action = "WaitingGripUnclamped"
+		WAIT SIG (grip.unclamped) OR SIG (s.force.in[1])
+	END
+	ACCURACY 20
+	LAPPRO .pick, -30
+	SPEED 250 MM/S
+	ACCURACY 0.02
+	LMOVE .pick
+	BREAK
+	;
+	PULSE grip.clamp
+	TWAIT 0.5
+	SIGNAL s.grip.full
+	$action = "WaitPosFree"
+	;
+	ACCURACY 20
+	LAPPRO .pick, -30
+	;
+	LMOVE .#pick.in
+	LMOVE #stz.wait
+	LMOVE #pos.wait
+	;
 .END
 .PROGRAM autostart.pc()@26/01/15 08:39 #0
-;
-; System switches
-  CP ON
-  PREFETCH.SIGINS OFF
-  QTOOL OFF
-  REP_ONCE ON
-  HOLD.STEP ON
-  DISP.EXESTEP ON
-  PROG.DATE ON
-  ABS.SPEED ON
-  autostart.pc ON
-  errstart.pc ON  ;
-;
-  IFPWPRINT 8,1,1,5,10="Robot: RS013N S/N: C2392","Controller: F60 S/N: C10632"," ","Powered by Robowizard Co.Ltd."
-;
-  CALL set.io.pc
-  CALL set.vars.pc
-;
-  MC PRIME a.main
-  TWAIT 1
-;
-  CALL watchdog.pc
-;
-.END
-.PROGRAM errstart.pc()@26/01/15 08:39 #115
-;
-  IF ERROR==-34021 OR ERROR==-10100 THEN
-    tcp.socket = -1
-    MC ERESET
-    TWAIT 1
-  END
-  TWAIT 5
-  errstart.pc ON
-;
-.END
-.PROGRAM set.io.pc()@26/01/15 08:39 #40
-; Gripper IO
-;
-; Tare
-  release.tare = 1
-  capture.tare = 2
-; Gripper
-  release.grip = 5
-  capture.grip = 6
-; Clamp
-  grip.unclamped = 1001
-  grip.clamped = 1002
-  grip.unclamp = 3
-  grip.clamp = 4
-;
-; Ethernet I/P IO (17-32)
-;
-; Inputs
-;
-  rs7.work[1] = 1017
-  rs7.tare.chg = 1018
-  rs7.locked.zone = 1019
-  rs7.finish.ack = 1020
-  rs7.put.ack = 1021
-;
-  rs7.det.picked[0] = 1025
-  rs7.det.picked[1] = 1026
-  rs7.det.picked[2] = 1027
-  rs7.det.picked[3] = 1028
-  rs7.det.picked[4] = 1029
-  rs7.det.picked[5] = 1030
-  rs7.det.picked[6] = 1031
-  rs7.det.picked[7] = 1032
-;
-  rs7.etalon.stop = 1033
-; Outputs
-;
-  do.work[1] = 17
-  rs13.tare.ack = 18
-  rs13.finish = 20
-  rs13.detail.put = 21
-  rs13.lock.zone = 22
-;
-  rs13.det.put[0] = 25
-  rs13.det.put[1] = 26
-  rs13.det.put[2] = 27
-  rs13.det.put[3] = 28
-  rs13.det.put[4] = 29
-  rs13.det.put[5] = 30
-  rs13.det.put[6] = 31
-  rs13.det.put[7] = 32
-; Internal IO
-;
-; Dedicated inputs 2001 - 2064
-;
-; IFP page change 2001-2008
-  di.ifp.page[1] = 2001
-  di.ifp.page[2] = 2002
-  di.ifp.page[3] = 2003
-  di.ifp.page[4] = 2004
-  di.ifp.page[5] = 2005
-  di.ifp.page[6] = 2006
-  di.ifp.page[7] = 2007
-  di.ifp.page[8] = 2008
-;
-  di.hold = 2009
-;
-; Dedicated outputs 2101-2164
-;
-  do.home = 2010
-  do.bat.alm = 2011
-  do.automatic = 2012
-;
-;;
-;
-; Internal logic 2201 - 2960
-;
-; TCP/IP display flags
-  s.tcp.send.ena = 2201
-  s.tcp.recv.ena = 2202
-  s.tcp.ena = 2203
-  s.tcp.log = 2204
-;
-  s.zone.blocked = 2209
-;
-; Workspaces
-  do.work[2] = 2212
-  do.work[3] = 2213
-  do.work[4] = 2214
-  do.work[5] = 2215
-  do.work[6] = 2216
-  do.work[7] = 2217
-  do.work[8] = 2218
-;
-  s.force.in[1] = 2221
-  s.force.in[2] = 2222
-;
-  s.stock.ot.ok = 2223
-  s.stock.ot.ng = 2224
-  s.stock.opt.ok = 2225
-  s.stock.opt.ng = 2226
-  s.ot.pos.ok = 2227
-  s.ot.pos.ng = 2228
-;
-  s.ot.placed = 2229
-  s.opt.placed = 2230
-;
-  s.grip.full = 2231
-;
-  s.cmd.start = 2232
-  s.cmd.pick = 2233
-  s.cmd.put = 2234
-  s.cmd.pneum.op = 2235
-  s.cmd.pneum.cl = 2236
-  s.cmd.chg.opt = 2237
-  s.cmd.finish = 2238
-  s.cmd.pause = 2239
-  s.cmd.resume = 2240
-  s.cmd.stop = 2241
-;
-  s.pr.tst.opt = 2247
-  s.pr.tst.stz = 2248
-  s.pr.tst.ot = 2249
-  s.pr.home = 2250
-  s.pr.tch.st.ot = 2251
-  s.pr.tch.st.opt = 2252
-  s.pr.tch.stz = 2253
-  s.pr.tch.grip = 2254
-  s.pr.tch.pos = 2255
-  s.apply.grip = 2256
-  s.apply.cv = 2257
-;
-  s.hmi.pneum.op = 2258
-  s.hmi.pneum.cl = 2259
-  s.hmi.get.cv = 2260
-  s.hmi.res.state = 2261
-  s.hmi.res.act = 2262
-;
-  s.debug.mode = 2300
-.END
-.PROGRAM set.vars.pc()@26/01/15 08:39 #43
-;
-; Constants
-;
-; Initialize once
-;
-;
-  IF NOT EXISTREAL("state") THEN
-    state = 0
-  END
-;
-  IF NOT EXISTCHAR("$tcp.ip") THEN
-    $tcp.ip = "127.0.0.1"
-  END
-;
-  IF NOT EXISTREAL("tcp.port") THEN
-    tcp.port = 9013
-  END
-;
-  IF NOT EXISTREAL("tcp.ena") THEN
-    tcp.ena = -1
-  END
-;
-  IF NOT EXISTREAL("tcp.recv.ena") THEN
-    tcp.recv.ena = -1
-  END
-;
-  IF NOT EXISTREAL("tcp.send.ena") THEN
-    tcp.send.ena = -1
-  END
-;
-  IF NOT EXISTREAL("tcp.sender.dly") THEN
-    tcp.sender.dly = 0.25
-  END
-;
-  IF NOT EXISTREAL("tyterm") THEN
-    tyterm = 0
-  END
-;
-  IF NOT EXISTCHAR("$log.entry[127]") THEN
-    FOR .i = 0 TO 127
-      $log.entry[.i] = " "
-    END
-  END
-;
-;IF NOT EXISTJOINT ("#current.pos") THEN
-;POINT #current.pos = #homyak
-;END
-;
-  IF NOT EXISTREAL("current.gripper") THEN
-    current.gripper = 0
-  END
-;
-  IF NOT EXISTREAL("pg.gripper") THEN
-    pg13.gripper = 0
-  END
-;
-  IF NOT EXISTREAL("hmi.gripper") THEN
-    hmi.gripper = 1
-  END
-;
-  IF NOT EXISTREAL("hmi.ot.i") THEN
-    hmi.ot.i = 1
-  END
-;
-  IF NOT EXISTREAL("hmi.ot.j") THEN
-    hmi.ot.j = 1
-  END
-;
-  IF NOT EXISTREAL("hmi.opt.i") THEN
-    hmi.opt.i = 1
-  END
-;
-  IF NOT EXISTREAL("hmi.opt.j") THEN
-    hmi.opt.j = 1
-  END
-;
-  IF NOT EXISTREAL("hmi.obj.id") THEN
-    hmi.obj.id = 1
-  END
-;
-  IF NOT EXISTCHAR("$action") THEN
-    $action = "Default"
-  END
-;
-  IF NOT EXISTCHAR("$pg.name") THEN
-    $pg.name = "Default"
-  END
-;
-  IF NOT EXISTREAL("detail.count") THEN
-    detail.count = 0
-  END
-;
-  IF NOT EXISTREAL("keep.gripper") THEN
-    keep.gripper = -1
-  END
-;
-  IF NOT EXISTREAL("keep.object") THEN
-    keep.object = -1
-  END
-;
-  IF NOT EXISTREAL("grip.xsh[3]") THEN
-    FOR .i = 1 TO 3
-      grip.xsh[.i] = 0
-      grip.ysh[.i] = 0
-      grip.zsh[.i] = 0
-      grip.180xsh[.i] = 0
-      grip.180ysh[.i] = 0
-    END
-  END
-;
-  FOR .n = 1 TO 64
-    .$name = "cv.x.plus["+$ENCODE(/L,.n)+"]"
-    IF NOT EXISTREAL(.$name) THEN
-      cv.x.plus[.n] = 0
-      cv.x.minus[.n] = 0
-      cv.y.plus[.n] = 0
-      cv.y.minus[.n] = 0
-    END
-  END
-;
-.END
-.PROGRAM watchdog.pc()@26/01/15 08:39 #0
-  WHILE TRUE DO
-;
-    CALL check.tasks.pc
-    CALL check.disp.pc
-    CALL check.zone.pc
-;
-;IF SIG (rs7.put.ack) THEN
-;  SIGNAL -rs13.detail.put
-;END
-;
-    IF NOT SIG(s.debug.mode) THEN
-      IF SWITCH(REPEAT ) AND NOT SWITCH(TEACH_LOCK ) AND NOT SWITCH(EMERGENCY ) AND NOT SWITCH(CS ) AND NOT SWITCH(ERROR ) THEN
-        MC ZPOWER ON
-;MC PRIME a.main
-;WHILE NOT SWITCH(POWER)
-;  TWAIT 0.01
-;  MC CONTINUE
-;END
-      END
-    END
-;
-    IF NOT SWITCH(REPEAT ) THEN
-      CALL check.teach.pc
-    END
-    TWAIT 0.01
-  END
-;
-.END
-.PROGRAM check.tasks.pc()@26/01/15 08:39 #59484976
-;
-  IF TASK(1002)<>1 THEN
-    PCEXECUTE 2: tcp.client.pc
-    TWAIT 3
-  END
-  IF TASK(1003)<>1 THEN
-    PCEXECUTE 3: tcp.sender.pc
-    TWAIT 3
-  END
-;
+	;
+	; System switches
+	CP ON
+	PREFETCH.SIGINS OFF
+	QTOOL OFF
+	REP_ONCE ON
+	HOLD.STEP ON
+	DISP.EXESTEP ON
+	PROG.DATE ON
+	ABS.SPEED ON
+	autostart.pc ON
+	errstart.pc ON  ;
+	;
+	IFPWPRINT 8, 1, 1, 5, 10 = "Robot: RS013N S/N: C2392", "Controller: F60 S/N: C10632", " ", "Powered by Robowizard Co.Ltd."
+	;
+	CALL set.io.pc
+	CALL set.vars.pc
+	;
+	MC PRIME a.main
+	TWAIT 1
+	;
+	CALL watchdog.pc
+	;
 .END
 .PROGRAM check.disp.pc()@26/01/15 08:39 #59484974
-;
-  IF SIG(s.tcp.ena) AND tcp.ena==-1 THEN
-    tcp.ena = tyterm
-  END
-  IF NOT SIG(s.tcp.ena) AND tcp.ena<>-1 THEN
-    tcp.ena = -1
-  END
-;
-  IF SIG(s.tcp.send.ena) AND tcp.send.ena==-1 THEN
-    tcp.send.ena = tyterm
-  END
-  IF NOT SIG(s.tcp.send.ena) AND tcp.send.ena<>-1 THEN
-    tcp.send.ena = -1
-  END
-;
-  IF SIG(s.tcp.recv.ena) AND tcp.recv.ena==-1 THEN
-    tcp.recv.ena = tyterm
-  END
-  IF NOT SIG(s.tcp.recv.ena) AND tcp.recv.ena<>-1 THEN
-    tcp.recv.ena = -1
-  END
-;
+	;
+	IF SIG (s.tcp.ena) AND tcp.ena == -1 THEN
+		tcp.ena = tyterm
+	END
+	IF NOT SIG (s.tcp.ena) AND tcp.ena <> -1 THEN
+		tcp.ena = -1
+	END
+	;
+	IF SIG (s.tcp.send.ena) AND tcp.send.ena == -1 THEN
+		tcp.send.ena = tyterm
+	END
+	IF NOT SIG (s.tcp.send.ena) AND tcp.send.ena <> -1 THEN
+		tcp.send.ena = -1
+	END
+	;
+	IF SIG (s.tcp.recv.ena) AND tcp.recv.ena == -1 THEN
+		tcp.recv.ena = tyterm
+	END
+	IF NOT SIG (s.tcp.recv.ena) AND tcp.recv.ena <> -1 THEN
+		tcp.recv.ena = -1
+	END
+	;
 .END
-.PROGRAM check.zone.pc()@26/01/15 08:39 #59484997
-;
-;do.work[1] = 17
-;rs7.work[1] = 1017
-;di.hold = 2009
-;s.zone.blocked = 2209
-; do.work[1]     rs7.work[1]             s.zone.blocked
-;----| |-------------| |----------------------( )
-;            |                |
-;            | s.zone.blocked |
-;            --------|/|-------
-;
-; s.zone.blocked   rs7.work[1]  do.work[1]   di.hold
-;------|/|------------| |---------|  |--------(/)
-;
-  SOUT 2209 = 17 AND (NOT 1017 OR 2209)
-  SOUT 2009 = NOT (NOT 2209 AND 1017 AND 17)
-;
+.PROGRAM check.tasks.pc()@26/01/15 08:39 #59484976
+	;
+	IF TASK (1002) <> 1 THEN
+		PCEXECUTE 2: tcp.client.pc
+		TWAIT 3
+	END
+	IF TASK (1003) <> 1 THEN
+		PCEXECUTE 3: tcp.sender.pc
+		TWAIT 3
+	END
+	;
 .END
 .PROGRAM check.teach.pc()@26/01/15 08:39 #31585440
-;
-  IF SIG(s.hmi.res.state) THEN
-    state = 0
-  END
-;
-  IF SIG(s.hmi.res.act) THEN
-    $action = " "
-  END
-;
-  IF SIG(s.hmi.pneum.op) THEN
-    $action = "WaitPneumaticOpen"
-    TWAIT 1
-    $action = "None"
-  END
-;
-  IF SIG(s.hmi.pneum.cl) THEN
-    $action = "WaitPneumaticClose"
-    TWAIT 1
-    $action = "None"
-  END
-;
-  IF SIG(s.hmi.get.cv) THEN
-    $action = "WaitForPick"
-    TWAIT 1
-    $action = "None"
-  END
-;
-  IF SIG(s.pr.home) AND NOT SWITCH(REPEAT ) THEN
-    MC PRIME a.home
-  END
-;
-  IF SIG(s.pr.tch.grip) AND NOT SWITCH(REPEAT ) THEN
-    MC PRIME a.teach.gripper
-  END
-;
-  IF SIG(s.pr.tch.st.ot) AND NOT SWITCH(REPEAT ) THEN
-    MC PRIME a.teach.ot
-  END
-;
-  IF SIG(s.pr.tch.st.opt) AND NOT SWITCH(REPEAT ) THEN
-    MC PRIME a.teach.opt
-  END
-;
-  IF SIG(s.pr.tst.ot) AND NOT SWITCH(REPEAT ) THEN
-    MC PRIME a.test.ot
-  END
-;
-  IF SIG(s.pr.tst.opt) AND NOT SWITCH(REPEAT ) THEN
-    MC PRIME a.test.opt
-  END
-;
-  IF SIG(s.pr.tst.stz) AND NOT SWITCH(REPEAT ) THEN
-    MC PRIME a.test.stz
-  END
-;
-  IF SIG(s.pr.tch.stz) AND NOT SWITCH(REPEAT ) THEN
-    MC PRIME a.teach.stz
-  END
-;
-  IF SIG(s.pr.tch.pos) AND NOT SWITCH(REPEAT ) THEN
-    MC PRIME a.teach.pos
-  END
-;
-; HMI PANEL GRIPPER TEACH DATA
-  IF keep.gripper<>hmi.gripper AND hmi.gripper>0 AND hmi.gripper<=3 THEN
-    hmi.gx = grip.xsh[hmi.gripper]
-    hmi.gy = grip.ysh[hmi.gripper]
-    hmi.gz = grip.zsh[hmi.gripper]
-    hmi.g180x = grip.180xsh[hmi.gripper]
-    hmi.g180y = grip.180ysh[hmi.gripper]
-;
-    keep.gripper = hmi.gripper
-  END
-  IF SIG(s.apply.grip) THEN
-    grip.xsh[hmi.gripper] = hmi.gx
-    grip.ysh[hmi.gripper] = hmi.gy
-    grip.zsh[hmi.gripper] = hmi.gz
-    grip.180xsh[hmi.gripper] = hmi.g180x
-    grip.180ysh[hmi.gripper] = hmi.g180y
-  END
-;
-; HMI PANEL OBJECT TEACH DATA
-  IF keep.object<>hmi.obj.id AND hmi.obj.id>0 AND hmi.obj.id<=64 THEN
-    hmi.x.plus = cv.x.plus[hmi.obj.id]
-    hmi.y.plus = cv.y.plus[hmi.obj.id]
-    hmi.x.minus = cv.x.minus[hmi.obj.id]
-    hmi.y.minus = cv.y.minus[hmi.obj.id]
-;
-    keep.object = hmi.obj.id
-  END
-;
-  IF SIG(s.apply.cv) THEN
-    cv.x.plus[hmi.obj.id] = hmi.x.plus
-    cv.y.plus[hmi.obj.id] = hmi.y.plus
-    cv.x.minus[hmi.obj.id] = hmi.x.minus
-    cv.y.minus[hmi.obj.id] = hmi.y.minus
-  END
+	;
+	IF SIG (s.hmi.res.state) THEN
+		state = 0
+	END
+	;
+	IF SIG (s.hmi.res.act) THEN
+		$action = " "
+	END
+	;
+	IF SIG (s.hmi.pneum.op) THEN
+		$action = "WaitPneumaticOpen"
+		TWAIT 1
+		$action = "None"
+	END
+	;
+	IF SIG (s.hmi.pneum.cl) THEN
+		$action = "WaitPneumaticClose"
+		TWAIT 1
+		$action = "None"
+	END
+	;
+	IF SIG (s.hmi.get.cv) THEN
+		$action = "WaitForPick"
+		TWAIT 1
+		$action = "None"
+	END
+	;
+	IF SIG (s.pr.home) AND NOT SWITCH (REPEAT ) THEN
+		MC PRIME a.home
+	END
+	;
+	IF SIG (s.pr.tch.grip) AND NOT SWITCH (REPEAT ) THEN
+		MC PRIME a.teach.gripper
+	END
+	;
+	IF SIG (s.pr.tch.st.ot) AND NOT SWITCH (REPEAT ) THEN
+		MC PRIME a.teach.ot
+	END
+	;
+	IF SIG (s.pr.tch.st.opt) AND NOT SWITCH (REPEAT ) THEN
+		MC PRIME a.teach.opt
+	END
+	;
+	IF SIG (s.pr.tst.ot) AND NOT SWITCH (REPEAT ) THEN
+		MC PRIME a.test.ot
+	END
+	;
+	IF SIG (s.pr.tst.opt) AND NOT SWITCH (REPEAT ) THEN
+		MC PRIME a.test.opt
+	END
+	;
+	IF SIG (s.pr.tst.stz) AND NOT SWITCH (REPEAT ) THEN
+		MC PRIME a.test.stz
+	END
+	;
+	IF SIG (s.pr.tch.stz) AND NOT SWITCH (REPEAT ) THEN
+		MC PRIME a.teach.stz
+	END
+	;
+	IF SIG (s.pr.tch.pos) AND NOT SWITCH (REPEAT ) THEN
+		MC PRIME a.teach.pos
+	END
+	;
+	; HMI PANEL GRIPPER TEACH DATA
+	IF keep.gripper <> hmi.gripper AND hmi.gripper > 0 AND hmi.gripper <= 3 THEN
+		hmi.gx = grip.xsh[hmi.gripper]
+		hmi.gy = grip.ysh[hmi.gripper]
+		hmi.gz = grip.zsh[hmi.gripper]
+		hmi.g180x = grip.180xsh[hmi.gripper]
+		hmi.g180y = grip.180ysh[hmi.gripper]
+		;
+		keep.gripper = hmi.gripper
+	END
+	IF SIG (s.apply.grip) THEN
+		grip.xsh[hmi.gripper] = hmi.gx
+		grip.ysh[hmi.gripper] = hmi.gy
+		grip.zsh[hmi.gripper] = hmi.gz
+		grip.180xsh[hmi.gripper] = hmi.g180x
+		grip.180ysh[hmi.gripper] = hmi.g180y
+	END
+	;
+	; HMI PANEL OBJECT TEACH DATA
+	IF keep.object <> hmi.obj.id AND hmi.obj.id > 0 AND hmi.obj.id <= 64 THEN
+		hmi.x.plus = cv.x.plus[hmi.obj.id]
+		hmi.y.plus = cv.y.plus[hmi.obj.id]
+		hmi.x.minus = cv.x.minus[hmi.obj.id]
+		hmi.y.minus = cv.y.minus[hmi.obj.id]
+		;
+		keep.object = hmi.obj.id
+	END
+	;
+	IF SIG (s.apply.cv) THEN
+		cv.x.plus[hmi.obj.id] = hmi.x.plus
+		cv.y.plus[hmi.obj.id] = hmi.y.plus
+		cv.x.minus[hmi.obj.id] = hmi.x.minus
+		cv.y.minus[hmi.obj.id] = hmi.y.minus
+	END
+.END
+.PROGRAM check.zone.pc()@26/01/15 08:39 #59484997
+	;
+	;do.work[1] = 17
+	;rs7.work[1] = 1017
+	;di.hold = 2009
+	;s.zone.blocked = 2209
+	; do.work[1]     rs7.work[1]             s.zone.blocked
+	;----| |-------------| |----------------------( )
+	;            |                |
+	;            | s.zone.blocked |
+	;            --------|/|-------
+	;
+	; s.zone.blocked   rs7.work[1]  do.work[1]   di.hold
+	;------|/|------------| |---------|  |--------(/)
+	;
+	SOUT 2209 = 17 AND (NOT 1017 OR 2209)
+	SOUT 2009 = NOT (NOT 2209 AND 1017 AND 17)
+	;
+.END
+.PROGRAM chk.lock()@26/01/15 08:39 #0
+	SWAIT -rs7.locked.zone, -rs7.work[1]
+.END
+.PROGRAM errstart.pc()@26/01/15 08:39 #115
+	;
+	IF ERROR == -34021 OR ERROR == -10100 THEN
+		tcp.socket = -1
+		MC ERESET
+		TWAIT 1
+	END
+	TWAIT 5
+	errstart.pc ON
+	;
+.END
+.PROGRAM get.state.pc(.$state)@26/01/15 15:42 #368234
+	.$state = "SPEED:" + $ENCODE (/L, MSPEED) + ";"
+	.$state = .$state + "POWER:"
+	IF SWITCH (POWER ) THEN
+		.$state = .$state + "TRUE;"
+	ELSE
+		.$state = .$state + "FALSE;"
+	END
+	; MAX: 12
+	;
+	.$state = .$state + "CS:"
+	IF SWITCH (CS ) THEN
+		.$state = .$state + "TRUE;"
+	ELSE
+		.$state = .$state + "FALSE;"
+	END
+	; MAX 9
+	;
+	.$state = .$state + "TEACH:"
+	IF SWITCH (REPEAT ) THEN
+		.$state = .$state + "FALSE;"
+	ELSE
+		.$state = .$state + "TRUE;"
+	END
+	; MAX 12
+	;
+	.$state = .$state + "TEACHL:"
+	IF SWITCH (TEACH_LOCK ) THEN
+		.$state = .$state + "TRUE;"
+	ELSE
+		.$state = .$state + "FALSE;"
+	END
+	; MAX 13
+	;
+	.$state = .$state + "TPEMG:"
+	IF SWITCH (TP_EMG ) THEN
+		.$state = .$state + "TRUE;"
+	ELSE
+		.$state = .$state + "FALSE;"
+	END
+	; MAX 12
+	;
+	.$state = .$state + "OPEMG:"
+	IF SWITCH (OP_EMG ) THEN
+		.$state = .$state + "TRUE;"
+	ELSE
+		.$state = .$state + "FALSE;"
+	END
+	; MAX 12
+	;
+	.$state = .$state + "EXEMG:"
+	IF SWITCH (EX_EMG ) THEN
+		.$state = .$state + "TRUE;"
+	ELSE
+		.$state = .$state + "FALSE;"
+	END
+	; MAX 12
+	;
+	.$state = .$state + "ERROR:"
+	IF SWITCH (ERROR ) THEN
+		.$state = .$state + "TRUE;"
+	ELSE
+		.$state = .$state + "FALSE;"
+	END
+	; MAX 12
+	;
+	.$state = .$state + "ECODE:"
+	.$state = .$state + $ENCODE (ERROR) + ";"
+	; MAX 12
+	;
+	.$state = .$state + "HOME:"
+	IF SIG (do.home) THEN
+		.$state = .$state + "TRUE;"
+	ELSE
+		.$state = .$state + "FALSE;"
+	END
+	;; MAX 12
+	;;
+	.$state = .$state + "BATALM:"
+	IF SIG (do.bat.alm) THEN
+		.$state = .$state + "TRUE;"
+	ELSE
+		.$state = .$state + "FALSE;"
+	END
+	; MAX 12
+	.$state = .$state + "\n"
+.END
+.PROGRAM gripper.pick(.gripper.no)@26/01/26 14:41 #70
+	;
+	; Start from step 3 to manual check
+	IF FALSE THEN
+		.gripper.no = hmi.gripper
+	END
+	; Safety check
+	IF current.gripper <> 0 THEN
+		CALL log ("Some gripper is already in robot\'s hand")
+		RETURN
+	END
+	PULSE release.grip
+	; Log info
+	.$temp = "Pick gripper" + $ENCODE (.gripper.no)
+	CALL log (.$temp)
+	; Set default motion parameters
+	SPEED 10 ALWAYS
+	ACCURACY 100 ALWAYS
+	TOOL tool.pick[.gripper.no]
+	; Calculate points
+	POINT .temp = #tool.point[.gripper.no]
+	; Motion
+	LMOVE .temp + TRANS (0, 0, 200)
+	;
+	ACCURACY 5
+	LMOVE .temp + TRANS (0, 0, 50)
+	BREAK
+	;
+	SPEED 50 MM/S ALWAYS
+	ACCURACY 0.02
+	LMOVE #tool.point[.gripper.no]
+	BREAK
+	; Capture tool
+	PULSE capture.grip
+	TWAIT 0.5
+	current.gripper = .gripper.no
+	;
+	SPEED 10 ALWAYS
+	ACCURACY 1
+	LMOVE .temp + TRANS (0, 0, 200)
+	;
+	; Log info
+	.$temp = "Gripper" + $ENCODE (.gripper.no) + " picked"
+	CALL log (.$temp)
+	;
+.END
+.PROGRAM gripper.put(.gripper.no)@26/01/26 14:41 #70
+	;
+	; Start from step 3 to manual check
+	IF FALSE THEN
+		.gripper.no = hmi.gripper
+	END
+	; Safety check
+	IF current.gripper == 0 THEN
+		CALL log ("There is no gripper")
+		RETURN
+	END
+	; Log info
+	.$temp = "Put gripper" + $ENCODE (.gripper.no)
+	CALL log (.$temp)
+	; Set default motion parameters
+	SPEED 10 ALWAYS
+	ACCURACY 100 ALWAYS
+	TOOL tool.pick[.gripper.no]
+	; Calculate points
+	POINT .temp = #tool.point[.gripper.no]
+	; Motion
+	LMOVE .temp + TRANS (0, 0, 200)
+	;
+	ACCURACY 5
+	LMOVE .temp + TRANS (0, 0, 50)
+	BREAK
+	;
+	SPEED 50 MM/S ALWAYS
+	ACCURACY 0.02
+	LMOVE #tool.point[.gripper.no]
+	BREAK
+	; Capture tool
+	PULSE release.grip
+	TWAIT 0.5
+	current.gripper = 0
+	;
+	SPEED 10 ALWAYS
+	ACCURACY 1
+	LMOVE .temp + TRANS (0, 0, 200)
+	;
+	; Log info
+	.$temp = "Gripper" + $ENCODE (.gripper.no) + " put"
+	CALL log (.$temp)
+	.gripper.no = 0
+	BREAK
+	;
+.END
+.PROGRAM id1()@26/01/27 10:41 #133; 312.229.002
+	; Object ID
+	object.id = 1
+	etalon.id = 1
+	; Working gripper
+	pg13.gripper = 2
+	pg7.gripper = 1
+	; Max objects in output tare
+	max.tare.count = 147;10 ;126
+	spc.tare.count = 50
+	; Object length
+	object.length = 27.5
+	;
+	direction = 1; -1 for reverse
+	;
+.END
+.PROGRAM id2()@26/01/27 10:41 #8; 0401.17.02.023-02
+	; Object ID
+	object.id = 2
+	etalon.id = 2
+	; Working gripper
+	pg13.gripper = 1
+	pg7.gripper = 1
+	; Max objects in output tare
+	max.tare.count = 105 ;84
+	spc.tare.count = 50
+	; Object length
+	object.length = 40
+	;
+	direction = 1; -1 for reverse
+	;
+.END
+.PROGRAM id3()@26/01/27 10:41 #10; 312.229.001
+	; Object ID
+	object.id = 3
+	etalon.id = 3
+	; Working gripper
+	pg13.gripper = 3
+	pg7.gripper = 1
+	; Max objects in output tare
+	max.tare.count = 77;10 ;77
+	spc.tare.count = 77
+	; Object length
+	object.length = 40
+	;
+	direction = 1; -1 for reverse
+	;
+.END
+.PROGRAM id4()@26/01/27 10:41 #20; 440.00.026
+	; Object ID
+	object.id = 4
+	etalon.id = 4
+	; Working gripper
+	pg13.gripper = 1
+	pg7.gripper = 1
+	; Max objects in output tare
+	max.tare.count = 168 ;147
+	spc.tare.count = 50
+	; Object length
+	object.length = 23.5
+	;
+	direction = 1; -1 for reverse
+	;
+.END
+.PROGRAM id5()@26/01/27 10:41 #11; 440.00.111
+	; Object ID
+	object.id = 5
+	etalon.id = 5
+	; Working gripper
+	pg13.gripper = 1
+	pg7.gripper = 1
+	; Max objects in output tare
+	max.tare.count = 231 ;231
+	spc.tare.count = 50
+	; Object length
+	object.length = 15
+	;
+	direction = 1; -1 for reverse
+	;
+.END
+.PROGRAM id6()@26/01/27 10:41 #25; 0401.28.02.063
+	; Object ID
+	object.id = 6
+	etalon.id = 6
+	; Working gripper
+	pg13.gripper = 1
+	pg7.gripper = 1
+	; Max objects in output tare
+	max.tare.count = 126 ;126
+	spc.tare.count = 50
+	; Object length
+	object.length = 28.5
+	;
+	direction = 1; -1 for reverse
+	;
+.END
+.PROGRAM load.opt.data()@26/01/15 08:39 #227
+	;
+	CALL log ("Load OPT IDs from string: " + $opt.data)
+	max.count.opt = 0
+	WHILE TRUE DO
+		max.count.opt = max.count.opt + 1
+		IF INSTR ($opt.data , ",") THEN
+			.id = VAL ($DECODE ($opt.data, ",", 0))
+			CALL opt.table (.id)
+			.temp = VAL ($DECODE ($opt.data, ",", 1))
+		ELSE
+			.id = VAL ($opt.data)
+			CALL opt.table (.id)
+			RETURN
+		END
+	END
+	;
+.END
+.PROGRAM load.ot.data()@26/01/15 08:39 #227
+	;
+	max.count.ot = 0
+	WHILE TRUE DO
+		max.count.ot = max.count.ot + 1
+		IF INSTR ($ot.data , ",") THEN
+			.id = VAL ($DECODE ($ot.data, ",", 0))
+			CALL ot.table (.id)
+			.temp = VAL ($DECODE ($ot.data, ",", 1))
+		ELSE
+			.id = VAL ($ot.data)
+			CALL ot.table (.id)
+			RETURN
+		END
+	END
+	;
+.END
+.PROGRAM log(.$msg)@26/01/15 08:39 #28691
+	;
+	; 1 line = 55 symbols max
+	;
+	FOR .i = 0 TO 126
+		$log.entry[.i] = $log.entry[.i + 1]
+	END
+	$log.entry[127] = $TIME + " " + .$msg
+	;
+	IFPWPRINT 1, 1, 1, 9, 10 = $log.entry[116], $log.entry[117], $log.entry[118], $log.entry[119]
+	IFPWPRINT 2, 1, 1, 9, 10 = $log.entry[120], $log.entry[121], $log.entry[122], $log.entry[123]
+	IFPWPRINT 3, 1, 1, 9, 10 = $log.entry[124], $log.entry[125], $log.entry[126], $log.entry[127]
+	;
+.END
+.PROGRAM opt.return(.i,.j)@26/01/15 08:39 #187
+	IF FALSE THEN
+		.i = hmi.opt.i
+		.j = hmi.opt.j
+	END
+	.$temp = "Return OPT with (i: " + $ENCODE (/L, .i) + ", j: " + $ENCODE (/L, .j) + ")"
+	CALL log (.$temp)
+	;
+	ACCURACY 100 ALWAYS
+	SPEED 10 ALWAYS
+	ACCEL 5 ALWAYS
+	DECEL 5 ALWAYS
+	;
+	PULSE release.tare
+	;
+	TOOL tool.pin
+	;
+	POINT .post.tare.in = #opt.take.safe
+	DECOMPOSE .ct1[1] = .post.tare.in
+	DECOMPOSE .ct2[1] = opt.point[.i, .j]
+	POINT .mid.point = TRANS (.ct2[1], .ct1[2], .ct2[3], .ct1[4], .ct1[5], .ct1[6])
+	POINT .put.stz = #opt.put
+	;
+	ACCURACY 20
+	LMOVE .put.stz + TRANS (, , 50)
+	;
+	CALL log ("Wait pneumatics open")
+	WHILE NOT SIG (s.cmd.pneum.op) DO
+		$action = "WaitPneumaticOpen"
+		TWAIT 0.5
+	END
+	SIGNAL -s.cmd.pneum.op
+	;
+	ACCURACY 0.02
+	SPEED 100 MM/S
+	LMOVE #opt.put
+	BREAK
+	PULSE capture.tare
+	TWAIT 0.5
+	;
+	ACCURACY 0.02
+	SPEED 100 MM/S
+	LMOVE .put.stz + TRANS (50)
+	;
+	;SPEED 80 ALWAYS
+	;ACCURACY 5
+	LMOVE #opt.put.safe
+	LMOVE #ot.put.safe
+	LMOVE opt.point[.i, .j] + TRANS (20, 0, 500)
+	;
+	ACCURACY 0.02
+	SPEED 100 MM/S
+	LMOVE opt.point[.i, .j] + TRANS (20)
+	BREAK
+	;
+	ACCURACY 0.02
+	SPEED 100 MM/S
+	LMOVE opt.point[.i, .j]
+	BREAK
+	PULSE release.tare
+	TWAIT 0.5
+	SIGNAL -s.opt.placed
+	;
+	ACCURACY 30
+	LMOVE opt.point[.i, .j] + TRANS (0, 0, 50)
+	LMOVE opt.point[.i, .j] + TRANS (0, 0, 200)
+	;
+	ACCEL 100 ALWAYS
+	DECEL 100 ALWAYS
+.END
+.PROGRAM opt.table(.id)@26/01/15 08:39 #227
+	;
+	.$temp = "Processing OPT with ID: " + $ENCODE (/L, .id)
+	CALL log (.$temp)
+	CASE .id OF
+		VALUE 1:
+			opt.cell[max.count.opt, 1] = 3;
+			opt.cell[max.count.opt, 2] = 1;
+			max.count.opt = max.count.opt + 1;
+			opt.cell[max.count.opt, 1] = 3;
+			opt.cell[max.count.opt, 2] = 2;
+			;
+		VALUE 2:
+			opt.cell[max.count.opt, 1] = 2;
+			opt.cell[max.count.opt, 2] = 1;
+			max.count.opt = max.count.opt + 1;
+			opt.cell[max.count.opt, 1] = 2;
+			opt.cell[max.count.opt, 2] = 2;
+			;
+			;
+		VALUE 3:
+			opt.cell[max.count.opt, 1] = 1;
+			opt.cell[max.count.opt, 2] = 1;
+			max.count.opt = max.count.opt + 1;
+			opt.cell[max.count.opt, 1] = 1;
+			opt.cell[max.count.opt, 2] = 2;
+			;
+			;
+		VALUE 4:
+			opt.cell[max.count.opt, 1] = 3;
+			opt.cell[max.count.opt, 2] = 3;
+			max.count.opt = max.count.opt + 1;
+			opt.cell[max.count.opt, 1] = 3;
+			opt.cell[max.count.opt, 2] = 4;
+			;
+			;
+		VALUE 5:
+			opt.cell[max.count.opt, 1] = 2;
+			opt.cell[max.count.opt, 2] = 3;
+			max.count.opt = max.count.opt + 1;
+			opt.cell[max.count.opt, 1] = 2;
+			opt.cell[max.count.opt, 2] = 4;
+			;
+			;
+		VALUE 6:
+			opt.cell[max.count.opt, 1] = 1;
+			opt.cell[max.count.opt, 2] = 3;
+			max.count.opt = max.count.opt + 1;
+			opt.cell[max.count.opt, 1] = 1;
+			opt.cell[max.count.opt, 2] = 4;
+			;
+			;
+		VALUE 7:
+			opt.cell[max.count.opt, 1] = 3;
+			opt.cell[max.count.opt, 2] = 5;
+			max.count.opt = max.count.opt + 1;
+			opt.cell[max.count.opt, 1] = 3;
+			opt.cell[max.count.opt, 2] = 6;
+			;
+			;
+		VALUE 8:
+			opt.cell[max.count.opt, 1] = 2;
+			opt.cell[max.count.opt, 2] = 5;
+			max.count.opt = max.count.opt + 1;
+			opt.cell[max.count.opt, 1] = 2;
+			opt.cell[max.count.opt, 2] = 6;
+			;
+			;
+		VALUE 9:
+			opt.cell[max.count.opt, 1] = 1;
+			opt.cell[max.count.opt, 2] = 5;
+			max.count.opt = max.count.opt + 1;
+			opt.cell[max.count.opt, 1] = 1;
+			opt.cell[max.count.opt, 2] = 6;
+			;
+			;
+		VALUE 10:
+			opt.cell[max.count.opt, 1] = 3;
+			opt.cell[max.count.opt, 2] = 7;
+			max.count.opt = max.count.opt + 1;
+			opt.cell[max.count.opt, 1] = 3;
+			opt.cell[max.count.opt, 2] = 8;
+			;
+			;
+		VALUE 11:
+			opt.cell[max.count.opt, 1] = 2;
+			opt.cell[max.count.opt, 2] = 7;
+			max.count.opt = max.count.opt + 1;
+			opt.cell[max.count.opt, 1] = 2;
+			opt.cell[max.count.opt, 2] = 8;
+			;
+			;
+		VALUE 12:
+			opt.cell[max.count.opt, 1] = 1;
+			opt.cell[max.count.opt, 2] = 7;
+			max.count.opt = max.count.opt + 1;
+			opt.cell[max.count.opt, 1] = 1;
+			opt.cell[max.count.opt, 2] = 8;
+			;
+			;
+		VALUE 13:
+			opt.cell[max.count.opt, 1] = 3;
+			opt.cell[max.count.opt, 2] = 9;
+			max.count.opt = max.count.opt + 1;
+			opt.cell[max.count.opt, 1] = 3;
+			opt.cell[max.count.opt, 2] = 10;
+			;
+			;
+		VALUE 14:
+			opt.cell[max.count.opt, 1] = 2;
+			opt.cell[max.count.opt, 2] = 9;
+			max.count.opt = max.count.opt + 1;
+			opt.cell[max.count.opt, 1] = 2;
+			opt.cell[max.count.opt, 2] = 10;
+			;
+			;
+		VALUE 15:
+			opt.cell[max.count.opt, 1] = 1;
+			opt.cell[max.count.opt, 2] = 9;
+			max.count.opt = max.count.opt + 1;
+			opt.cell[max.count.opt, 1] = 1;
+			opt.cell[max.count.opt, 2] = 10;
+			;
+	END
+	.$i1 = $ENCODE (/L, opt.cell[max.count.opt - 1, 1])
+	.$i2 = $ENCODE (/L, opt.cell[max.count.opt - 1, 2])
+	.$i3 = $ENCODE (/L, opt.cell[max.count.opt, 1])
+	.$i4 = $ENCODE (/L, opt.cell[max.count.opt, 2])
+	.$temp = "OPT indicies: (i:" + .$i1 + ", j:" + .$i2 + "), "
+	.$temp = .$temp + "(i:" + .$i3 + ", j:" + .$i4 + ")"
+	CALL log (.$temp)
+	;
+.END
+.PROGRAM opt.take(.i,.j)@26/01/26 14:54 #233
+	IF FALSE THEN
+		.i = hmi.st.in.i
+		.j = hmi.st.in.j
+	END
+	.$temp = "Take OT from (i: " + $ENCODE (/L, .i) + ", j: " + $ENCODE (/L, .j) + ")"
+	CALL log (.$temp)
+	; Set default motion parameters
+	TOOL tool.pin
+	SPEED 10 ALWAYS
+	ACCURACY 100 ALWAYS
+	ACCEL 5 ALWAYS
+	DECEL 5 ALWAYS
+	; Calculate points
+	POINT .opt.take.safe = #opt.take.safe
+	DECOMPOSE .ct1[1] = .opt.take.safe
+	DECOMPOSE .ct2[1] = opt.point[.i, .j]
+	POINT .mid.point = TRANS (.ct2[1], .ct1[2], .ct2[3], .ct1[4], .ct1[5], .ct1[6])
+	POINT .opt.put = #opt.put
+	; Release tare
+	PULSE release.tare
+	; Motion
+	;
+	; Move before OPT
+	LMOVE opt.point[.i, .j] + TRANS (0, 0, 200)
+	ACCURACY 5
+	LMOVE opt.point[.i, .j] + TRANS (0, 0, 50)
+	; Move to OPT
+	ACCURACY 0.02
+	SPEED 100 MM/S
+	LMOVE opt.point[.i, .j]
+	BREAK
+	PULSE capture.tare
+	count.opt = count.opt + 1
+	TWAIT 0.5
+	; Move up
+	ACCURACY 0.02
+	SPEED 100 MM/S
+	ACCEL 50
+	LMOVE opt.point[.i, .j] + TRANS (20)
+	; Move to sensor position
+	SPEED 100 MM/S
+	ACCURACY 0
+	LMOVE opt.point[.i, .j] + TRANS (20, 0, 100)
+	BREAK
+	; Wait sensor
+	CALL log ("Wait OPT sensor state")
+	WHILE NOT SIG (s.stock.opt.ok) AND NOT SIG (s.stock.opt.ng) DO
+		$action = "WaitInStockerSensor"
+		TWAIT 0.5
+	END
+	IF SIG (s.stock.opt.ok) THEN
+		CALL log ("OPT exists, continue")
+		LMOVE opt.point[.i, .j] + TRANS (20, 0, 500)
+		; Move to aux point
+		LMOVE .mid.point
+		LMOVE #opt.take.safe
+		LMOVE #opt.put.safe
+		; Move before put point
+		ACCURACY 20
+		LMOVE .opt.put + TRANS (50)
+		; Move to put point
+		ACCURACY 0.02
+		SPEED 30 MM/S
+		LMOVE #opt.put
+		BREAK
+		PULSE release.tare
+		TWAIT 0.5
+		SIGNAL s.opt.placed
+		; Move out of put point
+		ACCURACY 30
+		LMOVE .opt.put + TRANS (, , 50)
+		BREAK
+		; Wait pneumatics
+		CALL log ("Wait pneumatics close")
+		WHILE NOT SIG (s.cmd.pneum.cl) DO
+			$action = "WaitPneumaticClose"
+			TWAIT 0.5
+		END
+		CALL log (.$temp)
+		; Move out of put point
+		LMOVE #opt.put.safe
+		LMOVE #stz.wait
+		;POINT #current.pos = #stz.wait
+	ELSE
+		CALL log ("OPT do not exists, move to next")
+		ACCURACY 0.02
+		SPEED 100 MM/S
+		LMOVE opt.point[.i, .j] + TRANS (20)
+		ACCURACY 0.02
+		SPEED 100 MM/S
+		LMOVE opt.point[.i, .j]
+		BREAK
+		PULSE release.tare
+		TWAIT 0.5
+		ACCURACY 5
+		LMOVE opt.point[.i, .j] + TRANS (0, 0, 50)
+		LMOVE opt.point[.i, .j] + TRANS (0, 0, 200)
+		;  POINT #current.pos = #HERE
+	END
+	ACCEL 100 ALWAYS
+	DECEL 100 ALWAYS
+.END
+.PROGRAM ot.return(.i,.j)@26/01/15 08:39 #185
+	IF FALSE THEN
+		.i = hmi.ot.i
+		.j = hmi.ot.j
+	END
+	.$temp = "Return OT with (i: " + $ENCODE (/L, .i) + ", j: " + $ENCODE (/L, .j) + ")"
+	CALL log (.$temp)
+	;
+	ACCURACY 100 ALWAYS
+	ACCEL 5 ALWAYS
+	DECEL 5 ALWAYS
+	SPEED 10 ALWAYS
+	;
+	PULSE release.tare
+	;
+	TOOL tool.pin
+	;
+	POINT .post.tare.out = #ot.take.safe
+	DECOMPOSE .ct1[1] = .post.tare.out
+	DECOMPOSE .ct2[1] = ot.point[.i, .j]
+	POINT .mid.point = TRANS (.ct2[1], .ct1[2], .ct2[3], .ct1[4], .ct1[5], .ct1[6])
+	POINT .put.outpal = #ot.put
+	;
+	LMOVE #pos.wait
+	ACCURACY 20
+	LMOVE .put.outpal + TRANS (, , 50)
+	;
+	ACCURACY 0.02
+	SPEED 100 MM/S
+	LMOVE #ot.put
+	BREAK
+	;
+	PULSE capture.tare
+	TWAIT 0.5
+	;
+	ACCURACY 0.02
+	SPEED 100 MM/S
+	LMOVE .put.outpal + TRANS (150)
+	;
+	LMOVE #ot.take.safe
+	LMOVE ot.point[.i, .j] + TRANS (20, 0, 500)
+	;
+	ACCURACY 0.02
+	SPEED 100 MM/S
+	LMOVE ot.point[.i, .j] + TRANS (20)
+	BREAK
+	;
+	ACCURACY 0.02
+	SPEED 100 MM/S
+	LMOVE ot.point[.i, .j]
+	BREAK
+	PULSE release.tare
+	TWAIT 0.5
+	SIGNAL -s.ot.placed
+	;
+	ACCURACY 10
+	LMOVE ot.point[.i, .j] + TRANS (0, 0, 50)
+	;
+	ACCEL 100 ALWAYS
+	DECEL 100 ALWAYS
+.END
+.PROGRAM ot.table(.id)@26/01/15 08:39 #227
+	;
+	.$temp = "Processing OT with ID: " + $ENCODE (/L, .id)
+	CALL log (.$temp)
+	CASE .id OF
+		VALUE 1:
+			ot.cell[max.count.ot, 1] = 4;
+			ot.cell[max.count.ot, 2] = 1;
+			max.count.ot = max.count.ot + 1;
+			ot.cell[max.count.ot, 1] = 4;
+			ot.cell[max.count.ot, 2] = 2;
+			max.count.ot = max.count.ot + 1;
+			ot.cell[max.count.ot, 1] = 4;
+			ot.cell[max.count.ot, 2] = 3;
+			;
+		VALUE 2:
+			ot.cell[max.count.ot, 1] = 3;
+			ot.cell[max.count.ot, 2] = 1;
+			max.count.ot = max.count.ot + 1;
+			ot.cell[max.count.ot, 1] = 3;
+			ot.cell[max.count.ot, 2] = 2;
+			max.count.ot = max.count.ot + 1;
+			ot.cell[max.count.ot, 1] = 3;
+			ot.cell[max.count.ot, 2] = 3;
+			;
+		VALUE 3:
+			ot.cell[max.count.ot, 1] = 2;
+			ot.cell[max.count.ot, 2] = 1;
+			max.count.ot = max.count.ot + 1;
+			ot.cell[max.count.ot, 1] = 2;
+			ot.cell[max.count.ot, 2] = 2;
+			max.count.ot = max.count.ot + 1;
+			ot.cell[max.count.ot, 1] = 2;
+			ot.cell[max.count.ot, 2] = 3;
+			;
+		VALUE 4:
+			ot.cell[max.count.ot, 1] = 1;
+			ot.cell[max.count.ot, 2] = 1;
+			max.count.ot = max.count.ot + 1;
+			ot.cell[max.count.ot, 1] = 1;
+			ot.cell[max.count.ot, 2] = 2;
+			max.count.ot = max.count.ot + 1;
+			ot.cell[max.count.ot, 1] = 1;
+			ot.cell[max.count.ot, 2] = 3;
+			;
+		VALUE 5:
+			ot.cell[max.count.ot, 1] = 4;
+			ot.cell[max.count.ot, 2] = 4;
+			max.count.ot = max.count.ot + 1;
+			ot.cell[max.count.ot, 1] = 4;
+			ot.cell[max.count.ot, 2] = 5;
+			max.count.ot = max.count.ot + 1;
+			ot.cell[max.count.ot, 1] = 4;
+			ot.cell[max.count.ot, 2] = 6;
+			;
+		VALUE 6:
+			ot.cell[max.count.ot, 1] = 3;
+			ot.cell[max.count.ot, 2] = 4;
+			max.count.ot = max.count.ot + 1;
+			ot.cell[max.count.ot, 1] = 3;
+			ot.cell[max.count.ot, 2] = 5;
+			max.count.ot = max.count.ot + 1;
+			ot.cell[max.count.ot, 1] = 3;
+			ot.cell[max.count.ot, 2] = 6;
+			;
+		VALUE 7:
+			ot.cell[max.count.ot, 1] = 2;
+			ot.cell[max.count.ot, 2] = 4;
+			max.count.ot = max.count.ot + 1;
+			ot.cell[max.count.ot, 1] = 2;
+			ot.cell[max.count.ot, 2] = 5;
+			max.count.ot = max.count.ot + 1;
+			ot.cell[max.count.ot, 1] = 2;
+			ot.cell[max.count.ot, 2] = 6;
+			;
+		VALUE 8:
+			ot.cell[max.count.ot, 1] = 1;
+			ot.cell[max.count.ot, 2] = 4;
+			max.count.ot = max.count.ot + 1;
+			ot.cell[max.count.ot, 1] = 1;
+			ot.cell[max.count.ot, 2] = 5;
+			max.count.ot = max.count.ot + 1;
+			ot.cell[max.count.ot, 1] = 1;
+			ot.cell[max.count.ot, 2] = 6;
+			;
+		VALUE 9:
+			ot.cell[max.count.ot, 1] = 4;
+			ot.cell[max.count.ot, 2] = 7;
+			max.count.ot = max.count.ot + 1;
+			ot.cell[max.count.ot, 1] = 4;
+			ot.cell[max.count.ot, 2] = 8;
+			max.count.ot = max.count.ot + 1;
+			ot.cell[max.count.ot, 1] = 4;
+			ot.cell[max.count.ot, 2] = 9;
+			;
+		VALUE 10:
+			ot.cell[max.count.ot, 1] = 3;
+			ot.cell[max.count.ot, 2] = 7;
+			max.count.ot = max.count.ot + 1;
+			ot.cell[max.count.ot, 1] = 3;
+			ot.cell[max.count.ot, 2] = 8;
+			max.count.ot = max.count.ot + 1;
+			ot.cell[max.count.ot, 1] = 3;
+			ot.cell[max.count.ot, 2] = 9;
+			;
+		VALUE 11:
+			ot.cell[max.count.ot, 1] = 2;
+			ot.cell[max.count.ot, 2] = 7;
+			max.count.ot = max.count.ot + 1;
+			ot.cell[max.count.ot, 1] = 2;
+			ot.cell[max.count.ot, 2] = 8;
+			max.count.ot = max.count.ot + 1;
+			ot.cell[max.count.ot, 1] = 2;
+			ot.cell[max.count.ot, 2] = 9;
+			;
+		VALUE 12:
+			ot.cell[max.count.ot, 1] = 1;
+			ot.cell[max.count.ot, 2] = 7;
+			max.count.ot = max.count.ot + 1;
+			ot.cell[max.count.ot, 1] = 1;
+			ot.cell[max.count.ot, 2] = 8;
+			max.count.ot = max.count.ot + 1;
+			ot.cell[max.count.ot, 1] = 1;
+			ot.cell[max.count.ot, 2] = 9;
+			;
+		VALUE 13:
+			ot.cell[max.count.ot, 1] = 4;
+			ot.cell[max.count.ot, 2] = 10;
+			max.count.ot = max.count.ot + 1;
+			ot.cell[max.count.ot, 1] = 4;
+			ot.cell[max.count.ot, 2] = 11;
+			max.count.ot = max.count.ot + 1;
+			ot.cell[max.count.ot, 1] = 4;
+			ot.cell[max.count.ot, 2] = 12;
+			;
+		VALUE 14:
+			ot.cell[max.count.ot, 1] = 3;
+			ot.cell[max.count.ot, 2] = 10;
+			max.count.ot = max.count.ot + 1;
+			ot.cell[max.count.ot, 1] = 3;
+			ot.cell[max.count.ot, 2] = 11;
+			max.count.ot = max.count.ot + 1;
+			ot.cell[max.count.ot, 1] = 3;
+			ot.cell[max.count.ot, 2] = 12;
+			;
+		VALUE 15:
+			ot.cell[max.count.ot, 1] = 2;
+			ot.cell[max.count.ot, 2] = 10;
+			max.count.ot = max.count.ot + 1;
+			ot.cell[max.count.ot, 1] = 2;
+			ot.cell[max.count.ot, 2] = 11;
+			max.count.ot = max.count.ot + 1;
+			ot.cell[max.count.ot, 1] = 2;
+			ot.cell[max.count.ot, 2] = 12;
+			;
+		VALUE 16:
+			ot.cell[max.count.ot, 1] = 1;
+			ot.cell[max.count.ot, 2] = 10;
+			max.count.ot = max.count.ot + 1;
+			ot.cell[max.count.ot, 1] = 1;
+			ot.cell[max.count.ot, 2] = 11;
+			max.count.ot = max.count.ot + 1;
+			ot.cell[max.count.ot, 1] = 1;
+			ot.cell[max.count.ot, 2] = 12;
+			;
+	END
+	.$i1 = $ENCODE (/L, ot.cell[max.count.ot - 2, 1])
+	.$i2 = $ENCODE (/L, ot.cell[max.count.ot - 2, 2])
+	.$i3 = $ENCODE (/L, ot.cell[max.count.ot - 1, 1])
+	.$i4 = $ENCODE (/L, ot.cell[max.count.ot - 1, 2])
+	.$i5 = $ENCODE (/L, ot.cell[max.count.ot, 1])
+	.$i6 = $ENCODE (/L, ot.cell[max.count.ot, 2])
+	.$temp = "OT indicies: (i:" + .$i1 + ", j:" + .$i2 + "), "
+	.$temp = .$temp + "(i:" + .$i3 + ", j:" + .$i4 + "), "
+	.$temp = .$temp + "(i:" + .$i3 + ", j:" + .$i4 + ")"
+	CALL log (.$temp)
+	;
+.END
+.PROGRAM ot.take(.i,.j)@26/01/16 10:56 #247
+	; Start from step 3 to manual check
+	IF FALSE THEN
+		.i = hmi.st.out.i
+		.j = hmi.st.out.j
+	END
+	; Log info
+	.$temp = "Take OT from (i: " + $ENCODE (/L, .i) + ", j: " + $ENCODE (/L, .j) + ")"
+	CALL log (.$temp)
+	; Set default motion parameters
+	TOOL tool.pin
+	SPEED 10 ALWAYS
+	ACCURACY 100 ALWAYS
+	ACCEL 5 ALWAYS
+	DECEL 5 ALWAYS
+	; Calculate points
+	POINT .ot.take.safe = #ot.take.safe
+	DECOMPOSE .ct1[1] = .ot.take.safe
+	DECOMPOSE .ct2[1] = ot.point[.i, .j]
+	POINT .mid.point = TRANS (.ct1[1], .ct2[2], .ct2[3], .ct1[4], .ct1[5], .ct1[6])
+	POINT .ot.put = #ot.put
+	; Release tare
+	PULSE release.tare
+	; Motion
+	; Ensure that we are in home position!!!
+	;
+	; Move before OT
+	LMOVE ot.point[.i, .j] + TRANS (0, 0, 200)
+	ACCURACY 5
+	LMOVE ot.point[.i, .j] + TRANS (0, 0, 50)
+	; Move to OT
+	ACCURACY 0.02
+	SPEED 100 MM/S
+	LMOVE ot.point[.i, .j]
+	BREAK
+	PULSE capture.tare
+	TWAIT 0.5
+	count.ot = count.ot + 1
+	; Move up
+	ACCURACY 0.02
+	SPEED 100 MM/S
+	LMOVE ot.point[.i, .j] + TRANS (20)
+	; Move to sensor position
+	ACCURACY 0.02
+	SPEED 100 MM/S
+	LMOVE ot.point[.i, .j] + TRANS (20, 0, 100)
+	BREAK
+	; Wait sensor
+	CALL log ("Wait OT sensor state")
+	WHILE NOT SIG (s.stock.ot.ok) AND NOT SIG (s.stock.ot.ng) DO
+		$action = "WaitOutStockerSensor"
+		TWAIT 0.5
+	END
+	CALL log (.$temp)
+	; Check if OK
+	IF SIG (s.stock.ot.ok) THEN
+		CALL log ("OT exists, continue")
+		LMOVE ot.point[.i, .j] + TRANS (20, 0, 500)
+		LMOVE .mid.point
+		LMOVE #ot.take.safe
+		; Move to aux point
+		LMOVE #ot.put.safe
+		; Move before put point
+		ACCURACY 20
+		LMOVE .ot.put + TRANS (100)
+		; Move to put point
+		ACCURACY 0.02
+		SPEED 100 MM/S
+		LMOVE #ot.put
+		BREAK
+		PULSE release.tare
+		TWAIT 0.5
+		SIGNAL s.ot.placed
+		; Move out of put point
+		ACCURACY 30
+		LMOVE .ot.put + TRANS (, , 100)
+		;LMOVE #ot.put.safe
+		LMOVE #pos.wait
+		BREAK
+		PULSE rs13.tare.ack, 5
+		;
+		;  POINT #current.pos = #pos.wait
+	ELSE
+		CALL log ("OT do not exists, move to next")
+		ACCURACY 0.02
+		SPEED 100 MM/S
+		LMOVE ot.point[.i, .j] + TRANS (20)
+		ACCURACY 0.02
+		SPEED 100 MM/S
+		LMOVE ot.point[.i, .j]
+		BREAK
+		PULSE release.tare
+		TWAIT 0.5
+		ACCURACY 5
+		LMOVE ot.point[.i, .j] + TRANS (0, 0, 50)
+		LMOVE ot.point[.i, .j] + TRANS (0, 0, 200)
+		;  POINT #current.pos = #HERE
+	END
+	;
+	ACCEL 100 ALWAYS
+	DECEL 100 ALWAYS
+	;
+.END
+.PROGRAM pg.select()@26/01/25 17:23 #137
+	SCASE $pg.name OF
+		SVALUE "312.229.002":
+			CASE detail.spec OF
+				VALUE 0:
+					CALL id1; idX_1
+				VALUE 1:
+					CALL id1
+				VALUE 2:
+					CALL id1
+				ANY :
+					$pg.name = "NULL"
+			END
+			;
+		SVALUE "0401.17.02.023":
+			CASE detail.spec OF
+				VALUE 0:
+					CALL id2; idX_1
+				VALUE 1:
+					CALL id2
+				VALUE 2:
+					CALL id2
+				ANY :
+					$pg.name = "NULL"
+			END
+			;
+		SVALUE "312.229.001":
+			CASE detail.spec OF
+				VALUE 0:
+					CALL id3; idX_1
+				ANY :
+					$pg.name = "NULL"
+			END
+			;
+		SVALUE "440.00.026":
+			CASE detail.spec OF
+				VALUE 0:
+					CALL id4; idX_1
+				VALUE 1:
+					CALL id4
+				VALUE 2:
+					CALL id4
+				VALUE 3:
+					CALL id4
+				ANY :
+					$pg.name = "NULL"
+			END
+			;
+		SVALUE "440.00.111":
+			CASE detail.spec OF
+				VALUE 0:
+					CALL id5; idX_1
+				VALUE 2:
+					CALL id5
+				VALUE 3:
+					CALL id5
+				ANY :
+					$pg.name = "NULL"
+			END
+			;
+		SVALUE "0401.28.02.063":
+			CASE detail.spec OF
+				VALUE 0:
+					CALL id6; idX_1
+				VALUE 1:
+					CALL id6
+				ANY :
+					$pg.name = "NULL"
+			END
+			;
+			;
+		ANY :
+			$pg.name = "NULL"
+			RETURN
+	END
+	;
+.END
+.PROGRAM pg0()@26/01/15 08:39 #0
+	state = 0
+	CALL a.main
+.END
+.PROGRAM pos.put()@26/01/23 15:32 #1411
+	;
+	.$temp = "Put detail to positioner (ID:" + $ENCODE (object.id) + ")"
+	CALL log (.$temp)
+	;
+	SPEED 30 ALWAYS
+	ACCURACY 100 ALWAYS
+	TOOL tool.pick[current.gripper]
+	;
+	POINT .temp = #pos.point[object.id]
+	ACCURACY 20
+	;SIGNAL rs13.lock.zone ; TEST
+	LMOVE #pos.wait
+	BREAK
+	SIGNAL rs13.lock.zone
+	CALL log ("Check if positioner is occupied")
+	SWAIT -rs7.locked.zone
+	;
+	LMOVE .temp + TRANS (10, 0, 50)
+	ACCURACY 5
+	LMOVE .temp + TRANS (10, 0, 20)
+	ACCURACY 0.02
+	LMOVE .temp + TRANS (10, 0, 3)
+	BREAK
+	;
+	SPEED 100 MM/S
+	ACCURACY 0.02
+	LMOVE #pos.point[object.id]
+	BREAK
+	TWAIT 0.5
+	PULSE grip.unclamp
+	TWAIT 0.5
+	SIGNAL -s.grip.full
+	count.put = count.put + 1
+	BITS rs13.det.put[0], 8 = count.put
+	CALL log ("Detail counter:" + $ENCODE (count.put))
+	$action = "WaitForPick"
+	;
+	LMOVE .temp + TRANS (0, 0, 200)
+	;SIGNAL rs13.det.put
+	LMOVE #pos.wait
+	BREAK
+	SIGNAL -rs13.lock.zone
+	;LMOVE #stz.wait
+.END
+.PROGRAM safe.home()@26/01/15 08:39 #133
+	;
+	IF SIG (do.home) THEN
+		CALL log ("Robot already in home position")
+		RETURN
+	END
+	CALL log ("Performing safe motion to home position")
+	;
+	; In STZ zone
+	; Move to the height of a pos.wait
+	IF SIG (do.work[2]) THEN
+		POINT .temp = #stz.wait
+		DECOMPOSE .s[1] = .temp
+		POINT .temp = HERE
+		DECOMPOSE .c[1] = .temp
+		.dz = .s[3] - .c[3]
+		DRAW 0, 0, .dz
+		LMOVE #stz.wait
+		LMOVE #pos.wait
+		LMOVE #homyak
+	END
+	; In OT zone
+	; Move to the height of a home POINT
+	JMOVE #homyak
+	BREAK
+	CALL log ("Robot in home position")
+	;
+.END
+.PROGRAM set.io.pc()@26/01/15 08:39 #40
+	; Gripper IO
+	;
+	; Tare
+	release.tare = 1
+	capture.tare = 2
+	; Gripper
+	release.grip = 5
+	capture.grip = 6
+	; Clamp
+	grip.unclamped = 1001
+	grip.clamped = 1002
+	grip.unclamp = 3
+	grip.clamp = 4
+	;
+	; Ethernet I/P IO (17-32)
+	;
+	; Inputs
+	;
+	rs7.work[1] = 1017
+	rs7.tare.chg = 1018
+	rs7.locked.zone = 1019
+	rs7.finish.ack = 1020
+	rs7.put.ack = 1021
+	;
+	rs7.det.picked[0] = 1025
+	rs7.det.picked[1] = 1026
+	rs7.det.picked[2] = 1027
+	rs7.det.picked[3] = 1028
+	rs7.det.picked[4] = 1029
+	rs7.det.picked[5] = 1030
+	rs7.det.picked[6] = 1031
+	rs7.det.picked[7] = 1032
+	;
+	rs7.etalon.stop = 1033
+	; Outputs
+	;
+	do.work[1] = 17
+	rs13.tare.ack = 18
+	rs13.finish = 20
+	rs13.detail.put = 21
+	rs13.lock.zone = 22
+	;
+	rs13.det.put[0] = 25
+	rs13.det.put[1] = 26
+	rs13.det.put[2] = 27
+	rs13.det.put[3] = 28
+	rs13.det.put[4] = 29
+	rs13.det.put[5] = 30
+	rs13.det.put[6] = 31
+	rs13.det.put[7] = 32
+	;
+	rs13.no.ot.stop = 34
+	; Internal IO
+	;
+	; Dedicated inputs 2001 - 2064
+	;
+	; IFP page change 2001-2008
+	di.ifp.page[1] = 2001
+	di.ifp.page[2] = 2002
+	di.ifp.page[3] = 2003
+	di.ifp.page[4] = 2004
+	di.ifp.page[5] = 2005
+	di.ifp.page[6] = 2006
+	di.ifp.page[7] = 2007
+	di.ifp.page[8] = 2008
+	;
+	di.hold = 2009
+	;
+	; Dedicated outputs 2101-2164
+	;
+	do.home = 2010
+	do.bat.alm = 2011
+	do.automatic = 2012
+	;
+	;;
+	;
+	; Internal logic 2201 - 2960
+	;
+	; TCP/IP display flags
+	s.tcp.send.ena = 2201
+	s.tcp.recv.ena = 2202
+	s.tcp.ena = 2203
+	s.tcp.log = 2204
+	;
+	s.zone.blocked = 2209
+	;
+	; Workspaces
+	do.work[2] = 2212
+	do.work[3] = 2213
+	do.work[4] = 2214
+	do.work[5] = 2215
+	do.work[6] = 2216
+	do.work[7] = 2217
+	do.work[8] = 2218
+	;
+	s.force.in[1] = 2221
+	s.force.in[2] = 2222
+	;
+	s.stock.ot.ok = 2223
+	s.stock.ot.ng = 2224
+	s.stock.opt.ok = 2225
+	s.stock.opt.ng = 2226
+	s.ot.pos.ok = 2227
+	s.ot.pos.ng = 2228
+	;
+	s.ot.placed = 2229
+	s.opt.placed = 2230
+	;
+	s.grip.full = 2231
+	;
+	s.cmd.start = 2232
+	s.cmd.pick = 2233
+	s.cmd.put = 2234
+	s.cmd.pneum.op = 2235
+	s.cmd.pneum.cl = 2236
+	s.cmd.chg.opt = 2237
+	s.cmd.finish = 2238
+	s.cmd.pause = 2239
+	s.cmd.resume = 2240
+	s.cmd.stop = 2241
+	s.cmd.n.op.stop = 2242
+	;
+	s.pr.tst.opt = 2247
+	s.pr.tst.stz = 2248
+	s.pr.tst.ot = 2249
+	s.pr.home = 2250
+	s.pr.tch.st.ot = 2251
+	s.pr.tch.st.opt = 2252
+	s.pr.tch.stz = 2253
+	s.pr.tch.grip = 2254
+	s.pr.tch.pos = 2255
+	s.apply.grip = 2256
+	s.apply.cv = 2257
+	;
+	s.hmi.pneum.op = 2258
+	s.hmi.pneum.cl = 2259
+	s.hmi.get.cv = 2260
+	s.hmi.res.state = 2261
+	s.hmi.res.act = 2262
+	;
+	s.debug.mode = 2300
+.END
+.PROGRAM set.vars.pc()@26/01/15 08:39 #43
+	;
+	; Constants
+	;
+	; Initialize once
+	;
+	;
+	IF NOT EXISTREAL ("state") THEN
+		state = 0
+	END
+	;
+	IF NOT EXISTCHAR ("$tcp.ip") THEN
+		$tcp.ip = "127.0.0.1"
+	END
+	;
+	IF NOT EXISTREAL ("tcp.port") THEN
+		tcp.port = 9013
+	END
+	;
+	IF NOT EXISTREAL ("tcp.ena") THEN
+		tcp.ena = -1
+	END
+	;
+	IF NOT EXISTREAL ("tcp.recv.ena") THEN
+		tcp.recv.ena = -1
+	END
+	;
+	IF NOT EXISTREAL ("tcp.send.ena") THEN
+		tcp.send.ena = -1
+	END
+	;
+	IF NOT EXISTREAL ("tcp.sender.dly") THEN
+		tcp.sender.dly = 0.25
+	END
+	;
+	IF NOT EXISTREAL ("tyterm") THEN
+		tyterm = 0
+	END
+	;
+	IF NOT EXISTCHAR ("$log.entry[127]") THEN
+		FOR .i = 0 TO 127
+			$log.entry[.i] = " "
+		END
+	END
+	;
+	;IF NOT EXISTJOINT ("#current.pos") THEN
+	;POINT #current.pos = #homyak
+	;END
+	;
+	IF NOT EXISTREAL ("current.gripper") THEN
+		current.gripper = 0
+	END
+	;
+	IF NOT EXISTREAL ("pg.gripper") THEN
+		pg13.gripper = 0
+	END
+	;
+	IF NOT EXISTREAL ("hmi.gripper") THEN
+		hmi.gripper = 1
+	END
+	;
+	IF NOT EXISTREAL ("hmi.ot.i") THEN
+		hmi.ot.i = 1
+	END
+	;
+	IF NOT EXISTREAL ("hmi.ot.j") THEN
+		hmi.ot.j = 1
+	END
+	;
+	IF NOT EXISTREAL ("hmi.opt.i") THEN
+		hmi.opt.i = 1
+	END
+	;
+	IF NOT EXISTREAL ("hmi.opt.j") THEN
+		hmi.opt.j = 1
+	END
+	;
+	IF NOT EXISTREAL ("hmi.obj.id") THEN
+		hmi.obj.id = 1
+	END
+	;
+	IF NOT EXISTCHAR ("$action") THEN
+		$action = "Default"
+	END
+	;
+	IF NOT EXISTCHAR ("$pg.name") THEN
+		$pg.name = "Default"
+	END
+	;
+	IF NOT EXISTREAL ("detail.count") THEN
+		detail.count = 0
+	END
+	;
+	IF NOT EXISTREAL ("keep.gripper") THEN
+		keep.gripper = -1
+	END
+	;
+	IF NOT EXISTREAL ("keep.object") THEN
+		keep.object = -1
+	END
+	;
+	IF NOT EXISTREAL ("grip.xsh[3]") THEN
+		FOR .i = 1 TO 3
+			grip.xsh[.i] = 0
+			grip.ysh[.i] = 0
+			grip.zsh[.i] = 0
+			grip.180xsh[.i] = 0
+			grip.180ysh[.i] = 0
+		END
+	END
+	;
+	FOR .n = 1 TO 64
+		.$name = "cv.x.plus[" + $ENCODE (/L, .n) + "]"
+		IF NOT EXISTREAL (.$name) THEN
+			cv.x.plus[.n] = 0
+			cv.x.minus[.n] = 0
+			cv.y.plus[.n] = 0
+			cv.y.minus[.n] = 0
+		END
+	END
+	;
+.END
+.PROGRAM state0()@26/01/22 14:46 #118; Initialization of parameters
+	;
+	CALL log ("State 0: Program reset. Initialization of parameters")
+	SIGNAL -s.opt.placed, -s.ot.placed, -s.grip.full
+	SIGNAL -s.cmd.start, -s.cmd.pick, -s.cmd.finish, -rs13.finish, -s.cmd.stop
+	SIGNAL -s.cmd.chg.opt, -s.cmd.pause, -s.cmd.n.op.stop, -rs13.no.ot.stop
+	count.put = 0
+	BITS rs13.det.put[0], 8 = count.put
+	;count.ot = 0
+	;count.opt = 0
+	;$loaded.pg = "None"
+	;
+	state = 100
+	;
+.END
+.PROGRAM state1()@26/01/15 08:39 #264; Pick OT from stocker
+	;
+	CALL log ("State 1: Pick OT")
+	IF count.ot >= max.count.ot THEN
+		CALL log ("Reached out of maximum tare count")
+		SIGNAL s.cmd.n.op.stop
+		LMOVE #ot.take.safe
+		LMOVE #homyak
+		state = 104
+		RETURN
+	END
+	; Check all start positions
+	POINT .current.pos = #HERE
+	POINT .stz.wait = #stz.wait
+	POINT .pos.wait = #pos.wait
+	; Move to start position
+	IF SIG (do.home) THEN
+		LMOVE #ot.take.safe
+	END
+	IF DISTANCE (.current.pos, .stz.wait) <= 25 THEN
+		LMOVE #pos.wait
+		LMOVE #ot.take.safe
+	END
+	IF DISTANCE (.current.pos, .pos.wait) <= 25 THEN
+		LMOVE #ot.take.safe
+	END
+	; #ot.take.safe -> take -> put -> pos.wait
+	; #ot.take.safe -> take
+	.i = ot.cell[count.ot + 1, 1]
+	.j = ot.cell[count.ot + 1, 2]
+	CALL ot.take (.i, .j); count.ot + 1
+	;
+	state = 101
+	;
+.END
+.PROGRAM state100()@26/01/22 14:46 #96; Waiting for start
+	;
+	CALL log ("State 100: Waiting for start")
+	$action = "WaitingForStart"
+	;
+	WHILE NOT SIG (s.cmd.start) DO
+		TWAIT 0.5
+	END
+	count.ot = 0
+	count.opt = 0
+	SIGNAL -s.cmd.stop
+	SIGNAL -s.cmd.start
+	;
+	CALL log ("START with Name:" + $pg.name + "-" + $ENCODE (detail.spec) + " Count:" + $ENCODE (detail.count) + " OT:" + $ot.data + " OPT:" + $opt.data);
+	CALL load.opt.data
+	CALL load.ot.data
+	CALL pg.select
+	state = 106
+	;
+.END
+.PROGRAM state101()@26/01/15 08:39 #4964; Auxilary state
+	CALL log ("State 101: Calculating next step")
+	state = 102
+.END
+.PROGRAM state102()@26/01/26 14:41 #7144245; Decision making
+	; Priority 1
+	IF SIG (s.cmd.pause) THEN
+		state = 105
+		RETURN
+	END
+	;
+	; Priority 2
+	IF SIG (s.cmd.stop) OR SIG (rs7.etalon.stop) THEN
+		state = 103;6
+		RETURN
+	END
+	; Priority 3
+	IF NOT SIG (s.ot.placed) THEN
+		state = 1
+		RETURN
+	END
+	;
+	; Priority 4
+	IF NOT SIG (s.opt.placed) AND SIG (s.ot.placed) AND NOT (count.put == detail.count) THEN
+		state = 2
+		RETURN
+	END
+	; Priority 5
+	IF SIG (rs7.tare.chg) THEN
+		state = 5
+		RETURN
+	END
+	; Priority 6
+	IF SIG (s.ot.placed) AND SIG (s.opt.placed) AND NOT SIG (s.grip.full) THEN
+		$action = "WaitForPick"
+		IF stz.x >= 0 AND SIG (s.cmd.pick) THEN ;AND NOT SIG (rs7.tare.chg) THEN
+			SIGNAL -s.cmd.pick
+			$action = " "
+			state = 3
+			RETURN
+		END
+	END
+	; Priority 7
+	IF SIG (s.ot.placed) AND SIG (s.opt.placed) AND SIG (s.grip.full) AND BITS (rs7.det.picked[0], 8) == count.put THEN
+		$action = "WaitPosFree"
+		IF NOT SIG (rs7.work[1]) AND SIG (s.cmd.put) AND NOT SIG (rs7.locked.zone) THEN
+			state = 4
+			RETURN
+		END
+	END
+	; Priority 8
+	IF SIG (s.cmd.chg.opt) OR count.put == detail.count THEN
+		state = 6
+		$action = "ChangeOPT"
+		RETURN
+	END
+.END
+.PROGRAM state103()@26/01/15 08:39 #21; Auxilary state
+	CALL log ("State 103: Ending sequence started")
+	state = 104
+.END
+.PROGRAM state104()@26/01/22 14:18 #554295; Ending sequence
+	;
+	IF SIG (s.cmd.n.op.stop) AND SIG (s.opt.placed) THEN
+		state = 6
+		RETURN
+	END
+	;
+	IF SIG (s.cmd.n.op.stop) AND NOT SIG (s.opt.placed) THEN
+		CALL log ("Program complete")
+		SIGNAL rs13.no.ot.stop
+		state = 255
+		RETURN
+	END
+	;
+	IF SIG (s.ot.placed) AND SIG (s.grip.full) AND BITS (rs7.det.picked[0], 8) == count.put THEN
+		$action = "WaitPosFree"
+		IF NOT SIG (rs7.work[1]) AND SIG (s.cmd.put) AND NOT SIG (rs7.locked.zone) THEN
+			state = 4
+			RETURN
+		END
+	END
+	;
+	IF NOT SIG (s.grip.full) AND SIG (s.opt.placed) THEN
+		state = 6
+		RETURN
+	END
+	;
+	; Priority 5
+	IF SIG (rs7.tare.chg) THEN
+		state = 5
+		RETURN
+	END
+	;
+	.m1 = NOT SIG (s.grip.full) AND SIG (s.ot.placed) AND NOT SIG (rs7.tare.chg)
+	.m2 = count.opt >= max.count.opt OR count.put == detail.count
+	.m3 = SIG (s.cmd.stop) OR SIG (rs7.etalon.stop)
+	IF .m1 AND (.m2 OR .m3) THEN
+		SIGNAL s.cmd.finish
+		SIGNAL rs13.finish
+		CALL log ("Wait for RS007L finish task")
+		SWAIT rs7.finish.ack
+		state = 5
+		RETURN
+	END
+	;
+	IF NOT SIG (s.grip.full) AND SIG (s.cmd.finish) THEN
+		CALL log ("Program complete")
+		state = 255
+		RETURN
+	END
+	;
+	IF NOT SIG (s.grip.full) AND count.ot >= max.count.ot THEN
+		CALL log ("Unexpected behaviour!")
+		state = 255
+		RETURN
+	END
+	;
+.END
+.PROGRAM state105()@26/01/15 08:39 #18; Program paused
+	CALL log ("State 105: Program paused")
+	$action = "Paused"
+	SWAIT s.cmd.resume
+	$action = " "
+	CALL log ("Program resumed")
+	SIGNAL -s.cmd.pause
+	state = 101
+.END
+.PROGRAM state106()@26/01/15 08:39 #227; Check program
+	CALL log ("State 106: Check program")
+	IF $pg.name <> "NULL" THEN
+		CALL log ("Selected program: " + $pg.name)
+		state = 7
+	ELSE
+		CALL log ("Wrong program name. Program reset")
+		BREAK
+		$action = "WrongProgramName"
+		TWAIT 10
+		BREAK
+		state = 0
+	END
+.END
+.PROGRAM state2()@26/01/16 11:34 #170; Pick OPT from stocker
+	;
+	CALL log ("State 2: Pick OPT")
+	IF count.opt >= max.count.opt THEN
+		CALL log ("Reached out of maximum tare count")
+		LMOVE #homyak
+		state = 104 ;!!!
+		RETURN
+	END
+	; Check all start positions
+	POINT .current.pos = #HERE
+	POINT .stz.wait = #stz.wait
+	POINT .pos.wait = #pos.wait
+	; Move to start position
+	IF DISTANCE (.current.pos, .stz.wait) <= 25 THEN
+		LMOVE #pos.wait
+	END
+	; home -> take -> put -> stz.wait
+	; pos.wait -> take -> put -> stz.wait
+	.i = opt.cell[count.opt + 1, 1]
+	.j = opt.cell[count.opt + 1, 2]
+	CALL opt.take (.i, .j); count.opt + 1
+	;
+	;POINT #current.pos = #stz.wait
+	;
+	SIGNAL -s.cmd.chg.opt
+	;
+	state = 101
+	;
+.END
+.PROGRAM state255()@26/01/15 08:39 #145; Program complete
+	CALL log ("State 255: Program complete")
+	state = 0
+.END
+.PROGRAM state3()@26/01/15 08:39 #2243; Pick from STZ
+	;
+	CALL log ("State 3: Pick from STZ")
+	; Check all start positions
+	POINT .current.pos = #HERE
+	POINT .stz.wait = #stz.wait
+	POINT .pos.wait = #pos.wait
+	IF SIG (do.home) THEN
+		LMOVE #opt.take.safe
+		LMOVE #opt.put.safe
+		LMOVE #stz.wait
+	END
+	IF DISTANCE (.current.pos, .pos.wait) <= 25 THEN
+		LMOVE #stz.wait
+	END
+	; stz.wait -> pick -> pos.wait
+	CALL stz.pick
+	;
+	;POINT #current.pos = #pos.wait
+	;
+	state = 101
+	;
+.END
+.PROGRAM state4()@26/01/15 08:39 #2205; Put detail to positioner
+	CALL log ("State 4: Put detail to positioner")
+	; Check all start positions
+	POINT .current.pos = #HERE
+	POINT .stz.wait = #stz.wait
+	POINT .pos.wait = #pos.wait
+	IF SIG (do.home) THEN
+		LMOVE #opt.take.safe
+		LMOVE #pos.wait
+	END
+	IF DISTANCE (.current.pos, .stz.wait) <= 25 THEN
+		LMOVE #pos.wait
+	END
+	; pos.wait -> put -> pos.wait
+	CALL pos.put
+	;
+	;POINT #current.pos = #pos.wait JMOVE
+	;
+	IF SIG (s.cmd.stop) OR SIG (rs7.etalon.stop) THEN
+		state = 104
+	ELSE
+		state = 101
+	END
+	;
+.END
+.PROGRAM state5()@26/01/15 08:39 #199; Return OT
+	CALL log ("State 5: Return OT")
+	; Check all start positions
+	POINT .current.pos = #HERE
+	POINT .stz.wait = #stz.wait
+	POINT .pos.wait = #pos.wait
+	IF DISTANCE (.current.pos, .stz.wait) <= 25 THEN
+		LMOVE #pos.wait
+	END
+	;
+	SWAIT -rs7.work[1]
+	; pos.wait -> take -> put -> Decide
+	.i = ot.cell[count.ot, 1]
+	.j = ot.cell[count.ot, 2]
+	CALL ot.return (.i, .j); count.ot + 1
+	;
+	;POINT #current.pos = #HERE
+	state = 8
+	;
+.END
+.PROGRAM state6()@26/01/15 14:43 #144; Return OPT
+	CALL log ("State 6: Return OPT")
+	; Check all start positions
+	POINT .current.pos = #HERE
+	POINT .stz.wait = #stz.wait
+	POINT .pos.wait = #pos.wait
+	IF SIG (do.home) THEN
+		LMOVE #opt.take.safe
+		LMOVE #opt.put.safe
+		LMOVE #stz.wait
+	END
+	IF DISTANCE (.current.pos, .pos.wait) <= 25 THEN
+		LMOVE #stz.wait
+	END
+	;
+	SIGNAL -s.cmd.chg.opt
+	; stz.wait -> take -> put -> Decide
+	.i = opt.cell[count.opt, 1]
+	.j = opt.cell[count.opt, 2]
+	CALL opt.return (.i, .j); count.ot + 1
+	;
+	;POINT #current.pos = #HERE
+	SIGNAL -s.cmd.chg.opt
+	state = 9
+	;
+.END
+.PROGRAM state7()@26/01/15 08:39 #217; Check grippers
+	CALL log ("State 7: Check if gripper change is required")
+	; We are at home at this point. No cases without home!
+	IF current.gripper <> pg13.gripper THEN
+		CALL log ("Selected wrong gripper, perform change")
+		LMOVE #opt.take.safe
+		LMOVE #stz.wait
+		IF current.gripper <> 0 THEN
+			CALL gripper.put (current.gripper)
+		END
+		CALL gripper.pick (pg13.gripper)
+		LMOVE #opt.take.safe
+		LMOVE #homyak
+	ELSE
+		CALL log ("Program gripper is the same as current gripper")
+	END
+	state = 1
+.END
+.PROGRAM state8()@26/01/15 08:39 #199; Decide if pick next OT
+	CALL log ("State 8: Decide if pick next OT")
+	IF count.ot >= max.count.ot OR SIG (s.cmd.finish) THEN
+		LMOVE #ot.take.safe
+		LMOVE #homyak
+		;
+		;POINT #current.pos = #homyak
+		state = 104
+	ELSE
+		state = 1
+	END
+.END
+.PROGRAM state9()@26/01/26 14:41 #201; Decide if pick next OPT
+	CALL log ("State 9: Decide if pick next OPT")
+	;
+	.m1 = count.opt >= max.count.opt OR count.put == detail.count
+	.m2 = SIG (s.cmd.stop) OR SIG (rs7.etalon.stop)
+	.m3 = SIG (s.cmd.n.op.stop)
+	IF .m1 OR .m2 OR .m3 THEN
+		LMOVE #homyak
+		;
+		;POINT #current.pos = #homyak
+		state = 104
+	ELSE
+		state = 2
+	END
+.END
+.PROGRAM stz.pick()@26/01/26 14:41 #2158
+	;
+	.$temp = "Pick detail from stz (" + $ENCODE (/L, stz.x) + ", " + $ENCODE (/L, stz.y) + ", " + $ENCODE (/L, stz.a) + ")"
+	CALL log (.$temp)
+	;
+	SPEED 100 ALWAYS
+	ACCURACY 100 ALWAYS
+	TOOL tool.pick[current.gripper]
+	; Raw coordinates
+	.x = stz.x
+	.y = stz.y
+	.a = stz.a
+	;
+	IF .x == 0 OR .y == 0 THEN
+		CALL log ("Unexpected 0 coordinate")
+		RETURN
+	END
+	;
+	; Gripper shift
+	.xsh = grip.xsh[current.gripper]
+	.ysh = grip.ysh[current.gripper]
+	.zsh = grip.zsh[current.gripper]
+	IF .a == 180 THEN
+		.xsh = grip.180xsh[current.gripper]
+		.ysh = grip.180ysh[current.gripper]
+	END
+	; CV correction
+	.xp = cv.x.plus[object.id]
+	.xm = cv.x.minus[object.id]
+	.yp = cv.y.plus[object.id]
+	.ym = cv.y.minus[object.id]
+	;
+	IF .x > center.x + 10 THEN
+		.x = .x - .xp * (.x - center.x)
+	END
+	IF .x < center.x - 10 THEN
+		.x = .x + .xm * (-.x + center.x)
+	END
+	IF .y > center.y + 10 THEN
+		.y = .y - .yp * (.y - center.y)
+	END
+	IF .y < center.y - 10 THEN
+		.y = .y + .ym * (-.y + center.y)
+	END
+	;
+	POINT .pick = stz.frame + TRANS (.x + .xsh, .y + .ysh, .zsh) + RZ (.a)
+	DECOMPOSE .c[1] = #pick.in
+	POINT .#pick.in = #PPOINT (.c[1], .c[2], .c[3], .c[4], .c[5], .c[6] - .a)
+	;
+	LMOVE #stz.wait
+	ACCURACY 20
+	LMOVE .#pick.in
+	IF NOT SIG (grip.unclamped) THEN
+		PULSE grip.unclamp
+		CALL log ("Wait for unclamp gripper")
+		$action = "WaitingGripUnclamped"
+		WAIT SIG (grip.unclamped) OR SIG (s.force.in[1])
+	END
+	ACCURACY 20
+	LAPPRO .pick, -30
+	SPEED 40 MM/S
+	ACCURACY 0.02
+	LMOVE .pick
+	BREAK
+	;
+	TWAIT 0.5
+	PULSE grip.clamp
+	TWAIT 0.5
+	SIGNAL s.grip.full
+	$action = "WaitPosFree"
+	;
+	ACCURACY 5
+	LAPPRO .pick, -30
+	BREAK
+	TWAIT 0.1
+	;
+	LMOVE .#pick.in
+	LMOVE #stz.wait
+	LMOVE #pos.wait
+	;
+.END
+.PROGRAM tcp.callback.pc(.$data[],.data.length)@26/01/22 14:00 #61354
+	.$temp = "Received " + $ENCODE (.data.length) + " strings:"
+	PRINT tcp.recv.ena: .$temp
+	FOR .i = 1 TO .data.length
+		PRINT tcp.recv.ena: .$data[.i]
+		CALL tcp.log.pc (.$data[.i])
+		; Strings for parsing
+		;
+		; START COMMAND
+		; String format:
+		; START;DETAILNAME;DETAILCOUNT;[INTAREID1,INTAREID2,..];[OTAREID1,INTAREID2,..];
+		IF INSTR (.$data[.i] , "START") THEN
+			; Decode command
+			.$temp = $DECODE (.$data[1], ";",0)
+			.$temp = $DECODE (.$data[1], ";",1)
+			; Decode detail type
+			$pg.name = $DECODE (.$data[1], ";",0)
+			.$temp = $DECODE (.$data[1], ";",1)
+			; Decode detail spec
+			detail.spec = VAL ($DECODE (.$data[1], ";",0))
+			.$temp = $DECODE (.$data[1], ";",1)
+			; Decode detail count
+			detail.count = VAL ($DECODE (.$data[1], ";",0))
+			.$temp = $DECODE (.$data[1], ";",1)
+			; Decode intare ids
+			$ot.data = $DECODE (.$data[1], ";",0)
+			; Decode outtare ids
+			.$temp = $DECODE (.$data[1], ";",1)
+			$opt.data = $DECODE (.$data[1], ";",0)
+			; Decode layout
+			.$temp = $DECODE (.$data[1], ";",1)
+			layout = $DECODE (.$data[1], ";",0)
+			;
+			stz.x = -1
+			stz.y = -1
+			PULSE s.cmd.start, 5
+		END
+		;
+		; SENSOR COMMAND
+		; String format:
+		; SENSOR;SENSORNAME;STATE;
+		IF INSTR (.$data[.i] , "SENSOR") THEN
+			; Decode command
+			.$temp = $DECODE (.$data[1], ";",0)
+			.$temp = $DECODE (.$data[1], ";",1)
+			; Decode sensor name
+			.$sensor.name = $DECODE (.$data[1], ";",0)
+			.$temp = $DECODE (.$data[1], ";",1)
+			; Decode sensor state
+			.$sensor.state = $DECODE (.$data[1], ";",0)
+			;CALL tcp.log.pc(.$sensor.state)
+			;
+			IF INSTR (.$sensor.state , "TRUE") THEN
+				IF .$sensor.name == "STOCKERINTARESENSOR" THEN
+					PULSE s.stock.opt.ok, 5
+				END
+				;
+				IF .$sensor.name == "STOCKEROUTTARESENSOR" THEN
+					PULSE s.stock.ot.ok, 5
+				END
+				;
+				IF .$sensor.name == "OUTPALLETSENSOR" THEN
+					PULSE s.ot.pos.ok, 5
+				END
+			END
+			IF INSTR (.$sensor.state , "FALSE") THEN
+				IF .$sensor.name == "STOCKERINTARESENSOR" THEN
+					PULSE s.stock.opt.ng, 5
+				END
+				;
+				IF .$sensor.name == "STOCKEROUTTARESENSOR" THEN
+					PULSE s.stock.ot.ng, 5
+				END
+				;
+				IF .$sensor.name == "OUTPALLETSENSOR" THEN
+					PULSE s.ot.pos.ng, 5
+				END
+			END
+		END
+		;
+		; PNEUMOOPEN COMMAND
+		; String format:
+		; PNEUMOOPEN;
+		IF INSTR (.$data[.i] , "PNEUMOOPEN") THEN
+			$action = " "
+			PULSE s.cmd.pneum.op, 5
+		END
+		;
+		; PNEUMOCLOSE COMMAND
+		; String format:
+		; PNEUMOCLOSE;
+		IF INSTR (.$data[.i] , "PNEUMOCLOSE") THEN
+			$action = " "
+			PULSE s.cmd.pneum.cl, 5
+		END
+		;
+		; PICK COMMAND
+		; String format
+		; PICK;x;y;a;
+		IF INSTR (.$data[.i] , "PICK") THEN
+			.$temp = $DECODE (.$data[1], ";",0)
+			.$temp = $DECODE (.$data[1], ";",1)
+			.$x = $DECODE (.$data[1], ",", 0)
+			.$temp = $DECODE (.$data[1], ",", 1)
+			.$y = $DECODE (.$data[1], ",", 0)
+			.$temp = $DECODE (.$data[1], ",", 1)
+			.$a = .$data[1]
+			stz.y = VAL (.$x) / 10
+			stz.x = VAL (.$y) / 10
+			stz.a = VAL (.$a)
+			PULSE s.cmd.pick, 5
+			;$action = " "
+			;s.cmd.put
+		END
+		;
+		; POSITIONEREMPTY COMMAND
+		; String format
+		; POSITIONEREMPTY;
+		IF INSTR (.$data[.i] , "POSITIONEREMPTY") THEN
+			PULSE s.cmd.put, 5
+		END
+		;
+		; PALLETEMPTY COMMAND
+		; String format:
+		; PALLETEMPTY;
+		IF INSTR (.$data[.i] , "PALLETEMPTY") THEN
+			SIGNAL s.cmd.chg.opt
+		END
+		;
+		; SPEED COMMAND
+		; String format:
+		; SPEED;VALUE;
+		;
+		IF INSTR (.$data[.i] , "SPEED") THEN
+			.$temp = $DECODE (.$data[1], ";",0)
+			.$temp = $DECODE (.$data[1], ";",1)
+			.$spd = $DECODE (.$data[1], ";",0)
+			.speed = VAL (.$spd)
+			IF .speed <= 0 THEN
+				.speed = 1
+			END
+			IF .speed > 100 THEN
+				.speed = 100
+			END
+			MON_SPEED (.speed)
+		END
+		;
+		; PAUSE COMMAND
+		; String format:
+		; PAUSE;
+		;
+		IF INSTR (.$data[.i] , "PAUSE") THEN
+			SIGNAL s.cmd.pause
+		END
+		;
+		; RESUME COMMAND
+		; String format:
+		; RESUME;
+		;
+		IF INSTR (.$data[.i] , "RESUME") THEN
+			PULSE s.cmd.resume, 5
+		END
+		;
+		; STOP COMMAND
+		; String format:
+		; STOP;
+		;
+		IF INSTR (.$data[.i] , "STOP") THEN
+			SIGNAL s.cmd.stop
+		END
+		;
+		; RESET COMMAND
+		; String format:
+		; RESET;
+		;
+		IF INSTR (.$data[.i] , "RESET") THEN
+			state = 0
+		END
+		;
+		; CYCLEON COMMAND
+		; String format:
+		; CYCLEON;
+		;
+		IF INSTR (.$data[.i] , "CYCLEON") AND NOT SWITCH (CS ) THEN
+			IF SIG (do.automatic) THEN
+				MC CONTINUE
+			END
+		END
+		;
+		; STEPMODE COMMAND
+		; String format:
+		; STEPMODE;VALUE
+		;
+		IF INSTR (.$data[.i] , "STEPMODE") THEN
+			; Decode command
+			.$temp = $DECODE (.$data[1], ";",0)
+			.$temp = $DECODE (.$data[1], ";",1)
+			; Decode measurement result
+			.$state = $DECODE (.$data[1], ";",0)
+			IF INSTR (.$state , "TRUE") THEN
+				STP_ONCE ON
+			END
+			IF INSTR (.$state , "FALSE") THEN
+				STP_ONCE OFF
+			END
+		END
+		;
+		; NEXTSTEP COMMAND
+		; String format:
+		; NEXTSTEP;
+		;
+		IF INSTR (.$data[.i] , "NEXTSTEP") THEN
+			STPNEXT
+		END
+		;
+		; ERESET COMMAND
+		; String format:
+		; ERESET;
+		;
+		IF INSTR (.$data[.i] , "ERESET") THEN
+			MC ERESET
+		END
+		;
+		.$data[.i] = ""
+	END
+.END
+.PROGRAM tcp.client.pc()@26/01/15 08:39 #0
+	;
+	tcp.socket = -1
+	.tcp.retry.count = 10
+	.tcp.connect.tmo = 5
+	.tcp.receive.tmo = 5
+	;
+	WHILE TRUE DO
+		; Checking for active sockets and closing them
+		PRINT tcp.ena: "Checking for active sockets and closing them"
+		TCP_STATUS .number, .ports[0], .sockets[0], .errors[0], .suberrors[0], .$ips[0]
+		IF .number > 0 THEN
+			FOR .i = 0 TO .number - 1
+				IF .sockets[.i] <> 0 THEN
+					.$temp = "Closing socket with id: " + $ENCODE (.sockets[.i])
+					PRINT tcp.ena: .$temp
+					TCP_CLOSE .status, .sockets[.i]
+				END
+			END
+		END
+		; Get IP from string
+		.$tcp.ip.copy = $tcp.ip
+		FOR .i = 1 TO 4
+			.$ip = $DECODE (.$tcp.ip.copy, ".")
+			.ip[.i] = VAL (.$ip)
+			IF .i < 4 THEN
+				.$ip = $DECODE (.$tcp.ip.copy, ".", 1)
+			END
+		END
+		;
+		; Connect to server
+		.$temp = "Connecting to server with ip: " + $tcp.ip
+		PRINT tcp.ena: .$temp
+		TCP_CONNECT tcp.socket, tcp.port, .ip[1], .tcp.connect.tmo
+		;
+		; Start data processing cycle
+		IF tcp.socket >= 0 THEN
+			.$temp = "Connection established with socket id:" + $ENCODE (tcp.socket)
+			PRINT tcp.ena: .$temp
+			.connected = TRUE
+			; Start receiving data cycle
+			.tcp.error.cnt = 0
+			WHILE .connected AND .tcp.error.cnt <= .tcp.retry.count DO
+				TCP_RECV .status, tcp.socket, .$tcp.request[1], .request.size, .tcp.receive.tmo, 255
+				IF .status >= 0 THEN
+					IF .request.size == 0 THEN
+						.tcp.error.cnt = .tcp.error.cnt + 1
+						.$temp = "Received data with 0 length. Error count:" + $ENCODE (.tcp.error.cnt)
+						PRINT tcp.ena: .$temp
+					ELSE
+						CALL tcp.callback.pc (.$tcp.request[], .request.size)
+					END
+				ELSE
+					IF .status == -34024 THEN
+						PRINT tcp.ena: "Timeout in receive, it\'s ok"
+					ELSE
+						.tcp.error.cnt = .tcp.error.cnt + 1
+						.$temp = "Failed to receive data with error:" + $ENCODE (.status) + ". Error count:" + $ENCODE (.tcp.error.cnt)
+						PRINT tcp.ena: .$temp
+					END
+				END
+				TWAIT 0.05
+			END
+		ELSE
+			.$temp = "Connection failed with error:" + $ENCODE (tcp.socket)
+			PRINT tcp.ena: .$temp
+			IF tcp.socket > 0 THEN
+				TCP_CLOSE .status, tcp.socket
+			END
+		END
+		TWAIT 0.05
+	END
+.END
+.PROGRAM tcp.log.pc(.$msg)@26/01/15 08:39 #128421
+	IF NOT SIG (s.tcp.log) THEN
+		RETURN
+	END
+	;
+	; 1 line = 55 symbols max
+	;
+	FOR .i = 0 TO 126
+		$log.entry[.i] = $log.entry[.i + 1]
+	END
+	$log.entry[127] = $TIME + " " + .$msg
+	;
+	IFPWPRINT 1, 1, 1, 9, 10 = $log.entry[116], $log.entry[117], $log.entry[118], $log.entry[119]
+	IFPWPRINT 2, 1, 1, 9, 10 = $log.entry[120], $log.entry[121], $log.entry[122], $log.entry[123]
+	IFPWPRINT 3, 1, 1, 9, 10 = $log.entry[124], $log.entry[125], $log.entry[126], $log.entry[127]
+	;
+.END
+.PROGRAM tcp.send.pc(.$data[],.data.length)@26/01/15 08:39 #285228
+	;
+	.tcp.send.tmo = 5
+	;
+	IF tcp.socket > 0 THEN
+		TCP_SEND .status, tcp.socket, .$data[1], .data.length, .tcp.send.tmo
+		IF .status >= 0 THEN
+			.$temp = "Sent " + $ENCODE (.data.length) + " strings"
+			PRINT tcp.send.ena: .$temp
+			FOR .i = 1 TO .data.length
+				PRINT tcp.send.ena: .$data[.i]
+			END
+		ELSE
+			.$temp = "Failed to send data with error:" + $ENCODE (.status)
+			PRINT tcp.send.ena: .$temp
+			tcp.socket = -1
+		END
+	ELSE
+		PRINT tcp.send.ena: "Failed to send data. Socket is not opened. Waiting for 5 seconds"
+		TWAIT 5
+	END
+	;
+.END
+.PROGRAM tcp.sender.pc()@26/01/15 08:39 #0
+	;
+	WHILE TRUE DO
+		;
+		CALL get.state.pc (.$data[1])
+		.$data[2] = "ACTION:" + $action + ";"
+		.$data[2] = .$data[2] + "TAREIN:" + $ENCODE (count.opt) + ";"
+		.$data[2] = .$data[2] + "TAREOUT:" + $ENCODE (count.ot) + ";"
+		.$data[2] = .$data[2] + "GRIPPER:" + $ENCODE (current.gripper) + ";"
+		.$data[2] = .$data[2] + "PICKCOUNT:" + $ENCODE (count.put) + ";"
+		.$data[2] = .$data[2] + "STATE:" + $ENCODE (state) + ";"
+		.$data[2] = .$data[2] + "HOUR:" + $ENCODE (OPEINFO (3)) + ";"
+		;
+		IF SWITCH (STP_ONCE) THEN
+			.$data[2] = .$data[2] + "STEPMODE:TRUE;"
+		ELSE
+			.$data[2] = .$data[2] + "STEPMODE:FALSE;"
+		END
+		;
+		;
+		.$data[2] = .$data[2] + "\n"
+		;
+		CALL tcp.send.pc (.$data[], 2)
+		TWAIT tcp.sender.dly
+	END
+	;
+.END
+.PROGRAM watchdog.pc()@26/01/15 08:39 #0
+	WHILE TRUE DO
+		;
+		CALL check.tasks.pc
+		CALL check.disp.pc
+		CALL check.zone.pc
+		;
+		;IF SIG (rs7.put.ack) THEN
+		;  SIGNAL -rs13.detail.put
+		;END
+		;
+		IF NOT SIG (s.debug.mode) THEN
+			IF SWITCH (REPEAT ) AND NOT SWITCH (TEACH_LOCK ) AND NOT SWITCH (EMERGENCY ) AND NOT SWITCH (CS ) AND NOT SWITCH (ERROR ) THEN
+				MC ZPOWER ON
+				;MC PRIME a.main
+				;WHILE NOT SWITCH(POWER)
+				;  TWAIT 0.01
+				;  MC CONTINUE
+				;END
+			END
+		END
+		;
+		IF NOT SWITCH (REPEAT ) THEN
+			CALL check.teach.pc
+		END
+		TWAIT 0.01
+	END
+	;
 .END
 .PROGRAM Comment___ () ; Comments for IDE. Do not use.
 	; @@@ PROJECT @@@
@@ -2936,307 +2959,310 @@ N_INT300    "s.debug.mode"
 	; 192.168.7.102
 	; 23
 	; @@@ PROGRAM @@@
-	; Group:Objects:1
-	; 1:id1:F
-	; 1:id2:F
-	; 1:id3:F
-	; 1:id4:F
-	; 1:id5:F
-	; 1:id6:F
-	; Group:STZ:2
-	; 2:a.teach.stz:F
-	; .plb 
-	; .plt 
-	; .prt 
-	; .prb 
-	; .dx1 
-	; .dx2 
-	; .dy1 
-	; .dy2 
-	; 2:stz.pick:F
-	; .$temp 
-	; .x 
-	; .y 
-	; .a 
-	; .xsh 
-	; .ysh 
-	; .zsh 
-	; .xp 
-	; .xm 
-	; .yp 
-	; .ym 
-	; .pick 
-	; .c 
-	; .#pick.in 
-	; 2:a.test.stz:F
-	; .$temp 
-	; .x 
-	; .y 
-	; .a 
-	; .xsh 
-	; .ysh 
-	; .zsh 
-	; .xp 
-	; .xm 
-	; .yp 
-	; .ym 
-	; .pick 
-	; .c 
-	; .#pick.in 
-	; Group:OPT:3
-	; 3:load.opt.data:F
-	; .id 
-	; .temp 
-	; 3:opt.table:F
-	; .id 
-	; .$temp 
-	; .$i1 
-	; .$i2 
-	; .$i3 
-	; .$i4 
-	; 3:opt.take:F
-	; .i 
-	; .j 
-	; .$temp 
-	; .opt.take.safe 
-	; .ct1 
-	; .ct2 
-	; .mid.point 
-	; .opt.put 
-	; 3:a.teach.opt:F
-	; .i 
-	; .j 
-	; 3:a.test.opt:F
-	; .i 
-	; .j 
-	; 3:opt.return:F
-	; .i 
-	; .j 
-	; .$temp 
-	; .post.tare.in 
-	; .ct1 
-	; .ct2 
-	; .mid.point 
-	; .put.stz 
-	; Group:Gripper:4
-	; 4:a.test.gripper:F
-	; 4:gripper.pick:F
-	; .gripper.no 
-	; .$temp 
-	; .temp 
-	; 4:gripper.put:F
-	; .gripper.no 
-	; .$temp 
-	; .temp 
-	; 4:a.teach.gripper:F
-	; .temp 
-	; Group:OT:5
-	; 5:a.test.ot:F
-	; .i 
-	; .j 
-	; 5:a.teach.ot:F
-	; .i 
-	; .j 
-	; 5:load.ot.data:F
-	; .id 
-	; .temp 
-	; 5:ot.table:F
-	; .id 
-	; .$temp 
-	; .$i1 
-	; .$i2 
-	; .$i3 
-	; .$i4 
-	; .$i5 
-	; .$i6 
-	; 5:ot.take:F
-	; .i 
-	; .j 
-	; .$temp 
-	; .ot.take.safe 
-	; .ct1 
-	; .ct2 
-	; .mid.point 
-	; .ot.put 
-	; .tare.ack 
-	; 5:ot.return:F
-	; .i 
-	; .j 
-	; .$temp 
-	; .post.tare.out 
-	; .ct1 
-	; .ct2 
-	; .mid.point 
-	; .put.outpal 
-	; Group:Positioner:6
-	; 6:a.teach.pos:F
-	; .temp 
-	; 6:pos.put:F
-	; .$temp 
-	; .temp 
-	; .det.put 
-	; .lock.zone 
-	; .locked.zone 
-	; Group:States:7
-	; 7:state0:F
-	; .finish 
-	; .det.put 
-	; 7:state1:F
-	; .current.pos 
-	; .stz.wait 
-	; .pos.wait 
-	; .i 
-	; .j 
-	; 7:state2:F
-	; .current.pos 
-	; .stz.wait 
-	; .pos.wait 
-	; .i 
-	; .j 
-	; 7:state3:F
-	; .current.pos 
-	; .stz.wait 
-	; .pos.wait 
-	; 7:state4:F
-	; .current.pos 
-	; .stz.wait 
-	; .pos.wait 
-	; .etalon.stop 
-	; 7:state5:F
-	; .current.pos 
-	; .stz.wait 
-	; .pos.wait 
-	; .i 
-	; .j 
-	; .work 
-	; 7:state6:F
-	; .current.pos 
-	; .stz.wait 
-	; .pos.wait 
-	; .i 
-	; .j 
-	; 7:state7:F
-	; 7:state8:F
-	; 7:state9:F
-	; .etalon.stop 
-	; 7:state100:F
-	; 7:state101:F
-	; 7:state102:F
-	; .tare.chg 
-	; .work 
-	; .locked.zone 
-	; .det.picked 
-	; .etalon.stop 
-	; 7:state103:F
-	; 7:state104:F
-	; .m1 
-	; .m2 
-	; .m3 
-	; .det.picked 
-	; .work 
-	; .locked.zone 
-	; .tare.chg 
-	; .etalon.stop 
-	; .finish 
-	; .finish.ack 
-	; 7:state105:F
-	; 7:state106:F
-	; 7:state255:F
-	; Group:Utilities:8
-	; 8:a.home:F
-	; 8:a.align:F
-	; 8:safe.home:F
-	; .temp 
-	; .s 
-	; .c 
-	; .dz 
-	; 8:log:F
-	; .$msg 
-	; .i 
-	; 8:pg.select:F
-	; 8:chk.lock:F
-	; .locked.zone 
-	; .work 
-	; 0:a.main:F
-	; .$pg.string 
-	; 0:pg0:F
-	; Group:TCPIP:9
-	; 9:get.state.pc:B
-	; .$state 
-	; 9:tcp.sender.pc:B
-	; .$data 
-	; 9:tcp.callback.pc:B
-	; .$data 
-	; .data.length 
-	; .$temp 
-	; .i 
-	; .$sensor.name 
-	; .$sensor.state 
-	; .$x 
-	; .$y 
-	; .$a 
-	; .$spd 
-	; .speed 
-	; .$state 
-	; 9:tcp.client.pc:B
-	; .tcp.retry.count 
-	; .tcp.connect.tmo 
-	; .tcp.receive.tmo 
-	; .number 
-	; .ports 
-	; .sockets 
-	; .errors 
-	; .suberrors 
-	; .$ips 
-	; .i 
-	; .$temp 
-	; .status 
-	; .$tcp.ip.copy 
-	; .$ip 
-	; .ip 
-	; .connected 
-	; .tcp.error.cnt 
-	; .$tcp.request 
-	; .request.size 
-	; 9:tcp.send.pc:B
-	; .$data 
-	; .data.length 
-	; .tcp.send.tmo 
-	; .status 
-	; .$temp 
-	; .i 
-	; .$data[] 
-	; 9:tcp.log.pc:B
-	; .$msg 
-	; .i 
-	; 0:autostart.pc:B
-	; 0:errstart.pc:B
-	; Group:Initialization:10
-	; 10:set.io.pc:B
-	; .work 
-	; .tare.chg 
-	; .locked.zone 
-	; .finish.ack 
-	; .put.ack 
-	; .tare.ack 
-	; .finish 
-	; .detail.put 
-	; .det.picked 
-	; .det.put 
-	; .lock.zone 
-	; .etalon.stop 
-	; 10:set.vars.pc:B
-	; .i 
-	; .n 
-	; .$name 
-	; Group:Watchdog:11
-	; 11:watchdog.pc:B
-	; .put.ack 
-	; .detail.put 
-	; 11:check.tasks.pc:B
-	; 11:check.disp.pc:B
-	; 11:check.zone.pc:B
-	; 11:check.teach.pc:B
+	;   Group:Objects:1
+	;     1:id1:F
+	;     1:id2:F
+	;     1:id3:F
+	;     1:id4:F
+	;     1:id5:F
+	;     1:id6:F
+	;   Group:STZ:2
+	;     2:a.teach.stz:F
+	;       .plb 
+	;       .plt 
+	;       .prt 
+	;       .prb 
+	;       .dx1 
+	;       .dx2 
+	;       .dy1 
+	;       .dy2 
+	;     2:stz.pick:F
+	;       .$temp 
+	;       .x 
+	;       .y 
+	;       .a 
+	;       .xsh 
+	;       .ysh 
+	;       .zsh 
+	;       .xp 
+	;       .xm 
+	;       .yp 
+	;       .ym 
+	;       .pick 
+	;       .c 
+	;       .#pick.in 
+	;     2:a.test.stz:F
+	;       .$temp 
+	;       .x 
+	;       .y 
+	;       .a 
+	;       .xsh 
+	;       .ysh 
+	;       .zsh 
+	;       .xp 
+	;       .xm 
+	;       .yp 
+	;       .ym 
+	;       .pick 
+	;       .c 
+	;       .#pick.in 
+	;   Group:OPT:3
+	;     3:load.opt.data:F
+	;       .id 
+	;       .temp 
+	;     3:opt.table:F
+	;       .id 
+	;       .$temp 
+	;       .$i1 
+	;       .$i2 
+	;       .$i3 
+	;       .$i4 
+	;     3:opt.take:F
+	;       .i 
+	;       .j 
+	;       .$temp 
+	;       .opt.take.safe 
+	;       .ct1 
+	;       .ct2 
+	;       .mid.point 
+	;       .opt.put 
+	;     3:a.teach.opt:F
+	;       .i 
+	;       .j 
+	;     3:a.test.opt:F
+	;       .i 
+	;       .j 
+	;     3:opt.return:F
+	;       .i 
+	;       .j 
+	;       .$temp 
+	;       .post.tare.in 
+	;       .ct1 
+	;       .ct2 
+	;       .mid.point 
+	;       .put.stz 
+	;   Group:Gripper:4
+	;     4:a.test.gripper:F
+	;     4:gripper.pick:F
+	;       .gripper.no 
+	;       .$temp 
+	;       .temp 
+	;     4:gripper.put:F
+	;       .gripper.no 
+	;       .$temp 
+	;       .temp 
+	;     4:a.teach.gripper:F
+	;       .temp 
+	;   Group:OT:5
+	;     5:a.test.ot:F
+	;       .i 
+	;       .j 
+	;     5:a.teach.ot:F
+	;       .i 
+	;       .j 
+	;     5:load.ot.data:F
+	;       .id 
+	;       .temp 
+	;     5:ot.table:F
+	;       .id 
+	;       .$temp 
+	;       .$i1 
+	;       .$i2 
+	;       .$i3 
+	;       .$i4 
+	;       .$i5 
+	;       .$i6 
+	;     5:ot.take:F
+	;       .i 
+	;       .j 
+	;       .$temp 
+	;       .ot.take.safe 
+	;       .ct1 
+	;       .ct2 
+	;       .mid.point 
+	;       .ot.put 
+	;       .tare.ack 
+	;     5:ot.return:F
+	;       .i 
+	;       .j 
+	;       .$temp 
+	;       .post.tare.out 
+	;       .ct1 
+	;       .ct2 
+	;       .mid.point 
+	;       .put.outpal 
+	;   Group:Positioner:6
+	;     6:a.teach.pos:F
+	;       .temp 
+	;     6:pos.put:F
+	;       .$temp 
+	;       .temp 
+	;       .det.put 
+	;       .lock.zone 
+	;       .locked.zone 
+	;   Group:States:7
+	;     7:state0:F
+	;       .finish 
+	;       .det.put 
+	;     7:state1:F
+	;       .current.pos 
+	;       .stz.wait 
+	;       .pos.wait 
+	;       .i 
+	;       .j 
+	;     7:state2:F
+	;       .current.pos 
+	;       .stz.wait 
+	;       .pos.wait 
+	;       .i 
+	;       .j 
+	;     7:state3:F
+	;       .current.pos 
+	;       .stz.wait 
+	;       .pos.wait 
+	;     7:state4:F
+	;       .current.pos 
+	;       .stz.wait 
+	;       .pos.wait 
+	;       .etalon.stop 
+	;     7:state5:F
+	;       .current.pos 
+	;       .stz.wait 
+	;       .pos.wait 
+	;       .i 
+	;       .j 
+	;       .work 
+	;     7:state6:F
+	;       .current.pos 
+	;       .stz.wait 
+	;       .pos.wait 
+	;       .i 
+	;       .j 
+	;     7:state7:F
+	;     7:state8:F
+	;     7:state9:F
+	;       .m1 
+	;       .m2 
+	;       .m3 
+	;       .etalon.stop 
+	;     7:state100:F
+	;     7:state101:F
+	;     7:state102:F
+	;       .tare.chg 
+	;       .work 
+	;       .locked.zone 
+	;       .det.picked 
+	;       .etalon.stop 
+	;     7:state103:F
+	;     7:state104:F
+	;       .m1 
+	;       .m2 
+	;       .m3 
+	;       .det.picked 
+	;       .work 
+	;       .locked.zone 
+	;       .tare.chg 
+	;       .etalon.stop 
+	;       .finish 
+	;       .finish.ack 
+	;     7:state105:F
+	;     7:state106:F
+	;     7:state255:F
+	;   Group:Utilities:8
+	;     8:a.home:F
+	;     8:a.align:F
+	;     8:safe.home:F
+	;       .temp 
+	;       .s 
+	;       .c 
+	;       .dz 
+	;     8:log:F
+	;       .$msg 
+	;       .i 
+	;     8:pg.select:F
+	;     8:chk.lock:F
+	;       .locked.zone 
+	;       .work 
+	;   0:a.main:F
+	;     .$pg.string 
+	;   0:pg0:F
+	;   Group:TCPIP:9
+	;     9:get.state.pc:B
+	;       .$state 
+	;     9:tcp.sender.pc:B
+	;       .$data 
+	;     9:tcp.callback.pc:B
+	;       .$data 
+	;       .data.length 
+	;       .$temp 
+	;       .i 
+	;       .$sensor.name 
+	;       .$sensor.state 
+	;       .$x 
+	;       .$y 
+	;       .$a 
+	;       .$spd 
+	;       .speed 
+	;       .$state 
+	;     9:tcp.client.pc:B
+	;       .tcp.retry.count 
+	;       .tcp.connect.tmo 
+	;       .tcp.receive.tmo 
+	;       .number 
+	;       .ports 
+	;       .sockets 
+	;       .errors 
+	;       .suberrors 
+	;       .$ips 
+	;       .i 
+	;       .$temp 
+	;       .status 
+	;       .$tcp.ip.copy 
+	;       .$ip 
+	;       .ip 
+	;       .connected 
+	;       .tcp.error.cnt 
+	;       .$tcp.request 
+	;       .request.size 
+	;     9:tcp.send.pc:B
+	;       .$data 
+	;       .data.length 
+	;       .tcp.send.tmo 
+	;       .status 
+	;       .$temp 
+	;       .i 
+	;       .$data[] 
+	;     9:tcp.log.pc:B
+	;       .$msg 
+	;       .i 
+	;   0:autostart.pc:B
+	;   0:errstart.pc:B
+	;   Group:Initialization:10
+	;     10:set.io.pc:B
+	;       .work 
+	;       .tare.chg 
+	;       .locked.zone 
+	;       .finish.ack 
+	;       .put.ack 
+	;       .tare.ack 
+	;       .finish 
+	;       .detail.put 
+	;       .det.picked 
+	;       .det.put 
+	;       .lock.zone 
+	;       .etalon.stop 
+	;     10:set.vars.pc:B
+	;       .i 
+	;       .n 
+	;       .$name 
+	;   Group:Watchdog:11
+	;     11:watchdog.pc:B
+	;       .put.ack 
+	;       .detail.put 
+	;     11:check.tasks.pc:B
+	;     11:check.disp.pc:B
+	;     11:check.zone.pc:B
+	;     11:check.teach.pc:B
 	; @@@ TRANS @@@
 	; ot.point[] OT point i, j
 	; opt.point[] OPT point i, j
@@ -3392,6 +3418,8 @@ N_INT300    "s.debug.mode"
 	; s.tcp.log Add log record for tcp.log
 	; rs7.etalon.stop Etalon measurement was bad, need to stop
 	; do.automatic Robot in automatic mode
+	; rs13.no.ot.stop No OT found when it should be
+	; s.cmd.n.op.stop Internal signal no OP stop
 	; @@@ TOOLS @@@
 	; tool.pin Tool for calibration pin and tare
 	; tool.pick[] Gripper 3 tool
@@ -3951,6 +3979,8 @@ rs7.etalon.stop = 1033
 do.automatic = 2012
 pg7.gripper = 1
 layout = 0
+rs13.no.ot.stop = 34
+s.cmd.n.op.stop = 2242
 .END
 .STRINGS
 $tcp.ip = "192.168.7.100"

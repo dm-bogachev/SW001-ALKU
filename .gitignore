@@ -38,3 +38,5 @@ DatasetGrabber/images/**/*
 DatasetGrabber/imagesold/**/*
 DatasetGrabber/images.tar.xz
 DatasetGrabber.tar.xz
+Robot/rs07_fix.pg
+Robot/rs13_fix.pg
