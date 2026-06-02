@@ -1,94 +1,94 @@
 .AUXDATA
-N_OX1    "release.grip"
-N_OX2    "capture.grip"
-N_OX3    "grip.unclamp"
-N_OX4    "grip.clamp"
-N_OX17    "do.work[1]"
-N_OX18    "rs7.tare.chg"
-N_OX19    "rs7.locked.zone"
-N_OX20    "rs7.finish.ack"
-N_OX21    "rs7.put.ack"
-N_OX25    "rs7.det.picked[0]"
-N_OX26    "rs7.det.picked[1]"
-N_OX27    "rs7.det.picked[2]"
-N_OX28    "rs7.det.picked[3]"
-N_OX29    "rs7.det.picked[4]"
-N_OX30    "rs7.det.picked[5]"
-N_OX31    "rs7.det.picked[6]"
-N_OX32    "rs7.det.picked[7]"
-N_OX33    "rs7.etalon.stop"
-N_WX1    "grip.unclamped"
-N_WX2    "grip.clamped"
-N_WX17    "rs13.work[1]"
-N_WX18    "rs13.tare.ack"
-N_WX19    "rs13.detail.put"
-N_WX20    "rs13.finish"
-N_WX25    "rs13.det.put[0]"
-N_WX26    "rs13.det.put[1]"
-N_WX27    "rs13.det.put[2]"
-N_WX28    "rs13.det.put[3]"
-N_WX29    "rs13.det.put[4]"
-N_WX30    "rs13.det.put[5]"
-N_WX31    "rs13.det.put[6]"
-N_WX32    "rs13.det.put[7]"
-N_WX33    "rs13.no.ot.stop"
-N_INT1    "di.ifp.page[1]"
-N_INT2    "di.ifp.page[2]"
-N_INT3    "di.ifp.page[3]"
-N_INT4    "di.ifp.page[4]"
-N_INT5    "di.ifp.page[5]"
-N_INT6    "di.ifp.page[6]"
-N_INT7    "di.ifp.page[7]"
-N_INT8    "di.ifp.page[8]"
-N_INT9    "di.hold"
-N_INT10    "do.home"
-N_INT11    "do.bat.alm"
-N_INT12    "do.automatic"
-N_INT201    "s.tcp.send.ena"
-N_INT202    "s.tcp.recv.ena"
-N_INT203    "s.tcp.ena"
-N_INT204    "s.tcp.log"
-N_INT209    "s.zone.blocked"
-N_INT212    "do.work[2]"
-N_INT213    "do.work[3]"
-N_INT214    "do.work[4]"
-N_INT215    "do.work[5]"
-N_INT216    "do.work[6]"
-N_INT217    "do.work[7]"
-N_INT218    "do.work[8]"
-N_INT221    "s.force.in[1]"
-N_INT222    "s.force.in[2]"
-N_INT223    "s.defect.pal.ok"
-N_INT224    "s.defect.pal.ng"
-N_INT225    "s.measure.ok"
-N_INT226    "s.measure.ng"
-N_INT227    "s.force.defect"
-N_INT231    "s.grip.full"
-N_INT232    "s.cmd.start"
-N_INT233    "s.cmd.pick"
-N_INT234    "s.cmd.measured"
-N_INT237    "s.cmd.chk.etal"
-N_INT238    "s.cmd.finish"
-N_INT239    "s.cmd.pause"
-N_INT240    "s.cmd.resume"
-N_INT241    "s.cmd.stop"
-N_INT249    "s.pr.tst.ot"
-N_INT250    "s.pr.home"
-N_INT251    "s.pr.tch.ot"
-N_INT252    "s.pr.tch.defect"
-N_INT253    "s.pr.tch.meas"
-N_INT254    "s.pr.tch.etal"
-N_INT255    "s.pr.tch.pos"
-N_INT256    "s.apply.obj"
-N_INT260    "s.pr.tch.grip"
-N_INT261    "s.hmi.res.state"
-N_INT262    "s.hmi.res.act"
-N_INT270    "s.opt.spacer"
-N_INT271    "s.opt.flip"
-N_INT272    "s.etalon.ok"
-N_INT273    "s.etalon.ret"
-N_INT274    "s.etalon.ng"
-N_INT300    "s.debug.mode"
+N_OX1    "release.grip|!Release gripper!"
+N_OX2    "capture.grip|Capture gripper"
+N_OX3    "grip.unclamp|Unclamp gripper"
+N_OX4    "grip.clamp|Clamp gripper"
+N_OX17    "do.work[1]|Robot in workspace i"
+N_OX18    "rs7.tare.chg|Request tare change"
+N_OX19    "rs7.locked.zone|RS007L Blocked positioner zone"
+N_OX20    "rs7.finish.ack|RS007L finished work"
+N_OX21    "rs7.put.ack|RS007L picked detail"
+N_OX25    "rs7.det.picked[0]|Picked details count from RS007L"
+N_OX26    "rs7.det.picked[1]|Picked details count from RS007L"
+N_OX27    "rs7.det.picked[2]|Picked details count from RS007L"
+N_OX28    "rs7.det.picked[3]|Picked details count from RS007L"
+N_OX29    "rs7.det.picked[4]|Picked details count from RS007L"
+N_OX30    "rs7.det.picked[5]|Picked details count from RS007L"
+N_OX31    "rs7.det.picked[6]|Picked details count from RS007L"
+N_OX32    "rs7.det.picked[7]|Picked details count from RS007L"
+N_OX33    "rs7.etalon.stop|Etalon measurement was bad, need to stop"
+N_WX1    "grip.unclamped|Gripper unclamped"
+N_WX2    "grip.clamped|Gripper clamped"
+N_WX17    "rs13.work[1]|Robot in workspace 1"
+N_WX18    "rs13.tare.ack|Acknowledge of tare change"
+N_WX19    "rs13.detail.put|RS013N put detail to positioner"
+N_WX20    "rs13.finish|RS013N finish process"
+N_WX25    "rs13.det.put[0]|Put details count from RS0013N"
+N_WX26    "rs13.det.put[1]|Put details count from RS0013N"
+N_WX27    "rs13.det.put[2]|Put details count from RS0013N"
+N_WX28    "rs13.det.put[3]|Put details count from RS0013N"
+N_WX29    "rs13.det.put[4]|Put details count from RS0013N"
+N_WX30    "rs13.det.put[5]|Put details count from RS0013N"
+N_WX31    "rs13.det.put[6]|Put details count from RS0013N"
+N_WX32    "rs13.det.put[7]|Put details count from RS0013N"
+N_WX33    "rs13.no.ot.stop|No OT found when it should be"
+N_INT1    "di.ifp.page[1]|Open IFP page i"
+N_INT2    "di.ifp.page[2]|Open IFP page i"
+N_INT3    "di.ifp.page[3]|Open IFP page i"
+N_INT4    "di.ifp.page[4]|Open IFP page i"
+N_INT5    "di.ifp.page[5]|Open IFP page i"
+N_INT6    "di.ifp.page[6]|Open IFP page i"
+N_INT7    "di.ifp.page[7]|Open IFP page i"
+N_INT8    "di.ifp.page[8]|Open IFP page i"
+N_INT9    "di.hold|Set hold mode"
+N_INT10    "do.home|Robot in home position"
+N_INT11    "do.bat.alm|Battery low alarm"
+N_INT12    "do.automatic|Robot in automatic mode"
+N_INT201    "s.tcp.send.ena|Display TCP send prints"
+N_INT202    "s.tcp.recv.ena|Display TCP receive prints"
+N_INT203    "s.tcp.ena|Display TCP connect prints"
+N_INT204    "s.tcp.log|Add log record for tcp.log"
+N_INT209    "s.zone.blocked|RS007L first in common zone"
+N_INT212    "do.work[2]|Robot in workspace i"
+N_INT213    "do.work[3]|Robot in workspace i"
+N_INT214    "do.work[4]|Robot in workspace i"
+N_INT215    "do.work[5]|Robot in workspace i"
+N_INT216    "do.work[6]|Robot in workspace i"
+N_INT217    "do.work[7]|Robot in workspace i"
+N_INT218    "do.work[8]|Robot in workspace i"
+N_INT221    "s.force.in[1]|Force input signal i"
+N_INT222    "s.force.in[2]|Force input signal i"
+N_INT223    "s.defect.pal.ok|Defect pallet sensor OK"
+N_INT224    "s.defect.pal.ng|Defect pallet sensor NG"
+N_INT225    "s.measure.ok|Measurement result OK"
+N_INT226    "s.measure.ng|Measurement result NG"
+N_INT227    "s.force.defect|Force measure defect"
+N_INT231    "s.grip.full|Gripper is full"
+N_INT232    "s.cmd.start|Start command"
+N_INT233    "s.cmd.pick|Pick from positioner command"
+N_INT234    "s.cmd.measured|Detail measured"
+N_INT237    "s.cmd.chk.etal|Check etalon command"
+N_INT238    "s.cmd.finish|Finish program"
+N_INT239    "s.cmd.pause|Pause program command"
+N_INT240    "s.cmd.resume|Resume program command"
+N_INT241    "s.cmd.stop|Stop program command"
+N_INT249    "s.pr.tst.ot|Prime test OT program"
+N_INT250    "s.pr.home|Prime a.home"
+N_INT251    "s.pr.tch.ot|Prime teach OT"
+N_INT252    "s.pr.tch.defect|Prime teach defect"
+N_INT253    "s.pr.tch.meas|Prime teach measure machine"
+N_INT254    "s.pr.tch.etal|Prime teach Etalon"
+N_INT255    "s.pr.tch.pos|Prime teach positioner"
+N_INT256    "s.apply.obj|Apply object shifts"
+N_INT260    "s.pr.tch.grip|Prime teach gripper"
+N_INT261    "s.hmi.res.state|Reset state from HMI"
+N_INT262    "s.hmi.res.act|Reset action from hmi"
+N_INT270    "s.opt.spacer|Option for put to OT with spacer"
+N_INT271    "s.opt.flip|Option to put to OT with flip"
+N_INT272    "s.etalon.ok|Etalon result: OK"
+N_INT273    "s.etalon.ret|Etalon result: RETRY"
+N_INT274    "s.etalon.ng|Etalon result: NG"
+N_INT300    "s.debug.mode|Debug mode"
 .END
 .INTER_PANEL_D
 0,9,1,6,15
@@ -2245,23 +2245,23 @@ N_INT300    "s.debug.mode"
 	state = 103
 .END
 .PROGRAM state7()@26/01/21 14:55 #200; Deprecated
-	CALL log ("State 7: Check if gripper change is required")
-	; We are at home at this point. No cases without home!
-	IF current.gripper <> pg7.gripper THEN
-		CALL log ("Selected wrong gripper, perform change")
-		JMOVE #defect.safe
-		IF current.gripper <> 0 THEN
-			CALL gripper.put (current.gripper)
-		END
-		CALL gripper.pick (pg13.gripper)
-		JMOVE #defect.safe
-		;LMOVE #homyak
-	ELSE
-		CALL log ("Program gripper is the same as current gripper")
-	END
-	;
-	SIGNAL s.cmd.chk.etal
-	state = 5
+  CALL log ("State 7: Check if gripper change is required")
+  ; We are at home at this point. No cases without home!
+  IF current.gripper <> pg7.gripper THEN
+    CALL log ("Selected wrong gripper, perform change")
+    JMOVE #defect.safe
+    IF current.gripper <> 0 THEN
+      CALL gripper.put (current.gripper)
+    END
+    CALL gripper.pick (pg7.gripper)
+    JMOVE #defect.safe
+    ;LMOVE #homyak
+  ELSE
+    CALL log ("Program gripper is the same as current gripper")
+  END
+  ;
+  SIGNAL s.cmd.chk.etal
+  state = 5
 .END
 .PROGRAM state8()@26/01/21 14:55 #0; Check etalon by command
 	CALL log ("State 8: Check etalon by command")

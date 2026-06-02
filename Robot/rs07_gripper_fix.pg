@@ -1,0 +1,19 @@
+.PROGRAM state7()@26/01/21 14:55 #200; Deprecated
+  CALL log ("State 7: Check if gripper change is required")
+  ; We are at home at this point. No cases without home!
+  IF current.gripper <> pg7.gripper THEN
+    CALL log ("Selected wrong gripper, perform change")
+    JMOVE #defect.safe
+    IF current.gripper <> 0 THEN
+      CALL gripper.put (current.gripper)
+    END
+    CALL gripper.pick (pg7.gripper)
+    JMOVE #defect.safe
+    ;LMOVE #homyak
+  ELSE
+    CALL log ("Program gripper is the same as current gripper")
+  END
+  ;
+  SIGNAL s.cmd.chk.etal
+  state = 5
+.END
