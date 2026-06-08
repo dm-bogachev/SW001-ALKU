@@ -210,18 +210,19 @@ class Background(Thread):
             return False
         
         command = f"START;{ProductName};{ProductSpec};{ProductCount};"
-        if InTareIDs:
-            command += ",".join(str(id) for id in InTareIDs)
-            command += ";"
-        else: 
-            return False
-        #
+        # 
         if OutTareIDs:
             command += ",".join(str(id) for id in OutTareIDs)
             command += ";"
         else:
             return False
         
+        if InTareIDs:
+            command += ",".join(str(id) for id in InTareIDs)
+            command += ";"
+        else: 
+            return False
+        #      
         command += f"{Layout};"
         
         if not self.send_command_to_robot(command, "RS013N", RS013N_API_URL):
