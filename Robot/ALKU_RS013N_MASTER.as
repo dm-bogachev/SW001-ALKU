@@ -2584,7 +2584,7 @@ N_INT300    "s.debug.mode|Debug mode"
       $opt.data = $DECODE (.$data[1], ";",0)
       ; Decode layout
       .$temp = $DECODE (.$data[1], ";",1)
-      layout = $DECODE (.$data[1], ";",0)
+      layout = VAL ($DECODE (.$data[1], ";",0))
       ;
       stz.x = -1
       stz.y = -1
