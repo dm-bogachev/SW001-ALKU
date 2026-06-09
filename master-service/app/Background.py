@@ -266,10 +266,10 @@ class Background(Thread):
         if result == 0:
             logger.info("Измерение эталона прошло успешно")
             send_result = "OK"
-        elif result == -1:
+        elif result == -1 or result == -3:
             logger.info("Требуется повторное измерение эталона")
             send_result = "RETRY"
-        elif result == -2:
+        elif result == -2 or result == -4:
             logger.info("Измерение эталона завершилось ошибкой")
             send_result = "FAILED"
         return self.send_command_to_robot(f"ETALONRESULT;{send_result};", "RS007L", RS007L_API_URL)
