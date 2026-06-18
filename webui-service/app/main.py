@@ -63,10 +63,17 @@ app.mount("/css", StaticFiles(directory=os.path.join(os.path.dirname(os.path.abs
 app.mount("/js", StaticFiles(directory=os.path.join(os.path.dirname(os.path.abspath(__file__)), "templates", "js")), name="js")
 app.mount("/img", StaticFiles(directory=os.path.join(os.path.dirname(os.path.abspath(__file__)), "templates", "img")), name="img")
 
+
 @app.get("/", response_class=HTMLResponse)
 async def index (request: Request):
-    logger.debug("Открываем главную страницу")
-    return templates.TemplateResponse("index.html", {"request": request})
+    try:
+        logger.debug("Открываем главную страницу")
+        template_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "templates", "index.html")
+        with open(template_path, "r", encoding="utf-8") as f:
+            return f.read()
+    except Exception as e:
+        logger.error(f"Ошибка при загрузке шаблона: {str(e)}", exc_info=True)
+        raise
 
 @app.get("/config")
 async def get_config():
