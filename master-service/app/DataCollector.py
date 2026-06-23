@@ -36,7 +36,49 @@ class DataCollector(Thread):
             "rs007l": "unreachable",
         }
 
+        self.io = {}
+
         self.__stop_event = Event()
+
+    def __get_io_data(self):
+        """
+            Сбор состояния IO: возвращает dict
+            {
+                "DI01": 0, "DI02": 1, ..., "DI08": 0,
+                "DO01": 0, "DO02": 1, ..., "DO08": 0
+            }
+        """
+        defaults = {
+            "DI01": False, "DI02": False, "DI03": False, "DI04": False, "DI05": False, "DI06": False, "DI07": False, "DI08": False,
+            "DO01": False, "DO02": False, "DO03": False, "DO04": False, "DO05": False, "DO06": False, "DO07": False, "DO08": False,
+        }
+        
+        try:
+            resp = requests.get(f"{IO_API_URL}/inputs/all", timeout=3)
+            resp.raise_for_status()
+            inputs_payload = resp.json()
+            
+            resp = requests.get(f"{IO_API_URL}/outputs/all", timeout=3)
+            resp.raise_for_status()
+            outputs_payload = resp.json()
+            
+            result = {}
+            
+            # Map inputs to DI01, DI02, ..., DI08
+            if "Inputs" in inputs_payload:
+                for i, value in enumerate(inputs_payload["Inputs"]):
+                    result[f"DI{i+1:02d}"] = bool(value)
+            
+            # Map outputs to DO01, DO02, ..., DO08
+            if "Outputs" in outputs_payload:
+                for i, value in enumerate(outputs_payload["Outputs"]):
+                    result[f"DO{i+1:02d}"] = bool(value)
+            
+            return result
+            
+        except requests.exceptions.RequestException as e:
+            logger.warning(f"Failed to get IO data: {e}")
+            return defaults
 
     def __check_states(self):
         states = {}
@@ -220,6 +262,7 @@ class DataCollector(Thread):
             "rs013n": self.rs013n,
             "rs007l": self.rs007l,
             "cv": self.cv,
+            "io": self.io,
         }
 
     def run(self):
@@ -230,6 +273,7 @@ class DataCollector(Thread):
             self.rs007l = self.__collect_rs007l_data()
             self.states = self.__check_states()
             self.cv = self.__collect_cv_data()
+            self.io = self.__get_io_data()
             time.sleep(0.1)
 
         
