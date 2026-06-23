@@ -6,7 +6,6 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspa
 
 # Внутренние модули
 from common.Logger import config_logger
-from RobotState import RobotState
 from DataCollector import DataCollector
 import requests
 from api import *  # This imports RS013N_API_URL

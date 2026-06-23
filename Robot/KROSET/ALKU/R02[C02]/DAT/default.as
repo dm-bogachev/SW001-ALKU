@@ -16,15 +16,15 @@
 .NETCONF     192.168.1.4,"fcon",255.255.255.0,0.0.0.0,0.0.0.0,0.0.0.0,""
 .NETCONF2     192.168.7.103,255.255.255.0,0.0.0.0
 .ROBOTDATA1
-ZROBOT.TYPE    30  10   6 6324      -95551   RS007L-B001 ( 2025-12-18 19:52 )
+ZROBOT.TYPE    30  10   6 6324      -95551   RS007L-B001 ( 2026-06-23 18:28 )
 ZSYSTEM         1   5         -91
 ZLINEAR         0   0   0   0   0   0  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1         179
 CONT_CODE     701      -10516
 ZZERO         268466748 268333916 268159364 268435457 268298794 268427090 268435456 268435456 268435456 268435456 268435456 268435456 268435456 268435456 268435456 268435456 268435456 268435456   544241416
 ENDLESS_POS   0 100 1       -1516
 LANGUAGE      2
-ZSIGSPEC       16  16 960      -14881
-ZSIGSPEC2      16   0        -241
+ZSIGSPEC      960 960 960      -43201
+ZSIGSPEC2       0   0          -1
 ZSETAPPLI          0      0      8      8      0    255       -4066
 ZAXCONFIG       1  -1  -1  -1  -1  -1  -1  -1  -1  -1         119
 ZMTNIMP_01    ON  -3361
@@ -1335,38 +1335,38 @@ ZSWITCH ZFIX_CALL_1STEPPG ON   -523
 .END
 .OPE_INFO1
 OPEINFO  30 10 6 6324  1723231961  ;(24/8/10 4:32:41) RS007L-B001 
-CONT_TIM  259.9 
-SERV_TIM  63.6 
-MTON_CNT  1883 
+CONT_TIM  261.4 
+SERV_TIM  64.1 
+MTON_CNT  1887 
 ESTP_CNT  9 
-BRKE_CNT  1948 
-CON_PWR  18.113 
-SUP_PWR  18.113 
+BRKE_CNT  1951 
+CON_PWR  18.120 
+SUP_PWR  18.120 
 REG_PWR  0.000 
 MOVE_TJT  16.4 21.4 17.3 11.7 16.9 19.7 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 
-DIST_DJT  1010.307 1086.821 687.294 1389.441 1061.544 2410.899 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 
-DIST_DJT_PLUS  504.134 542.970 344.151 694.687 530.164 1204.691 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 
-OPEINFO TP_BKLIGHT  0 121.9 50000 
+DIST_DJT  1011.099 1087.373 687.678 1389.857 1061.952 2411.955 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 
+DIST_DJT_PLUS  504.526 543.242 344.343 694.895 530.364 1205.219 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 
+OPEINFO TP_BKLIGHT  0 122.6 50000 
 OPEINFO MC  0 0 2000000 
 OPEINFO PARTS1  0 0 0 0 0 0 0 0 0 0 0 
 OPEINFO PARTS2  0 0 0 0 0 0 0 0 0 0 0 
 OPEINFO PARTS3  0 0 0 0 0 0 0 0 0 0 0 
 M_OPEINFO  30 10 6 6324  1713957146  ;(24/4/24 20:12:26) RS007L-B001 
-M_CONT_TIM  319.5 
-M_SERV_TIM  77.9 
-M_MTON_CNT  3011 
+M_CONT_TIM  321.0 
+M_SERV_TIM  78.4 
+M_MTON_CNT  3015 
 M_ESTP_CNT  13 
-M_BRKE_CNT  3187 
-M_CON_PWR  22.387 
-M_SUP_PWR  22.387 
+M_BRKE_CNT  3190 
+M_CON_PWR  22.394 
+M_SUP_PWR  22.394 
 M_REG_PWR  0.000 
 M_MOVE_TJT  18.0 24.2 19.6 12.5 18.9 22.7 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 
-M_DIST_DJT  1046.094 1156.283 759.090 1432.070 1121.753 2517.688 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 
-M_DIST_DJT_PLUS  504.134 542.970 344.151 694.687 530.164 1204.691 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 
+M_DIST_DJT  1046.886 1156.835 759.474 1432.486 1122.161 2518.744 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 
+M_DIST_DJT_PLUS  504.526 543.242 344.343 694.895 530.364 1205.219 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 
 M_MOVE_TJT_OVERDRIVE  0.0 0.0 0.0 0.0 0.0 0.0 
 M_DIST_DJT_OVERDRIVE  0.000 0.000 0.000 0.000 0.000 0.000 
 M_WARN_CJT_OVERDRIVE  0 0 0 0 0 0 
-HOUR_MTR  319.5 
+HOUR_MTR  321.0 
 .END
 .SYSDATA
 REG_POINT       0
@@ -2390,7 +2390,7 @@ SWITCH AUTOSTART2.PC   OFF
 SWITCH AUTOSTART3.PC   OFF
 SWITCH AUTOSTART4.PC   OFF
 SWITCH AUTOSTART5.PC   OFF
-SWITCH ERRSTART.PC     OFF
+SWITCH ERRSTART.PC     ON 
 SWITCH AUTOSTART.LSQ   OFF
 SWITCH DISPIO_01       OFF
 SWITCH HOLD.STEP       ON 
@@ -2458,15 +2458,15 @@ SWITCH SLOW_REP_MM     OFF
 .END
 .CONDITION
 AS_VER       ASF_01000001G
-ELOG_NUM            126
+ELOG_NUM            132
 CHK_ONCE      255
 MAN_SPEED     1
 CHK_SPEED     1
 MON_SPEED       100.000
 PRG_ACCEL       100.000
-PRG_SPEED       100.000
+PRG_SPEED        20.000
 PRG_DECEL       100.000
-PRM_SPEED       100.000
+PRM_SPEED        20.000
 PRM_ACCEL       100.000
 PRM_DECEL       100.000
 BLK_SPEED       100.000
@@ -2491,9 +2491,9 @@ CINT_PRM_ACCEL    100.000
 CINT_PRG_ACCEL    100.000
 CINT_PRM_DECEL    100.000
 CINT_PRG_DECEL    100.000
-PRG_ACCEL_ORG      0.000
-PRG_SPEED_ORG      0.000
-PRG_DECEL_ORG      0.000
+PRG_ACCEL_ORG    100.000
+PRG_SPEED_ORG     20.000
+PRG_DECEL_ORG    100.000
 PRG_JT_ACCEL    100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000
 PRG_JT_DECEL    100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000
 PRM_JT_ACCEL    100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000
@@ -2505,9 +2505,9 @@ STEP2ENV0_PRG_STEP          1
 STEP2ENV1_CALL_PRGNAME tcp.client.pc
 STEP2ENV1_PRG_STEP         43
 STEP2ENV2_CALL_PRGNAME tcp.sender.pc
-STEP2ENV2_PRG_STEP          1
+STEP2ENV2_PRG_STEP         23
 STEP2ENV4_CALL_PRGNAME errstart.pc
-STEP2ENV4_PRG_STEP          7
+STEP2ENV4_PRG_STEP          9
 USR_DO1      00000000000000000000000000000000
 USR_DO2      00000000000000000000000000000000
 USR_DO3      00000000000000000000000000000000
@@ -2545,9 +2545,9 @@ USR_INTERNAL3 00000000000000000000000000000000
 USR_INTERNAL4 00000000000000000000000000000000
 USR_INTERNAL5 00000000000000000000000000000000
 USR_INTERNAL6 00000000000000000000000000000000
-USR_INTERNAL7 00000000000000000000000000000000
+USR_INTERNAL7 00110000000000000000000000000000
 USR_INTERNAL8 00000000000000000000000000000000
-USR_INTERNAL9 00000000000000000000000000000000
+USR_INTERNAL9 00000000000000001000000000000000
 USR_INTERNAL10 00000000000000000000000000000000
 USR_INTERNAL11 00000000000000000000000000000000
 USR_INTERNAL12 00000000000000000000000000000000
@@ -2589,16 +2589,31 @@ USR_ADO2_7         0      0      0      0      0      0      0      0      0    
 USR_ADO2_8         0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0
 UCINDENT1          0
 UCLINE1            0
-UCFGCOLOR1         0
-UCBGCOLOR1         0
+UCFGCOLOR1        11
+UCBGCOLOR1        10
+UCCHARWINSTR1 18:08:45 State 100: Waiting for start
+18:10:03 START with Name:312.229.002-0 Count: 150 OT:1 OPT:1
+18:10:03 State 106: Check program
+18:10:03 Selected program: 312.229.002
+
 UCINDENT2          0
 UCLINE2            0
-UCFGCOLOR2         0
-UCBGCOLOR2         0
+UCFGCOLOR2        11
+UCBGCOLOR2        10
+UCCHARWINSTR2 18:10:03 State 5: Check etalon
+18:10:04 Wait for unclamp gripper. State: WaitingGripUnclamped
+18:10:46 Pick detail from etalon (ID: 1)
+18:10:51 Measure etalon (ID: 1)
+
 UCINDENT3          0
 UCLINE3            0
-UCFGCOLOR3         0
-UCBGCOLOR3         0
+UCFGCOLOR3        11
+UCBGCOLOR3        10
+UCCHARWINSTR3 18:10:55 Waiting for measurement result
+18:11:28 Measurement etalon: OK
+18:11:30 Return etalon to positioner (ID: 1)
+18:11:35 State 101: Calculating next step
+
 UCINDENT4          0
 UCLINE4            0
 UCFGCOLOR4         0
@@ -3361,6 +3376,7 @@ TP_RECINHI      0   0   0
 64,4,1,"OFF     ON","",""," TCP SEND",10,4,4,0,2201,0
 65,4,1,"OFF     ON","",""," TCP RECV",10,4,4,0,2202,0
 66,4,1,"OFF     ON","",""," TCP LOG",10,4,4,0,2204,0
+67,8,"wdog.tmr","  WATCHDOG"," TIMER, s",10,15,3,1,0
 68,14,"action","  CURRENT","  ACTION",10,15,0
 69,2,"","   RESET","   ACTION","",10,4,15,2262,0
 70,1,"GRIP FULL","","","",10,15,4,10,2231,0
@@ -3378,9 +3394,10 @@ TP_RECINHI      0   0   0
 91,2,"   PRIME","","   TEACH","POSITIONER",10,4,11,2255,0
 97,2,"","   Close","  gripper","",10,4,5,4,0
 105,2,"","   MAIN","<---------","",10,4,11,2001,0
-109,2,"","   TEACH","  MACHINE","",10,4,11,2005,0
-110,2,"","   TEACH","    OT","",10,4,11,2006,0
-111,2,"","   TEACH","  DEFECT","",10,4,11,2007,0
+108,2,"","   TEACH","  MACHINE","",10,4,11,2005,0
+109,2,"","   TEACH","    OT","",10,4,11,2006,0
+110,2,"","   TEACH","  DEFECT","",10,4,11,2007,0
+111,2,"","   TEACH","  GRIPPERS","",10,4,11,2008,0
 112,2,"  ","  PRIME","  HOME","",10,4,11,2250,0
 113,8,"hmi.obj.id","  OBJECT","    ID",10,2,2,1,0
 114,8,"hmi.tool.no","    HMI","  GRIPPER ",10,2,2,1,0
@@ -3390,9 +3407,10 @@ TP_RECINHI      0   0   0
 126,2,"   PRIME","","   TEACH","   ETALON",10,4,11,2254,0
 127,8,"hmi.etalon.id","  ETALON","    ID",10,2,2,1,0
 133,2,"","   MAIN","<---------","",10,4,11,2001,0
-137,2,"","   TEACH","POSITIONER","",10,4,11,2004,0
-138,2,"","   TEACH","    OT","",10,4,11,2006,0
-139,2,"","   TEACH","  DEFECT","",10,4,11,2007,0
+136,2,"","   TEACH","POSITIONER","",10,4,11,2004,0
+137,2,"","   TEACH","    OT","",10,4,11,2006,0
+138,2,"","   TEACH","  DEFECT","",10,4,11,2007,0
+139,2,"","   TEACH","  GRIPPERS","",10,4,11,2008,0
 140,2,"  ","  PRIME","  HOME","",10,4,11,2250,0
 141,8,"hmi.obj.id","  OBJECT","    ID",10,2,2,1,0
 142,8,"hmi.tool.no","    HMI","  GRIPPER ",10,2,2,1,0
@@ -3410,18 +3428,31 @@ TP_RECINHI      0   0   0
 156,8,"ot.y","    OT","Y POSITION",10,3,2,1,0
 157,8,"hmi.ot.k","    OT","  PUT ID ",10,3,3,1,0
 161,2,"","   MAIN","<---------","",10,4,11,2001,0
-165,2,"","   TEACH","POSITIONER","",10,4,11,2004,0
-166,2,"","   TEACH","  MACHINE","",10,4,11,2005,0
-167,2,"","   TEACH","  DEFECT","",10,4,11,2007,0
+164,2,"","   TEACH","POSITIONER","",10,4,11,2004,0
+165,2,"","   TEACH","  MACHINE","",10,4,11,2005,0
+166,2,"","   TEACH","  DEFECT","",10,4,11,2007,0
+167,2,"","   TEACH","  GRIPPERS","",10,4,11,2008,0
 168,2,"  ","  PRIME","  HOME","",10,4,11,2250,0
 170,8,"hmi.defect.pos","  DEFECT","    ID",10,2,2,1,0
 174,2,"","   Open ","  gripper","",10,4,5,3,0
 175,2,"   PRIME","","   TEACH","  DEFECT",10,4,11,2252,0
 181,2,"","   Close","  gripper","",10,4,5,4,0
 189,2,"","   MAIN","<---------","",10,4,11,2001,0
-193,2,"","   TEACH","POSITIONER","",10,4,11,2004,0
-194,2,"","   TEACH","  MACHINE","",10,4,11,2005,0
-195,2,"","   TEACH","    OT","",10,4,11,2006,0
+192,2,"","   TEACH","POSITIONER","",10,4,11,2004,0
+193,2,"","   TEACH","  MACHINE","",10,4,11,2005,0
+194,2,"","   TEACH","    OT","",10,4,11,2006,0
+195,2,"","   TEACH","  GRIPPERS","",10,4,11,2008,0
+196,2,"  ","  PRIME","  HOME","",10,4,11,2250,0
+199,8,"current.gripper","  CURRENT","  GRIPPER ",10,2,2,1,0
+200,8,"hmi.gripper","    HMI","  GRIPPER ",10,2,2,1,0
+202,2,"","  Capture","  gripper","",10,4,6,6,0
+203,2,"   PRIME","","   TEACH","  GRIPPERS",10,4,11,2260,0
+209,2,"","  Release ","  gripper","",10,4,6,5,-1
+217,2,"","   MAIN","<---------","",10,4,11,2001,0
+220,2,"","   TEACH","POSITIONER","",10,4,11,2004,0
+221,2,"","   TEACH","  MACHINE","",10,4,11,2005,0
+222,2,"","   TEACH","    OT","",10,4,11,2006,0
+223,2,"","   TEACH","  DEFECT","",10,4,11,2007,0
 .END
 .INTER_PANEL_TITLE
 "MAIN",1
@@ -3438,19 +3469,19 @@ TP_RECINHI      0   0   0
 .END
 .SIG_COMMENT
 .END
-.PROGRAM a.align()@26/06/15 22:03 #0
+.PROGRAM a.align()@26/06/23 17:18 #0
 ;
   SPEED 250 MM/S ALWAYS
   ALIGN
 ;
 .END
-.PROGRAM a.home()@26/06/15 22:03 #0
+.PROGRAM a.home()@26/06/23 17:18 #0
 ;
   SPEED 250 MM/S ALWAYS
   JMOVE #homyak
 ;
 .END
-.PROGRAM a.main()@26/06/15 22:03 #0
+.PROGRAM a.main()@26/06/23 17:18 #0
 ;
   CALL log("Main program executed")
   CALL safe.home
@@ -3470,7 +3501,7 @@ TP_RECINHI      0   0   0
   END
 ;
 .END
-.PROGRAM a.teach.defect()@26/06/15 22:03 #0
+.PROGRAM a.teach.defect()@26/06/23 17:18 #0
   IF FALSE THEN
     SPEED 250 MM/S ALWAYS
     ACCURACY 0 ALWAYS
@@ -3506,7 +3537,7 @@ TP_RECINHI      0   0   0
   LMOVE .defect.pos
   LAPPRO .defect.pos,-10
 .END
-.PROGRAM a.teach.etalon()@26/06/15 22:03 #0
+.PROGRAM a.teach.etalon()@26/06/23 17:18 #0
 ;
   TOOL tool.pick[hmi.tool.no]
 ;
@@ -3575,7 +3606,7 @@ TP_RECINHI      0   0   0
   LMOVE #et.pos.point[hmi.etalon.id]
   LMOVE .et.pos.point+TRANS(0,0,50)
 .END
-.PROGRAM a.teach.machine()@26/06/15 22:03 #0
+.PROGRAM a.teach.machine()@26/06/23 17:18 #0
   IF FALSE THEN ; For round details
     TOOL tool.pick[hmi.tool.no]
     JMOVE #safe.machine
@@ -3608,7 +3639,7 @@ TP_RECINHI      0   0   0
     LMOVE #before.machine[1]
   END
 .END
-.PROGRAM a.teach.ot()@26/06/15 22:03 #0
+.PROGRAM a.teach.ot()@26/06/23 17:18 #0
   SPEED 250 MM/S ALWAYS
   ACCURACY 0 ALWAYS
   TOOL tool.pick[hmi.tool.no]
@@ -3629,7 +3660,7 @@ TP_RECINHI      0   0   0
 ;
 ;JMOVE ot.frame + TRANS (grip.xsh[hmi.tool.no], grip.ysh[hmi.tool.no], grip.zsh[hmi.tool.no])
 .END
-.PROGRAM a.teach.pos()@26/06/15 22:03 #0
+.PROGRAM a.teach.pos()@26/06/23 17:18 #0
 ;
   IF hmi.obj.id==round.no THEN
     .shift.x = 0
@@ -3659,7 +3690,7 @@ TP_RECINHI      0   0   0
   TWAIT 0.5
 ;
 .END
-.PROGRAM a.test.ot()@26/06/15 22:03 #0
+.PROGRAM a.test.ot()@26/06/23 17:18 #0
   IF hmi.ot.k<>-1 THEN
     .$pg = "id"+$ENCODE(/L,hmi.obj.id)
     SCALL .$pg
@@ -3684,7 +3715,7 @@ TP_RECINHI      0   0   0
   LMOVE .put
   LAPPRO .put,-50
 .END
-.PROGRAM autostart.pc()@26/06/15 22:03 #0
+.PROGRAM autostart.pc()@26/06/23 17:18 #0
 ;
 ; System switches
   CP ON
@@ -3709,7 +3740,7 @@ TP_RECINHI      0   0   0
   CALL watchdog.pc
 ;
 .END
-.PROGRAM calc.grid()@26/06/15 22:03 #90
+.PROGRAM calc.grid()@26/06/23 17:18 #91
 ; Constants
   line.width = 210; 210; mm
   lines.count = 21
@@ -3732,7 +3763,7 @@ TP_RECINHI      0   0   0
   END
 ;
 .END
-.PROGRAM calc.grid.rnd()@26/06/15 22:03 #11
+.PROGRAM calc.grid.rnd()@26/06/23 17:18 #11
 ; Constants
   lines.count = 11
   obj.in.line = 7
@@ -3748,7 +3779,7 @@ TP_RECINHI      0   0   0
   END
 ;
 .END
-.PROGRAM calc.ot()@26/06/15 22:03 #116
+.PROGRAM calc.ot()@26/06/23 17:18 #117
 ; Get matrix center
   .center.col = INT(lines.count/2)
   .center.row = INT(obj.in.line/2)
@@ -3860,7 +3891,7 @@ TP_RECINHI      0   0   0
 ;  PRINT .$line    ; печатаем всю строку одним вызовом
 ;END
 .END
-.PROGRAM calc.ot.old()@26/06/15 22:03 #0
+.PROGRAM calc.ot.old()@26/06/23 17:18 #0
 ; Get matrix center
   .center.col = INT(lines.count/2)
   .center.row = INT(obj.in.line/2)
@@ -3950,7 +3981,7 @@ TP_RECINHI      0   0   0
 ;  PRINT .$line    ; печатаем всю строку одним вызовом
 ;END
 .END
-.PROGRAM check.disp.pc()@26/06/15 22:03 #51958622
+.PROGRAM check.disp.pc()@26/06/23 17:18 #52275340
 ;
   IF SIG(s.tcp.ena) AND tcp.ena==-1 THEN
     tcp.ena = tyterm
@@ -3974,7 +4005,7 @@ TP_RECINHI      0   0   0
   END
 ;
 .END
-.PROGRAM check.tasks.pc()@26/06/15 22:03 #51958631
+.PROGRAM check.tasks.pc()@26/06/23 17:18 #52275349
 ;
   IF TASK(1002)<>1 THEN
     PCEXECUTE 2: tcp.client.pc
@@ -3986,7 +4017,7 @@ TP_RECINHI      0   0   0
   END
 ;
 .END
-.PROGRAM check.teach.pc()@26/06/15 22:03 #11289320
+.PROGRAM check.teach.pc()@26/06/23 17:18 #11289588
 ;
   IF SIG(s.hmi.res.state) THEN
     state = 0
@@ -4045,7 +4076,7 @@ TP_RECINHI      0   0   0
   END
 ;
 .END
-.PROGRAM check.zone.pc()@26/06/15 22:03 #51958650
+.PROGRAM check.zone.pc()@26/06/23 17:18 #52275368
 ;
 ;do.work[1] = 17
 ;rs13.work[1] = 1017
@@ -4064,7 +4095,7 @@ TP_RECINHI      0   0   0
   SOUT 2009 = NOT (NOT 2209 AND 1017 AND 17)
 ;
 .END
-.PROGRAM defect.put()@26/06/15 22:03 #326
+.PROGRAM defect.put()@26/06/23 17:18 #326
 ;
   IF count.defect>=max.defect.cnt THEN
     CALL log("Defect tare is full. Waiting for tare clean")
@@ -4103,7 +4134,7 @@ TP_RECINHI      0   0   0
   LMOVE #homyak
 ;
 .END
-.PROGRAM errstart.pc()@26/06/15 22:03 #1081
+.PROGRAM errstart.pc()@26/06/23 17:18 #1523
 ;
   IF ERROR==-34021 OR ERROR==-10100 THEN
     tcp.socket = -1
@@ -4114,7 +4145,7 @@ TP_RECINHI      0   0   0
   ERRSTART.PC ON
 ;
 .END
-.PROGRAM etalon.measure(.id)@26/06/15 22:03 #86
+.PROGRAM etalon.measure(.id)@26/06/23 17:18 #87
   IF FALSE THEN
     .id = hmi.etalon.id
   END
@@ -4259,11 +4290,11 @@ TP_RECINHI      0   0   0
   ACCURACY 100
   LMOVE #homyak
 .END
-.PROGRAM get.ot.point(.obj.id)@26/06/15 22:03 #1697
+.PROGRAM get.ot.point(.obj.id)@26/06/23 17:18 #1697
   ot.x = ms[.obj.id]
   ot.y = ns[.obj.id]
 .END
-.PROGRAM get.ot.point.ol(.obj.id)@26/06/15 22:03 #0
+.PROGRAM get.ot.point.ol(.obj.id)@26/06/23 17:18 #0
   IF object.id==pawn.no THEN
     ot.x = .obj.id MOD lines.count
     ot.y = INT(.obj.id/lines.count)
@@ -4272,7 +4303,7 @@ TP_RECINHI      0   0   0
   ot.x = ms[.obj.id]
   ot.y = ns[.obj.id]
 .END
-.PROGRAM get.state.pc(.$state)@26/06/15 22:03 #1369888
+.PROGRAM get.state.pc(.$state)@26/06/23 17:18 #1382211
   .$state = "SPEED:"+$ENCODE(/L,MSPEED)+";"
   .$state = .$state+"POWER:"
   IF SWITCH(POWER ) THEN
@@ -4359,7 +4390,7 @@ TP_RECINHI      0   0   0
 ; MAX 12
   .$state = .$state+"\n"
 .END
-.PROGRAM id1()@26/06/15 22:03 #97; 312.229.002
+.PROGRAM id1()@26/06/23 17:18 #98; 312.229.002
 ; Object ID
   object.id = 1
   etalon.id = 1 ; Can be object.id <> etalon.id
@@ -4374,7 +4405,7 @@ TP_RECINHI      0   0   0
   direction = 1; -1 for reverse
 ;
 .END
-.PROGRAM id2()@26/06/15 22:03 #7; 0401.17.02.023-02
+.PROGRAM id2()@26/06/23 17:18 #7; 0401.17.02.023-02
 ; Object ID
   object.id = 2
   etalon.id = 2 ; Can be object.id <> etalon.id
@@ -4389,7 +4420,7 @@ TP_RECINHI      0   0   0
   direction = 1; -1 for reverse
 ;
 .END
-.PROGRAM id3()@26/06/15 22:03 #10; 312.229.001
+.PROGRAM id3()@26/06/23 17:18 #10; 312.229.001
 ; Object ID
   object.id = 3
   etalon.id = 3 ; Can be object.id <> etalon.id
@@ -4404,7 +4435,7 @@ TP_RECINHI      0   0   0
   direction = 1; -1 for reverse
 ;
 .END
-.PROGRAM id4()@26/06/15 22:03 #15; 440.00.026
+.PROGRAM id4()@26/06/23 17:18 #15; 440.00.026
 ; Object ID
   object.id = 4
   etalon.id = 4 ; Can be object.id <> etalon.id
@@ -4419,7 +4450,7 @@ TP_RECINHI      0   0   0
   direction = 1; -1 for reverse
 ;
 .END
-.PROGRAM id5()@26/06/15 22:03 #11; 440.00.111
+.PROGRAM id5()@26/06/23 17:18 #11; 440.00.111
 ; Object ID
   object.id = 5
   etalon.id = 5 ; Can be object.id <> etalon.id
@@ -4434,7 +4465,7 @@ TP_RECINHI      0   0   0
   direction = 1; -1 for reverse
 ;
 .END
-.PROGRAM id6()@26/06/15 22:03 #27; 0401.28.02.063
+.PROGRAM id6()@26/06/23 17:18 #27; 0401.28.02.063
 ; Object ID
   object.id = 6
   etalon.id = 6 ; Can be object.id <> etalon.id
@@ -4449,7 +4480,7 @@ TP_RECINHI      0   0   0
   direction = 1; -1 for reverse
 ;
 .END
-.PROGRAM log(.$msg)@26/06/15 22:03 #29477
+.PROGRAM log(.$msg)@26/06/23 17:18 #29496
 ;
 ; 1 line = 55 symbols max
 ;
@@ -4463,7 +4494,7 @@ TP_RECINHI      0   0   0
   IFPWPRINT 3,1,1,9,10=$log.entry[124],$log.entry[125],$log.entry[126],$log.entry[127]
 ;
 .END
-.PROGRAM measure()@26/06/15 22:03 #1968
+.PROGRAM measure()@26/06/23 17:18 #1968
   IF FALSE THEN
     .pos = hmi.obj.id
   END
@@ -4549,7 +4580,7 @@ TP_RECINHI      0   0   0
 ;JMOVE #safe.machine
 ;JMOVE #homyak
 .END
-.PROGRAM ot.put()@26/06/15 22:03 #913
+.PROGRAM ot.put()@26/06/23 17:18 #913
 ;
   SIGNAL rs7.locked.zone
   IF SIG(rs7.tare.chg) THEN
@@ -4612,7 +4643,7 @@ TP_RECINHI      0   0   0
   END
 ;
 .END
-.PROGRAM pg.select()@26/06/15 22:03 #137
+.PROGRAM pg.select()@26/06/23 17:18 #138
   SCASE $pg.name OF
    SVALUE "312.229.002":
     CASE detail.spec OF
@@ -4689,11 +4720,11 @@ TP_RECINHI      0   0   0
   END
 ;
 .END
-.PROGRAM pg0()@26/06/15 22:03 #0
+.PROGRAM pg0()@26/06/23 17:18 #0
   state = 0
   CALL a.main
 .END
-.PROGRAM pos.pick()@26/06/15 22:03 #1435
+.PROGRAM pos.pick()@26/06/23 17:18 #1435
 ;
   .$temp = "Pick detail from positioner (ID:"+$ENCODE(object.id)+")"
   CALL log(.$temp)
@@ -4757,7 +4788,7 @@ TP_RECINHI      0   0   0
   SIGNAL -rs7.locked.zone
 ;
 .END
-.PROGRAM safe.home()@26/06/15 22:03 #132
+.PROGRAM safe.home()@26/06/23 17:18 #134
 ;
 ; Safe zones:
 ; 1. OT zone: same as for normal work
@@ -4818,7 +4849,7 @@ TP_RECINHI      0   0   0
   END
 ;
 .END
-.PROGRAM set.io.pc()@26/06/15 22:03 #46
+.PROGRAM set.io.pc()@26/06/23 17:18 #48
 ; Gripper IO
 ;
 ; Gripper
@@ -4963,7 +4994,7 @@ TP_RECINHI      0   0   0
 ;
   s.debug.mode = 2300
 .END
-.PROGRAM set.vars.pc()@26/06/15 22:03 #20
+.PROGRAM set.vars.pc()@26/06/23 18:08 #19
 ;
 ; Constants
 ;
@@ -4971,6 +5002,11 @@ TP_RECINHI      0   0   0
 ;
 ;
   recv.etalon = -1
+;
+  IF NOT EXISTREAL("wdog.tmr") THEN
+    wdog.tmr = 120
+    $wdog.state = "FALSE"
+  END
 ;
   IF NOT EXISTREAL("max.defect.cnt") THEN
     max.defect.cnt = 50
@@ -5044,7 +5080,7 @@ TP_RECINHI      0   0   0
   END
 ;
   IF NOT EXISTREAL("pg.gripper") THEN
-    pg.gripper = 0
+    pg13.gripper = 0
   END
 ;
   IF NOT EXISTREAL("hmi.gripper") THEN
@@ -5092,7 +5128,7 @@ TP_RECINHI      0   0   0
   END
 ;
 .END
-.PROGRAM state0()@26/06/15 22:03 #121; Initialization of parameters
+.PROGRAM state0()@26/06/23 17:18 #121; Initialization of parameters
 ;
   CALL log("State 0: Program reset. Initialization of parameters")
   SIGNAL -s.grip.full,-s.measure.ok,-s.measure.ng,-rs7.tare.chg,-s.cmd.measured
@@ -5107,7 +5143,7 @@ TP_RECINHI      0   0   0
   state = 100
 ;
 .END
-.PROGRAM state1()@26/06/15 22:03 #2102; Pick from positioner
+.PROGRAM state1()@26/06/23 17:18 #2102; Pick from positioner
   CALL log("State 1: Pick from positioner")
 ; Check all start positions
 ; Possible do not needed because robot can be only in HOME or near positioner
@@ -5118,7 +5154,7 @@ TP_RECINHI      0   0   0
   state = 101
 ;
 .END
-.PROGRAM state100()@26/06/15 22:03 #98; Waiting for start
+.PROGRAM state100()@26/06/23 17:18 #99; Waiting for start
 ;
   CALL log("State 100: Waiting for start")
   $action = "WaitingForStart"
@@ -5136,11 +5172,11 @@ TP_RECINHI      0   0   0
   CALL pg.select
   state = 106
 .END
-.PROGRAM state101()@26/06/15 22:03 #7020; Auxilary state
+.PROGRAM state101()@26/06/23 17:18 #7021; Auxilary state
   CALL log("State 101: Calculating next step")
   state = 102
 .END
-.PROGRAM state102()@26/06/15 22:03 #454390; Decision making
+.PROGRAM state102()@26/06/23 17:18 #463625; Decision making
 ; Priority 1
   IF SIG(s.cmd.pause) THEN
     state = 105
@@ -5190,19 +5226,19 @@ TP_RECINHI      0   0   0
     RETURN
   END
 .END
-.PROGRAM state103()@26/06/15 22:03 #126; Auxilary state
+.PROGRAM state103()@26/06/23 17:18 #126; Auxilary state
   CALL log("State 103: Ending sequence started")
   state = 104
 ;
 .END
-.PROGRAM state104()@26/06/15 22:03 #126; Ending sequence
+.PROGRAM state104()@26/06/23 17:18 #126; Ending sequence
 ;
   SIGNAL rs7.finish.ack
   state = 255
   RETURN
 ;
 .END
-.PROGRAM state105()@26/06/15 22:03 #17; Program paused
+.PROGRAM state105()@26/06/23 17:18 #17; Program paused
   CALL log("State 105: Program paused")
   $action = "Paused"
   SWAIT s.cmd.resume
@@ -5211,7 +5247,7 @@ TP_RECINHI      0   0   0
   SIGNAL -s.cmd.pause
   state = 101
 .END
-.PROGRAM state106()@26/06/15 22:03 #210; Check program
+.PROGRAM state106()@26/06/23 17:18 #211; Check program
   CALL log("State 106: Check program")
   IF $pg.name<>"NULL" THEN
     CALL log("Selected program: "+$pg.name)
@@ -5232,7 +5268,7 @@ TP_RECINHI      0   0   0
   END
 ;
 .END
-.PROGRAM state2()@26/06/15 22:03 #2072; Measurement process
+.PROGRAM state2()@26/06/23 17:18 #2072; Measurement process
   CALL log("State 2: Measurement process")
 ; Check all start positions
 ; Possible do not needed because robot can be only in HOME or near positioner
@@ -5244,12 +5280,12 @@ TP_RECINHI      0   0   0
   state = 101
 ;
 .END
-.PROGRAM state255()@26/06/15 22:03 #126
+.PROGRAM state255()@26/06/23 17:18 #126
   CALL log("State 255: Program complete")
   state = 0
 ;
 .END
-.PROGRAM state3()@26/06/15 22:03 #1728; Put detail to OT
+.PROGRAM state3()@26/06/23 17:18 #1728; Put detail to OT
   CALL log("State 3: Put detail to OT")
 ; Check all start positions
 ; Possible do not needed because robot can be only in HOME or near positioner
@@ -5261,7 +5297,7 @@ TP_RECINHI      0   0   0
   state = 101
 ;
 .END
-.PROGRAM state4()@26/06/15 22:03 #354; State 4: Put detail to defect tare
+.PROGRAM state4()@26/06/23 17:18 #354; State 4: Put detail to defect tare
   CALL log("State 4: Put detail to defect tare")
 ; Check all start positions
 ; Possible do not needed because robot can be only in HOME or near positioner
@@ -5273,7 +5309,7 @@ TP_RECINHI      0   0   0
   state = 101
 ;
 .END
-.PROGRAM state5()@26/06/15 22:03 #722; Check etalon
+.PROGRAM state5()@26/06/23 17:18 #723; Check etalon
   CALL log("State 5: Check etalon")
 ; TEMPORARY!!!!!!!!
 ;  state = 101
@@ -5305,19 +5341,19 @@ TP_RECINHI      0   0   0
 ;END
 ;
 .END
-.PROGRAM state6()@26/06/15 22:03 #0; Deprecated
+.PROGRAM state6()@26/06/23 17:18 #0; Deprecated
   state = 103
 .END
-.PROGRAM state7()@26/06/15 22:03 #200; Deprecated
+.PROGRAM state7()@26/06/23 17:18 #201; Deprecated
   SIGNAL s.cmd.chk.etal
   state = 5
 .END
-.PROGRAM state8()@26/06/15 22:03 #0; Check etalon by command
+.PROGRAM state8()@26/06/23 17:18 #0; Check etalon by command
   CALL log("State 8: Check etalon by command")
   CALL etalon.measure(etalon.id)
   state = 105
 .END
-.PROGRAM tcp.callback.pc(.$data[],.data.length)@26/06/15 22:03 #48774
+.PROGRAM tcp.callback.pc(.$data[],.data.length)@26/06/23 17:18 #50501
   .$temp = "Received "+$ENCODE(.data.length)+" strings:"
   PRINT tcp.recv.ena: .$temp
   FOR .i = 1 TO .data.length
@@ -5540,7 +5576,7 @@ TP_RECINHI      0   0   0
     .$data[.i] = ""
   END
 .END
-.PROGRAM tcp.client.pc()@26/06/15 22:03 #0
+.PROGRAM tcp.client.pc()@26/06/23 17:18 #0
 ;
   tcp.socket = -1
   .tcp.retry.count = 10
@@ -5613,7 +5649,7 @@ TP_RECINHI      0   0   0
     TWAIT 0.05
   END
 .END
-.PROGRAM tcp.log.pc(.$msg)@26/06/15 22:03 #67907
+.PROGRAM tcp.log.pc(.$msg)@26/06/23 17:18 #69634
   IF NOT SIG(s.tcp.log) THEN
     RETURN
   END
@@ -5630,7 +5666,7 @@ TP_RECINHI      0   0   0
   IFPWPRINT 3,1,1,9,10=$log.entry[124],$log.entry[125],$log.entry[126],$log.entry[127]
 ;
 .END
-.PROGRAM tcp.send.pc(.$data[],.data.length)@26/06/15 22:03 #1882141
+.PROGRAM tcp.send.pc(.$data[],.data.length)@26/06/23 17:18 #1894463
 ;
   .tcp.send.tmo = 5
 ;
@@ -5653,12 +5689,13 @@ TP_RECINHI      0   0   0
   END
 ;
 .END
-.PROGRAM tcp.sender.pc()@26/06/15 22:03 #0
+.PROGRAM tcp.sender.pc()@26/06/23 18:08 #0
 ;
   WHILE TRUE DO
 ;
     CALL get.state.pc(.$data[1])
     .$data[2] = "ACTION:"+$action+";"
+    .$data[2] = "WATCHDOG:"+$wdog.state+";"
     .$data[2] = .$data[2]+"GRIPPER:"+$ENCODE(current.gripper)+";"
     .$data[2] = .$data[2]+"PICKCOUNT:"+$ENCODE(count.pick)+";"
     .$data[2] = .$data[2]+"DEFECTCOUNT:"+$ENCODE(count.defect)+";"
@@ -5679,7 +5716,7 @@ TP_RECINHI      0   0   0
   END
 ;
 .END
-.PROGRAM test()@26/06/15 22:03 #1
+.PROGRAM test()@26/06/23 17:18 #1
   CALL id2
   CALL calc.grid
   FOR .i = 0 TO 100
@@ -5690,18 +5727,41 @@ TP_RECINHI      0   0   0
     TWAIT 5
   END
 .END
-.PROGRAM watchdog.pc()@26/06/15 22:03 #0
+.PROGRAM watchdog.pc()@26/06/23 18:07 #0
+;
+  HERE .last.pos
+  TIMER 1 = 0
+;
   WHILE TRUE DO
 ;
     CALL check.tasks.pc
     CALL check.disp.pc
     CALL check.zone.pc
 ;
-;IF SWITCH (CS) AND state > 0 THEN
-;  IF BITS (rs13.det.put[0], 8) == count.pick THEN
-;    TIMER(1) = 0
-;  END
-;END
+    HERE .current.pos
+    .c1 = SWITCH(CS )
+    .c2 = $action=="Paused"
+    .c3 = DISTANCE(.current.pos,.last.pos)>5
+    .c4 = state<>0 OR state<>100
+    .c5 = TIMER(1)>wdog.tmr
+;
+    IF NOT .c1 OR .c2 OR .c3 OR NOT .c4 THEN
+      TIMER 1 = 0
+    END
+;
+    IF .c3 THEN
+      HERE .last.pos
+    END
+    IF .c5 THEN
+      IF $wdog.state<>"TRUE" THEN
+        $wdog.state = "TRUE"
+      END
+    ELSE
+      IF $wdog.state<>"FALSE" THEN
+        $wdog.state = "FALSE"
+      END
+    END
+;
 ;
     IF SIG(rs13.tare.ack) THEN
       IF count.put==max.tare.count THEN
@@ -5731,172 +5791,172 @@ TP_RECINHI      0   0   0
 .TRANS
 ot.frame -145.166809 539.605957 -5.568207 -59.186329 0.333351 -120.949539
 ot.put[0,0] -145.166809 539.605957 -5.568207 -59.186329 0.333351 -120.949539
-ot.put[0,1] -145.097824 568.605530 -5.423507 -59.186329 0.333351 -120.949539
-ot.put[0,2] -145.028839 597.605103 -5.278806 -59.186329 0.333351 -120.949539
-ot.put[0,3] -144.959854 626.604614 -5.134106 -59.186329 0.333351 -120.949539
-ot.put[0,4] -144.890869 655.604187 -4.989406 -59.186329 0.333351 -120.949539
-ot.put[0,5] -144.821884 684.603760 -4.844706 -59.186329 0.333351 -120.949539
-ot.put[0,6] -144.752899 713.603333 -4.700006 -59.186329 0.333351 -120.949539
+ot.put[0,1] -145.097824 568.605530 -5.423506 -59.186329 0.333351 -120.949539
+ot.put[0,2] -145.028839 597.605042 -5.278806 -59.186329 0.333351 -120.949539
+ot.put[0,3] -144.959869 626.604614 -5.134106 -59.186329 0.333351 -120.949539
+ot.put[0,4] -144.890884 655.604187 -4.989405 -59.186329 0.333351 -120.949539
+ot.put[0,5] -144.821899 684.603760 -4.844705 -59.186329 0.333351 -120.949539
+ot.put[0,6] -144.752914 713.603271 -4.700004 -59.186329 0.333351 -120.949539
 ot.put[0,7] -144.750519 714.603271 -4.695016 -59.186329 0.333351 -120.949539
 ot.put[1,0] -129.166931 539.568115 -5.616081 -59.186329 0.333351 -120.949539
-ot.put[1,1] -129.097931 568.567688 -5.471380 -59.186329 0.333351 -120.949539
-ot.put[1,2] -129.028946 597.567261 -5.326680 -59.186329 0.333351 -120.949539
-ot.put[1,3] -128.959961 626.566833 -5.181980 -59.186329 0.333351 -120.949539
-ot.put[1,4] -128.890976 655.566345 -5.037280 -59.186329 0.333351 -120.949539
-ot.put[1,5] -128.821991 684.565918 -4.892580 -59.186329 0.333351 -120.949539
-ot.put[1,6] -128.753006 713.565491 -4.747879 -59.186329 0.333351 -120.949539
+ot.put[1,1] -129.097946 568.567688 -5.471380 -59.186329 0.333351 -120.949539
+ot.put[1,2] -129.028961 597.567261 -5.326680 -59.186329 0.333351 -120.949539
+ot.put[1,3] -128.959976 626.566772 -5.181979 -59.186329 0.333351 -120.949539
+ot.put[1,4] -128.890991 655.566345 -5.037279 -59.186329 0.333351 -120.949539
+ot.put[1,5] -128.822021 684.565918 -4.892579 -59.186329 0.333351 -120.949539
+ot.put[1,6] -128.753036 713.565430 -4.747878 -59.186329 0.333351 -120.949539
 ot.put[1,7] -128.750626 714.565491 -4.742889 -59.186329 0.333351 -120.949539
-ot.put[2,0] -113.167038 539.530334 -5.663954 -59.186329 0.333351 -120.949539
-ot.put[2,1] -113.098053 568.529846 -5.519254 -59.186329 0.333351 -120.949539
-ot.put[2,2] -113.029068 597.529419 -5.374554 -59.186329 0.333351 -120.949539
-ot.put[2,3] -112.960083 626.528992 -5.229854 -59.186329 0.333351 -120.949539
-ot.put[2,4] -112.891098 655.528564 -5.085154 -59.186329 0.333351 -120.949539
-ot.put[2,5] -112.822113 684.528076 -4.940453 -59.186329 0.333351 -120.949539
-ot.put[2,6] -112.753128 713.527649 -4.795753 -59.186329 0.333351 -120.949539
+ot.put[2,0] -113.167038 539.530334 -5.663955 -59.186329 0.333351 -120.949539
+ot.put[2,1] -113.098061 568.529846 -5.519254 -59.186329 0.333351 -120.949539
+ot.put[2,2] -113.029083 597.529419 -5.374554 -59.186329 0.333351 -120.949539
+ot.put[2,3] -112.960098 626.528992 -5.229853 -59.186329 0.333351 -120.949539
+ot.put[2,4] -112.891113 655.528564 -5.085153 -59.186329 0.333351 -120.949539
+ot.put[2,5] -112.822136 684.528076 -4.940453 -59.186329 0.333351 -120.949539
+ot.put[2,6] -112.753151 713.527649 -4.795752 -59.186329 0.333351 -120.949539
 ot.put[2,7] -112.750748 714.527649 -4.790763 -59.186329 0.333351 -120.949539
 ot.put[3,0] -97.167160 539.492493 -5.711828 -59.186329 0.333351 -120.949539
 ot.put[3,1] -97.098175 568.492065 -5.567128 -59.186329 0.333351 -120.949539
-ot.put[3,2] -97.029182 597.491577 -5.422428 -59.186329 0.333351 -120.949539
-ot.put[3,3] -96.960197 626.491150 -5.277728 -59.186329 0.333351 -120.949539
-ot.put[3,4] -96.891212 655.490723 -5.133027 -59.186329 0.333351 -120.949539
-ot.put[3,5] -96.822220 684.490295 -4.988327 -59.186329 0.333351 -120.949539
-ot.put[3,6] -96.753235 713.489868 -4.843627 -59.186329 0.333351 -120.949539
+ot.put[3,2] -97.029198 597.491577 -5.422428 -59.186329 0.333351 -120.949539
+ot.put[3,3] -96.960220 626.491150 -5.277727 -59.186329 0.333351 -120.949539
+ot.put[3,4] -96.891235 655.490723 -5.133027 -59.186329 0.333351 -120.949539
+ot.put[3,5] -96.822250 684.490234 -4.988326 -59.186329 0.333351 -120.949539
+ot.put[3,6] -96.753265 713.489807 -4.843626 -59.186329 0.333351 -120.949539
 ot.put[3,7] -96.750862 714.489868 -4.838637 -59.186329 0.333351 -120.949539
-ot.put[4,0] -81.167267 539.454651 -5.759702 -59.186329 0.333351 -120.949539
-ot.put[4,1] -81.098282 568.454224 -5.615002 -59.186329 0.333351 -120.949539
-ot.put[4,2] -81.029297 597.453796 -5.470302 -59.186329 0.333351 -120.949539
-ot.put[4,3] -80.960312 626.453369 -5.325601 -59.186329 0.333351 -120.949539
-ot.put[4,4] -80.891327 655.452881 -5.180901 -59.186329 0.333351 -120.949539
-ot.put[4,5] -80.822342 684.452454 -5.036201 -59.186329 0.333351 -120.949539
-ot.put[4,6] -80.753357 713.452026 -4.891500 -59.186329 0.333351 -120.949539
+ot.put[4,0] -81.167274 539.454651 -5.759702 -59.186329 0.333351 -120.949539
+ot.put[4,1] -81.098289 568.454224 -5.615002 -59.186329 0.333351 -120.949539
+ot.put[4,2] -81.029312 597.453796 -5.470302 -59.186329 0.333351 -120.949539
+ot.put[4,3] -80.960327 626.453369 -5.325601 -59.186329 0.333351 -120.949539
+ot.put[4,4] -80.891350 655.452881 -5.180901 -59.186329 0.333351 -120.949539
+ot.put[4,5] -80.822365 684.452454 -5.036200 -59.186329 0.333351 -120.949539
+ot.put[4,6] -80.753387 713.452026 -4.891500 -59.186329 0.333351 -120.949539
 ot.put[4,7] -80.750977 714.452026 -4.886511 -59.186329 0.333351 -120.949539
 ot.put[5,0] -65.167389 539.416870 -5.807576 -59.186329 0.333351 -120.949539
 ot.put[5,1] -65.098404 568.416382 -5.662876 -59.186329 0.333351 -120.949539
-ot.put[5,2] -65.029419 597.415955 -5.518176 -59.186329 0.333351 -120.949539
-ot.put[5,3] -64.960434 626.415527 -5.373475 -59.186329 0.333351 -120.949539
-ot.put[5,4] -64.891441 655.415100 -5.228775 -59.186329 0.333351 -120.949539
-ot.put[5,5] -64.822456 684.414673 -5.084074 -59.186329 0.333351 -120.949539
-ot.put[5,6] -64.753471 713.414185 -4.939374 -59.186329 0.333351 -120.949539
+ot.put[5,2] -65.029427 597.415955 -5.518175 -59.186329 0.333351 -120.949539
+ot.put[5,3] -64.960442 626.415527 -5.373475 -59.186329 0.333351 -120.949539
+ot.put[5,4] -64.891464 655.415039 -5.228775 -59.186329 0.333351 -120.949539
+ot.put[5,5] -64.822479 684.414612 -5.084074 -59.186329 0.333351 -120.949539
+ot.put[5,6] -64.753502 713.414185 -4.939373 -59.186329 0.333351 -120.949539
 ot.put[5,7] -64.751091 714.414185 -4.934385 -59.186329 0.333351 -120.949539
-ot.put[6,0] -49.167503 539.379028 -5.855450 -59.186329 0.333351 -120.949539
-ot.put[6,1] -49.098518 568.378601 -5.710750 -59.186329 0.333351 -120.949539
-ot.put[6,2] -49.029533 597.378113 -5.566049 -59.186329 0.333351 -120.949539
-ot.put[6,3] -48.960548 626.377686 -5.421349 -59.186329 0.333351 -120.949539
-ot.put[6,4] -48.891556 655.377258 -5.276649 -59.186329 0.333351 -120.949539
-ot.put[6,5] -48.822571 684.376831 -5.131948 -59.186329 0.333351 -120.949539
-ot.put[6,6] -48.753586 713.376343 -4.987248 -59.186329 0.333351 -120.949539
+ot.put[6,0] -49.167511 539.379028 -5.855450 -59.186329 0.333351 -120.949539
+ot.put[6,1] -49.098526 568.378601 -5.710750 -59.186329 0.333351 -120.949539
+ot.put[6,2] -49.029549 597.378174 -5.566049 -59.186329 0.333351 -120.949539
+ot.put[6,3] -48.960564 626.377686 -5.421349 -59.186329 0.333351 -120.949539
+ot.put[6,4] -48.891586 655.377258 -5.276649 -59.186329 0.333351 -120.949539
+ot.put[6,5] -48.822601 684.376831 -5.131948 -59.186329 0.333351 -120.949539
+ot.put[6,6] -48.753624 713.376343 -4.987247 -59.186329 0.333351 -120.949539
 ot.put[6,7] -48.751205 714.376343 -4.982259 -59.186329 0.333351 -120.949539
-ot.put[7,0] -33.167618 539.341187 -5.903324 -59.186329 0.333351 -120.949539
-ot.put[7,1] -33.098633 568.340759 -5.758623 -59.186329 0.333351 -120.949539
-ot.put[7,2] -33.029648 597.340332 -5.613923 -59.186329 0.333351 -120.949539
-ot.put[7,3] -32.960663 626.339844 -5.469223 -59.186329 0.333351 -120.949539
-ot.put[7,4] -32.891670 655.339417 -5.324522 -59.186329 0.333351 -120.949539
-ot.put[7,5] -32.822685 684.338989 -5.179822 -59.186329 0.333351 -120.949539
-ot.put[7,6] -32.753700 713.338562 -5.035122 -59.186329 0.333351 -120.949539
+ot.put[7,0] -33.167625 539.341187 -5.903324 -59.186329 0.333351 -120.949539
+ot.put[7,1] -33.098640 568.340759 -5.758624 -59.186329 0.333351 -120.949539
+ot.put[7,2] -33.029663 597.340332 -5.613923 -59.186329 0.333351 -120.949539
+ot.put[7,3] -32.960678 626.339905 -5.469223 -59.186329 0.333351 -120.949539
+ot.put[7,4] -32.891701 655.339417 -5.324522 -59.186329 0.333351 -120.949539
+ot.put[7,5] -32.822716 684.338989 -5.179822 -59.186329 0.333351 -120.949539
+ot.put[7,6] -32.753738 713.338562 -5.035121 -59.186329 0.333351 -120.949539
 ot.put[7,7] -32.751320 714.338562 -5.030132 -59.186329 0.333351 -120.949539
-ot.put[8,0] -17.167732 539.303345 -5.951197 -59.186329 0.333351 -120.949539
-ot.put[8,1] -17.098740 568.302917 -5.806497 -59.186329 0.333351 -120.949539
-ot.put[8,2] -17.029755 597.302490 -5.661797 -59.186329 0.333351 -120.949539
-ot.put[8,3] -16.960770 626.302063 -5.517097 -59.186329 0.333351 -120.949539
-ot.put[8,4] -16.891785 655.301636 -5.372396 -59.186329 0.333351 -120.949539
-ot.put[8,5] -16.822800 684.301147 -5.227696 -59.186329 0.333351 -120.949539
-ot.put[8,6] -16.753815 713.300720 -5.082996 -59.186329 0.333351 -120.949539
+ot.put[8,0] -17.167740 539.303406 -5.951198 -59.186329 0.333351 -120.949539
+ot.put[8,1] -17.098755 568.302979 -5.806498 -59.186329 0.333351 -120.949539
+ot.put[8,2] -17.029770 597.302490 -5.661797 -59.186329 0.333351 -120.949539
+ot.put[8,3] -16.960800 626.302063 -5.517097 -59.186329 0.333351 -120.949539
+ot.put[8,4] -16.891815 655.301636 -5.372396 -59.186329 0.333351 -120.949539
+ot.put[8,5] -16.822830 684.301147 -5.227695 -59.186329 0.333351 -120.949539
+ot.put[8,6] -16.753845 713.300720 -5.082995 -59.186329 0.333351 -120.949539
 ot.put[8,7] -16.751434 714.300720 -5.078006 -59.186329 0.333351 -120.949539
-ot.put[9,0] -1.167847 539.265564 -5.999071 -59.186329 0.333351 -120.949539
-ot.put[9,1] -1.098862 568.265137 -5.854371 -59.186329 0.333351 -120.949539
-ot.put[9,2] -1.029877 597.264648 -5.709671 -59.186329 0.333351 -120.949539
-ot.put[9,3] -0.960892 626.264221 -5.564970 -59.186329 0.333351 -120.949539
-ot.put[9,4] -0.891907 655.263794 -5.420270 -59.186329 0.333351 -120.949539
-ot.put[9,5] -0.822922 684.263367 -5.275570 -59.186329 0.333351 -120.949539
-ot.put[9,6] -0.753937 713.262939 -5.130870 -59.186329 0.333351 -120.949539
+ot.put[9,0] -1.167862 539.265564 -5.999072 -59.186329 0.333351 -120.949539
+ot.put[9,1] -1.098877 568.265137 -5.854372 -59.186329 0.333351 -120.949539
+ot.put[9,2] -1.029892 597.264709 -5.709671 -59.186329 0.333351 -120.949539
+ot.put[9,3] -0.960922 626.264221 -5.564970 -59.186329 0.333351 -120.949539
+ot.put[9,4] -0.891937 655.263794 -5.420270 -59.186329 0.333351 -120.949539
+ot.put[9,5] -0.822952 684.263367 -5.275569 -59.186329 0.333351 -120.949539
+ot.put[9,6] -0.753967 713.262939 -5.130869 -59.186329 0.333351 -120.949539
 ot.put[9,7] -0.751556 714.262878 -5.125880 -59.186329 0.333351 -120.949539
-ot.put[10,0] 14.832031 539.227722 -6.046945 -59.186329 0.333351 -120.949539
+ot.put[10,0] 14.832031 539.227783 -6.046946 -59.186329 0.333351 -120.949539
 ot.put[10,1] 14.901016 568.227295 -5.902245 -59.186329 0.333351 -120.949539
 ot.put[10,2] 14.970001 597.226868 -5.757545 -59.186329 0.333351 -120.949539
-ot.put[10,3] 15.038986 626.226440 -5.612844 -59.186329 0.333351 -120.949539
-ot.put[10,4] 15.107971 655.225952 -5.468144 -59.186329 0.333351 -120.949539
-ot.put[10,5] 15.176956 684.225525 -5.323444 -59.186329 0.333351 -120.949539
-ot.put[10,6] 15.245941 713.225098 -5.178743 -59.186329 0.333351 -120.949539
+ot.put[10,3] 15.038971 626.226440 -5.612844 -59.186329 0.333351 -120.949539
+ot.put[10,4] 15.107956 655.225952 -5.468144 -59.186329 0.333351 -120.949539
+ot.put[10,5] 15.176941 684.225525 -5.323443 -59.186329 0.333351 -120.949539
+ot.put[10,6] 15.245926 713.225098 -5.178743 -59.186329 0.333351 -120.949539
 ot.put[10,7] 15.248322 714.225098 -5.173754 -59.186329 0.333351 -120.949539
-ot.put[11,0] 30.831924 539.189880 -6.094819 -59.186329 0.333351 -120.949539
-ot.put[11,1] 30.900909 568.189453 -5.950119 -59.186329 0.333351 -120.949539
-ot.put[11,2] 30.969894 597.189026 -5.805418 -59.186329 0.333351 -120.949539
-ot.put[11,3] 31.038879 626.188599 -5.660718 -59.186329 0.333351 -120.949539
-ot.put[11,4] 31.107864 655.188110 -5.516018 -59.186329 0.333351 -120.949539
-ot.put[11,5] 31.176849 684.187744 -5.371318 -59.186329 0.333351 -120.949539
-ot.put[11,6] 31.245834 713.187256 -5.226617 -59.186329 0.333351 -120.949539
+ot.put[11,0] 30.831909 539.189941 -6.094820 -59.186329 0.333351 -120.949539
+ot.put[11,1] 30.900894 568.189514 -5.950119 -59.186329 0.333351 -120.949539
+ot.put[11,2] 30.969879 597.189026 -5.805418 -59.186329 0.333351 -120.949539
+ot.put[11,3] 31.038849 626.188599 -5.660718 -59.186329 0.333351 -120.949539
+ot.put[11,4] 31.107834 655.188171 -5.516018 -59.186329 0.333351 -120.949539
+ot.put[11,5] 31.176819 684.187744 -5.371317 -59.186329 0.333351 -120.949539
+ot.put[11,6] 31.245804 713.187256 -5.226617 -59.186329 0.333351 -120.949539
 ot.put[11,7] 31.248215 714.187256 -5.221628 -59.186329 0.333351 -120.949539
-ot.put[12,0] 46.831802 539.152100 -6.142693 -59.186329 0.333351 -120.949539
-ot.put[12,1] 46.900787 568.151672 -5.997993 -59.186329 0.333351 -120.949539
-ot.put[12,2] 46.969772 597.151184 -5.853292 -59.186329 0.333351 -120.949539
-ot.put[12,3] 47.038757 626.150757 -5.708592 -59.186329 0.333351 -120.949539
-ot.put[12,4] 47.107742 655.150330 -5.563891 -59.186329 0.333351 -120.949539
-ot.put[12,5] 47.176727 684.149902 -5.419191 -59.186329 0.333351 -120.949539
-ot.put[12,6] 47.245712 713.149414 -5.274491 -59.186329 0.333351 -120.949539
+ot.put[12,0] 46.831787 539.152100 -6.142694 -59.186329 0.333351 -120.949539
+ot.put[12,1] 46.900772 568.151672 -5.997993 -59.186329 0.333351 -120.949539
+ot.put[12,2] 46.969757 597.151245 -5.853292 -59.186329 0.333351 -120.949539
+ot.put[12,3] 47.038727 626.150757 -5.708592 -59.186329 0.333351 -120.949539
+ot.put[12,4] 47.107712 655.150330 -5.563892 -59.186329 0.333351 -120.949539
+ot.put[12,5] 47.176697 684.149902 -5.419191 -59.186329 0.333351 -120.949539
+ot.put[12,6] 47.245682 713.149414 -5.274491 -59.186329 0.333351 -120.949539
 ot.put[12,7] 47.248093 714.149414 -5.269502 -59.186329 0.333351 -120.949539
-ot.put[13,0] 62.831696 539.114258 -6.190567 -59.186329 0.333351 -120.949539
-ot.put[13,1] 62.900681 568.113831 -6.045866 -59.186329 0.333351 -120.949539
-ot.put[13,2] 62.969666 597.113403 -5.901166 -59.186329 0.333351 -120.949539
-ot.put[13,3] 63.038651 626.112915 -5.756466 -59.186329 0.333351 -120.949539
-ot.put[13,4] 63.107635 655.112488 -5.611765 -59.186329 0.333351 -120.949539
-ot.put[13,5] 63.176620 684.112061 -5.467065 -59.186329 0.333351 -120.949539
-ot.put[13,6] 63.245605 713.111633 -5.322365 -59.186329 0.333351 -120.949539
+ot.put[13,0] 62.831680 539.114319 -6.190567 -59.186329 0.333351 -120.949539
+ot.put[13,1] 62.900665 568.113831 -6.045867 -59.186329 0.333351 -120.949539
+ot.put[13,2] 62.969650 597.113403 -5.901166 -59.186329 0.333351 -120.949539
+ot.put[13,3] 63.038620 626.112976 -5.756466 -59.186329 0.333351 -120.949539
+ot.put[13,4] 63.107605 655.112488 -5.611765 -59.186329 0.333351 -120.949539
+ot.put[13,5] 63.176590 684.112061 -5.467065 -59.186329 0.333351 -120.949539
+ot.put[13,6] 63.245575 713.111633 -5.322365 -59.186329 0.333351 -120.949539
 ot.put[13,7] 63.247986 714.111572 -5.317375 -59.186329 0.333351 -120.949539
-ot.put[14,0] 78.831573 539.076416 -6.238441 -59.186329 0.333351 -120.949539
-ot.put[14,1] 78.900558 568.075989 -6.093740 -59.186329 0.333351 -120.949539
-ot.put[14,2] 78.969543 597.075562 -5.949040 -59.186329 0.333351 -120.949539
-ot.put[14,3] 79.038528 626.075134 -5.804339 -59.186329 0.333351 -120.949539
-ot.put[14,4] 79.107513 655.074707 -5.659639 -59.186329 0.333351 -120.949539
-ot.put[14,5] 79.176498 684.074219 -5.514939 -59.186329 0.333351 -120.949539
-ot.put[14,6] 79.245483 713.073792 -5.370239 -59.186329 0.333351 -120.949539
+ot.put[14,0] 78.831558 539.076477 -6.238441 -59.186329 0.333351 -120.949539
+ot.put[14,1] 78.900543 568.076050 -6.093741 -59.186329 0.333351 -120.949539
+ot.put[14,2] 78.969528 597.075562 -5.949040 -59.186329 0.333351 -120.949539
+ot.put[14,3] 79.038498 626.075134 -5.804340 -59.186329 0.333351 -120.949539
+ot.put[14,4] 79.107483 655.074707 -5.659639 -59.186329 0.333351 -120.949539
+ot.put[14,5] 79.176468 684.074219 -5.514939 -59.186329 0.333351 -120.949539
+ot.put[14,6] 79.245453 713.073792 -5.370239 -59.186329 0.333351 -120.949539
 ot.put[14,7] 79.247864 714.073792 -5.365249 -59.186329 0.333351 -120.949539
-ot.put[15,0] 94.831467 539.038635 -6.286314 -59.186329 0.333351 -120.949539
-ot.put[15,1] 94.900452 568.038147 -6.141614 -59.186329 0.333351 -120.949539
-ot.put[15,2] 94.969437 597.037720 -5.996913 -59.186329 0.333351 -120.949539
-ot.put[15,3] 95.038422 626.037292 -5.852213 -59.186329 0.333351 -120.949539
-ot.put[15,4] 95.107407 655.036865 -5.707513 -59.186329 0.333351 -120.949539
-ot.put[15,5] 95.176392 684.036438 -5.562813 -59.186329 0.333351 -120.949539
-ot.put[15,6] 95.245377 713.036011 -5.418113 -59.186329 0.333351 -120.949539
+ot.put[15,0] 94.831451 539.038635 -6.286315 -59.186329 0.333351 -120.949539
+ot.put[15,1] 94.900436 568.038208 -6.141615 -59.186329 0.333351 -120.949539
+ot.put[15,2] 94.969421 597.037781 -5.996914 -59.186329 0.333351 -120.949539
+ot.put[15,3] 95.038391 626.037292 -5.852214 -59.186329 0.333351 -120.949539
+ot.put[15,4] 95.107376 655.036865 -5.707513 -59.186329 0.333351 -120.949539
+ot.put[15,5] 95.176361 684.036438 -5.562813 -59.186329 0.333351 -120.949539
+ot.put[15,6] 95.245346 713.036011 -5.418112 -59.186329 0.333351 -120.949539
 ot.put[15,7] 95.247757 714.035950 -5.413123 -59.186329 0.333351 -120.949539
-ot.put[16,0] 110.831345 539.000793 -6.334188 -59.186329 0.333351 -120.949539
-ot.put[16,1] 110.900330 568.000366 -6.189487 -59.186329 0.333351 -120.949539
-ot.put[16,2] 110.969330 596.999939 -6.044787 -59.186329 0.333351 -120.949539
-ot.put[16,3] 111.038300 625.999451 -5.900087 -59.186329 0.333351 -120.949539
-ot.put[16,4] 111.107300 654.999023 -5.755387 -59.186329 0.333351 -120.949539
-ot.put[16,5] 111.176270 683.998596 -5.610687 -59.186329 0.333351 -120.949539
-ot.put[16,6] 111.245270 712.998169 -5.465986 -59.186329 0.333351 -120.949539
+ot.put[16,0] 110.831329 539.000854 -6.334189 -59.186329 0.333351 -120.949539
+ot.put[16,1] 110.900299 568.000366 -6.189488 -59.186329 0.333351 -120.949539
+ot.put[16,2] 110.969299 596.999939 -6.044788 -59.186329 0.333351 -120.949539
+ot.put[16,3] 111.038269 625.999512 -5.900088 -59.186329 0.333351 -120.949539
+ot.put[16,4] 111.107269 654.999023 -5.755387 -59.186329 0.333351 -120.949539
+ot.put[16,5] 111.176239 683.998596 -5.610687 -59.186329 0.333351 -120.949539
+ot.put[16,6] 111.245209 712.998169 -5.465986 -59.186329 0.333351 -120.949539
 ot.put[16,7] 111.247650 713.998169 -5.460997 -59.186329 0.333351 -120.949539
-ot.put[17,0] 126.831238 538.962952 -6.382062 -59.186329 0.333351 -120.949539
-ot.put[17,1] 126.900238 567.962524 -6.237361 -59.186329 0.333351 -120.949539
-ot.put[17,2] 126.969208 596.962097 -6.092661 -59.186329 0.333351 -120.949539
-ot.put[17,3] 127.038208 625.961670 -5.947961 -59.186329 0.333351 -120.949539
-ot.put[17,4] 127.107178 654.961182 -5.803261 -59.186329 0.333351 -120.949539
-ot.put[17,5] 127.176178 683.960754 -5.658561 -59.186329 0.333351 -120.949539
-ot.put[17,6] 127.245148 712.960327 -5.513860 -59.186329 0.333351 -120.949539
+ot.put[17,0] 126.831207 538.963013 -6.382063 -59.186329 0.333351 -120.949539
+ot.put[17,1] 126.900177 567.962585 -6.237362 -59.186329 0.333351 -120.949539
+ot.put[17,2] 126.969177 596.962097 -6.092662 -59.186329 0.333351 -120.949539
+ot.put[17,3] 127.038147 625.961670 -5.947962 -59.186329 0.333351 -120.949539
+ot.put[17,4] 127.107147 654.961243 -5.803261 -59.186329 0.333351 -120.949539
+ot.put[17,5] 127.176117 683.960815 -5.658561 -59.186329 0.333351 -120.949539
+ot.put[17,6] 127.245087 712.960327 -5.513860 -59.186329 0.333351 -120.949539
 ot.put[17,7] 127.247528 713.960327 -5.508871 -59.186329 0.333351 -120.949539
-ot.put[18,0] 142.831116 538.925171 -6.429935 -59.186329 0.333351 -120.949539
-ot.put[18,1] 142.900116 567.924683 -6.285235 -59.186329 0.333351 -120.949539
-ot.put[18,2] 142.969086 596.924255 -6.140535 -59.186329 0.333351 -120.949539
-ot.put[18,3] 143.038086 625.923828 -5.995835 -59.186329 0.333351 -120.949539
-ot.put[18,4] 143.107056 654.923401 -5.851135 -59.186329 0.333351 -120.949539
-ot.put[18,5] 143.176056 683.922974 -5.706434 -59.186329 0.333351 -120.949539
-ot.put[18,6] 143.245026 712.922485 -5.561734 -59.186329 0.333351 -120.949539
+ot.put[18,0] 142.831085 538.925171 -6.429937 -59.186329 0.333351 -120.949539
+ot.put[18,1] 142.900055 567.924744 -6.285236 -59.186329 0.333351 -120.949539
+ot.put[18,2] 142.969055 596.924316 -6.140536 -59.186329 0.333351 -120.949539
+ot.put[18,3] 143.038025 625.923828 -5.995835 -59.186329 0.333351 -120.949539
+ot.put[18,4] 143.107025 654.923401 -5.851135 -59.186329 0.333351 -120.949539
+ot.put[18,5] 143.175995 683.922974 -5.706435 -59.186329 0.333351 -120.949539
+ot.put[18,6] 143.244965 712.922485 -5.561734 -59.186329 0.333351 -120.949539
 ot.put[18,7] 143.247406 713.922485 -5.556745 -59.186329 0.333351 -120.949539
-ot.put[19,0] 158.830994 538.887329 -6.477809 -59.186329 0.333351 -120.949539
-ot.put[19,1] 158.899994 567.886902 -6.333109 -59.186329 0.333351 -120.949539
-ot.put[19,2] 158.968964 596.886475 -6.188409 -59.186329 0.333351 -120.949539
-ot.put[19,3] 159.037964 625.885986 -6.043709 -59.186329 0.333351 -120.949539
-ot.put[19,4] 159.106934 654.885559 -5.899008 -59.186329 0.333351 -120.949539
-ot.put[19,5] 159.175934 683.885132 -5.754308 -59.186329 0.333351 -120.949539
-ot.put[19,6] 159.244904 712.884705 -5.609608 -59.186329 0.333351 -120.949539
+ot.put[19,0] 158.830994 538.887390 -6.477811 -59.186329 0.333351 -120.949539
+ot.put[19,1] 158.899963 567.886902 -6.333110 -59.186329 0.333351 -120.949539
+ot.put[19,2] 158.968964 596.886475 -6.188410 -59.186329 0.333351 -120.949539
+ot.put[19,3] 159.037933 625.886047 -6.043709 -59.186329 0.333351 -120.949539
+ot.put[19,4] 159.106934 654.885620 -5.899009 -59.186329 0.333351 -120.949539
+ot.put[19,5] 159.175903 683.885132 -5.754309 -59.186329 0.333351 -120.949539
+ot.put[19,6] 159.244873 712.884705 -5.609608 -59.186329 0.333351 -120.949539
 ot.put[19,7] 159.247284 713.884644 -5.604618 -59.186329 0.333351 -120.949539
-ot.put[20,0] 174.830872 538.849487 -6.525683 -59.186329 0.333351 -120.949539
-ot.put[20,1] 174.899872 567.849060 -6.380983 -59.186329 0.333351 -120.949539
-ot.put[20,2] 174.968842 596.848633 -6.236283 -59.186329 0.333351 -120.949539
-ot.put[20,3] 175.037842 625.848206 -6.091582 -59.186329 0.333351 -120.949539
-ot.put[20,4] 175.106812 654.847717 -5.946882 -59.186329 0.333351 -120.949539
-ot.put[20,5] 175.175812 683.847290 -5.802182 -59.186329 0.333351 -120.949539
-ot.put[20,6] 175.244781 712.846863 -5.657482 -59.186329 0.333351 -120.949539
+ot.put[20,0] 174.830872 538.849548 -6.525684 -59.186329 0.333351 -120.949539
+ot.put[20,1] 174.899841 567.849121 -6.380984 -59.186329 0.333351 -120.949539
+ot.put[20,2] 174.968842 596.848633 -6.236284 -59.186329 0.333351 -120.949539
+ot.put[20,3] 175.037811 625.848206 -6.091583 -59.186329 0.333351 -120.949539
+ot.put[20,4] 175.106812 654.847778 -5.946883 -59.186329 0.333351 -120.949539
+ot.put[20,5] 175.175781 683.847290 -5.802182 -59.186329 0.333351 -120.949539
+ot.put[20,6] 175.244751 712.846863 -5.657482 -59.186329 0.333351 -120.949539
 ot.put[20,7] 175.247162 713.846863 -5.652492 -59.186329 0.333351 -120.949539
 tool.pick[1] 0.000000 10.000000 120.000000 -22.500000 180.000000 0.000000
 .END
@@ -6005,6 +6065,7 @@ di.ifp.page[5] = 2005
 di.ifp.page[6] = 2006
 di.ifp.page[7] = 2007
 di.ifp.page[8] = 2008
+direction = 1
 do.automatic = 2012
 do.bat.alm = 2011
 do.home = 2010
@@ -6420,156 +6481,156 @@ keep.object = 1
 line.width = 210
 lines.count = 21
 lines.shift = 16
-max.count.put = 15
+max.count.put = 0
 max.defect.cnt = 50
-max.tare.count = 10
-ms[0] = 10
-ms[1] = 10
-ms[2] = 10
-ms[3] = 10
-ms[4] = 10
-ms[5] = 10
-ms[6] = 10
-ms[7] = 9
-ms[8] = 9
-ms[9] = 9
-ms[10] = 9
-ms[11] = 9
-ms[12] = 9
-ms[13] = 9
-ms[14] = 11
-ms[15] = 11
-ms[16] = 11
-ms[17] = 11
-ms[18] = 11
-ms[19] = 11
-ms[20] = 11
-ms[21] = 8
-ms[22] = 8
-ms[23] = 8
-ms[24] = 8
-ms[25] = 8
-ms[26] = 8
-ms[27] = 8
-ms[28] = 12
-ms[29] = 12
-ms[30] = 12
-ms[31] = 12
-ms[32] = 12
-ms[33] = 12
-ms[34] = 12
-ms[35] = 7
-ms[36] = 7
-ms[37] = 7
-ms[38] = 7
-ms[39] = 7
-ms[40] = 7
-ms[41] = 7
-ms[42] = 13
-ms[43] = 13
-ms[44] = 13
-ms[45] = 13
-ms[46] = 13
-ms[47] = 13
-ms[48] = 13
-ms[49] = 6
-ms[50] = 6
-ms[51] = 6
-ms[52] = 6
-ms[53] = 6
-ms[54] = 6
-ms[55] = 6
-ms[56] = 14
-ms[57] = 14
-ms[58] = 14
-ms[59] = 14
-ms[60] = 14
-ms[61] = 14
-ms[62] = 14
-ms[63] = 5
-ms[64] = 5
-ms[65] = 5
-ms[66] = 5
-ms[67] = 5
-ms[68] = 5
-ms[69] = 5
-ms[70] = 15
-ms[71] = 15
-ms[72] = 15
-ms[73] = 15
-ms[74] = 15
-ms[75] = 15
-ms[76] = 15
-ms[77] = 4
-ms[78] = 4
-ms[79] = 4
-ms[80] = 4
-ms[81] = 4
-ms[82] = 4
-ms[83] = 4
-ms[84] = 16
-ms[85] = 16
-ms[86] = 16
-ms[87] = 16
-ms[88] = 16
-ms[89] = 16
-ms[90] = 16
-ms[91] = 3
-ms[92] = 3
-ms[93] = 3
-ms[94] = 3
-ms[95] = 3
-ms[96] = 3
-ms[97] = 3
-ms[98] = 17
-ms[99] = 17
-ms[100] = 17
-ms[101] = 17
-ms[102] = 17
-ms[103] = 17
-ms[104] = 17
-ms[105] = 2
-ms[106] = 2
-ms[107] = 2
-ms[108] = 2
-ms[109] = 2
-ms[110] = 2
-ms[111] = 2
-ms[112] = 18
-ms[113] = 18
-ms[114] = 18
-ms[115] = 18
-ms[116] = 18
-ms[117] = 18
-ms[118] = 18
-ms[119] = 1
-ms[120] = 1
-ms[121] = 1
-ms[122] = 1
-ms[123] = 1
-ms[124] = 1
-ms[125] = 1
-ms[126] = 19
-ms[127] = 19
-ms[128] = 19
-ms[129] = 19
-ms[130] = 19
-ms[131] = 19
-ms[132] = 19
-ms[133] = 0
-ms[134] = 0
-ms[135] = 0
-ms[136] = 0
-ms[137] = 0
-ms[138] = 0
-ms[139] = 0
-ms[140] = 20
-ms[141] = 20
-ms[142] = 20
-ms[143] = 20
-ms[144] = 20
-ms[145] = 20
-ms[146] = 20
+max.tare.count = 147
+ms[0] = 0
+ms[1] = 0
+ms[2] = 0
+ms[3] = 0
+ms[4] = 0
+ms[5] = 0
+ms[6] = 0
+ms[7] = 20
+ms[8] = 20
+ms[9] = 20
+ms[10] = 20
+ms[11] = 20
+ms[12] = 20
+ms[13] = 20
+ms[14] = 10
+ms[15] = 10
+ms[16] = 10
+ms[17] = 10
+ms[18] = 10
+ms[19] = 10
+ms[20] = 10
+ms[21] = 9
+ms[22] = 9
+ms[23] = 9
+ms[24] = 9
+ms[25] = 9
+ms[26] = 9
+ms[27] = 9
+ms[28] = 11
+ms[29] = 11
+ms[30] = 11
+ms[31] = 11
+ms[32] = 11
+ms[33] = 11
+ms[34] = 11
+ms[35] = 8
+ms[36] = 8
+ms[37] = 8
+ms[38] = 8
+ms[39] = 8
+ms[40] = 8
+ms[41] = 8
+ms[42] = 12
+ms[43] = 12
+ms[44] = 12
+ms[45] = 12
+ms[46] = 12
+ms[47] = 12
+ms[48] = 12
+ms[49] = 7
+ms[50] = 7
+ms[51] = 7
+ms[52] = 7
+ms[53] = 7
+ms[54] = 7
+ms[55] = 7
+ms[56] = 13
+ms[57] = 13
+ms[58] = 13
+ms[59] = 13
+ms[60] = 13
+ms[61] = 13
+ms[62] = 13
+ms[63] = 6
+ms[64] = 6
+ms[65] = 6
+ms[66] = 6
+ms[67] = 6
+ms[68] = 6
+ms[69] = 6
+ms[70] = 14
+ms[71] = 14
+ms[72] = 14
+ms[73] = 14
+ms[74] = 14
+ms[75] = 14
+ms[76] = 14
+ms[77] = 5
+ms[78] = 5
+ms[79] = 5
+ms[80] = 5
+ms[81] = 5
+ms[82] = 5
+ms[83] = 5
+ms[84] = 15
+ms[85] = 15
+ms[86] = 15
+ms[87] = 15
+ms[88] = 15
+ms[89] = 15
+ms[90] = 15
+ms[91] = 4
+ms[92] = 4
+ms[93] = 4
+ms[94] = 4
+ms[95] = 4
+ms[96] = 4
+ms[97] = 4
+ms[98] = 16
+ms[99] = 16
+ms[100] = 16
+ms[101] = 16
+ms[102] = 16
+ms[103] = 16
+ms[104] = 16
+ms[105] = 3
+ms[106] = 3
+ms[107] = 3
+ms[108] = 3
+ms[109] = 3
+ms[110] = 3
+ms[111] = 3
+ms[112] = 17
+ms[113] = 17
+ms[114] = 17
+ms[115] = 17
+ms[116] = 17
+ms[117] = 17
+ms[118] = 17
+ms[119] = 2
+ms[120] = 2
+ms[121] = 2
+ms[122] = 2
+ms[123] = 2
+ms[124] = 2
+ms[125] = 2
+ms[126] = 18
+ms[127] = 18
+ms[128] = 18
+ms[129] = 18
+ms[130] = 18
+ms[131] = 18
+ms[132] = 18
+ms[133] = 1
+ms[134] = 1
+ms[135] = 1
+ms[136] = 1
+ms[137] = 1
+ms[138] = 1
+ms[139] = 1
+ms[140] = 19
+ms[141] = 19
+ms[142] = 19
+ms[143] = 19
+ms[144] = 19
+ms[145] = 19
+ms[146] = 19
 ns[0] = 0
 ns[1] = 1
 ns[2] = 2
@@ -6792,149 +6853,151 @@ s.tcp.recv.ena = 2202
 s.tcp.send.ena = 2201
 s.zone.blocked = 2209
 spc.tare.count = 50
-state = 100
+state = 102
 tcp.ena = -1
 tcp.port = 9007
 tcp.recv.ena = -1
 tcp.send.ena = -1
 tcp.sender.dly = 0.25
-tcp.socket = 588
+tcp.socket = 696
 tyterm = 0
+wdog.tmr = 30
 .END
 .STRINGS
-$action = "WaitingForStart"
-$log.entry[0] = "15:27:26 CYCLEON;\n"
-$log.entry[1] = "15:27:36 CYCLEON;\n"
-$log.entry[2] = "15:27:47 CYCLEON;\n"
-$log.entry[3] = "15:27:57 CYCLEON;\n"
-$log.entry[4] = "15:28:08 CYCLEON;\n"
-$log.entry[5] = "15:28:18 CYCLEON;\n"
-$log.entry[6] = "15:28:29 CYCLEON;\n"
-$log.entry[7] = "15:28:39 CYCLEON;\n"
-$log.entry[8] = "15:28:50 CYCLEON;\n"
-$log.entry[9] = "15:29:00 CYCLEON;\n"
-$log.entry[10] = "15:29:11 CYCLEON;\n"
-$log.entry[11] = "15:29:21 CYCLEON;\n"
-$log.entry[12] = "15:29:32 CYCLEON;\n"
-$log.entry[13] = "15:29:42 CYCLEON;\n"
-$log.entry[14] = "15:29:53 CYCLEON;\n"
-$log.entry[15] = "15:30:03 CYCLEON;\n"
-$log.entry[16] = "15:30:14 CYCLEON;\n"
-$log.entry[17] = "15:30:24 CYCLEON;\n"
-$log.entry[18] = "15:30:35 CYCLEON;\n"
-$log.entry[19] = "15:30:45 CYCLEON;\n"
-$log.entry[20] = "15:30:56 CYCLEON;\n"
-$log.entry[21] = "15:31:06 CYCLEON;\n"
-$log.entry[22] = "15:31:17 CYCLEON;\n"
-$log.entry[23] = "15:31:27 CYCLEON;\n"
-$log.entry[24] = "15:31:38 CYCLEON;\n"
-$log.entry[25] = "15:31:48 CYCLEON;\n"
-$log.entry[26] = "15:31:59 CYCLEON;\n"
-$log.entry[27] = "15:32:09 CYCLEON;\n"
-$log.entry[28] = "15:32:20 CYCLEON;\n"
-$log.entry[29] = "15:32:30 CYCLEON;\n"
-$log.entry[30] = "15:32:41 CYCLEON;\n"
-$log.entry[31] = "15:32:51 CYCLEON;\n"
-$log.entry[32] = "15:33:02 CYCLEON;\n"
-$log.entry[33] = "15:33:13 CYCLEON;\n"
-$log.entry[34] = "15:33:23 CYCLEON;\n"
-$log.entry[35] = "15:33:34 CYCLEON;\n"
-$log.entry[36] = "15:33:44 CYCLEON;\n"
-$log.entry[37] = "15:33:55 CYCLEON;\n"
-$log.entry[38] = "15:34:05 CYCLEON;\n"
-$log.entry[39] = "15:34:16 CYCLEON;\n"
-$log.entry[40] = "15:34:26 CYCLEON;\n"
-$log.entry[41] = "15:34:37 CYCLEON;\n"
-$log.entry[42] = "15:34:47 CYCLEON;\n"
-$log.entry[43] = "15:34:58 CYCLEON;\n"
-$log.entry[44] = "15:35:08 CYCLEON;\n"
-$log.entry[45] = "15:35:19 CYCLEON;\n"
-$log.entry[46] = "15:35:29 CYCLEON;\n"
-$log.entry[47] = "15:35:40 CYCLEON;\n"
-$log.entry[48] = "15:35:50 CYCLEON;\n"
-$log.entry[49] = "15:36:01 CYCLEON;\n"
-$log.entry[50] = "15:36:12 CYCLEON;\n"
-$log.entry[51] = "15:36:22 CYCLEON;\n"
-$log.entry[52] = "15:36:33 CYCLEON;\n"
-$log.entry[53] = "15:36:43 CYCLEON;\n"
-$log.entry[54] = "15:36:54 CYCLEON;\n"
-$log.entry[55] = "15:37:04 CYCLEON;\n"
-$log.entry[56] = "15:37:15 CYCLEON;\n"
-$log.entry[57] = "15:37:25 CYCLEON;\n"
-$log.entry[58] = "15:37:36 CYCLEON;\n"
-$log.entry[59] = "15:37:46 CYCLEON;\n"
-$log.entry[60] = "15:37:57 CYCLEON;\n"
-$log.entry[61] = "15:38:07 CYCLEON;\n"
-$log.entry[62] = "15:38:18 CYCLEON;\n"
-$log.entry[63] = "15:38:28 CYCLEON;\n"
-$log.entry[64] = "15:38:39 CYCLEON;\n"
-$log.entry[65] = "15:38:49 CYCLEON;\n"
-$log.entry[66] = "15:39:00 CYCLEON;\n"
-$log.entry[67] = "15:39:10 CYCLEON;\n"
-$log.entry[68] = "15:39:21 CYCLEON;\n"
-$log.entry[69] = "15:39:31 CYCLEON;\n"
-$log.entry[70] = "15:39:42 CYCLEON;\n"
-$log.entry[71] = "15:39:53 CYCLEON;\n"
-$log.entry[72] = "15:40:03 CYCLEON;\n"
-$log.entry[73] = "15:40:14 CYCLEON;\n"
-$log.entry[74] = "15:40:24 CYCLEON;\n"
-$log.entry[75] = "15:40:35 CYCLEON;\n"
-$log.entry[76] = "15:40:45 CYCLEON;\n"
-$log.entry[77] = "15:40:56 CYCLEON;\n"
-$log.entry[78] = "15:41:06 CYCLEON;\n"
-$log.entry[79] = "15:41:17 CYCLEON;\n"
-$log.entry[80] = "15:41:27 CYCLEON;\n"
-$log.entry[81] = "15:41:38 CYCLEON;\n"
-$log.entry[82] = "15:41:48 CYCLEON;\n"
-$log.entry[83] = "15:41:59 CYCLEON;\n"
-$log.entry[84] = "15:42:09 CYCLEON;\n"
-$log.entry[85] = "15:42:20 CYCLEON;\n"
-$log.entry[86] = "15:42:30 CYCLEON;\n"
-$log.entry[87] = "15:42:41 CYCLEON;\n"
-$log.entry[88] = "15:42:51 CYCLEON;\n"
-$log.entry[89] = "15:43:02 CYCLEON;\n"
-$log.entry[90] = "15:43:13 CYCLEON;\n"
-$log.entry[91] = "15:43:23 CYCLEON;\n"
-$log.entry[92] = "15:44:09 CYCLEON;\n"
-$log.entry[93] = "15:44:19 CYCLEON;\n"
-$log.entry[94] = "15:44:29 CYCLEON;\n"
-$log.entry[95] = "15:44:39 CYCLEON;\n"
-$log.entry[96] = "15:44:50 CYCLEON;\n"
-$log.entry[97] = "15:45:00 CYCLEON;\n"
-$log.entry[98] = "15:45:10 CYCLEON;\n"
-$log.entry[99] = "15:45:20 CYCLEON;\n"
-$log.entry[100] = "15:45:30 CYCLEON;\n"
-$log.entry[101] = "15:45:41 CYCLEON;\n"
-$log.entry[102] = "15:45:51 CYCLEON;\n"
-$log.entry[103] = "15:46:01 CYCLEON;\n"
-$log.entry[104] = "15:46:11 CYCLEON;\n"
-$log.entry[105] = "15:46:21 CYCLEON;\n"
-$log.entry[106] = "15:46:32 CYCLEON;\n"
-$log.entry[107] = "15:46:42 CYCLEON;\n"
-$log.entry[108] = "15:46:52 CYCLEON;\n"
-$log.entry[109] = "15:47:02 CYCLEON;\n"
-$log.entry[110] = "15:47:13 CYCLEON;\n"
-$log.entry[111] = "15:47:23 CYCLEON;\n"
-$log.entry[112] = "15:47:33 CYCLEON;\n"
-$log.entry[113] = "15:47:43 CYCLEON;\n"
-$log.entry[114] = "15:47:54 CYCLEON;\n"
-$log.entry[115] = "15:48:04 CYCLEON;\n"
-$log.entry[116] = "15:48:04 Main program executed"
-$log.entry[117] = "15:48:05 Robot already in home position"
-$log.entry[118] = "15:48:05 State 0: Program reset. Initialization of parameters"
-$log.entry[119] = "15:48:05 State 100: Waiting for start"
-$log.entry[120] = "15:49:15 CYCLEON;\n"
-$log.entry[121] = "15:49:25 CYCLEON;\n"
-$log.entry[122] = "15:49:35 CYCLEON;\n"
-$log.entry[123] = "15:49:45 CYCLEON;\n"
-$log.entry[124] = "15:49:55 CYCLEON;\n"
-$log.entry[125] = "15:50:05 CYCLEON;\n"
-$log.entry[126] = "15:50:15 CYCLEON;\n"
-$log.entry[127] = "15:50:25 CYCLEON;\n"
+$action = "WaitPosFull"
+$log.entry[0] = "15:30:45 CYCLEON;\n"
+$log.entry[1] = "15:30:56 CYCLEON;\n"
+$log.entry[2] = "15:31:06 CYCLEON;\n"
+$log.entry[3] = "15:31:17 CYCLEON;\n"
+$log.entry[4] = "15:31:27 CYCLEON;\n"
+$log.entry[5] = "15:31:38 CYCLEON;\n"
+$log.entry[6] = "15:31:48 CYCLEON;\n"
+$log.entry[7] = "15:31:59 CYCLEON;\n"
+$log.entry[8] = "15:32:09 CYCLEON;\n"
+$log.entry[9] = "15:32:20 CYCLEON;\n"
+$log.entry[10] = "15:32:30 CYCLEON;\n"
+$log.entry[11] = "15:32:41 CYCLEON;\n"
+$log.entry[12] = "15:32:51 CYCLEON;\n"
+$log.entry[13] = "15:33:02 CYCLEON;\n"
+$log.entry[14] = "15:33:13 CYCLEON;\n"
+$log.entry[15] = "15:33:23 CYCLEON;\n"
+$log.entry[16] = "15:33:34 CYCLEON;\n"
+$log.entry[17] = "15:33:44 CYCLEON;\n"
+$log.entry[18] = "15:33:55 CYCLEON;\n"
+$log.entry[19] = "15:34:05 CYCLEON;\n"
+$log.entry[20] = "15:34:16 CYCLEON;\n"
+$log.entry[21] = "15:34:26 CYCLEON;\n"
+$log.entry[22] = "15:34:37 CYCLEON;\n"
+$log.entry[23] = "15:34:47 CYCLEON;\n"
+$log.entry[24] = "15:34:58 CYCLEON;\n"
+$log.entry[25] = "15:35:08 CYCLEON;\n"
+$log.entry[26] = "15:35:19 CYCLEON;\n"
+$log.entry[27] = "15:35:29 CYCLEON;\n"
+$log.entry[28] = "15:35:40 CYCLEON;\n"
+$log.entry[29] = "15:35:50 CYCLEON;\n"
+$log.entry[30] = "15:36:01 CYCLEON;\n"
+$log.entry[31] = "15:36:12 CYCLEON;\n"
+$log.entry[32] = "15:36:22 CYCLEON;\n"
+$log.entry[33] = "15:36:33 CYCLEON;\n"
+$log.entry[34] = "15:36:43 CYCLEON;\n"
+$log.entry[35] = "15:36:54 CYCLEON;\n"
+$log.entry[36] = "15:37:04 CYCLEON;\n"
+$log.entry[37] = "15:37:15 CYCLEON;\n"
+$log.entry[38] = "15:37:25 CYCLEON;\n"
+$log.entry[39] = "15:37:36 CYCLEON;\n"
+$log.entry[40] = "15:37:46 CYCLEON;\n"
+$log.entry[41] = "15:37:57 CYCLEON;\n"
+$log.entry[42] = "15:38:07 CYCLEON;\n"
+$log.entry[43] = "15:38:18 CYCLEON;\n"
+$log.entry[44] = "15:38:28 CYCLEON;\n"
+$log.entry[45] = "15:38:39 CYCLEON;\n"
+$log.entry[46] = "15:38:49 CYCLEON;\n"
+$log.entry[47] = "15:39:00 CYCLEON;\n"
+$log.entry[48] = "15:39:10 CYCLEON;\n"
+$log.entry[49] = "15:39:21 CYCLEON;\n"
+$log.entry[50] = "15:39:31 CYCLEON;\n"
+$log.entry[51] = "15:39:42 CYCLEON;\n"
+$log.entry[52] = "15:39:53 CYCLEON;\n"
+$log.entry[53] = "15:40:03 CYCLEON;\n"
+$log.entry[54] = "15:40:14 CYCLEON;\n"
+$log.entry[55] = "15:40:24 CYCLEON;\n"
+$log.entry[56] = "15:40:35 CYCLEON;\n"
+$log.entry[57] = "15:40:45 CYCLEON;\n"
+$log.entry[58] = "15:40:56 CYCLEON;\n"
+$log.entry[59] = "15:41:06 CYCLEON;\n"
+$log.entry[60] = "15:41:17 CYCLEON;\n"
+$log.entry[61] = "15:41:27 CYCLEON;\n"
+$log.entry[62] = "15:41:38 CYCLEON;\n"
+$log.entry[63] = "15:41:48 CYCLEON;\n"
+$log.entry[64] = "15:41:59 CYCLEON;\n"
+$log.entry[65] = "15:42:09 CYCLEON;\n"
+$log.entry[66] = "15:42:20 CYCLEON;\n"
+$log.entry[67] = "15:42:30 CYCLEON;\n"
+$log.entry[68] = "15:42:41 CYCLEON;\n"
+$log.entry[69] = "15:42:51 CYCLEON;\n"
+$log.entry[70] = "15:43:02 CYCLEON;\n"
+$log.entry[71] = "15:43:13 CYCLEON;\n"
+$log.entry[72] = "15:43:23 CYCLEON;\n"
+$log.entry[73] = "15:44:09 CYCLEON;\n"
+$log.entry[74] = "15:44:19 CYCLEON;\n"
+$log.entry[75] = "15:44:29 CYCLEON;\n"
+$log.entry[76] = "15:44:39 CYCLEON;\n"
+$log.entry[77] = "15:44:50 CYCLEON;\n"
+$log.entry[78] = "15:45:00 CYCLEON;\n"
+$log.entry[79] = "15:45:10 CYCLEON;\n"
+$log.entry[80] = "15:45:20 CYCLEON;\n"
+$log.entry[81] = "15:45:30 CYCLEON;\n"
+$log.entry[82] = "15:45:41 CYCLEON;\n"
+$log.entry[83] = "15:45:51 CYCLEON;\n"
+$log.entry[84] = "15:46:01 CYCLEON;\n"
+$log.entry[85] = "15:46:11 CYCLEON;\n"
+$log.entry[86] = "15:46:21 CYCLEON;\n"
+$log.entry[87] = "15:46:32 CYCLEON;\n"
+$log.entry[88] = "15:46:42 CYCLEON;\n"
+$log.entry[89] = "15:46:52 CYCLEON;\n"
+$log.entry[90] = "15:47:02 CYCLEON;\n"
+$log.entry[91] = "15:47:13 CYCLEON;\n"
+$log.entry[92] = "15:47:23 CYCLEON;\n"
+$log.entry[93] = "15:47:33 CYCLEON;\n"
+$log.entry[94] = "15:47:43 CYCLEON;\n"
+$log.entry[95] = "15:47:54 CYCLEON;\n"
+$log.entry[96] = "15:48:04 CYCLEON;\n"
+$log.entry[97] = "15:48:04 Main program executed"
+$log.entry[98] = "15:48:05 Robot already in home position"
+$log.entry[99] = "15:48:05 State 0: Program reset. Initialization of parameters"
+$log.entry[100] = "15:48:05 State 100: Waiting for start"
+$log.entry[101] = "15:49:15 CYCLEON;\n"
+$log.entry[102] = "15:49:25 CYCLEON;\n"
+$log.entry[103] = "15:49:35 CYCLEON;\n"
+$log.entry[104] = "15:49:45 CYCLEON;\n"
+$log.entry[105] = "15:49:55 CYCLEON;\n"
+$log.entry[106] = "15:50:05 CYCLEON;\n"
+$log.entry[107] = "15:50:15 CYCLEON;\n"
+$log.entry[108] = "15:50:25 CYCLEON;\n"
+$log.entry[109] = "18:02:23 Main program executed"
+$log.entry[110] = "18:02:23 Performing safe motion to home position"
+$log.entry[111] = "18:02:23 Robot in home position"
+$log.entry[112] = "18:02:23 State 100: Waiting for start"
+$log.entry[113] = "18:08:45 Main program executed"
+$log.entry[114] = "18:08:45 Performing safe motion to home position"
+$log.entry[115] = "18:08:45 Robot in home position"
+$log.entry[116] = "18:08:45 State 100: Waiting for start"
+$log.entry[117] = "18:10:03 START with Name:312.229.002-0 Count: 150 OT:1 OPT:1"
+$log.entry[118] = "18:10:03 State 106: Check program"
+$log.entry[119] = "18:10:03 Selected program: 312.229.002"
+$log.entry[120] = "18:10:03 State 5: Check etalon"
+$log.entry[121] = "18:10:04 Wait for unclamp gripper. State: WaitingGripUnclamped"
+$log.entry[122] = "18:10:46 Pick detail from etalon (ID: 1)"
+$log.entry[123] = "18:10:51 Measure etalon (ID: 1)"
+$log.entry[124] = "18:10:55 Waiting for measurement result"
+$log.entry[125] = "18:11:28 Measurement etalon: OK"
+$log.entry[126] = "18:11:30 Return etalon to positioner (ID: 1)"
+$log.entry[127] = "18:11:35 State 101: Calculating next step"
 $opt.data = "1"
 $ot.data = "1"
 $pg.name = "312.229.002"
-$tcp.ip = "192.168.7.100"
+$tcp.ip = "192.168.0.130"
+$wdog.state = "FALSE"
 .END
 .IDE_CMT
 @@@ PROJECT @@@

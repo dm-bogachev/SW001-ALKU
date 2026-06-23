@@ -130,6 +130,7 @@ N_INT300    "s.debug.mode|Debug mode"
 64,4,1,"OFF     ON","",""," TCP SEND",10,4,4,0,2201,0
 65,4,1,"OFF     ON","",""," TCP RECV",10,4,4,0,2202,0
 66,4,1,"OFF     ON","",""," TCP LOG",10,4,4,0,2204,0
+67,8,"wdog.tmr","  WATCHDOG"," TIMER, s",10,15,3,1,0
 68,14,"action","  CURRENT","  ACTION",10,15,0
 69,2,"","   RESET","   ACTION","",10,4,15,2262,0
 70,1,"OT PLACED ","","","",10,15,4,10,2229,0
@@ -1963,126 +1964,132 @@ N_INT300    "s.debug.mode|Debug mode"
 	s.debug.mode = 2300
 .END
 .PROGRAM set.vars.pc()@26/01/15 08:39 #43
-	;
-	; Constants
-	;
-	; Initialize once
-	;
-	;
-	IF NOT EXISTREAL ("state") THEN
-		state = 0
-	END
-	;
-	IF NOT EXISTCHAR ("$tcp.ip") THEN
-		$tcp.ip = "127.0.0.1"
-	END
-	;
-	IF NOT EXISTREAL ("tcp.port") THEN
-		tcp.port = 9013
-	END
-	;
-	IF NOT EXISTREAL ("tcp.ena") THEN
-		tcp.ena = -1
-	END
-	;
-	IF NOT EXISTREAL ("tcp.recv.ena") THEN
-		tcp.recv.ena = -1
-	END
-	;
-	IF NOT EXISTREAL ("tcp.send.ena") THEN
-		tcp.send.ena = -1
-	END
-	;
-	IF NOT EXISTREAL ("tcp.sender.dly") THEN
-		tcp.sender.dly = 0.25
-	END
-	;
-	IF NOT EXISTREAL ("tyterm") THEN
-		tyterm = 0
-	END
-	;
-	IF NOT EXISTCHAR ("$log.entry[127]") THEN
-		FOR .i = 0 TO 127
-			$log.entry[.i] = " "
-		END
-	END
-	;
-	;IF NOT EXISTJOINT ("#current.pos") THEN
-	;POINT #current.pos = #homyak
-	;END
-	;
-	IF NOT EXISTREAL ("current.gripper") THEN
-		current.gripper = 0
-	END
-	;
-	IF NOT EXISTREAL ("pg.gripper") THEN
-		pg13.gripper = 0
-	END
-	;
-	IF NOT EXISTREAL ("hmi.gripper") THEN
-		hmi.gripper = 1
-	END
-	;
-	IF NOT EXISTREAL ("hmi.ot.i") THEN
-		hmi.ot.i = 1
-	END
-	;
-	IF NOT EXISTREAL ("hmi.ot.j") THEN
-		hmi.ot.j = 1
-	END
-	;
-	IF NOT EXISTREAL ("hmi.opt.i") THEN
-		hmi.opt.i = 1
-	END
-	;
-	IF NOT EXISTREAL ("hmi.opt.j") THEN
-		hmi.opt.j = 1
-	END
-	;
-	IF NOT EXISTREAL ("hmi.obj.id") THEN
-		hmi.obj.id = 1
-	END
-	;
-	IF NOT EXISTCHAR ("$action") THEN
-		$action = "Default"
-	END
-	;
-	IF NOT EXISTCHAR ("$pg.name") THEN
-		$pg.name = "Default"
-	END
-	;
-	IF NOT EXISTREAL ("detail.count") THEN
-		detail.count = 0
-	END
-	;
-	IF NOT EXISTREAL ("keep.gripper") THEN
-		keep.gripper = -1
-	END
-	;
-	IF NOT EXISTREAL ("keep.object") THEN
-		keep.object = -1
-	END
-	;
-	IF NOT EXISTREAL ("grip.xsh[3]") THEN
-		FOR .i = 1 TO 3
-			grip.xsh[.i] = 0
-			grip.ysh[.i] = 0
-			grip.zsh[.i] = 0
-			grip.180xsh[.i] = 0
-			grip.180ysh[.i] = 0
-		END
-	END
-	;
-	FOR .n = 1 TO 64
-		.$name = "cv.x.plus[" + $ENCODE (/L, .n) + "]"
-		IF NOT EXISTREAL (.$name) THEN
-			cv.x.plus[.n] = 0
-			cv.x.minus[.n] = 0
-			cv.y.plus[.n] = 0
-			cv.y.minus[.n] = 0
-		END
-	END
-	;
+  ;
+  ; Constants
+  ;
+  ; Initialize once
+  ;
+  ;
+  IF NOT EXISTREAL ("wdog.tmr") THEN
+    wdog.tmr = 120
+    $wdog.state = "FALSE"
+  END
+  ; 
+  ;
+  IF NOT EXISTREAL ("state") THEN
+    state = 0
+  END
+  ;
+  IF NOT EXISTCHAR ("$tcp.ip") THEN
+    $tcp.ip = "127.0.0.1"
+  END
+  ;
+  IF NOT EXISTREAL ("tcp.port") THEN
+    tcp.port = 9013
+  END
+  ;
+  IF NOT EXISTREAL ("tcp.ena") THEN
+    tcp.ena = -1
+  END
+  ;
+  IF NOT EXISTREAL ("tcp.recv.ena") THEN
+    tcp.recv.ena = -1
+  END
+  ;
+  IF NOT EXISTREAL ("tcp.send.ena") THEN
+    tcp.send.ena = -1
+  END
+  ;
+  IF NOT EXISTREAL ("tcp.sender.dly") THEN
+    tcp.sender.dly = 0.25
+  END
+  ;
+  IF NOT EXISTREAL ("tyterm") THEN
+    tyterm = 0
+  END
+  ;
+  IF NOT EXISTCHAR ("$log.entry[127]") THEN
+    FOR .i = 0 TO 127
+      $log.entry[.i] = " "
+    END
+  END
+  ;
+  ;IF NOT EXISTJOINT ("#current.pos") THEN
+  ;POINT #current.pos = #homyak
+  ;END
+  ;
+  IF NOT EXISTREAL ("current.gripper") THEN
+    current.gripper = 0
+  END
+  ;
+  IF NOT EXISTREAL ("pg.gripper") THEN
+    pg13.gripper = 0
+  END
+  ;
+  IF NOT EXISTREAL ("hmi.gripper") THEN
+    hmi.gripper = 1
+  END
+  ;
+  IF NOT EXISTREAL ("hmi.ot.i") THEN
+    hmi.ot.i = 1
+  END
+  ;
+  IF NOT EXISTREAL ("hmi.ot.j") THEN
+    hmi.ot.j = 1
+  END
+  ;
+  IF NOT EXISTREAL ("hmi.opt.i") THEN
+    hmi.opt.i = 1
+  END
+  ;
+  IF NOT EXISTREAL ("hmi.opt.j") THEN
+    hmi.opt.j = 1
+  END
+  ;
+  IF NOT EXISTREAL ("hmi.obj.id") THEN
+    hmi.obj.id = 1
+  END
+  ;
+  IF NOT EXISTCHAR ("$action") THEN
+    $action = "Default"
+  END
+  ;
+  IF NOT EXISTCHAR ("$pg.name") THEN
+    $pg.name = "Default"
+  END
+  ;
+  IF NOT EXISTREAL ("detail.count") THEN
+    detail.count = 0
+  END
+  ;
+  IF NOT EXISTREAL ("keep.gripper") THEN
+    keep.gripper = -1
+  END
+  ;
+  IF NOT EXISTREAL ("keep.object") THEN
+    keep.object = -1
+  END
+  ;
+  IF NOT EXISTREAL ("grip.xsh[3]") THEN
+    FOR .i = 1 TO 3
+      grip.xsh[.i] = 0
+      grip.ysh[.i] = 0
+      grip.zsh[.i] = 0
+      grip.180xsh[.i] = 0
+      grip.180ysh[.i] = 0
+    END
+  END
+  ;
+  FOR .n = 1 TO 64
+    .$name = "cv.x.plus[" + $ENCODE (/L, .n) + "]"
+    IF NOT EXISTREAL (.$name) THEN
+      cv.x.plus[.n] = 0
+      cv.x.minus[.n] = 0
+      cv.y.plus[.n] = 0
+      cv.y.minus[.n] = 0
+    END
+  END
+  ;
 .END
 .PROGRAM state0()@26/01/22 14:46 #118; Initialization of parameters
   ;
@@ -2903,60 +2910,87 @@ N_INT300    "s.debug.mode|Debug mode"
 	;
 .END
 .PROGRAM tcp.sender.pc()@26/01/15 08:39 #0
-	;
-	WHILE TRUE DO
-		;
-		CALL get.state.pc (.$data[1])
-		.$data[2] = "ACTION:" + $action + ";"
-		.$data[2] = .$data[2] + "TAREIN:" + $ENCODE (count.opt) + ";"
-		.$data[2] = .$data[2] + "TAREOUT:" + $ENCODE (count.ot) + ";"
-		.$data[2] = .$data[2] + "GRIPPER:" + $ENCODE (current.gripper) + ";"
-		.$data[2] = .$data[2] + "PICKCOUNT:" + $ENCODE (count.put) + ";"
-		.$data[2] = .$data[2] + "STATE:" + $ENCODE (state) + ";"
-		.$data[2] = .$data[2] + "HOUR:" + $ENCODE (OPEINFO (3)) + ";"
-		;
-		IF SWITCH (STP_ONCE) THEN
-			.$data[2] = .$data[2] + "STEPMODE:TRUE;"
-		ELSE
-			.$data[2] = .$data[2] + "STEPMODE:FALSE;"
-		END
-		;
-		;
-		.$data[2] = .$data[2] + "\n"
-		;
-		CALL tcp.send.pc (.$data[], 2)
-		TWAIT tcp.sender.dly
-	END
-	;
+  ;
+  WHILE TRUE DO
+    ; 
+    CALL get.state.pc (.$data[1])
+    .$data[2] = "ACTION:" + $action + ";"
+    .$data[2] = "WATCHDOG:" + $wdog.state + ";"
+    .$data[2] = .$data[2] + "TAREIN:" + $ENCODE (count.opt) + ";"
+    .$data[2] = .$data[2] + "TAREOUT:" + $ENCODE (count.ot) + ";"
+    .$data[2] = .$data[2] + "GRIPPER:" + $ENCODE (current.gripper) + ";"
+    .$data[2] = .$data[2] + "PICKCOUNT:" + $ENCODE (count.put) + ";"
+    .$data[2] = .$data[2] + "STATE:" + $ENCODE (state) + ";"
+    .$data[2] = .$data[2] + "HOUR:" + $ENCODE (OPEINFO (3)) + ";"
+    ;
+    IF SWITCH (STP_ONCE) THEN
+      .$data[2] = .$data[2] + "STEPMODE:TRUE;"
+    ELSE
+      .$data[2] = .$data[2] + "STEPMODE:FALSE;"
+    END
+    ;
+    ;
+    .$data[2] = .$data[2] + "\n"
+    ;
+    CALL tcp.send.pc (.$data[], 2)
+    TWAIT tcp.sender.dly
+  END
+  ;
 .END
 .PROGRAM watchdog.pc()@26/01/15 08:39 #0
-	WHILE TRUE DO
-		;
-		CALL check.tasks.pc
-		CALL check.disp.pc
-		CALL check.zone.pc
-		;
-		;IF SIG (rs7.put.ack) THEN
-		;  SIGNAL -rs13.detail.put
-		;END
-		;
-		IF NOT SIG (s.debug.mode) THEN
-			IF SWITCH (REPEAT ) AND NOT SWITCH (TEACH_LOCK ) AND NOT SWITCH (EMERGENCY ) AND NOT SWITCH (CS ) AND NOT SWITCH (ERROR ) THEN
-				MC ZPOWER ON
-				;MC PRIME a.main
-				;WHILE NOT SWITCH(POWER)
-				;  TWAIT 0.01
-				;  MC CONTINUE
-				;END
-			END
-		END
-		;
-		IF NOT SWITCH (REPEAT ) THEN
-			CALL check.teach.pc
-		END
-		TWAIT 0.01
-	END
-	;
+  ;
+  HERE .last.pos
+  TIMER 1 = 0
+  ;
+  WHILE TRUE DO
+    ;
+    CALL check.tasks.pc
+    CALL check.disp.pc
+    CALL check.zone.pc
+    ;
+    HERE .current.pos
+    .c1 = SWITCH (CS)
+    .c2 = $action == "Paused"
+    .c3 = DISTANCE (.current.pos, .last.pos) > 5
+    .c4 = state <> 0 OR state <> 100
+    .c5 = TIMER (1) > wdog.tmr
+    ;
+    IF NOT .c1 OR .c2 OR .c3 OR NOT .c4 THEN
+      TIMER 1 = 0
+    END
+    ;
+    IF .c3 THEN
+      HERE .last.pos
+    END
+    ;
+    IF .c5 THEN
+      IF $wdog.state <> "TRUE" THEN
+        $wdog.state = "TRUE"
+      END
+    ELSE
+      IF $wdog.state <> "FALSE" THEN
+        $wdog.state = "FALSE"
+      END
+    END 
+    ;
+    ;
+    IF NOT SIG (s.debug.mode) THEN
+      IF SWITCH (REPEAT ) AND NOT SWITCH (TEACH_LOCK ) AND NOT SWITCH (EMERGENCY ) AND NOT SWITCH (CS ) AND NOT SWITCH (ERROR ) THEN
+        MC ZPOWER ON
+        ;MC PRIME a.main
+        ;WHILE NOT SWITCH(POWER)
+        ;  TWAIT 0.01
+        ;  MC CONTINUE
+        ;END
+      END
+    END
+    ;
+    IF NOT SWITCH (REPEAT ) THEN
+      CALL check.teach.pc
+    END
+    TWAIT 0.01
+  END
+  ;
 .END
 .PROGRAM Comment___ () ; Comments for IDE. Do not use.
 	; @@@ PROJECT @@@
@@ -2968,9 +3002,9 @@ N_INT300    "s.debug.mode|Debug mode"
 	; count.ot
 	; count.put
 	; @@@ CONNECTION @@@
-	; RS013N
-	; 192.168.7.102
-	; 23
+	; KROSET R01
+	; 127.0.0.1
+	; 9105
 	; @@@ PROGRAM @@@
 	;   Group:Objects:1
 	;     1:id1:F

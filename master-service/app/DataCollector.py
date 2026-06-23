@@ -6,7 +6,6 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspa
 
 # Внутренние модули
 from common.Logger import config_logger
-from RobotState import RobotState
 import requests
 from api import *
 # from configuration import Config
@@ -137,7 +136,8 @@ class DataCollector(Thread):
             "putcount": 0,
             "state": -1,
             "hour": -1,
-            "stepmode": False
+            "stepmode": False,
+            "watchdog": False,
         }
 
         try:
@@ -153,7 +153,7 @@ class DataCollector(Thread):
             # Boolean-like fields
             for key in ("connected", "power", "teach", "cs", "error",
                         "teachl", "tpemg", "opemg", "exemg", "home", "batalm",
-                        "stepmode"):
+                        "stepmode", "watchdog"):
                 if key in rs:
                     val = rs.get(key)
                     if isinstance(val, str):

@@ -1,0 +1,495 @@
+.AUXDATA
+N_OX1    "release.grip"
+N_OX2    "capture.grip"
+N_OX3    "grip.unclamp"
+N_OX4    "grip.clamp"
+N_OX17    "do.work[1]"
+N_OX18    "rs7.tare.chg"
+N_OX19    "rs7.locked.zone"
+N_OX20    "rs7.finish.ack"
+N_OX21    "rs7.put.ack"
+N_OX25    "rs7.det.picked[0]"
+N_OX26    "rs7.det.picked[1]"
+N_OX27    "rs7.det.picked[2]"
+N_OX28    "rs7.det.picked[3]"
+N_OX29    "rs7.det.picked[4]"
+N_OX30    "rs7.det.picked[5]"
+N_OX31    "rs7.det.picked[6]"
+N_OX32    "rs7.det.picked[7]"
+N_OX33    "rs7.etalon.stop"
+N_WX1    "grip.unclamped"
+N_WX2    "grip.clamped"
+N_WX17    "rs13.work[1]"
+N_WX18    "rs13.tare.ack"
+N_WX19    "rs13.detail.put"
+N_WX20    "rs13.finish"
+N_WX25    "rs13.det.put[0]"
+N_WX26    "rs13.det.put[1]"
+N_WX27    "rs13.det.put[2]"
+N_WX28    "rs13.det.put[3]"
+N_WX29    "rs13.det.put[4]"
+N_WX30    "rs13.det.put[5]"
+N_WX31    "rs13.det.put[6]"
+N_WX32    "rs13.det.put[7]"
+N_WX33    "rs13.no.ot.stop"
+N_INT1    "di.ifp.page[1]"
+N_INT2    "di.ifp.page[2]"
+N_INT3    "di.ifp.page[3]"
+N_INT4    "di.ifp.page[4]"
+N_INT5    "di.ifp.page[5]"
+N_INT6    "di.ifp.page[6]"
+N_INT7    "di.ifp.page[7]"
+N_INT8    "di.ifp.page[8]"
+N_INT9    "di.hold"
+N_INT10    "do.home"
+N_INT11    "do.bat.alm"
+N_INT12    "do.automatic"
+N_INT201    "s.tcp.send.ena"
+N_INT202    "s.tcp.recv.ena"
+N_INT203    "s.tcp.ena"
+N_INT204    "s.tcp.log"
+N_INT209    "s.zone.blocked"
+N_INT212    "do.work[2]"
+N_INT213    "do.work[3]"
+N_INT214    "do.work[4]"
+N_INT215    "do.work[5]"
+N_INT216    "do.work[6]"
+N_INT217    "do.work[7]"
+N_INT218    "do.work[8]"
+N_INT221    "s.force.in[1]"
+N_INT222    "s.force.in[2]"
+N_INT223    "s.defect.pal.ok"
+N_INT224    "s.defect.pal.ng"
+N_INT225    "s.measure.ok"
+N_INT226    "s.measure.ng"
+N_INT227    "s.force.defect"
+N_INT231    "s.grip.full"
+N_INT232    "s.cmd.start"
+N_INT233    "s.cmd.pick"
+N_INT234    "s.cmd.measured"
+N_INT237    "s.cmd.chk.etal"
+N_INT238    "s.cmd.finish"
+N_INT239    "s.cmd.pause"
+N_INT240    "s.cmd.resume"
+N_INT241    "s.cmd.stop"
+N_INT249    "s.pr.tst.ot"
+N_INT250    "s.pr.home"
+N_INT251    "s.pr.tch.ot"
+N_INT252    "s.pr.tch.defect"
+N_INT253    "s.pr.tch.meas"
+N_INT254    "s.pr.tch.etal"
+N_INT255    "s.pr.tch.pos"
+N_INT256    "s.apply.obj"
+N_INT260    "s.pr.tch.grip"
+N_INT261    "s.hmi.res.state"
+N_INT262    "s.hmi.res.act"
+N_INT270    "s.opt.spacer"
+N_INT271    "s.opt.flip"
+N_INT272    "s.etalon.ok"
+N_INT273    "s.etalon.ret"
+N_INT274    "s.etalon.ng"
+N_INT300    "s.debug.mode"
+.END
+.PROGRAM state0()@26/01/22 14:37 #121; Initialization of parameters
+	;
+	CALL log ("State 0: Program reset. Initialization of parameters")
+	SIGNAL -s.grip.full, -s.measure.ok, -s.measure.ng, -rs7.tare.chg, -s.cmd.measured
+	SIGNAL -s.cmd.start, -s.cmd.pick, -s.cmd.finish, -rs7.locked.zone, -s.cmd.stop
+	SIGNAL -s.cmd.chk.etal, -rs7.etalon.stop, -s.cmd.pause
+	SIGNAL -s.etalon.ok, -s.etalon.ret, -s.etalon.ng
+	count.pick = 0
+	BITS rs7.det.picked[0], 8 = count.pick
+	count.put = 0
+	;max.count.put = 0
+	;
+	state = 100
+	;
+.END
+.PROGRAM state1()@26/01/21 14:55 #2102; Pick from positioner
+	CALL log ("State 1: Pick from positioner")
+	; Check all start positions
+	; Possible do not needed because robot can be only in HOME or near positioner
+	;JMOVE #homyak
+	;
+	CALL pos.pick
+	;
+	state = 101
+	;
+.END
+.PROGRAM state2()@26/01/21 14:55 #2072; Measurement process
+	CALL log ("State 2: Measurement process")
+	; Check all start positions
+	; Possible do not needed because robot can be only in HOME or near positioner
+	;JMOVE #homyak
+	;
+	CALL measure
+	$action = "WaitPosFull"
+	;
+	state = 101
+	;
+.END
+.PROGRAM state3()@26/01/21 14:55 #1728; Put detail to OT
+	CALL log ("State 3: Put detail to OT")
+	; Check all start positions
+	; Possible do not needed because robot can be only in HOME or near positioner
+	;JMOVE #homyak
+	;
+	SIGNAL -s.measure.ok, -s.measure.ng
+	CALL ot.put
+	;
+	state = 101
+	;
+.END
+.PROGRAM state4()@26/01/21 14:55 #354; State 4: Put detail to defect tare
+	CALL log ("State 4: Put detail to defect tare")
+	; Check all start positions
+	; Possible do not needed because robot can be only in HOME or near positioner
+	;JMOVE #homyak
+	;
+	SIGNAL -s.measure.ok, -s.measure.ng
+	CALL defect.put
+	;
+	state = 101
+	;
+.END
+.PROGRAM state5()@26/01/24 19:18 #722; Check etalon
+	CALL log ("State 5: Check etalon")
+	; TEMPORARY!!!!!!!!
+	;  state = 101
+	;  SIGNAL -s.cmd.chk.etal
+	;  RETURN
+	SIGNAL -s.etalon.ok, -s.etalon.ret, -s.etalon.ng
+	IF recv.etalon == 99 THEN
+		CALL etalon.measure (99)
+	ELSE
+		CALL etalon.measure (etalon.id)
+	END
+	;
+	IF SIG (s.etalon.ok) THEN
+		state = 101
+	END
+	IF SIG (s.etalon.ret) THEN
+		state = 5
+	END
+	IF SIG (s.etalon.ng) THEN
+		SIGNAL rs7.etalon.stop
+		;SIGNAL s.force.defect
+		state = 101
+	END
+	SIGNAL -s.cmd.chk.etal
+	;IF SIG (s.measure.ok) THEN
+	;  state = 101
+	;ELSE
+	;  state = 105
+	;END
+	;
+.END
+.PROGRAM state6()@26/01/21 14:55 #0; Deprecated
+	state = 103
+.END
+.PROGRAM state7()@26/01/21 14:55 #200; Deprecated
+	CALL log ("State 7: Check if gripper change is required")
+	; We are at home at this point. No cases without home!
+	IF current.gripper <> pg7.gripper THEN
+		CALL log ("Selected wrong gripper, perform change")
+		JMOVE #defect.safe
+		IF current.gripper <> 0 THEN
+			CALL gripper.put (current.gripper)
+		END
+		CALL gripper.pick (pg13.gripper)
+		JMOVE #defect.safe
+		;LMOVE #homyak
+	ELSE
+		CALL log ("Program gripper is the same as current gripper")
+	END
+	;
+	SIGNAL s.cmd.chk.etal
+	state = 5
+.END
+.PROGRAM state8()@26/01/21 14:55 #0; Check etalon by command
+	CALL log ("State 8: Check etalon by command")
+	CALL etalon.measure (etalon.id)
+	state = 105
+.END
+.PROGRAM state100()@26/01/22 14:37 #98; Waiting for start
+	;
+	CALL log ("State 100: Waiting for start")
+	$action = "WaitingForStart"
+	;
+	WHILE NOT SIG (s.cmd.start) DO
+		TWAIT 0.5
+	END
+	SIGNAL -s.cmd.start
+	SIGNAL -s.cmd.stop
+	SIGNAL -rs7.finish.ack
+	max.count.put = 0
+	;
+	CALL log ("START with Name:" + $pg.name + "-" + $ENCODE (/L, detail.spec) + " Count:" + $ENCODE (detail.count) + " OT:" + $ot.data + " OPT:" + $opt.data)
+	;
+	CALL pg.select
+	state = 106
+.END
+.PROGRAM state101()@26/01/21 14:55 #7020; Auxilary state
+	CALL log ("State 101: Calculating next step")
+	state = 102
+.END
+.PROGRAM state102()@26/01/21 14:55 #454390; Decision making
+	; Priority 1
+	IF SIG (s.cmd.pause) THEN
+		state = 105
+		RETURN
+	END
+	IF SIG (s.cmd.chk.etal) AND NOT SIG (s.grip.full) THEN
+		state = 5
+		RETURN
+	END
+	; Priority 2
+	;IF SIG (s.cmd.stop) AND BITS (rs13.det.put[0], 8) <= count.pick THEN
+	;  state = 6
+	;  RETURN
+	;END
+	; Priority 3
+	IF NOT SIG (s.grip.full) THEN
+		$action = "WaitPosFull"
+		IF SIG (s.cmd.pick) AND NOT SIG (rs13.work[1]) AND BITS (rs13.det.put[0], 8) > count.pick THEN
+			state = 1
+			RETURN
+		END
+	END
+	; Priority 4
+	IF SIG (s.grip.full) AND NOT SIG (s.cmd.measured) AND NOT SIG (rs7.etalon.stop) THEN
+		state = 2
+		RETURN
+	END
+	; Priority 5
+	IF SIG (s.grip.full) AND SIG (s.measure.ok) AND NOT SIG (rs7.tare.chg) AND NOT SIG (rs7.etalon.stop) THEN
+		state = 3
+		RETURN
+	END
+	; Priority 6
+	IF SIG (s.grip.full) AND (SIG (s.measure.ng) OR SIG (rs7.etalon.stop)) THEN
+		state = 4
+		RETURN
+	END
+	; Priority 8
+	IF NOT SIG (s.grip.full) THEN; AND NOT SIG (s.cmd.pick) THEN
+		JMOVE #homyak
+		BREAK
+		SIGNAL -rs7.locked.zone
+	END
+	; Priority 7
+	IF SIG (rs13.finish) AND NOT SIG (s.grip.full) AND NOT (BITS (rs13.det.put[0], 8) > count.pick) THEN
+		state = 103
+		RETURN
+	END
+	;
+	IF SIG (rs13.no.ot.stop) THEN
+		state = 103
+		RETURN
+	END
+	;
+.END
+.PROGRAM state103()@26/01/21 14:55 #126; Auxilary state
+	CALL log ("State 103: Ending sequence started")
+	state = 104
+	;
+.END
+.PROGRAM state104()@26/01/21 14:55 #126; Ending sequence
+	;
+	SIGNAL rs7.finish.ack
+	state = 255
+	RETURN
+	;
+.END
+.PROGRAM state105()@26/01/21 14:55 #17; Program paused
+	CALL log ("State 105: Program paused")
+	$action = "Paused"
+	SWAIT s.cmd.resume
+	$action = " "
+	CALL log ("Program resumed")
+	SIGNAL -s.cmd.pause
+	state = 101
+.END
+.PROGRAM state106()@26/01/21 14:55 #210; Check program
+	CALL log ("State 106: Check program")
+	IF $pg.name <> "NULL" THEN
+		CALL log ("Selected program: " + $pg.name)
+		IF object.id == round.no THEN
+			CALL calc.grid.rnd
+		ELSE
+			CALL calc.grid
+		END
+		;
+		CALL calc.ot
+		IF state = 255 THEN
+			RETURN
+		END
+		;
+		state = 7
+	ELSE
+		CALL log ("Wrong program name. Program reset")
+		BREAK
+		$action = "WrongProgramName"
+		TWAIT 10
+		BREAK
+		state = 0
+	END
+	;
+.END
+.PROGRAM state255()@26/01/21 14:55 #126
+	CALL log ("State 255: Program complete")
+	state = 0
+	;
+.END
+.PROGRAM set.io.pc()@26/01/21 14:55 #44
+	; Gripper IO
+	;
+	; Gripper
+	release.grip = 1
+	capture.grip = 2
+	; Clamp
+	grip.unclamped = 1001
+	grip.clamped = 1002
+	grip.unclamp = 3
+	grip.clamp = 4
+	;
+	; Ethernet I/P IO (17-32)
+	;
+	; Inputs
+	;
+	rs13.work[1] = 1017
+	rs13.tare.ack = 1018
+	rs13.detail.put = 1019
+	rs13.finish = 1020
+	rs13.lock.zone = 1022
+	;rs13.put.ack = 1021
+	rs13.det.put[0] = 1025
+	rs13.det.put[1] = 1026
+	rs13.det.put[2] = 1027
+	rs13.det.put[3] = 1028
+	rs13.det.put[4] = 1029
+	rs13.det.put[5] = 1030
+	rs13.det.put[6] = 1031
+	rs13.det.put[7] = 1032
+	;
+	rs13.no.ot.stop = 1033
+	;
+	; Outputs
+	;
+	do.work[1] = 17
+	rs7.tare.chg = 18
+	rs7.locked.zone = 19
+	rs7.finish.ack = 20
+	;rs7.put.ack = 21
+	;rs13.detail.put = 21
+	rs7.det.picked[0] = 25
+	rs7.det.picked[1] = 26
+	rs7.det.picked[2] = 27
+	rs7.det.picked[3] = 28
+	rs7.det.picked[4] = 29
+	rs7.det.picked[5] = 30
+	rs7.det.picked[6] = 31
+	rs7.det.picked[7] = 32
+	;
+	rs7.etalon.stop = 33
+	;
+	; Internal IO
+	;
+	; Dedicated inputs 2001 - 2064
+	;
+	; IFP page change 2001-2008
+	di.ifp.page[1] = 2001
+	di.ifp.page[2] = 2002
+	di.ifp.page[3] = 2003
+	di.ifp.page[4] = 2004
+	di.ifp.page[5] = 2005
+	di.ifp.page[6] = 2006
+	di.ifp.page[7] = 2007
+	di.ifp.page[8] = 2008
+	;
+	di.hold = 2009
+	;
+	; Dedicated outputs 2101-2164
+	;
+	do.home = 2010
+	do.bat.alm = 2011
+	do.automatic = 2012
+	;
+	;
+	; Internal logic 2201 - 2960
+	;
+	; TCP/IP display flags
+	s.tcp.send.ena = 2201
+	s.tcp.recv.ena = 2202
+	s.tcp.ena = 2203
+	s.tcp.log = 2204
+	;
+	s.zone.blocked = 2209
+	;
+	; Workspaces
+	do.work[2] = 2212
+	do.work[3] = 2213
+	do.work[4] = 2214
+	do.work[5] = 2215
+	do.work[6] = 2216
+	do.work[7] = 2217
+	do.work[8] = 2218
+	;
+	s.force.in[1] = 2221
+	s.force.in[2] = 2222
+	;
+	s.defect.pal.ok = 2223
+	s.defect.pal.ng = 2224
+	s.measure.ok = 2225
+	s.measure.ng = 2226
+	;s.force.defect = 2227
+	;
+	;s.stock.opt.ng = 2226
+	;s.ot.pos.ok = 2227
+	;s.ot.pos.ng = 2228
+	;
+	;s.ot.placed = 2229
+	;s.opt.placed = 2230
+	;
+	s.grip.full = 2231
+	;
+	s.cmd.start = 2232
+	s.cmd.pick = 2233
+	s.cmd.measured = 2234
+	;s.cmd.pneum.op = 2235
+	;s.cmd.pneum.cl = 2236
+	s.cmd.chk.etal = 2237
+	s.cmd.finish = 2238
+	s.cmd.pause = 2239
+	s.cmd.resume = 2240
+	s.cmd.stop = 2241
+	;
+	s.pr.home = 2250
+	s.pr.tch.ot = 2251
+	s.pr.tch.defect = 2252
+	s.pr.tch.meas = 2253
+	s.pr.tch.etal = 2254
+	s.pr.tch.pos = 2255
+	s.pr.tch.grip = 2260
+	;
+	s.apply.obj = 2256
+	;s.apply.cv = 2257
+	s.pr.tst.ot = 2249
+	;
+	s.opt.spacer = 2270
+	s.opt.flip = 2271
+	s.etalon.ok = 2272
+	s.etalon.ret = 2273
+	s.etalon.ng = 2274
+	;s.hmi.pneum.op = 2258
+	;s.hmi.pneum.cl = 2259
+	;s.hmi.get.cv = 2260
+	s.hmi.res.state = 2261
+	s.hmi.res.act = 2262
+	;
+	s.debug.mode = 2300
+.END
+
+
+
+
