@@ -2915,7 +2915,7 @@ N_INT300    "s.debug.mode|Debug mode"
     ; 
     CALL get.state.pc (.$data[1])
     .$data[2] = "ACTION:" + $action + ";"
-    .$data[2] = "WATCHDOG:" + $wdog.state + ";"
+    .$data[2] = .$data[2] + "WATCHDOG:" + $wdog.state + ";"
     .$data[2] = .$data[2] + "TAREIN:" + $ENCODE (count.opt) + ";"
     .$data[2] = .$data[2] + "TAREOUT:" + $ENCODE (count.ot) + ";"
     .$data[2] = .$data[2] + "GRIPPER:" + $ENCODE (current.gripper) + ";"
@@ -3304,6 +3304,13 @@ N_INT300    "s.debug.mode|Debug mode"
 	;       .$name 
 	;   Group:Watchdog:11
 	;     11:watchdog.pc:B
+	;       .last.pos 
+	;       .current.pos 
+	;       .c1 
+	;       .c2 
+	;       .c3 
+	;       .c4 
+	;       .c5 
 	;       .put.ack 
 	;       .detail.put 
 	;     11:check.tasks.pc:B
