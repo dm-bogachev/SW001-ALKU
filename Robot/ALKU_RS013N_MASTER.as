@@ -2096,8 +2096,8 @@ N_INT300    "s.debug.mode|Debug mode"
   CALL log ("State 0: Program reset. Initialization of parameters")
   SIGNAL -s.opt.placed, -s.ot.placed, -s.grip.full
   SIGNAL -s.cmd.start, -s.cmd.pick, -s.cmd.finish, -rs13.finish, -s.cmd.stop
-  SIGNAL -s.cmd.chg.opt, -s.cmd.pause, -s.cmd.n.op.stop, -rs13.no.ot.stop
-  ;
+  SIGNAL -s.cmd.chg.opt,-s.cmd.n.op.stop, -rs13.no.ot.stop
+  SIGNAL -s.cmd.resume, -s.cmd.pause
   SIGNAL -s.stock.opt.ng, -s.stock.ot.ng, -s.stock.opt.ok, -s.stock.ot.ok
   ;
   count.put = 0
@@ -2284,13 +2284,14 @@ N_INT300    "s.debug.mode|Debug mode"
 	;
 .END
 .PROGRAM state105()@26/01/15 08:39 #18; Program paused
-	CALL log ("State 105: Program paused")
-	$action = "Paused"
-	SWAIT s.cmd.resume
-	$action = " "
-	CALL log ("Program resumed")
-	SIGNAL -s.cmd.pause
-	state = 101
+  CALL log ("State 105: Program paused")
+  $action = "Paused"
+  SWAIT s.cmd.resume
+  SIGNAL -s.cmd.resume
+  $action = " "
+  CALL log ("Program resumed")
+  SIGNAL -s.cmd.pause
+  state = 101
 .END
 .PROGRAM state106()@26/01/15 08:39 #227; Check program
 	CALL log ("State 106: Check program")
@@ -2720,7 +2721,7 @@ N_INT300    "s.debug.mode|Debug mode"
     ; RESUME;
     ;
     IF INSTR (.$data[.i] , "RESUME") THEN
-      PULSE s.cmd.resume, 5
+      SIGNAL s.cmd.resume
     END
     ;
     ; STOP COMMAND

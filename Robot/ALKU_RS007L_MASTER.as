@@ -2024,19 +2024,20 @@ N_INT300    "s.debug.mode|Debug mode"
   ;
 .END
 .PROGRAM state0()@26/01/22 14:37 #121; Initialization of parameters
-	;
-	CALL log ("State 0: Program reset. Initialization of parameters")
-	SIGNAL -s.grip.full, -s.measure.ok, -s.measure.ng, -rs7.tare.chg, -s.cmd.measured
-	SIGNAL -s.cmd.start, -s.cmd.pick, -s.cmd.finish, -rs7.locked.zone, -s.cmd.stop
-	SIGNAL -s.cmd.chk.etal, -rs7.etalon.stop, -s.cmd.pause
-	SIGNAL -s.etalon.ok, -s.etalon.ret, -s.etalon.ng
-	count.pick = 0
-	BITS rs7.det.picked[0], 8 = count.pick
-	count.put = 0
-	;max.count.put = 0
-	;
-	state = 100
-	;
+  ;
+  CALL log ("State 0: Program reset. Initialization of parameters")
+  SIGNAL -s.grip.full, -s.measure.ok, -s.measure.ng, -rs7.tare.chg, -s.cmd.measured
+  SIGNAL -s.cmd.start, -s.cmd.pick, -s.cmd.finish, -rs7.locked.zone, -s.cmd.stop
+  SIGNAL -s.cmd.chk.etal, -rs7.etalon.stop
+  SIGNAL -s.cmd.resume, -s.cmd.pause
+  SIGNAL -s.etalon.ok, -s.etalon.ret, -s.etalon.ng
+  count.pick = 0
+  BITS rs7.det.picked[0], 8 = count.pick
+  count.put = 0
+  ;max.count.put = 0
+  ;
+  state = 100
+  ;
 .END
 .PROGRAM state1()@26/01/21 14:55 #2102; Pick from positioner
 	CALL log ("State 1: Pick from positioner")
@@ -2140,13 +2141,14 @@ N_INT300    "s.debug.mode|Debug mode"
 	;
 .END
 .PROGRAM state105()@26/01/21 14:55 #17; Program paused
-	CALL log ("State 105: Program paused")
-	$action = "Paused"
-	SWAIT s.cmd.resume
-	$action = " "
-	CALL log ("Program resumed")
-	SIGNAL -s.cmd.pause
-	state = 101
+  CALL log ("State 105: Program paused")
+  $action = "Paused"
+  SWAIT s.cmd.resume
+  SIGNAL -s.cmd.resume
+  $action = " "
+  CALL log ("Program resumed")
+  SIGNAL -s.cmd.pause
+  state = 101
 .END
 .PROGRAM state106()@26/01/21 14:55 #210; Check program
 	CALL log ("State 106: Check program")
@@ -2239,8 +2241,10 @@ N_INT300    "s.debug.mode|Debug mode"
     WAIT SIG(s.cmd.resume) OR SIG(s.cmd.stop)
     IF SIG(s.cmd.resume) THEN
       state = 5
+      SIGNAL -s.cmd.resume
     ELSE
       SIGNAL rs7.etalon.stop
+      SIGNAL -s.cmd.stop
       state = 101
     END
   END
@@ -2440,7 +2444,7 @@ N_INT300    "s.debug.mode|Debug mode"
     ; RESUME;
     ;
     IF INSTR (.$data[.i] , "RESUME") THEN
-      PULSE s.cmd.resume, 5
+      SIGNAL s.cmd.resume
     END
     ;
     ; STOP COMMAND
