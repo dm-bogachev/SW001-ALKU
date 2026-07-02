@@ -9,3 +9,4 @@ pymodbus==2.5.3
 requests
 jinja2
 python-multipart
+fastapi_offline

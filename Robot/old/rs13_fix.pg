@@ -1,0 +1,629 @@
+.AUXDATA
+N_OX1    "release.tare"
+N_OX2    "capture.tare"
+N_OX3    "grip.unclamp"
+N_OX4    "grip.clamp"
+N_OX5    "release.grip"
+N_OX6    "capture.grip"
+N_OX17    "do.work[1]"
+N_OX18    "rs13.tare.ack"
+N_OX20    "rs13.finish"
+N_OX21    "rs13.detail.put"
+N_OX22    "rs13.lock.zone"
+N_OX25    "rs13.det.put[0]"
+N_OX26    "rs13.det.put[1]"
+N_OX27    "rs13.det.put[2]"
+N_OX28    "rs13.det.put[3]"
+N_OX29    "rs13.det.put[4]"
+N_OX30    "rs13.det.put[5]"
+N_OX31    "rs13.det.put[6]"
+N_OX32    "rs13.det.put[7]"
+N_OX34    "rs13.no.ot.stop"
+N_WX1    "grip.unclamped"
+N_WX2    "grip.clamped"
+N_WX17    "rs7.work[1]"
+N_WX18    "rs7.tare.chg"
+N_WX19    "rs7.locked.zone"
+N_WX20    "rs7.finish.ack"
+N_WX21    "rs7.put.ack"
+N_WX25    "rs7.det.picked[0]"
+N_WX26    "rs7.det.picked[1]"
+N_WX27    "rs7.det.picked[2]"
+N_WX28    "rs7.det.picked[3]"
+N_WX29    "rs7.det.picked[4]"
+N_WX30    "rs7.det.picked[5]"
+N_WX31    "rs7.det.picked[6]"
+N_WX32    "rs7.det.picked[7]"
+N_WX33    "rs7.etalon.stop"
+N_INT1    "di.ifp.page[1]"
+N_INT2    "di.ifp.page[2]"
+N_INT3    "di.ifp.page[3]"
+N_INT4    "di.ifp.page[4]"
+N_INT5    "di.ifp.page[5]"
+N_INT6    "di.ifp.page[6]"
+N_INT7    "di.ifp.page[7]"
+N_INT8    "di.ifp.page[8]"
+N_INT9    "di.hold"
+N_INT10    "do.home"
+N_INT11    "do.bat.alm"
+N_INT12    "do.automatic"
+N_INT201    "s.tcp.send.ena"
+N_INT202    "s.tcp.recv.ena"
+N_INT203    "s.tcp.ena"
+N_INT204    "s.tcp.log"
+N_INT209    "s.zone.blocked"
+N_INT212    "do.work[2]"
+N_INT213    "do.work[3]"
+N_INT214    "do.work[4]"
+N_INT215    "do.work[5]"
+N_INT216    "do.work[6]"
+N_INT217    "do.work[7]"
+N_INT218    "do.work[8]"
+N_INT221    "s.force.in[1]"
+N_INT222    "s.force.in[2]"
+N_INT223    "s.stock.ot.ok"
+N_INT224    "s.stock.ot.ng"
+N_INT225    "s.stock.opt.ok"
+N_INT226    "s.stock.opt.ng"
+N_INT227    "s.ot.pos.ok"
+N_INT228    "s.ot.pos.ng"
+N_INT229    "s.ot.placed"
+N_INT230    "s.opt.placed"
+N_INT231    "s.grip.full"
+N_INT232    "s.cmd.start"
+N_INT233    "s.cmd.pick"
+N_INT234    "s.cmd.put"
+N_INT235    "s.cmd.pneum.op"
+N_INT236    "s.cmd.pneum.cl"
+N_INT237    "s.cmd.chg.opt"
+N_INT238    "s.cmd.finish"
+N_INT239    "s.cmd.pause"
+N_INT240    "s.cmd.resume"
+N_INT241    "s.cmd.stop"
+N_INT242    "s.cmd.n.op.stop"
+N_INT247    "s.pr.tst.opt"
+N_INT248    "s.pr.tst.stz"
+N_INT249    "s.pr.tst.ot"
+N_INT250    "s.pr.home"
+N_INT251    "s.pr.tch.st.ot"
+N_INT252    "s.pr.tch.st.opt"
+N_INT253    "s.pr.tch.stz"
+N_INT254    "s.pr.tch.grip"
+N_INT255    "s.pr.tch.pos"
+N_INT256    "s.apply.grip"
+N_INT257    "s.apply.cv"
+N_INT258    "s.hmi.pneum.op"
+N_INT259    "s.hmi.pneum.cl"
+N_INT260    "s.hmi.get.cv"
+N_INT261    "s.hmi.res.state"
+N_INT262    "s.hmi.res.act"
+N_INT300    "s.debug.mode"
+.END
+.PROGRAM state0()@26/01/22 14:46 #118; Initialization of parameters
+	;
+	CALL log ("State 0: Program reset. Initialization of parameters")
+	SIGNAL -s.opt.placed, -s.ot.placed, -s.grip.full
+	SIGNAL -s.cmd.start, -s.cmd.pick, -s.cmd.finish, -rs13.finish, -s.cmd.stop
+	SIGNAL -s.cmd.chg.opt, -s.cmd.pause, -s.cmd.n.op.stop, -rs13.no.ot.stop
+	count.put = 0
+	BITS rs13.det.put[0], 8 = count.put
+	;count.ot = 0
+	;count.opt = 0
+	;$loaded.pg = "None"
+	;
+	state = 100
+	;
+.END
+.PROGRAM state1()@26/01/15 08:39 #264; Pick OT from stocker
+	;
+	CALL log ("State 1: Pick OT")
+	IF count.ot >= max.count.ot THEN
+		CALL log ("Reached out of maximum tare count")
+		SIGNAL s.cmd.n.op.stop
+		LMOVE #ot.take.safe
+		LMOVE #homyak
+		state = 104
+		RETURN
+	END
+	; Check all start positions
+	POINT .current.pos = #HERE
+	POINT .stz.wait = #stz.wait
+	POINT .pos.wait = #pos.wait
+	; Move to start position
+	IF SIG (do.home) THEN
+		LMOVE #ot.take.safe
+	END
+	IF DISTANCE (.current.pos, .stz.wait) <= 25 THEN
+		LMOVE #pos.wait
+		LMOVE #ot.take.safe
+	END
+	IF DISTANCE (.current.pos, .pos.wait) <= 25 THEN
+		LMOVE #ot.take.safe
+	END
+	; #ot.take.safe -> take -> put -> pos.wait
+	; #ot.take.safe -> take
+	.i = ot.cell[count.ot + 1, 1]
+	.j = ot.cell[count.ot + 1, 2]
+	CALL ot.take (.i, .j); count.ot + 1
+	;
+	state = 101
+	;
+.END
+.PROGRAM state2()@26/01/16 11:34 #170; Pick OPT from stocker
+	;
+	CALL log ("State 2: Pick OPT")
+	IF count.opt >= max.count.opt THEN
+		CALL log ("Reached out of maximum tare count")
+		LMOVE #homyak
+		state = 104 ;!!!
+		RETURN
+	END
+	; Check all start positions
+	POINT .current.pos = #HERE
+	POINT .stz.wait = #stz.wait
+	POINT .pos.wait = #pos.wait
+	; Move to start position
+	IF DISTANCE (.current.pos, .stz.wait) <= 25 THEN
+		LMOVE #pos.wait
+	END
+	; home -> take -> put -> stz.wait
+	; pos.wait -> take -> put -> stz.wait
+	.i = opt.cell[count.opt + 1, 1]
+	.j = opt.cell[count.opt + 1, 2]
+	CALL opt.take (.i, .j); count.opt + 1
+	;
+	;POINT #current.pos = #stz.wait
+	;
+	SIGNAL -s.cmd.chg.opt
+	;
+	state = 101
+	;
+.END
+.PROGRAM state3()@26/01/15 08:39 #2243; Pick from STZ
+	;
+	CALL log ("State 3: Pick from STZ")
+	; Check all start positions
+	POINT .current.pos = #HERE
+	POINT .stz.wait = #stz.wait
+	POINT .pos.wait = #pos.wait
+	IF SIG (do.home) THEN
+		LMOVE #opt.take.safe
+		LMOVE #opt.put.safe
+		LMOVE #stz.wait
+	END
+	IF DISTANCE (.current.pos, .pos.wait) <= 25 THEN
+		LMOVE #stz.wait
+	END
+	; stz.wait -> pick -> pos.wait
+	CALL stz.pick
+	;
+	;POINT #current.pos = #pos.wait
+	;
+	state = 101
+	;
+.END
+.PROGRAM state4()@26/01/15 08:39 #2205; Put detail to positioner
+	CALL log ("State 4: Put detail to positioner")
+	; Check all start positions
+	POINT .current.pos = #HERE
+	POINT .stz.wait = #stz.wait
+	POINT .pos.wait = #pos.wait
+	IF SIG (do.home) THEN
+		LMOVE #opt.take.safe
+		LMOVE #pos.wait
+	END
+	IF DISTANCE (.current.pos, .stz.wait) <= 25 THEN
+		LMOVE #pos.wait
+	END
+	; pos.wait -> put -> pos.wait
+	CALL pos.put
+	;
+	;POINT #current.pos = #pos.wait JMOVE
+	;
+	IF SIG (s.cmd.stop) OR SIG (rs7.etalon.stop) THEN
+		state = 104
+	ELSE
+		state = 101
+	END
+	;
+.END
+.PROGRAM state5()@26/01/15 08:39 #199; Return OT
+	CALL log ("State 5: Return OT")
+	; Check all start positions
+	POINT .current.pos = #HERE
+	POINT .stz.wait = #stz.wait
+	POINT .pos.wait = #pos.wait
+	IF DISTANCE (.current.pos, .stz.wait) <= 25 THEN
+		LMOVE #pos.wait
+	END
+	;
+	SWAIT -rs7.work[1]
+	; pos.wait -> take -> put -> Decide
+	.i = ot.cell[count.ot, 1]
+	.j = ot.cell[count.ot, 2]
+	CALL ot.return (.i, .j); count.ot + 1
+	;
+	;POINT #current.pos = #HERE
+	state = 8
+	;
+.END
+.PROGRAM state6()@26/01/15 14:43 #144; Return OPT
+	CALL log ("State 6: Return OPT")
+	; Check all start positions
+	POINT .current.pos = #HERE
+	POINT .stz.wait = #stz.wait
+	POINT .pos.wait = #pos.wait
+	IF SIG (do.home) THEN
+		LMOVE #opt.take.safe
+		LMOVE #opt.put.safe
+		LMOVE #stz.wait
+	END
+	IF DISTANCE (.current.pos, .pos.wait) <= 25 THEN
+		LMOVE #stz.wait
+	END
+	;
+	SIGNAL -s.cmd.chg.opt
+	; stz.wait -> take -> put -> Decide
+	.i = opt.cell[count.opt, 1]
+	.j = opt.cell[count.opt, 2]
+	CALL opt.return (.i, .j); count.ot + 1
+	;
+	;POINT #current.pos = #HERE
+	SIGNAL -s.cmd.chg.opt
+	state = 9
+	;
+.END
+.PROGRAM state7()@26/01/15 08:39 #217; Check grippers
+	CALL log ("State 7: Check if gripper change is required")
+	; We are at home at this point. No cases without home!
+	IF current.gripper <> pg13.gripper THEN
+		CALL log ("Selected wrong gripper, perform change")
+		LMOVE #opt.take.safe
+		LMOVE #stz.wait
+		IF current.gripper <> 0 THEN
+			CALL gripper.put (current.gripper)
+		END
+		CALL gripper.pick (pg13.gripper)
+		LMOVE #opt.take.safe
+		LMOVE #homyak
+	ELSE
+		CALL log ("Program gripper is the same as current gripper")
+	END
+	state = 1
+.END
+.PROGRAM state8()@26/01/15 08:39 #199; Decide if pick next OT
+	CALL log ("State 8: Decide if pick next OT")
+	IF count.ot >= max.count.ot OR SIG (s.cmd.finish) THEN
+		LMOVE #ot.take.safe
+		LMOVE #homyak
+		;
+		;POINT #current.pos = #homyak
+		state = 104
+	ELSE
+		state = 1
+	END
+.END
+.PROGRAM state9()@26/01/26 14:41 #201; Decide if pick next OPT
+	CALL log ("State 9: Decide if pick next OPT")
+	;
+	.m1 = count.opt >= max.count.opt OR count.put == detail.count
+	.m2 = SIG (s.cmd.stop) OR SIG (rs7.etalon.stop)
+	.m3 = SIG (s.cmd.n.op.stop)
+	IF .m1 OR .m2 OR .m3 THEN
+		LMOVE #homyak
+		;
+		;POINT #current.pos = #homyak
+		state = 104
+	ELSE
+		state = 2
+	END
+.END
+.PROGRAM state100()@26/01/22 14:46 #96; Waiting for start
+	;
+	CALL log ("State 100: Waiting for start")
+	$action = "WaitingForStart"
+	;
+	WHILE NOT SIG (s.cmd.start) DO
+		TWAIT 0.5
+	END
+	count.ot = 0
+	count.opt = 0
+	SIGNAL -s.cmd.stop
+	SIGNAL -s.cmd.start
+	;
+	CALL log ("START with Name:" + $pg.name + "-" + $ENCODE (detail.spec) + " Count:" + $ENCODE (detail.count) + " OT:" + $ot.data + " OPT:" + $opt.data);
+	CALL load.opt.data
+	CALL load.ot.data
+	CALL pg.select
+	state = 106
+	;
+.END
+.PROGRAM state101()@26/01/15 08:39 #4964; Auxilary state
+	CALL log ("State 101: Calculating next step")
+	state = 102
+.END
+.PROGRAM state102()@26/01/26 14:41 #7144245; Decision making
+	; Priority 1
+	IF SIG (s.cmd.pause) THEN
+		state = 105
+		RETURN
+	END
+	;
+	; Priority 2
+	IF SIG (s.cmd.stop) OR SIG (rs7.etalon.stop) THEN
+		state = 103;6
+		RETURN
+	END
+	; Priority 3
+	IF NOT SIG (s.ot.placed) THEN
+		state = 1
+		RETURN
+	END
+	;
+	; Priority 4
+	IF NOT SIG (s.opt.placed) AND SIG (s.ot.placed) AND NOT (count.put == detail.count) THEN
+		state = 2
+		RETURN
+	END
+	; Priority 5
+	IF SIG (rs7.tare.chg) THEN
+		state = 5
+		RETURN
+	END
+	; Priority 6
+	IF SIG (s.ot.placed) AND SIG (s.opt.placed) AND NOT SIG (s.grip.full) THEN
+		$action = "WaitForPick"
+		IF stz.x >= 0 AND SIG (s.cmd.pick) THEN ;AND NOT SIG (rs7.tare.chg) THEN
+			SIGNAL -s.cmd.pick
+			$action = " "
+			state = 3
+			RETURN
+		END
+	END
+	; Priority 7
+	IF SIG (s.ot.placed) AND SIG (s.opt.placed) AND SIG (s.grip.full) AND BITS (rs7.det.picked[0], 8) == count.put THEN
+		$action = "WaitPosFree"
+		IF NOT SIG (rs7.work[1]) AND SIG (s.cmd.put) AND NOT SIG (rs7.locked.zone) THEN
+			state = 4
+			RETURN
+		END
+	END
+	; Priority 8
+	IF SIG (s.cmd.chg.opt) OR count.put == detail.count THEN
+		state = 6
+		$action = "ChangeOPT"
+		RETURN
+	END
+.END
+.PROGRAM state103()@26/01/15 08:39 #21; Auxilary state
+	CALL log ("State 103: Ending sequence started")
+	state = 104
+.END
+.PROGRAM state104()@26/01/22 14:18 #554295; Ending sequence
+	;
+	IF SIG (s.cmd.n.op.stop) AND SIG (s.opt.placed) THEN
+		state = 6
+		RETURN
+	END
+	;
+	IF SIG (s.cmd.n.op.stop) AND NOT SIG (s.opt.placed) THEN
+		CALL log ("Program complete")
+		SIGNAL rs13.no.ot.stop
+		state = 255
+		RETURN
+	END
+	;
+	IF SIG (s.ot.placed) AND SIG (s.grip.full) AND BITS (rs7.det.picked[0], 8) == count.put THEN
+		$action = "WaitPosFree"
+		IF NOT SIG (rs7.work[1]) AND SIG (s.cmd.put) AND NOT SIG (rs7.locked.zone) THEN
+			state = 4
+			RETURN
+		END
+	END
+	;
+	IF NOT SIG (s.grip.full) AND SIG (s.opt.placed) THEN
+		state = 6
+		RETURN
+	END
+	;
+	; Priority 5
+	IF SIG (rs7.tare.chg) THEN
+		state = 5
+		RETURN
+	END
+	;
+	.m1 = NOT SIG (s.grip.full) AND SIG (s.ot.placed) AND NOT SIG (rs7.tare.chg)
+	.m2 = count.opt >= max.count.opt OR count.put == detail.count
+	.m3 = SIG (s.cmd.stop) OR SIG (rs7.etalon.stop)
+	IF .m1 AND (.m2 OR .m3) THEN
+		SIGNAL s.cmd.finish
+		SIGNAL rs13.finish
+		CALL log ("Wait for RS007L finish task")
+		SWAIT rs7.finish.ack
+		state = 5
+		RETURN
+	END
+	;
+	IF NOT SIG (s.grip.full) AND SIG (s.cmd.finish) THEN
+		CALL log ("Program complete")
+		state = 255
+		RETURN
+	END
+	;
+	IF NOT SIG (s.grip.full) AND count.ot >= max.count.ot THEN
+		CALL log ("Unexpected behaviour!")
+		state = 255
+		RETURN
+	END
+	;
+.END
+.PROGRAM state105()@26/01/15 08:39 #18; Program paused
+	CALL log ("State 105: Program paused")
+	$action = "Paused"
+	SWAIT s.cmd.resume
+	$action = " "
+	CALL log ("Program resumed")
+	SIGNAL -s.cmd.pause
+	state = 101
+.END
+.PROGRAM state106()@26/01/15 08:39 #227; Check program
+	CALL log ("State 106: Check program")
+	IF $pg.name <> "NULL" THEN
+		CALL log ("Selected program: " + $pg.name)
+		state = 7
+	ELSE
+		CALL log ("Wrong program name. Program reset")
+		BREAK
+		$action = "WrongProgramName"
+		TWAIT 10
+		BREAK
+		state = 0
+	END
+.END
+.PROGRAM state255()@26/01/15 08:39 #145; Program complete
+	CALL log ("State 255: Program complete")
+	state = 0
+.END
+.PROGRAM set.io.pc()@26/01/15 08:39 #40
+	; Gripper IO
+	;
+	; Tare
+	release.tare = 1
+	capture.tare = 2
+	; Gripper
+	release.grip = 5
+	capture.grip = 6
+	; Clamp
+	grip.unclamped = 1001
+	grip.clamped = 1002
+	grip.unclamp = 3
+	grip.clamp = 4
+	;
+	; Ethernet I/P IO (17-32)
+	;
+	; Inputs
+	;
+	rs7.work[1] = 1017
+	rs7.tare.chg = 1018
+	rs7.locked.zone = 1019
+	rs7.finish.ack = 1020
+	rs7.put.ack = 1021
+	;
+	rs7.det.picked[0] = 1025
+	rs7.det.picked[1] = 1026
+	rs7.det.picked[2] = 1027
+	rs7.det.picked[3] = 1028
+	rs7.det.picked[4] = 1029
+	rs7.det.picked[5] = 1030
+	rs7.det.picked[6] = 1031
+	rs7.det.picked[7] = 1032
+	;
+	rs7.etalon.stop = 1033
+	; Outputs
+	;
+	do.work[1] = 17
+	rs13.tare.ack = 18
+	rs13.finish = 20
+	rs13.detail.put = 21
+	rs13.lock.zone = 22
+	;
+	rs13.det.put[0] = 25
+	rs13.det.put[1] = 26
+	rs13.det.put[2] = 27
+	rs13.det.put[3] = 28
+	rs13.det.put[4] = 29
+	rs13.det.put[5] = 30
+	rs13.det.put[6] = 31
+	rs13.det.put[7] = 32
+	;
+	rs13.no.ot.stop = 34
+	; Internal IO
+	;
+	; Dedicated inputs 2001 - 2064
+	;
+	; IFP page change 2001-2008
+	di.ifp.page[1] = 2001
+	di.ifp.page[2] = 2002
+	di.ifp.page[3] = 2003
+	di.ifp.page[4] = 2004
+	di.ifp.page[5] = 2005
+	di.ifp.page[6] = 2006
+	di.ifp.page[7] = 2007
+	di.ifp.page[8] = 2008
+	;
+	di.hold = 2009
+	;
+	; Dedicated outputs 2101-2164
+	;
+	do.home = 2010
+	do.bat.alm = 2011
+	do.automatic = 2012
+	;
+	;;
+	;
+	; Internal logic 2201 - 2960
+	;
+	; TCP/IP display flags
+	s.tcp.send.ena = 2201
+	s.tcp.recv.ena = 2202
+	s.tcp.ena = 2203
+	s.tcp.log = 2204
+	;
+	s.zone.blocked = 2209
+	;
+	; Workspaces
+	do.work[2] = 2212
+	do.work[3] = 2213
+	do.work[4] = 2214
+	do.work[5] = 2215
+	do.work[6] = 2216
+	do.work[7] = 2217
+	do.work[8] = 2218
+	;
+	s.force.in[1] = 2221
+	s.force.in[2] = 2222
+	;
+	s.stock.ot.ok = 2223
+	s.stock.ot.ng = 2224
+	s.stock.opt.ok = 2225
+	s.stock.opt.ng = 2226
+	s.ot.pos.ok = 2227
+	s.ot.pos.ng = 2228
+	;
+	s.ot.placed = 2229
+	s.opt.placed = 2230
+	;
+	s.grip.full = 2231
+	;
+	s.cmd.start = 2232
+	s.cmd.pick = 2233
+	s.cmd.put = 2234
+	s.cmd.pneum.op = 2235
+	s.cmd.pneum.cl = 2236
+	s.cmd.chg.opt = 2237
+	s.cmd.finish = 2238
+	s.cmd.pause = 2239
+	s.cmd.resume = 2240
+	s.cmd.stop = 2241
+	s.cmd.n.op.stop = 2242
+	;
+	s.pr.tst.opt = 2247
+	s.pr.tst.stz = 2248
+	s.pr.tst.ot = 2249
+	s.pr.home = 2250
+	s.pr.tch.st.ot = 2251
+	s.pr.tch.st.opt = 2252
+	s.pr.tch.stz = 2253
+	s.pr.tch.grip = 2254
+	s.pr.tch.pos = 2255
+	s.apply.grip = 2256
+	s.apply.cv = 2257
+	;
+	s.hmi.pneum.op = 2258
+	s.hmi.pneum.cl = 2259
+	s.hmi.get.cv = 2260
+	s.hmi.res.state = 2261
+	s.hmi.res.act = 2262
+	;
+	s.debug.mode = 2300
+.END

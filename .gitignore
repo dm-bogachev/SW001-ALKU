@@ -45,3 +45,5 @@ data/models/model_312.229.002.pt.old
 data/models/model_440.00.026.pt.old
 data/models/model_440.00.111.pt.old
 camera-service/app/core
+Robot/rs07_fix.pg
+Robot/rs13_fix.pg
