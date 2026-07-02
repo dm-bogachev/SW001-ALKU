@@ -8,15 +8,23 @@ N_OX18    "rs7.tare.chg|Request tare change"
 N_OX19    "rs7.locked.zone|RS007L Blocked positioner zone"
 N_OX20    "rs7.finish.ack|RS007L finished work"
 N_OX21    "rs7.put.ack|RS007L picked detail"
-N_OX25    "rs7.det.picked[0]|Picked details count from RS007L"
-N_OX26    "rs7.det.picked[1]|Picked details count from RS007L"
-N_OX27    "rs7.det.picked[2]|Picked details count from RS007L"
-N_OX28    "rs7.det.picked[3]|Picked details count from RS007L"
-N_OX29    "rs7.det.picked[4]|Picked details count from RS007L"
-N_OX30    "rs7.det.picked[5]|Picked details count from RS007L"
-N_OX31    "rs7.det.picked[6]|Picked details count from RS007L"
-N_OX32    "rs7.det.picked[7]|Picked details count from RS007L"
 N_OX33    "rs7.etalon.stop|Etalon measurement was bad, need to stop"
+N_OX40    "rs7.det.picked[0]|Picked details count from RS007L"
+N_OX41    "rs7.det.picked[1]|Picked details count from RS007L"
+N_OX42    "rs7.det.picked[2]|Picked details count from RS007L"
+N_OX43    "rs7.det.picked[3]|Picked details count from RS007L"
+N_OX44    "rs7.det.picked[4]|Picked details count from RS007L"
+N_OX45    "rs7.det.picked[5]|Picked details count from RS007L"
+N_OX46    "rs7.det.picked[6]|Picked details count from RS007L"
+N_OX47    "rs7.det.picked[7]|Picked details count from RS007L"
+N_OX48    "rs7.det.picked[8]|Picked details count from RS007L"
+N_OX49    "rs7.det.picked[9]|Picked details count from RS007L"
+N_OX50    "rs7.det.picked[10]|Picked details count from RS007L"
+N_OX51    "rs7.det.picked[11]|Picked details count from RS007L"
+N_OX52    "rs7.det.picked[12]|Picked details count from RS007L"
+N_OX53    "rs7.det.picked[13]|Picked details count from RS007L"
+N_OX54    "rs7.det.picked[14]|Picked details count from RS007L"
+N_OX55    "rs7.det.picked[15]|Picked details count from RS007L"
 N_WX1    "grip.unclamped|Gripper unclamped"
 N_WX2    "grip.clamped|Gripper clamped"
 N_WX17    "rs13.work[1]|Robot in workspace 1"
@@ -24,15 +32,23 @@ N_WX18    "rs13.tare.ack|Acknowledge of tare change"
 N_WX19    "rs13.detail.put|RS013N put detail to positioner"
 N_WX20    "rs13.finish|RS013N finish process"
 N_WX22    "rs13.lock.zone|"
-N_WX25    "rs13.det.put[0]|Put details count from RS0013N"
-N_WX26    "rs13.det.put[1]|Put details count from RS0013N"
-N_WX27    "rs13.det.put[2]|Put details count from RS0013N"
-N_WX28    "rs13.det.put[3]|Put details count from RS0013N"
-N_WX29    "rs13.det.put[4]|Put details count from RS0013N"
-N_WX30    "rs13.det.put[5]|Put details count from RS0013N"
-N_WX31    "rs13.det.put[6]|Put details count from RS0013N"
-N_WX32    "rs13.det.put[7]|Put details count from RS0013N"
 N_WX33    "rs13.no.ot.stop|"
+N_WX40    "rs13.det.put[0]|Number of details put by RS013"
+N_WX41    "rs13.det.put[1]|Number of details put by RS013"
+N_WX42    "rs13.det.put[2]|Number of details put by RS013"
+N_WX43    "rs13.det.put[3]|Number of details put by RS013"
+N_WX44    "rs13.det.put[4]|Number of details put by RS013"
+N_WX45    "rs13.det.put[5]|Number of details put by RS013"
+N_WX46    "rs13.det.put[6]|Number of details put by RS013"
+N_WX47    "rs13.det.put[7]|Number of details put by RS013"
+N_WX48    "rs13.det.put[8]|Number of details put by RS013"
+N_WX49    "rs13.det.put[9]|Number of details put by RS013"
+N_WX50    "rs13.det.put[10]|Number of details put by RS013"
+N_WX51    "rs13.det.put[11]|Number of details put by RS013"
+N_WX52    "rs13.det.put[12]|Number of details put by RS013"
+N_WX53    "rs13.det.put[13]|Number of details put by RS013"
+N_WX54    "rs13.det.put[14]|Number of details put by RS013"
+N_WX55    "rs13.det.put[15]|Number of details put by RS013"
 N_INT1    "di.ifp.page[1]|Open IFP page i"
 N_INT2    "di.ifp.page[2]|Open IFP page i"
 N_INT3    "di.ifp.page[3]|Open IFP page i"
@@ -128,8 +144,8 @@ N_INT301    "s.enable.shift|Enable shift for even layers"
 71,1," POS FULL","","","",10,15,4,10,2233,0
 76,4,1,"OFF     ON","","","  DEBUG",10,4,4,0,2300,0
 77,2,"","   MAIN","<---------","",10,4,11,2001,0
-79,7,"  RS007L","COUNT PICK",10,15,4,0,0,25,8,1
-80,7,"  RS013N","COUNT PUT",10,15,4,0,0,1025,8,1
+79,7,"  RS007L","COUNT PICK",10,15,4,0,0,40,16,1
+80,7,"  RS013N","COUNT PUT",10,15,4,0,0,1040,16,1
 81,8,"count.defect","Current","defect",10,15,2,1,0
 82,8,"max.defect.cnt","Max defect","tare count",10,15,2,1,0
 83,4,1,"OFF     ON","","","  OT SHIFT",10,4,4,0,2301,0
@@ -1503,18 +1519,18 @@ N_INT301    "s.enable.shift|Enable shift for even layers"
 ;
 .END
 .PROGRAM log.pc1(.$msg)@26/07/01 13:42 #0
-	;
-	; 1 line = 55 symbols max
-	;
-	FOR .i = 0 TO 126
-		$log.entry[.i] = $log.entry[.i + 1]
-	END
-	$log.entry[127] = $TIME + " " + .$msg
-	;
-	IFPWPRINT 1, 1, 1, 9, 10 = $log.entry[116], $log.entry[117], $log.entry[118], $log.entry[119]
-	IFPWPRINT 2, 1, 1, 9, 10 = $log.entry[120], $log.entry[121], $log.entry[122], $log.entry[123]
-	IFPWPRINT 3, 1, 1, 9, 10 = $log.entry[124], $log.entry[125], $log.entry[126], $log.entry[127]
-	;
+  ;
+  ; 1 line = 55 symbols max
+  ;
+  FOR .i = 0 TO 126
+    $log.entry[.i] = $log.entry[.i + 1]
+  END
+  $log.entry[127] = $TIME + " " + .$msg
+  ;
+  IFPWPRINT 1, 1, 1, 9, 10 = $log.entry[116], $log.entry[117], $log.entry[118], $log.entry[119]
+  IFPWPRINT 2, 1, 1, 9, 10 = $log.entry[120], $log.entry[121], $log.entry[122], $log.entry[123]
+  IFPWPRINT 3, 1, 1, 9, 10 = $log.entry[124], $log.entry[125], $log.entry[126], $log.entry[127]
+  ;
 .END
 .PROGRAM log.pc2(.$msg)@26/07/02 08:35 #1432
 ;
@@ -1825,7 +1841,7 @@ N_INT301    "s.enable.shift|Enable shift for even layers"
   SIGNAL s.grip.full
   SIGNAL -s.cmd.measured
   count.pick = count.pick+1
-  BITS rs7.det.picked[0],8 = count.pick
+  BITS rs7.det.picked[0],16 = count.pick
 ;
   LMOVE .temp+TRANS(.shift.x,.shift.y,10)
   ACCURACY 100
@@ -1951,14 +1967,22 @@ N_INT301    "s.enable.shift|Enable shift for even layers"
   rs13.finish = 1020
   rs13.lock.zone = 1022
 ;rs13.put.ack = 1021
-  rs13.det.put[0] = 1025
-  rs13.det.put[1] = 1026
-  rs13.det.put[2] = 1027
-  rs13.det.put[3] = 1028
-  rs13.det.put[4] = 1029
-  rs13.det.put[5] = 1030
-  rs13.det.put[6] = 1031
-  rs13.det.put[7] = 1032
+  rs13.det.put[0] = 1040
+  rs13.det.put[1] = 1041
+  rs13.det.put[2] = 1042
+  rs13.det.put[3] = 1043
+  rs13.det.put[4] = 1044
+  rs13.det.put[5] = 1045
+  rs13.det.put[6] = 1046
+  rs13.det.put[7] = 1047
+  rs13.det.put[8] = 1048
+  rs13.det.put[9] = 1049
+  rs13.det.put[10] = 1050
+  rs13.det.put[11] = 1051
+  rs13.det.put[12] = 1052
+  rs13.det.put[13] = 1053
+  rs13.det.put[14] = 1054
+  rs13.det.put[15] = 1055
 ;
   rs13.no.ot.stop = 1033
 ;
@@ -1970,14 +1994,22 @@ N_INT301    "s.enable.shift|Enable shift for even layers"
   rs7.finish.ack = 20
 ;rs7.put.ack = 21
 ;rs13.detail.put = 21
-  rs7.det.picked[0] = 25
-  rs7.det.picked[1] = 26
-  rs7.det.picked[2] = 27
-  rs7.det.picked[3] = 28
-  rs7.det.picked[4] = 29
-  rs7.det.picked[5] = 30
-  rs7.det.picked[6] = 31
-  rs7.det.picked[7] = 32
+  rs7.det.picked[0] = 40
+  rs7.det.picked[1] = 41
+  rs7.det.picked[2] = 42
+  rs7.det.picked[3] = 43
+  rs7.det.picked[4] = 44
+  rs7.det.picked[5] = 45
+  rs7.det.picked[6] = 46
+  rs7.det.picked[7] = 47
+  rs7.det.picked[8] = 48
+  rs7.det.picked[9] = 49
+  rs7.det.picked[10] = 50
+  rs7.det.picked[11] = 51
+  rs7.det.picked[12] = 52
+  rs7.det.picked[13] = 53
+  rs7.det.picked[14] = 54
+  rs7.det.picked[15] = 55
 ;
   rs7.etalon.stop = 33
 ;
@@ -2224,7 +2256,7 @@ N_INT301    "s.enable.shift|Enable shift for even layers"
   SIGNAL -s.etalon.ok,-s.etalon.ret,-s.etalon.ng
   SIGNAL s.force.in[1],s.force.in[2]
   count.pick = 0
-  BITS rs7.det.picked[0],8 = count.pick
+  BITS rs7.det.picked[0],16 = count.pick
   count.put = 0
 ;
   chg.tare.count = max.tare.count
@@ -2278,14 +2310,14 @@ N_INT301    "s.enable.shift|Enable shift for even layers"
     RETURN
   END
   ; Priority 2
-  ;IF SIG (s.cmd.stop) AND BITS (rs13.det.put[0], 8) <= count.pick THEN
+  ;IF SIG (s.cmd.stop) AND BITS (rs13.det.put[0], 16) <= count.pick THEN
   ;  state = 6
   ;  RETURN
   ;END
   ; Priority 3
   IF NOT SIG (s.grip.full) THEN
     $action = "WaitPosFull"
-    IF SIG (s.cmd.pick) AND NOT SIG (rs13.work[1]) AND BITS (rs13.det.put[0], 8) > count.pick THEN
+    IF SIG (s.cmd.pick) AND NOT SIG (rs13.work[1]) AND BITS (rs13.det.put[0], 16) > count.pick THEN
       state = 1
       RETURN
     END
@@ -2306,7 +2338,7 @@ N_INT301    "s.enable.shift|Enable shift for even layers"
     RETURN
   END
   ; Priority 7
-  IF SIG (rs13.finish) AND NOT SIG (s.grip.full) AND NOT (BITS (rs13.det.put[0], 8) > count.pick) THEN
+  IF SIG (rs13.finish) AND NOT SIG (s.grip.full) AND NOT (BITS (rs13.det.put[0], 16) > count.pick) THEN
     state = 103
     RETURN
   END
@@ -3261,6 +3293,8 @@ N_INT301    "s.enable.shift|Enable shift for even layers"
 	;       .i 
 	;   Group:Logs:14
 	;     14:log.pc1:B
+	;       .$msg 
+	;       .i 
 	;     14:log.pc2:B
 	;       .$msg 
 	;       .i 
@@ -3420,8 +3454,7 @@ N_INT301    "s.enable.shift|Enable shift for even layers"
 	; s.cmd.pick Pick from positioner command
 	; s.opt.spacer Option for put to OT with spacer
 	; s.opt.flip Option to put to OT with flip
-	; rs13.det.put[] Put details count from RS0013N
-	; rs7.det.picked[] Picked details count from RS007L
+	; rs13.det.put[] Number of details put by RS013
 	; s.cmd.measured Detail measured
 	; s.tcp.log Add log record for tcp.log
 	; s.force.defect Force measure defect
@@ -3435,6 +3468,7 @@ N_INT301    "s.enable.shift|Enable shift for even layers"
 	; s.enable.shift Enable shift for even layers
 	; rs13.lock.zone 
 	; rs13.no.ot.stop 
+	; rs7.det.picked[] Picked details count from RS007L
 	; @@@ TOOLS @@@
 	; tool.pick[] Gripper tool
 	; @@@ BASE @@@
@@ -3939,22 +3973,14 @@ tyterm = 0
 s.cmd.pick = 2233
 s.opt.spacer = 2270
 s.opt.flip = 2271
-rs13.det.put[0] = 1025
-rs13.det.put[1] = 1026
-rs13.det.put[2] = 1027
-rs13.det.put[3] = 1028
-rs13.det.put[4] = 1029
-rs13.det.put[5] = 1030
-rs13.det.put[6] = 1031
-rs13.det.put[7] = 1032
-rs7.det.picked[0] = 25
-rs7.det.picked[1] = 26
-rs7.det.picked[2] = 27
-rs7.det.picked[3] = 28
-rs7.det.picked[4] = 29
-rs7.det.picked[5] = 30
-rs7.det.picked[6] = 31
-rs7.det.picked[7] = 32
+rs13.det.put[7] = 1047
+rs13.det.put[6] = 1046
+rs13.det.put[5] = 1045
+rs13.det.put[4] = 1044
+rs13.det.put[3] = 1043
+rs13.det.put[2] = 1042
+rs13.det.put[1] = 1041
+rs13.det.put[0] = 1040
 grip.180xsh[4] = 0
 grip.180xsh[5] = 0
 grip.180ysh[4] = 0
@@ -4909,6 +4935,30 @@ pg.gripper = 2
 rs13.lock.zone = 1022
 rs13.no.ot.stop = 1033
 wdog.tmr = 180
+rs7.det.picked[0] = 40
+rs7.det.picked[1] = 41
+rs7.det.picked[2] = 42
+rs7.det.picked[3] = 43
+rs7.det.picked[4] = 44
+rs7.det.picked[5] = 45
+rs7.det.picked[6] = 46
+rs7.det.picked[7] = 47
+rs7.det.picked[8] = 48
+rs7.det.picked[9] = 49
+rs7.det.picked[10] = 50
+rs7.det.picked[11] = 51
+rs7.det.picked[12] = 52
+rs7.det.picked[13] = 53
+rs7.det.picked[14] = 54
+rs7.det.picked[15] = 55
+rs13.det.put[8] = 1048
+rs13.det.put[9] = 1049
+rs13.det.put[10] = 1050
+rs13.det.put[11] = 1051
+rs13.det.put[12] = 1052
+rs13.det.put[13] = 1053
+rs13.det.put[14] = 1054
+rs13.det.put[15] = 1055
 .END
 .STRINGS
 $log.entry[2] = "11:54:08 State 101: Calculating next step"

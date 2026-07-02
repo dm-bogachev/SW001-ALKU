@@ -1,0 +1,500 @@
+.INTER_PANEL_D
+0,9,1,6,15
+6,10,"","PCEXECUTE","AUTOSTART","",10,4,6,1,"PCEXECUTE autostart.pc",0
+7,9,2,6,15
+13,2,""," DEBUG","--------->","",10,4,11,2003,0
+14,9,3,6,15
+20,2,""," GRIPPERS","--------->","",10,4,11,2002,0
+21,9,8,6,15
+27,2,""," TEACH","--------->","",10,4,11,2004,0
+28,1,"  Gripper","","","  opened",10,15,4,10,1001,0
+29,1,"  Gripper","","","  closed",10,15,4,10,1002,0
+30,8,"current.gripper","  CURRENT","  GRIPPER ",10,2,2,1,0
+31,8,"hmi.gripper","    HMI","  GRIPPER ",10,2,2,1,0
+33,2,"","  Release ","  gripper","",10,4,6,5,-1
+34,2,"","  Capture","  gripper","",10,4,6,6,0
+35,2,"","   Open ","  gripper","",10,4,5,3,0
+36,2,"","   Close","  gripper","",10,4,5,4,0
+40,2,"","  Release ","   tare","",10,4,6,1,-1
+41,2,"","  Capture","   tare","",10,4,6,2,0
+42,4,1,"OFF     ON","","","FORCE IN 1",10,4,4,0,2221,0
+43,4,1,"OFF     ON","","","FORCE IN 2",10,4,4,0,2222,0
+49,2,"","   MAIN","<---------","",10,4,11,2001,0
+56,14,"tcp.ip","Server IP","",10,15,0
+57,8,"tcp.port","Server","port",10,15,5,1,0
+58,8,"tcp.sender.dly","Polling","delay, s",10,15,2,2,0
+61,8,"state","  CURRENT","   STATE",10,15,3,1,0
+62,2,"","   RESET","   STATE","",10,4,15,2261,0
+63,4,1,"OFF     ON","","","TCP COMMON",10,4,4,0,2203,0
+64,4,1,"OFF     ON","",""," TCP SEND",10,4,4,0,2201,0
+65,4,1,"OFF     ON","",""," TCP RECV",10,4,4,0,2202,0
+66,4,1,"OFF     ON","",""," TCP LOG",10,4,4,0,2204,0
+67,8,"wdog.tmr","  WATCHDOG"," TIMER, s",10,15,3,1,0
+68,14,"action","  CURRENT","  ACTION",10,15,0
+69,2,"","   RESET","   ACTION","",10,4,15,2262,0
+70,1,"OT PLACED ","","","",10,15,4,10,2229,0
+71,1,"OPT PLACED","","","",10,15,4,10,2230,0
+72,1,"GRIP FULL","","","",10,15,4,10,2231,0
+73,1," POS FREE","","","",10,15,4,10,2234,0
+76,4,1,"OFF     ON","","","  DEBUG",10,4,4,0,2300,0
+77,2,"","   MAIN","<---------","",10,4,11,2001,0
+79,7,"  RS013N"," COUNT PUT",10,15,4,0,0,40,16,1
+80,7,"  RS007L","COUNT PICK",10,15,4,0,0,1040,16,1
+82,2,"","   OPEN","PNEUMATICS","",10,4,8,2258,0
+83,2,"","   CLOSE","PNEUMATICS","",10,4,8,2259,0
+84,2,"  ","  PRIME","  HOME","",10,4,11,2250,0
+85,8,"hmi.obj.id","  OBJECT","    ID",10,2,2,1,0
+86,8,"hmi.gripper","    HMI","  GRIPPER ",10,2,2,1,0
+88,8,"hmi.x.plus","DISTORTION"," X+ COEFF",10,3,4,2,0
+89,8,"hmi.y.plus","DISTORTION"," Y+ COEFF",10,3,4,2,0
+91,2,"   PRIME","","   TEACH","    STZ",10,4,11,2253,0
+92,8,"center.x","CENTER OF","  X AXIS",10,3,4,2,0
+93,8,"center.y","CENTER OF","  Y AXIS",10,3,4,2,0
+95,8,"hmi.x.minus","DISTORTION"," X- COEFF",10,3,4,2,0
+96,8,"hmi.y.minus","DISTORTION"," Y- COEFF",10,3,4,2,0
+97,2,""," APPLY FOR"," N OBJECT","",10,4,14,2257,0
+98,2,"   PRIME","","    TEST","    STZ",10,4,11,2248,0
+99,8,"stz.x","   STZ X","COORDINATE",10,3,4,2,0
+100,8,"stz.y","   STZ Y","COORDINATE",10,3,4,2,0
+101,8,"stz.a","   STZ ","  ANGLE",10,3,4,2,0
+104,2,"","   GET","COORDINATE","",10,4,8,2260,0
+105,2,"","   MAIN","<---------","",10,4,11,2001,0
+108,2,"","   TEACH","  STOCKERS","",10,4,11,2005,0
+109,2,"","   TEACH","POSITIONER","",10,4,11,2006,0
+110,2,"","   TEACH","    STZ","",10,4,11,2007,0
+111,2,"","   TEACH","  GRIPPERS","",10,4,11,2008,0
+112,2,"  ","  PRIME","  HOME","",10,4,11,2250,0
+113,2,"   PRIME","","   TEACH","    OT",10,4,11,2251,0
+114,8,"hmi.ot.i","    OT","COLUMN NO",10,2,2,1,0
+115,2,"   PRIME","","   TEACH","    OPT",10,4,11,2252,0
+116,8,"hmi.opt.i","   OPT","COLUMN NO",10,2,2,1,0
+118,2,"","  Release ","   tare","",10,4,6,1,-1
+120,2,"   PRIME","","   TEST","    OT",10,4,11,2249,0
+121,8,"hmi.ot.j","    OT","  ROW NO",10,2,2,1,0
+122,2,"   PRIME","","   TEST","   OPT",10,4,11,2247,0
+123,8,"hmi.opt.j","   OPT","  ROW NO",10,2,2,1,0
+125,2,"","  Capture","   tare","",10,4,6,2,0
+133,2,"","   MAIN","<---------","",10,4,11,2001,0
+136,2,"","   TEACH","  OBJECTS","",10,4,11,2004,0
+137,2,"","   TEACH","POSITIONER","",10,4,11,2006,0
+138,2,"","   TEACH","    STZ","",10,4,11,2007,0
+139,2,"","   TEACH","  GRIPPERS","",10,4,11,2008,0
+140,2,"  ","  PRIME","  HOME","",10,4,11,2250,0
+141,8,"hmi.obj.id","  OBJECT","    ID",10,2,2,1,0
+142,8,"hmi.gripper","    HMI","  GRIPPER ",10,2,2,1,0
+146,2,"","   Open ","  gripper","",10,4,5,3,0
+147,2,"   PRIME","","   TEACH","POSITIONER",10,4,11,2255,0
+153,2,"","   Close","  gripper","",10,4,5,4,0
+161,2,"","   MAIN","<---------","",10,4,11,2001,0
+164,2,"","   TEACH","  OBJECTS","",10,4,11,2004,0
+165,2,"","   TEACH","  STOCKERS","",10,4,11,2005,0
+166,2,"","   TEACH","    STZ","",10,4,11,2007,0
+167,2,"","   TEACH","  GRIPPERS","",10,4,11,2008,0
+168,2,"  ","  PRIME","  HOME","",10,4,11,2250,0
+169,8,"hmi.obj.id","  OBJECT","    ID",10,2,2,1,0
+170,8,"hmi.gripper","    HMI","  GRIPPER ",10,2,2,1,0
+172,8,"hmi.gx","GRIPPER N"," X SHIFT",10,3,4,2,0
+173,8,"hmi.gy","GRIPPER N"," Y SHIFT",10,3,4,2,0
+174,8,"hmi.gz","GRIPPER N"," Z SHIFT",10,3,4,2,0
+175,2,"   PRIME","","   TEACH","    STZ",10,4,11,2253,0
+176,8,"center.x","CENTER OF","  X AXIS",10,3,4,2,0
+177,8,"center.y","CENTER OF","  Y AXIS",10,3,4,2,0
+179,8,"hmi.g180x","GRIPPER N","180X SHIFT",10,3,4,2,0
+180,8,"hmi.g180y","GRIPPER N","180Y SHIFT",10,3,4,2,0
+181,2,""," APPLY FOR"," N GRIPPER","",10,4,14,2256,0
+182,2,"   PRIME","","    TEST","    STZ",10,4,11,2248,0
+183,8,"stz.x","   STZ X","COORDINATE",10,3,4,2,0
+184,8,"stz.y","   STZ Y","COORDINATE",10,3,4,2,0
+185,8,"stz.a","   STZ ","  ANGLE",10,3,4,2,0
+188,2,"","   GET","COORDINATE","",10,4,8,2260,0
+189,2,"","   MAIN","<---------","",10,4,11,2001,0
+192,2,"","   TEACH","  OBJECTS","",10,4,11,2004,0
+193,2,"","   TEACH","  STOCKERS","",10,4,11,2005,0
+194,2,"","   TEACH","POSITIONER","",10,4,11,2006,0
+195,2,"","   TEACH","  GRIPPERS","",10,4,11,2008,0
+196,2,"  ","  PRIME","  HOME","",10,4,11,2250,0
+199,8,"current.gripper","  CURRENT","  GRIPPER ",10,2,2,1,0
+200,8,"hmi.gripper","    HMI","  GRIPPER ",10,2,2,1,0
+202,2,"","  Capture","  gripper","",10,4,6,6,0
+203,2,"   PRIME","","   TEACH","  GRIPPERS",10,4,11,2254,0
+209,2,"","  Release ","  gripper","",10,4,6,5,-1
+217,2,"","   MAIN","<---------","",10,4,11,2001,0
+220,2,"","   TEACH","  OBJECTS","",10,4,11,2004,0
+221,2,"","   TEACH","  STOCKERS","",10,4,11,2005,0
+222,2,"","   TEACH","POSITIONER","",10,4,11,2006,0
+223,2,"","   TEACH","    STZ","",10,4,11,2007,0
+.END
+.INTER_PANEL_TITLE
+"MAIN",1
+"GRIPPERS",1
+"DEBUG",1
+"TEACH OBJECT",1
+"TEACH STOCKERS",1
+"TEACH POSITIONER",1
+"TEACH STZ",1
+"TEACH GRIPPERS",1
+"",0
+"",0
+"",0
+"",0
+"",0
+"",0
+"",0
+"",0
+.END
+.INTER_PANEL_COLOR_D
+182,3,225,244,28,159,252,255,251,255,0,31,2,241,52,255,
+.END
+.PROGRAM pos.put()@26/07/01 15:52 #2706
+;
+  .$temp = "Put detail to positioner (ID:"+$ENCODE(object.id)+")"
+  CALL log(.$temp)
+;
+  SPEED 30 ALWAYS
+  ACCURACY 100 ALWAYS
+  TOOL tool.pick[current.gripper]
+;
+  POINT .temp = #pos.point[object.id]
+  ACCURACY 20
+;SIGNAL rs13.lock.zone ; TEST
+  LMOVE #pos.wait
+  BREAK
+  SIGNAL rs13.lock.zone
+  CALL log("Check if positioner is occupied")
+  SWAIT -rs7.locked.zone
+;
+  LMOVE .temp+TRANS(10,0,50)
+  ACCURACY 5
+  LMOVE .temp+TRANS(10,0,20)
+  ACCURACY 0.02
+  IF object.id==2 THEN
+    LMOVE .temp+TRANS(5,0,5)
+  ELSE
+    LMOVE .temp+TRANS(10,0,3)
+  END
+  BREAK
+;
+  SPEED 100 MM/S
+  ACCURACY 0.02
+  LMOVE #pos.point[object.id]
+  BREAK
+  STABLE 0.2
+  TWAIT 0.3
+  PULSE grip.unclamp
+  TWAIT 0.5
+  SIGNAL -s.grip.full
+  count.put = count.put+1
+  BITS rs13.det.put[0],16 = count.put
+  CALL log("Detail counter:"+$ENCODE(count.put))
+  $action = "WaitForPick"
+;
+  LMOVE .temp+TRANS(0,0,200)
+;SIGNAL rs13.det.put
+  LMOVE #pos.wait
+  BREAK
+  SIGNAL -rs13.lock.zone
+;LMOVE #stz.wait
+.END
+.PROGRAM state0()@26/06/26 14:33 #169; Initialization of parameters
+;
+  CALL log("State 0: Program reset. Initialization of parameters")
+  SIGNAL -s.opt.placed,-s.ot.placed,-s.grip.full
+  SIGNAL -s.cmd.start,-s.cmd.pick,-s.cmd.finish,-rs13.finish,-s.cmd.stop
+  SIGNAL -s.cmd.chg.opt,-s.cmd.n.op.stop,-rs13.no.ot.stop
+  SIGNAL -s.cmd.resume,-s.cmd.pause
+  SIGNAL -s.stock.opt.ng,-s.stock.ot.ng,-s.stock.opt.ok,-s.stock.ot.ok
+  SIGNAL s.force.in[1], s.force.in[2]
+  ;
+  count.put = 0
+  BITS rs13.det.put[0],16 = count.put
+;count.ot = 0
+;count.opt = 0
+;$loaded.pg = "None"
+;
+  state = 100
+;
+.END
+.PROGRAM state102()@26/06/30 22:50 #17321930; Decision making
+; Priority 1
+  IF SIG(s.cmd.pause) THEN
+    state = 105
+    RETURN
+  END
+;
+; Priority 2
+  IF SIG(s.cmd.stop) OR SIG(rs7.etalon.stop) THEN
+    state = 103;6
+    RETURN
+  END
+; Priority 3
+  IF NOT SIG(s.ot.placed) THEN
+    state = 1
+    RETURN
+  END
+;
+; Priority 4
+  IF NOT SIG(s.opt.placed) AND SIG(s.ot.placed) AND NOT (count.put==detail.count) THEN
+    state = 2
+    RETURN
+  END
+; Priority 5
+  IF SIG(rs7.tare.chg) AND SIG(s.ot.placed) THEN
+    state = 5
+    RETURN
+  END
+; Priority 6
+  IF SIG(s.ot.placed) AND SIG(s.opt.placed) AND NOT SIG(s.grip.full) THEN
+    $action = "WaitForPick"
+    IF stz.x>=0 AND SIG(s.cmd.pick) THEN ;AND NOT SIG (rs7.tare.chg) THEN
+      SIGNAL -s.cmd.pick
+      $action = " "
+      state = 3
+      RETURN
+    END
+  END
+; Priority 7
+  IF SIG(s.ot.placed) AND SIG(s.opt.placed) AND SIG(s.grip.full) AND BITS(rs7.det.picked[0],16)==count.put THEN
+    $action = "WaitPosFree"
+    IF NOT SIG(rs7.work[1]) AND SIG(s.cmd.put) AND NOT SIG(rs7.locked.zone) THEN
+      state = 4
+      RETURN
+    END
+  END
+; Priority 8
+  IF SIG(s.cmd.chg.opt) OR count.put==detail.count THEN
+    state = 6
+    $action = "ChangeOPT"
+    RETURN
+  END
+.END
+.PROGRAM state104()@26/07/01 08:11 #1371086; Ending sequence
+;
+  IF SIG(s.cmd.n.op.stop) AND SIG(s.opt.placed) THEN
+    state = 6
+    RETURN
+  END
+;
+  IF SIG(s.cmd.n.op.stop) AND NOT SIG(s.opt.placed) THEN
+    CALL log("Program complete")
+    SIGNAL rs13.no.ot.stop
+    state = 255
+    RETURN
+  END
+;
+  IF SIG(s.ot.placed) AND SIG(s.grip.full) AND BITS(rs7.det.picked[0],16)==count.put THEN
+    $action = "WaitPosFree"
+    IF NOT SIG(rs7.work[1]) AND SIG(s.cmd.put) AND NOT SIG(rs7.locked.zone) THEN
+      state = 4
+      RETURN
+    END
+  END
+;
+  IF NOT SIG(s.grip.full) AND SIG(s.opt.placed) THEN
+    state = 6
+    RETURN
+  END
+;
+  .m1 = NOT SIG(s.grip.full) AND SIG(s.ot.placed) AND NOT SIG(rs7.tare.chg)
+  .m2 = count.opt>=max.count.opt OR count.put==detail.count
+  .m3 = SIG(s.cmd.stop) OR SIG(rs7.etalon.stop)
+  IF .m1 AND (.m2 OR .m3) THEN
+    SIGNAL s.cmd.finish
+    SIGNAL rs13.finish
+    CALL log("Wait for RS007L finish task")
+    SWAIT rs7.finish.ack
+    state = 5
+    RETURN
+  END
+;
+; Priority 5
+  IF SIG(rs7.tare.chg) AND SIG(s.ot.placed) THEN
+    state = 5
+    RETURN
+  END
+;
+; Impossible situation
+  IF SIG(rs7.tare.chg) AND NOT SIG(s.ot.placed) THEN
+    PULSE rs13.tare.ack,15
+    RETURN
+  END
+;
+  IF NOT SIG(s.grip.full) AND SIG(s.cmd.finish) THEN
+    CALL log("Program complete")
+    state = 255
+    RETURN
+  END
+;
+  IF NOT SIG(s.grip.full) AND count.ot>=max.count.ot THEN
+    CALL log("Unexpected behaviour!")
+    state = 255
+    RETURN
+  END
+;
+.END
+.PROGRAM set.io.pc()@26/06/25 16:09 #85
+; Gripper IO
+;
+; Tare
+  release.tare = 1
+  capture.tare = 2
+; Gripper
+  release.grip = 5
+  capture.grip = 6
+; Clamp
+  grip.unclamped = 1001
+  grip.clamped = 1002
+  grip.unclamp = 3
+  grip.clamp = 4
+;
+; Ethernet I/P IO (17-32)
+;
+; Inputs
+;
+  rs7.work[1] = 1017
+  rs7.tare.chg = 1018
+  rs7.locked.zone = 1019
+  rs7.finish.ack = 1020
+  rs7.put.ack = 1021
+;
+  rs7.det.picked[0] = 1040
+  rs7.det.picked[1] = 1041
+  rs7.det.picked[2] = 1042
+  rs7.det.picked[3] = 1043
+  rs7.det.picked[4] = 1044
+  rs7.det.picked[5] = 1045
+  rs7.det.picked[6] = 1046
+  rs7.det.picked[7] = 1047
+  rs7.det.picked[8] = 1048
+  rs7.det.picked[9] = 1049
+  rs7.det.picked[10] = 1050
+  rs7.det.picked[11] = 1051
+  rs7.det.picked[12] = 1052
+  rs7.det.picked[13] = 1053
+  rs7.det.picked[14] = 1054
+  rs7.det.picked[15] = 1055
+;
+  rs7.etalon.stop = 1033
+; Outputs
+;
+  do.work[1] = 17
+  rs13.tare.ack = 18
+  rs13.finish = 20
+  rs13.detail.put = 21
+  rs13.lock.zone = 22
+;
+  rs13.det.put[0] = 40
+  rs13.det.put[1] = 41
+  rs13.det.put[2] = 42
+  rs13.det.put[3] = 43
+  rs13.det.put[4] = 44
+  rs13.det.put[5] = 45
+  rs13.det.put[6] = 46
+  rs13.det.put[7] = 47
+  rs13.det.put[8] = 48
+  rs13.det.put[9] = 49
+  rs13.det.put[10] = 50
+  rs13.det.put[11] = 51
+  rs13.det.put[12] = 52
+  rs13.det.put[13] = 53
+  rs13.det.put[14] = 54
+  rs13.det.put[15] = 55
+;
+  rs13.no.ot.stop = 34
+; Internal IO
+;
+; Dedicated inputs 2001 - 2064
+;
+; IFP page change 2001-2008
+  di.ifp.page[1] = 2001
+  di.ifp.page[2] = 2002
+  di.ifp.page[3] = 2003
+  di.ifp.page[4] = 2004
+  di.ifp.page[5] = 2005
+  di.ifp.page[6] = 2006
+  di.ifp.page[7] = 2007
+  di.ifp.page[8] = 2008
+;
+  di.hold = 2009
+;
+; Dedicated outputs 2101-2164
+;
+  do.home = 2010
+  do.bat.alm = 2011
+  do.automatic = 2012
+;
+;;
+;
+; Internal logic 2201 - 2960
+;
+; TCP/IP display flags
+  s.tcp.send.ena = 2201
+  s.tcp.recv.ena = 2202
+  s.tcp.ena = 2203
+  s.tcp.log = 2204
+;
+  s.zone.blocked = 2209
+;
+; Workspaces
+  do.work[2] = 2212
+  do.work[3] = 2213
+  do.work[4] = 2214
+  do.work[5] = 2215
+  do.work[6] = 2216
+  do.work[7] = 2217
+  do.work[8] = 2218
+;
+  s.force.in[1] = 2221
+  s.force.in[2] = 2222
+;
+  s.stock.ot.ok = 2223
+  s.stock.ot.ng = 2224
+  s.stock.opt.ok = 2225
+  s.stock.opt.ng = 2226
+  s.ot.pos.ok = 2227
+  s.ot.pos.ng = 2228
+;
+  s.ot.placed = 2229
+  s.opt.placed = 2230
+;
+  s.grip.full = 2231
+;
+  s.cmd.start = 2232
+  s.cmd.pick = 2233
+  s.cmd.put = 2234
+  s.cmd.pneum.op = 2235
+  s.cmd.pneum.cl = 2236
+  s.cmd.chg.opt = 2237
+  s.cmd.finish = 2238
+  s.cmd.pause = 2239
+  s.cmd.resume = 2240
+  s.cmd.stop = 2241
+  s.cmd.n.op.stop = 2242
+;
+  s.pr.tst.opt = 2247
+  s.pr.tst.stz = 2248
+  s.pr.tst.ot = 2249
+  s.pr.home = 2250
+  s.pr.tch.st.ot = 2251
+  s.pr.tch.st.opt = 2252
+  s.pr.tch.stz = 2253
+  s.pr.tch.grip = 2254
+  s.pr.tch.pos = 2255
+  s.apply.grip = 2256
+  s.apply.cv = 2257
+;
+  s.hmi.pneum.op = 2258
+  s.hmi.pneum.cl = 2259
+  s.hmi.get.cv = 2260
+  s.hmi.res.state = 2261
+  s.hmi.res.act = 2262
+;
+  s.debug.mode = 2300
+.END
+.* IDE Comments
+
+
+.* 7:state0
+.* 7:state102
+.* 7:state104
+
+

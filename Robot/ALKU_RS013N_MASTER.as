@@ -10,24 +10,24 @@ N_OX18    "rs13.tare.ack|Acknowledge of tare change"
 N_OX20    "rs13.finish|RS013N finish process"
 N_OX21    "rs13.detail.put|RS013N put detail to positioner"
 N_OX22    "rs13.lock.zone|RS013N locked in positioner zone"
-N_OX25    "rs13.det.put[0]|Put details count from RS0013N"
-N_OX26    "rs13.det.put[1]|Put details count from RS0013N"
-N_OX27    "rs13.det.put[2]|Put details count from RS0013N"
-N_OX28    "rs13.det.put[3]|Put details count from RS0013N"
-N_OX29    "rs13.det.put[4]|Put details count from RS0013N"
-N_OX30    "rs13.det.put[5]|Put details count from RS0013N"
-N_OX31    "rs13.det.put[6]|Put details count from RS0013N"
-N_OX32    "rs13.det.put[7]|Put details count from RS0013N"
 N_OX33    "rs13.opt.chg|RS013 is in change OPT"
 N_OX34    "rs13.no.ot.stop|"
-N_OX35    "rs13.ot.oddity[0]|FFU"
-N_OX36    "rs13.ot.oddity[1]|"
-N_OX37    "rs13.ot.oddity[2]|"
-N_OX38    "rs13.ot.oddity[3]|"
-N_OX39    "rs13.ot.oddity[4]|"
-N_OX40    "rs13.ot.oddity[5]|"
-N_OX41    "rs13.ot.oddity[6]|"
-N_OX42    "rs13.ot.oddity[7]|"
+N_OX40    "rs13.det.put[0]|Put details count from RS0013N"
+N_OX41    "rs13.det.put[1]|Put details count from RS0013N"
+N_OX42    "rs13.det.put[2]|Put details count from RS0013N"
+N_OX43    "rs13.det.put[3]|Put details count from RS0013N"
+N_OX44    "rs13.det.put[4]|Put details count from RS0013N"
+N_OX45    "rs13.det.put[5]|Put details count from RS0013N"
+N_OX46    "rs13.det.put[6]|Put details count from RS0013N"
+N_OX47    "rs13.det.put[7]|Put details count from RS0013N"
+N_OX48    "rs13.det.put[8]|Put details count from RS0013N"
+N_OX49    "rs13.det.put[9]|Put details count from RS0013N"
+N_OX50    "rs13.det.put[10]|Put details count from RS0013N"
+N_OX51    "rs13.det.put[11]|Put details count from RS0013N"
+N_OX52    "rs13.det.put[12]|Put details count from RS0013N"
+N_OX53    "rs13.det.put[13]|Put details count from RS0013N"
+N_OX54    "rs13.det.put[14]|Put details count from RS0013N"
+N_OX55    "rs13.det.put[15]|Put details count from RS0013N"
 N_WX1    "grip.unclamped|Gripper unclamped"
 N_WX2    "grip.clamped|Gripper clamped"
 N_WX17    "rs7.work[1]|RS007L in common area"
@@ -35,15 +35,23 @@ N_WX18    "rs7.tare.chg|Request tare change"
 N_WX19    "rs7.locked.zone|RS007L Blocked positioner zone"
 N_WX20    "rs7.finish.ack|RS007L finished work"
 N_WX21    "rs7.put.ack|RS007L picked detail"
-N_WX25    "rs7.det.picked[0]|Picked details count from RS007L"
-N_WX26    "rs7.det.picked[1]|Picked details count from RS007L"
-N_WX27    "rs7.det.picked[2]|Picked details count from RS007L"
-N_WX28    "rs7.det.picked[3]|Picked details count from RS007L"
-N_WX29    "rs7.det.picked[4]|Picked details count from RS007L"
-N_WX30    "rs7.det.picked[5]|Picked details count from RS007L"
-N_WX31    "rs7.det.picked[6]|Picked details count from RS007L"
-N_WX32    "rs7.det.picked[7]|Picked details count from RS007L"
 N_WX33    "rs7.etalon.stop|Etalon measurement was bad, need to stop"
+N_WX40    "rs7.det.picked[0]|Picked details count from RS007L"
+N_WX41    "rs7.det.picked[1]|Picked details count from RS007L"
+N_WX42    "rs7.det.picked[2]|Picked details count from RS007L"
+N_WX43    "rs7.det.picked[3]|Picked details count from RS007L"
+N_WX44    "rs7.det.picked[4]|Picked details count from RS007L"
+N_WX45    "rs7.det.picked[5]|Picked details count from RS007L"
+N_WX46    "rs7.det.picked[6]|Picked details count from RS007L"
+N_WX47    "rs7.det.picked[7]|Picked details count from RS007L"
+N_WX48    "rs7.det.picked[8]|Picked details count from RS007L"
+N_WX49    "rs7.det.picked[9]|Picked details count from RS007L"
+N_WX50    "rs7.det.picked[10]|Picked details count from RS007L"
+N_WX51    "rs7.det.picked[11]|Picked details count from RS007L"
+N_WX52    "rs7.det.picked[12]|Picked details count from RS007L"
+N_WX53    "rs7.det.picked[13]|Picked details count from RS007L"
+N_WX54    "rs7.det.picked[14]|Picked details count from RS007L"
+N_WX55    "rs7.det.picked[15]|Picked details count from RS007L"
 N_INT1    "di.ifp.page[1]|Open IFP page i"
 N_INT2    "di.ifp.page[2]|Open IFP page i"
 N_INT3    "di.ifp.page[3]|Open IFP page i"
@@ -148,8 +156,8 @@ N_INT300    "s.debug.mode|Debug mode"
 73,1," POS FREE","","","",10,15,4,10,2234,0
 76,4,1,"OFF     ON","","","  DEBUG",10,4,4,0,2300,0
 77,2,"","   MAIN","<---------","",10,4,11,2001,0
-79,7,"  RS013N"," COUNT PUT",10,15,4,0,0,25,8,1
-80,7,"  RS007L","COUNT PICK",10,15,4,0,0,1025,8,1
+79,7,"  RS013N"," COUNT PUT",10,15,4,0,0,40,16,1
+80,7,"  RS007L","COUNT PICK",10,15,4,0,0,1040,16,1
 82,2,"","   OPEN","PNEUMATICS","",10,4,8,2258,0
 83,2,"","   CLOSE","PNEUMATICS","",10,4,8,2259,0
 84,2,"  ","  PRIME","  HOME","",10,4,11,2250,0
@@ -1892,7 +1900,7 @@ N_INT300    "s.debug.mode|Debug mode"
   TWAIT 0.5
   SIGNAL -s.grip.full
   count.put = count.put+1
-  BITS rs13.det.put[0],8 = count.put
+  BITS rs13.det.put[0],16 = count.put
   CALL log("Detail counter:"+$ENCODE(count.put))
   $action = "WaitForPick"
 ;
@@ -1956,14 +1964,22 @@ N_INT300    "s.debug.mode|Debug mode"
   rs7.finish.ack = 1020
   rs7.put.ack = 1021
 ;
-  rs7.det.picked[0] = 1025
-  rs7.det.picked[1] = 1026
-  rs7.det.picked[2] = 1027
-  rs7.det.picked[3] = 1028
-  rs7.det.picked[4] = 1029
-  rs7.det.picked[5] = 1030
-  rs7.det.picked[6] = 1031
-  rs7.det.picked[7] = 1032
+  rs7.det.picked[0] = 1040
+  rs7.det.picked[1] = 1041
+  rs7.det.picked[2] = 1042
+  rs7.det.picked[3] = 1043
+  rs7.det.picked[4] = 1044
+  rs7.det.picked[5] = 1045
+  rs7.det.picked[6] = 1046
+  rs7.det.picked[7] = 1047
+  rs7.det.picked[8] = 1048
+  rs7.det.picked[9] = 1049
+  rs7.det.picked[10] = 1050
+  rs7.det.picked[11] = 1051
+  rs7.det.picked[12] = 1052
+  rs7.det.picked[13] = 1053
+  rs7.det.picked[14] = 1054
+  rs7.det.picked[15] = 1055
 ;
   rs7.etalon.stop = 1033
 ; Outputs
@@ -1974,14 +1990,22 @@ N_INT300    "s.debug.mode|Debug mode"
   rs13.detail.put = 21
   rs13.lock.zone = 22
 ;
-  rs13.det.put[0] = 25
-  rs13.det.put[1] = 26
-  rs13.det.put[2] = 27
-  rs13.det.put[3] = 28
-  rs13.det.put[4] = 29
-  rs13.det.put[5] = 30
-  rs13.det.put[6] = 31
-  rs13.det.put[7] = 32
+  rs13.det.put[0] = 40
+  rs13.det.put[1] = 41
+  rs13.det.put[2] = 42
+  rs13.det.put[3] = 43
+  rs13.det.put[4] = 44
+  rs13.det.put[5] = 45
+  rs13.det.put[6] = 46
+  rs13.det.put[7] = 47
+  rs13.det.put[8] = 48
+  rs13.det.put[9] = 49
+  rs13.det.put[10] = 50
+  rs13.det.put[11] = 51
+  rs13.det.put[12] = 52
+  rs13.det.put[13] = 53
+  rs13.det.put[14] = 54
+  rs13.det.put[15] = 55
 ;
   rs13.no.ot.stop = 34
 ; Internal IO
@@ -2216,7 +2240,7 @@ N_INT300    "s.debug.mode|Debug mode"
   SIGNAL s.force.in[1], s.force.in[2]
   ;
   count.put = 0
-  BITS rs13.det.put[0],8 = count.put
+  BITS rs13.det.put[0],16 = count.put
 ;count.ot = 0
 ;count.opt = 0
 ;$loaded.pg = "None"
@@ -2322,7 +2346,7 @@ N_INT300    "s.debug.mode|Debug mode"
     END
   END
 ; Priority 7
-  IF SIG(s.ot.placed) AND SIG(s.opt.placed) AND SIG(s.grip.full) AND BITS(rs7.det.picked[0],8)==count.put THEN
+  IF SIG(s.ot.placed) AND SIG(s.opt.placed) AND SIG(s.grip.full) AND BITS(rs7.det.picked[0],16)==count.put THEN
     $action = "WaitPosFree"
     IF NOT SIG(rs7.work[1]) AND SIG(s.cmd.put) AND NOT SIG(rs7.locked.zone) THEN
       state = 4
@@ -2354,7 +2378,7 @@ N_INT300    "s.debug.mode|Debug mode"
     RETURN
   END
 ;
-  IF SIG(s.ot.placed) AND SIG(s.grip.full) AND BITS(rs7.det.picked[0],8)==count.put THEN
+  IF SIG(s.ot.placed) AND SIG(s.grip.full) AND BITS(rs7.det.picked[0],16)==count.put THEN
     $action = "WaitPosFree"
     IF NOT SIG(rs7.work[1]) AND SIG(s.cmd.put) AND NOT SIG(rs7.locked.zone) THEN
       state = 4
@@ -3474,6 +3498,7 @@ N_INT300    "s.debug.mode|Debug mode"
 	;   Group:Logs:12
 	;     12:log.pc2:B
 	;       .$msg 
+	;       .i 
 	; @@@ TRANS @@@
 	; ot.point[] OT point i, j
 	; opt.point[] OPT point i, j
@@ -3638,7 +3663,6 @@ N_INT300    "s.debug.mode|Debug mode"
 	; rs13.opt.chg RS013 is in change OPT
 	; rs13.no.ot.stop 
 	; s.cmd.n.op.stop 
-	; rs13.ot.oddity[] FFU
 	; @@@ TOOLS @@@
 	; tool.pin Tool for calibration pin and tare
 	; tool.pick[] Gripper 3 tool
@@ -4050,22 +4074,22 @@ s.hmi.res.act = 2262
 s.debug.mode = 2300
 do.bat.alm = 2011
 s.pr.tst.stz = 2248
-rs7.det.picked[0] = 1025
-rs7.det.picked[1] = 1026
-rs7.det.picked[2] = 1027
-rs7.det.picked[3] = 1028
-rs7.det.picked[4] = 1029
-rs7.det.picked[5] = 1030
-rs7.det.picked[6] = 1031
-rs7.det.picked[7] = 1032
-rs13.det.put[0] = 25
-rs13.det.put[1] = 26
-rs13.det.put[2] = 27
-rs13.det.put[3] = 28
-rs13.det.put[4] = 29
-rs13.det.put[5] = 30
-rs13.det.put[6] = 31
-rs13.det.put[7] = 32
+rs7.det.picked[7] = 1047
+rs7.det.picked[6] = 1046
+rs7.det.picked[5] = 1045
+rs7.det.picked[4] = 1044
+rs7.det.picked[3] = 1043
+rs7.det.picked[2] = 1042
+rs7.det.picked[1] = 1041
+rs7.det.picked[0] = 1040
+rs13.det.put[7] = 47
+rs13.det.put[6] = 46
+rs13.det.put[5] = 45
+rs13.det.put[4] = 44
+rs13.det.put[3] = 43
+rs13.det.put[2] = 42
+rs13.det.put[1] = 41
+rs13.det.put[0] = 40
 detail.spec = 1
 cv.x.minus[33] = 0
 cv.x.minus[34] = 0
@@ -4210,14 +4234,22 @@ pg.gripper = 2
 rs13.no.ot.stop = 34
 s.cmd.n.op.stop = 2242
 wdog.tmr = 180
-rs13.ot.oddity[0] = 35
-rs13.ot.oddity[1] = 36
-rs13.ot.oddity[2] = 37
-rs13.ot.oddity[3] = 38
-rs13.ot.oddity[4] = 39
-rs13.ot.oddity[5] = 40
-rs13.ot.oddity[6] = 41
-rs13.ot.oddity[7] = 42
+rs7.det.picked[8] = 1048
+rs7.det.picked[9] = 1049
+rs7.det.picked[10] = 1050
+rs7.det.picked[11] = 1051
+rs7.det.picked[12] = 1052
+rs7.det.picked[13] = 1053
+rs7.det.picked[14] = 1054
+rs7.det.picked[15] = 1055
+rs13.det.put[8] = 48
+rs13.det.put[9] = 49
+rs13.det.put[10] = 50
+rs13.det.put[11] = 51
+rs13.det.put[12] = 52
+rs13.det.put[13] = 53
+rs13.det.put[14] = 54
+rs13.det.put[15] = 55
 .END
 .STRINGS
 $tcp.ip = "192.168.7.100"
