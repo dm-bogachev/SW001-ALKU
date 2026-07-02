@@ -18,6 +18,16 @@ N_OX29    "rs13.det.put[4]|Put details count from RS0013N"
 N_OX30    "rs13.det.put[5]|Put details count from RS0013N"
 N_OX31    "rs13.det.put[6]|Put details count from RS0013N"
 N_OX32    "rs13.det.put[7]|Put details count from RS0013N"
+N_OX33    "rs13.opt.chg|RS013 is in change OPT"
+N_OX34    "rs13.no.ot.stop|"
+N_OX35    "rs13.ot.oddity[0]|FFU"
+N_OX36    "rs13.ot.oddity[1]|"
+N_OX37    "rs13.ot.oddity[2]|"
+N_OX38    "rs13.ot.oddity[3]|"
+N_OX39    "rs13.ot.oddity[4]|"
+N_OX40    "rs13.ot.oddity[5]|"
+N_OX41    "rs13.ot.oddity[6]|"
+N_OX42    "rs13.ot.oddity[7]|"
 N_WX1    "grip.unclamped|Gripper unclamped"
 N_WX2    "grip.clamped|Gripper clamped"
 N_WX17    "rs7.work[1]|RS007L in common area"
@@ -79,6 +89,7 @@ N_INT238    "s.cmd.finish|Finish program"
 N_INT239    "s.cmd.pause|Pause program command"
 N_INT240    "s.cmd.resume|Resume program command"
 N_INT241    "s.cmd.stop|Stop program command"
+N_INT242    "s.cmd.n.op.stop|"
 N_INT247    "s.pr.tst.opt|Prime OPT test program"
 N_INT248    "s.pr.tst.stz|Prime test stz program"
 N_INT249    "s.pr.tst.ot|Prime OT test program"
@@ -128,6 +139,7 @@ N_INT300    "s.debug.mode|Debug mode"
 64,4,1,"OFF     ON","",""," TCP SEND",10,4,4,0,2201,0
 65,4,1,"OFF     ON","",""," TCP RECV",10,4,4,0,2202,0
 66,4,1,"OFF     ON","",""," TCP LOG",10,4,4,0,2204,0
+67,8,"wdog.tmr","  WATCHDOG"," TIMER, s",10,15,3,1,0
 68,14,"action","  CURRENT","  ACTION",10,15,0
 69,2,"","   RESET","   ACTION","",10,4,15,2262,0
 70,1,"OT PLACED ","","","",10,15,4,10,2229,0
@@ -243,19 +255,19 @@ N_INT300    "s.debug.mode|Debug mode"
 .INTER_PANEL_COLOR_D
 182,3,225,244,28,159,252,255,251,255,0,31,2,241,52,255,
 .END
-.PROGRAM a.align()@26/01/15 08:39 #0
+.PROGRAM a.align()@26/06/25 16:09 #0
 ;
   SPEED 250 MM/S ALWAYS
   ALIGN
 ;
 .END
-.PROGRAM a.home()@26/01/15 08:39 #0
+.PROGRAM a.home()@26/06/25 16:09 #0
 ;
   SPEED 250 MM/S ALWAYS
   JMOVE #homyak
 ;
 .END
-.PROGRAM a.main()@26/01/15 08:39 #0
+.PROGRAM a.main()@26/06/25 16:09 #0
 ;
   CALL log("Main program executed")
   CALL safe.home
@@ -271,7 +283,7 @@ N_INT300    "s.debug.mode|Debug mode"
   END
 ;
 .END
-.PROGRAM a.teach.gripper()@26/01/15 08:39 #0
+.PROGRAM a.teach.gripper()@26/06/25 16:09 #0
 ;
   TOOL tool.pick[hmi.gripper]
 ;
@@ -302,7 +314,7 @@ N_INT300    "s.debug.mode|Debug mode"
   LMOVE .temp+TRANS(0,0,200)
 ;
 .END
-.PROGRAM a.teach.opt()@26/01/21 13:57 #0
+.PROGRAM a.teach.opt()@26/06/25 16:09 #0
 ; Use this for first teach
   IF FALSE THEN
     TOOL tool.pin
@@ -326,7 +338,7 @@ N_INT300    "s.debug.mode|Debug mode"
   LMOVE opt.point[.i,.j]+TRANS(0,0,50)
 ;
 .END
-.PROGRAM a.teach.ot()@26/01/21 11:02 #0
+.PROGRAM a.teach.ot()@26/06/25 16:09 #0
 ; Use this for first teach
   IF FALSE THEN
     TOOL tool.pin
@@ -350,32 +362,54 @@ N_INT300    "s.debug.mode|Debug mode"
   LMOVE ot.point[.i,.j]+TRANS(0,0,50)
 ;
 .END
-.PROGRAM a.teach.pos()@26/01/26 21:43 #0
+.PROGRAM a.teach.pos()@26/07/01 15:39 #0
 ;
   TOOL tool.pick[hmi.gripper]
 ;
+  JMOVE #pos.wait
+;
   POINT .temp = #pos.point[hmi.obj.id]
-  LMOVE .temp+TRANS(10,0,50)
+  LMOVE .temp+TRANS(10,0,150)
   LMOVE .temp+TRANS(10,0,20)
+  IF hmi.obj.id==2 THEN
+    LMOVE .temp+TRANS(5,0,5)
+  END
   BREAK
   LMOVE #pos.point[hmi.obj.id]; *** TEACH POINT ***
   BREAK
   TWAIT 0.5
+  PULSE grip.unclamp
+  BREAK
   POINT .temp = #pos.point[hmi.obj.id]
   LMOVE .temp+TRANS(10,0,20)
-  LMOVE .temp+TRANS(0,0,50)
+  LMOVE .temp+TRANS(0,0,150)
   BREAK
   TWAIT 0.5
+  JMOVE #pos.wait
 ;
 .END
-.PROGRAM a.teach.stz()@26/01/15 08:39 #0
+.PROGRAM a.teach.stz()@26/06/25 16:09 #0
 ;
-  TOOL tool.pin
+  TOOL tool.teach.stz
+  IF FALSE THEN
+    JAPPRO #plb,-10
+  END
 ;
+  LAPPRO #plb,-10
   LMOVE #plb; *** TEACH POINT *** Left bottom
+  LAPPRO #plb,-10
+;
+  LAPPRO #plt,-10
   LMOVE #plt; *** TEACH POINT *** Left top
+  LAPPRO #plt,-10
+;
+  LAPPRO #prt,-10
   LMOVE #prt; *** TEACH POINT *** Right top
+  LAPPRO #prt,-10
+;
+  LAPPRO #prb,-10
   LMOVE #prb; *** TEACH POINT *** Right bottom
+  LAPPRO #prb,-10
 ;
   POINT .plb = #plb
   POINT .plt = #plt
@@ -403,13 +437,13 @@ N_INT300    "s.debug.mode|Debug mode"
   LMOVE stz.frame+TRANS(stz.x,stz.y,10)
 ;
 .END
-.PROGRAM a.test.gripper()@26/01/15 08:39 #0
+.PROGRAM a.test.gripper()@26/06/25 16:09 #0
 ;
   CALL gripper.pick(hmi.gripper)
   CALL gripper.put(hmi.gripper)
 ; detail.type
 .END
-.PROGRAM a.test.opt()@26/01/15 08:39 #0
+.PROGRAM a.test.opt()@26/06/25 16:09 #0
 ;
   .i = hmi.opt.i
   .j = hmi.opt.j
@@ -417,7 +451,7 @@ N_INT300    "s.debug.mode|Debug mode"
   CALL opt.return(.i,.j)
 ;
 .END
-.PROGRAM a.test.ot()@26/01/15 08:39 #0
+.PROGRAM a.test.ot()@26/06/25 16:09 #0
 ;
   .i = hmi.ot.i
   .j = hmi.ot.j
@@ -425,7 +459,7 @@ N_INT300    "s.debug.mode|Debug mode"
   CALL ot.return(.i,.j)
 ;
 .END
-.PROGRAM a.test.stz()@26/01/15 08:39 #0
+.PROGRAM a.test.stz()@26/06/25 16:09 #0
   .$temp = "Pick detail from stz ("+$ENCODE(/L,stz.x)+", "+$ENCODE(/L,stz.y)+", "+$ENCODE(/L,stz.a)+")"
   CALL log(.$temp)
 ;
@@ -497,7 +531,7 @@ N_INT300    "s.debug.mode|Debug mode"
   LMOVE #pos.wait
 ;
 .END
-.PROGRAM autostart.pc()@26/01/15 08:39 #0
+.PROGRAM autostart.pc()@26/06/25 16:09 #0
 ;
 ; System switches
   CP ON
@@ -511,7 +545,12 @@ N_INT300    "s.debug.mode|Debug mode"
   autostart.pc ON
   errstart.pc ON  ;
 ;
-  IFPWPRINT 8,1,1,5,10="Robot: RS013N S/N: C2392","Controller: F60 S/N: C10632"," ","Powered by Robowizard Co.Ltd."
+  .$rob.name = $SYSDATA(ZROB.NAME)
+  .cont.no = SYSDATA(CONT.NO)
+  .robot.no = SYSDATA(ZROB.MGFNO)
+  .$robot.str = "Robot: "+.$rob.name+" S/N: C"+$ENCODE(/L,.robot.no)
+  .$cont.str = "Controller: F60 S/N: C"+$ENCODE(/L,.cont.no)
+  IFPWPRINT 8,1,1,5,10=.$robot.str,.$cont.str," ","Powered by Robowizard Co.Ltd."
 ;
   CALL set.io.pc
   CALL set.vars.pc
@@ -522,7 +561,7 @@ N_INT300    "s.debug.mode|Debug mode"
   CALL watchdog.pc
 ;
 .END
-.PROGRAM check.disp.pc()@26/01/15 08:39 #59484974
+.PROGRAM check.disp.pc()@26/06/25 16:09 #103877665
 ;
   IF SIG(s.tcp.ena) AND tcp.ena==-1 THEN
     tcp.ena = tyterm
@@ -546,7 +585,7 @@ N_INT300    "s.debug.mode|Debug mode"
   END
 ;
 .END
-.PROGRAM check.tasks.pc()@26/01/15 08:39 #59484976
+.PROGRAM check.tasks.pc()@26/06/25 16:09 #103877671
 ;
   IF TASK(1002)<>1 THEN
     PCEXECUTE 2: tcp.client.pc
@@ -558,7 +597,7 @@ N_INT300    "s.debug.mode|Debug mode"
   END
 ;
 .END
-.PROGRAM check.teach.pc()@26/01/15 08:39 #31585440
+.PROGRAM check.teach.pc()@26/06/25 16:09 #42652355
 ;
   IF SIG(s.hmi.res.state) THEN
     state = 0
@@ -657,7 +696,7 @@ N_INT300    "s.debug.mode|Debug mode"
     cv.y.minus[hmi.obj.id] = hmi.y.minus
   END
 .END
-.PROGRAM check.zone.pc()@26/01/15 08:39 #59484997
+.PROGRAM check.zone.pc()@26/06/25 16:09 #103877703
 ;
 ;do.work[1] = 17
 ;rs7.work[1] = 1017
@@ -676,10 +715,10 @@ N_INT300    "s.debug.mode|Debug mode"
   SOUT 2009 = NOT (NOT 2209 AND 1017 AND 17)
 ;
 .END
-.PROGRAM chk.lock()@26/01/15 08:39 #0
+.PROGRAM chk.lock()@26/06/25 16:09 #0
   SWAIT -rs7.locked.zone,-rs7.work[1]
 .END
-.PROGRAM errstart.pc()@26/01/15 08:39 #115
+.PROGRAM errstart.pc()@26/06/25 16:09 #306
 ;
   IF ERROR==-34021 OR ERROR==-10100 THEN
     tcp.socket = -1
@@ -690,7 +729,7 @@ N_INT300    "s.debug.mode|Debug mode"
   errstart.pc ON
 ;
 .END
-.PROGRAM get.state.pc(.$state)@26/01/15 15:42 #368234
+.PROGRAM get.state.pc(.$state)@26/06/25 16:09 #587993
   .$state = "SPEED:"+$ENCODE(/L,MSPEED)+";"
   .$state = .$state+"POWER:"
   IF SWITCH(POWER ) THEN
@@ -777,7 +816,7 @@ N_INT300    "s.debug.mode|Debug mode"
 ; MAX 12
   .$state = .$state+"\n"
 .END
-.PROGRAM gripper.pick(.gripper.no)@26/01/26 14:41 #70
+.PROGRAM gripper.pick(.gripper.no)@26/06/25 16:09 #122
 ;
 ; Start from step 3 to manual check
   IF FALSE THEN
@@ -816,6 +855,10 @@ N_INT300    "s.debug.mode|Debug mode"
 ;
   SPEED 10 ALWAYS
   ACCURACY 1
+  LMOVE .temp+TRANS(0,0,10)
+;
+  SPEED 10 ALWAYS
+  ACCURACY 1
   LMOVE .temp+TRANS(0,0,200)
 ;
 ; Log info
@@ -823,7 +866,7 @@ N_INT300    "s.debug.mode|Debug mode"
   CALL log(.$temp)
 ;
 .END
-.PROGRAM gripper.put(.gripper.no)@26/01/26 14:41 #70
+.PROGRAM gripper.put(.gripper.no)@26/06/25 16:09 #121
 ;
 ; Start from step 3 to manual check
   IF FALSE THEN
@@ -870,12 +913,13 @@ N_INT300    "s.debug.mode|Debug mode"
   BREAK
 ;
 .END
-.PROGRAM id1()@26/01/27 10:41 #133; 312.229.002
+.PROGRAM id1()@26/07/01 08:03 #222; 312.229.002
 ; Object ID
   object.id = 1
   etalon.id = 1
 ; Working gripper
-  pg.gripper = 2
+  pg13.gripper = 2
+  pg7.gripper = 1
 ; Max objects in output tare
   max.tare.count = 147;10 ;126
   spc.tare.count = 50
@@ -885,12 +929,13 @@ N_INT300    "s.debug.mode|Debug mode"
   direction = 1; -1 for reverse
 ;
 .END
-.PROGRAM id2()@26/01/27 10:41 #8; 0401.17.02.023-02
+.PROGRAM id2()@26/06/25 16:09 #24; 0401.17.02.023-02
 ; Object ID
   object.id = 2
   etalon.id = 2
 ; Working gripper
-  pg.gripper = 1
+  pg13.gripper = 1
+  pg7.gripper = 1
 ; Max objects in output tare
   max.tare.count = 105 ;84
   spc.tare.count = 50
@@ -900,12 +945,13 @@ N_INT300    "s.debug.mode|Debug mode"
   direction = 1; -1 for reverse
 ;
 .END
-.PROGRAM id3()@26/01/27 10:41 #10; 312.229.001
+.PROGRAM id3()@26/06/25 16:09 #32; 312.229.001
 ; Object ID
   object.id = 3
   etalon.id = 3
 ; Working gripper
-  pg.gripper = 3
+  pg13.gripper = 3
+  pg7.gripper = 2
 ; Max objects in output tare
   max.tare.count = 77;10 ;77
   spc.tare.count = 77
@@ -915,12 +961,13 @@ N_INT300    "s.debug.mode|Debug mode"
   direction = 1; -1 for reverse
 ;
 .END
-.PROGRAM id4()@26/01/27 10:41 #20; 440.00.026
+.PROGRAM id4()@26/06/25 16:09 #23; 440.00.026
 ; Object ID
   object.id = 4
   etalon.id = 4
 ; Working gripper
-  pg.gripper = 1
+  pg13.gripper = 1
+  pg7.gripper = 1
 ; Max objects in output tare
   max.tare.count = 168 ;147
   spc.tare.count = 50
@@ -930,12 +977,13 @@ N_INT300    "s.debug.mode|Debug mode"
   direction = 1; -1 for reverse
 ;
 .END
-.PROGRAM id5()@26/01/27 10:41 #11; 440.00.111
+.PROGRAM id5()@26/06/25 16:09 #14; 440.00.111
 ; Object ID
   object.id = 5
   etalon.id = 5
 ; Working gripper
-  pg.gripper = 1
+  pg13.gripper = 1
+  pg7.gripper = 1
 ; Max objects in output tare
   max.tare.count = 231 ;231
   spc.tare.count = 50
@@ -945,12 +993,13 @@ N_INT300    "s.debug.mode|Debug mode"
   direction = 1; -1 for reverse
 ;
 .END
-.PROGRAM id6()@26/01/27 10:41 #25; 0401.28.02.063
+.PROGRAM id6()@26/06/25 16:09 #38; 0401.28.02.063
 ; Object ID
   object.id = 6
   etalon.id = 6
 ; Working gripper
-  pg.gripper = 1
+  pg13.gripper = 1
+  pg7.gripper = 1
 ; Max objects in output tare
   max.tare.count = 126 ;126
   spc.tare.count = 50
@@ -960,7 +1009,7 @@ N_INT300    "s.debug.mode|Debug mode"
   direction = 1; -1 for reverse
 ;
 .END
-.PROGRAM load.opt.data()@26/01/15 08:39 #227
+.PROGRAM load.opt.data()@26/06/25 16:09 #375
 ;
   CALL log("Load OPT IDs from string: "+$opt.data)
   max.count.opt = 0
@@ -978,7 +1027,7 @@ N_INT300    "s.debug.mode|Debug mode"
   END
 ;
 .END
-.PROGRAM load.ot.data()@26/01/15 08:39 #227
+.PROGRAM load.ot.data()@26/06/25 16:09 #373
 ;
   max.count.ot = 0
   WHILE TRUE DO
@@ -995,7 +1044,7 @@ N_INT300    "s.debug.mode|Debug mode"
   END
 ;
 .END
-.PROGRAM log(.$msg)@26/01/15 08:39 #28691
+.PROGRAM log(.$msg)@26/06/25 16:09 #49345
 ;
 ; 1 line = 55 symbols max
 ;
@@ -1009,7 +1058,45 @@ N_INT300    "s.debug.mode|Debug mode"
   IFPWPRINT 3,1,1,9,10=$log.entry[124],$log.entry[125],$log.entry[126],$log.entry[127]
 ;
 .END
-.PROGRAM opt.return(.i,.j)@26/01/15 08:39 #187
+.PROGRAM log.pc2 (.$msg)
+  ;
+  ; 1 line = 55 symbols max
+  ;
+  FOR .i = 0 TO 126
+    $log.entry[.i] = $log.entry[.i + 1]
+  END
+  $log.entry[127] = $TIME + " " + .$msg
+  ;
+  IFPWPRINT 1, 1, 1, 9, 10 = $log.entry[116], $log.entry[117], $log.entry[118], $log.entry[119]
+  IFPWPRINT 2, 1, 1, 9, 10 = $log.entry[120], $log.entry[121], $log.entry[122], $log.entry[123]
+  IFPWPRINT 3, 1, 1, 9, 10 = $log.entry[124], $log.entry[125], $log.entry[126], $log.entry[127]
+  ;
+.END
+.PROGRAM opt.push()@26/07/01 14:35 #130
+;
+  ACCURACY 0.02 ALWAYS
+  SPEED 300 MM/S ALWAYS
+;
+  LMOVE #opt.put.safe
+;
+  JMOVE #push.appro[1]
+  SPEED 30 MM/S
+  LMOVE #push[1]
+  BREAK
+  TWAIT 0.5
+  LMOVE #push.appro[1]
+;
+  LMOVE #push.appro[2]
+  SPEED 30 MM/S
+  LMOVE #push[2]
+  BREAK
+  TWAIT 0.5
+  LMOVE #push.appro[2]
+;
+  LMOVE #opt.put.safe
+;
+.END
+.PROGRAM opt.return(.i,.j)@26/06/25 16:09 #316
   IF FALSE THEN
     .i = hmi.opt.i
     .j = hmi.opt.j
@@ -1028,7 +1115,11 @@ N_INT300    "s.debug.mode|Debug mode"
 ;
   POINT .post.tare.in = #opt.take.safe
   DECOMPOSE .ct1[1] = .post.tare.in
-  DECOMPOSE .ct2[1] = opt.point[.i,.j]
+  IF .i==3 AND .j>=9 THEN
+    DECOMPOSE .ct2[1] = opt.point[.i,9]
+  ELSE
+    DECOMPOSE .ct2[1] = opt.point[.i,.j]
+  END
   POINT .mid.point = TRANS(.ct2[1],.ct1[2],.ct2[3],.ct1[4],.ct1[5],.ct1[6])
   POINT .put.stz = #opt.put
 ;
@@ -1057,6 +1148,8 @@ N_INT300    "s.debug.mode|Debug mode"
 ;ACCURACY 5
   LMOVE #opt.put.safe
   LMOVE #ot.put.safe
+  SWAIT -rs7.locked.zone
+  LMOVE .mid.point
   LMOVE opt.point[.i,.j]+TRANS(20,0,500)
 ;
   ACCURACY 0.02
@@ -1065,7 +1158,7 @@ N_INT300    "s.debug.mode|Debug mode"
   BREAK
 ;
   ACCURACY 0.02
-  SPEED 100 MM/S
+  SPEED 20 MM/S
   LMOVE opt.point[.i,.j]
   BREAK
   PULSE release.tare
@@ -1075,11 +1168,12 @@ N_INT300    "s.debug.mode|Debug mode"
   ACCURACY 30
   LMOVE opt.point[.i,.j]+TRANS(0,0,50)
   LMOVE opt.point[.i,.j]+TRANS(0,0,200)
+;LMOVE .mid.point
 ;
   ACCEL 100 ALWAYS
   DECEL 100 ALWAYS
 .END
-.PROGRAM opt.table(.id)@26/01/15 08:39 #227
+.PROGRAM opt.table(.id)@26/06/25 16:09 #375
 ;
   .$temp = "Processing OPT with ID: "+$ENCODE(/L,.id)
   CALL log(.$temp)
@@ -1212,12 +1306,12 @@ N_INT300    "s.debug.mode|Debug mode"
   CALL log(.$temp)
 ;
 .END
-.PROGRAM opt.take(.i,.j)@26/01/26 14:54 #233
+.PROGRAM opt.take(.i,.j)@26/06/25 16:09 #388
   IF FALSE THEN
     .i = hmi.st.in.i
     .j = hmi.st.in.j
   END
-  .$temp = "Take OT from (i: "+$ENCODE(/L,.i)+", j: "+$ENCODE(/L,.j)+")"
+  .$temp = "Take OPT from (i: "+$ENCODE(/L,.i)+", j: "+$ENCODE(/L,.j)+")"
   CALL log(.$temp)
 ; Set default motion parameters
   TOOL tool.pin
@@ -1228,7 +1322,11 @@ N_INT300    "s.debug.mode|Debug mode"
 ; Calculate points
   POINT .opt.take.safe = #opt.take.safe
   DECOMPOSE .ct1[1] = .opt.take.safe
-  DECOMPOSE .ct2[1] = opt.point[.i,.j]
+  IF .i==3 AND .j>=9 THEN
+    DECOMPOSE .ct2[1] = opt.point[.i,8]
+  ELSE
+    DECOMPOSE .ct2[1] = opt.point[.i,.j]
+  END
   POINT .mid.point = TRANS(.ct2[1],.ct1[2],.ct2[3],.ct1[4],.ct1[5],.ct1[6])
   POINT .opt.put = #opt.put
 ; Release tare
@@ -1263,6 +1361,8 @@ N_INT300    "s.debug.mode|Debug mode"
     $action = "WaitInStockerSensor"
     TWAIT 0.5
   END
+  CALL log(.$temp)
+;SWAIT -rs7.locked.zone
   IF SIG(s.stock.opt.ok) THEN
     CALL log("OPT exists, continue")
     LMOVE opt.point[.i,.j]+TRANS(20,0,500)
@@ -1273,9 +1373,12 @@ N_INT300    "s.debug.mode|Debug mode"
 ; Move before put point
     ACCURACY 20
     LMOVE .opt.put+TRANS(50)
+    ACCURACY 1
+    LMOVE .opt.put+TRANS(20)
+    BREAK
 ; Move to put point
     ACCURACY 0.02
-    SPEED 30 MM/S
+    SPEED 20 MM/S
     LMOVE #opt.put
     BREAK
     PULSE release.tare
@@ -1293,6 +1396,8 @@ N_INT300    "s.debug.mode|Debug mode"
     END
     CALL log(.$temp)
 ; Move out of put point
+    LMOVE #opt.put.safe
+    CALL opt.push
     LMOVE #opt.put.safe
     LMOVE #stz.wait
 ;POINT #current.pos = #stz.wait
@@ -1315,7 +1420,7 @@ N_INT300    "s.debug.mode|Debug mode"
   ACCEL 100 ALWAYS
   DECEL 100 ALWAYS
 .END
-.PROGRAM ot.return(.i,.j)@26/01/15 08:39 #185
+.PROGRAM ot.return(.i,.j)@26/06/25 16:09 #328
   IF FALSE THEN
     .i = hmi.ot.i
     .j = hmi.ot.j
@@ -1334,13 +1439,18 @@ N_INT300    "s.debug.mode|Debug mode"
 ;
   POINT .post.tare.out = #ot.take.safe
   DECOMPOSE .ct1[1] = .post.tare.out
-  DECOMPOSE .ct2[1] = ot.point[.i,.j]
+  IF .i==3 AND .j>=10 THEN
+    DECOMPOSE .ct2[1] = ot.point[.i,9]
+  ELSE
+    DECOMPOSE .ct2[1] = ot.point[.i,.j]
+  END
   POINT .mid.point = TRANS(.ct2[1],.ct1[2],.ct2[3],.ct1[4],.ct1[5],.ct1[6])
   POINT .put.outpal = #ot.put
 ;
   LMOVE #pos.wait
   ACCURACY 20
   LMOVE .put.outpal+TRANS(,,50)
+  BREAK
 ;
   ACCURACY 0.02
   SPEED 100 MM/S
@@ -1355,7 +1465,7 @@ N_INT300    "s.debug.mode|Debug mode"
   LMOVE .put.outpal+TRANS(150)
 ;
   LMOVE #ot.take.safe
-  LMOVE ot.point[.i,.j]+TRANS(20,0,500)
+  LMOVE ot.point[.i,.j]+TRANS(20,0,400)
 ;
   ACCURACY 0.02
   SPEED 100 MM/S
@@ -1363,7 +1473,7 @@ N_INT300    "s.debug.mode|Debug mode"
   BREAK
 ;
   ACCURACY 0.02
-  SPEED 100 MM/S
+  SPEED 20 MM/S
   LMOVE ot.point[.i,.j]
   BREAK
   PULSE release.tare
@@ -1376,7 +1486,7 @@ N_INT300    "s.debug.mode|Debug mode"
   ACCEL 100 ALWAYS
   DECEL 100 ALWAYS
 .END
-.PROGRAM ot.table(.id)@26/01/15 08:39 #227
+.PROGRAM ot.table(.id)@26/06/25 16:09 #373
 ;
   .$temp = "Processing OT with ID: "+$ENCODE(/L,.id)
   CALL log(.$temp)
@@ -1554,7 +1664,7 @@ N_INT300    "s.debug.mode|Debug mode"
   CALL log(.$temp)
 ;
 .END
-.PROGRAM ot.take(.i,.j)@26/01/16 10:56 #247
+.PROGRAM ot.take(.i,.j)@26/07/01 08:05 #450
 ; Start from step 3 to manual check
   IF FALSE THEN
     .i = hmi.st.out.i
@@ -1572,7 +1682,12 @@ N_INT300    "s.debug.mode|Debug mode"
 ; Calculate points
   POINT .ot.take.safe = #ot.take.safe
   DECOMPOSE .ct1[1] = .ot.take.safe
-  DECOMPOSE .ct2[1] = ot.point[.i,.j]
+  IF .i==3 AND .j>=10 THEN
+    DECOMPOSE .ct2[1] = ot.point[.i,9]
+  ELSE
+    DECOMPOSE .ct2[1] = ot.point[.i,.j]
+  END
+;DECOMPOSE .ct2[1] = ot.point[.i, .j]
   POINT .mid.point = TRANS(.ct1[1],.ct2[2],.ct2[3],.ct1[4],.ct1[5],.ct1[6])
   POINT .ot.put = #ot.put
 ; Release tare
@@ -1611,7 +1726,7 @@ N_INT300    "s.debug.mode|Debug mode"
 ; Check if OK
   IF SIG(s.stock.ot.ok) THEN
     CALL log("OT exists, continue")
-    LMOVE ot.point[.i,.j]+TRANS(20,0,500)
+    LMOVE ot.point[.i,.j]+TRANS(20,0,400)
     LMOVE .mid.point
     LMOVE #ot.take.safe
 ; Move to aux point
@@ -1621,7 +1736,7 @@ N_INT300    "s.debug.mode|Debug mode"
     LMOVE .ot.put+TRANS(100)
 ; Move to put point
     ACCURACY 0.02
-    SPEED 100 MM/S
+    SPEED 20 MM/S
     LMOVE #ot.put
     BREAK
     PULSE release.tare
@@ -1633,7 +1748,7 @@ N_INT300    "s.debug.mode|Debug mode"
 ;LMOVE #ot.put.safe
     LMOVE #pos.wait
     BREAK
-    PULSE rs13.tare.ack,5
+    PULSE rs13.tare.ack,15
 ;
 ;  POINT #current.pos = #pos.wait
   ELSE
@@ -1657,7 +1772,7 @@ N_INT300    "s.debug.mode|Debug mode"
   DECEL 100 ALWAYS
 ;
 .END
-.PROGRAM pg.select()@26/01/25 17:23 #137
+.PROGRAM pg.select()@26/06/25 16:09 #283
   SCASE $pg.name OF
    SVALUE "312.229.002":
     CASE detail.spec OF
@@ -1734,11 +1849,11 @@ N_INT300    "s.debug.mode|Debug mode"
   END
 ;
 .END
-.PROGRAM pg0()@26/01/15 08:39 #0
+.PROGRAM pg0()@26/06/25 16:09 #0
   state = 0
   CALL a.main
 .END
-.PROGRAM pos.put()@26/01/23 15:32 #1411
+.PROGRAM pos.put()@26/07/01 15:52 #2706
 ;
   .$temp = "Put detail to positioner (ID:"+$ENCODE(object.id)+")"
   CALL log(.$temp)
@@ -1760,14 +1875,19 @@ N_INT300    "s.debug.mode|Debug mode"
   ACCURACY 5
   LMOVE .temp+TRANS(10,0,20)
   ACCURACY 0.02
-  LMOVE .temp+TRANS(10,0,3)
+  IF object.id==2 THEN
+    LMOVE .temp+TRANS(5,0,5)
+  ELSE
+    LMOVE .temp+TRANS(10,0,3)
+  END
   BREAK
 ;
   SPEED 100 MM/S
   ACCURACY 0.02
   LMOVE #pos.point[object.id]
   BREAK
-  TWAIT 0.5
+  STABLE 0.2
+  TWAIT 0.3
   PULSE grip.unclamp
   TWAIT 0.5
   SIGNAL -s.grip.full
@@ -1783,7 +1903,7 @@ N_INT300    "s.debug.mode|Debug mode"
   SIGNAL -rs13.lock.zone
 ;LMOVE #stz.wait
 .END
-.PROGRAM safe.home()@26/01/15 08:39 #133
+.PROGRAM safe.home()@26/06/25 16:09 #197
 ;
   IF SIG(do.home) THEN
     CALL log("Robot already in home position")
@@ -1811,7 +1931,7 @@ N_INT300    "s.debug.mode|Debug mode"
   CALL log("Robot in home position")
 ;
 .END
-.PROGRAM set.io.pc()@26/01/15 08:39 #40
+.PROGRAM set.io.pc()@26/06/25 16:09 #85
 ; Gripper IO
 ;
 ; Tare
@@ -1862,6 +1982,8 @@ N_INT300    "s.debug.mode|Debug mode"
   rs13.det.put[5] = 30
   rs13.det.put[6] = 31
   rs13.det.put[7] = 32
+;
+  rs13.no.ot.stop = 34
 ; Internal IO
 ;
 ; Dedicated inputs 2001 - 2064
@@ -1930,6 +2052,7 @@ N_INT300    "s.debug.mode|Debug mode"
   s.cmd.pause = 2239
   s.cmd.resume = 2240
   s.cmd.stop = 2241
+  s.cmd.n.op.stop = 2242
 ;
   s.pr.tst.opt = 2247
   s.pr.tst.stz = 2248
@@ -1951,11 +2074,17 @@ N_INT300    "s.debug.mode|Debug mode"
 ;
   s.debug.mode = 2300
 .END
-.PROGRAM set.vars.pc()@26/01/15 08:39 #43
+.PROGRAM set.vars.pc()@26/06/25 16:09 #62
 ;
 ; Constants
 ;
 ; Initialize once
+;
+;
+  IF NOT EXISTREAL("wdog.tmr") THEN
+    wdog.tmr = 120
+    $wdog.state = "FALSE"
+  END
 ;
 ;
   IF NOT EXISTREAL("state") THEN
@@ -2005,7 +2134,7 @@ N_INT300    "s.debug.mode|Debug mode"
   END
 ;
   IF NOT EXISTREAL("pg.gripper") THEN
-    pg.gripper = 0
+    pg13.gripper = 0
   END
 ;
   IF NOT EXISTREAL("hmi.gripper") THEN
@@ -2073,12 +2202,18 @@ N_INT300    "s.debug.mode|Debug mode"
   END
 ;
 .END
-.PROGRAM state0()@26/01/22 14:46 #118; Initialization of parameters
+.PROGRAM ship.pos()@26/06/25 16:09 #0
+  JOINT SPEED9 ACCU1 TIMER0 TOOL1 WORK0 CLAMP OX= WX= #[-0.0011916,0,-159,0,-108,15] ;
+.END
+.PROGRAM state0()@26/06/26 14:33 #169; Initialization of parameters
 ;
   CALL log("State 0: Program reset. Initialization of parameters")
   SIGNAL -s.opt.placed,-s.ot.placed,-s.grip.full
   SIGNAL -s.cmd.start,-s.cmd.pick,-s.cmd.finish,-rs13.finish,-s.cmd.stop
-  SIGNAL -s.cmd.chg.opt,-s.cmd.pause
+  SIGNAL -s.cmd.chg.opt,-s.cmd.n.op.stop,-rs13.no.ot.stop
+  SIGNAL -s.cmd.resume,-s.cmd.pause
+  SIGNAL -s.stock.opt.ng,-s.stock.ot.ng,-s.stock.opt.ok,-s.stock.ot.ok
+;
   count.put = 0
   BITS rs13.det.put[0],8 = count.put
 ;count.ot = 0
@@ -2088,13 +2223,15 @@ N_INT300    "s.debug.mode|Debug mode"
   state = 100
 ;
 .END
-.PROGRAM state1()@26/01/15 08:39 #264; Pick OT from stocker
+.PROGRAM state1()@26/06/25 16:09 #470; Pick OT from stocker
 ;
   CALL log("State 1: Pick OT")
   IF count.ot>=max.count.ot THEN
     CALL log("Reached out of maximum tare count")
+    SIGNAL s.cmd.n.op.stop
+    LMOVE #ot.take.safe
     LMOVE #homyak
-    state = 255
+    state = 103
     RETURN
   END
 ; Check all start positions
@@ -2121,7 +2258,7 @@ N_INT300    "s.debug.mode|Debug mode"
   state = 101
 ;
 .END
-.PROGRAM state100()@26/01/22 14:46 #96; Waiting for start
+.PROGRAM state100()@26/06/25 16:09 #233; Waiting for start
 ;
   CALL log("State 100: Waiting for start")
   $action = "WaitingForStart"
@@ -2141,11 +2278,11 @@ N_INT300    "s.debug.mode|Debug mode"
   state = 106
 ;
 .END
-.PROGRAM state101()@26/01/15 08:39 #4964; Auxilary state
+.PROGRAM state101()@26/06/25 16:09 #8281; Auxilary state
   CALL log("State 101: Calculating next step")
   state = 102
 .END
-.PROGRAM state102()@26/01/26 14:41 #7144245; Decision making
+.PROGRAM state102()@26/06/30 22:50 #17321930; Decision making
 ; Priority 1
   IF SIG(s.cmd.pause) THEN
     state = 105
@@ -2169,7 +2306,7 @@ N_INT300    "s.debug.mode|Debug mode"
     RETURN
   END
 ; Priority 5
-  IF SIG(rs7.tare.chg) THEN
+  IF SIG(rs7.tare.chg) AND SIG(s.ot.placed) THEN
     state = 5
     RETURN
   END
@@ -2198,11 +2335,23 @@ N_INT300    "s.debug.mode|Debug mode"
     RETURN
   END
 .END
-.PROGRAM state103()@26/01/15 08:39 #21; Auxilary state
-  CALL log("State 103: Ending sequence started")
+.PROGRAM state103()@26/06/25 16:09 #43; Auxilary state
+  CALL log("State 103: Calculating ending sequence step")
   state = 104
 .END
-.PROGRAM state104()@26/01/22 14:18 #554295; Ending sequence
+.PROGRAM state104()@26/07/01 08:11 #1371086; Ending sequence
+;
+  IF SIG(s.cmd.n.op.stop) AND SIG(s.opt.placed) THEN
+    state = 6
+    RETURN
+  END
+;
+  IF SIG(s.cmd.n.op.stop) AND NOT SIG(s.opt.placed) THEN
+    CALL log("Program complete")
+    SIGNAL rs13.no.ot.stop
+    state = 255
+    RETURN
+  END
 ;
   IF SIG(s.ot.placed) AND SIG(s.grip.full) AND BITS(rs7.det.picked[0],8)==count.put THEN
     $action = "WaitPosFree"
@@ -2217,12 +2366,6 @@ N_INT300    "s.debug.mode|Debug mode"
     RETURN
   END
 ;
-; Priority 5
-  IF SIG(rs7.tare.chg) THEN
-    state = 5
-    RETURN
-  END
-;
   .m1 = NOT SIG(s.grip.full) AND SIG(s.ot.placed) AND NOT SIG(rs7.tare.chg)
   .m2 = count.opt>=max.count.opt OR count.put==detail.count
   .m3 = SIG(s.cmd.stop) OR SIG(rs7.etalon.stop)
@@ -2232,6 +2375,18 @@ N_INT300    "s.debug.mode|Debug mode"
     CALL log("Wait for RS007L finish task")
     SWAIT rs7.finish.ack
     state = 5
+    RETURN
+  END
+;
+; Priority 5
+  IF SIG(rs7.tare.chg) AND SIG(s.ot.placed) THEN
+    state = 5
+    RETURN
+  END
+;
+; Impossible situation
+  IF SIG(rs7.tare.chg) AND NOT SIG(s.ot.placed) THEN
+    PULSE rs13.tare.ack,15
     RETURN
   END
 ;
@@ -2248,16 +2403,17 @@ N_INT300    "s.debug.mode|Debug mode"
   END
 ;
 .END
-.PROGRAM state105()@26/01/15 08:39 #18; Program paused
+.PROGRAM state105()@26/06/26 14:33 #60; Program paused
   CALL log("State 105: Program paused")
   $action = "Paused"
   SWAIT s.cmd.resume
+  SIGNAL -s.cmd.resume
   $action = " "
   CALL log("Program resumed")
   SIGNAL -s.cmd.pause
   state = 101
 .END
-.PROGRAM state106()@26/01/15 08:39 #227; Check program
+.PROGRAM state106()@26/06/25 16:09 #364; Check program
   CALL log("State 106: Check program")
   IF $pg.name<>"NULL" THEN
     CALL log("Selected program: "+$pg.name)
@@ -2271,13 +2427,13 @@ N_INT300    "s.debug.mode|Debug mode"
     state = 0
   END
 .END
-.PROGRAM state2()@26/01/16 11:34 #170; Pick OPT from stocker
+.PROGRAM state2()@26/06/25 16:09 #323; Pick OPT from stocker
 ;
   CALL log("State 2: Pick OPT")
   IF count.opt>=max.count.opt THEN
     CALL log("Reached out of maximum tare count")
     LMOVE #homyak
-    state = 104 ;!!!
+    state = 103 ;!!!
     RETURN
   END
 ; Check all start positions
@@ -2301,11 +2457,11 @@ N_INT300    "s.debug.mode|Debug mode"
   state = 101
 ;
 .END
-.PROGRAM state255()@26/01/15 08:39 #145; Program complete
+.PROGRAM state255()@26/06/25 16:09 #264; Program complete
   CALL log("State 255: Program complete")
   state = 0
 .END
-.PROGRAM state3()@26/01/15 08:39 #2243; Pick from STZ
+.PROGRAM state3()@26/06/25 16:09 #3707; Pick from STZ
 ;
   CALL log("State 3: Pick from STZ")
 ; Check all start positions
@@ -2328,7 +2484,7 @@ N_INT300    "s.debug.mode|Debug mode"
   state = 101
 ;
 .END
-.PROGRAM state4()@26/01/15 08:39 #2205; Put detail to positioner
+.PROGRAM state4()@26/06/25 16:09 #3656; Put detail to positioner
   CALL log("State 4: Put detail to positioner")
 ; Check all start positions
   POINT .current.pos = #HERE
@@ -2347,13 +2503,13 @@ N_INT300    "s.debug.mode|Debug mode"
 ;POINT #current.pos = #pos.wait JMOVE
 ;
   IF SIG(s.cmd.stop) OR SIG(rs7.etalon.stop) THEN
-    state = 104
+    state = 103
   ELSE
     state = 101
   END
 ;
 .END
-.PROGRAM state5()@26/01/15 08:39 #199; Return OT
+.PROGRAM state5()@26/06/25 16:09 #342; Return OT
   CALL log("State 5: Return OT")
 ; Check all start positions
   POINT .current.pos = #HERE
@@ -2373,8 +2529,15 @@ N_INT300    "s.debug.mode|Debug mode"
   state = 8
 ;
 .END
-.PROGRAM state6()@26/01/15 14:43 #144; Return OPT
+.PROGRAM state6()@26/06/30 22:03 #153; Return OPT
+;
   CALL log("State 6: Return OPT")
+;
+  IF NOT SIG(s.opt.placed) THEN
+    CALL log("OPT does not exists on STZ")
+    state = 9
+    RETURN
+  END
 ; Check all start positions
   POINT .current.pos = #HERE
   POINT .stz.wait = #stz.wait
@@ -2399,17 +2562,17 @@ N_INT300    "s.debug.mode|Debug mode"
   state = 9
 ;
 .END
-.PROGRAM state7()@26/01/15 08:39 #217; Check grippers
+.PROGRAM state7()@26/06/25 16:09 #354; Check grippers
   CALL log("State 7: Check if gripper change is required")
 ; We are at home at this point. No cases without home!
-  IF current.gripper<>pg.gripper THEN
+  IF current.gripper<>pg13.gripper THEN
     CALL log("Selected wrong gripper, perform change")
     LMOVE #opt.take.safe
     LMOVE #stz.wait
     IF current.gripper<>0 THEN
       CALL gripper.put(current.gripper)
     END
-    CALL gripper.pick(pg.gripper)
+    CALL gripper.pick(pg13.gripper)
     LMOVE #opt.take.safe
     LMOVE #homyak
   ELSE
@@ -2417,30 +2580,34 @@ N_INT300    "s.debug.mode|Debug mode"
   END
   state = 1
 .END
-.PROGRAM state8()@26/01/15 08:39 #199; Decide if pick next OT
+.PROGRAM state8()@26/06/25 16:09 #342; Decide if pick next OT
   CALL log("State 8: Decide if pick next OT")
   IF count.ot>=max.count.ot OR SIG(s.cmd.finish) THEN
     LMOVE #ot.take.safe
     LMOVE #homyak
 ;
 ;POINT #current.pos = #homyak
-    state = 104
+    state = 103
   ELSE
     state = 1
   END
 .END
-.PROGRAM state9()@26/01/26 14:41 #201; Decide if pick next OPT
+.PROGRAM state9()@26/06/25 16:09 #330; Decide if pick next OPT
   CALL log("State 9: Decide if pick next OPT")
-  IF count.opt>=max.count.opt OR count.put==detail.count OR SIG(s.cmd.stop) OR SIG(rs7.etalon.stop) THEN
+;
+  .m1 = count.opt>=max.count.opt OR count.put==detail.count
+  .m2 = SIG(s.cmd.stop) OR SIG(rs7.etalon.stop)
+  .m3 = SIG(s.cmd.n.op.stop)
+  IF .m1 OR .m2 OR .m3 THEN
     LMOVE #homyak
 ;
 ;POINT #current.pos = #homyak
-    state = 104
+    state = 103
   ELSE
     state = 2
   END
 .END
-.PROGRAM stz.pick()@26/01/26 14:41 #2158
+.PROGRAM stz.pick()@26/06/25 16:09 #3757
 ;
   .$temp = "Pick detail from stz ("+$ENCODE(/L,stz.x)+", "+$ENCODE(/L,stz.y)+", "+$ENCODE(/L,stz.a)+")"
   CALL log(.$temp)
@@ -2521,7 +2688,7 @@ N_INT300    "s.debug.mode|Debug mode"
   LMOVE #pos.wait
 ;
 .END
-.PROGRAM tcp.callback.pc(.$data[],.data.length)@26/01/22 14:00 #61354
+.PROGRAM tcp.callback.pc(.$data[],.data.length)@26/06/26 14:34 #94094
   .$temp = "Received "+$ENCODE(.data.length)+" strings:"
   PRINT tcp.recv.ena: .$temp
   FOR .i = 1 TO .data.length
@@ -2550,6 +2717,10 @@ N_INT300    "s.debug.mode|Debug mode"
 ; Decode outtare ids
       .$temp = $DECODE(.$data[1],";",1)
       $opt.data = $DECODE(.$data[1],";",0)
+; Decode layout
+      .$temp = $DECODE(.$data[1],";",1)
+      layout = VAL($DECODE(.$data[1],";",0))
+;
       stz.x = -1
       stz.y = -1
       PULSE s.cmd.start,5
@@ -2669,6 +2840,7 @@ N_INT300    "s.debug.mode|Debug mode"
 ; PAUSE;
 ;
     IF INSTR(.$data[.i] , "PAUSE") THEN
+      CALL log.pc2 ("Received PAUSE command")
       SIGNAL s.cmd.pause
     END
 ;
@@ -2677,7 +2849,8 @@ N_INT300    "s.debug.mode|Debug mode"
 ; RESUME;
 ;
     IF INSTR(.$data[.i] , "RESUME") THEN
-      PULSE s.cmd.resume,5
+      CALL log.pc2 ("Received RESUME command")
+      SIGNAL s.cmd.resume
     END
 ;
 ; STOP COMMAND
@@ -2685,6 +2858,7 @@ N_INT300    "s.debug.mode|Debug mode"
 ; STOP;
 ;
     IF INSTR(.$data[.i] , "STOP") THEN
+      CALL log.pc2 ("Received STOP command")
       SIGNAL s.cmd.stop
     END
 ;
@@ -2738,12 +2912,22 @@ N_INT300    "s.debug.mode|Debug mode"
 ;
     IF INSTR(.$data[.i] , "ERESET") THEN
       MC ERESET
+      .$data[.i] = ""
+      RETURN
+    END
+;
+; RESET COMMAND
+; String format:
+; RESET;
+;
+    IF INSTR(.$data[.i] , "RESET") THEN
+      state = 0
     END
 ;
     .$data[.i] = ""
   END
 .END
-.PROGRAM tcp.client.pc()@26/01/15 08:39 #0
+.PROGRAM tcp.client.pc()@26/06/25 16:09 #0
 ;
   tcp.socket = -1
   .tcp.retry.count = 10
@@ -2816,7 +3000,7 @@ N_INT300    "s.debug.mode|Debug mode"
     TWAIT 0.05
   END
 .END
-.PROGRAM tcp.log.pc(.$msg)@26/01/15 08:39 #128421
+.PROGRAM tcp.log.pc(.$msg)@26/06/25 16:09 #188326
   IF NOT SIG(s.tcp.log) THEN
     RETURN
   END
@@ -2833,7 +3017,7 @@ N_INT300    "s.debug.mode|Debug mode"
   IFPWPRINT 3,1,1,9,10=$log.entry[124],$log.entry[125],$log.entry[126],$log.entry[127]
 ;
 .END
-.PROGRAM tcp.send.pc(.$data[],.data.length)@26/01/15 08:39 #285228
+.PROGRAM tcp.send.pc(.$data[],.data.length)@26/06/25 16:09 #504988
 ;
   .tcp.send.tmo = 5
 ;
@@ -2856,12 +3040,13 @@ N_INT300    "s.debug.mode|Debug mode"
   END
 ;
 .END
-.PROGRAM tcp.sender.pc()@26/01/15 08:39 #0
+.PROGRAM tcp.sender.pc()@26/06/25 16:09 #0
 ;
   WHILE TRUE DO
 ;
     CALL get.state.pc(.$data[1])
     .$data[2] = "ACTION:"+$action+";"
+    .$data[2] = .$data[2]+"WATCHDOG:"+$wdog.state+";"
     .$data[2] = .$data[2]+"TAREIN:"+$ENCODE(count.opt)+";"
     .$data[2] = .$data[2]+"TAREOUT:"+$ENCODE(count.ot)+";"
     .$data[2] = .$data[2]+"GRIPPER:"+$ENCODE(current.gripper)+";"
@@ -2883,16 +3068,42 @@ N_INT300    "s.debug.mode|Debug mode"
   END
 ;
 .END
-.PROGRAM watchdog.pc()@26/01/15 08:39 #0
+.PROGRAM watchdog.pc()@26/06/25 16:09 #0
+;
+  HERE .last.pos
+  TIMER 1 = 0
+;
   WHILE TRUE DO
 ;
     CALL check.tasks.pc
     CALL check.disp.pc
     CALL check.zone.pc
 ;
-;IF SIG (rs7.put.ack) THEN
-;  SIGNAL -rs13.detail.put
-;END
+    HERE .current.pos
+    .c1 = SWITCH(CS )
+    .c2 = $action=="Paused"
+    .c3 = DISTANCE(.current.pos,.last.pos)>5
+    .c4 = state<>0 OR state<>100
+    .c5 = TIMER(1)>wdog.tmr
+;
+    IF NOT .c1 OR .c2 OR .c3 OR NOT .c4 THEN
+      TIMER 1 = 0
+    END
+;
+    IF .c3 THEN
+      HERE .last.pos
+    END
+;
+    IF .c5 THEN
+      IF $wdog.state<>"TRUE" THEN
+        $wdog.state = "TRUE"
+      END
+    ELSE
+      IF $wdog.state<>"FALSE" THEN
+        $wdog.state = "FALSE"
+      END
+    END
+;
 ;
     IF NOT SIG(s.debug.mode) THEN
       IF SWITCH(REPEAT ) AND NOT SWITCH(TEACH_LOCK ) AND NOT SWITCH(EMERGENCY ) AND NOT SWITCH(CS ) AND NOT SWITCH(ERROR ) THEN
@@ -2921,6 +3132,9 @@ N_INT300    "s.debug.mode|Debug mode"
 	; count.opt
 	; count.ot
 	; count.put
+	; rs7.finish.ack
+	; s.cmd.finish
+	; ~Log
 	; @@@ CONNECTION @@@
 	; RS013N
 	; 192.168.7.102
@@ -2928,11 +3142,17 @@ N_INT300    "s.debug.mode|Debug mode"
 	; @@@ PROGRAM @@@
 	;   Group:Objects:1
 	;     1:id1:F
+	;       .gripper 
 	;     1:id2:F
+	;       .gripper 
 	;     1:id3:F
+	;       .gripper 
 	;     1:id4:F
+	;       .gripper 
 	;     1:id5:F
+	;       .gripper 
 	;     1:id6:F
+	;       .gripper 
 	;   Group:STZ:2
 	;     2:a.teach.stz:F
 	;       .plb 
@@ -3008,6 +3228,8 @@ N_INT300    "s.debug.mode|Debug mode"
 	;       .ct2 
 	;       .mid.point 
 	;       .put.stz 
+	;       .locked.zone 
+	;     3:opt.push:F
 	;   Group:Gripper:4
 	;     4:a.test.gripper:F
 	;     4:gripper.pick:F
@@ -3064,12 +3286,13 @@ N_INT300    "s.debug.mode|Debug mode"
 	;     6:pos.put:F
 	;       .$temp 
 	;       .temp 
-	;       .det.put 
 	;       .lock.zone 
 	;       .locked.zone 
+	;       .det.put 
 	;   Group:States:7
 	;     7:state0:F
 	;       .finish 
+	;       .no.ot.stop 
 	;       .det.put 
 	;     7:state1:F
 	;       .current.pos 
@@ -3091,6 +3314,7 @@ N_INT300    "s.debug.mode|Debug mode"
 	;       .current.pos 
 	;       .stz.wait 
 	;       .pos.wait 
+	;       .etalon.stop 
 	;     7:state5:F
 	;       .current.pos 
 	;       .stz.wait 
@@ -3105,24 +3329,40 @@ N_INT300    "s.debug.mode|Debug mode"
 	;       .i 
 	;       .j 
 	;     7:state7:F
+	;       .gripper 
 	;     7:state8:F
 	;     7:state9:F
+	;       .m1 
+	;       .m2 
+	;       .m3 
+	;       .etalon.stop 
 	;     7:state100:F
 	;     7:state101:F
 	;     7:state102:F
+	;       .etalon.stop 
 	;       .tare.chg 
+	;       .det.picked 
 	;       .work 
 	;       .locked.zone 
-	;       .det.picked 
 	;     7:state103:F
 	;     7:state104:F
 	;       .m1 
 	;       .m2 
 	;       .m3 
+	;       .no.ot.stop 
+	;       .det.picked 
+	;       .work 
+	;       .locked.zone 
+	;       .tare.chg 
+	;       .etalon.stop 
+	;       .finish 
+	;       .finish.ack 
+	;       .tare.ack 
 	;     7:state105:F
 	;     7:state106:F
 	;     7:state255:F
 	;   Group:Utilities:8
+	;     8:ship.pos:F
 	;     8:a.home:F
 	;     8:a.align:F
 	;     8:safe.home:F
@@ -3185,11 +3425,15 @@ N_INT300    "s.debug.mode|Debug mode"
 	;       .status 
 	;       .$temp 
 	;       .i 
-	;       .$data[] 
 	;     9:tcp.log.pc:B
 	;       .$msg 
 	;       .i 
 	;   0:autostart.pc:B
+	;     .$rob.name 
+	;     .cont.no 
+	;     .robot.no 
+	;     .$robot.str 
+	;     .$cont.str 
 	;   0:errstart.pc:B
 	;   Group:Initialization:10
 	;     10:set.io.pc:B
@@ -3198,24 +3442,35 @@ N_INT300    "s.debug.mode|Debug mode"
 	;       .locked.zone 
 	;       .finish.ack 
 	;       .put.ack 
+	;       .det.picked 
+	;       .etalon.stop 
 	;       .tare.ack 
 	;       .finish 
 	;       .detail.put 
-	;       .det.picked 
-	;       .det.put 
 	;       .lock.zone 
+	;       .det.put 
+	;       .no.ot.stop 
 	;     10:set.vars.pc:B
 	;       .i 
 	;       .n 
 	;       .$name 
+	;       .gripper 
 	;   Group:Watchdog:11
 	;     11:watchdog.pc:B
-	;       .put.ack 
-	;       .detail.put 
+	;       .last.pos 
+	;       .current.pos 
+	;       .c1 
+	;       .c2 
+	;       .c3 
+	;       .c4 
+	;       .c5 
 	;     11:check.tasks.pc:B
 	;     11:check.disp.pc:B
 	;     11:check.zone.pc:B
 	;     11:check.teach.pc:B
+	;   Group:Logs:12
+	;     12:log.pc2:B
+	;       .$msg 
 	; @@@ TRANS @@@
 	; ot.point[] OT point i, j
 	; opt.point[] OPT point i, j
@@ -3236,6 +3491,8 @@ N_INT300    "s.debug.mode|Debug mode"
 	; #opt.put.safe Safe point before put OTP to STZ
 	; #opt.take.safe Safe point for taking OTP
 	; #pos.point[] Positioner point for object i
+	; #push[] 
+	; #push.appro[] 
 	; @@@ REALS @@@
 	; tcp.socket TCP socket ID
 	; tcp.ena Enable TCP connect display
@@ -3246,7 +3503,7 @@ N_INT300    "s.debug.mode|Debug mode"
 	; tcp.port TCP port
 	; state State variable
 	; current.gripper Current gripper in robot (0,1,2,3)
-	; pg.gripper Object data: Gripper in current program
+	; pg13.gripper Object data: Gripper in current program for RS013
 	; hmi.gripper HMI gripper number for teach and debug
 	; max.count.ot Maximum count of OT in task
 	; detail.count Count of details in tares
@@ -3292,6 +3549,11 @@ N_INT300    "s.debug.mode|Debug mode"
 	; spc.tare.count Object data: Max details in tare with spacer
 	; detail.spec Detail specification
 	; etalon.id Etalon ID for current object
+	; pg7.gripper Object data: Gripper in current program for RS007
+	; layout Put layout
+	; direction 
+	; pg.gripper 
+	; wdog.tmr 
 	; @@@ STRINGS @@@
 	; $tcp.ip Server PC IP address
 	; $log.entry[] Log entry
@@ -3299,6 +3561,7 @@ N_INT300    "s.debug.mode|Debug mode"
 	; $pg.name Program name (same as in machine)
 	; $ot.data Used OT cells string
 	; $opt.data Used OPT cells string
+	; $wdog.state 
 	; @@@ INTEGER @@@
 	; @@@ SIGNALS @@@
 	; release.tare !Release tare!
@@ -3369,9 +3632,14 @@ N_INT300    "s.debug.mode|Debug mode"
 	; s.tcp.log Add log record for tcp.log
 	; rs7.etalon.stop Etalon measurement was bad, need to stop
 	; do.automatic Robot in automatic mode
+	; rs13.opt.chg RS013 is in change OPT
+	; rs13.no.ot.stop 
+	; s.cmd.n.op.stop 
+	; rs13.ot.oddity[] FFU
 	; @@@ TOOLS @@@
 	; tool.pin Tool for calibration pin and tare
 	; tool.pick[] Gripper 3 tool
+	; tool.teach.stz 
 	; @@@ BASE @@@
 	; @@@ FRAME @@@
 	; stz.frame 
@@ -3388,110 +3656,115 @@ tool.pin -85.070000 -205.369995 -19.860001 67.500000 70.000000 0.000000
 tool.pick[3] -2.000000 0.000000 171.199997 -113.500000 180.000000 0.000000
 tool.pick[2] -5.960000 -6.028000 171.199997 -113.500000 180.000000 0.000000
 tool.pick[1] -5.960000 -6.028000 171.199997 -113.500000 180.000000 0.000000
-ot.point[1,1] -983.301270 -788.295532 253.901215 2.341933 89.325150 179.865494
-ot.point[1,2] -982.205933 -788.446716 154.354309 2.021118 89.585609 179.872833
-ot.point[1,3] -980.928406 -788.668457 53.915634 2.341933 89.325150 179.865494
-ot.point[1,4] -979.742004 -788.854919 -46.077179 2.341933 89.325150 179.865494
-ot.point[1,5] -978.555603 -789.041382 -146.069946 2.341933 89.325150 179.865494
-ot.point[1,6] -977.369202 -789.227905 -246.062744 2.341933 89.325150 179.865494
-ot.point[1,7] -976.182739 -789.414368 -346.055573 2.341933 89.325150 179.865494
-ot.point[1,8] -974.996338 -789.600830 -446.048370 2.341933 89.325150 179.865494
-ot.point[1,9] -973.809937 -789.787292 -546.041138 2.341933 89.325150 179.865494
-ot.point[1,10] -972.623535 -789.973755 -646.033936 2.341933 89.325150 179.865494
-ot.point[1,11] -971.437073 -790.160217 -746.026733 2.341933 89.325150 179.865494
-ot.point[1,12] -970.250671 -790.346680 -846.019531 2.341933 89.325150 179.865494
-ot.point[2,1] -1002.846680 -298.960785 252.693848 2.343762 89.323959 179.866272
-ot.point[2,2] -1001.694946 -298.977844 152.408463 2.133055 89.320068 179.838821
-ot.point[2,3] -1000.207886 -298.282837 52.979111 1.822335 89.497353 179.872803
-ot.point[2,4] -999.751343 -299.264984 -47.227478 2.341933 89.325150 179.865494
-ot.point[2,5] -998.564941 -299.451447 -147.220245 2.341933 89.325150 179.865494
-ot.point[2,6] -997.378479 -299.637909 -247.213043 2.341933 89.325150 179.865494
-ot.point[2,7] -996.192078 -299.824371 -347.205902 2.341933 89.325150 179.865494
-ot.point[2,8] -995.005676 -300.010864 -447.198700 2.341933 89.325150 179.865494
-ot.point[2,9] -993.819214 -300.197327 -547.191406 2.341933 89.325150 179.865494
-ot.point[2,10] -992.632813 -300.383789 -647.184204 2.341933 89.325150 179.865494
-ot.point[2,11] -991.446411 -300.570251 -747.177002 2.341933 89.325150 179.865494
-ot.point[2,12] -990.260010 -300.756714 -847.169800 2.341933 89.325150 179.865494
-ot.point[3,1] -1021.325562 189.536331 250.764481 2.079461 89.326508 179.866104
-ot.point[3,2] -1020.238037 190.680695 151.571289 2.124365 89.320251 179.865372
-ot.point[3,3] -1018.863525 190.578827 51.628357 2.023588 89.324493 179.869720
-ot.point[3,4] -1018.040833 189.208405 -48.064903 2.164302 89.550728 179.870728
-ot.point[3,5] -1016.762573 189.242493 -147.942932 2.095623 89.747086 179.866104
-ot.point[3,6] -1015.624512 188.835083 -247.413605 1.780555 89.522888 179.870010
-ot.point[3,7] -1016.201416 189.765564 -348.356171 2.341933 89.325150 179.865494
-ot.point[3,8] -1015.014954 189.579102 -448.348969 2.341933 89.325150 179.865494
-ot.point[3,9] -1013.828552 189.392639 -548.341675 2.341933 89.325150 179.865494
-ot.point[3,10] -1012.642151 189.206177 -648.334473 2.341933 89.325150 179.865494
-ot.point[3,11] -1011.455688 189.019714 -748.327271 2.341933 89.325150 179.865494
-ot.point[3,12] -1010.269287 188.833252 -848.320190 2.341933 89.325150 179.865494
-ot.point[4,1] -1041.988525 679.001526 252.418839 2.193199 89.431305 179.871170
-ot.point[4,2] -1040.544678 678.889832 150.880066 1.943597 89.582031 179.944366
-ot.point[4,3] -1039.993896 678.563477 51.039490 2.198490 89.448624 179.870636
-ot.point[4,4] -1037.967896 678.061340 -47.551163 2.459561 89.317101 179.839859
-ot.point[4,5] -1036.542725 678.144897 -148.944183 2.427061 89.552307 179.860031
-ot.point[4,6] -1035.347046 677.990784 -247.383636 2.061972 89.948349 179.862000
-ot.point[4,7] -1035.237061 677.379028 -347.585510 1.939114 89.319771 179.868179
-ot.point[4,8] -1032.201050 677.183228 -446.882416 2.161867 90.027191 179.863342
-ot.point[4,9] -1031.900635 677.259277 -548.403809 2.130295 89.320984 179.863541
-ot.point[4,10] -1032.651489 678.796143 -649.484863 2.341933 89.325150 179.865494
-ot.point[4,11] -1031.465088 678.609619 -749.477661 2.341933 89.325150 179.865494
-ot.point[4,12] -1030.278564 678.423218 -849.470459 2.341933 89.325150 179.865494
-opt.point[1,5] -464.649078 1117.833618 -42.448326 -88.449577 89.841476 179.580917
-opt.point[1,4] -465.668518 1117.750488 37.904358 -88.133888 89.889687 -179.815018
-opt.point[1,3] -466.276123 1117.581299 115.708862 -88.131294 89.893593 -179.587143
-opt.point[1,2] -466.458435 1118.655518 196.283279 -87.976616 89.504700 -179.969055
-opt.point[1,1] -467.890869 1118.399902 276.287659 -87.755272 89.895615 179.631821
-opt.point[1,6] -464.204193 1117.111206 -122.380806 -87.886330 89.972328 -179.579346
-opt.point[1,7] -470.967804 1117.428223 -202.377838 -88.128929 89.896347 179.629318
-opt.point[1,8] -471.480408 1117.266602 -282.376038 -88.128929 89.896347 179.629318
-opt.point[1,9] -471.993011 1117.105103 -362.374207 -88.128929 89.896347 179.629318
-opt.point[1,10] -472.505585 1116.943604 -442.372437 -88.128929 89.896347 179.629318
-opt.point[2,1] 140.868256 1140.382324 281.254578 -87.872887 89.895187 179.627991
-opt.point[2,2] 140.920364 1140.070068 201.409729 -87.916298 89.854790 179.689819
-opt.point[2,3] 141.973984 1140.098022 121.605438 -88.063309 90.388512 179.629608
-opt.point[2,4] 142.851822 1139.372681 42.719284 -88.043335 90.514503 179.758728
-opt.point[2,5] 139.719666 1137.660645 -46.327911 -88.128929 89.896347 179.629318
-opt.point[2,6] 139.207092 1137.499023 -126.326111 -88.128929 89.896347 179.629318
-opt.point[2,7] 138.694458 1137.337524 -206.324341 -88.128929 89.896347 179.629318
-opt.point[2,8] 138.181885 1137.176025 -286.322510 -88.128929 89.896347 179.629318
-opt.point[2,9] 137.669312 1137.014404 -366.320679 -88.128929 89.896347 179.629318
-opt.point[2,10] 137.156677 1136.852905 -446.318909 -88.128929 89.896347 179.629318
-opt.point[3,1] 749.365173 1163.661011 287.878082 -88.122612 89.613457 -179.569077
-opt.point[3,2] 750.179871 1163.896484 208.089630 -88.264069 90.334930 179.735077
-opt.point[3,3] 750.407166 1157.893066 109.722000 -88.128929 89.896347 179.629318
-opt.point[3,4] 749.894592 1157.731445 29.723785 -88.128929 89.896347 179.629318
-opt.point[3,5] 749.381897 1157.569946 -50.274384 -88.128929 89.896347 179.629318
-opt.point[3,6] 748.869324 1157.408447 -130.272583 -88.128929 89.896347 179.629318
-opt.point[3,7] 748.356750 1157.246826 -210.270813 -88.128929 89.896347 179.629318
-opt.point[3,8] 747.844177 1157.085327 -290.269043 -88.128929 89.896347 179.629318
-opt.point[3,9] 747.331604 1156.923828 -370.267212 -88.128929 89.896347 179.629318
-opt.point[3,10] 746.819031 1156.762207 -450.265442 -88.128929 89.896347 179.629318
-stz.frame 988.691956 -343.384247 109.344147 -173.771179 1.999711 -7.460209
+ot.point[1,1] -1111.654907 -739.913818 300.010284 0.736410 89.897484 179.961014
+ot.point[1,2] -1111.369141 -740.069580 199.625275 0.663807 89.977646 -179.789429
+ot.point[1,3] -1111.458252 -739.790161 100.705551 0.986979 89.941795 -179.868729
+ot.point[1,4] -1111.057373 -740.725403 1.262161 0.590529 89.881622 179.598358
+ot.point[1,5] -1110.757080 -740.478455 -99.105347 0.565860 90.564705 179.609573
+ot.point[1,6] -1110.897339 -741.133179 -198.834229 0.485536 89.542709 179.729446
+ot.point[1,7] -1111.472656 -741.500732 -299.220276 0.628907 89.987381 179.986176
+ot.point[1,8] -1110.711426 -741.893311 -399.577667 0.867267 89.985268 179.988525
+ot.point[1,9] -1110.729980 -742.304443 -498.647186 0.918011 89.898216 179.963440
+ot.point[1,10] -1110.045654 -743.064758 -598.980469 0.737526 89.895813 179.962921
+ot.point[1,11] -1110.022949 -743.103455 -699.565796 0.413598 89.891380 179.920242
+ot.point[1,12] -1110.116089 -743.437073 -798.870239 0.523253 89.894653 179.962967
+ot.point[2,1] -1119.717163 -250.408249 298.794495 0.731798 89.896118 179.860947
+ot.point[2,2] -1119.510986 -250.742920 199.229065 0.732768 89.892517 179.964493
+ot.point[2,3] -1119.052246 -251.078979 98.541916 0.669038 89.896530 -179.906265
+ot.point[2,4] -1118.565430 -251.846237 -0.942902 0.732930 89.896118 179.963226
+ot.point[2,5] -1118.614868 -251.328354 -101.489243 0.736556 89.895119 179.923752
+ot.point[2,6] -1118.485596 -251.019119 -201.438934 0.377266 89.617615 179.628723
+ot.point[2,7] -1118.302612 -252.113205 -300.606140 0.485951 89.893646 179.961884
+ot.point[2,8] -1117.796875 -252.930603 -400.342224 0.436053 90.006752 179.962311
+ot.point[2,9] -1117.939697 -251.673553 -500.349487 0.510684 89.895012 179.962021
+ot.point[2,10] -1117.700928 -253.439590 -600.488831 0.535911 89.894524 179.963211
+ot.point[2,11] -1116.388428 -253.557999 -700.811523 0.418628 89.893997 179.950012
+ot.point[2,12] -1117.160645 -254.437271 -800.364563 0.734386 89.892822 179.961395
+ot.point[3,1] -1125.477539 237.423615 297.821838 0.737709 89.941254 179.903122
+ot.point[3,2] -1125.482910 238.289276 196.551727 0.735883 89.895164 179.960815
+ot.point[3,3] -1124.346802 237.944138 97.539612 0.732866 89.897110 179.961533
+ot.point[3,4] -1123.657959 237.382080 -3.162827 0.733291 90.432663 179.962051
+ot.point[3,5] -1124.287598 237.883133 -102.039978 0.732394 89.892296 179.962784
+ot.point[3,6] -1123.658813 237.367798 -202.480652 0.373593 89.893196 179.961884
+ot.point[3,7] -1123.853638 236.265610 -301.203735 0.733813 89.895332 179.960510
+ot.point[3,8] -1122.936279 236.706314 -401.833557 0.738421 89.895683 179.960388
+ot.point[3,9] -1122.611328 236.058990 -501.025879 0.715740 90.469109 179.954636
+ot.point[3,10] -1122.256592 236.817459 -602.069824 0.360843 89.898277 179.960358
+ot.point[3,11] -1121.770996 235.748108 -703.458130 0.498732 89.897102 179.959946
+ot.point[3,12] -1121.316650 235.073242 -801.565063 0.614506 89.897026 179.961853
+ot.point[4,1] -1133.979370 727.690918 296.780609 0.733801 89.895287 179.959793
+ot.point[4,2] -1132.682129 727.293823 197.394394 0.735658 89.891945 179.957245
+ot.point[4,3] -1132.569580 727.766174 97.452484 0.584195 89.892494 179.957230
+ot.point[4,4] -1131.822510 726.716675 -2.797195 0.604038 89.894531 179.957718
+ot.point[4,5] -1130.892700 726.926147 -101.870880 0.211270 89.891434 179.957596
+ot.point[4,6] -1130.360474 726.408752 -201.634247 0.308122 89.894325 179.961105
+ot.point[4,7] -1129.766846 725.911560 -301.125519 0.997188 89.897339 179.959167
+ot.point[4,8] -1128.462036 726.190735 -402.914124 0.857846 90.353661 179.959656
+ot.point[4,9] -1129.845459 726.129761 -502.727722 0.496983 89.895515 179.959534
+ot.point[4,10] -1128.630859 725.219971 -602.626831 0.735067 89.894585 179.958817
+ot.point[4,11] -1128.067383 725.600586 -702.881592 0.384235 89.891808 179.956802
+ot.point[4,12] -1128.350830 724.875061 -800.114441 0.582651 89.893852 179.956451
+opt.point[1,5] -629.917603 1169.801147 -1.113297 -89.581078 89.984138 179.651932
+opt.point[1,4] -630.320496 1169.627686 78.074677 -89.297699 90.470970 179.650391
+opt.point[1,3] -630.840332 1168.696533 158.936188 -89.601089 90.468666 179.646561
+opt.point[1,2] -630.655579 1168.490723 239.020737 -89.594971 89.601250 179.646301
+opt.point[1,1] -631.685608 1168.400513 319.015869 -89.601135 90.469864 179.645187
+opt.point[1,6] -629.479858 1169.978516 -78.251968 -89.638512 90.503296 179.675430
+opt.point[1,7] -629.059631 1171.140625 -161.026154 -89.640205 90.468040 179.282379
+opt.point[1,8] -628.538269 1171.049805 -240.408813 -89.405479 90.467392 179.648270
+opt.point[1,9] -629.140076 1171.364380 -321.279724 -89.394127 90.469261 179.647903
+opt.point[1,10] -628.669556 1172.164062 -399.897339 -89.597221 90.466919 179.648193
+opt.point[2,1] -21.808992 1175.382568 315.229797 -89.595238 90.466522 179.643005
+opt.point[2,2] -22.219978 1175.921631 237.925934 -89.341194 89.483421 179.651688
+opt.point[2,3] -22.710728 1175.207642 157.563995 -89.598274 90.468819 179.645767
+opt.point[2,4] -21.407572 1176.899414 77.910309 -89.601936 90.467896 179.646744
+opt.point[2,5] -21.638943 1176.298584 -1.211349 -90.005096 90.463722 179.333420
+opt.point[2,6] -21.028332 1177.123535 -80.911247 -89.794907 90.771591 179.533264
+opt.point[2,7] -20.423031 1176.523437 -160.862854 -89.602203 90.781036 179.645432
+opt.point[2,8] -20.607676 1177.213257 -240.968643 -89.829315 90.983459 179.642822
+opt.point[2,9] -20.043625 1176.714844 -321.063171 -89.610970 91.024788 179.644623
+opt.point[2,10] -20.108852 1177.242187 -400.928223 -89.911018 90.468697 179.643768
+opt.point[3,1] 586.341980 1182.977661 319.447784 -89.387474 90.412498 179.759888
+opt.point[3,2] 586.599426 1183.727905 239.512939 -89.362350 90.409515 179.378067
+opt.point[3,3] 586.409058 1182.944092 159.906281 -89.362816 90.406548 179.377106
+opt.point[3,4] 586.531311 1182.707764 79.594635 -89.461105 90.932907 179.376953
+opt.point[3,5] 587.182068 1182.476807 -2.380333 -89.789978 90.925163 179.371338
+opt.point[3,6] 587.362793 1183.365234 -79.906029 -89.463066 90.502296 179.373276
+opt.point[3,7] 587.794128 1182.431519 -160.216370 -89.467316 90.903534 179.372711
+opt.point[3,8] 588.255859 1182.869507 -238.759796 -89.691757 90.900261 179.391769
+opt.point[3,9] 588.266479 1182.886719 -320.512634 -89.766251 89.898415 179.213760
+opt.point[3,10] 588.891357 1182.884766 -400.920135 -89.698425 90.473976 178.915314
+stz.frame 1017.526978 -393.391937 95.348770 178.919846 0.115481 1.379133
+tool.teach.stz -103.050003 -248.779999 -36.959999 67.500000 70.000000 0.000000
 .END
 .JOINTS
 #homyak -45.000000 -30.000002 -120.000008 0.000000 -90.000000 22.500000
-#tool.point[3] 152.513062 36.866146 -111.188293 3.732012 -30.937502 -42.612892
-#tool.point[2] 146.547989 31.255722 -122.853958 3.178916 -25.219118 -36.335194
-#tool.point[1] 138.009109 26.380774 -133.075394 2.785166 -19.660723 -27.889797
-#prb 146.296967 26.655985 -89.838234 -54.878906 71.183853 -105.880890
-#prt 134.565048 41.486687 -65.941849 -50.747608 57.059559 -105.200981
-#plt 111.817329 21.086079 -96.765480 -25.279980 52.104725 -133.340485
-#plb 120.860649 1.281152 -121.462181 -32.857822 60.155643 -127.981834
-#opt.put 138.937363 13.391503 -112.955795 -14.236524 -67.871483 -18.503794
-#pick.in 130.503326 12.590690 -97.431877 -0.818260 -69.914940 -15.682721
+#tool.point[3] 152.468979 39.979961 -103.785278 0.009844 -36.182102 -40.835827
+#tool.point[2] 147.377747 33.842480 -116.311241 0.012920 -29.801104 -35.746784
+#tool.point[1] 140.325165 28.539387 -127.252174 0.017227 -24.169922 -28.705080
+#prb 146.058258 30.649822 -79.780716 -57.429665 67.489700 -100.066101
+#prt 134.807739 46.821167 -53.884495 -55.575966 53.100361 -97.663338
+#plt 113.957413 23.380470 -90.331917 -29.980986 48.877491 -127.864609
+#plb 123.666023 3.765710 -114.678970 -37.725555 57.652130 -122.111366
+#opt.put 139.791321 18.456614 -106.269028 -15.190752 -69.163750 -20.509375
+#pick.in 131.972565 20.340382 -89.749924 -0.814570 -69.824982 -17.155291
 #ot.take.safe -35.996922 10.180959 -121.562561 -5.131054 -67.795944 11.253090
 #ot.put.safe 35.497650 -37.572060 -132.300156 16.290791 -96.920013 77.315880
-#ot.put 64.851494 54.648605 -114.222755 15.314415 -29.544985 31.716595
+#ot.put 64.605232 55.283337 -113.476852 17.697216 -29.917833 31.399326
 #pos.wait 62.065971 -11.377430 -122.238724 -0.289775 -69.805077 52.576439
-#stz.wait 153.260971 -5.244692 -116.123528 -0.757969 -68.765495 -38.446480
-#opt.put.safe 156.298325 -5.104900 -119.704788 -18.823099 -74.562843 -35.173141
+#stz.wait 143.892761 5.799493 -104.503166 -0.795498 -69.457626 -29.072502
+#opt.put.safe 160.053391 -1.668782 -116.894211 -19.530001 -72.850349 -38.309544
 #opt.take.safe 30.699938 -18.854830 -127.388382 0.332227 -91.897202 24.509468
-#pos.point[1] 83.419533 43.293804 -103.687843 -31.818077 -39.768448 -35.524250
-#pos.point[4] 83.701935 51.042030 -87.643524 -29.811180 -50.703964 -40.880169
-#pos.point[2] 82.494072 47.514668 -96.066505 -33.877884 -44.752125 -34.387962
-#pos.point[3] 82.330032 41.277905 -109.930130 -35.967831 -37.481236 -28.508781
-#pos.point[5] 84.536041 58.034710 -72.491096 -26.333878 -53.942188 -46.611683
-#pos.point[6] 84.417282 54.733280 -79.618431 -26.207754 -53.467030 -45.375008
+#pos.point[1] 83.583176 44.026722 -103.849152 -32.444386 -38.966450 -34.892979
+#pos.point[4] 84.780319 50.917202 -88.309273 -26.680868 -48.481979 -40.995033
+#pos.point[2] 84.642494 46.813137 -97.024872 -30.374737 -42.035755 -39.589493
+#pos.point[3] 82.818977 40.690620 -110.485077 -36.123489 -37.370686 -28.853739
+#pos.point[5] 84.910202 58.561409 -72.906898 -26.703018 -52.976074 -46.407791
+#pos.point[6] 85.206505 54.985500 -80.083771 -24.648750 -52.014774 -46.814835
+#push[1] 129.465469 12.173496 -112.137871 -12.591388 -72.061386 -10.240178
+#push[2] 144.050842 29.893173 -87.567604 -16.258799 -75.406723 -25.162800
+#push.appro[1] 129.473801 10.918990 -111.317017 -12.458496 -74.086304 -10.716833
+#push.appro[2] 144.054016 28.953665 -86.818436 -16.144365 -77.028580 -25.650068
 .END
 .REALS
 release.tare = 1
@@ -3537,10 +3810,10 @@ s.cmd.pneum.op = 2235
 s.force.in[1] = 2221
 s.force.in[2] = 2222
 current.gripper = 1
-pg.gripper = 2
+pg13.gripper = 1
 hmi.gripper = 1
 max.count.ot = 3
-detail.count = 150
+detail.count = 308
 max.count.opt = 2
 count.put = 0
 count.ot = 2
@@ -3566,14 +3839,14 @@ s.pr.tch.pos = 2255
 s.apply.grip = 2256
 s.apply.cv = 2257
 s.cmd.put = 2234
-stz.a = 0
-hmi.obj.id = 5
-hmi.opt.i = 1
+stz.a = 180
+hmi.obj.id = 2
+hmi.opt.i = 3
 hmi.opt.j = 1
 hmi.ot.i = 4
-hmi.ot.j = 4
-stz.x = 143.642
-stz.y = 275.829
+hmi.ot.j = 12
+stz.x = 57.4195
+stz.y = 36.5653
 cv.x.minus[1] = 0.02
 cv.x.minus[2] = 0.02
 cv.x.minus[3] = 0.01
@@ -3606,12 +3879,12 @@ cv.x.minus[29] = 0
 cv.x.minus[30] = 0
 cv.x.minus[31] = 0
 cv.x.minus[32] = 0
-cv.x.plus[1] = 0.02
+cv.x.plus[1] = 0.005
 cv.x.plus[2] = 0.01
 cv.x.plus[3] = 0.01
-cv.x.plus[4] = 0.01
+cv.x.plus[4] = 0.001
 cv.x.plus[5] = 0
-cv.x.plus[6] = 0.025
+cv.x.plus[6] = 0.01
 cv.x.plus[7] = 0
 cv.x.plus[8] = 0
 cv.x.plus[9] = 0
@@ -3638,10 +3911,10 @@ cv.x.plus[29] = 0
 cv.x.plus[30] = 0
 cv.x.plus[31] = 0
 cv.x.plus[32] = 0
-cv.y.minus[1] = 0.01
+cv.y.minus[1] = 0.005
 cv.y.minus[2] = 0.001
 cv.y.minus[3] = 0.007
-cv.y.minus[4] = 0.005
+cv.y.minus[4] = 0.01
 cv.y.minus[5] = 0.008
 cv.y.minus[6] = 0
 cv.y.minus[7] = 0
@@ -3675,7 +3948,7 @@ cv.y.plus[2] = 0.01
 cv.y.plus[3] = 0.005
 cv.y.plus[4] = 0.012
 cv.y.plus[5] = 0.01
-cv.y.plus[6] = 0.015
+cv.y.plus[6] = 0.01
 cv.y.plus[7] = 0
 cv.y.plus[8] = 0
 cv.y.plus[9] = 0
@@ -3702,34 +3975,34 @@ cv.y.plus[29] = 0
 cv.y.plus[30] = 0
 cv.y.plus[31] = 0
 cv.y.plus[32] = 0
-grip.180xsh[1] = -2
-grip.180xsh[2] = -2
+grip.180xsh[1] = -6
+grip.180xsh[2] = -5
 grip.180xsh[3] = 0
-grip.180ysh[1] = 5
-grip.180ysh[2] = 3
+grip.180ysh[1] = 4
+grip.180ysh[2] = 4
 grip.180ysh[3] = 0
-grip.xsh[1] = 4
-grip.xsh[2] = 3
-grip.xsh[3] = 2
-grip.ysh[1] = -2
+grip.xsh[1] = 2.5
+grip.xsh[2] = 1.5
+grip.xsh[3] = -3.5
+grip.ysh[1] = -2.5
 grip.ysh[2] = -2
 grip.ysh[3] = -1
 grip.zsh[1] = 1
 grip.zsh[2] = 1.5
 grip.zsh[3] = 7
 center.x = 147.8
-hmi.g180x = -2
-hmi.g180y = 5
-hmi.gx = 4
-hmi.gy = -2
+hmi.g180x = -6
+hmi.g180y = 4
+hmi.gx = 2.5
+hmi.gy = -2.5
 hmi.gz = 1
 hmi.x.minus = 0.02
-hmi.x.plus = 0
+hmi.x.plus = 0.01
 rs13.tare.ack = 18
-hmi.y.minus = 0.008
+hmi.y.minus = 0.001
 hmi.y.plus = 0.01
 keep.gripper = 1
-keep.object = 5
+keep.object = 2
 rs7.tare.chg = 1018
 center.y = 245.4
 s.cmd.chg.opt = 2237
@@ -3742,9 +4015,9 @@ rs7.put.ack = 1021
 s.hmi.pneum.op = 2258
 s.hmi.pneum.cl = 2259
 s.hmi.get.cv = 2260
-object.length = 27.5
-max.tare.count = 10
-object.id = 1
+object.length = 40
+max.tare.count = 105
+object.id = 2
 opt.cell[1,1] = 3
 opt.cell[1,2] = 1
 opt.cell[2,1] = 3
@@ -3790,7 +4063,7 @@ rs13.det.put[4] = 29
 rs13.det.put[5] = 30
 rs13.det.put[6] = 31
 rs13.det.put[7] = 32
-detail.spec = 0
+detail.spec = 1
 cv.x.minus[33] = 0
 cv.x.minus[34] = 0
 cv.x.minus[35] = 0
@@ -3922,143 +4195,160 @@ cv.y.plus[64] = 0
 s.pr.tst.ot = 2249
 s.pr.tst.opt = 2247
 rs13.lock.zone = 22
-etalon.id = 1
+etalon.id = 2
 s.tcp.log = 2204
 rs7.etalon.stop = 1033
 do.automatic = 2012
+pg7.gripper = 1
+layout = 0
+rs13.opt.chg = 33
+direction = 1
+pg.gripper = 2
+rs13.no.ot.stop = 34
+s.cmd.n.op.stop = 2242
+wdog.tmr = 180
+rs13.ot.oddity[0] = 35
+rs13.ot.oddity[1] = 36
+rs13.ot.oddity[2] = 37
+rs13.ot.oddity[3] = 38
+rs13.ot.oddity[4] = 39
+rs13.ot.oddity[5] = 40
+rs13.ot.oddity[6] = 41
+rs13.ot.oddity[7] = 42
 .END
 .STRINGS
 $tcp.ip = "192.168.7.100"
-$log.entry[0] = "15:48:48 POSITIONEREMPTY;\n"
-$log.entry[1] = "15:48:48 POSITIONEREMPTY;\n"
-$log.entry[2] = "15:48:48 POSITIONEREMPTY;\n"
-$log.entry[3] = "15:48:49 POSITIONEREMPTY;\n"
-$log.entry[4] = "15:48:49 POSITIONEREMPTY;\n"
-$log.entry[5] = "15:48:49 POSITIONEREMPTY;\n"
-$log.entry[6] = "15:48:50 POSITIONEREMPTY;\n"
-$log.entry[7] = "15:48:50 POSITIONEREMPTY;\n"
-$log.entry[8] = "15:48:50 POSITIONEREMPTY;\n"
-$log.entry[9] = "15:48:50 POSITIONEREMPTY;\n"
-$log.entry[10] = "15:48:51 POSITIONEREMPTY;\n"
-$log.entry[11] = "15:48:51 POSITIONEREMPTY;\n"
-$log.entry[12] = "15:48:51 POSITIONEREMPTY;\n"
-$log.entry[13] = "15:48:51 POSITIONEREMPTY;\n"
-$log.entry[14] = "15:48:52 POSITIONEREMPTY;\n"
-$log.entry[15] = "15:48:52 POSITIONEREMPTY;\n"
-$log.entry[16] = "15:48:52 POSITIONEREMPTY;\n"
-$log.entry[17] = "15:48:52 POSITIONEREMPTY;\n"
-$log.entry[18] = "15:48:53 POSITIONEREMPTY;\n"
-$log.entry[19] = "15:48:53 POSITIONEREMPTY;\n"
-$log.entry[20] = "15:48:53 POSITIONEREMPTY;\n"
-$log.entry[21] = "15:48:53 POSITIONEREMPTY;\n"
-$log.entry[22] = "15:48:54 POSITIONEREMPTY;\n"
-$log.entry[23] = "15:48:54 POSITIONEREMPTY;\n"
-$log.entry[24] = "15:48:54 POSITIONEREMPTY;\n"
-$log.entry[25] = "15:48:54 POSITIONEREMPTY;\n"
-$log.entry[26] = "15:48:55 POSITIONEREMPTY;\n"
-$log.entry[27] = "15:48:55 POSITIONEREMPTY;\n"
-$log.entry[28] = "15:48:55 POSITIONEREMPTY;\n"
-$log.entry[29] = "15:48:55 POSITIONEREMPTY;\n"
-$log.entry[30] = "15:48:56 POSITIONEREMPTY;\n"
-$log.entry[31] = "15:48:56 POSITIONEREMPTY;\n"
-$log.entry[32] = "15:48:56 POSITIONEREMPTY;\n"
-$log.entry[33] = "15:48:56 POSITIONEREMPTY;\n"
-$log.entry[34] = "15:48:57 POSITIONEREMPTY;\n"
-$log.entry[35] = "15:48:57 POSITIONEREMPTY;\n"
-$log.entry[36] = "15:48:57 POSITIONEREMPTY;\n"
-$log.entry[37] = "15:48:57 CYCLEON;\n"
-$log.entry[38] = "15:48:58 POSITIONEREMPTY;\n"
-$log.entry[39] = "15:48:58 POSITIONEREMPTY;\n"
-$log.entry[40] = "15:48:58 POSITIONEREMPTY;\n"
-$log.entry[41] = "15:48:58 POSITIONEREMPTY;\n"
-$log.entry[42] = "15:48:58 POSITIONEREMPTY;\n"
-$log.entry[43] = "15:48:59 POSITIONEREMPTY;\n"
-$log.entry[44] = "15:48:59 POSITIONEREMPTY;\n"
-$log.entry[45] = "15:48:59 POSITIONEREMPTY;\n"
-$log.entry[46] = "15:49:00 POSITIONEREMPTY;\n"
-$log.entry[47] = "15:49:00 POSITIONEREMPTY;\n"
-$log.entry[48] = "15:49:00 POSITIONEREMPTY;\n"
-$log.entry[49] = "15:49:00 POSITIONEREMPTY;\n"
-$log.entry[50] = "15:49:01 POSITIONEREMPTY;\n"
-$log.entry[51] = "15:49:01 POSITIONEREMPTY;\n"
-$log.entry[52] = "15:49:01 POSITIONEREMPTY;\n"
-$log.entry[53] = "15:49:01 POSITIONEREMPTY;\n"
-$log.entry[54] = "15:49:02 POSITIONEREMPTY;\n"
-$log.entry[55] = "15:49:02 POSITIONEREMPTY;\n"
-$log.entry[56] = "15:49:02 POSITIONEREMPTY;\n"
-$log.entry[57] = "15:49:02 POSITIONEREMPTY;\n"
-$log.entry[58] = "15:49:03 POSITIONEREMPTY;\n"
-$log.entry[59] = "15:49:03 POSITIONEREMPTY;\n"
-$log.entry[60] = "15:49:03 POSITIONEREMPTY;\n"
-$log.entry[61] = "15:49:03 POSITIONEREMPTY;\n"
-$log.entry[62] = "15:49:04 POSITIONEREMPTY;\n"
-$log.entry[63] = "15:49:04 POSITIONEREMPTY;\n"
-$log.entry[64] = "15:49:04 POSITIONEREMPTY;\n"
-$log.entry[65] = "15:49:04 POSITIONEREMPTY;\n"
-$log.entry[66] = "15:49:05 POSITIONEREMPTY;\n"
-$log.entry[67] = "15:49:05 POSITIONEREMPTY;\n"
-$log.entry[68] = "15:49:05 POSITIONEREMPTY;\n"
-$log.entry[69] = "15:49:08 CYCLEON;\n"
-$log.entry[70] = "15:49:18 CYCLEON;\n"
-$log.entry[71] = "15:49:29 CYCLEON;\n"
-$log.entry[72] = "15:49:39 CYCLEON;\n"
-$log.entry[73] = "15:49:50 CYCLEON;\n"
-$log.entry[74] = "15:50:01 CYCLEON;\n"
-$log.entry[75] = "15:50:11 CYCLEON;\n"
-$log.entry[76] = "15:50:22 CYCLEON;\n"
-$log.entry[77] = "15:50:32 CYCLEON;\n"
-$log.entry[78] = "15:50:43 CYCLEON;\n"
-$log.entry[79] = "15:50:53 CYCLEON;\n"
-$log.entry[80] = "15:51:04 CYCLEON;\n"
-$log.entry[81] = "15:51:14 CYCLEON;\n"
-$log.entry[82] = "15:51:25 CYCLEON;\n"
-$log.entry[83] = "15:51:35 CYCLEON;\n"
-$log.entry[84] = "15:51:46 CYCLEON;\n"
-$log.entry[85] = "15:51:56 CYCLEON;\n"
-$log.entry[86] = "15:52:07 CYCLEON;\n"
-$log.entry[87] = "15:52:17 CYCLEON;\n"
-$log.entry[88] = "15:52:28 CYCLEON;\n"
-$log.entry[89] = "15:52:38 CYCLEON;\n"
-$log.entry[90] = "15:52:49 CYCLEON;\n"
-$log.entry[91] = "15:52:59 CYCLEON;\n"
-$log.entry[92] = "15:53:45 CYCLEON;\n"
-$log.entry[93] = "15:53:55 CYCLEON;\n"
-$log.entry[94] = "15:54:05 CYCLEON;\n"
-$log.entry[95] = "15:54:16 CYCLEON;\n"
-$log.entry[96] = "15:54:26 CYCLEON;\n"
-$log.entry[97] = "15:54:36 CYCLEON;\n"
-$log.entry[98] = "15:54:46 CYCLEON;\n"
-$log.entry[99] = "15:54:57 CYCLEON;\n"
-$log.entry[100] = "15:55:07 CYCLEON;\n"
-$log.entry[101] = "15:55:17 CYCLEON;\n"
-$log.entry[102] = "15:55:27 CYCLEON;\n"
-$log.entry[103] = "15:55:37 CYCLEON;\n"
-$log.entry[104] = "15:55:48 CYCLEON;\n"
-$log.entry[105] = "15:55:58 CYCLEON;\n"
-$log.entry[106] = "15:56:08 CYCLEON;\n"
-$log.entry[107] = "15:56:18 CYCLEON;\n"
-$log.entry[108] = "15:56:29 CYCLEON;\n"
-$log.entry[109] = "15:56:39 CYCLEON;\n"
-$log.entry[110] = "15:56:49 CYCLEON;\n"
-$log.entry[111] = "15:56:59 CYCLEON;\n"
-$log.entry[112] = "15:57:09 CYCLEON;\n"
-$log.entry[113] = "15:57:20 CYCLEON;\n"
-$log.entry[114] = "15:57:30 CYCLEON;\n"
-$log.entry[115] = "15:57:30 Main program executed"
-$log.entry[116] = "15:57:31 Robot already in home position"
-$log.entry[117] = "15:57:31 State 0: Program reset. Initialization of parameters"
-$log.entry[118] = "15:57:31 State 100: Waiting for start"
-$log.entry[119] = "15:57:40 CYCLEON;\n"
-$log.entry[120] = "15:58:51 CYCLEON;\n"
-$log.entry[121] = "15:59:01 CYCLEON;\n"
-$log.entry[122] = "15:59:11 CYCLEON;\n"
-$log.entry[123] = "15:59:21 CYCLEON;\n"
-$log.entry[124] = "15:59:31 CYCLEON;\n"
-$log.entry[125] = "15:59:41 CYCLEON;\n"
-$log.entry[126] = "15:59:51 CYCLEON;\n"
-$log.entry[127] = "16:00:02 CYCLEON;\n"
+$log.entry[0] = "17:41:20 State 4: Put detail to positioner"
+$log.entry[1] = "17:41:20 Put detail to positioner (ID: 2)"
+$log.entry[2] = "17:41:20 Check if positioner is occupied"
+$log.entry[3] = "17:41:22 Detail counter: 244"
+$log.entry[4] = "17:41:23 State 101: Calculating next step"
+$log.entry[5] = "17:41:23 State 3: Pick from STZ"
+$log.entry[6] = "17:41:23 Pick detail from stz (179.2012, 145.75401, 180)"
+$log.entry[7] = "17:41:25 Wait for unclamp gripper"
+$log.entry[8] = "17:41:29 State 101: Calculating next step"
+$log.entry[9] = "17:41:36 State 4: Put detail to positioner"
+$log.entry[10] = "17:41:36 Put detail to positioner (ID: 2)"
+$log.entry[11] = "17:41:36 Check if positioner is occupied"
+$log.entry[12] = "17:41:38 Detail counter: 245"
+$log.entry[13] = "17:41:39 State 101: Calculating next step"
+$log.entry[14] = "17:41:39 State 3: Pick from STZ"
+$log.entry[15] = "17:41:40 Pick detail from stz (232.47165, 438.71368, 0)"
+$log.entry[16] = "17:41:41 Wait for unclamp gripper"
+$log.entry[17] = "17:41:44 State 101: Calculating next step"
+$log.entry[18] = "17:41:52 State 4: Put detail to positioner"
+$log.entry[19] = "17:41:52 Put detail to positioner (ID: 2)"
+$log.entry[20] = "17:41:53 Check if positioner is occupied"
+$log.entry[21] = "17:41:55 Detail counter: 246"
+$log.entry[22] = "17:41:56 State 101: Calculating next step"
+$log.entry[23] = "17:41:56 State 3: Pick from STZ"
+$log.entry[24] = "17:41:56 Pick detail from stz (271.05295, 385.05496, 0)"
+$log.entry[25] = "17:41:57 Wait for unclamp gripper"
+$log.entry[26] = "17:42:00 State 101: Calculating next step"
+$log.entry[27] = "17:44:09 State 4: Put detail to positioner"
+$log.entry[28] = "17:44:09 Put detail to positioner (ID: 2)"
+$log.entry[29] = "17:44:10 Check if positioner is occupied"
+$log.entry[30] = "17:44:12 Detail counter: 247"
+$log.entry[31] = "17:44:13 State 101: Calculating next step"
+$log.entry[32] = "17:44:14 State 3: Pick from STZ"
+$log.entry[33] = "17:44:14 Pick detail from stz (221.28569, 310.18121, 180)"
+$log.entry[34] = "17:44:16 Wait for unclamp gripper"
+$log.entry[35] = "17:44:20 State 101: Calculating next step"
+$log.entry[36] = "17:44:25 State 4: Put detail to positioner"
+$log.entry[37] = "17:44:25 Put detail to positioner (ID: 2)"
+$log.entry[38] = "17:44:25 Check if positioner is occupied"
+$log.entry[39] = "17:44:28 Detail counter: 248"
+$log.entry[40] = "17:44:29 State 101: Calculating next step"
+$log.entry[41] = "17:44:29 State 3: Pick from STZ"
+$log.entry[42] = "17:44:29 Pick detail from stz (105.22615, 127.58525, 180)"
+$log.entry[43] = "17:44:30 Wait for unclamp gripper"
+$log.entry[44] = "17:44:34 State 101: Calculating next step"
+$log.entry[45] = "17:44:42 State 4: Put detail to positioner"
+$log.entry[46] = "17:44:42 Put detail to positioner (ID: 2)"
+$log.entry[47] = "17:44:42 Check if positioner is occupied"
+$log.entry[48] = "17:44:44 Detail counter: 249"
+$log.entry[49] = "17:44:45 State 101: Calculating next step"
+$log.entry[50] = "17:44:45 State 3: Pick from STZ"
+$log.entry[51] = "17:44:45 Pick detail from stz (274.9884, 456.55356, 0)"
+$log.entry[52] = "17:44:46 Wait for unclamp gripper"
+$log.entry[53] = "17:44:49 State 101: Calculating next step"
+$log.entry[54] = "17:44:56 State 4: Put detail to positioner"
+$log.entry[55] = "17:44:57 Put detail to positioner (ID: 2)"
+$log.entry[56] = "17:44:57 Check if positioner is occupied"
+$log.entry[57] = "17:44:59 Detail counter: 250"
+$log.entry[58] = "17:45:00 State 101: Calculating next step"
+$log.entry[59] = "17:45:01 State 3: Pick from STZ"
+$log.entry[60] = "17:45:01 Pick detail from stz (117.76094, 364.74164, 0)"
+$log.entry[61] = "17:45:02 Wait for unclamp gripper"
+$log.entry[62] = "17:45:05 State 101: Calculating next step"
+$log.entry[63] = "17:45:12 State 4: Put detail to positioner"
+$log.entry[64] = "17:45:12 Put detail to positioner (ID: 2)"
+$log.entry[65] = "17:45:13 Check if positioner is occupied"
+$log.entry[66] = "17:45:15 Detail counter: 251"
+$log.entry[67] = "17:45:16 State 101: Calculating next step"
+$log.entry[68] = "17:45:16 State 3: Pick from STZ"
+$log.entry[69] = "17:45:16 Pick detail from stz (117.12953, 383.00641, 0)"
+$log.entry[70] = "17:45:17 Wait for unclamp gripper"
+$log.entry[71] = "17:45:20 State 101: Calculating next step"
+$log.entry[72] = "17:45:27 State 4: Put detail to positioner"
+$log.entry[73] = "17:45:28 Put detail to positioner (ID: 2)"
+$log.entry[74] = "17:45:28 Check if positioner is occupied"
+$log.entry[75] = "17:45:30 Detail counter: 252"
+$log.entry[76] = "17:45:31 State 101: Calculating next step"
+$log.entry[77] = "17:45:32 State 3: Pick from STZ"
+$log.entry[78] = "17:45:32 Pick detail from stz (33.60365, 365.4389, 0)"
+$log.entry[79] = "17:45:33 Wait for unclamp gripper"
+$log.entry[80] = "17:45:36 State 101: Calculating next step"
+$log.entry[81] = "17:45:42 State 4: Put detail to positioner"
+$log.entry[82] = "17:45:43 Put detail to positioner (ID: 2)"
+$log.entry[83] = "17:45:43 Check if positioner is occupied"
+$log.entry[84] = "17:45:45 Detail counter: 253"
+$log.entry[85] = "17:45:46 State 101: Calculating next step"
+$log.entry[86] = "17:45:46 State 3: Pick from STZ"
+$log.entry[87] = "17:45:46 Pick detail from stz (253.68384, 37.98418, 0)"
+$log.entry[88] = "17:45:47 Wait for unclamp gripper"
+$log.entry[89] = "17:45:50 State 101: Calculating next step"
+$log.entry[90] = "17:45:59 State 4: Put detail to positioner"
+$log.entry[91] = "17:45:59 Put detail to positioner (ID: 2)"
+$log.entry[92] = "17:45:59 Check if positioner is occupied"
+$log.entry[93] = "17:46:01 Detail counter: 254"
+$log.entry[94] = "17:46:02 State 101: Calculating next step"
+$log.entry[95] = "17:46:02 State 3: Pick from STZ"
+$log.entry[96] = "17:46:03 Pick detail from stz (33.50939, 383.2276, 0)"
+$log.entry[97] = "17:46:04 Wait for unclamp gripper"
+$log.entry[98] = "17:46:07 State 101: Calculating next step"
+$log.entry[99] = "17:46:14 State 4: Put detail to positioner"
+$log.entry[100] = "17:46:14 Put detail to positioner (ID: 2)"
+$log.entry[101] = "17:46:14 Check if positioner is occupied"
+$log.entry[102] = "17:46:16 Detail counter: 255"
+$log.entry[103] = "17:46:17 State 101: Calculating next step"
+$log.entry[104] = "17:46:19 State 3: Pick from STZ"
+$log.entry[105] = "17:46:19 Pick detail from stz (276.6539, 438.15363, 0)"
+$log.entry[106] = "17:46:20 Wait for unclamp gripper"
+$log.entry[107] = "17:46:23 State 101: Calculating next step"
+$log.entry[108] = "17:46:42 State 4: Put detail to positioner"
+$log.entry[109] = "17:46:42 Put detail to positioner (ID: 2)"
+$log.entry[110] = "17:46:42 Check if positioner is occupied"
+$log.entry[111] = "17:46:44 Detail counter: 256"
+$log.entry[112] = "17:46:45 State 101: Calculating next step"
+$log.entry[113] = "17:46:53 State 3: Pick from STZ"
+$log.entry[114] = "17:46:53 Pick detail from stz (57.41953, 36.56533, 180)"
+$log.entry[115] = "17:46:55 Wait for unclamp gripper"
+$log.entry[116] = "17:46:59 State 101: Calculating next step"
+$log.entry[117] = "17:48:26 State 105: Program paused"
+$log.entry[118] = "17:48:26 Program resumed"
+$log.entry[119] = "17:48:26 State 101: Calculating next step"
+$log.entry[120] = "17:52:24 State 105: Program paused"
+$log.entry[121] = "17:52:24 Program resumed"
+$log.entry[122] = "17:52:24 State 101: Calculating next step"
+$log.entry[123] = "17:55:40 State 103: Ending sequence started"
+$log.entry[124] = "07:35:17 Main program executed"
+$log.entry[125] = "07:35:17 Robot already in home position"
+$log.entry[126] = "07:35:17 State 0: Program reset. Initialization of parameters"
+$log.entry[127] = "07:35:17 State 100: Waiting for start"
 $action = "WaitingForStart"
-$pg.name = "312.229.002"
+$pg.name = "0401.17.02.023"
 $ot.data = "1"
 $opt.data = "1"
+$wdog.state = "FALSE"
 .END

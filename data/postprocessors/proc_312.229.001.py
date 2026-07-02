@@ -61,7 +61,7 @@ def process(frame, yolo_data: list):
             data.pick_point = center
             #cv2.circle(drawframe, (int(center[0]), int(center[1])), 150, (0,255,0), 10)
             data.pick_angle = 0#__get_gripper_angle(data, yolo_data)
-            if area < 18000 or area > 30000:
+            if area < 15000 or area > 40000:
                 continue
             result.append(data)
             # frame = cv2.circle(frame, (int(center[0]), int(center[1])), int(abs(x1-x2)), (0, 255, 0), 2)

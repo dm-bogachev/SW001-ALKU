@@ -6,7 +6,6 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspa
 
 # Внутренние модули
 from common.Logger import config_logger
-from RobotState import RobotState
 from DataCollector import DataCollector
 import requests
 from api import *  # This imports RS013N_API_URL
@@ -37,6 +36,7 @@ class Background(Thread):
         self.redrops = 0
         self.in_process = False
         self.current_product = ""
+        self.pneumatic_state_opened = True
         #
         self.cycle_delay = 0.25  # Задержка между циклами основного потока в секундах
 
@@ -177,7 +177,6 @@ class Background(Thread):
         else:
             logger.warning("Не удалось отправить команду на а пересброс тары")
 
-
     def shake_slow(self):
         resp = requests.post(f"{IO_API_URL}/shake_slow", timeout=8)
         if resp.status_code == 200:
@@ -204,23 +203,26 @@ class Background(Thread):
             return False
         return True
 
-    def start_process(self, ProductName: str, ProductSpec: int, ProductCount: int, InTareIDs: list, OutTareIDs: list):
+    def start_process(self, ProductName: str, ProductSpec: int, ProductCount: int, InTareIDs: list, OutTareIDs: list, Layout: int):
         
         if not self.change_model(ProductName):
             return False
         
         command = f"START;{ProductName};{ProductSpec};{ProductCount};"
-        if InTareIDs:
-            command += ",".join(str(id) for id in InTareIDs)
-            command += ";"
-        else: 
-            return False
-        #
+        # 
         if OutTareIDs:
             command += ",".join(str(id) for id in OutTareIDs)
             command += ";"
         else:
             return False
+        
+        if InTareIDs:
+            command += ",".join(str(id) for id in InTareIDs)
+            command += ";"
+        else: 
+            return False
+        #      
+        command += f"{Layout};"
         
         if not self.send_command_to_robot(command, "RS013N", RS013N_API_URL):
             return False
@@ -263,10 +265,10 @@ class Background(Thread):
         if result == 0:
             logger.info("Измерение эталона прошло успешно")
             send_result = "OK"
-        elif result == -1:
+        elif result == -1 or result == -3:
             logger.info("Требуется повторное измерение эталона")
             send_result = "RETRY"
-        elif result == -2:
+        elif result == -2 or result == -4:
             logger.info("Измерение эталона завершилось ошибкой")
             send_result = "FAILED"
         return self.send_command_to_robot(f"ETALONRESULT;{send_result};", "RS007L", RS007L_API_URL)
@@ -309,6 +311,11 @@ class Background(Thread):
             return False
         return True
 
+    def check_air(self) -> bool:
+        logger.debug("Проверка наличия воздуха")
+        if not self.get_io_state(8):
+            logger.warning("В системе отсутствует воздух") 
+
     def ereset(self):
         command = "ERESET;"
         if not self.send_command_to_robot(command, "RS013N", RS013N_API_URL):
@@ -324,8 +331,12 @@ class Background(Thread):
     def run(self):
         logger.info(f'Запуск потока сбора данных')
         on_action = False
+        #
         last_rs13n_action = ""
         last_rs007l_action = ""
+        #
+        #air_state = self.check_air()
+        #
         while not self.__stop_event.is_set():
             try:
                 # DataCollector may not have populated attributes yet; access safely
@@ -335,6 +346,15 @@ class Background(Thread):
                 rs7 = getattr(self.collector, "rs007l", None) or {}
                 rs13_action = str(rs13.get("action", "") or "")
                 rs7_action = str(rs7.get("action", "") or "")
+
+                # if self.check_air() != air_state:
+                #     if air_state:
+                #         if not self.pneumatic_state_opened:
+                #             self.open_pneumatic()
+                #     else:
+                #         if not self.pneumatic_state_opened:
+                #             self.close_pneumatic()
+                #     air_state = not air_state        
 
                 if rs13_action != last_rs13n_action:
                     logger.info(f"Новый запрос от робота RS013N: {rs13_action}")
@@ -371,6 +391,7 @@ class Background(Thread):
             command = "PNEUMOOPEN;"
             self.send_command_to_robot(command, "RS013N", RS013N_API_URL)
             self.in_process = False 
+            self.pneumatic_state_opened = True
 
     def process_pneumatic_close(self):
         logger.info("Закрытие пневматики")
@@ -381,6 +402,7 @@ class Background(Thread):
             command = "PNEUMOCLOSE;"
             self.send_command_to_robot(command, "RS013N", RS013N_API_URL)
             self.in_process = False
+            self.pneumatic_state_opened = False
         
     def process_check_positioner(self, ROBOT_API_URL):
 
@@ -414,12 +436,14 @@ class Background(Thread):
             logger.error("Объект не обнаружен, повтор через 2 секунды")
             if self.detect_attempts <= 5:
                 if self.redrops < 4:
-                    if self.current_product == "312.229.001":
+                    if self.redrops == 1 or self.redrops == 3:
+                    #if self.current_product == "312.229.001":
                         self.shake_fast()
                     else:
                         self.shake_slow()
                     self.detect_attempts = 2
                     self.redrops += 1
+                    time.sleep(5)
                 else:
                     command = f"PALLETEMPTY;"
                     logger.warning("Паллета пуста, отправка команды на RS013N")

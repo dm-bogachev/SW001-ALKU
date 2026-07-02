@@ -28,14 +28,14 @@
         "0401.17.02.023": {
             "ModelName": "0401.17.02.023",
             "ModelFileName": "model_0401.17.02.023.pt",
-            "ConfidenceThreshold": "0.9",
+            "ConfidenceThreshold": "0.91",
             "ModelType": "yolo-pose",
             "ModelProcessor": "proc_0401.17.02.023.py"
         },
         "0401.28.02.063": {
             "ModelName": "0401.28.02.063",
             "ModelFileName": "model_0401.28.02.063.pt",
-            "ConfidenceThreshold": "0.75",
+            "ConfidenceThreshold": "0.7",
             "ModelType": "yolo-pose",
             "ModelProcessor": "proc_0401.28.02.063.py"
         },
@@ -50,7 +50,7 @@
     "Display": {
         "BBOX": true,
         "COORDINATES": false,
-        "KEYPOINTS": false,
+        "KEYPOINTS": true,
         "LABELS": true,
         "SCORES": true,
         "POINTS": true,
@@ -77,7 +77,7 @@
     },
     "Process": {
         "ProcessingDelay": 0.0,
-        "LastModel": "312.229.002",
+        "LastModel": "0401.17.02.023",
         "FirstObjectCriteria": "Probability"
     },
     "IO": {

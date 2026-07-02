@@ -1,0 +1,13 @@
+fastapi
+uvicorn[standard]
+redis
+numpy
+pandas
+opencv-python
+fastapi-offline
+pymodbus==2.5.3
+requests
+jinja2
+python-multipart
+ultralytics
+fastapi_offline

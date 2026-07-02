@@ -142,11 +142,13 @@ class Detector:
         model_name = self.__current_model
         for data in predictions:
             conf = data.boxes.conf.cpu().tolist()[0]
-            if conf < self.__models[model_name].confidence_threshold:
-                continue
-            xyxy = data.boxes.xyxy.cpu().tolist()[0]
             class_id = data.boxes.cls.cpu().tolist()[0]
             class_name = data.names[int(class_id)]
+            #
+            if conf < self.__models[model_name].confidence_threshold and class_name != "id_312_229_002_NG":
+                continue
+            xyxy = data.boxes.xyxy.cpu().tolist()[0]
+            #class_id = data.boxes.cls.cpu().tolist()[0]
             if data.keypoints is not None:
                 keypoints = data.keypoints.data.cpu().tolist()[0]
             else:

@@ -64,7 +64,7 @@ def reboot():
 def start_process(request: ProcessRequest):
     """ Запуск процесса """
     logger.debug(f"Запрос /master/start ({request.ProductName}-{request.ProductSpec}: {request.ProductCount}, {request.InTareIDs}, {request.OutTareIDs})")
-    if not master.start_process(request.ProductName, request.ProductSpec, request.ProductCount, request.InTareIDs, request.OutTareIDs):
+    if not master.start_process(request.ProductName, request.ProductSpec, request.ProductCount, request.InTareIDs, request.OutTareIDs, request.Layout):
         return {"Status": "Failed",
                 "Code": -1,
                 "Reason": "Error in sending to robot"
@@ -107,7 +107,7 @@ def set_measurement_result(result: bool):
 def set_etalon_result(result: int):
     """ Получение результата проверки эталона """
     logger.debug(f"Запрос /master/etalon_result")
-    if result not in [0, -1, -2]:
+    if result not in [0, -1, -2, -3, -4]:
         return {"Status": "Failed",
                 "Code": -2,
                 "Reason": "Wrong etalon result"
@@ -212,10 +212,10 @@ def set_step_mode(mode: bool):
     return {"Status": "OK"}
 
 @app.post("/next_step")
-def next_step(robot: int):
+def next_step():
     """ Отправка команды на следующий шаг режима авто/шаг"""
     logger.debug("Запрос /master/next_step")
-    if not master.next_step(robot):
+    if not master.next_step():
         return {"Status": "Failed",
                 "Code": -1,
                 "Reason": "Error in sending to robot"
