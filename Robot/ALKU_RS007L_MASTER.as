@@ -33,22 +33,22 @@ N_WX19    "rs13.detail.put|RS013N put detail to positioner"
 N_WX20    "rs13.finish|RS013N finish process"
 N_WX22    "rs13.lock.zone|"
 N_WX33    "rs13.no.ot.stop|"
-N_WX40    "rs13.det.put[0]|Number of details put by RS013"
-N_WX41    "rs13.det.put[1]|Number of details put by RS013"
-N_WX42    "rs13.det.put[2]|Number of details put by RS013"
-N_WX43    "rs13.det.put[3]|Number of details put by RS013"
-N_WX44    "rs13.det.put[4]|Number of details put by RS013"
-N_WX45    "rs13.det.put[5]|Number of details put by RS013"
-N_WX46    "rs13.det.put[6]|Number of details put by RS013"
-N_WX47    "rs13.det.put[7]|Number of details put by RS013"
-N_WX48    "rs13.det.put[8]|Number of details put by RS013"
-N_WX49    "rs13.det.put[9]|Number of details put by RS013"
-N_WX50    "rs13.det.put[10]|Number of details put by RS013"
-N_WX51    "rs13.det.put[11]|Number of details put by RS013"
-N_WX52    "rs13.det.put[12]|Number of details put by RS013"
-N_WX53    "rs13.det.put[13]|Number of details put by RS013"
-N_WX54    "rs13.det.put[14]|Number of details put by RS013"
-N_WX55    "rs13.det.put[15]|Number of details put by RS013"
+N_WX40    "rs13.det.put[0]|Put details count from RS0013N"
+N_WX41    "rs13.det.put[1]|Put details count from RS0013N"
+N_WX42    "rs13.det.put[2]|Put details count from RS0013N"
+N_WX43    "rs13.det.put[3]|Put details count from RS0013N"
+N_WX44    "rs13.det.put[4]|Put details count from RS0013N"
+N_WX45    "rs13.det.put[5]|Put details count from RS0013N"
+N_WX46    "rs13.det.put[6]|Put details count from RS0013N"
+N_WX47    "rs13.det.put[7]|Put details count from RS0013N"
+N_WX48    "rs13.det.put[8]|Put details count from RS0013N"
+N_WX49    "rs13.det.put[9]|Put details count from RS0013N"
+N_WX50    "rs13.det.put[10]|Put details count from RS0013N"
+N_WX51    "rs13.det.put[11]|Put details count from RS0013N"
+N_WX52    "rs13.det.put[12]|Put details count from RS0013N"
+N_WX53    "rs13.det.put[13]|Put details count from RS0013N"
+N_WX54    "rs13.det.put[14]|Put details count from RS0013N"
+N_WX55    "rs13.det.put[15]|Put details count from RS0013N"
 N_INT1    "di.ifp.page[1]|Open IFP page i"
 N_INT2    "di.ifp.page[2]|Open IFP page i"
 N_INT3    "di.ifp.page[3]|Open IFP page i"
@@ -131,6 +131,7 @@ N_INT301    "s.enable.shift|Enable shift for even layers"
 56,14,"tcp.ip","Server IP","",10,15,0
 57,8,"tcp.port","Server","port",10,15,5,1,0
 58,8,"tcp.sender.dly","Polling","delay, s",10,15,2,2,0
+60,8,"object.id","Object ID","",10,15,2,1,0
 61,8,"state","  CURRENT","   STATE",10,15,3,1,0
 62,2,"","   RESET","   STATE","",10,4,15,2261,0
 63,4,1,"OFF     ON","","","TCP COMMON",10,4,4,0,2203,0
@@ -142,6 +143,7 @@ N_INT301    "s.enable.shift|Enable shift for even layers"
 69,2,"","   RESET","   ACTION","",10,4,15,2262,0
 70,1,"GRIP FULL","","","",10,15,4,10,2231,0
 71,1," POS FULL","","","",10,15,4,10,2233,0
+75,8,"current.ot","Current OT","  count",10,15,2,1,0
 76,4,1,"OFF     ON","","","  DEBUG",10,4,4,0,2300,0
 77,2,"","   MAIN","<---------","",10,4,11,2001,0
 79,7,"  RS007L","COUNT PICK",10,15,4,0,0,40,16,1
@@ -195,6 +197,7 @@ N_INT301    "s.enable.shift|Enable shift for even layers"
 166,2,"","   TEACH","  DEFECT","",10,4,11,2007,0
 167,2,"","   TEACH","  GRIPPERS","",10,4,11,2008,0
 168,2,"  ","  PRIME","  HOME","",10,4,11,2250,0
+169,8,"hmi.obj.id","  OBJECT","    ID",10,2,2,1,0
 170,8,"hmi.defect.pos","  DEFECT","    ID",10,2,2,1,0
 174,2,"","   Open ","  gripper","",10,4,5,3,0
 175,2,"   PRIME","","   TEACH","  DEFECT",10,4,11,2252,0
@@ -202,6 +205,8 @@ N_INT301    "s.enable.shift|Enable shift for even layers"
 178,8,"defect.y.cor","TARE Y COR","",10,15,4,2,0
 179,8,"defect.h.cor","TARE Z COR","",10,15,4,2,0
 181,2,"","   Close","  gripper","",10,4,5,4,0
+184,8,"defect.x.cor.r","ROUND DET.","  X COR.",10,15,4,2,0
+185,8,"defect.y.cor.r","ROUND DET.","  Y COR.",10,15,4,2,0
 189,2,"","   MAIN","<---------","",10,4,11,2001,0
 192,2,"","   TEACH","POSITIONER","",10,4,11,2004,0
 193,2,"","   TEACH","  MACHINE","",10,4,11,2005,0
@@ -210,9 +215,9 @@ N_INT301    "s.enable.shift|Enable shift for even layers"
 196,2,"  ","  PRIME","  HOME","",10,4,11,2250,0
 199,8,"current.gripper","  CURRENT","  GRIPPER ",10,2,2,1,0
 200,8,"hmi.gripper","    HMI","  GRIPPER ",10,2,2,1,0
-202,2,"","  Capture","  gripper","",10,4,6,6,0
+202,2,"","  Capture","  gripper","",10,4,6,2,0
 203,2,"   PRIME","","   TEACH","  GRIPPERS",10,4,11,2260,0
-209,2,"","  Release ","  gripper","",10,4,6,5,-1
+209,2,"","  Release ","  gripper","",10,4,6,1,-1
 217,2,"","   MAIN","<---------","",10,4,11,2001,0
 220,2,"","   TEACH","POSITIONER","",10,4,11,2004,0
 221,2,"","   TEACH","  MACHINE","",10,4,11,2005,0
@@ -277,23 +282,23 @@ N_INT301    "s.enable.shift|Enable shift for even layers"
     SPEED 250 MM/S ALWAYS
     ACCURACY 0 ALWAYS
     TOOL tool.pick[hmi.tool.no]
-;
+    ;
     LMOVE #def.down.right; *** TEACH POINT *** Lower right
     LMOVE #def.up.right; *** TEACH POINT *** Upper right
     LMOVE #def.up.left; *** TEACH POINT *** Upper left
-;
+    ;
     POINT .x = #def.up.right
     POINT .y = #def.up.left
     POINT .o = #def.down.right
-;
+    ;
     BREAK
-    POINT defect.frame = FRAME(.o,.x,.y,.o)
-;
+    POINT defect.frame = FRAME (.o, .x, .y, .o)
+    ;
     .k = 1
     FOR .i = 0 TO 9
       FOR .j = 0 TO 4
-        POINT #defect.point[.k] = defect.frame+TRANS(.i*27.8,.j*55.6)
-        .k = .k+1
+        POINT #defect.point[.k] = defect.frame + TRANS (.i * 27.8, .j * 55.6)
+        .k = .k + 1
       END
     END
   END
@@ -301,23 +306,33 @@ N_INT301    "s.enable.shift|Enable shift for even layers"
   ACCURACY 0.02 ALWAYS
   TOOL tool.pick[hmi.tool.no]
   BREAK
-;
+  ;
+  IF hmi.obj.id == round.no THEN
+    .xc = defect.x.cor.r
+    .yc = defect.y.cor.r
+    .rz = 90
+  ELSE
+    .xc = defect.x.cor
+    .yc = defect.y.cor
+    .rz = 0
+  END
+  ;
   POINT .defect.pos = #defect.point[hmi.defect.pos]
-  POINT .defect.pos = SHIFT(.defect.pos BY defect.x.cor,defect.y.cor)
-;
-  LAPPRO .defect.pos,-(30+defect.h.cor)
-  LAPPRO .defect.pos,-defect.h.cor
-  LAPPRO .defect.pos,-(30+defect.h.cor)
+  POINT .defect.pos = SHIFT (.defect.pos BY .xc, .yc) + RZ(.rz)
+  ;
+  LAPPRO .defect.pos, - (30 + defect.h.cor)
+  LAPPRO .defect.pos, -defect.h.cor
+  LAPPRO .defect.pos, - (30 + defect.h.cor)
 .END
-.PROGRAM a.teach.etalon()@26/07/02 09:34 #0
-;
+.PROGRAM a.teach.etalon()@26/07/03 09:35 #0
+  ;
   TOOL tool.pick[hmi.tool.no]
-;
-  IF hmi.etalon.id==round.no THEN
+  ;
+  IF hmi.etalon.id == round.no THEN
     .eshift.x = 0
     .eshift.y = 0
   ELSE
-    IF hmi.etalon.id==pawn.no THEN
+    IF hmi.etalon.id == pawn.no THEN
       .eshift.x = 0
       .eshift.y = 0
     ELSE
@@ -325,32 +340,32 @@ N_INT301    "s.enable.shift|Enable shift for even layers"
       .eshift.y = 5
     END
   END
-; Pick etalon
+  ; Pick etalon
   POINT .et.pos.point = #et.pos.point[hmi.etalon.id]
-  JMOVE .et.pos.point+TRANS(0,0,50)
+  JMOVE .et.pos.point + TRANS (0, 0, 50)
   BREAK
   LMOVE #et.pos.point[hmi.etalon.id]; *** TEACH POINT ***
   POINT .et.pos.point = #et.pos.point[hmi.etalon.id]
   BREAK
   TWAIT 0.5
-  LMOVE .et.pos.point+TRANS(.eshift.x,.eshift.y,10)
-  LMOVE .et.pos.point+TRANS(0,0,50)
+  LMOVE .et.pos.point + TRANS (.eshift.x, .eshift.y, 10)
+  LMOVE .et.pos.point + TRANS (0, 0, 50)
   LMOVE #homyak
   BREAK
   TWAIT 0.5
-; Measure etalon
+  ; Measure etalon
   IF FALSE THEN ; For round details
     TOOL tool.pick[hmi.tool.no]
     JMOVE #safe.machine
     JMOVE #before.machine[2]
     POINT .et.mac.poin = #et.mac.point[hmi.etalon.id]
-    JMOVE .et.mac.poin+TRANS(0,0,10)
+    JMOVE .et.mac.poin + TRANS (0, 0, 10)
     BREAK
     LMOVE #et.mac.point[hmi.etalon.id]; *** TEACH POINT ***
     POINT .et.mac.poin = #et.mac.point[hmi.etalon.id]
     BREAK
     TWAIT 0.5
-    LMOVE .et.mac.poin+TRANS(0,0,10)
+    LMOVE .et.mac.poin + TRANS (0, 0, 10)
     BREAK
     TWAIT 0.5
     LMOVE #before.machine[2]
@@ -359,24 +374,31 @@ N_INT301    "s.enable.shift|Enable shift for even layers"
     JMOVE #safe.machine
     JMOVE #before.machine[1]
     POINT .et.mac.poin = #et.mac.point[hmi.etalon.id]
-    JMOVE .et.mac.poin+TRANS(0,10,0)
+    JMOVE .et.mac.poin + TRANS (0, 10, 0)
     BREAK
     LMOVE #et.mac.point[hmi.etalon.id]; *** TEACH POINT ***
     POINT .et.mac.poin = #et.mac.point[hmi.etalon.id]
     BREAK
     TWAIT 0.5
-    LMOVE .et.mac.poin+TRANS(0,10,0)
+    LMOVE .et.mac.poin + TRANS (0, 10, 0)
     BREAK
     TWAIT 0.5
     LMOVE #before.machine[1]
   END
-;
+  ;
   LMOVE #safe.machine
   LMOVE #homyak
-  LMOVE .et.pos.point+TRANS(0,0,50)
-  LMOVE .et.pos.point+TRANS(.eshift.x,.eshift.y,10)
+  LMOVE .et.pos.point + TRANS (0, 0, 50)
+  ;
+  IF hmi.etalon.id == 5 THEN
+    LMOVE .et.pos.point + TRANS (.eshift.x, .eshift.y + 3, 5)
+    LMOVE .et.pos.point + TRANS (.eshift.x, .eshift.y, 5)
+  ELSE
+    LMOVE .et.pos.point + TRANS (.eshift.x, .eshift.y, 10)
+  END
+  ;
   LMOVE #et.pos.point[hmi.etalon.id]
-  LMOVE .et.pos.point+TRANS(0,0,50)
+  LMOVE .et.pos.point + TRANS (0, 0, 50)
 .END
 .PROGRAM a.teach.gripper()@26/06/25 16:05 #0
 ;
@@ -618,7 +640,7 @@ N_INT301    "s.enable.shift|Enable shift for even layers"
   CALL watchdog.pc
 ;
 .END
-.PROGRAM calc.grid()@26/07/01 14:04 #224
+.PROGRAM calc.grid()@26/07/01 14:04 #234
 ; Constants
   line.width = 210; 210; mm
   lines.count = 21
@@ -657,7 +679,7 @@ N_INT301    "s.enable.shift|Enable shift for even layers"
   END
 ;
 .END
-.PROGRAM calc.grid.rnd()@26/07/01 08:40 #38
+.PROGRAM calc.grid.rnd()@26/07/01 08:40 #41
 ; Constants
   lines.count = 11
   obj.in.line = 7
@@ -675,7 +697,7 @@ N_INT301    "s.enable.shift|Enable shift for even layers"
   END
 ;
 .END
-.PROGRAM calc.ot()@26/06/25 16:05 #283
+.PROGRAM calc.ot()@26/06/25 16:05 #296
 ;
   .$calc.pg = "layout"+$ENCODE(/L,layout)
   IF EXISTPGM(.$calc.pg) THEN
@@ -687,7 +709,7 @@ N_INT301    "s.enable.shift|Enable shift for even layers"
   END
 ;
 .END
-.PROGRAM check.disp.pc()@26/06/25 16:05 #96185262
+.PROGRAM check.disp.pc()@26/06/25 16:05 #100230083
 ;
   IF SIG(s.tcp.ena) AND tcp.ena==-1 THEN
     tcp.ena = tyterm
@@ -711,7 +733,7 @@ N_INT301    "s.enable.shift|Enable shift for even layers"
   END
 ;
 .END
-.PROGRAM check.tasks.pc()@26/06/25 16:05 #96185274
+.PROGRAM check.tasks.pc()@26/06/25 16:05 #100230094
 ;
   IF TASK(1002)<>1 THEN
     PCEXECUTE 2: tcp.client.pc
@@ -723,7 +745,7 @@ N_INT301    "s.enable.shift|Enable shift for even layers"
   END
 ;
 .END
-.PROGRAM check.teach.pc()@26/06/25 16:05 #20011850
+.PROGRAM check.teach.pc()@26/06/25 16:05 #20426132
 ;
   IF SIG(s.hmi.res.state) THEN
     state = 0
@@ -790,7 +812,7 @@ N_INT301    "s.enable.shift|Enable shift for even layers"
   END
 ;
 .END
-.PROGRAM check.zone.pc()@26/06/25 16:05 #96185301
+.PROGRAM check.zone.pc()@26/06/25 16:05 #100230121
 ;
 ;do.work[1] = 17
 ;rs13.work[1] = 1017
@@ -809,7 +831,7 @@ N_INT301    "s.enable.shift|Enable shift for even layers"
   SOUT 2009 = NOT (NOT 2209 AND 1017 AND 17)
 ;
 .END
-.PROGRAM defect.put()@26/07/01 15:22 #785
+.PROGRAM defect.put()@26/07/01 15:22 #921
 ;
   IF count.defect>=max.defect.cnt THEN
     CALL log("Defect tare is full. Waiting for tare clean")
@@ -822,8 +844,18 @@ N_INT301    "s.enable.shift|Enable shift for even layers"
   ACCURACY 100 ALWAYS
   TOOL tool.pick[current.gripper]
 ;
+  IF object.id == round.no THEN
+    .xc = defect.x.cor.r
+    .yc = defect.y.cor.r
+    .rz = 90
+  ELSE
+    .xc = defect.x.cor
+    .yc = defect.y.cor
+    .rz = 0
+  END
+;
   POINT .temp = #defect.point[count.defect+1]
-  POINT .temp = SHIFT(.temp BY defect.x.cor,defect.y.cor)
+  POINT .temp = SHIFT(.temp BY .xc, .yc) + RZ(.rz)
 ;
 ;
   JMOVE #safe.defect
@@ -851,7 +883,7 @@ N_INT301    "s.enable.shift|Enable shift for even layers"
   LMOVE #homyak
 ;
 .END
-.PROGRAM errstart.pc()@26/06/25 16:05 #628
+.PROGRAM errstart.pc()@26/06/25 16:05 #668
 ;
   IF ERROR==-34021 OR ERROR==-10100 THEN
     tcp.socket = -1
@@ -862,7 +894,7 @@ N_INT301    "s.enable.shift|Enable shift for even layers"
   errstart.pc ON
 ;
 .END
-.PROGRAM etalon.measure(.id)@26/07/01 15:51 #263
+.PROGRAM etalon.measure(.id)@26/07/01 15:51 #293
   IF FALSE THEN
     .id = hmi.etalon.id
   END
@@ -939,7 +971,7 @@ N_INT301    "s.enable.shift|Enable shift for even layers"
   LMOVE .etalon.mac.pt+TRANS(0,.shift.y,.shift.z)
   ACCURACY 5
   LMOVE .etalon.mac.pt+TRANS(0,.shift.y*0.2,.shift.z*0.2)
-  SPEED 50 MM/S
+  SPEED 20 MM/S
   ACCURACY 0.5
   LMOVE #et.mac.point[.id]
   BREAK
@@ -995,9 +1027,20 @@ N_INT301    "s.enable.shift|Enable shift for even layers"
   JMOVE #homyak
   LMOVE #safe.etalon
   LMOVE .etalon.pos.pt+TRANS(0,0,50)
+  SPEED 100 MM/S
   LMOVE .etalon.pos.pt+TRANS(.eshift.x,.eshift.y,30)
-  LMOVE .etalon.pos.pt+TRANS(.eshift.x,.eshift.y,10)
-  SPEED 150 MM/S
+    ;
+  IF .id == 5 THEN
+    SPEED 50 MM/S
+    LMOVE .etalon.pos.pt + TRANS (.eshift.x, .eshift.y + 3, 5)
+    SPEED 50 MM/S
+    LMOVE .etalon.pos.pt + TRANS (.eshift.x, .eshift.y, 5)
+  ELSE
+    SPEED 50 MM/S
+    LMOVE .etalon.pos.pt+TRANS(.eshift.x,.eshift.y,10)
+  END
+  ;
+  SPEED 20 MM/S
   ACCURACY 0.02
   LMOVE #et.pos.point[.id]
   BREAK
@@ -1005,6 +1048,7 @@ N_INT301    "s.enable.shift|Enable shift for even layers"
   PULSE grip.unclamp
   TWAIT 0.3
   SIGNAL -s.grip.full
+  SPEED 50 MM/S
   LMOVE .etalon.pos.pt+TRANS(0,0,30)
   ACCURACY 100
   LMOVE .etalon.pos.pt+TRANS(0,0,50)
@@ -1017,11 +1061,11 @@ N_INT301    "s.enable.shift|Enable shift for even layers"
   END
 ;
 .END
-.PROGRAM get.ot.point(.obj.id)@26/06/25 16:05 #2780
+.PROGRAM get.ot.point(.obj.id)@26/06/25 16:05 #3207
   ot.x = ms[.obj.id]
   ot.y = ns[.obj.id]
 .END
-.PROGRAM get.state.pc(.$state)@26/06/25 16:05 #2967615
+.PROGRAM get.state.pc(.$state)@26/06/25 16:05 #3121225
   .$state = "SPEED:"+$ENCODE(/L,MSPEED)+";"
   .$state = .$state+"POWER:"
   IF SWITCH(POWER ) THEN
@@ -1108,7 +1152,7 @@ N_INT301    "s.enable.shift|Enable shift for even layers"
 ; MAX 12
   .$state = .$state+"\n"
 .END
-.PROGRAM gripper.pick(.gripper.no)@26/06/25 16:05 #107
+.PROGRAM gripper.pick(.gripper.no)@26/06/25 16:05 #109
 ;
 ; Start from step 3 to manual check
   IF FALSE THEN
@@ -1158,7 +1202,7 @@ N_INT301    "s.enable.shift|Enable shift for even layers"
   CALL log(.$temp)
 ;
 .END
-.PROGRAM gripper.put(.gripper.no)@26/06/25 16:05 #107
+.PROGRAM gripper.put(.gripper.no)@26/06/25 16:05 #109
 ;
 ; Start from step 3 to manual check
   IF FALSE THEN
@@ -1205,7 +1249,7 @@ N_INT301    "s.enable.shift|Enable shift for even layers"
   BREAK
 ;
 .END
-.PROGRAM id1()@26/07/01 14:47 #183; 312.229.002
+.PROGRAM id1()@26/07/01 14:47 #187; 312.229.002
 ; Object ID
   object.id = 1
   etalon.id = 1 ; Can be object.id <> etalon.id
@@ -1222,7 +1266,7 @@ N_INT301    "s.enable.shift|Enable shift for even layers"
   direction = 1; -1 for reverse
 ;
 .END
-.PROGRAM id2()@26/06/25 16:05 #25; 0401.17.02.023-02
+.PROGRAM id2()@26/06/25 16:05 #26; 0401.17.02.023-02
 ; Object ID
   object.id = 2
   etalon.id = 2 ; Can be object.id <> etalon.id
@@ -1238,7 +1282,7 @@ N_INT301    "s.enable.shift|Enable shift for even layers"
   direction = 1; -1 for reverse
 ;
 .END
-.PROGRAM id3()@26/06/25 16:05 #37; 312.229.001
+.PROGRAM id3()@26/06/25 16:05 #38; 312.229.001
 ; Object ID
   object.id = 3
   etalon.id = 3 ; Can be object.id <> etalon.id
@@ -1270,7 +1314,7 @@ N_INT301    "s.enable.shift|Enable shift for even layers"
   direction = 1; -1 for reverse
 ;
 .END
-.PROGRAM id5()@26/06/25 16:05 #14; 440.00.111
+.PROGRAM id5()@26/06/25 16:05 #16; 440.00.111
 ; Object ID
   object.id = 5
   etalon.id = 5 ; Can be object.id <> etalon.id
@@ -1286,7 +1330,7 @@ N_INT301    "s.enable.shift|Enable shift for even layers"
   direction = 1; -1 for reverse
 ;
 .END
-.PROGRAM id6()@26/06/25 16:05 #41; 0401.28.02.063
+.PROGRAM id6()@26/06/25 16:05 #43; 0401.28.02.063
 ; Object ID
   object.id = 6
   etalon.id = 6 ; Can be object.id <> etalon.id
@@ -1302,7 +1346,7 @@ N_INT301    "s.enable.shift|Enable shift for even layers"
   direction = 1; -1 for reverse
 ;
 .END
-.PROGRAM layout0()@26/06/25 16:05 #165
+.PROGRAM layout0()@26/06/25 16:05 #178
 ; Get matrix center
   .center.col = INT(lines.count/2)
   .center.row = INT(obj.in.line/2)
@@ -1504,7 +1548,7 @@ N_INT301    "s.enable.shift|Enable shift for even layers"
 ;  PRINT .$line    ; печатаем всю строку одним вызовом
 ;END
 .END
-.PROGRAM log(.$msg)@26/06/25 16:05 #52549
+.PROGRAM log(.$msg)@26/06/25 16:05 #59941
 ;
 ; 1 line = 55 symbols max
 ;
@@ -1519,20 +1563,6 @@ N_INT301    "s.enable.shift|Enable shift for even layers"
 ;
 .END
 .PROGRAM log.pc1(.$msg)@26/07/01 13:42 #0
-  ;
-  ; 1 line = 55 symbols max
-  ;
-  FOR .i = 0 TO 126
-    $log.entry[.i] = $log.entry[.i + 1]
-  END
-  $log.entry[127] = $TIME + " " + .$msg
-  ;
-  IFPWPRINT 1, 1, 1, 9, 10 = $log.entry[116], $log.entry[117], $log.entry[118], $log.entry[119]
-  IFPWPRINT 2, 1, 1, 9, 10 = $log.entry[120], $log.entry[121], $log.entry[122], $log.entry[123]
-  IFPWPRINT 3, 1, 1, 9, 10 = $log.entry[124], $log.entry[125], $log.entry[126], $log.entry[127]
-  ;
-.END
-.PROGRAM log.pc2(.$msg)@26/07/02 08:35 #1432
 ;
 ; 1 line = 55 symbols max
 ;
@@ -1546,7 +1576,21 @@ N_INT301    "s.enable.shift|Enable shift for even layers"
   IFPWPRINT 3,1,1,9,10=$log.entry[124],$log.entry[125],$log.entry[126],$log.entry[127]
 ;
 .END
-.PROGRAM measure()@26/07/01 16:10 #3258
+.PROGRAM log.pc2(.$msg)@26/07/02 08:35 #2018
+;
+; 1 line = 55 symbols max
+;
+  FOR .i = 0 TO 126
+    $log.entry[.i] = $log.entry[.i+1]
+  END
+  $log.entry[127] = $TIME+" "+.$msg
+;
+  IFPWPRINT 1,1,1,9,10=$log.entry[116],$log.entry[117],$log.entry[118],$log.entry[119]
+  IFPWPRINT 2,1,1,9,10=$log.entry[120],$log.entry[121],$log.entry[122],$log.entry[123]
+  IFPWPRINT 3,1,1,9,10=$log.entry[124],$log.entry[125],$log.entry[126],$log.entry[127]
+;
+.END
+.PROGRAM measure()@26/07/01 16:10 #3817
   IF FALSE THEN
     .pos = hmi.obj.id
   END
@@ -1578,7 +1622,7 @@ N_INT301    "s.enable.shift|Enable shift for even layers"
   ACCURACY 5
   LMOVE .machine.pos+TRANS(0,.shift.y*0.2,.shift.z*0.2)
   STABLE 0.2
-  SPEED 75 MM/S
+  SPEED 20 MM/S
   ACCURACY 0.2
   LMOVE #machine.pos[.pos]
   STABLE 0.2
@@ -1613,7 +1657,7 @@ N_INT301    "s.enable.shift|Enable shift for even layers"
   LMOVE .machine.pos+TRANS(0,.shift.y,.shift.z)
   ACCURACY 5
   LMOVE .machine.pos+TRANS(0,.shift.y*0.2,.shift.z*0.2)
-  SPEED 150 MM/S
+  SPEED 100 MM/S
   ACCURACY 0.5
   LMOVE #machine.pos[.pos]
   BREAK
@@ -1633,7 +1677,7 @@ N_INT301    "s.enable.shift|Enable shift for even layers"
 ;JMOVE #safe.machine
 ;JMOVE #homyak
 .END
-.PROGRAM ot.put()@26/07/01 14:08 #1845
+.PROGRAM ot.put()@26/07/01 14:08 #2272
 ;
   SIGNAL rs7.locked.zone
   IF SIG(rs7.tare.chg) THEN
@@ -1670,7 +1714,7 @@ N_INT301    "s.enable.shift|Enable shift for even layers"
   ACCURACY 5
   LAPPRO .put,-20
   ACCURACY 0.02
-  SPEED 150 MM/S
+  SPEED 100 MM/S
   LMOVE .put
   BREAK
 ;
@@ -1708,7 +1752,7 @@ N_INT301    "s.enable.shift|Enable shift for even layers"
   END
 ;
 .END
-.PROGRAM pg.select()@26/06/25 16:05 #292
+.PROGRAM pg.select()@26/06/25 16:05 #302
   SCASE $pg.name OF
    SVALUE "312.229.002":
     CASE detail.spec OF
@@ -1789,7 +1833,7 @@ N_INT301    "s.enable.shift|Enable shift for even layers"
   state = 0
   CALL a.main
 .END
-.PROGRAM pos.pick()@26/06/25 16:05 #3059
+.PROGRAM pos.pick()@26/07/02 22:07 #3608
 ;
   .$temp = "Pick detail from positioner (ID:"+$ENCODE(object.id)+")"
   CALL log(.$temp)
@@ -1831,7 +1875,7 @@ N_INT301    "s.enable.shift|Enable shift for even layers"
     WAIT SIG(grip.unclamped) OR SIG(s.force.in[1])
   END
 ;
-  SPEED 150 MM/S
+  SPEED 100 MM/S
   ACCURACY 0.02
   LMOVE #pos.point[object.id]
   BREAK
@@ -1853,7 +1897,7 @@ N_INT301    "s.enable.shift|Enable shift for even layers"
   SIGNAL -rs7.locked.zone
 ;
 .END
-.PROGRAM safe.home()@26/06/25 16:05 #201
+.PROGRAM safe.home()@26/06/25 16:05 #208
 ;
 ; Safe zones:
 ; 1. OT zone: same as for normal work
@@ -1945,7 +1989,7 @@ N_INT301    "s.enable.shift|Enable shift for even layers"
   END
 ;
 .END
-.PROGRAM set.io.pc()@26/06/25 16:05 #91
+.PROGRAM set.io.pc()@26/07/02 22:07 #93
 ; Gripper IO
 ;
 ; Gripper
@@ -2109,7 +2153,7 @@ N_INT301    "s.enable.shift|Enable shift for even layers"
 ;
   s.debug.mode = 2300
 .END
-.PROGRAM set.vars.pc()@26/06/25 16:05 #39
+.PROGRAM set.vars.pc()@26/06/25 16:05 #44
 ;
 ; Constants
 ;
@@ -2246,7 +2290,7 @@ N_INT301    "s.enable.shift|Enable shift for even layers"
 .PROGRAM ship.pos()@26/06/25 16:05 #0
   JOINT SPEED9 ACCU1 TIMER0 TOOL1 WORK0 CLAMP OX= WX= #[0,10,-157,-90,-125,15] ;
 .END
-.PROGRAM state0()@26/07/02 13:41 #174; Initialization of parameters
+.PROGRAM state0()@26/07/02 22:07 #181; Initialization of parameters
 ;
   CALL log("State 0: Program reset. Initialization of parameters")
   SIGNAL -s.grip.full,-s.measure.ok,-s.measure.ng,-rs7.tare.chg,-s.cmd.measured
@@ -2266,7 +2310,7 @@ N_INT301    "s.enable.shift|Enable shift for even layers"
   state = 100
 ;
 .END
-.PROGRAM state1()@26/06/25 16:05 #3593; Pick from positioner
+.PROGRAM state1()@26/06/25 16:05 #4160; Pick from positioner
   CALL log("State 1: Pick from positioner")
 ; Check all start positions
 ; Possible do not needed because robot can be only in HOME or near positioner
@@ -2277,7 +2321,7 @@ N_INT301    "s.enable.shift|Enable shift for even layers"
   state = 101
 ;
 .END
-.PROGRAM state100()@26/06/25 16:05 #243; Waiting for start
+.PROGRAM state100()@26/06/25 16:05 #253; Waiting for start
 ;
   CALL log("State 100: Waiting for start")
   $action = "WaitingForStart"
@@ -2295,80 +2339,85 @@ N_INT301    "s.enable.shift|Enable shift for even layers"
   CALL pg.select
   state = 106
 .END
-.PROGRAM state101()@26/06/25 16:05 #11722; Auxilary state
+.PROGRAM state101()@26/06/25 16:05 #13447; Auxilary state
   CALL log("State 101: Calculating next step")
   state = 102
 .END
-.PROGRAM state102()@26/07/02 08:03 #630849; Decision making
-  ; Priority 1
-  IF SIG (s.cmd.pause) THEN
+.PROGRAM state102()@26/07/02 22:07 #674074; Decision making
+; Priority 1
+  IF SIG(s.cmd.pause) THEN
     state = 105
     RETURN
   END
-  IF SIG (s.cmd.chk.etal) AND NOT SIG (s.grip.full) THEN
+  IF SIG(s.cmd.chk.etal) AND NOT SIG(s.grip.full) THEN
     state = 5
     RETURN
   END
-  ; Priority 2
-  ;IF SIG (s.cmd.stop) AND BITS (rs13.det.put[0], 16) <= count.pick THEN
-  ;  state = 6
-  ;  RETURN
-  ;END
-  ; Priority 3
-  IF NOT SIG (s.grip.full) THEN
+; Priority 2
+;IF SIG (s.cmd.stop) AND BITS (rs13.det.put[0], 16) <= count.pick THEN
+;  state = 6
+;  RETURN
+;END
+; Priority 3
+  IF NOT SIG(s.grip.full) THEN
     $action = "WaitPosFull"
-    IF SIG (s.cmd.pick) AND NOT SIG (rs13.work[1]) AND BITS (rs13.det.put[0], 16) > count.pick THEN
+    IF SIG(s.cmd.pick) AND NOT SIG(rs13.work[1]) AND BITS(rs13.det.put[0],16)>count.pick THEN
       state = 1
       RETURN
     END
   END
-  ; Priority 4
-  IF SIG (s.grip.full) AND NOT SIG (s.cmd.measured) AND NOT SIG (rs7.etalon.stop) THEN
+; Priority 4
+  IF SIG(s.grip.full) AND NOT SIG(s.cmd.measured) AND NOT SIG(rs7.etalon.stop) THEN
     state = 2
     RETURN
   END
-  ; Priority 5
-  IF SIG (s.grip.full) AND SIG (s.measure.ok) AND NOT SIG (rs7.tare.chg) AND NOT SIG (rs7.etalon.stop) THEN
+; Priority 5
+  IF SIG(s.grip.full) AND SIG(s.measure.ok) AND NOT SIG(rs7.tare.chg) AND NOT SIG(rs7.etalon.stop) THEN
     state = 3
     RETURN
   END
-  ; Priority 6
-  IF SIG (s.grip.full) AND (SIG (s.measure.ng) OR SIG (rs7.etalon.stop)) THEN
+; Priority 6
+  IF SIG(s.grip.full) AND (SIG(s.measure.ng) OR SIG(rs7.etalon.stop)) THEN
     state = 4
     RETURN
   END
   ; Priority 7
-  IF SIG (rs13.finish) AND NOT SIG (s.grip.full) AND NOT (BITS (rs13.det.put[0], 16) > count.pick) THEN
-    state = 103
-    RETURN
-  END
-  ;
-  IF SIG (rs13.no.ot.stop) THEN
-    state = 103
-    RETURN
-  END
-  ;
-  ; Priority 8
-  IF NOT SIG (s.grip.full) THEN; AND NOT SIG (s.cmd.pick) THEN
+  IF NOT SIG(s.grip.full) THEN; AND NOT SIG (s.cmd.pick) THEN
     JMOVE #homyak
     BREAK
     SIGNAL -rs7.locked.zone
   END
   ;
+; Priority 8
+  IF SIG(rs13.finish) AND NOT SIG(s.grip.full) AND NOT (BITS(rs13.det.put[0],16)>count.pick) THEN
+    state = 103
+    RETURN
+  END
+;
+  IF SIG(rs13.no.ot.stop) THEN
+    state = 103
+    RETURN
+  END
+;
 .END
-.PROGRAM state103()@26/07/02 08:12 #244; Auxilary state
+.PROGRAM state103()@26/07/02 08:12 #248; Auxilary state
   CALL log("State 103: Calculating ending sequence step")
   state = 104
 ;
 .END
-.PROGRAM state104()@26/06/25 16:05 #244; Ending sequence
+.PROGRAM state104()@26/06/25 16:05 #248; Ending sequence
 ;
+  IF NOT SIG(s.grip.full) THEN; AND NOT SIG (s.cmd.pick) THEN
+    JMOVE #homyak
+    BREAK
+    SIGNAL -rs7.locked.zone
+  END
   SIGNAL rs7.finish.ack
   state = 255
   RETURN
 ;
 .END
-.PROGRAM state105()@26/06/26 14:27 #63; Program paused
+.PROGRAM state105()@26/06/26 14:27 #70; Program paused
   CALL log("State 105: Program paused")
   $action = "Paused"
   SWAIT s.cmd.resume
@@ -2378,7 +2427,7 @@ N_INT301    "s.enable.shift|Enable shift for even layers"
   SIGNAL -s.cmd.pause
   state = 101
 .END
-.PROGRAM state106()@26/06/25 16:05 #355; Check program
+.PROGRAM state106()@26/06/25 16:05 #365; Check program
   CALL log("State 106: Check program")
   IF $pg.name<>"NULL" THEN
     CALL log("Selected program: "+$pg.name)
@@ -2404,7 +2453,7 @@ N_INT301    "s.enable.shift|Enable shift for even layers"
   END
 ;
 .END
-.PROGRAM state2()@26/06/25 16:05 #3544; Measurement process
+.PROGRAM state2()@26/06/25 16:05 #4103; Measurement process
   CALL log("State 2: Measurement process")
 ; Check all start positions
 ; Possible do not needed because robot can be only in HOME or near positioner
@@ -2416,12 +2465,12 @@ N_INT301    "s.enable.shift|Enable shift for even layers"
   state = 101
 ;
 .END
-.PROGRAM state255()@26/06/25 16:05 #245
+.PROGRAM state255()@26/06/25 16:05 #249
   CALL log("State 255: Program complete")
   state = 0
 ;
 .END
-.PROGRAM state3()@26/06/25 16:05 #2677; Put detail to OT
+.PROGRAM state3()@26/06/25 16:05 #3104; Put detail to OT
   CALL log("State 3: Put detail to OT")
 ; Check all start positions
 ; Possible do not needed because robot can be only in HOME or near positioner
@@ -2433,7 +2482,7 @@ N_INT301    "s.enable.shift|Enable shift for even layers"
   state = 101
 ;
 .END
-.PROGRAM state4()@26/06/25 16:05 #891; State 4: Put detail to defect tare
+.PROGRAM state4()@26/06/25 16:05 #1027; State 4: Put detail to defect tare
   CALL log("State 4: Put detail to defect tare")
 ; Check all start positions
 ; Possible do not needed because robot can be only in HOME or near positioner
@@ -2445,7 +2494,7 @@ N_INT301    "s.enable.shift|Enable shift for even layers"
   state = 101
 ;
 .END
-.PROGRAM state5()@26/06/26 14:27 #798; Check etalon
+.PROGRAM state5()@26/06/26 14:27 #827; Check etalon
   CALL log("State 5: Check etalon")
 ; TEMPORARY!!!!!!!!
 ;  state = 101
@@ -2488,7 +2537,7 @@ N_INT301    "s.enable.shift|Enable shift for even layers"
 .PROGRAM state6()@26/06/25 16:05 #0; Deprecated
   state = 103
 .END
-.PROGRAM state7()@26/06/25 16:05 #277; Deprecated
+.PROGRAM state7()@26/06/25 16:05 #287; Deprecated
   CALL log("State 7: Check if gripper change is required")
 ; We are at home at this point. No cases without home!
   IF current.gripper<>pg7.gripper THEN
@@ -2512,7 +2561,7 @@ N_INT301    "s.enable.shift|Enable shift for even layers"
   CALL etalon.measure(etalon.id)
   state = 105
 .END
-.PROGRAM tcp.callback.pc(.$data[],.data.length)@26/07/02 09:50 #75414
+.PROGRAM tcp.callback.pc(.$data[],.data.length)@26/07/02 09:50 #90131
   .$temp = "Received "+$ENCODE(.data.length)+" strings:"
   PRINT tcp.recv.ena: .$temp
   FOR .i = 1 TO .data.length
@@ -2827,7 +2876,7 @@ N_INT301    "s.enable.shift|Enable shift for even layers"
     TWAIT 0.05
   END
 .END
-.PROGRAM tcp.log.pc(.$msg)@26/06/25 16:05 #157371
+.PROGRAM tcp.log.pc(.$msg)@26/06/25 16:05 #172088
   IF NOT SIG(s.tcp.log) THEN
     RETURN
   END
@@ -2844,7 +2893,7 @@ N_INT301    "s.enable.shift|Enable shift for even layers"
   IFPWPRINT 3,1,1,9,10=$log.entry[124],$log.entry[125],$log.entry[126],$log.entry[127]
 ;
 .END
-.PROGRAM tcp.send.pc(.$data[],.data.length)@26/06/25 16:05 #3479871
+.PROGRAM tcp.send.pc(.$data[],.data.length)@26/06/25 16:05 #3633481
 ;
   .tcp.send.tmo = 5
 ;
@@ -3152,6 +3201,9 @@ N_INT301    "s.enable.shift|Enable shift for even layers"
 	;       .temp 
 	;   Group:Defect:8
 	;     8:defect.put:F
+	;       .xc 
+	;       .yc 
+	;       .rz 
 	;       .temp 
 	;     8:a.teach.defect:F
 	;       .x 
@@ -3160,6 +3212,9 @@ N_INT301    "s.enable.shift|Enable shift for even layers"
 	;       .k 
 	;       .i 
 	;       .j 
+	;       .xc 
+	;       .yc 
+	;       .rz 
 	;       .defect.pos 
 	;   Group:States:9
 	;     9:state0:F
@@ -3454,7 +3509,8 @@ N_INT301    "s.enable.shift|Enable shift for even layers"
 	; s.cmd.pick Pick from positioner command
 	; s.opt.spacer Option for put to OT with spacer
 	; s.opt.flip Option to put to OT with flip
-	; rs13.det.put[] Number of details put by RS013
+	; rs13.det.put[] Put details count from RS0013N
+	; rs7.det.picked[] Picked details count from RS007L
 	; s.cmd.measured Detail measured
 	; s.tcp.log Add log record for tcp.log
 	; s.force.defect Force measure defect
@@ -3468,7 +3524,6 @@ N_INT301    "s.enable.shift|Enable shift for even layers"
 	; s.enable.shift Enable shift for even layers
 	; rs13.lock.zone 
 	; rs13.no.ot.stop 
-	; rs7.det.picked[] Picked details count from RS007L
 	; @@@ TOOLS @@@
 	; tool.pick[] Gripper tool
 	; @@@ BASE @@@
@@ -3927,7 +3982,7 @@ count.defect = 0
 count.pick = 0
 count.put = 0
 current.gripper = 1
-detail.count = 308
+detail.count = 201
 grip.180xsh[1] = 0
 grip.180xsh[2] = 0
 grip.180xsh[3] = 0
@@ -3935,7 +3990,7 @@ grip.180ysh[1] = 0
 grip.180ysh[2] = 0
 grip.180ysh[3] = 0
 grip.xsh[1] = 1.5
-grip.xsh[2] = 2
+grip.xsh[2] = 1.7
 grip.xsh[3] = -24
 grip.ysh[1] = -15
 grip.ysh[2] = -15
@@ -3947,20 +4002,20 @@ hmi.defect.pos = 49
 hmi.etalon.id = 5
 hmi.g180x = 0
 hmi.g180y = 0
-hmi.gx = 2
-hmi.gy = -15
+hmi.gx = 1.5
+hmi.gy = -12
 hmi.gz = -47
-hmi.obj.id = 2
+hmi.obj.id = 4
 hmi.tool.no = 1
-keep.object = 2
+keep.object = 4
 line.width = 210
 lines.count = 20
 lines.shift = 16
-max.tare.count = 105
-obj.in.line = 5
+max.tare.count = 147
+obj.in.line = 7
 obj.spacer = 1.5
-object.length = 40
-pg13.gripper = 1
+object.length = 27.5
+pg13.gripper = 2
 rs13.work[1] = 1017
 state = 100
 tcp.ena = -1
@@ -3968,19 +4023,27 @@ tcp.port = 9007
 tcp.recv.ena = -1
 tcp.send.ena = -1
 tcp.sender.dly = 0.25
-tcp.socket = 35
+tcp.socket = 34
 tyterm = 0
 s.cmd.pick = 2233
 s.opt.spacer = 2270
 s.opt.flip = 2271
-rs13.det.put[7] = 1047
-rs13.det.put[6] = 1046
-rs13.det.put[5] = 1045
-rs13.det.put[4] = 1044
-rs13.det.put[3] = 1043
-rs13.det.put[2] = 1042
-rs13.det.put[1] = 1041
 rs13.det.put[0] = 1040
+rs13.det.put[1] = 1041
+rs13.det.put[2] = 1042
+rs13.det.put[3] = 1043
+rs13.det.put[4] = 1044
+rs13.det.put[5] = 1045
+rs13.det.put[6] = 1046
+rs13.det.put[7] = 1047
+rs7.det.picked[0] = 40
+rs7.det.picked[1] = 41
+rs7.det.picked[2] = 42
+rs7.det.picked[3] = 43
+rs7.det.picked[4] = 44
+rs7.det.picked[5] = 45
+rs7.det.picked[6] = 46
+rs7.det.picked[7] = 47
 grip.180xsh[4] = 0
 grip.180xsh[5] = 0
 grip.180ysh[4] = 0
@@ -3998,106 +4061,106 @@ ms[1] = 0
 ms[2] = 0
 ms[3] = 0
 ms[4] = 0
-ms[5] = 19
-ms[6] = 19
+ms[5] = 0
+ms[6] = 0
 ms[7] = 19
 ms[8] = 19
 ms[9] = 19
-ms[10] = 10
-ms[11] = 10
-ms[12] = 10
-ms[13] = 10
+ms[10] = 19
+ms[11] = 19
+ms[12] = 19
+ms[13] = 19
 ms[14] = 10
-ms[15] = 9
-ms[16] = 9
-ms[17] = 9
-ms[18] = 9
-ms[19] = 9
-ms[20] = 11
-ms[21] = 11
-ms[22] = 11
-ms[23] = 11
-ms[24] = 11
-ms[25] = 8
-ms[26] = 8
-ms[27] = 8
-ms[28] = 8
-ms[29] = 8
-ms[30] = 12
-ms[31] = 12
-ms[32] = 12
-ms[33] = 12
-ms[34] = 12
-ms[35] = 7
-ms[36] = 7
-ms[37] = 7
-ms[38] = 7
-ms[39] = 7
-ms[40] = 13
-ms[41] = 13
-ms[42] = 13
-ms[43] = 13
-ms[44] = 13
-ms[45] = 6
-ms[46] = 6
-ms[47] = 6
-ms[48] = 6
-ms[49] = 6
-ms[50] = 14
-ms[51] = 14
-ms[52] = 14
-ms[53] = 14
-ms[54] = 14
-ms[55] = 5
-ms[56] = 5
-ms[57] = 5
-ms[58] = 5
-ms[59] = 5
-ms[60] = 15
-ms[61] = 15
-ms[62] = 15
-ms[63] = 15
-ms[64] = 15
-ms[65] = 4
-ms[66] = 4
-ms[67] = 4
-ms[68] = 4
-ms[69] = 4
-ms[70] = 16
-ms[71] = 16
-ms[72] = 16
-ms[73] = 16
-ms[74] = 16
-ms[75] = 3
-ms[76] = 3
-ms[77] = 3
-ms[78] = 3
-ms[79] = 3
-ms[80] = 17
-ms[81] = 17
-ms[82] = 17
-ms[83] = 17
-ms[84] = 17
-ms[85] = 2
-ms[86] = 2
-ms[87] = 2
-ms[88] = 2
-ms[89] = 2
-ms[90] = 18
-ms[91] = 18
-ms[92] = 18
-ms[93] = 18
-ms[94] = 18
-ms[95] = 1
-ms[96] = 1
-ms[97] = 1
-ms[98] = 1
-ms[99] = 1
-ms[100] = 19
-ms[101] = 19
-ms[102] = 19
-ms[103] = 19
-ms[104] = 19
+ms[15] = 10
+ms[16] = 10
+ms[17] = 10
+ms[18] = 10
+ms[19] = 10
+ms[20] = 10
+ms[21] = 9
+ms[22] = 9
+ms[23] = 9
+ms[24] = 9
+ms[25] = 9
+ms[26] = 9
+ms[27] = 9
+ms[28] = 11
+ms[29] = 11
+ms[30] = 11
+ms[31] = 11
+ms[32] = 11
+ms[33] = 11
+ms[34] = 11
+ms[35] = 8
+ms[36] = 8
+ms[37] = 8
+ms[38] = 8
+ms[39] = 8
+ms[40] = 8
+ms[41] = 8
+ms[42] = 12
+ms[43] = 12
+ms[44] = 12
+ms[45] = 12
+ms[46] = 12
+ms[47] = 12
+ms[48] = 12
+ms[49] = 7
+ms[50] = 7
+ms[51] = 7
+ms[52] = 7
+ms[53] = 7
+ms[54] = 7
+ms[55] = 7
+ms[56] = 13
+ms[57] = 13
+ms[58] = 13
+ms[59] = 13
+ms[60] = 13
+ms[61] = 13
+ms[62] = 13
+ms[63] = 6
+ms[64] = 6
+ms[65] = 6
+ms[66] = 6
+ms[67] = 6
+ms[68] = 6
+ms[69] = 6
+ms[70] = 14
+ms[71] = 14
+ms[72] = 14
+ms[73] = 14
+ms[74] = 14
+ms[75] = 14
+ms[76] = 14
+ms[77] = 5
+ms[78] = 5
+ms[79] = 5
+ms[80] = 5
+ms[81] = 5
+ms[82] = 5
+ms[83] = 5
+ms[84] = 15
+ms[85] = 15
+ms[86] = 15
+ms[87] = 15
+ms[88] = 15
+ms[89] = 15
+ms[90] = 15
+ms[91] = 4
+ms[92] = 4
+ms[93] = 4
+ms[94] = 4
+ms[95] = 4
+ms[96] = 4
+ms[97] = 4
+ms[98] = 16
+ms[99] = 16
+ms[100] = 16
+ms[101] = 16
+ms[102] = 16
+ms[103] = 16
+ms[104] = 16
 ms[105] = 3
 ms[106] = 3
 ms[107] = 3
@@ -4145,106 +4208,106 @@ ns[1] = 1
 ns[2] = 2
 ns[3] = 3
 ns[4] = 4
-ns[5] = 0
-ns[6] = 1
-ns[7] = 2
-ns[8] = 3
-ns[9] = 4
-ns[10] = 0
-ns[11] = 1
-ns[12] = 2
-ns[13] = 3
-ns[14] = 4
-ns[15] = 0
-ns[16] = 1
-ns[17] = 2
-ns[18] = 3
-ns[19] = 4
-ns[20] = 0
-ns[21] = 1
-ns[22] = 2
-ns[23] = 3
-ns[24] = 4
-ns[25] = 0
-ns[26] = 1
-ns[27] = 2
-ns[28] = 3
-ns[29] = 4
-ns[30] = 0
-ns[31] = 1
-ns[32] = 2
-ns[33] = 3
-ns[34] = 4
+ns[5] = 5
+ns[6] = 6
+ns[7] = 0
+ns[8] = 1
+ns[9] = 2
+ns[10] = 3
+ns[11] = 4
+ns[12] = 5
+ns[13] = 6
+ns[14] = 0
+ns[15] = 1
+ns[16] = 2
+ns[17] = 3
+ns[18] = 4
+ns[19] = 5
+ns[20] = 6
+ns[21] = 0
+ns[22] = 1
+ns[23] = 2
+ns[24] = 3
+ns[25] = 4
+ns[26] = 5
+ns[27] = 6
+ns[28] = 0
+ns[29] = 1
+ns[30] = 2
+ns[31] = 3
+ns[32] = 4
+ns[33] = 5
+ns[34] = 6
 ns[35] = 0
 ns[36] = 1
 ns[37] = 2
 ns[38] = 3
 ns[39] = 4
-ns[40] = 0
-ns[41] = 1
-ns[42] = 2
-ns[43] = 3
-ns[44] = 4
-ns[45] = 0
-ns[46] = 1
-ns[47] = 2
-ns[48] = 3
-ns[49] = 4
-ns[50] = 0
-ns[51] = 1
-ns[52] = 2
-ns[53] = 3
-ns[54] = 4
-ns[55] = 0
-ns[56] = 1
-ns[57] = 2
-ns[58] = 3
-ns[59] = 4
-ns[60] = 0
-ns[61] = 1
-ns[62] = 2
-ns[63] = 3
-ns[64] = 4
-ns[65] = 0
-ns[66] = 1
-ns[67] = 2
-ns[68] = 3
-ns[69] = 4
+ns[40] = 5
+ns[41] = 6
+ns[42] = 0
+ns[43] = 1
+ns[44] = 2
+ns[45] = 3
+ns[46] = 4
+ns[47] = 5
+ns[48] = 6
+ns[49] = 0
+ns[50] = 1
+ns[51] = 2
+ns[52] = 3
+ns[53] = 4
+ns[54] = 5
+ns[55] = 6
+ns[56] = 0
+ns[57] = 1
+ns[58] = 2
+ns[59] = 3
+ns[60] = 4
+ns[61] = 5
+ns[62] = 6
+ns[63] = 0
+ns[64] = 1
+ns[65] = 2
+ns[66] = 3
+ns[67] = 4
+ns[68] = 5
+ns[69] = 6
 ns[70] = 0
 ns[71] = 1
 ns[72] = 2
 ns[73] = 3
 ns[74] = 4
-ns[75] = 0
-ns[76] = 1
-ns[77] = 2
-ns[78] = 3
-ns[79] = 4
-ns[80] = 0
-ns[81] = 1
-ns[82] = 2
-ns[83] = 3
-ns[84] = 4
-ns[85] = 0
-ns[86] = 1
-ns[87] = 2
-ns[88] = 3
-ns[89] = 4
-ns[90] = 0
-ns[91] = 1
-ns[92] = 2
-ns[93] = 3
-ns[94] = 4
-ns[95] = 0
-ns[96] = 1
-ns[97] = 2
-ns[98] = 3
-ns[99] = 4
-ns[100] = 0
-ns[101] = 1
-ns[102] = 2
-ns[103] = 3
-ns[104] = 4
+ns[75] = 5
+ns[76] = 6
+ns[77] = 0
+ns[78] = 1
+ns[79] = 2
+ns[80] = 3
+ns[81] = 4
+ns[82] = 5
+ns[83] = 6
+ns[84] = 0
+ns[85] = 1
+ns[86] = 2
+ns[87] = 3
+ns[88] = 4
+ns[89] = 5
+ns[90] = 6
+ns[91] = 0
+ns[92] = 1
+ns[93] = 2
+ns[94] = 3
+ns[95] = 4
+ns[96] = 5
+ns[97] = 6
+ns[98] = 0
+ns[99] = 1
+ns[100] = 2
+ns[101] = 3
+ns[102] = 4
+ns[103] = 5
+ns[104] = 6
 ns[105] = 0
 ns[106] = 1
 ns[107] = 2
@@ -4287,12 +4350,12 @@ ns[143] = 3
 ns[144] = 4
 ns[145] = 5
 ns[146] = 6
-object.id = 2
-ot.x = 12
-ot.y = 4
+object.id = 1
+ot.x = 11
+ot.y = 2
 round.no = 3
 spc.tare.count = 50
-detail.spec = 1
+detail.spec = 0
 grip.xsh[6] = 1.5
 grip.xsh[7] = 0
 grip.xsh[8] = 0
@@ -4320,7 +4383,7 @@ grip.xsh[29] = 0
 grip.xsh[30] = 0
 grip.xsh[31] = 0
 grip.xsh[32] = 0
-etalon.id = 2
+etalon.id = 1
 grip.180xsh[33] = 0
 grip.180xsh[34] = 0
 grip.180xsh[35] = 0
@@ -4664,7 +4727,7 @@ grip.midysh[61] = 0
 grip.midysh[62] = 0
 grip.midysh[63] = 0
 grip.midysh[64] = 0
-max.count.put = 140
+max.count.put = 178
 pg7.gripper = 1
 s.pr.tch.grip = 2260
 layout = 0
@@ -4674,11 +4737,11 @@ s.enable.shift = 2301
 current.ot = 1
 etalon.tree.id = 0
 tree.gripper = 2
-chg.tare.count = 105
+chg.tare.count = 147
 defect.x.cor = 0
 defect.y.cor = 7
 direction = 1
-hmi.ot.k = 5
+hmi.ot.k = 0
 ms[147] = 4
 ms[148] = 4
 ms[149] = 4
@@ -4935,14 +4998,6 @@ pg.gripper = 2
 rs13.lock.zone = 1022
 rs13.no.ot.stop = 1033
 wdog.tmr = 180
-rs7.det.picked[0] = 40
-rs7.det.picked[1] = 41
-rs7.det.picked[2] = 42
-rs7.det.picked[3] = 43
-rs7.det.picked[4] = 44
-rs7.det.picked[5] = 45
-rs7.det.picked[6] = 46
-rs7.det.picked[7] = 47
 rs7.det.picked[8] = 48
 rs7.det.picked[9] = 49
 rs7.det.picked[10] = 50

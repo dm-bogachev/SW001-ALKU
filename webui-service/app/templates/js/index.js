@@ -616,33 +616,33 @@ async function updateObjectsList() {
     renderObjects(objectsData);
 
     // Отправляем данные о первом объекте на сервер, если объекты есть
-    if (objectsData.Status === "OK" && objectsData.Objects && objectsData.Objects.length > 0) {
-        const firstObject = objectsData.Objects[0];
-        if (firstObject.pick_point && firstObject.pick_point.length >= 2 && firstObject.pick_angle !== undefined) {
-            const x = firstObject.pick_point[0].toFixed(2);
-            const y = firstObject.pick_point[1].toFixed(2);
-            const angle = firstObject.pick_angle.toFixed(2);
-            console.log(`Отправка данных о точке захвата: x=${x}, y=${y}, angle=${angle}`);
+    // if (objectsData.Status === "OK" && objectsData.Objects && objectsData.Objects.length > 0) {
+    //     const firstObject = objectsData.Objects[0];
+    //     if (firstObject.pick_point && firstObject.pick_point.length >= 2 && firstObject.pick_angle !== undefined) {
+    //         const x = firstObject.pick_point[0].toFixed(2);
+    //         const y = firstObject.pick_point[1].toFixed(2);
+    //         const angle = firstObject.pick_angle.toFixed(2);
+    //         console.log(`Отправка данных о точке захвата: x=${x}, y=${y}, angle=${angle}`);
             // Check if commands should be sent
-            const sendCommandsSwitch = document.getElementById('send-commands-switch');
-            if (!sendCommandsSwitch || sendCommandsSwitch.checked) {
-                console.log('Command sending is disabled');
-                return;
-            }
-            // Отправляем POST запрос с данными о точке и угле
-            fetch(`${RS013N_API_URL}/send_pick_data?x=${x}&y=${y}&angle=${angle}`, {
-                method: 'POST',
-                headers: {
-                    'accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: ''
+            // const sendCommandsSwitch = document.getElementById('send-commands-switch');
+            // if (!sendCommandsSwitch || sendCommandsSwitch.checked) {
+            //     console.log('Command sending is disabled');
+            //     return;
+            // }
+            // // Отправляем POST запрос с данными о точке и угле
+            // fetch(`${RS013N_API_URL}/send_pick_data?x=${x}&y=${y}&angle=${angle}`, {
+            //     method: 'POST',
+            //     headers: {
+            //         'accept': 'application/json',
+            //         'Content-Type': 'application/json'
+            //     },
+            //     body: ''
 
-            }).catch(error => {
-                console.error('Ошибка при отправке данных о точке захвата:', error);
-            });
-        }
-    }
+            // }).catch(error => {
+            //     console.error('Ошибка при отправке данных о точке захвата:', error);
+            // });
+    //     }
+    // }
 
     // Обновляем каждые 2 секунды
     setTimeout(updateObjectsList, 2000);

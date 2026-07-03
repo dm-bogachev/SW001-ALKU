@@ -478,7 +478,7 @@ input:checked + .slider:before {
 
 .model-selector-container {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     gap: 15px;
     align-items: flex-start;
     background: #f8f9fa;
@@ -718,14 +718,14 @@ input:checked + .slider:before {
 .display-settings-grid {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 2px;
 }
 
 .display-setting-item {
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 12px;
+    gap: 2px;
+    padding: 2px;
     background: white;
     border-radius: 8px;
     border: 1px solid #e0e0e0;

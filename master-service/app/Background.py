@@ -345,16 +345,7 @@ class Background(Thread):
                 rs13 = getattr(self.collector, "rs013n", None) or {}
                 rs7 = getattr(self.collector, "rs007l", None) or {}
                 rs13_action = str(rs13.get("action", "") or "")
-                rs7_action = str(rs7.get("action", "") or "")
-
-                # if self.check_air() != air_state:
-                #     if air_state:
-                #         if not self.pneumatic_state_opened:
-                #             self.open_pneumatic()
-                #     else:
-                #         if not self.pneumatic_state_opened:
-                #             self.close_pneumatic()
-                #     air_state = not air_state        
+                rs7_action = str(rs7.get("action", "") or "")       
 
                 if rs13_action != last_rs13n_action:
                     logger.info(f"Новый запрос от робота RS013N: {rs13_action}")

@@ -141,6 +141,7 @@ N_INT300    "s.debug.mode|Debug mode"
 56,14,"tcp.ip","Server IP","",10,15,0
 57,8,"tcp.port","Server","port",10,15,5,1,0
 58,8,"tcp.sender.dly","Polling","delay, s",10,15,2,2,0
+60,8,"object.id","Object ID","",10,15,2,1,0
 61,8,"state","  CURRENT","   STATE",10,15,3,1,0
 62,2,"","   RESET","   STATE","",10,4,15,2261,0
 63,4,1,"OFF     ON","","","TCP COMMON",10,4,4,0,2203,0
@@ -569,7 +570,7 @@ N_INT300    "s.debug.mode|Debug mode"
   CALL watchdog.pc
 ;
 .END
-.PROGRAM check.disp.pc()@26/06/25 16:09 #103877665
+.PROGRAM check.disp.pc()@26/06/25 16:09 #109420660
 ;
   IF SIG(s.tcp.ena) AND tcp.ena==-1 THEN
     tcp.ena = tyterm
@@ -593,7 +594,7 @@ N_INT300    "s.debug.mode|Debug mode"
   END
 ;
 .END
-.PROGRAM check.tasks.pc()@26/06/25 16:09 #103877671
+.PROGRAM check.tasks.pc()@26/06/25 16:09 #109420667
 ;
   IF TASK(1002)<>1 THEN
     PCEXECUTE 2: tcp.client.pc
@@ -605,7 +606,7 @@ N_INT300    "s.debug.mode|Debug mode"
   END
 ;
 .END
-.PROGRAM check.teach.pc()@26/06/25 16:09 #42652355
+.PROGRAM check.teach.pc()@26/06/25 16:09 #43148260
 ;
   IF SIG(s.hmi.res.state) THEN
     state = 0
@@ -704,7 +705,7 @@ N_INT300    "s.debug.mode|Debug mode"
     cv.y.minus[hmi.obj.id] = hmi.y.minus
   END
 .END
-.PROGRAM check.zone.pc()@26/06/25 16:09 #103877703
+.PROGRAM check.zone.pc()@26/06/25 16:09 #109420699
 ;
 ;do.work[1] = 17
 ;rs7.work[1] = 1017
@@ -726,7 +727,7 @@ N_INT300    "s.debug.mode|Debug mode"
 .PROGRAM chk.lock()@26/06/25 16:09 #0
   SWAIT -rs7.locked.zone,-rs7.work[1]
 .END
-.PROGRAM errstart.pc()@26/06/25 16:09 #306
+.PROGRAM errstart.pc()@26/06/25 16:09 #344
 ;
   IF ERROR==-34021 OR ERROR==-10100 THEN
     tcp.socket = -1
@@ -737,7 +738,7 @@ N_INT300    "s.debug.mode|Debug mode"
   errstart.pc ON
 ;
 .END
-.PROGRAM get.state.pc(.$state)@26/06/25 16:09 #587993
+.PROGRAM get.state.pc(.$state)@26/06/25 16:09 #615769
   .$state = "SPEED:"+$ENCODE(/L,MSPEED)+";"
   .$state = .$state+"POWER:"
   IF SWITCH(POWER ) THEN
@@ -824,7 +825,7 @@ N_INT300    "s.debug.mode|Debug mode"
 ; MAX 12
   .$state = .$state+"\n"
 .END
-.PROGRAM gripper.pick(.gripper.no)@26/06/25 16:09 #122
+.PROGRAM gripper.pick(.gripper.no)@26/06/25 16:09 #126
 ;
 ; Start from step 3 to manual check
   IF FALSE THEN
@@ -874,7 +875,7 @@ N_INT300    "s.debug.mode|Debug mode"
   CALL log(.$temp)
 ;
 .END
-.PROGRAM gripper.put(.gripper.no)@26/06/25 16:09 #121
+.PROGRAM gripper.put(.gripper.no)@26/06/25 16:09 #125
 ;
 ; Start from step 3 to manual check
   IF FALSE THEN
@@ -921,7 +922,7 @@ N_INT300    "s.debug.mode|Debug mode"
   BREAK
 ;
 .END
-.PROGRAM id1()@26/07/01 08:03 #222; 312.229.002
+.PROGRAM id1()@26/07/01 08:03 #226; 312.229.002
 ; Object ID
   object.id = 1
   etalon.id = 1
@@ -937,7 +938,7 @@ N_INT300    "s.debug.mode|Debug mode"
   direction = 1; -1 for reverse
 ;
 .END
-.PROGRAM id2()@26/06/25 16:09 #24; 0401.17.02.023-02
+.PROGRAM id2()@26/06/25 16:09 #27; 0401.17.02.023-02
 ; Object ID
   object.id = 2
   etalon.id = 2
@@ -953,7 +954,7 @@ N_INT300    "s.debug.mode|Debug mode"
   direction = 1; -1 for reverse
 ;
 .END
-.PROGRAM id3()@26/06/25 16:09 #32; 312.229.001
+.PROGRAM id3()@26/06/25 16:09 #33; 312.229.001
 ; Object ID
   object.id = 3
   etalon.id = 3
@@ -985,7 +986,7 @@ N_INT300    "s.debug.mode|Debug mode"
   direction = 1; -1 for reverse
 ;
 .END
-.PROGRAM id5()@26/06/25 16:09 #14; 440.00.111
+.PROGRAM id5()@26/06/25 16:09 #16; 440.00.111
 ; Object ID
   object.id = 5
   etalon.id = 5
@@ -1001,7 +1002,7 @@ N_INT300    "s.debug.mode|Debug mode"
   direction = 1; -1 for reverse
 ;
 .END
-.PROGRAM id6()@26/06/25 16:09 #38; 0401.28.02.063
+.PROGRAM id6()@26/06/25 16:09 #40; 0401.28.02.063
 ; Object ID
   object.id = 6
   etalon.id = 6
@@ -1017,7 +1018,7 @@ N_INT300    "s.debug.mode|Debug mode"
   direction = 1; -1 for reverse
 ;
 .END
-.PROGRAM load.opt.data()@26/06/25 16:09 #375
+.PROGRAM load.opt.data()@26/06/25 16:09 #387
 ;
   CALL log("Load OPT IDs from string: "+$opt.data)
   max.count.opt = 0
@@ -1035,7 +1036,7 @@ N_INT300    "s.debug.mode|Debug mode"
   END
 ;
 .END
-.PROGRAM load.ot.data()@26/06/25 16:09 #373
+.PROGRAM load.ot.data()@26/06/25 16:09 #385
 ;
   max.count.ot = 0
   WHILE TRUE DO
@@ -1052,7 +1053,7 @@ N_INT300    "s.debug.mode|Debug mode"
   END
 ;
 .END
-.PROGRAM log(.$msg)@26/06/25 16:09 #49345
+.PROGRAM log(.$msg)@26/06/25 16:09 #55417
 ;
 ; 1 line = 55 symbols max
 ;
@@ -1066,24 +1067,24 @@ N_INT300    "s.debug.mode|Debug mode"
   IFPWPRINT 3,1,1,9,10=$log.entry[124],$log.entry[125],$log.entry[126],$log.entry[127]
 ;
 .END
-.PROGRAM log.pc2 (.$msg)
-  ;
-  ; 1 line = 55 symbols max
-  ;
+.PROGRAM log.pc2(.$msg)@26/07/02 09:48 #31
+;
+; 1 line = 55 symbols max
+;
   FOR .i = 0 TO 126
-    $log.entry[.i] = $log.entry[.i + 1]
+    $log.entry[.i] = $log.entry[.i+1]
   END
-  $log.entry[127] = $TIME + " " + .$msg
-  ;
-  IFPWPRINT 1, 1, 1, 9, 10 = $log.entry[116], $log.entry[117], $log.entry[118], $log.entry[119]
-  IFPWPRINT 2, 1, 1, 9, 10 = $log.entry[120], $log.entry[121], $log.entry[122], $log.entry[123]
-  IFPWPRINT 3, 1, 1, 9, 10 = $log.entry[124], $log.entry[125], $log.entry[126], $log.entry[127]
-  ;
+  $log.entry[127] = $TIME+" "+.$msg
+;
+  IFPWPRINT 1,1,1,9,10=$log.entry[116],$log.entry[117],$log.entry[118],$log.entry[119]
+  IFPWPRINT 2,1,1,9,10=$log.entry[120],$log.entry[121],$log.entry[122],$log.entry[123]
+  IFPWPRINT 3,1,1,9,10=$log.entry[124],$log.entry[125],$log.entry[126],$log.entry[127]
+;
 .END
-.PROGRAM opt.push()@26/07/01 14:35 #130
+.PROGRAM opt.push()@26/07/01 14:35 #141
 ;
   ACCURACY 0.02 ALWAYS
-  SPEED 300 MM/S ALWAYS
+  SPEED 500 MM/S ALWAYS
 ;
   LMOVE #opt.put.safe
 ;
@@ -1104,7 +1105,7 @@ N_INT300    "s.debug.mode|Debug mode"
   LMOVE #opt.put.safe
 ;
 .END
-.PROGRAM opt.return(.i,.j)@26/06/25 16:09 #316
+.PROGRAM opt.return(.i,.j)@26/06/25 16:09 #324
   IF FALSE THEN
     .i = hmi.opt.i
     .j = hmi.opt.j
@@ -1142,14 +1143,14 @@ N_INT300    "s.debug.mode|Debug mode"
   SIGNAL -s.cmd.pneum.op
 ;
   ACCURACY 0.02
-  SPEED 100 MM/S
+  SPEED 50 MM/S
   LMOVE #opt.put
   BREAK
   PULSE capture.tare
   TWAIT 0.5
 ;
   ACCURACY 0.02
-  SPEED 100 MM/S
+  SPEED 50 MM/S
   LMOVE .put.stz+TRANS(50)
 ;
 ;SPEED 80 ALWAYS
@@ -1181,7 +1182,7 @@ N_INT300    "s.debug.mode|Debug mode"
   ACCEL 100 ALWAYS
   DECEL 100 ALWAYS
 .END
-.PROGRAM opt.table(.id)@26/06/25 16:09 #375
+.PROGRAM opt.table(.id)@26/06/25 16:09 #387
 ;
   .$temp = "Processing OPT with ID: "+$ENCODE(/L,.id)
   CALL log(.$temp)
@@ -1314,7 +1315,7 @@ N_INT300    "s.debug.mode|Debug mode"
   CALL log(.$temp)
 ;
 .END
-.PROGRAM opt.take(.i,.j)@26/06/25 16:09 #388
+.PROGRAM opt.take(.i,.j)@26/06/25 16:09 #401
   IF FALSE THEN
     .i = hmi.st.in.i
     .j = hmi.st.in.j
@@ -1347,7 +1348,7 @@ N_INT300    "s.debug.mode|Debug mode"
   LMOVE opt.point[.i,.j]+TRANS(0,0,50)
 ; Move to OPT
   ACCURACY 0.02
-  SPEED 100 MM/S
+  SPEED 50 MM/S
   LMOVE opt.point[.i,.j]
   BREAK
   PULSE capture.tare
@@ -1355,11 +1356,11 @@ N_INT300    "s.debug.mode|Debug mode"
   TWAIT 0.5
 ; Move up
   ACCURACY 0.02
-  SPEED 100 MM/S
+  SPEED 50 MM/S
   ACCEL 50
   LMOVE opt.point[.i,.j]+TRANS(20)
 ; Move to sensor position
-  SPEED 100 MM/S
+  SPEED 50 MM/S
   ACCURACY 0
   LMOVE opt.point[.i,.j]+TRANS(20,0,100)
   BREAK
@@ -1407,15 +1408,16 @@ N_INT300    "s.debug.mode|Debug mode"
     LMOVE #opt.put.safe
     CALL opt.push
     LMOVE #opt.put.safe
+    SPEED 500 MM/S
     LMOVE #stz.wait
 ;POINT #current.pos = #stz.wait
   ELSE
     CALL log("OPT do not exists, move to next")
     ACCURACY 0.02
-    SPEED 100 MM/S
+    SPEED 50 MM/S
     LMOVE opt.point[.i,.j]+TRANS(20)
     ACCURACY 0.02
-    SPEED 100 MM/S
+    SPEED 50 MM/S
     LMOVE opt.point[.i,.j]
     BREAK
     PULSE release.tare
@@ -1428,7 +1430,7 @@ N_INT300    "s.debug.mode|Debug mode"
   ACCEL 100 ALWAYS
   DECEL 100 ALWAYS
 .END
-.PROGRAM ot.return(.i,.j)@26/06/25 16:09 #328
+.PROGRAM ot.return(.i,.j)@26/06/25 16:09 #335
   IF FALSE THEN
     .i = hmi.ot.i
     .j = hmi.ot.j
@@ -1461,7 +1463,7 @@ N_INT300    "s.debug.mode|Debug mode"
   BREAK
 ;
   ACCURACY 0.02
-  SPEED 100 MM/S
+  SPEED 50 MM/S
   LMOVE #ot.put
   BREAK
 ;
@@ -1476,7 +1478,7 @@ N_INT300    "s.debug.mode|Debug mode"
   LMOVE ot.point[.i,.j]+TRANS(20,0,400)
 ;
   ACCURACY 0.02
-  SPEED 100 MM/S
+  SPEED 50 MM/S
   LMOVE ot.point[.i,.j]+TRANS(20)
   BREAK
 ;
@@ -1494,7 +1496,7 @@ N_INT300    "s.debug.mode|Debug mode"
   ACCEL 100 ALWAYS
   DECEL 100 ALWAYS
 .END
-.PROGRAM ot.table(.id)@26/06/25 16:09 #373
+.PROGRAM ot.table(.id)@26/06/25 16:09 #385
 ;
   .$temp = "Processing OT with ID: "+$ENCODE(/L,.id)
   CALL log(.$temp)
@@ -1672,7 +1674,7 @@ N_INT300    "s.debug.mode|Debug mode"
   CALL log(.$temp)
 ;
 .END
-.PROGRAM ot.take(.i,.j)@26/07/01 08:05 #450
+.PROGRAM ot.take(.i,.j)@26/07/01 08:05 #465
 ; Start from step 3 to manual check
   IF FALSE THEN
     .i = hmi.st.out.i
@@ -1709,7 +1711,7 @@ N_INT300    "s.debug.mode|Debug mode"
   LMOVE ot.point[.i,.j]+TRANS(0,0,50)
 ; Move to OT
   ACCURACY 0.02
-  SPEED 100 MM/S
+  SPEED 50 MM/S
   LMOVE ot.point[.i,.j]
   BREAK
   PULSE capture.tare
@@ -1717,7 +1719,7 @@ N_INT300    "s.debug.mode|Debug mode"
   count.ot = count.ot+1
 ; Move up
   ACCURACY 0.02
-  SPEED 100 MM/S
+  SPEED 50 MM/S
   LMOVE ot.point[.i,.j]+TRANS(20)
 ; Move to sensor position
   ACCURACY 0.02
@@ -1762,10 +1764,10 @@ N_INT300    "s.debug.mode|Debug mode"
   ELSE
     CALL log("OT do not exists, move to next")
     ACCURACY 0.02
-    SPEED 100 MM/S
+    SPEED 50 MM/S
     LMOVE ot.point[.i,.j]+TRANS(20)
     ACCURACY 0.02
-    SPEED 100 MM/S
+    SPEED 50 MM/S
     LMOVE ot.point[.i,.j]
     BREAK
     PULSE release.tare
@@ -1780,7 +1782,7 @@ N_INT300    "s.debug.mode|Debug mode"
   DECEL 100 ALWAYS
 ;
 .END
-.PROGRAM pg.select()@26/06/25 16:09 #283
+.PROGRAM pg.select()@26/06/25 16:09 #295
   SCASE $pg.name OF
    SVALUE "312.229.002":
     CASE detail.spec OF
@@ -1861,7 +1863,7 @@ N_INT300    "s.debug.mode|Debug mode"
   state = 0
   CALL a.main
 .END
-.PROGRAM pos.put()@26/07/01 15:52 #2706
+.PROGRAM pos.put()@26/07/02 22:09 #3256
 ;
   .$temp = "Put detail to positioner (ID:"+$ENCODE(object.id)+")"
   CALL log(.$temp)
@@ -1890,7 +1892,7 @@ N_INT300    "s.debug.mode|Debug mode"
   END
   BREAK
 ;
-  SPEED 100 MM/S
+  SPEED 20 MM/S
   ACCURACY 0.02
   LMOVE #pos.point[object.id]
   BREAK
@@ -1911,7 +1913,7 @@ N_INT300    "s.debug.mode|Debug mode"
   SIGNAL -rs13.lock.zone
 ;LMOVE #stz.wait
 .END
-.PROGRAM safe.home()@26/06/25 16:09 #197
+.PROGRAM safe.home()@26/06/25 16:09 #206
 ;
   IF SIG(do.home) THEN
     CALL log("Robot already in home position")
@@ -1939,7 +1941,7 @@ N_INT300    "s.debug.mode|Debug mode"
   CALL log("Robot in home position")
 ;
 .END
-.PROGRAM set.io.pc()@26/06/25 16:09 #85
+.PROGRAM set.io.pc()@26/07/02 22:09 #87
 ; Gripper IO
 ;
 ; Tare
@@ -2098,7 +2100,7 @@ N_INT300    "s.debug.mode|Debug mode"
 ;
   s.debug.mode = 2300
 .END
-.PROGRAM set.vars.pc()@26/06/25 16:09 #62
+.PROGRAM set.vars.pc()@26/06/25 16:09 #68
 ;
 ; Constants
 ;
@@ -2229,7 +2231,7 @@ N_INT300    "s.debug.mode|Debug mode"
 .PROGRAM ship.pos()@26/06/25 16:09 #0
   JOINT SPEED9 ACCU1 TIMER0 TOOL1 WORK0 CLAMP OX= WX= #[-0.0011916,0,-159,0,-108,15] ;
 .END
-.PROGRAM state0()@26/06/26 14:33 #169; Initialization of parameters
+.PROGRAM state0()@26/07/02 22:09 #176; Initialization of parameters
 ;
   CALL log("State 0: Program reset. Initialization of parameters")
   SIGNAL -s.opt.placed,-s.ot.placed,-s.grip.full
@@ -2237,8 +2239,8 @@ N_INT300    "s.debug.mode|Debug mode"
   SIGNAL -s.cmd.chg.opt,-s.cmd.n.op.stop,-rs13.no.ot.stop
   SIGNAL -s.cmd.resume,-s.cmd.pause
   SIGNAL -s.stock.opt.ng,-s.stock.ot.ng,-s.stock.opt.ok,-s.stock.ot.ok
-  SIGNAL s.force.in[1], s.force.in[2]
-  ;
+  SIGNAL s.force.in[1],s.force.in[2]
+;
   count.put = 0
   BITS rs13.det.put[0],16 = count.put
 ;count.ot = 0
@@ -2248,7 +2250,7 @@ N_INT300    "s.debug.mode|Debug mode"
   state = 100
 ;
 .END
-.PROGRAM state1()@26/06/25 16:09 #470; Pick OT from stocker
+.PROGRAM state1()@26/07/02 08:08 #485; Pick OT from stocker
 ;
   CALL log("State 1: Pick OT")
   IF count.ot>=max.count.ot THEN
@@ -2283,7 +2285,7 @@ N_INT300    "s.debug.mode|Debug mode"
   state = 101
 ;
 .END
-.PROGRAM state100()@26/06/25 16:09 #233; Waiting for start
+.PROGRAM state100()@26/06/25 16:09 #245; Waiting for start
 ;
   CALL log("State 100: Waiting for start")
   $action = "WaitingForStart"
@@ -2303,11 +2305,11 @@ N_INT300    "s.debug.mode|Debug mode"
   state = 106
 ;
 .END
-.PROGRAM state101()@26/06/25 16:09 #8281; Auxilary state
+.PROGRAM state101()@26/06/25 16:09 #9552; Auxilary state
   CALL log("State 101: Calculating next step")
   state = 102
 .END
-.PROGRAM state102()@26/06/30 22:50 #17321930; Decision making
+.PROGRAM state102()@26/07/02 22:09 #19831711; Decision making
 ; Priority 1
   IF SIG(s.cmd.pause) THEN
     state = 105
@@ -2338,7 +2340,7 @@ N_INT300    "s.debug.mode|Debug mode"
 ; Priority 6
   IF SIG(s.ot.placed) AND SIG(s.opt.placed) AND NOT SIG(s.grip.full) THEN
     $action = "WaitForPick"
-    IF stz.x>=0 AND SIG(s.cmd.pick) THEN ;AND NOT SIG (rs7.tare.chg) THEN
+    IF stz.x>=0 AND SIG(s.cmd.pick) AND NOT (count.put==detail.count) THEN ;AND NOT SIG (rs7.tare.chg) THEN
       SIGNAL -s.cmd.pick
       $action = " "
       state = 3
@@ -2360,11 +2362,11 @@ N_INT300    "s.debug.mode|Debug mode"
     RETURN
   END
 .END
-.PROGRAM state103()@26/06/25 16:09 #43; Auxilary state
+.PROGRAM state103()@26/07/02 08:11 #67; Auxilary state
   CALL log("State 103: Calculating ending sequence step")
   state = 104
 .END
-.PROGRAM state104()@26/07/01 08:11 #1371086; Ending sequence
+.PROGRAM state104()@26/07/02 22:09 #1509404; Ending sequence
 ;
   IF SIG(s.cmd.n.op.stop) AND SIG(s.opt.placed) THEN
     state = 6
@@ -2428,17 +2430,18 @@ N_INT300    "s.debug.mode|Debug mode"
   END
 ;
 .END
-.PROGRAM state105()@26/06/26 14:33 #60; Program paused
+.PROGRAM state105()@26/07/02 09:53 #68; Program paused
   CALL log("State 105: Program paused")
   $action = "Paused"
   SWAIT s.cmd.resume
   SIGNAL -s.cmd.resume
+  SIGNAL -s.cmd.pause
   $action = " "
   CALL log("Program resumed")
   SIGNAL -s.cmd.pause
   state = 101
 .END
-.PROGRAM state106()@26/06/25 16:09 #364; Check program
+.PROGRAM state106()@26/06/25 16:09 #376; Check program
   CALL log("State 106: Check program")
   IF $pg.name<>"NULL" THEN
     CALL log("Selected program: "+$pg.name)
@@ -2452,7 +2455,7 @@ N_INT300    "s.debug.mode|Debug mode"
     state = 0
   END
 .END
-.PROGRAM state2()@26/06/25 16:09 #323; Pick OPT from stocker
+.PROGRAM state2()@26/07/02 08:08 #337; Pick OPT from stocker
 ;
   CALL log("State 2: Pick OPT")
   IF count.opt>=max.count.opt THEN
@@ -2482,11 +2485,11 @@ N_INT300    "s.debug.mode|Debug mode"
   state = 101
 ;
 .END
-.PROGRAM state255()@26/06/25 16:09 #264; Program complete
+.PROGRAM state255()@26/06/25 16:09 #268; Program complete
   CALL log("State 255: Program complete")
   state = 0
 .END
-.PROGRAM state3()@26/06/25 16:09 #3707; Pick from STZ
+.PROGRAM state3()@26/06/25 16:09 #4329; Pick from STZ
 ;
   CALL log("State 3: Pick from STZ")
 ; Check all start positions
@@ -2509,7 +2512,7 @@ N_INT300    "s.debug.mode|Debug mode"
   state = 101
 ;
 .END
-.PROGRAM state4()@26/06/25 16:09 #3656; Put detail to positioner
+.PROGRAM state4()@26/07/02 08:08 #4275; Put detail to positioner
   CALL log("State 4: Put detail to positioner")
 ; Check all start positions
   POINT .current.pos = #HERE
@@ -2534,7 +2537,7 @@ N_INT300    "s.debug.mode|Debug mode"
   END
 ;
 .END
-.PROGRAM state5()@26/06/25 16:09 #342; Return OT
+.PROGRAM state5()@26/06/25 16:09 #349; Return OT
   CALL log("State 5: Return OT")
 ; Check all start positions
   POINT .current.pos = #HERE
@@ -2554,7 +2557,7 @@ N_INT300    "s.debug.mode|Debug mode"
   state = 8
 ;
 .END
-.PROGRAM state6()@26/06/30 22:03 #153; Return OPT
+.PROGRAM state6()@26/06/30 22:03 #161; Return OPT
 ;
   CALL log("State 6: Return OPT")
 ;
@@ -2587,7 +2590,7 @@ N_INT300    "s.debug.mode|Debug mode"
   state = 9
 ;
 .END
-.PROGRAM state7()@26/06/25 16:09 #354; Check grippers
+.PROGRAM state7()@26/06/25 16:09 #366; Check grippers
   CALL log("State 7: Check if gripper change is required")
 ; We are at home at this point. No cases without home!
   IF current.gripper<>pg13.gripper THEN
@@ -2605,7 +2608,7 @@ N_INT300    "s.debug.mode|Debug mode"
   END
   state = 1
 .END
-.PROGRAM state8()@26/06/25 16:09 #342; Decide if pick next OT
+.PROGRAM state8()@26/07/02 08:08 #349; Decide if pick next OT
   CALL log("State 8: Decide if pick next OT")
   IF count.ot>=max.count.ot OR SIG(s.cmd.finish) THEN
     LMOVE #ot.take.safe
@@ -2617,7 +2620,7 @@ N_INT300    "s.debug.mode|Debug mode"
     state = 1
   END
 .END
-.PROGRAM state9()@26/06/25 16:09 #330; Decide if pick next OPT
+.PROGRAM state9()@26/07/02 08:08 #338; Decide if pick next OPT
   CALL log("State 9: Decide if pick next OPT")
 ;
   .m1 = count.opt>=max.count.opt OR count.put==detail.count
@@ -2632,7 +2635,7 @@ N_INT300    "s.debug.mode|Debug mode"
     state = 2
   END
 .END
-.PROGRAM stz.pick()@26/06/25 16:09 #3757
+.PROGRAM stz.pick()@26/06/25 16:09 #4379
 ;
   .$temp = "Pick detail from stz ("+$ENCODE(/L,stz.x)+", "+$ENCODE(/L,stz.y)+", "+$ENCODE(/L,stz.a)+")"
   CALL log(.$temp)
@@ -2692,7 +2695,7 @@ N_INT300    "s.debug.mode|Debug mode"
   END
   ACCURACY 20
   LAPPRO .pick,-30
-  SPEED 40 MM/S
+  SPEED 20 MM/S
   ACCURACY 0.02
   LMOVE .pick
   BREAK
@@ -2713,7 +2716,7 @@ N_INT300    "s.debug.mode|Debug mode"
   LMOVE #pos.wait
 ;
 .END
-.PROGRAM tcp.callback.pc(.$data[],.data.length)@26/06/26 14:34 #94094
+.PROGRAM tcp.callback.pc(.$data[],.data.length)@26/07/02 09:51 #103266
   .$temp = "Received "+$ENCODE(.data.length)+" strings:"
   PRINT tcp.recv.ena: .$temp
   FOR .i = 1 TO .data.length
@@ -2865,7 +2868,7 @@ N_INT300    "s.debug.mode|Debug mode"
 ; PAUSE;
 ;
     IF INSTR(.$data[.i] , "PAUSE") THEN
-      CALL log.pc2 ("Received PAUSE command")
+      CALL log.pc2("Received PAUSE command")
       SIGNAL s.cmd.pause
     END
 ;
@@ -2874,7 +2877,7 @@ N_INT300    "s.debug.mode|Debug mode"
 ; RESUME;
 ;
     IF INSTR(.$data[.i] , "RESUME") THEN
-      CALL log.pc2 ("Received RESUME command")
+      CALL log.pc2("Received RESUME command")
       SIGNAL s.cmd.resume
     END
 ;
@@ -2883,7 +2886,7 @@ N_INT300    "s.debug.mode|Debug mode"
 ; STOP;
 ;
     IF INSTR(.$data[.i] , "STOP") THEN
-      CALL log.pc2 ("Received STOP command")
+      CALL log.pc2("Received STOP command")
       SIGNAL s.cmd.stop
     END
 ;
@@ -3025,7 +3028,7 @@ N_INT300    "s.debug.mode|Debug mode"
     TWAIT 0.05
   END
 .END
-.PROGRAM tcp.log.pc(.$msg)@26/06/25 16:09 #188326
+.PROGRAM tcp.log.pc(.$msg)@26/06/25 16:09 #197838
   IF NOT SIG(s.tcp.log) THEN
     RETURN
   END
@@ -3042,7 +3045,7 @@ N_INT300    "s.debug.mode|Debug mode"
   IFPWPRINT 3,1,1,9,10=$log.entry[124],$log.entry[125],$log.entry[126],$log.entry[127]
 ;
 .END
-.PROGRAM tcp.send.pc(.$data[],.data.length)@26/06/25 16:09 #504988
+.PROGRAM tcp.send.pc(.$data[],.data.length)@26/06/25 16:09 #532763
 ;
   .tcp.send.tmo = 5
 ;
@@ -3161,6 +3164,11 @@ N_INT300    "s.debug.mode|Debug mode"
 	; s.cmd.finish
 	; s.force.in[1]
 	; s.force.in[2]
+	; detail.count
+	; $action
+	; s.grip.full
+	; s.opt.placed
+	; s.ot.placed
 	; ~Log
 	; @@@ CONNECTION @@@
 	; RS013N
@@ -4074,22 +4082,22 @@ s.hmi.res.act = 2262
 s.debug.mode = 2300
 do.bat.alm = 2011
 s.pr.tst.stz = 2248
-rs7.det.picked[7] = 1047
-rs7.det.picked[6] = 1046
-rs7.det.picked[5] = 1045
-rs7.det.picked[4] = 1044
-rs7.det.picked[3] = 1043
-rs7.det.picked[2] = 1042
-rs7.det.picked[1] = 1041
 rs7.det.picked[0] = 1040
-rs13.det.put[7] = 47
-rs13.det.put[6] = 46
-rs13.det.put[5] = 45
-rs13.det.put[4] = 44
-rs13.det.put[3] = 43
-rs13.det.put[2] = 42
-rs13.det.put[1] = 41
+rs7.det.picked[1] = 1041
+rs7.det.picked[2] = 1042
+rs7.det.picked[3] = 1043
+rs7.det.picked[4] = 1044
+rs7.det.picked[5] = 1045
+rs7.det.picked[6] = 1046
+rs7.det.picked[7] = 1047
 rs13.det.put[0] = 40
+rs13.det.put[1] = 41
+rs13.det.put[2] = 42
+rs13.det.put[3] = 43
+rs13.det.put[4] = 44
+rs13.det.put[5] = 45
+rs13.det.put[6] = 46
+rs13.det.put[7] = 47
 detail.spec = 1
 cv.x.minus[33] = 0
 cv.x.minus[34] = 0
@@ -4234,6 +4242,14 @@ pg.gripper = 2
 rs13.no.ot.stop = 34
 s.cmd.n.op.stop = 2242
 wdog.tmr = 180
+rs13.det.put[15] = 55
+rs13.det.put[14] = 54
+rs13.det.put[13] = 53
+rs13.det.put[12] = 52
+rs13.det.put[11] = 51
+rs13.det.put[10] = 50
+rs13.det.put[9] = 49
+rs13.det.put[8] = 48
 rs7.det.picked[8] = 1048
 rs7.det.picked[9] = 1049
 rs7.det.picked[10] = 1050
@@ -4242,147 +4258,139 @@ rs7.det.picked[12] = 1052
 rs7.det.picked[13] = 1053
 rs7.det.picked[14] = 1054
 rs7.det.picked[15] = 1055
-rs13.det.put[8] = 48
-rs13.det.put[9] = 49
-rs13.det.put[10] = 50
-rs13.det.put[11] = 51
-rs13.det.put[12] = 52
-rs13.det.put[13] = 53
-rs13.det.put[14] = 54
-rs13.det.put[15] = 55
 .END
 .STRINGS
 $tcp.ip = "192.168.7.100"
-$log.entry[0] = "17:41:20 State 4: Put detail to positioner"
-$log.entry[1] = "17:41:20 Put detail to positioner (ID: 2)"
-$log.entry[2] = "17:41:20 Check if positioner is occupied"
-$log.entry[3] = "17:41:22 Detail counter: 244"
-$log.entry[4] = "17:41:23 State 101: Calculating next step"
-$log.entry[5] = "17:41:23 State 3: Pick from STZ"
-$log.entry[6] = "17:41:23 Pick detail from stz (179.2012, 145.75401, 180)"
-$log.entry[7] = "17:41:25 Wait for unclamp gripper"
-$log.entry[8] = "17:41:29 State 101: Calculating next step"
-$log.entry[9] = "17:41:36 State 4: Put detail to positioner"
-$log.entry[10] = "17:41:36 Put detail to positioner (ID: 2)"
-$log.entry[11] = "17:41:36 Check if positioner is occupied"
-$log.entry[12] = "17:41:38 Detail counter: 245"
-$log.entry[13] = "17:41:39 State 101: Calculating next step"
-$log.entry[14] = "17:41:39 State 3: Pick from STZ"
-$log.entry[15] = "17:41:40 Pick detail from stz (232.47165, 438.71368, 0)"
-$log.entry[16] = "17:41:41 Wait for unclamp gripper"
-$log.entry[17] = "17:41:44 State 101: Calculating next step"
-$log.entry[18] = "17:41:52 State 4: Put detail to positioner"
-$log.entry[19] = "17:41:52 Put detail to positioner (ID: 2)"
-$log.entry[20] = "17:41:53 Check if positioner is occupied"
-$log.entry[21] = "17:41:55 Detail counter: 246"
-$log.entry[22] = "17:41:56 State 101: Calculating next step"
-$log.entry[23] = "17:41:56 State 3: Pick from STZ"
-$log.entry[24] = "17:41:56 Pick detail from stz (271.05295, 385.05496, 0)"
-$log.entry[25] = "17:41:57 Wait for unclamp gripper"
-$log.entry[26] = "17:42:00 State 101: Calculating next step"
-$log.entry[27] = "17:44:09 State 4: Put detail to positioner"
-$log.entry[28] = "17:44:09 Put detail to positioner (ID: 2)"
-$log.entry[29] = "17:44:10 Check if positioner is occupied"
-$log.entry[30] = "17:44:12 Detail counter: 247"
-$log.entry[31] = "17:44:13 State 101: Calculating next step"
-$log.entry[32] = "17:44:14 State 3: Pick from STZ"
-$log.entry[33] = "17:44:14 Pick detail from stz (221.28569, 310.18121, 180)"
-$log.entry[34] = "17:44:16 Wait for unclamp gripper"
-$log.entry[35] = "17:44:20 State 101: Calculating next step"
-$log.entry[36] = "17:44:25 State 4: Put detail to positioner"
-$log.entry[37] = "17:44:25 Put detail to positioner (ID: 2)"
-$log.entry[38] = "17:44:25 Check if positioner is occupied"
-$log.entry[39] = "17:44:28 Detail counter: 248"
-$log.entry[40] = "17:44:29 State 101: Calculating next step"
-$log.entry[41] = "17:44:29 State 3: Pick from STZ"
-$log.entry[42] = "17:44:29 Pick detail from stz (105.22615, 127.58525, 180)"
-$log.entry[43] = "17:44:30 Wait for unclamp gripper"
-$log.entry[44] = "17:44:34 State 101: Calculating next step"
-$log.entry[45] = "17:44:42 State 4: Put detail to positioner"
-$log.entry[46] = "17:44:42 Put detail to positioner (ID: 2)"
-$log.entry[47] = "17:44:42 Check if positioner is occupied"
-$log.entry[48] = "17:44:44 Detail counter: 249"
-$log.entry[49] = "17:44:45 State 101: Calculating next step"
-$log.entry[50] = "17:44:45 State 3: Pick from STZ"
-$log.entry[51] = "17:44:45 Pick detail from stz (274.9884, 456.55356, 0)"
-$log.entry[52] = "17:44:46 Wait for unclamp gripper"
-$log.entry[53] = "17:44:49 State 101: Calculating next step"
-$log.entry[54] = "17:44:56 State 4: Put detail to positioner"
-$log.entry[55] = "17:44:57 Put detail to positioner (ID: 2)"
-$log.entry[56] = "17:44:57 Check if positioner is occupied"
-$log.entry[57] = "17:44:59 Detail counter: 250"
-$log.entry[58] = "17:45:00 State 101: Calculating next step"
-$log.entry[59] = "17:45:01 State 3: Pick from STZ"
-$log.entry[60] = "17:45:01 Pick detail from stz (117.76094, 364.74164, 0)"
-$log.entry[61] = "17:45:02 Wait for unclamp gripper"
-$log.entry[62] = "17:45:05 State 101: Calculating next step"
-$log.entry[63] = "17:45:12 State 4: Put detail to positioner"
-$log.entry[64] = "17:45:12 Put detail to positioner (ID: 2)"
-$log.entry[65] = "17:45:13 Check if positioner is occupied"
-$log.entry[66] = "17:45:15 Detail counter: 251"
-$log.entry[67] = "17:45:16 State 101: Calculating next step"
-$log.entry[68] = "17:45:16 State 3: Pick from STZ"
-$log.entry[69] = "17:45:16 Pick detail from stz (117.12953, 383.00641, 0)"
-$log.entry[70] = "17:45:17 Wait for unclamp gripper"
-$log.entry[71] = "17:45:20 State 101: Calculating next step"
-$log.entry[72] = "17:45:27 State 4: Put detail to positioner"
-$log.entry[73] = "17:45:28 Put detail to positioner (ID: 2)"
-$log.entry[74] = "17:45:28 Check if positioner is occupied"
-$log.entry[75] = "17:45:30 Detail counter: 252"
-$log.entry[76] = "17:45:31 State 101: Calculating next step"
-$log.entry[77] = "17:45:32 State 3: Pick from STZ"
-$log.entry[78] = "17:45:32 Pick detail from stz (33.60365, 365.4389, 0)"
-$log.entry[79] = "17:45:33 Wait for unclamp gripper"
-$log.entry[80] = "17:45:36 State 101: Calculating next step"
-$log.entry[81] = "17:45:42 State 4: Put detail to positioner"
-$log.entry[82] = "17:45:43 Put detail to positioner (ID: 2)"
-$log.entry[83] = "17:45:43 Check if positioner is occupied"
-$log.entry[84] = "17:45:45 Detail counter: 253"
-$log.entry[85] = "17:45:46 State 101: Calculating next step"
-$log.entry[86] = "17:45:46 State 3: Pick from STZ"
-$log.entry[87] = "17:45:46 Pick detail from stz (253.68384, 37.98418, 0)"
-$log.entry[88] = "17:45:47 Wait for unclamp gripper"
-$log.entry[89] = "17:45:50 State 101: Calculating next step"
-$log.entry[90] = "17:45:59 State 4: Put detail to positioner"
-$log.entry[91] = "17:45:59 Put detail to positioner (ID: 2)"
-$log.entry[92] = "17:45:59 Check if positioner is occupied"
-$log.entry[93] = "17:46:01 Detail counter: 254"
-$log.entry[94] = "17:46:02 State 101: Calculating next step"
-$log.entry[95] = "17:46:02 State 3: Pick from STZ"
-$log.entry[96] = "17:46:03 Pick detail from stz (33.50939, 383.2276, 0)"
-$log.entry[97] = "17:46:04 Wait for unclamp gripper"
-$log.entry[98] = "17:46:07 State 101: Calculating next step"
-$log.entry[99] = "17:46:14 State 4: Put detail to positioner"
-$log.entry[100] = "17:46:14 Put detail to positioner (ID: 2)"
-$log.entry[101] = "17:46:14 Check if positioner is occupied"
-$log.entry[102] = "17:46:16 Detail counter: 255"
-$log.entry[103] = "17:46:17 State 101: Calculating next step"
-$log.entry[104] = "17:46:19 State 3: Pick from STZ"
-$log.entry[105] = "17:46:19 Pick detail from stz (276.6539, 438.15363, 0)"
-$log.entry[106] = "17:46:20 Wait for unclamp gripper"
-$log.entry[107] = "17:46:23 State 101: Calculating next step"
-$log.entry[108] = "17:46:42 State 4: Put detail to positioner"
-$log.entry[109] = "17:46:42 Put detail to positioner (ID: 2)"
-$log.entry[110] = "17:46:42 Check if positioner is occupied"
-$log.entry[111] = "17:46:44 Detail counter: 256"
-$log.entry[112] = "17:46:45 State 101: Calculating next step"
-$log.entry[113] = "17:46:53 State 3: Pick from STZ"
-$log.entry[114] = "17:46:53 Pick detail from stz (57.41953, 36.56533, 180)"
-$log.entry[115] = "17:46:55 Wait for unclamp gripper"
-$log.entry[116] = "17:46:59 State 101: Calculating next step"
-$log.entry[117] = "17:48:26 State 105: Program paused"
-$log.entry[118] = "17:48:26 Program resumed"
-$log.entry[119] = "17:48:26 State 101: Calculating next step"
-$log.entry[120] = "17:52:24 State 105: Program paused"
-$log.entry[121] = "17:52:24 Program resumed"
-$log.entry[122] = "17:52:24 State 101: Calculating next step"
-$log.entry[123] = "17:55:40 State 103: Ending sequence started"
-$log.entry[124] = "07:35:17 Main program executed"
-$log.entry[125] = "07:35:17 Robot already in home position"
-$log.entry[126] = "07:35:17 State 0: Program reset. Initialization of parameters"
-$log.entry[127] = "07:35:17 State 100: Waiting for start"
-$action = "WaitingForStart"
-$pg.name = "0401.17.02.023"
+$log.entry[0] = "03:12:19 State 3: Pick from STZ"
+$log.entry[1] = "03:12:19 Pick detail from stz (75.28773, 458.19403, 180)"
+$log.entry[2] = "03:12:20 Wait for unclamp gripper"
+$log.entry[3] = "03:12:24 State 101: Calculating next step"
+$log.entry[4] = "03:12:30 State 4: Put detail to positioner"
+$log.entry[5] = "03:12:30 Put detail to positioner (ID: 1)"
+$log.entry[6] = "03:12:30 Check if positioner is occupied"
+$log.entry[7] = "03:12:32 Detail counter: 193"
+$log.entry[8] = "03:12:33 State 101: Calculating next step"
+$log.entry[9] = "03:12:34 State 3: Pick from STZ"
+$log.entry[10] = "03:12:34 Pick detail from stz (245.59708, 312.51816, 180)"
+$log.entry[11] = "03:12:36 Wait for unclamp gripper"
+$log.entry[12] = "03:12:40 State 101: Calculating next step"
+$log.entry[13] = "03:12:45 State 4: Put detail to positioner"
+$log.entry[14] = "03:12:45 Put detail to positioner (ID: 1)"
+$log.entry[15] = "03:12:45 Check if positioner is occupied"
+$log.entry[16] = "03:12:48 Detail counter: 194"
+$log.entry[17] = "03:12:48 State 101: Calculating next step"
+$log.entry[18] = "03:12:49 State 3: Pick from STZ"
+$log.entry[19] = "03:12:49 Pick detail from stz (185.6057, 220.79065, 180)"
+$log.entry[20] = "03:12:50 Wait for unclamp gripper"
+$log.entry[21] = "03:12:54 State 101: Calculating next step"
+$log.entry[22] = "03:13:00 State 4: Put detail to positioner"
+$log.entry[23] = "03:13:00 Put detail to positioner (ID: 1)"
+$log.entry[24] = "03:13:01 Check if positioner is occupied"
+$log.entry[25] = "03:13:03 Detail counter: 195"
+$log.entry[26] = "03:13:04 State 101: Calculating next step"
+$log.entry[27] = "03:13:05 State 3: Pick from STZ"
+$log.entry[28] = "03:13:05 Pick detail from stz (216.48958, 128.97754, 180)"
+$log.entry[29] = "03:13:07 Wait for unclamp gripper"
+$log.entry[30] = "03:13:10 State 101: Calculating next step"
+$log.entry[31] = "03:13:17 State 4: Put detail to positioner"
+$log.entry[32] = "03:13:17 Put detail to positioner (ID: 1)"
+$log.entry[33] = "03:13:17 Check if positioner is occupied"
+$log.entry[34] = "03:13:20 Detail counter: 196"
+$log.entry[35] = "03:13:20 State 101: Calculating next step"
+$log.entry[36] = "03:13:21 State 3: Pick from STZ"
+$log.entry[37] = "03:13:21 Pick detail from stz (75.77645, 421.7746, 180)"
+$log.entry[38] = "03:13:23 Wait for unclamp gripper"
+$log.entry[39] = "03:13:27 State 101: Calculating next step"
+$log.entry[40] = "03:13:32 State 4: Put detail to positioner"
+$log.entry[41] = "03:13:32 Put detail to positioner (ID: 1)"
+$log.entry[42] = "03:13:32 Check if positioner is occupied"
+$log.entry[43] = "03:13:35 Detail counter: 197"
+$log.entry[44] = "03:13:35 State 101: Calculating next step"
+$log.entry[45] = "03:13:36 State 3: Pick from STZ"
+$log.entry[46] = "03:13:36 Pick detail from stz (191.31532, 37.49669, 180)"
+$log.entry[47] = "03:13:37 Wait for unclamp gripper"
+$log.entry[48] = "03:13:41 State 101: Calculating next step"
+$log.entry[49] = "03:13:47 State 4: Put detail to positioner"
+$log.entry[50] = "03:13:47 Put detail to positioner (ID: 1)"
+$log.entry[51] = "03:13:48 Check if positioner is occupied"
+$log.entry[52] = "03:13:50 Detail counter: 198"
+$log.entry[53] = "03:13:51 State 101: Calculating next step"
+$log.entry[54] = "03:13:52 State 3: Pick from STZ"
+$log.entry[55] = "03:13:52 Pick detail from stz (216.1239, 147.4617, 180)"
+$log.entry[56] = "03:13:53 Wait for unclamp gripper"
+$log.entry[57] = "03:13:57 State 101: Calculating next step"
+$log.entry[58] = "03:14:02 State 4: Put detail to positioner"
+$log.entry[59] = "03:14:02 Put detail to positioner (ID: 1)"
+$log.entry[60] = "03:14:03 Check if positioner is occupied"
+$log.entry[61] = "03:14:05 Detail counter: 199"
+$log.entry[62] = "03:14:06 State 101: Calculating next step"
+$log.entry[63] = "03:14:06 State 3: Pick from STZ"
+$log.entry[64] = "03:14:06 Pick detail from stz (246.29794, 458.6601, 180)"
+$log.entry[65] = "03:14:08 Wait for unclamp gripper"
+$log.entry[66] = "03:14:12 State 101: Calculating next step"
+$log.entry[67] = "03:14:17 State 4: Put detail to positioner"
+$log.entry[68] = "03:14:17 Put detail to positioner (ID: 1)"
+$log.entry[69] = "03:14:17 Check if positioner is occupied"
+$log.entry[70] = "03:14:20 Detail counter: 200"
+$log.entry[71] = "03:14:21 State 101: Calculating next step"
+$log.entry[72] = "03:14:21 State 3: Pick from STZ"
+$log.entry[73] = "03:14:21 Pick detail from stz (185.41812, 312.19858, 180)"
+$log.entry[74] = "03:14:22 Wait for unclamp gripper"
+$log.entry[75] = "03:14:26 State 101: Calculating next step"
+$log.entry[76] = "03:14:32 State 4: Put detail to positioner"
+$log.entry[77] = "03:14:32 Put detail to positioner (ID: 1)"
+$log.entry[78] = "03:14:33 Check if positioner is occupied"
+$log.entry[79] = "03:14:35 Detail counter: 201"
+$log.entry[80] = "03:14:36 State 101: Calculating next step"
+$log.entry[81] = "03:14:36 State 6: Return OPT"
+$log.entry[82] = "03:14:36 Return OPT with (i: 2, j: 6)"
+$log.entry[83] = "03:14:37 Wait pneumatics open"
+$log.entry[84] = "03:14:59 State 9: Decide if pick next OPT"
+$log.entry[85] = "03:15:00 State 103: Calculating ending sequence step"
+$log.entry[86] = "03:15:01 Wait for RS007L finish task"
+$log.entry[87] = "03:15:03 State 5: Return OT"
+$log.entry[88] = "03:15:03 Return OT with (i: 1, j: 5)"
+$log.entry[89] = "03:15:23 State 8: Decide if pick next OT"
+$log.entry[90] = "03:15:26 State 103: Calculating ending sequence step"
+$log.entry[91] = "03:15:26 Program complete"
+$log.entry[92] = "03:15:26 State 255: Program complete"
+$log.entry[93] = "03:15:27 State 0: Program reset. Initialization of parameters"
+$log.entry[94] = "03:15:27 State 100: Waiting for start"
+$log.entry[95] = "03:15:30 Received STOP command"
+$log.entry[96] = "13:58:37 Main program executed"
+$log.entry[97] = "13:58:37 Robot already in home position"
+$log.entry[98] = "13:58:37 State 0: Program reset. Initialization of parameters"
+$log.entry[99] = "13:58:38 State 100: Waiting for start"
+$log.entry[100] = "13:58:46 START with Name:440.00.111- 2 Count: 9 OT:1 OPT:1"
+$log.entry[101] = "13:58:46 Load OPT IDs from string: 1"
+$log.entry[102] = "13:58:46 Processing OPT with ID: 1"
+$log.entry[103] = "13:58:46 OPT indicies: (i:3, j:1), (i:3, j:2)"
+$log.entry[104] = "13:58:46 Processing OT with ID: 1"
+$log.entry[105] = "13:58:46 OT indicies: (i:4, j:1), (i:4, j:2), (i:4, j:2)"
+$log.entry[106] = "13:58:46 State 106: Check program"
+$log.entry[107] = "13:58:46 Selected program: 440.00.111"
+$log.entry[108] = "13:58:47 State 7: Check if gripper change is required"
+$log.entry[109] = "13:58:47 Selected wrong gripper, perform change"
+$log.entry[110] = "13:58:48 Put gripper 2"
+$log.entry[111] = "13:58:51 Gripper 2 put"
+$log.entry[112] = "13:58:52 Pick gripper 1"
+$log.entry[113] = "13:58:54 Gripper 1 picked"
+$log.entry[114] = "13:58:57 State 1: Pick OT"
+$log.entry[115] = "13:58:57 Take OT from (i: 4, j: 1)"
+$log.entry[116] = "13:59:03 Wait OT sensor state"
+$log.entry[117] = "13:59:07 Take OT from (i: 4, j: 1)"
+$log.entry[118] = "13:59:07 OT exists, continue"
+$log.entry[119] = "13:59:16 State 101: Calculating next step"
+$log.entry[120] = "13:59:17 State 2: Pick OPT"
+$log.entry[121] = "13:59:17 Take OPT from (i: 3, j: 1)"
+$log.entry[122] = "13:59:22 Wait OPT sensor state"
+$log.entry[123] = "13:59:27 Take OPT from (i: 3, j: 1)"
+$log.entry[124] = "13:59:27 OPT exists, continue"
+$log.entry[125] = "13:59:35 Wait pneumatics close"
+$log.entry[126] = "13:59:43 Take OPT from (i: 3, j: 1)"
+$log.entry[127] = "13:59:55 State 101: Calculating next step"
+$action = " "
+$pg.name = "440.00.111"
 $ot.data = "1"
 $opt.data = "1"
 $wdog.state = "FALSE"

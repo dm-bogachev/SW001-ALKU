@@ -51,6 +51,7 @@
         <div class="tab active" data-tab="control">Просмотр</div>
         <div class="tab" data-tab="robots">Роботы</div>
         <div class="tab" data-tab="io">IO</div>
+        <div class="tab" data-tab="debug">Отладка</div>
         <!-- Можно добавлять новые вкладки здесь -->
     </nav>
 
@@ -164,15 +165,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="debug-buttons">
-                            <button onclick="tare_on()">Tare on</button>
-                            <button onclick="tare_off()">Tare off</button>
-                            <br>
-                            <button onclick="calibrate()">Calibrate</button>
-                            <button onclick="uncalibrate()">Uncalibrate</button>
-                            <input id="exposureTmp"></input>
-                            <button onclick="setExpo()">Set exposure</button>
-                        </div>
+
                     </div>
                 </div>
             </div>
@@ -180,15 +173,14 @@
 
         <section class="tab-content" id="robots">
             <div class="robots-container">
-                <h2>Роботы</h2>
                 <!-- Отправлять команды (вкл/выкл) -->
-                <div class="robot-send-toggle" style="margin:10px 0; display:flex; align-items:center; gap:8px;">
+                <!-- <div class="robot-send-toggle" style="margin:10px 0; display:flex; align-items:center; gap:8px;">
                     <label class="switch" style="margin:0;">
                         <input type="checkbox" id="send-commands-switch" checked>
                         <span class="slider"></span>
                     </label>
                     <div style="font-size:14px;">Не отправлять команды</div>
-                </div>
+                </div> -->
                 <div class="robot-status-container">
 
                     <!-- RS013N Status -->
@@ -320,8 +312,6 @@
 
         <section class="tab-content" id="io">
             <div class="io-container">
-                <h2>Управление IO</h2>
-
                 <div class="io-section">
                     <h3>Входы (Inputs)</h3>
                     <div class="io-grid">
@@ -509,6 +499,19 @@
                         </div>
                     </div>
                 </div>
+            </div>
+
+        </section>
+
+        <section class="tab-content" id="debug">
+            <div class="debug-buttons">
+                <button onclick="tare_on()">Tare on</button>
+                <button onclick="tare_off()">Tare off</button>
+                <br>
+                <button onclick="calibrate()">Calibrate</button>
+                <button onclick="uncalibrate()">Uncalibrate</button>
+                <input id="exposureTmp"></input>
+                <button onclick="setExpo()">Set exposure</button>
             </div>
         </section>
     </main>
