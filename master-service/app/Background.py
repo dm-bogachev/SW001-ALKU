@@ -40,6 +40,28 @@ class Background(Thread):
         #
         self.cycle_delay = 0.25  # Задержка между циклами основного потока в секундах
 
+    def set_use_alternate_wave(self, use_alternate: bool):
+        if use_alternate:
+            logger.info(f"Включение чередующейся волны")
+            command = f"ALTERNATEWAVE;TRUE;"
+        else:
+            command = f"ALTERNATEWAVE;FALSE;"
+            logger.info(f"Выключение чередующейся волны")
+        if not self.send_command_to_robot(command, "RS007L", RS007L_API_URL):
+            return False
+        return True
+    
+    def is_retake_opt(self, retake: bool):
+        if retake:
+            logger.info(f"Включение повторного захвата ОПТ")
+            command = f"RETAKEOPT;TRUE;"
+        else:
+            command = f"RETAKEOPT;FALSE;"
+            logger.info(f"Выключение повторного захвата ОПТ")
+        if not self.send_command_to_robot(command, "RS013N", RS013N_API_URL):
+            return False
+        return True
+
     def next_step(self):
         logger.info(f"Запрос следующего шага для робота")
         command = f"NEXTSTEP;"

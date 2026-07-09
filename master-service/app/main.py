@@ -244,6 +244,28 @@ def ereset():
                 }
     return {"Status": "OK"}
 
+@app.post("/set_use_alternate_wave")
+def set_use_alternate_wave(use: bool):
+    """ Установка использования чередующейся волны """
+    logger.debug("Запрос /master/set_use_alternate_wave")
+    if not master.set_use_alternate_wave(use):
+        return {"Status": "Failed",
+                "Code": -1,
+                "Reason": "Error in sending to robot"
+                }
+    return {"Status": "OK"}
+
+@app.post("/is_retake_opt")
+def is_retake_opt(retake: bool):
+    """ Произвести повторную работу с ячейкой ОПТ """
+    logger.debug("Запрос /master/is_retake_opt")
+    if not master.is_retake_opt(retake):
+        return {"Status": "Failed",
+                "Code": -1,
+                "Reason": "Error in sending to robot"
+                }
+    return {"Status": "OK"}
+
 @app.get("/data")
 def get_data():
     """ Получение собранных данных """
