@@ -138,6 +138,7 @@ class DataCollector(Thread):
             "hour": -1,
             "stepmode": False,
             "watchdog": False,
+            "altwave": False,
         }
 
         try:
@@ -153,7 +154,7 @@ class DataCollector(Thread):
             # Boolean-like fields
             for key in ("connected", "power", "teach", "cs", "error",
                         "teachl", "tpemg", "opemg", "exemg", "home", "batalm",
-                        "stepmode", "watchdog"):
+                        "stepmode", "watchdog", "altwave"):
                 if key in rs:
                     val = rs.get(key)
                     if isinstance(val, str):

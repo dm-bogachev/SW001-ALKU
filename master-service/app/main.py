@@ -222,6 +222,17 @@ def next_step():
                 }
     return {"Status": "OK"}
 
+@app.post("/set_use_alternate_wave")
+def set_use_alternate_wave(use_alternate: bool):
+    """ Отправка команды на использование альтернативной волны """
+    logger.debug("Запрос /master/set_use_alternate_wave")
+    if not master.set_use_alternate_wave(use_alternate):
+        return {"Status": "Failed",
+                "Code": -1,
+                "Reason": "Error in sending to robot"
+                }
+    return {"Status": "OK"}
+
 @app.post("/cycle_on")
 def cycle_on():
     """ Запуск циклов на роботе """
@@ -234,10 +245,10 @@ def cycle_on():
     return {"Status": "OK"}
 
 @app.post("/error_reset")
-def ereset():
+def error_reset():
     """ Сброс ошибки на роботе """
-    logger.debug("Запрос /master/ereset")
-    if not master.ereset():
+    logger.debug("Запрос /master/error_reset")
+    if not master.error_reset():
         return {"Status": "Failed",
                 "Code": -1,
                 "Reason": "Error in sending to robot"

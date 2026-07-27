@@ -315,8 +315,16 @@ class Background(Thread):
         logger.debug("Проверка наличия воздуха")
         if not self.get_io_state(8):
             logger.warning("В системе отсутствует воздух") 
+            return False
+        return True
 
-    def ereset(self):
+    def set_use_alternate_wave(self, use_alternate: bool):
+        command = f"ALTERNATEWAVE;{str(use_alternate).upper()};"
+        if not self.send_command_to_robot(command, "RS007L", RS007L_API_URL):
+            return False
+        return True
+
+    def error_reset(self):
         command = "ERESET;"
         if not self.send_command_to_robot(command, "RS013N", RS013N_API_URL):
             return False
@@ -434,7 +442,7 @@ class Background(Thread):
                         self.shake_slow()
                     self.detect_attempts = 2
                     self.redrops += 1
-                    time.sleep(5)
+                    
                 else:
                     command = f"PALLETEMPTY;"
                     logger.warning("Паллета пуста, отправка команды на RS013N")
@@ -442,5 +450,6 @@ class Background(Thread):
                         logger.error(f"Ошибка отправки команды на RS013N: {command}")
                     else:
                         logger.info(f"Команда отправлена на RS013N: {command}")
+                    time.sleep(3)
             self.detect_attempts = self.detect_attempts + 1
-            time.sleep(2)
+            

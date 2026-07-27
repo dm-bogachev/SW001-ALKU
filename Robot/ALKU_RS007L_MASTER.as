@@ -1,112 +1,120 @@
 .AUXDATA
-N_OX1    "release.grip|!Release gripper!"
-N_OX2    "capture.grip|Capture gripper"
-N_OX3    "grip.unclamp|Unclamp gripper"
-N_OX4    "grip.clamp|Clamp gripper"
-N_OX17    "do.work[1]|Robot in workspace i"
-N_OX18    "rs7.tare.chg|Request tare change"
-N_OX19    "rs7.locked.zone|RS007L Blocked positioner zone"
-N_OX20    "rs7.finish.ack|RS007L finished work"
-N_OX21    "rs7.put.ack|RS007L picked detail"
-N_OX33    "rs7.etalon.stop|Etalon measurement was bad, need to stop"
-N_OX40    "rs7.det.picked[0]|Picked details count from RS007L"
-N_OX41    "rs7.det.picked[1]|Picked details count from RS007L"
-N_OX42    "rs7.det.picked[2]|Picked details count from RS007L"
-N_OX43    "rs7.det.picked[3]|Picked details count from RS007L"
-N_OX44    "rs7.det.picked[4]|Picked details count from RS007L"
-N_OX45    "rs7.det.picked[5]|Picked details count from RS007L"
-N_OX46    "rs7.det.picked[6]|Picked details count from RS007L"
-N_OX47    "rs7.det.picked[7]|Picked details count from RS007L"
-N_OX48    "rs7.det.picked[8]|Picked details count from RS007L"
-N_OX49    "rs7.det.picked[9]|Picked details count from RS007L"
-N_OX50    "rs7.det.picked[10]|Picked details count from RS007L"
-N_OX51    "rs7.det.picked[11]|Picked details count from RS007L"
-N_OX52    "rs7.det.picked[12]|Picked details count from RS007L"
-N_OX53    "rs7.det.picked[13]|Picked details count from RS007L"
-N_OX54    "rs7.det.picked[14]|Picked details count from RS007L"
-N_OX55    "rs7.det.picked[15]|Picked details count from RS007L"
-N_WX1    "grip.unclamped|Gripper unclamped"
-N_WX2    "grip.clamped|Gripper clamped"
-N_WX17    "rs13.work[1]|Robot in workspace 1"
-N_WX18    "rs13.tare.ack|Acknowledge of tare change"
-N_WX19    "rs13.detail.put|RS013N put detail to positioner"
-N_WX20    "rs13.finish|RS013N finish process"
-N_WX22    "rs13.lock.zone|"
-N_WX33    "rs13.no.ot.stop|"
-N_WX40    "rs13.det.put[0]|Put details count from RS0013N"
-N_WX41    "rs13.det.put[1]|Put details count from RS0013N"
-N_WX42    "rs13.det.put[2]|Put details count from RS0013N"
-N_WX43    "rs13.det.put[3]|Put details count from RS0013N"
-N_WX44    "rs13.det.put[4]|Put details count from RS0013N"
-N_WX45    "rs13.det.put[5]|Put details count from RS0013N"
-N_WX46    "rs13.det.put[6]|Put details count from RS0013N"
-N_WX47    "rs13.det.put[7]|Put details count from RS0013N"
-N_WX48    "rs13.det.put[8]|Put details count from RS0013N"
-N_WX49    "rs13.det.put[9]|Put details count from RS0013N"
-N_WX50    "rs13.det.put[10]|Put details count from RS0013N"
-N_WX51    "rs13.det.put[11]|Put details count from RS0013N"
-N_WX52    "rs13.det.put[12]|Put details count from RS0013N"
-N_WX53    "rs13.det.put[13]|Put details count from RS0013N"
-N_WX54    "rs13.det.put[14]|Put details count from RS0013N"
-N_WX55    "rs13.det.put[15]|Put details count from RS0013N"
-N_INT1    "di.ifp.page[1]|Open IFP page i"
-N_INT2    "di.ifp.page[2]|Open IFP page i"
-N_INT3    "di.ifp.page[3]|Open IFP page i"
-N_INT4    "di.ifp.page[4]|Open IFP page i"
-N_INT5    "di.ifp.page[5]|Open IFP page i"
-N_INT6    "di.ifp.page[6]|Open IFP page i"
-N_INT7    "di.ifp.page[7]|Open IFP page i"
-N_INT8    "di.ifp.page[8]|Open IFP page i"
-N_INT9    "di.hold|Set hold mode"
-N_INT10    "do.home|Robot in home position"
-N_INT11    "do.bat.alm|Battery low alarm"
-N_INT12    "do.automatic|Robot in automatic mode"
-N_INT201    "s.tcp.send.ena|Display TCP send prints"
-N_INT202    "s.tcp.recv.ena|Display TCP receive prints"
-N_INT203    "s.tcp.ena|Display TCP connect prints"
-N_INT204    "s.tcp.log|Add log record for tcp.log"
-N_INT209    "s.zone.blocked|RS007L first in common zone"
-N_INT212    "do.work[2]|Robot in workspace i"
-N_INT213    "do.work[3]|Robot in workspace i"
-N_INT214    "do.work[4]|Robot in workspace i"
-N_INT215    "do.work[5]|Robot in workspace i"
-N_INT216    "do.work[6]|Robot in workspace i"
-N_INT217    "do.work[7]|Robot in workspace i"
-N_INT218    "do.work[8]|Robot in workspace i"
-N_INT221    "s.force.in[1]|Force input signal i"
-N_INT222    "s.force.in[2]|Force input signal i"
-N_INT223    "s.defect.pal.ok|Defect pallet sensor OK"
-N_INT224    "s.defect.pal.ng|Defect pallet sensor NG"
-N_INT225    "s.measure.ok|Measurement result OK"
-N_INT226    "s.measure.ng|Measurement result NG"
-N_INT227    "s.force.defect|Force measure defect"
-N_INT231    "s.grip.full|Gripper is full"
-N_INT232    "s.cmd.start|Start command"
-N_INT233    "s.cmd.pick|Pick from positioner command"
-N_INT234    "s.cmd.measured|Detail measured"
-N_INT237    "s.cmd.chk.etal|Check etalon command"
-N_INT238    "s.cmd.finish|Finish program"
-N_INT239    "s.cmd.pause|Pause program command"
-N_INT240    "s.cmd.resume|Resume program command"
-N_INT241    "s.cmd.stop|Stop program command"
-N_INT249    "s.pr.tst.ot|Prime test OT program"
-N_INT250    "s.pr.home|Prime a.home"
-N_INT251    "s.pr.tch.ot|Prime teach OT"
-N_INT252    "s.pr.tch.defect|Prime teach defect"
-N_INT253    "s.pr.tch.meas|Prime teach measure machine"
-N_INT254    "s.pr.tch.etal|Prime teach Etalon"
-N_INT255    "s.pr.tch.pos|Prime teach positioner"
-N_INT256    "s.apply.obj|Apply object shifts"
-N_INT260    "s.pr.tch.grip|Prime teach gripper"
-N_INT261    "s.hmi.res.state|Reset state from HMI"
-N_INT262    "s.hmi.res.act|Reset action from hmi"
-N_INT270    "s.opt.spacer|Option for put to OT with spacer"
-N_INT271    "s.opt.flip|Option to put to OT with flip"
-N_INT272    "s.etalon.ok|Etalon result: OK"
-N_INT273    "s.etalon.ret|Etalon result: RETRY"
-N_INT274    "s.etalon.ng|Etalon result: NG"
-N_INT300    "s.debug.mode|Debug mode"
-N_INT301    "s.enable.shift|Enable shift for even layers"
+N_OX1    "release.grip"
+N_OX2    "capture.grip"
+N_OX3    "grip.unclamp"
+N_OX4    "grip.clamp"
+N_OX17    "do.work[1]"
+N_OX18    "rs7.tare.chg"
+N_OX19    "rs7.locked.zone"
+N_OX20    "rs7.finish.ack"
+N_OX21    "rs7.put.ack"
+N_OX33    "rs7.etalon.stop"
+N_OX40    "rs7.det.picked[0]"
+N_OX41    "rs7.det.picked[1]"
+N_OX42    "rs7.det.picked[2]"
+N_OX43    "rs7.det.picked[3]"
+N_OX44    "rs7.det.picked[4]"
+N_OX45    "rs7.det.picked[5]"
+N_OX46    "rs7.det.picked[6]"
+N_OX47    "rs7.det.picked[7]"
+N_OX48    "rs7.det.picked[8]"
+N_OX49    "rs7.det.picked[9]"
+N_OX50    "rs7.det.picked[10]"
+N_OX51    "rs7.det.picked[11]"
+N_OX52    "rs7.det.picked[12]"
+N_OX53    "rs7.det.picked[13]"
+N_OX54    "rs7.det.picked[14]"
+N_OX55    "rs7.det.picked[15]"
+N_WX1    "grip.unclamped"
+N_WX2    "grip.clamped"
+N_WX17    "rs13.work[1]"
+N_WX18    "rs13.tare.ack"
+N_WX19    "rs13.detail.put"
+N_WX20    "rs13.finish"
+N_WX22    "rs13.lock.zone"
+N_WX33    "rs13.no.ot.stop"
+N_WX40    "rs13.det.put[0]"
+N_WX41    "rs13.det.put[1]"
+N_WX42    "rs13.det.put[2]"
+N_WX43    "rs13.det.put[3]"
+N_WX44    "rs13.det.put[4]"
+N_WX45    "rs13.det.put[5]"
+N_WX46    "rs13.det.put[6]"
+N_WX47    "rs13.det.put[7]"
+N_WX48    "rs13.det.put[8]"
+N_WX49    "rs13.det.put[9]"
+N_WX50    "rs13.det.put[10]"
+N_WX51    "rs13.det.put[11]"
+N_WX52    "rs13.det.put[12]"
+N_WX53    "rs13.det.put[13]"
+N_WX54    "rs13.det.put[14]"
+N_WX55    "rs13.det.put[15]"
+N_INT1    "di.ifp.page[1]"
+N_INT2    "di.ifp.page[2]"
+N_INT3    "di.ifp.page[3]"
+N_INT4    "di.ifp.page[4]"
+N_INT5    "di.ifp.page[5]"
+N_INT6    "di.ifp.page[6]"
+N_INT7    "di.ifp.page[7]"
+N_INT8    "di.ifp.page[8]"
+N_INT9    "di.hold"
+N_INT10    "do.home"
+N_INT11    "do.bat.alm"
+N_INT12    "do.automatic"
+N_INT201    "s.tcp.send.ena"
+N_INT202    "s.tcp.recv.ena"
+N_INT203    "s.tcp.ena"
+N_INT204    "s.tcp.log"
+N_INT209    "s.zone.blocked"
+N_INT212    "do.work[2]"
+N_INT213    "do.work[3]"
+N_INT214    "do.work[4]"
+N_INT215    "do.work[5]"
+N_INT216    "do.work[6]"
+N_INT217    "do.work[7]"
+N_INT218    "do.work[8]"
+N_INT221    "s.force.in[1]"
+N_INT222    "s.force.in[2]"
+N_INT223    "s.defect.pal.ok"
+N_INT224    "s.defect.pal.ng"
+N_INT225    "s.measure.ok"
+N_INT226    "s.measure.ng"
+N_INT227    "s.force.defect"
+N_INT231    "s.grip.full"
+N_INT232    "s.cmd.start"
+N_INT233    "s.cmd.pick"
+N_INT234    "s.cmd.measured"
+N_INT237    "s.cmd.chk.etal"
+N_INT238    "s.cmd.finish"
+N_INT239    "s.cmd.pause"
+N_INT240    "s.cmd.resume"
+N_INT241    "s.cmd.stop"
+N_INT249    "s.pr.tst.ot"
+N_INT250    "s.pr.home"
+N_INT251    "s.pr.tch.ot"
+N_INT252    "s.pr.tch.defect"
+N_INT253    "s.pr.tch.meas"
+N_INT254    "s.pr.tch.etal"
+N_INT255    "s.pr.tch.pos"
+N_INT256    "s.apply.obj"
+N_INT260    "s.pr.tch.grip"
+N_INT261    "s.hmi.res.state"
+N_INT262    "s.hmi.res.act"
+N_INT270    "s.opt.spacer"
+N_INT271    "s.opt.flip"
+N_INT272    "s.etalon.ok"
+N_INT273    "s.etalon.ret"
+N_INT274    "s.etalon.ng"
+N_INT300    "s.debug.mode"
+N_INT301    "s.enable.shift"
+.END
+.ROBOTDATA1
+ZSIGSPEC 960 960 960  9894
+ZSIGSPEC2 0 0  9894
+.END
+.SYSDATA
+RMTOUT960 1 17 33 49 65 81 97 113 129 145 161 177 193 209 225 241 257 273 289 305 321 337 353 369 385 401 417 433 449 465 481 497 513 529 545 561 577 593 609 625 641 657 673 689 705 721 737 753 769 785 801 817 833 849 865 881 897 913 929 945  9894
+RMTIN960 1001 1017 1033 1049 1065 1081 1097 1113 1129 1145 1161 1177 1193 1209 1225 1241 1257 1273 1289 1305 1321 1337 1353 1369 1385 1401 1417 1433 1449 1465 1481 1497 1513 1529 1545 1561 1577 1593 1609 1625 1641 1657 1673 1689 1705 1721 1737 1753 1769 1785 1801 1817 1833 1849 1865 1881 1897 1913 1929 1945  9894
 .END
 .INTER_PANEL_D
 0,9,1,6,15
@@ -680,22 +688,25 @@ N_INT301    "s.enable.shift|Enable shift for even layers"
 ;
 .END
 .PROGRAM calc.grid.rnd()@26/07/01 08:40 #41
-; Constants
+  ; Constants
   lines.count = 11
   obj.in.line = 7
   lines.shift = 27; mm
-;
+  ;
   .max = 77
   .obj.shift = 27 ; mm
-;
+  ;
   chg.tare.count = max.tare.count
-;
-  FOR .i = 0 TO lines.count-1
-    FOR .j = 0 TO obj.in.line-1
-      POINT ot.put[.i,.j] = ot.frame+TRANS(-.i*lines.shift,-.j*.obj.shift)
+  ;
+  .$temp = "Calc grid for" + $ENCODE (current.ot) + "," + $ENCODE (lines.count)
+  CALL log (.$temp)
+  ;
+  FOR .i = 0 TO lines.count - 1
+    FOR .j = 0 TO obj.in.line - 1
+      POINT ot.put[.i, .j] = ot.frame + TRANS (-.i * lines.shift, -.j * .obj.shift)
     END
   END
-;
+  ;
 .END
 .PROGRAM calc.ot()@26/06/25 16:05 #296
 ;
@@ -2152,6 +2163,7 @@ N_INT301    "s.enable.shift|Enable shift for even layers"
   s.hmi.res.act = 2262
 ;
   s.debug.mode = 2300
+  s.enable.shift = 2301
 .END
 .PROGRAM set.vars.pc()@26/06/25 16:05 #44
 ;
@@ -2562,244 +2574,265 @@ N_INT301    "s.enable.shift|Enable shift for even layers"
   state = 105
 .END
 .PROGRAM tcp.callback.pc(.$data[],.data.length)@26/07/02 09:50 #90131
-  .$temp = "Received "+$ENCODE(.data.length)+" strings:"
+  .$temp = "Received " + $ENCODE (.data.length) + " strings:"
   PRINT tcp.recv.ena: .$temp
   FOR .i = 1 TO .data.length
     PRINT tcp.recv.ena: .$data[.i]
-    CALL tcp.log.pc(.$data[.i])
-;
-; Strings for parsing
-;
-; START COMMAND
-; String format:
-; START;DETAILNAME;DETAILSPEC;DETAILCOUNT;[INTAREID1,INTAREID2,..];[OTAREID1,INTAREID2,..];
-    IF INSTR(.$data[.i] , "START") THEN
-; Decode command
-      .$temp = $DECODE(.$data[1],";",0)
-      .$temp = $DECODE(.$data[1],";",1)
-; Decode detail type
-      $pg.name = $DECODE(.$data[1],";",0)
-      .$temp = $DECODE(.$data[1],";",1)
-; Decode detail spec
-      detail.spec = VAL($DECODE(.$data[1],";",0))
-      .$temp = $DECODE(.$data[1],";",1)
-; Decode detail count
-      detail.count = VAL($DECODE(.$data[1],";",0))
-      .$temp = $DECODE(.$data[1],";",1)
-; Decode intare ids
-      $ot.data = $DECODE(.$data[1],";",0)
-; Decode outtare ids
-      .$temp = $DECODE(.$data[1],";",1)
-      $opt.data = $DECODE(.$data[1],";",0)
-; Decode layout
-      .$temp = $DECODE(.$data[1],";",1)
-      layout = VAL($DECODE(.$data[1],";",0))
-      PULSE s.cmd.start,5
+    CALL tcp.log.pc (.$data[.i])
+    ;
+    ; Strings for parsing
+    ;
+    ; START COMMAND
+    ; String format:
+    ; START;DETAILNAME;DETAILSPEC;DETAILCOUNT;[INTAREID1,INTAREID2,..];[OTAREID1,INTAREID2,..];
+    IF INSTR (.$data[.i] , "START") THEN
+      ; Decode command
+      .$temp = $DECODE (.$data[1], ";",0)
+      .$temp = $DECODE (.$data[1], ";",1)
+      ; Decode detail type
+      $pg.name = $DECODE (.$data[1], ";",0)
+      .$temp = $DECODE (.$data[1], ";",1)
+      ; Decode detail spec
+      detail.spec = VAL ($DECODE (.$data[1], ";",0))
+      .$temp = $DECODE (.$data[1], ";",1)
+      ; Decode detail count
+      detail.count = VAL ($DECODE (.$data[1], ";",0))
+      .$temp = $DECODE (.$data[1], ";",1)
+      ; Decode intare ids
+      $ot.data = $DECODE (.$data[1], ";",0)
+      ; Decode outtare ids
+      .$temp = $DECODE (.$data[1], ";",1)
+      $opt.data = $DECODE (.$data[1], ";",0)
+      ; Decode layout
+      .$temp = $DECODE (.$data[1], ";",1)
+      layout = VAL ($DECODE (.$data[1], ";",0))
+      PULSE s.cmd.start, 5
     END
-;
-; SENSOR COMMAND
-; String format:
-; SENSOR;SENSORNAME;STATE;
-    IF INSTR(.$data[.i] , "SENSOR") THEN
-; Decode command
-      .$temp = $DECODE(.$data[1],";",0)
-      .$temp = $DECODE(.$data[1],";",1)
-; Decode sensor name
-      .$sensor.name = $DECODE(.$data[1],";",0)
-      .$temp = $DECODE(.$data[1],";",1)
-; Decode sensor state
-      .$sensor.state = $DECODE(.$data[1],";",0)
-;
-      IF INSTR(.$sensor.state , "TRUE") THEN
-        IF .$sensor.name=="DEFECTPALLETSENSOR" THEN
-          PULSE s.defect.pal.ok,5
+    ;
+    ; SENSOR COMMAND
+    ; String format:
+    ; SENSOR;SENSORNAME;STATE;
+    IF INSTR (.$data[.i] , "SENSOR") THEN
+      ; Decode command
+      .$temp = $DECODE (.$data[1], ";",0)
+      .$temp = $DECODE (.$data[1], ";",1)
+      ; Decode sensor name
+      .$sensor.name = $DECODE (.$data[1], ";",0)
+      .$temp = $DECODE (.$data[1], ";",1)
+      ; Decode sensor state
+      .$sensor.state = $DECODE (.$data[1], ";",0)
+      ;
+      IF INSTR (.$sensor.state , "TRUE") THEN
+        IF .$sensor.name == "DEFECTPALLETSENSOR" THEN
+          PULSE s.defect.pal.ok, 5
         END
       ELSE
-        IF .$sensor.name=="DEFECTPALLETSENSOR" THEN
-          PULSE s.defect.pal.ng,5
+        IF .$sensor.name == "DEFECTPALLETSENSOR" THEN
+          PULSE s.defect.pal.ng, 5
         END
       END
     END
-;
-;ETALONRESULT COMMAND
-; String format:
-;ETALONRESULT;RESULT;
-    IF INSTR(.$data[.i] , "ETALONRESULT") THEN
-; Decode command
-      .$temp = $DECODE(.$data[1],";",0)
-      .$temp = $DECODE(.$data[1],";",1)
-; Decode state
-      .$state = $DECODE(.$data[1],";",0)
-      .$temp = $DECODE(.$data[1],";",1)
-;
-      IF .$state=="OK" THEN
+    ;
+    ;ETALONRESULT COMMAND
+    ; String format:
+    ;ETALONRESULT;RESULT;
+    IF INSTR (.$data[.i] , "ETALONRESULT") THEN
+      ; Decode command
+      .$temp = $DECODE (.$data[1], ";",0)
+      .$temp = $DECODE (.$data[1], ";",1)
+      ; Decode state
+      .$state = $DECODE (.$data[1], ";",0)
+      .$temp = $DECODE (.$data[1], ";",1)
+      ;
+      IF .$state == "OK" THEN
         SIGNAL s.etalon.ok
       END
-      IF .$state=="RETRY" THEN
+      IF .$state == "RETRY" THEN
         SIGNAL s.etalon.ret
       END
-      IF .$state=="FAILED" THEN
+      IF .$state == "FAILED" THEN
         SIGNAL s.etalon.ng
       END
     END
-;
-; MEASUREMENT COMMAND
-; String format:
-; MEASUREMENT;STATE;
-    IF INSTR(.$data[.i] , "MEASUREMENT") THEN
-; Decode command
-      .$temp = $DECODE(.$data[1],";",0)
-      .$temp = $DECODE(.$data[1],";",1)
-; Decode measurement result
-      .$measurement.sta = $DECODE(.$data[1],";",0)
-      IF INSTR(.$measurement.sta , "TRUE") THEN
-        CALL log.pc2("Received MEASUREMENT command: TRUE")
+    ;
+    ; MEASUREMENT COMMAND
+    ; String format:
+    ; MEASUREMENT;STATE;
+    IF INSTR (.$data[.i] , "MEASUREMENT") THEN
+      ; Decode command
+      .$temp = $DECODE (.$data[1], ";",0)
+      .$temp = $DECODE (.$data[1], ";",1)
+      ; Decode measurement result
+      .$measurement.sta = $DECODE (.$data[1], ";",0)
+      IF INSTR (.$measurement.sta , "TRUE") THEN
+        CALL log.pc2 ("Received MEASUREMENT command: TRUE")
         SIGNAL s.measure.ok
       END
-      IF INSTR(.$measurement.sta , "FALSE") THEN
-        CALL log.pc2("Received MEASUREMENT command: FALSE")
+      IF INSTR (.$measurement.sta , "FALSE") THEN
+        CALL log.pc2 ("Received MEASUREMENT command: FALSE")
         SIGNAL s.measure.ng
       END
     END
-;
-; SPEED COMMAND
-; String format:
-; SPEED;VALUE;
-;
-    IF INSTR(.$data[.i] , "SPEED") THEN
-      .$temp = $DECODE(.$data[1],";",0)
-      .$temp = $DECODE(.$data[1],";",1)
-      .$spd = $DECODE(.$data[1],";",0)
-      .speed = VAL(.$spd)
-      IF .speed<=0 THEN
+    ;
+    ; SPEED COMMAND
+    ; String format:
+    ; SPEED;VALUE;
+    ;
+    IF INSTR (.$data[.i] , "SPEED") THEN
+      ;
+      CALL log.pc2 ("Received SPEED command")
+      .$temp = $DECODE (.$data[1], ";",0)
+      .$temp = $DECODE (.$data[1], ";",1)
+      .$spd = $DECODE (.$data[1], ";",0)
+      .speed = VAL (.$spd)
+      IF .speed <= 0 THEN
         .speed = 1
       END
-      IF .speed>100 THEN
+      IF .speed > 100 THEN
         .speed = 100
       END
       MON_SPEED (.speed)
     END
-;
-; POSITIONERFULL COMMAND
-; String format
-; POSITIONERFULL;
-    IF INSTR(.$data[.i] , "POSITIONERFULL") THEN
-;CALL log.pc2("Received POSITIONERFULL command")
-      PULSE s.cmd.pick,5
+    ;
+    ; POSITIONERFULL COMMAND
+    ; String format
+    ; POSITIONERFULL;
+    IF INSTR (.$data[.i] , "POSITIONERFULL") THEN
+      ;CALL log.pc2("Received POSITIONERFULL command")
+      PULSE s.cmd.pick, 5
     END
-;
-; ETALON COMMAND
-; String format:
-; ETALON;ID;
-;
-    IF INSTR(.$data[.i] , "ETALON") THEN
-; Decode command
-      .$temp = $DECODE(.$data[1],";",0)
-      .$temp = $DECODE(.$data[1],";",1)
-; Need to decide where to check etalon!!!!
-; Decode etalon id
-      recv.etalon = VAL($DECODE(.$data[1],";",0))
-;
+    ;
+    ; ETALON COMMAND
+    ; String format:
+    ; ETALON;ID;
+    ;
+    IF INSTR (.$data[.i] , "ETALON") THEN
+      ; Decode command
+      .$temp = $DECODE (.$data[1], ";",0)
+      .$temp = $DECODE (.$data[1], ";",1)
+      ; Need to decide where to check etalon!!!!
+      ; Decode etalon id
+      recv.etalon = VAL ($DECODE (.$data[1], ";",0))
+      ;
       SIGNAL s.cmd.chk.etal
     END
-;
-; CLEANDEFECT COMMAND
-; String format:
-; CLEANDEFECT;
-;
-    IF INSTR(.$data[.i] , "CLEANDEFECT") THEN
+    ;
+    ; CLEANDEFECT COMMAND
+    ; String format:
+    ; CLEANDEFECT;
+    ;
+    IF INSTR (.$data[.i] , "CLEANDEFECT") THEN
+      CALL log.pc2 ("Received CLEANDEFECT command")
       count.defect = 0
     END
-;
-; PAUSE COMMAND
-; String format:
-; PAUSE;
-;
-    IF INSTR(.$data[.i] , "PAUSE") THEN
-      CALL log.pc2("Received PAUSE command")
+    ;
+    ; PAUSE COMMAND
+    ; String format:
+    ; PAUSE;
+    ;
+    IF INSTR (.$data[.i] , "PAUSE") THEN
+      CALL log.pc2 ("Received PAUSE command")
       SIGNAL s.cmd.pause
     END
-;
-; RESUME COMMAND
-; String format:
-; RESUME;
-;
-    IF INSTR(.$data[.i] , "RESUME") THEN
-      CALL log.pc2("Received RESUME command")
+    ;
+    ; RESUME COMMAND
+    ; String format:
+    ; RESUME;
+    ;
+    IF INSTR (.$data[.i] , "RESUME") THEN
+      CALL log.pc2 ("Received RESUME command")
       SIGNAL s.cmd.resume
     END
-;
-; STOP COMMAND
-; String format:
-; STOP;
-;
-    IF INSTR(.$data[.i] , "STOP") THEN
-      CALL log.pc2("Received STOP command")
+    ;
+    ; STOP COMMAND
+    ; String format:
+    ; STOP;
+    ;
+    IF INSTR (.$data[.i] , "STOP") THEN
+      CALL log.pc2 ("Received STOP command")
       SIGNAL s.cmd.stop
+      SIGNAL rs7.etalon.stop
     END
-;
-; STOP COMMAND
-; String format:
-; STOP;
-;
-    IF INSTR(.$data[.i] , "STOP") THEN
-      SIGNAL s.cmd.stop
+    ;
+    ; ALTERNATEWAVE COMMAND
+    ; String format:
+    ; ALTERNATEWAVE:VALUE
+    IF INSTR (.$data[.i] , "ALTERNATEWAVE") THEN
+      ; Decode command
+      .$temp = $DECODE (.$data[1], ";",0)
+      .$temp = $DECODE (.$data[1], ";",1)
+      ; Decode measurement result
+      .$state = $DECODE (.$data[1], ";",0)
+      IF INSTR (.$state , "TRUE") THEN
+        CALL log.pc2("Received SET ALTERNATIVE WAVE MODE TRUE command")
+        SIGNAL s.enable.shift
+      END
+      IF INSTR (.$state , "FALSE") THEN
+        CALL log.pc2("Received SET ALTERNATIVE WAVE MODE FALSE command")
+        SIGNAL -s.enable.shift
+      END
     END
-;
-; CYCLEON COMMAND
-; String format:
-; CYCLEON;
-;
-    IF INSTR(.$data[.i] , "CYCLEON") THEN
-      IF SIG(do.automatic) AND NOT SWITCH(CS ) THEN
+    ;
+    ; CYCLEON COMMAND
+    ; String format:
+    ; CYCLEON;
+    ;
+    IF INSTR (.$data[.i] , "CYCLEON") THEN
+      CALL log.pc2("Received CYCLE ON command")
+      IF SIG (do.automatic) AND NOT SWITCH (CS ) THEN
         MC CONTINUE
       END
     END
-;
-; STEPMODE COMMAND
-; String format:
-; STEPMODE;VALUE
-;
-    IF INSTR(.$data[.i] , "STEPMODE") THEN
-; Decode command
-      .$temp = $DECODE(.$data[1],";",0)
-      .$temp = $DECODE(.$data[1],";",1)
-; Decode measurement result
-      .$state = $DECODE(.$data[1],";",0)
-      IF INSTR(.$state , "TRUE") THEN
+    ;
+    ; STEPMODE COMMAND
+    ; String format:
+    ; STEPMODE;VALUE
+    ;
+    IF INSTR (.$data[.i] , "STEPMODE") THEN
+      ; Decode command
+      .$temp = $DECODE (.$data[1], ";",0)
+      .$temp = $DECODE (.$data[1], ";",1)
+      ; Decode measurement result
+      .$state = $DECODE (.$data[1], ";",0)
+      IF INSTR (.$state , "TRUE") THEN
+        CALL log.pc2("Received SET STEP MODE TRUE command")
         STP_ONCE ON
       END
-      IF INSTR(.$state , "FALSE") THEN
+      IF INSTR (.$state , "FALSE") THEN
+        CALL log.pc2("Received SET STEP MODE FALSE command")
         STP_ONCE OFF
       END
     END
-;
-; NEXTSTEP COMMAND
-; String format:
-; NEXTSTEP;
-;
-    IF INSTR(.$data[.i] , "NEXTSTEP") THEN
+    ;
+    ; NEXTSTEP COMMAND
+    ; String format:
+    ; NEXTSTEP;
+    ;
+    IF INSTR (.$data[.i] , "NEXTSTEP") THEN
+      CALL log.pc2("Received NEXTSTEP command")
       STPNEXT
     END
-;
-; ERESET COMMAND
-; String format:
-; ERESET;
-;
-    IF INSTR(.$data[.i] , "ERESET") THEN
+    ;
+    ; ERESET COMMAND
+    ; String format:
+    ; ERESET;
+    ;
+    IF INSTR (.$data[.i] , "ERESET") THEN
+      CALL log.pc2("Received ERROR RESET command")
       MC ERESET
       .$data[.i] = ""
       RETURN
     END
-;
-; RESET COMMAND
-; String format:
-; RESET;
-;
-    IF INSTR(.$data[.i] , "RESET") THEN
+    ;
+    ; RESET COMMAND
+    ; String format:
+    ; RESET;
+    ;
+    IF INSTR (.$data[.i] , "RESET") THEN
+      CALL log.pc2("Received RESET command")
       state = 0
     END
-;
+    ;
     .$data[.i] = ""
   END
 .END
@@ -2917,31 +2950,37 @@ N_INT301    "s.enable.shift|Enable shift for even layers"
 ;
 .END
 .PROGRAM tcp.sender.pc()@26/06/25 16:05 #0
-;
+  ;
   WHILE TRUE DO
-;
-    CALL get.state.pc(.$data[1])
-    .$data[2] = "ACTION:"+$action+";"
-    .$data[2] = .$data[2]+"WATCHDOG:"+$wdog.state+";"
-    .$data[2] = .$data[2]+"GRIPPER:"+$ENCODE(current.gripper)+";"
-    .$data[2] = .$data[2]+"PICKCOUNT:"+$ENCODE(count.pick)+";"
-    .$data[2] = .$data[2]+"DEFECTCOUNT:"+$ENCODE(count.defect)+";"
-    .$data[2] = .$data[2]+"PUTCOUNT:"+$ENCODE(max.count.put)+";"
-    .$data[2] = .$data[2]+"STATE:"+$ENCODE(state)+";"
-    .$data[2] = .$data[2]+"HOUR:"+$ENCODE(OPEINFO(3))+";"
-;
-    IF SWITCH(STP_ONCE) THEN
-      .$data[2] = .$data[2]+"STEPMODE:TRUE;"
+    ;
+    CALL get.state.pc (.$data[1])
+    .$data[2] = "ACTION:" + $action + ";"
+    .$data[2] = .$data[2] + "WATCHDOG:" + $wdog.state + ";"
+    .$data[2] = .$data[2] + "GRIPPER:" + $ENCODE (current.gripper) + ";"
+    .$data[2] = .$data[2] + "PICKCOUNT:" + $ENCODE (count.pick) + ";"
+    .$data[2] = .$data[2] + "DEFECTCOUNT:" + $ENCODE (count.defect) + ";"
+    .$data[2] = .$data[2] + "PUTCOUNT:" + $ENCODE (max.count.put) + ";"
+    .$data[2] = .$data[2] + "STATE:" + $ENCODE (state) + ";"
+    .$data[2] = .$data[2] + "HOUR:" + $ENCODE (OPEINFO (3)) + ";"
+    ;
+    IF SWITCH (STP_ONCE) THEN
+      .$data[2] = .$data[2] + "STEPMODE:TRUE;"
     ELSE
-      .$data[2] = .$data[2]+"STEPMODE:FALSE;"
+      .$data[2] = .$data[2] + "STEPMODE:FALSE;"
     END
-;
-    .$data[2] = .$data[2]+"\n"
-;
-    CALL tcp.send.pc(.$data[],2)
+    ;
+    IF SIG (s.enable.shift) THEN
+      .$data[2] = .$data[2] + "ALTWAVE:TRUE;"
+    ELSE
+      .$data[2] = .$data[2] + "ALTWAVE:FALSE;"
+    END
+    ;
+    .$data[2] = .$data[2] + "\n"
+    ;
+    CALL tcp.send.pc (.$data[], 2)
     TWAIT tcp.sender.dly
   END
-;
+  ;
 .END
 .PROGRAM watchdog.pc()@26/07/01 14:24 #0
 ;
@@ -3059,9 +3098,9 @@ N_INT301    "s.enable.shift|Enable shift for even layers"
 	; $log.entry[126]
 	; $log.entry[127]
 	; @@@ CONNECTION @@@
-	; ALKU RS007L
-	; 192.168.7.103
-	; 23
+	; KROSET R02
+	; 127.0.0.1
+	; 9205
 	; @@@ PROGRAM @@@
 	;   Group:Layouts:1
 	;     1:layout0:F

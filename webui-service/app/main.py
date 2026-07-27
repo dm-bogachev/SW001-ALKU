@@ -9,7 +9,6 @@ from fastapi import Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.concurrency import asynccontextmanager
 from fastapi.responses import HTMLResponse
-from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 
 # Внутренние модули
@@ -56,17 +55,20 @@ def reboot():
     return {"Status": "Reboot"}
 
 
-templates = Jinja2Templates(directory=os.path.join(os.path.dirname(os.path.abspath(__file__)), "templates"))
+TEMPLATE_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "templates")
 
 # Mount static files directory
-app.mount("/css", StaticFiles(directory=os.path.join(os.path.dirname(os.path.abspath(__file__)), "templates", "css")), name="css")
-app.mount("/js", StaticFiles(directory=os.path.join(os.path.dirname(os.path.abspath(__file__)), "templates", "js")), name="js")
-app.mount("/img", StaticFiles(directory=os.path.join(os.path.dirname(os.path.abspath(__file__)), "templates", "img")), name="img")
+app.mount("/css", StaticFiles(directory=os.path.join(TEMPLATE_DIR, "css")), name="css")
+app.mount("/js", StaticFiles(directory=os.path.join(TEMPLATE_DIR, "js")), name="js")
+app.mount("/img", StaticFiles(directory=os.path.join(TEMPLATE_DIR, "img")), name="img")
 
 @app.get("/", response_class=HTMLResponse)
-async def index (request: Request):
+async def index(request: Request):
     logger.debug("Открываем главную страницу")
-    return templates.TemplateResponse("index.html", {"request": request})
+    index_path = os.path.join(TEMPLATE_DIR, "index.html")
+    with open(index_path, "r", encoding="utf-8") as f:
+        content = f.read()
+    return HTMLResponse(content)
 
 @app.get("/config")
 async def get_config():
