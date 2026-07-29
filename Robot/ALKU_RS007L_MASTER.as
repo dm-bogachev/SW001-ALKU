@@ -2606,6 +2606,14 @@ RMTIN960 1001 1017 1033 1049 1065 1081 1097 1113 1129 1145 1161 1177 1193 1209 1
       ; Decode layout
       .$temp = $DECODE (.$data[1], ";",1)
       layout = VAL ($DECODE (.$data[1], ";",0))
+      ;
+      .$temp = $DECODE (.$data[1], ";",1)
+      .$awave = $DECODE (.$data[1], ";",0)
+      IF INSTR (.$awave, "AWON") THEN
+        SIGNAL s.enable.shift
+      ELSE
+        SIGNAL -s.enable.shift
+      END
       PULSE s.cmd.start, 5
     END
     ;
@@ -2764,11 +2772,11 @@ RMTIN960 1001 1017 1033 1049 1065 1081 1097 1113 1129 1145 1161 1177 1193 1209 1
       ; Decode measurement result
       .$state = $DECODE (.$data[1], ";",0)
       IF INSTR (.$state , "TRUE") THEN
-        CALL log.pc2("Received SET ALTERNATIVE WAVE MODE TRUE command")
+        CALL log.pc2 ("Received SET ALTERNATIVE WAVE MODE TRUE command")
         SIGNAL s.enable.shift
       END
       IF INSTR (.$state , "FALSE") THEN
-        CALL log.pc2("Received SET ALTERNATIVE WAVE MODE FALSE command")
+        CALL log.pc2 ("Received SET ALTERNATIVE WAVE MODE FALSE command")
         SIGNAL -s.enable.shift
       END
     END
@@ -2778,7 +2786,7 @@ RMTIN960 1001 1017 1033 1049 1065 1081 1097 1113 1129 1145 1161 1177 1193 1209 1
     ; CYCLEON;
     ;
     IF INSTR (.$data[.i] , "CYCLEON") THEN
-      CALL log.pc2("Received CYCLE ON command")
+      CALL log.pc2 ("Received CYCLE ON command")
       IF SIG (do.automatic) AND NOT SWITCH (CS ) THEN
         MC CONTINUE
       END
@@ -2795,11 +2803,11 @@ RMTIN960 1001 1017 1033 1049 1065 1081 1097 1113 1129 1145 1161 1177 1193 1209 1
       ; Decode measurement result
       .$state = $DECODE (.$data[1], ";",0)
       IF INSTR (.$state , "TRUE") THEN
-        CALL log.pc2("Received SET STEP MODE TRUE command")
+        CALL log.pc2 ("Received SET STEP MODE TRUE command")
         STP_ONCE ON
       END
       IF INSTR (.$state , "FALSE") THEN
-        CALL log.pc2("Received SET STEP MODE FALSE command")
+        CALL log.pc2 ("Received SET STEP MODE FALSE command")
         STP_ONCE OFF
       END
     END
@@ -2809,7 +2817,7 @@ RMTIN960 1001 1017 1033 1049 1065 1081 1097 1113 1129 1145 1161 1177 1193 1209 1
     ; NEXTSTEP;
     ;
     IF INSTR (.$data[.i] , "NEXTSTEP") THEN
-      CALL log.pc2("Received NEXTSTEP command")
+      CALL log.pc2 ("Received NEXTSTEP command")
       STPNEXT
     END
     ;
@@ -2818,7 +2826,7 @@ RMTIN960 1001 1017 1033 1049 1065 1081 1097 1113 1129 1145 1161 1177 1193 1209 1
     ; ERESET;
     ;
     IF INSTR (.$data[.i] , "ERESET") THEN
-      CALL log.pc2("Received ERROR RESET command")
+      CALL log.pc2 ("Received ERROR RESET command")
       MC ERESET
       .$data[.i] = ""
       RETURN
@@ -2829,7 +2837,7 @@ RMTIN960 1001 1017 1033 1049 1065 1081 1097 1113 1129 1145 1161 1177 1193 1209 1
     ; RESET;
     ;
     IF INSTR (.$data[.i] , "RESET") THEN
-      CALL log.pc2("Received RESET command")
+      CALL log.pc2 ("Received RESET command")
       state = 0
     END
     ;
@@ -3174,6 +3182,7 @@ RMTIN960 1001 1017 1033 1049 1065 1081 1097 1113 1129 1145 1161 1177 1193 1209 1
 	;     4:calc.grid.rnd:F
 	;       .max 
 	;       .obj.shift 
+	;       .$temp 
 	;       .i 
 	;       .j 
 	;     4:get.ot.point:F

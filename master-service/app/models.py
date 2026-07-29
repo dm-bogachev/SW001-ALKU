@@ -8,6 +8,7 @@ class ProcessRequest(BaseModel):
     InTareIDs: List[int] = []
     OutTareIDs: List[int] = []
     Layout: int = 0
+    UseAlternateWave: bool = False
     
 class SensorState(BaseModel):
     SensorName: str

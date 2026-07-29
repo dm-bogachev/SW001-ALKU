@@ -203,7 +203,7 @@ class Background(Thread):
             return False
         return True
 
-    def start_process(self, ProductName: str, ProductSpec: int, ProductCount: int, InTareIDs: list, OutTareIDs: list, Layout: int):
+    def start_process(self, ProductName: str, ProductSpec: int, ProductCount: int, InTareIDs: list, OutTareIDs: list, Layout: int, UseAlternateWave: bool):
         
         if not self.change_model(ProductName):
             return False
@@ -222,7 +222,12 @@ class Background(Thread):
         else: 
             return False
         #      
-        command += f"{Layout};"
+        if UseAlternateWave:
+            cmdpart = f"AWON;"
+        else:
+            cmdpart = f"AWOFF;"
+
+        command += f"{Layout};{cmdpart};"
         
         if not self.send_command_to_robot(command, "RS013N", RS013N_API_URL):
             return False

@@ -63,8 +63,19 @@ def reboot():
 @app.post("/start")
 def start_process(request: ProcessRequest):
     """ Запуск процесса """
-    logger.debug(f"Запрос /master/start ({request.ProductName}-{request.ProductSpec}: {request.ProductCount}, {request.InTareIDs}, {request.OutTareIDs})")
-    if not master.start_process(request.ProductName, request.ProductSpec, request.ProductCount, request.InTareIDs, request.OutTareIDs, request.Layout):
+    logger.debug(
+        f"Запрос /master/start "
+        f"({request.ProductName}-{request.ProductSpec}: "
+        f"{request.ProductCount}, {request.InTareIDs}, {request.OutTareIDs})"
+        f"{request.Layout},{request.UseAlternateWave}"
+    )
+    if not master.start_process(request.ProductName, 
+                                request.ProductSpec, 
+                                request.ProductCount, 
+                                request.InTareIDs, 
+                                request.OutTareIDs, 
+                                request.Layout,
+                                request.UseAlternateWave):
         return {"Status": "Failed",
                 "Code": -1,
                 "Reason": "Error in sending to robot"

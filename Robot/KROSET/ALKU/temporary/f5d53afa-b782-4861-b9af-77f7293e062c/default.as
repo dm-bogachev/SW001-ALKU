@@ -1335,30 +1335,30 @@ ZSWITCH ZFIX_CALL_1STEPPG ON   -523
 .END
 .OPE_INFO1
 OPEINFO  30 10 6 6324  1723231961  ;(24/8/10 4:32:41) RS007L-B001 
-CONT_TIM  263.0 
+CONT_TIM  263.3 
 SERV_TIM  64.1 
-MTON_CNT  1892 
+MTON_CNT  1895 
 ESTP_CNT  9 
 BRKE_CNT  1951 
-CON_PWR  18.125 
-SUP_PWR  18.125 
+CON_PWR  18.126 
+SUP_PWR  18.126 
 REG_PWR  0.000 
 MOVE_TJT  16.4 21.4 17.3 11.7 16.9 19.7 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 
 DIST_DJT  1011.099 1087.373 687.678 1389.857 1061.952 2411.955 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 
 DIST_DJT_PLUS  504.526 543.242 344.343 694.895 530.364 1205.219 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 
-OPEINFO TP_BKLIGHT  0 122.9 50000 
+OPEINFO TP_BKLIGHT  0 123.1 50000 
 OPEINFO MC  0 0 2000000 
 OPEINFO PARTS1  0 0 0 0 0 0 0 0 0 0 0 
 OPEINFO PARTS2  0 0 0 0 0 0 0 0 0 0 0 
 OPEINFO PARTS3  0 0 0 0 0 0 0 0 0 0 0 
 M_OPEINFO  30 10 6 6324  1713957146  ;(24/4/24 20:12:26) RS007L-B001 
-M_CONT_TIM  322.6 
+M_CONT_TIM  322.9 
 M_SERV_TIM  78.4 
-M_MTON_CNT  3020 
+M_MTON_CNT  3023 
 M_ESTP_CNT  13 
 M_BRKE_CNT  3190 
-M_CON_PWR  22.399 
-M_SUP_PWR  22.399 
+M_CON_PWR  22.400 
+M_SUP_PWR  22.400 
 M_REG_PWR  0.000 
 M_MOVE_TJT  18.0 24.2 19.6 12.5 18.9 22.7 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 
 M_DIST_DJT  1046.886 1156.835 759.474 1432.486 1122.161 2518.744 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 
@@ -1366,7 +1366,7 @@ M_DIST_DJT_PLUS  504.526 543.242 344.343 694.895 530.364 1205.219 0.000 0.000 0.
 M_MOVE_TJT_OVERDRIVE  0.0 0.0 0.0 0.0 0.0 0.0 
 M_DIST_DJT_OVERDRIVE  0.000 0.000 0.000 0.000 0.000 0.000 
 M_WARN_CJT_OVERDRIVE  0 0 0 0 0 0 
-HOUR_MTR  322.6 
+HOUR_MTR  322.9 
 .END
 .SYSDATA
 REG_POINT       0
@@ -2458,7 +2458,7 @@ SWITCH SLOW_REP_MM     OFF
 .END
 .CONDITION
 AS_VER       ASF_01000001G
-ELOG_NUM            126
+ELOG_NUM            380
 CHK_ONCE      255
 MAN_SPEED     1
 CHK_SPEED     1
@@ -2548,7 +2548,7 @@ USR_INTERNAL6 00000000000000000000000000000000
 USR_INTERNAL7 00000000000000000000000000000000
 USR_INTERNAL8 00000000000000000000000000000000
 USR_INTERNAL9 00000000000000000000000000000000
-USR_INTERNAL10 00000000000000000000000000000000
+USR_INTERNAL10 00000000000000000001000000000000
 USR_INTERNAL11 00000000000000000000000000000000
 USR_INTERNAL12 00000000000000000000000000000000
 USR_INTERNAL13 00000000000000000000000000000000
@@ -2589,16 +2589,31 @@ USR_ADO2_7         0      0      0      0      0      0      0      0      0    
 USR_ADO2_8         0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0
 UCINDENT1          0
 UCLINE1            0
-UCFGCOLOR1         0
-UCBGCOLOR1         0
+UCFGCOLOR1        11
+UCBGCOLOR1        10
+UCCHARWINSTR1 18:10:04 Wait for unclamp gripper. State: WaitingGripUnclamped
+18:10:46 Pick detail from etalon (ID: 1)
+18:10:51 Measure etalon (ID: 1)
+18:10:55 Waiting for measurement result
+
 UCINDENT2          0
 UCLINE2            0
-UCFGCOLOR2         0
-UCBGCOLOR2         0
+UCFGCOLOR2        11
+UCBGCOLOR2        10
+UCCHARWINSTR2 18:11:28 Measurement etalon: OK
+18:11:30 Return etalon to positioner (ID: 1)
+18:11:35 State 101: Calculating next step
+05:13:20 Received SET ALTERNATIVE WAVE MODE TRUE command
+
 UCINDENT3          0
 UCLINE3            0
-UCFGCOLOR3         0
-UCBGCOLOR3         0
+UCFGCOLOR3        11
+UCBGCOLOR3        10
+UCCHARWINSTR3 05:15:15 Received SET ALTERNATIVE WAVE MODE TRUE command
+05:15:26 Received SET ALTERNATIVE WAVE MODE FALSE command
+05:20:28 Received SET ALTERNATIVE WAVE MODE FALSE command
+05:20:34 Received SET ALTERNATIVE WAVE MODE TRUE command
+
 UCINDENT4          0
 UCLINE4            0
 UCFGCOLOR4         0
@@ -3355,6 +3370,7 @@ TP_RECINHI      0   0   0
 56,14,"tcp.ip","Server IP","",10,15,0
 57,8,"tcp.port","Server","port",10,15,5,1,0
 58,8,"tcp.sender.dly","Polling","delay, s",10,15,2,2,0
+60,8,"object.id","Object ID","",10,15,2,1,0
 61,8,"state","  CURRENT","   STATE",10,15,3,1,0
 62,2,"","   RESET","   STATE","",10,4,15,2261,0
 63,4,1,"OFF     ON","","","TCP COMMON",10,4,4,0,2203,0
@@ -3366,12 +3382,14 @@ TP_RECINHI      0   0   0
 69,2,"","   RESET","   ACTION","",10,4,15,2262,0
 70,1,"GRIP FULL","","","",10,15,4,10,2231,0
 71,1," POS FULL","","","",10,15,4,10,2233,0
+75,8,"current.ot","Current OT","  count",10,15,2,1,0
 76,4,1,"OFF     ON","","","  DEBUG",10,4,4,0,2300,0
 77,2,"","   MAIN","<---------","",10,4,11,2001,0
-79,7,"  RS007L","COUNT PICK",10,15,4,1,0,25,8,1
-80,7,"  RS013N","COUNT PUT",10,15,4,1,0,1025,8,1
+79,7,"  RS007L","COUNT PICK",10,15,4,1,0,40,16,1
+80,7,"  RS013N","COUNT PUT",10,15,4,1,0,1040,16,1
 81,8,"count.defect","Current","defect",10,15,2,1,0
 82,8,"max.defect.cnt","Max defect","tare count",10,15,2,1,0
+83,4,1,"OFF     ON","","","  OT SHIFT",10,4,4,0,2301,0
 84,2,"  ","  PRIME","  HOME","",10,4,11,2250,0
 85,8,"hmi.obj.id","  OBJECT","    ID",10,2,2,1,0
 86,8,"hmi.tool.no","    HMI","  GRIPPER ",10,2,2,1,0
@@ -3418,10 +3436,16 @@ TP_RECINHI      0   0   0
 166,2,"","   TEACH","  DEFECT","",10,4,11,2007,0
 167,2,"","   TEACH","  GRIPPERS","",10,4,11,2008,0
 168,2,"  ","  PRIME","  HOME","",10,4,11,2250,0
+169,8,"hmi.obj.id","  OBJECT","    ID",10,2,2,1,0
 170,8,"hmi.defect.pos","  DEFECT","    ID",10,2,2,1,0
 174,2,"","   Open ","  gripper","",10,4,5,3,0
 175,2,"   PRIME","","   TEACH","  DEFECT",10,4,11,2252,0
+177,8,"defect.x.cor","TARE X COR","",10,15,4,2,0
+178,8,"defect.y.cor","TARE Y COR","",10,15,4,2,0
+179,8,"defect.h.cor","TARE Z COR","",10,15,4,2,0
 181,2,"","   Close","  gripper","",10,4,5,4,0
+184,8,"defect.x.cor.r","ROUND DET.","  X COR.",10,15,4,2,0
+185,8,"defect.y.cor.r","ROUND DET.","  Y COR.",10,15,4,2,0
 189,2,"","   MAIN","<---------","",10,4,11,2001,0
 192,2,"","   TEACH","POSITIONER","",10,4,11,2004,0
 193,2,"","   TEACH","  MACHINE","",10,4,11,2005,0
@@ -3430,9 +3454,9 @@ TP_RECINHI      0   0   0
 196,2,"  ","  PRIME","  HOME","",10,4,11,2250,0
 199,8,"current.gripper","  CURRENT","  GRIPPER ",10,2,2,1,0
 200,8,"hmi.gripper","    HMI","  GRIPPER ",10,2,2,1,0
-202,2,"","  Capture","  gripper","",10,4,6,6,0
+202,2,"","  Capture","  gripper","",10,4,6,2,0
 203,2,"   PRIME","","   TEACH","  GRIPPERS",10,4,11,2260,0
-209,2,"","  Release ","  gripper","",10,4,6,5,-1
+209,2,"","  Release ","  gripper","",10,4,6,1,-1
 217,2,"","   MAIN","<---------","",10,4,11,2001,0
 220,2,"","   TEACH","POSITIONER","",10,4,11,2004,0
 221,2,"","   TEACH","  MACHINE","",10,4,11,2005,0
@@ -3454,19 +3478,19 @@ TP_RECINHI      0   0   0
 .END
 .SIG_COMMENT
 .END
-.PROGRAM a.align()@26/07/03 03:33 #0
+.PROGRAM a.align()@26/07/28 05:05 #0
 ;
   SPEED 250 MM/S ALWAYS
   ALIGN
 ;
 .END
-.PROGRAM a.home()@26/07/03 03:33 #0
+.PROGRAM a.home()@26/07/28 05:05 #0
 ;
   SPEED 250 MM/S ALWAYS
   JMOVE #homyak
 ;
 .END
-.PROGRAM a.main()@26/07/03 03:33 #0
+.PROGRAM a.main()@26/07/28 05:05 #0
 ;
   CALL log("Main program executed")
   CALL safe.home
@@ -3486,7 +3510,7 @@ TP_RECINHI      0   0   0
   END
 ;
 .END
-.PROGRAM a.teach.defect()@26/07/03 03:33 #0
+.PROGRAM a.teach.defect()@26/07/28 05:05 #0
   IF FALSE THEN
     SPEED 250 MM/S ALWAYS
     ACCURACY 0 ALWAYS
@@ -3522,7 +3546,7 @@ TP_RECINHI      0   0   0
   LMOVE .defect.pos
   LAPPRO .defect.pos,-10
 .END
-.PROGRAM a.teach.etalon()@26/07/03 03:33 #0
+.PROGRAM a.teach.etalon()@26/07/28 05:05 #0
 ;
   TOOL tool.pick[hmi.tool.no]
 ;
@@ -3591,7 +3615,7 @@ TP_RECINHI      0   0   0
   LMOVE #et.pos.point[hmi.etalon.id]
   LMOVE .et.pos.point+TRANS(0,0,50)
 .END
-.PROGRAM a.teach.machine()@26/07/03 03:33 #0
+.PROGRAM a.teach.machine()@26/07/28 05:05 #0
   IF FALSE THEN ; For round details
     TOOL tool.pick[hmi.tool.no]
     JMOVE #safe.machine
@@ -3624,7 +3648,7 @@ TP_RECINHI      0   0   0
     LMOVE #before.machine[1]
   END
 .END
-.PROGRAM a.teach.ot()@26/07/03 03:33 #0
+.PROGRAM a.teach.ot()@26/07/28 05:05 #0
   SPEED 250 MM/S ALWAYS
   ACCURACY 0 ALWAYS
   TOOL tool.pick[hmi.tool.no]
@@ -3645,7 +3669,7 @@ TP_RECINHI      0   0   0
 ;
 ;JMOVE ot.frame + TRANS (grip.xsh[hmi.tool.no], grip.ysh[hmi.tool.no], grip.zsh[hmi.tool.no])
 .END
-.PROGRAM a.teach.pos()@26/07/03 03:33 #0
+.PROGRAM a.teach.pos()@26/07/28 05:05 #0
 ;
   IF hmi.obj.id==round.no THEN
     .shift.x = 0
@@ -3675,7 +3699,7 @@ TP_RECINHI      0   0   0
   TWAIT 0.5
 ;
 .END
-.PROGRAM a.test.ot()@26/07/03 03:33 #0
+.PROGRAM a.test.ot()@26/07/28 05:05 #0
   IF hmi.ot.k<>-1 THEN
     .$pg = "id"+$ENCODE(/L,hmi.obj.id)
     SCALL .$pg
@@ -3700,7 +3724,7 @@ TP_RECINHI      0   0   0
   LMOVE .put
   LAPPRO .put,-50
 .END
-.PROGRAM autostart.pc()@26/07/03 03:33 #0
+.PROGRAM autostart.pc()@26/07/28 05:05 #0
 ;
 ; System switches
   CP ON
@@ -3725,7 +3749,7 @@ TP_RECINHI      0   0   0
   CALL watchdog.pc
 ;
 .END
-.PROGRAM calc.grid()@26/07/03 03:33 #91
+.PROGRAM calc.grid()@26/07/28 05:05 #91
 ; Constants
   line.width = 210; 210; mm
   lines.count = 21
@@ -3748,7 +3772,7 @@ TP_RECINHI      0   0   0
   END
 ;
 .END
-.PROGRAM calc.grid.rnd()@26/07/03 03:33 #11
+.PROGRAM calc.grid.rnd()@26/07/28 05:09 #41
 ; Constants
   lines.count = 11
   obj.in.line = 7
@@ -3757,6 +3781,11 @@ TP_RECINHI      0   0   0
   .max = 77
   .obj.shift = 27 ; mm
 ;
+  chg.tare.count = max.tare.count
+;
+  .$temp = "Calc grid for"+$ENCODE(current.ot)+","+$ENCODE(lines.count)
+  CALL log(.$temp)
+;
   FOR .i = 0 TO lines.count-1
     FOR .j = 0 TO obj.in.line-1
       POINT ot.put[.i,.j] = ot.frame+TRANS(-.i*lines.shift,-.j*.obj.shift)
@@ -3764,7 +3793,7 @@ TP_RECINHI      0   0   0
   END
 ;
 .END
-.PROGRAM calc.ot()@26/07/03 03:33 #117
+.PROGRAM calc.ot()@26/07/28 05:05 #117
 ; Get matrix center
   .center.col = INT(lines.count/2)
   .center.row = INT(obj.in.line/2)
@@ -3876,7 +3905,7 @@ TP_RECINHI      0   0   0
 ;  PRINT .$line    ; печатаем всю строку одним вызовом
 ;END
 .END
-.PROGRAM calc.ot.old()@26/07/03 03:33 #0
+.PROGRAM calc.ot.old()@26/07/28 05:05 #0
 ; Get matrix center
   .center.col = INT(lines.count/2)
   .center.row = INT(obj.in.line/2)
@@ -3966,7 +3995,7 @@ TP_RECINHI      0   0   0
 ;  PRINT .$line    ; печатаем всю строку одним вызовом
 ;END
 .END
-.PROGRAM check.disp.pc()@26/07/03 03:33 #52729147
+.PROGRAM check.disp.pc()@26/07/28 05:05 #52806328
 ;
   IF SIG(s.tcp.ena) AND tcp.ena==-1 THEN
     tcp.ena = tyterm
@@ -3990,7 +4019,7 @@ TP_RECINHI      0   0   0
   END
 ;
 .END
-.PROGRAM check.tasks.pc()@26/07/03 03:33 #52729156
+.PROGRAM check.tasks.pc()@26/07/28 05:05 #52806337
 ;
   IF TASK(1002)<>1 THEN
     PCEXECUTE 2: tcp.client.pc
@@ -4002,7 +4031,7 @@ TP_RECINHI      0   0   0
   END
 ;
 .END
-.PROGRAM check.teach.pc()@26/07/03 03:33 #11289588
+.PROGRAM check.teach.pc()@26/07/28 05:05 #11289588
 ;
   IF SIG(s.hmi.res.state) THEN
     state = 0
@@ -4061,7 +4090,7 @@ TP_RECINHI      0   0   0
   END
 ;
 .END
-.PROGRAM check.zone.pc()@26/07/03 03:33 #52729175
+.PROGRAM check.zone.pc()@26/07/28 05:05 #52806355
 ;
 ;do.work[1] = 17
 ;rs13.work[1] = 1017
@@ -4080,7 +4109,7 @@ TP_RECINHI      0   0   0
   SOUT 2009 = NOT (NOT 2209 AND 1017 AND 17)
 ;
 .END
-.PROGRAM defect.put()@26/07/03 03:33 #326
+.PROGRAM defect.put()@26/07/28 05:05 #326
 ;
   IF count.defect>=max.defect.cnt THEN
     CALL log("Defect tare is full. Waiting for tare clean")
@@ -4119,7 +4148,7 @@ TP_RECINHI      0   0   0
   LMOVE #homyak
 ;
 .END
-.PROGRAM errstart.pc()@26/07/03 03:33 #1528
+.PROGRAM errstart.pc()@26/07/28 05:05 #1549
 ;
   IF ERROR==-34021 OR ERROR==-10100 THEN
     tcp.socket = -1
@@ -4130,7 +4159,7 @@ TP_RECINHI      0   0   0
   ERRSTART.PC ON
 ;
 .END
-.PROGRAM etalon.measure(.id)@26/07/03 03:33 #87
+.PROGRAM etalon.measure(.id)@26/07/28 05:05 #87
   IF FALSE THEN
     .id = hmi.etalon.id
   END
@@ -4275,11 +4304,11 @@ TP_RECINHI      0   0   0
   ACCURACY 100
   LMOVE #homyak
 .END
-.PROGRAM get.ot.point(.obj.id)@26/07/03 03:33 #1697
+.PROGRAM get.ot.point(.obj.id)@26/07/28 05:05 #1697
   ot.x = ms[.obj.id]
   ot.y = ns[.obj.id]
 .END
-.PROGRAM get.ot.point.ol(.obj.id)@26/07/03 03:33 #0
+.PROGRAM get.ot.point.ol(.obj.id)@26/07/28 05:05 #0
   IF object.id==pawn.no THEN
     ot.x = .obj.id MOD lines.count
     ot.y = INT(.obj.id/lines.count)
@@ -4288,7 +4317,7 @@ TP_RECINHI      0   0   0
   ot.x = ms[.obj.id]
   ot.y = ns[.obj.id]
 .END
-.PROGRAM get.state.pc(.$state)@26/07/03 03:33 #1383293
+.PROGRAM get.state.pc(.$state)@26/07/28 05:05 #1386913
   .$state = "SPEED:"+$ENCODE(/L,MSPEED)+";"
   .$state = .$state+"POWER:"
   IF SWITCH(POWER ) THEN
@@ -4375,7 +4404,7 @@ TP_RECINHI      0   0   0
 ; MAX 12
   .$state = .$state+"\n"
 .END
-.PROGRAM id1()@26/07/03 03:33 #98; 312.229.002
+.PROGRAM id1()@26/07/28 05:05 #98; 312.229.002
 ; Object ID
   object.id = 1
   etalon.id = 1 ; Can be object.id <> etalon.id
@@ -4390,7 +4419,7 @@ TP_RECINHI      0   0   0
   direction = 1; -1 for reverse
 ;
 .END
-.PROGRAM id2()@26/07/03 03:33 #7; 0401.17.02.023-02
+.PROGRAM id2()@26/07/28 05:05 #7; 0401.17.02.023-02
 ; Object ID
   object.id = 2
   etalon.id = 2 ; Can be object.id <> etalon.id
@@ -4405,7 +4434,7 @@ TP_RECINHI      0   0   0
   direction = 1; -1 for reverse
 ;
 .END
-.PROGRAM id3()@26/07/03 03:33 #10; 312.229.001
+.PROGRAM id3()@26/07/28 05:05 #10; 312.229.001
 ; Object ID
   object.id = 3
   etalon.id = 3 ; Can be object.id <> etalon.id
@@ -4420,7 +4449,7 @@ TP_RECINHI      0   0   0
   direction = 1; -1 for reverse
 ;
 .END
-.PROGRAM id4()@26/07/03 03:33 #15; 440.00.026
+.PROGRAM id4()@26/07/28 05:05 #15; 440.00.026
 ; Object ID
   object.id = 4
   etalon.id = 4 ; Can be object.id <> etalon.id
@@ -4435,7 +4464,7 @@ TP_RECINHI      0   0   0
   direction = 1; -1 for reverse
 ;
 .END
-.PROGRAM id5()@26/07/03 03:33 #11; 440.00.111
+.PROGRAM id5()@26/07/28 05:05 #11; 440.00.111
 ; Object ID
   object.id = 5
   etalon.id = 5 ; Can be object.id <> etalon.id
@@ -4450,7 +4479,7 @@ TP_RECINHI      0   0   0
   direction = 1; -1 for reverse
 ;
 .END
-.PROGRAM id6()@26/07/03 03:33 #27; 0401.28.02.063
+.PROGRAM id6()@26/07/28 05:05 #27; 0401.28.02.063
 ; Object ID
   object.id = 6
   etalon.id = 6 ; Can be object.id <> etalon.id
@@ -4465,7 +4494,7 @@ TP_RECINHI      0   0   0
   direction = 1; -1 for reverse
 ;
 .END
-.PROGRAM log(.$msg)@26/07/03 03:33 #29496
+.PROGRAM log(.$msg)@26/07/28 05:05 #29496
 ;
 ; 1 line = 55 symbols max
 ;
@@ -4479,7 +4508,21 @@ TP_RECINHI      0   0   0
   IFPWPRINT 3,1,1,9,10=$log.entry[124],$log.entry[125],$log.entry[126],$log.entry[127]
 ;
 .END
-.PROGRAM measure()@26/07/03 03:33 #1968
+.PROGRAM log.pc2(.$msg)@26/07/28 05:13 #2023
+;
+; 1 line = 55 symbols max
+;
+  FOR .i = 0 TO 126
+    $log.entry[.i] = $log.entry[.i+1]
+  END
+  $log.entry[127] = $TIME+" "+.$msg
+;
+  IFPWPRINT 1,1,1,9,10=$log.entry[116],$log.entry[117],$log.entry[118],$log.entry[119]
+  IFPWPRINT 2,1,1,9,10=$log.entry[120],$log.entry[121],$log.entry[122],$log.entry[123]
+  IFPWPRINT 3,1,1,9,10=$log.entry[124],$log.entry[125],$log.entry[126],$log.entry[127]
+;
+.END
+.PROGRAM measure()@26/07/28 05:05 #1968
   IF FALSE THEN
     .pos = hmi.obj.id
   END
@@ -4565,7 +4608,7 @@ TP_RECINHI      0   0   0
 ;JMOVE #safe.machine
 ;JMOVE #homyak
 .END
-.PROGRAM ot.put()@26/07/03 03:33 #913
+.PROGRAM ot.put()@26/07/28 05:05 #913
 ;
   SIGNAL rs7.locked.zone
   IF SIG(rs7.tare.chg) THEN
@@ -4628,7 +4671,7 @@ TP_RECINHI      0   0   0
   END
 ;
 .END
-.PROGRAM pg.select()@26/07/03 03:33 #138
+.PROGRAM pg.select()@26/07/28 05:05 #138
   SCASE $pg.name OF
    SVALUE "312.229.002":
     CASE detail.spec OF
@@ -4705,11 +4748,11 @@ TP_RECINHI      0   0   0
   END
 ;
 .END
-.PROGRAM pg0()@26/07/03 03:33 #0
+.PROGRAM pg0()@26/07/28 05:05 #0
   state = 0
   CALL a.main
 .END
-.PROGRAM pos.pick()@26/07/03 03:33 #1435
+.PROGRAM pos.pick()@26/07/28 05:05 #1435
 ;
   .$temp = "Pick detail from positioner (ID:"+$ENCODE(object.id)+")"
   CALL log(.$temp)
@@ -4773,7 +4816,7 @@ TP_RECINHI      0   0   0
   SIGNAL -rs7.locked.zone
 ;
 .END
-.PROGRAM safe.home()@26/07/03 03:33 #134
+.PROGRAM safe.home()@26/07/28 05:05 #134
 ;
 ; Safe zones:
 ; 1. OT zone: same as for normal work
@@ -4834,7 +4877,7 @@ TP_RECINHI      0   0   0
   END
 ;
 .END
-.PROGRAM set.io.pc()@26/07/03 03:33 #53
+.PROGRAM set.io.pc()@26/07/28 05:05 #55
 ; Gripper IO
 ;
 ; Gripper
@@ -4979,7 +5022,7 @@ TP_RECINHI      0   0   0
 ;
   s.debug.mode = 2300
 .END
-.PROGRAM set.vars.pc()@26/07/03 03:33 #24
+.PROGRAM set.vars.pc()@26/07/28 05:05 #26
 ;
 ; Constants
 ;
@@ -5113,7 +5156,7 @@ TP_RECINHI      0   0   0
   END
 ;
 .END
-.PROGRAM state0()@26/07/03 03:33 #121; Initialization of parameters
+.PROGRAM state0()@26/07/28 05:05 #121; Initialization of parameters
 ;
   CALL log("State 0: Program reset. Initialization of parameters")
   SIGNAL -s.grip.full,-s.measure.ok,-s.measure.ng,-rs7.tare.chg,-s.cmd.measured
@@ -5128,7 +5171,7 @@ TP_RECINHI      0   0   0
   state = 100
 ;
 .END
-.PROGRAM state1()@26/07/03 03:33 #2102; Pick from positioner
+.PROGRAM state1()@26/07/28 05:05 #2102; Pick from positioner
   CALL log("State 1: Pick from positioner")
 ; Check all start positions
 ; Possible do not needed because robot can be only in HOME or near positioner
@@ -5139,7 +5182,7 @@ TP_RECINHI      0   0   0
   state = 101
 ;
 .END
-.PROGRAM state100()@26/07/03 03:33 #99; Waiting for start
+.PROGRAM state100()@26/07/28 05:05 #99; Waiting for start
 ;
   CALL log("State 100: Waiting for start")
   $action = "WaitingForStart"
@@ -5157,11 +5200,11 @@ TP_RECINHI      0   0   0
   CALL pg.select
   state = 106
 .END
-.PROGRAM state101()@26/07/03 03:33 #7021; Auxilary state
+.PROGRAM state101()@26/07/28 05:05 #7021; Auxilary state
   CALL log("State 101: Calculating next step")
   state = 102
 .END
-.PROGRAM state102()@26/07/03 03:33 #463625; Decision making
+.PROGRAM state102()@26/07/28 05:05 #463625; Decision making
 ; Priority 1
   IF SIG(s.cmd.pause) THEN
     state = 105
@@ -5211,19 +5254,19 @@ TP_RECINHI      0   0   0
     RETURN
   END
 .END
-.PROGRAM state103()@26/07/03 03:33 #126; Auxilary state
+.PROGRAM state103()@26/07/28 05:05 #126; Auxilary state
   CALL log("State 103: Ending sequence started")
   state = 104
 ;
 .END
-.PROGRAM state104()@26/07/03 03:33 #126; Ending sequence
+.PROGRAM state104()@26/07/28 05:05 #126; Ending sequence
 ;
   SIGNAL rs7.finish.ack
   state = 255
   RETURN
 ;
 .END
-.PROGRAM state105()@26/07/03 03:33 #17; Program paused
+.PROGRAM state105()@26/07/28 05:05 #17; Program paused
   CALL log("State 105: Program paused")
   $action = "Paused"
   SWAIT s.cmd.resume
@@ -5232,7 +5275,7 @@ TP_RECINHI      0   0   0
   SIGNAL -s.cmd.pause
   state = 101
 .END
-.PROGRAM state106()@26/07/03 03:33 #211; Check program
+.PROGRAM state106()@26/07/28 05:05 #211; Check program
   CALL log("State 106: Check program")
   IF $pg.name<>"NULL" THEN
     CALL log("Selected program: "+$pg.name)
@@ -5253,7 +5296,7 @@ TP_RECINHI      0   0   0
   END
 ;
 .END
-.PROGRAM state2()@26/07/03 03:33 #2072; Measurement process
+.PROGRAM state2()@26/07/28 05:05 #2072; Measurement process
   CALL log("State 2: Measurement process")
 ; Check all start positions
 ; Possible do not needed because robot can be only in HOME or near positioner
@@ -5265,12 +5308,12 @@ TP_RECINHI      0   0   0
   state = 101
 ;
 .END
-.PROGRAM state255()@26/07/03 03:33 #126
+.PROGRAM state255()@26/07/28 05:05 #126
   CALL log("State 255: Program complete")
   state = 0
 ;
 .END
-.PROGRAM state3()@26/07/03 03:33 #1728; Put detail to OT
+.PROGRAM state3()@26/07/28 05:05 #1728; Put detail to OT
   CALL log("State 3: Put detail to OT")
 ; Check all start positions
 ; Possible do not needed because robot can be only in HOME or near positioner
@@ -5282,7 +5325,7 @@ TP_RECINHI      0   0   0
   state = 101
 ;
 .END
-.PROGRAM state4()@26/07/03 03:33 #354; State 4: Put detail to defect tare
+.PROGRAM state4()@26/07/28 05:05 #354; State 4: Put detail to defect tare
   CALL log("State 4: Put detail to defect tare")
 ; Check all start positions
 ; Possible do not needed because robot can be only in HOME or near positioner
@@ -5294,7 +5337,7 @@ TP_RECINHI      0   0   0
   state = 101
 ;
 .END
-.PROGRAM state5()@26/07/03 03:33 #723; Check etalon
+.PROGRAM state5()@26/07/28 05:05 #723; Check etalon
   CALL log("State 5: Check etalon")
 ; TEMPORARY!!!!!!!!
 ;  state = 101
@@ -5326,19 +5369,19 @@ TP_RECINHI      0   0   0
 ;END
 ;
 .END
-.PROGRAM state6()@26/07/03 03:33 #0; Deprecated
+.PROGRAM state6()@26/07/28 05:05 #0; Deprecated
   state = 103
 .END
-.PROGRAM state7()@26/07/03 03:33 #201; Deprecated
+.PROGRAM state7()@26/07/28 05:05 #201; Deprecated
   SIGNAL s.cmd.chk.etal
   state = 5
 .END
-.PROGRAM state8()@26/07/03 03:33 #0; Check etalon by command
+.PROGRAM state8()@26/07/28 05:05 #0; Check etalon by command
   CALL log("State 8: Check etalon by command")
   CALL etalon.measure(etalon.id)
   state = 105
 .END
-.PROGRAM tcp.callback.pc(.$data[],.data.length)@26/07/03 03:33 #50501
+.PROGRAM tcp.callback.pc(.$data[],.data.length)@26/07/28 05:10 #90136
   .$temp = "Received "+$ENCODE(.data.length)+" strings:"
   PRINT tcp.recv.ena: .$temp
   FOR .i = 1 TO .data.length
@@ -5368,6 +5411,9 @@ TP_RECINHI      0   0   0
 ; Decode outtare ids
       .$temp = $DECODE(.$data[1],";",1)
       $opt.data = $DECODE(.$data[1],";",0)
+; Decode layout
+      .$temp = $DECODE(.$data[1],";",1)
+      layout = VAL($DECODE(.$data[1],";",0))
       PULSE s.cmd.start,5
     END
 ;
@@ -5427,9 +5473,11 @@ TP_RECINHI      0   0   0
 ; Decode measurement result
       .$measurement.sta = $DECODE(.$data[1],";",0)
       IF INSTR(.$measurement.sta , "TRUE") THEN
+        CALL log.pc2("Received MEASUREMENT command: TRUE")
         SIGNAL s.measure.ok
       END
       IF INSTR(.$measurement.sta , "FALSE") THEN
+        CALL log.pc2("Received MEASUREMENT command: FALSE")
         SIGNAL s.measure.ng
       END
     END
@@ -5439,6 +5487,8 @@ TP_RECINHI      0   0   0
 ; SPEED;VALUE;
 ;
     IF INSTR(.$data[.i] , "SPEED") THEN
+;
+      CALL log.pc2("Received SPEED command")
       .$temp = $DECODE(.$data[1],";",0)
       .$temp = $DECODE(.$data[1],";",1)
       .$spd = $DECODE(.$data[1],";",0)
@@ -5456,6 +5506,7 @@ TP_RECINHI      0   0   0
 ; String format
 ; POSITIONERFULL;
     IF INSTR(.$data[.i] , "POSITIONERFULL") THEN
+;CALL log.pc2("Received POSITIONERFULL command")
       PULSE s.cmd.pick,5
     END
 ;
@@ -5479,6 +5530,7 @@ TP_RECINHI      0   0   0
 ; CLEANDEFECT;
 ;
     IF INSTR(.$data[.i] , "CLEANDEFECT") THEN
+      CALL log.pc2("Received CLEANDEFECT command")
       count.defect = 0
     END
 ;
@@ -5487,6 +5539,7 @@ TP_RECINHI      0   0   0
 ; PAUSE;
 ;
     IF INSTR(.$data[.i] , "PAUSE") THEN
+      CALL log.pc2("Received PAUSE command")
       SIGNAL s.cmd.pause
     END
 ;
@@ -5495,7 +5548,8 @@ TP_RECINHI      0   0   0
 ; RESUME;
 ;
     IF INSTR(.$data[.i] , "RESUME") THEN
-      PULSE s.cmd.resume,5
+      CALL log.pc2("Received RESUME command")
+      SIGNAL s.cmd.resume
     END
 ;
 ; STOP COMMAND
@@ -5503,15 +5557,28 @@ TP_RECINHI      0   0   0
 ; STOP;
 ;
     IF INSTR(.$data[.i] , "STOP") THEN
+      CALL log.pc2("Received STOP command")
       SIGNAL s.cmd.stop
+      SIGNAL rs7.etalon.stop
     END
 ;
-; STOP COMMAND
+; ALTERNATEWAVE COMMAND
 ; String format:
-; STOP;
-;
-    IF INSTR(.$data[.i] , "STOP") THEN
-      SIGNAL s.cmd.stop
+; ALTERNATEWAVE:VALUE
+    IF INSTR(.$data[.i] , "ALTERNATEWAVE") THEN
+; Decode command
+      .$temp = $DECODE(.$data[1],";",0)
+      .$temp = $DECODE(.$data[1],";",1)
+; Decode measurement result
+      .$state = $DECODE(.$data[1],";",0)
+      IF INSTR(.$state , "TRUE") THEN
+        CALL log.pc2("Received SET ALTERNATIVE WAVE MODE TRUE command")
+        SIGNAL s.enable.shift
+      END
+      IF INSTR(.$state , "FALSE") THEN
+        CALL log.pc2("Received SET ALTERNATIVE WAVE MODE FALSE command")
+        SIGNAL -s.enable.shift
+      END
     END
 ;
 ; CYCLEON COMMAND
@@ -5519,6 +5586,7 @@ TP_RECINHI      0   0   0
 ; CYCLEON;
 ;
     IF INSTR(.$data[.i] , "CYCLEON") THEN
+      CALL log.pc2("Received CYCLE ON command")
       IF SIG(do.automatic) AND NOT SWITCH(CS ) THEN
         MC CONTINUE
       END
@@ -5535,9 +5603,11 @@ TP_RECINHI      0   0   0
 ; Decode measurement result
       .$state = $DECODE(.$data[1],";",0)
       IF INSTR(.$state , "TRUE") THEN
+        CALL log.pc2("Received SET STEP MODE TRUE command")
         STP_ONCE ON
       END
       IF INSTR(.$state , "FALSE") THEN
+        CALL log.pc2("Received SET STEP MODE FALSE command")
         STP_ONCE OFF
       END
     END
@@ -5547,6 +5617,7 @@ TP_RECINHI      0   0   0
 ; NEXTSTEP;
 ;
     IF INSTR(.$data[.i] , "NEXTSTEP") THEN
+      CALL log.pc2("Received NEXTSTEP command")
       STPNEXT
     END
 ;
@@ -5555,13 +5626,25 @@ TP_RECINHI      0   0   0
 ; ERESET;
 ;
     IF INSTR(.$data[.i] , "ERESET") THEN
+      CALL log.pc2("Received ERROR RESET command")
       MC ERESET
+      .$data[.i] = ""
+      RETURN
+    END
+;
+; RESET COMMAND
+; String format:
+; RESET;
+;
+    IF INSTR(.$data[.i] , "RESET") THEN
+      CALL log.pc2("Received RESET command")
+      state = 0
     END
 ;
     .$data[.i] = ""
   END
 .END
-.PROGRAM tcp.client.pc()@26/07/03 03:33 #0
+.PROGRAM tcp.client.pc()@26/07/28 05:05 #0
 ;
   tcp.socket = -1
   .tcp.retry.count = 10
@@ -5634,7 +5717,7 @@ TP_RECINHI      0   0   0
     TWAIT 0.05
   END
 .END
-.PROGRAM tcp.log.pc(.$msg)@26/07/03 03:33 #69634
+.PROGRAM tcp.log.pc(.$msg)@26/07/28 05:05 #69642
   IF NOT SIG(s.tcp.log) THEN
     RETURN
   END
@@ -5651,7 +5734,7 @@ TP_RECINHI      0   0   0
   IFPWPRINT 3,1,1,9,10=$log.entry[124],$log.entry[125],$log.entry[126],$log.entry[127]
 ;
 .END
-.PROGRAM tcp.send.pc(.$data[],.data.length)@26/07/03 03:33 #1895540
+.PROGRAM tcp.send.pc(.$data[],.data.length)@26/07/28 05:05 #1899134
 ;
   .tcp.send.tmo = 5
 ;
@@ -5674,13 +5757,13 @@ TP_RECINHI      0   0   0
   END
 ;
 .END
-.PROGRAM tcp.sender.pc()@26/07/03 03:33 #0
+.PROGRAM tcp.sender.pc()@26/07/28 05:10 #0
 ;
   WHILE TRUE DO
 ;
     CALL get.state.pc(.$data[1])
     .$data[2] = "ACTION:"+$action+";"
-    .$data[2] = "WATCHDOG:"+$wdog.state+";"
+    .$data[2] = .$data[2]+"WATCHDOG:"+$wdog.state+";"
     .$data[2] = .$data[2]+"GRIPPER:"+$ENCODE(current.gripper)+";"
     .$data[2] = .$data[2]+"PICKCOUNT:"+$ENCODE(count.pick)+";"
     .$data[2] = .$data[2]+"DEFECTCOUNT:"+$ENCODE(count.defect)+";"
@@ -5694,6 +5777,12 @@ TP_RECINHI      0   0   0
       .$data[2] = .$data[2]+"STEPMODE:FALSE;"
     END
 ;
+    IF SIG(s.enable.shift) THEN
+      .$data[2] = .$data[2]+"ALTWAVE:TRUE;"
+    ELSE
+      .$data[2] = .$data[2]+"ALTWAVE:FALSE;"
+    END
+;
     .$data[2] = .$data[2]+"\n"
 ;
     CALL tcp.send.pc(.$data[],2)
@@ -5701,7 +5790,7 @@ TP_RECINHI      0   0   0
   END
 ;
 .END
-.PROGRAM test()@26/07/03 03:33 #1
+.PROGRAM test()@26/07/28 05:05 #1
   CALL id2
   CALL calc.grid
   FOR .i = 0 TO 100
@@ -5712,7 +5801,7 @@ TP_RECINHI      0   0   0
     TWAIT 5
   END
 .END
-.PROGRAM watchdog.pc()@26/07/03 03:33 #0
+.PROGRAM watchdog.pc()@26/07/28 05:05 #0
 ;
   HERE .last.pos
   TIMER 1 = 0
@@ -6812,6 +6901,7 @@ s.cmd.stop = 2241
 s.debug.mode = 2300
 s.defect.pal.ng = 2224
 s.defect.pal.ok = 2223
+s.enable.shift = 2301
 s.etalon.ng = 2274
 s.etalon.ok = 2272
 s.etalon.ret = 2273
@@ -6850,138 +6940,138 @@ wdog.tmr = 30
 .END
 .STRINGS
 $action = "WaitPosFull"
-$log.entry[0] = "15:30:45 CYCLEON;\n"
-$log.entry[1] = "15:30:56 CYCLEON;\n"
-$log.entry[2] = "15:31:06 CYCLEON;\n"
-$log.entry[3] = "15:31:17 CYCLEON;\n"
-$log.entry[4] = "15:31:27 CYCLEON;\n"
-$log.entry[5] = "15:31:38 CYCLEON;\n"
-$log.entry[6] = "15:31:48 CYCLEON;\n"
-$log.entry[7] = "15:31:59 CYCLEON;\n"
-$log.entry[8] = "15:32:09 CYCLEON;\n"
-$log.entry[9] = "15:32:20 CYCLEON;\n"
-$log.entry[10] = "15:32:30 CYCLEON;\n"
-$log.entry[11] = "15:32:41 CYCLEON;\n"
-$log.entry[12] = "15:32:51 CYCLEON;\n"
-$log.entry[13] = "15:33:02 CYCLEON;\n"
-$log.entry[14] = "15:33:13 CYCLEON;\n"
-$log.entry[15] = "15:33:23 CYCLEON;\n"
-$log.entry[16] = "15:33:34 CYCLEON;\n"
-$log.entry[17] = "15:33:44 CYCLEON;\n"
-$log.entry[18] = "15:33:55 CYCLEON;\n"
-$log.entry[19] = "15:34:05 CYCLEON;\n"
-$log.entry[20] = "15:34:16 CYCLEON;\n"
-$log.entry[21] = "15:34:26 CYCLEON;\n"
-$log.entry[22] = "15:34:37 CYCLEON;\n"
-$log.entry[23] = "15:34:47 CYCLEON;\n"
-$log.entry[24] = "15:34:58 CYCLEON;\n"
-$log.entry[25] = "15:35:08 CYCLEON;\n"
-$log.entry[26] = "15:35:19 CYCLEON;\n"
-$log.entry[27] = "15:35:29 CYCLEON;\n"
-$log.entry[28] = "15:35:40 CYCLEON;\n"
-$log.entry[29] = "15:35:50 CYCLEON;\n"
-$log.entry[30] = "15:36:01 CYCLEON;\n"
-$log.entry[31] = "15:36:12 CYCLEON;\n"
-$log.entry[32] = "15:36:22 CYCLEON;\n"
-$log.entry[33] = "15:36:33 CYCLEON;\n"
-$log.entry[34] = "15:36:43 CYCLEON;\n"
-$log.entry[35] = "15:36:54 CYCLEON;\n"
-$log.entry[36] = "15:37:04 CYCLEON;\n"
-$log.entry[37] = "15:37:15 CYCLEON;\n"
-$log.entry[38] = "15:37:25 CYCLEON;\n"
-$log.entry[39] = "15:37:36 CYCLEON;\n"
-$log.entry[40] = "15:37:46 CYCLEON;\n"
-$log.entry[41] = "15:37:57 CYCLEON;\n"
-$log.entry[42] = "15:38:07 CYCLEON;\n"
-$log.entry[43] = "15:38:18 CYCLEON;\n"
-$log.entry[44] = "15:38:28 CYCLEON;\n"
-$log.entry[45] = "15:38:39 CYCLEON;\n"
-$log.entry[46] = "15:38:49 CYCLEON;\n"
-$log.entry[47] = "15:39:00 CYCLEON;\n"
-$log.entry[48] = "15:39:10 CYCLEON;\n"
-$log.entry[49] = "15:39:21 CYCLEON;\n"
-$log.entry[50] = "15:39:31 CYCLEON;\n"
-$log.entry[51] = "15:39:42 CYCLEON;\n"
-$log.entry[52] = "15:39:53 CYCLEON;\n"
-$log.entry[53] = "15:40:03 CYCLEON;\n"
-$log.entry[54] = "15:40:14 CYCLEON;\n"
-$log.entry[55] = "15:40:24 CYCLEON;\n"
-$log.entry[56] = "15:40:35 CYCLEON;\n"
-$log.entry[57] = "15:40:45 CYCLEON;\n"
-$log.entry[58] = "15:40:56 CYCLEON;\n"
-$log.entry[59] = "15:41:06 CYCLEON;\n"
-$log.entry[60] = "15:41:17 CYCLEON;\n"
-$log.entry[61] = "15:41:27 CYCLEON;\n"
-$log.entry[62] = "15:41:38 CYCLEON;\n"
-$log.entry[63] = "15:41:48 CYCLEON;\n"
-$log.entry[64] = "15:41:59 CYCLEON;\n"
-$log.entry[65] = "15:42:09 CYCLEON;\n"
-$log.entry[66] = "15:42:20 CYCLEON;\n"
-$log.entry[67] = "15:42:30 CYCLEON;\n"
-$log.entry[68] = "15:42:41 CYCLEON;\n"
-$log.entry[69] = "15:42:51 CYCLEON;\n"
-$log.entry[70] = "15:43:02 CYCLEON;\n"
-$log.entry[71] = "15:43:13 CYCLEON;\n"
-$log.entry[72] = "15:43:23 CYCLEON;\n"
-$log.entry[73] = "15:44:09 CYCLEON;\n"
-$log.entry[74] = "15:44:19 CYCLEON;\n"
-$log.entry[75] = "15:44:29 CYCLEON;\n"
-$log.entry[76] = "15:44:39 CYCLEON;\n"
-$log.entry[77] = "15:44:50 CYCLEON;\n"
-$log.entry[78] = "15:45:00 CYCLEON;\n"
-$log.entry[79] = "15:45:10 CYCLEON;\n"
-$log.entry[80] = "15:45:20 CYCLEON;\n"
-$log.entry[81] = "15:45:30 CYCLEON;\n"
-$log.entry[82] = "15:45:41 CYCLEON;\n"
-$log.entry[83] = "15:45:51 CYCLEON;\n"
-$log.entry[84] = "15:46:01 CYCLEON;\n"
-$log.entry[85] = "15:46:11 CYCLEON;\n"
-$log.entry[86] = "15:46:21 CYCLEON;\n"
-$log.entry[87] = "15:46:32 CYCLEON;\n"
-$log.entry[88] = "15:46:42 CYCLEON;\n"
-$log.entry[89] = "15:46:52 CYCLEON;\n"
-$log.entry[90] = "15:47:02 CYCLEON;\n"
-$log.entry[91] = "15:47:13 CYCLEON;\n"
-$log.entry[92] = "15:47:23 CYCLEON;\n"
-$log.entry[93] = "15:47:33 CYCLEON;\n"
-$log.entry[94] = "15:47:43 CYCLEON;\n"
-$log.entry[95] = "15:47:54 CYCLEON;\n"
-$log.entry[96] = "15:48:04 CYCLEON;\n"
-$log.entry[97] = "15:48:04 Main program executed"
-$log.entry[98] = "15:48:05 Robot already in home position"
-$log.entry[99] = "15:48:05 State 0: Program reset. Initialization of parameters"
-$log.entry[100] = "15:48:05 State 100: Waiting for start"
-$log.entry[101] = "15:49:15 CYCLEON;\n"
-$log.entry[102] = "15:49:25 CYCLEON;\n"
-$log.entry[103] = "15:49:35 CYCLEON;\n"
-$log.entry[104] = "15:49:45 CYCLEON;\n"
-$log.entry[105] = "15:49:55 CYCLEON;\n"
-$log.entry[106] = "15:50:05 CYCLEON;\n"
-$log.entry[107] = "15:50:15 CYCLEON;\n"
-$log.entry[108] = "15:50:25 CYCLEON;\n"
-$log.entry[109] = "18:02:23 Main program executed"
-$log.entry[110] = "18:02:23 Performing safe motion to home position"
-$log.entry[111] = "18:02:23 Robot in home position"
-$log.entry[112] = "18:02:23 State 100: Waiting for start"
-$log.entry[113] = "18:08:45 Main program executed"
-$log.entry[114] = "18:08:45 Performing safe motion to home position"
-$log.entry[115] = "18:08:45 Robot in home position"
-$log.entry[116] = "18:08:45 State 100: Waiting for start"
-$log.entry[117] = "18:10:03 START with Name:312.229.002-0 Count: 150 OT:1 OPT:1"
-$log.entry[118] = "18:10:03 State 106: Check program"
-$log.entry[119] = "18:10:03 Selected program: 312.229.002"
-$log.entry[120] = "18:10:03 State 5: Check etalon"
-$log.entry[121] = "18:10:04 Wait for unclamp gripper. State: WaitingGripUnclamped"
-$log.entry[122] = "18:10:46 Pick detail from etalon (ID: 1)"
-$log.entry[123] = "18:10:51 Measure etalon (ID: 1)"
-$log.entry[124] = "18:10:55 Waiting for measurement result"
-$log.entry[125] = "18:11:28 Measurement etalon: OK"
-$log.entry[126] = "18:11:30 Return etalon to positioner (ID: 1)"
-$log.entry[127] = "18:11:35 State 101: Calculating next step"
+$log.entry[0] = "15:31:38 CYCLEON;\n"
+$log.entry[1] = "15:31:48 CYCLEON;\n"
+$log.entry[2] = "15:31:59 CYCLEON;\n"
+$log.entry[3] = "15:32:09 CYCLEON;\n"
+$log.entry[4] = "15:32:20 CYCLEON;\n"
+$log.entry[5] = "15:32:30 CYCLEON;\n"
+$log.entry[6] = "15:32:41 CYCLEON;\n"
+$log.entry[7] = "15:32:51 CYCLEON;\n"
+$log.entry[8] = "15:33:02 CYCLEON;\n"
+$log.entry[9] = "15:33:13 CYCLEON;\n"
+$log.entry[10] = "15:33:23 CYCLEON;\n"
+$log.entry[11] = "15:33:34 CYCLEON;\n"
+$log.entry[12] = "15:33:44 CYCLEON;\n"
+$log.entry[13] = "15:33:55 CYCLEON;\n"
+$log.entry[14] = "15:34:05 CYCLEON;\n"
+$log.entry[15] = "15:34:16 CYCLEON;\n"
+$log.entry[16] = "15:34:26 CYCLEON;\n"
+$log.entry[17] = "15:34:37 CYCLEON;\n"
+$log.entry[18] = "15:34:47 CYCLEON;\n"
+$log.entry[19] = "15:34:58 CYCLEON;\n"
+$log.entry[20] = "15:35:08 CYCLEON;\n"
+$log.entry[21] = "15:35:19 CYCLEON;\n"
+$log.entry[22] = "15:35:29 CYCLEON;\n"
+$log.entry[23] = "15:35:40 CYCLEON;\n"
+$log.entry[24] = "15:35:50 CYCLEON;\n"
+$log.entry[25] = "15:36:01 CYCLEON;\n"
+$log.entry[26] = "15:36:12 CYCLEON;\n"
+$log.entry[27] = "15:36:22 CYCLEON;\n"
+$log.entry[28] = "15:36:33 CYCLEON;\n"
+$log.entry[29] = "15:36:43 CYCLEON;\n"
+$log.entry[30] = "15:36:54 CYCLEON;\n"
+$log.entry[31] = "15:37:04 CYCLEON;\n"
+$log.entry[32] = "15:37:15 CYCLEON;\n"
+$log.entry[33] = "15:37:25 CYCLEON;\n"
+$log.entry[34] = "15:37:36 CYCLEON;\n"
+$log.entry[35] = "15:37:46 CYCLEON;\n"
+$log.entry[36] = "15:37:57 CYCLEON;\n"
+$log.entry[37] = "15:38:07 CYCLEON;\n"
+$log.entry[38] = "15:38:18 CYCLEON;\n"
+$log.entry[39] = "15:38:28 CYCLEON;\n"
+$log.entry[40] = "15:38:39 CYCLEON;\n"
+$log.entry[41] = "15:38:49 CYCLEON;\n"
+$log.entry[42] = "15:39:00 CYCLEON;\n"
+$log.entry[43] = "15:39:10 CYCLEON;\n"
+$log.entry[44] = "15:39:21 CYCLEON;\n"
+$log.entry[45] = "15:39:31 CYCLEON;\n"
+$log.entry[46] = "15:39:42 CYCLEON;\n"
+$log.entry[47] = "15:39:53 CYCLEON;\n"
+$log.entry[48] = "15:40:03 CYCLEON;\n"
+$log.entry[49] = "15:40:14 CYCLEON;\n"
+$log.entry[50] = "15:40:24 CYCLEON;\n"
+$log.entry[51] = "15:40:35 CYCLEON;\n"
+$log.entry[52] = "15:40:45 CYCLEON;\n"
+$log.entry[53] = "15:40:56 CYCLEON;\n"
+$log.entry[54] = "15:41:06 CYCLEON;\n"
+$log.entry[55] = "15:41:17 CYCLEON;\n"
+$log.entry[56] = "15:41:27 CYCLEON;\n"
+$log.entry[57] = "15:41:38 CYCLEON;\n"
+$log.entry[58] = "15:41:48 CYCLEON;\n"
+$log.entry[59] = "15:41:59 CYCLEON;\n"
+$log.entry[60] = "15:42:09 CYCLEON;\n"
+$log.entry[61] = "15:42:20 CYCLEON;\n"
+$log.entry[62] = "15:42:30 CYCLEON;\n"
+$log.entry[63] = "15:42:41 CYCLEON;\n"
+$log.entry[64] = "15:42:51 CYCLEON;\n"
+$log.entry[65] = "15:43:02 CYCLEON;\n"
+$log.entry[66] = "15:43:13 CYCLEON;\n"
+$log.entry[67] = "15:43:23 CYCLEON;\n"
+$log.entry[68] = "15:44:09 CYCLEON;\n"
+$log.entry[69] = "15:44:19 CYCLEON;\n"
+$log.entry[70] = "15:44:29 CYCLEON;\n"
+$log.entry[71] = "15:44:39 CYCLEON;\n"
+$log.entry[72] = "15:44:50 CYCLEON;\n"
+$log.entry[73] = "15:45:00 CYCLEON;\n"
+$log.entry[74] = "15:45:10 CYCLEON;\n"
+$log.entry[75] = "15:45:20 CYCLEON;\n"
+$log.entry[76] = "15:45:30 CYCLEON;\n"
+$log.entry[77] = "15:45:41 CYCLEON;\n"
+$log.entry[78] = "15:45:51 CYCLEON;\n"
+$log.entry[79] = "15:46:01 CYCLEON;\n"
+$log.entry[80] = "15:46:11 CYCLEON;\n"
+$log.entry[81] = "15:46:21 CYCLEON;\n"
+$log.entry[82] = "15:46:32 CYCLEON;\n"
+$log.entry[83] = "15:46:42 CYCLEON;\n"
+$log.entry[84] = "15:46:52 CYCLEON;\n"
+$log.entry[85] = "15:47:02 CYCLEON;\n"
+$log.entry[86] = "15:47:13 CYCLEON;\n"
+$log.entry[87] = "15:47:23 CYCLEON;\n"
+$log.entry[88] = "15:47:33 CYCLEON;\n"
+$log.entry[89] = "15:47:43 CYCLEON;\n"
+$log.entry[90] = "15:47:54 CYCLEON;\n"
+$log.entry[91] = "15:48:04 CYCLEON;\n"
+$log.entry[92] = "15:48:04 Main program executed"
+$log.entry[93] = "15:48:05 Robot already in home position"
+$log.entry[94] = "15:48:05 State 0: Program reset. Initialization of parameters"
+$log.entry[95] = "15:48:05 State 100: Waiting for start"
+$log.entry[96] = "15:49:15 CYCLEON;\n"
+$log.entry[97] = "15:49:25 CYCLEON;\n"
+$log.entry[98] = "15:49:35 CYCLEON;\n"
+$log.entry[99] = "15:49:45 CYCLEON;\n"
+$log.entry[100] = "15:49:55 CYCLEON;\n"
+$log.entry[101] = "15:50:05 CYCLEON;\n"
+$log.entry[102] = "15:50:15 CYCLEON;\n"
+$log.entry[103] = "15:50:25 CYCLEON;\n"
+$log.entry[104] = "18:02:23 Main program executed"
+$log.entry[105] = "18:02:23 Performing safe motion to home position"
+$log.entry[106] = "18:02:23 Robot in home position"
+$log.entry[107] = "18:02:23 State 100: Waiting for start"
+$log.entry[108] = "18:08:45 Main program executed"
+$log.entry[109] = "18:08:45 Performing safe motion to home position"
+$log.entry[110] = "18:08:45 Robot in home position"
+$log.entry[111] = "18:08:45 State 100: Waiting for start"
+$log.entry[112] = "18:10:03 START with Name:312.229.002-0 Count: 150 OT:1 OPT:1"
+$log.entry[113] = "18:10:03 State 106: Check program"
+$log.entry[114] = "18:10:03 Selected program: 312.229.002"
+$log.entry[115] = "18:10:03 State 5: Check etalon"
+$log.entry[116] = "18:10:04 Wait for unclamp gripper. State: WaitingGripUnclamped"
+$log.entry[117] = "18:10:46 Pick detail from etalon (ID: 1)"
+$log.entry[118] = "18:10:51 Measure etalon (ID: 1)"
+$log.entry[119] = "18:10:55 Waiting for measurement result"
+$log.entry[120] = "18:11:28 Measurement etalon: OK"
+$log.entry[121] = "18:11:30 Return etalon to positioner (ID: 1)"
+$log.entry[122] = "18:11:35 State 101: Calculating next step"
+$log.entry[123] = "05:13:20 Received SET ALTERNATIVE WAVE MODE TRUE command"
+$log.entry[124] = "05:15:15 Received SET ALTERNATIVE WAVE MODE TRUE command"
+$log.entry[125] = "05:15:26 Received SET ALTERNATIVE WAVE MODE FALSE command"
+$log.entry[126] = "05:20:28 Received SET ALTERNATIVE WAVE MODE FALSE command"
+$log.entry[127] = "05:20:34 Received SET ALTERNATIVE WAVE MODE TRUE command"
 $opt.data = "1"
 $ot.data = "1"
 $pg.name = "312.229.002"
-$tcp.ip = "192.168.0.130"
+$tcp.ip = "127.0.0.1"
 $wdog.state = "FALSE"
 .END
 .IDE_CMT
