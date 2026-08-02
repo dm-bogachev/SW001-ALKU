@@ -3059,6 +3059,8 @@ RMTIN960 1001 1017 1033 1049 1065 1081 1097 1113 1129 1145 1161 1177 1193 1209 1
 	; @@@ PROJECTNAME @@@
 	; ALKU_RS007L_MASTER
 	; @@@ HISTORY @@@
+	; 02.08.2026 21:15:54
+	; 
 	; @@@ INSPECTION @@@
 	; count.pick
 	; max.count.put
@@ -3358,6 +3360,7 @@ RMTIN960 1001 1017 1033 1049 1065 1081 1097 1113 1129 1145 1161 1177 1193 1209 1
 	;       .data.length 
 	;       .$temp 
 	;       .i 
+	;       .$awave 
 	;       .$sensor.name 
 	;       .$sensor.state 
 	;       .$state 
