@@ -100,8 +100,8 @@ N_INT256    "s.apply.obj"
 N_INT260    "s.pr.tch.grip"
 N_INT261    "s.hmi.res.state"
 N_INT262    "s.hmi.res.act"
-N_INT270    "s.opt.spacer"
-N_INT271    "s.opt.flip"
+N_INT270    "s.ot.spacer"
+N_INT271    "s.ot.flip"
 N_INT272    "s.etalon.ok"
 N_INT273    "s.etalon.ret"
 N_INT274    "s.etalon.ng"
@@ -199,6 +199,7 @@ RMTIN960 1001 1017 1033 1049 1065 1081 1097 1113 1129 1145 1161 1177 1193 1209 1
 155,8,"ot.x","    OT","X POSITION",10,3,2,1,0
 156,8,"ot.y","    OT","Y POSITION",10,3,2,1,0
 157,8,"hmi.ot.k","    OT","  PUT ID ",10,3,3,1,0
+160,8,"layout","    OT","  LAYOUT",10,3,3,1,0
 161,2,"","   MAIN","<---------","",10,4,11,2001,0
 164,2,"","   TEACH","POSITIONER","",10,4,11,2004,0
 165,2,"","   TEACH","  MACHINE","",10,4,11,2005,0
@@ -532,37 +533,50 @@ RMTIN960 1001 1017 1033 1049 1065 1081 1097 1113 1129 1145 1161 1177 1193 1209 1
 ; detail.type
 .END
 .PROGRAM a.test.ot()@26/06/25 16:05 #0
-  IF hmi.ot.k<>-1 THEN
-    .$pg = "id"+$ENCODE(/L,hmi.obj.id)
+  IF hmi.ot.k <> -1 THEN
+    .$pg = "id" + $ENCODE (/L, hmi.obj.id)
     SCALL .$pg
-    IF hmi.obj.id<>round.no THEN
+    CALL select.layout
+    IF hmi.obj.id <> round.no THEN
       CALL calc.grid
     ELSE
       CALL calc.grid.rnd
     END
-    CALL calc.ot
-    CALL get.ot.point(hmi.ot.k)
+    CALL sort.grid
+    CALL get.ot.point (hmi.ot.k)
   END
   .x = grip.xsh[hmi.obj.id]
   .y = grip.ysh[hmi.obj.id]
   .z = grip.zsh[hmi.obj.id]
-  IF object.id<>round.no AND ot.y MOD 2<>0 AND SIG(s.opt.flip) THEN
+  .rz = 0
+  IF object.id <> round.no AND ot.y MOD 2 <> 0 AND SIG (s.ot.flip) THEN
     .x = grip.180xsh[hmi.obj.id]
     .y = grip.180ysh[hmi.obj.id]
+    .rz = 180
   END
-;
-  POINT .put = ot.put[ot.x,ot.y]+TRANS(.x,.y,.z)
-  LAPPRO .put,-50
-  LMOVE .put
-  LAPPRO .put,-50
+  ;
+  POINT .put = ot.put[ot.x, ot.y] + TRANS (.x, .y, .z)
+  POINT .putr = ot.put[ot.x, ot.y]+ RZ (.rz) + TRANS (.x, .y, .z)
+  POINT .putr2 = ot.put[ot.x, ot.y]+ RZ (.rz/2) + TRANS (.x, .y, .z)
+  LAPPRO .put, -200
+  BREAK
+  HERE .#temp
+  LAPPRO .putr2, -100
+  LAPPRO .putr, -50
+  LMOVE .putr
+  LAPPRO .putr, -50
+  LAPPRO .putr2, -100
+  LMOVE .#temp
+  ;
+  
 .END
 .PROGRAM a.test.ot.pick()@26/06/25 16:05 #1
-;
-  IF hmi.obj.id==round.no THEN
+  ;
+  IF hmi.obj.id == round.no THEN
     .shift.x = 0
     .shift.y = 0
   ELSE
-    IF hmi.obj.id==pawn.no THEN
+    IF hmi.obj.id == pawn.no THEN
       .shift.x = 0
       .shift.y = 0
     ELSE
@@ -570,53 +584,64 @@ RMTIN960 1001 1017 1033 1049 1065 1081 1097 1113 1129 1145 1161 1177 1193 1209 1
       .shift.y = 5
     END
   END
-;
+  ;
   TOOL tool.pick[hmi.tool.no]
-;
+  ;
   POINT .temp = #pos.point[hmi.obj.id]
-  JMOVE .temp+TRANS(0,0,50)
+  JMOVE .temp + TRANS (0, 0, 50)
   BREAK
   LMOVE #pos.point[hmi.obj.id]
   BREAK
   TWAIT 0.1
   PULSE grip.clamp
   TWAIT 0.3
-;
+  ;
   POINT .temp = #pos.point[hmi.obj.id]
   BREAK
   TWAIT 0.5
-  LMOVE .temp+TRANS(.shift.x,.shift.y,10)
-  LMOVE .temp+TRANS(0,0,50)
+  LMOVE .temp + TRANS (.shift.x, .shift.y, 10)
+  LMOVE .temp + TRANS (0, 0, 50)
   BREAK
   TWAIT 0.5
-;
-  IF hmi.ot.k<>-1 THEN
-    .$pg = "id"+$ENCODE(/L,hmi.obj.id)
+  ;
+  IF hmi.ot.k <> -1 THEN
+    .$pg = "id" + $ENCODE (/L, hmi.obj.id)
     SCALL .$pg
-    IF hmi.obj.id<>round.no THEN
+    CALL select.layout
+    IF hmi.obj.id <> round.no THEN
       CALL calc.grid
     ELSE
       CALL calc.grid.rnd
     END
-    CALL calc.ot
-    CALL get.ot.point(hmi.ot.k)
+    CALL sort.grid
+    CALL get.ot.point (hmi.ot.k)
   END
   .x = grip.xsh[hmi.obj.id]
   .y = grip.ysh[hmi.obj.id]
   .z = grip.zsh[hmi.obj.id]
-  IF object.id<>round.no AND ot.y MOD 2<>0 AND SIG(s.opt.flip) THEN
+  .rz = 0
+  IF object.id <> round.no AND ot.y MOD 2 <> 0 AND SIG (s.ot.flip) THEN
     .x = grip.180xsh[hmi.obj.id]
     .y = grip.180ysh[hmi.obj.id]
+    .rz = 180
   END
-;
-  POINT .put = ot.put[ot.x,ot.y]+TRANS(.x,.y,.z)
-  LAPPRO .put,-50
-  LMOVE .put
+  ;
+  POINT .put = ot.put[ot.x, ot.y] + TRANS (.x, .y, .z)
+  POINT .putr = ot.put[ot.x, ot.y]+ RZ (.rz) + TRANS (.x, .y, .z)
+  POINT .putr2 = ot.put[ot.x, ot.y]+ RZ (.rz/2) + TRANS (.x, .y, .z)
+  LAPPRO .put, -200
+  BREAK
+  HERE .#temp
+  LAPPRO .putr2, -100
+  LAPPRO .putr, -50
+  LMOVE .putr
   TWAIT 0.1
   PULSE grip.unclamp
   TWAIT 0.3
-;
-  LAPPRO .put,-50
+  LAPPRO .putr, -50
+  LAPPRO .putr2, -100
+  LMOVE .#temp
+  ;
 .END
 .PROGRAM autostart.pc()@26/06/25 16:05 #0
 ;
@@ -649,43 +674,50 @@ RMTIN960 1001 1017 1033 1049 1065 1081 1097 1113 1129 1145 1161 1177 1193 1209 1
 ;
 .END
 .PROGRAM calc.grid()@26/07/01 14:04 #341
-; Constants
+  ; Constants
   line.width = 210; 210; mm
   lines.count = 21
   lines.shift = 16; mm
   obj.spacer = 1.5; mm
-;
-;.max = max.tare.count
-;
-  .obj.len = object.length
-  .obj.len.w.spc = object.length+obj.spacer
-  obj.in.line = INT((line.width-obj.spacer)/.obj.len.w.spc);
-;
-  IF current.ot MOD 2<>0 OR NOT SIG(s.enable.shift) THEN
-    chg.tare.count = max.tare.count
+  ;
+  .max = work.tare.count
+  ;
+  IF NOT SIG (s.ot.spacer) THEN
+    .obj.len = object.length
+    .obj.len.w.spc = object.length + obj.spacer
+    obj.in.line = INT ((line.width - obj.spacer) / .obj.len.w.spc);
+  ELSE
+    obj.in.line = .max/21
+    .obj.len.w.spc = line.width / obj.in.line
+    .$temp = "Detail 'length':" + $ENCODE (.obj.len.w.spc)
+    CALL log (.$temp)
+  END
+  ;
+  IF current.ot MOD 2 <> 0 OR NOT SIG (s.enable.shift) THEN
+    chg.tare.count = .max
     lines.count = 21
     .extra.x = 0
   ELSE
-    chg.tare.count = max.tare.count-obj.in.line
-; in case of small values, we need at least one line!!!
-    IF chg.tare.count<=0 THEN
-      chg.tare.count = max.tare.count
+    chg.tare.count = .max - obj.in.line
+    ; in case of small values, we need at least one line!!!
+    IF chg.tare.count <= 0 THEN
+      chg.tare.count = .max
     END
     lines.count = 20
-    .extra.x = lines.shift/2
+    .extra.x = lines.shift / 2
   END
-;
-  .$temp = "Calc grid for"+$ENCODE(current.ot)+","+$ENCODE(lines.count)
-  CALL log(.$temp)
-; If you need to put details by max.tare.count
-;obj.in.line = INT(max.tare.count/21);
-;
-  FOR .i = 0 TO lines.count-1
-    FOR .j = 0 TO obj.in.line-1
-      POINT ot.put[.i,.j] = ot.frame+TRANS(-.i*lines.shift-.extra.x,-.j*.obj.len.w.spc)
+  ;
+  .$temp = "Calc grid for" + $ENCODE (current.ot) + "," + $ENCODE (lines.count)
+  CALL log (.$temp)
+  ; If you need to put details by .max
+  ;obj.in.line = INT(.max/21);
+  ;
+  FOR .i = 0 TO lines.count - 1
+    FOR .j = 0 TO obj.in.line - 1
+      POINT ot.put[.i, .j] = ot.frame + TRANS (-.i * lines.shift - .extra.x, -.j * .obj.len.w.spc)
     END
   END
-;
+  ;
 .END
 .PROGRAM calc.grid.rnd()@26/08/01 15:09 #48
 ; Constants
@@ -696,7 +728,7 @@ RMTIN960 1001 1017 1033 1049 1065 1081 1097 1113 1129 1145 1161 1177 1193 1209 1
   .max = 77
   .obj.shift = 27 ; mm
 ;
-  chg.tare.count = max.tare.count
+  chg.tare.count = work.tare.count
 ;
   .$temp = "Calc grid for"+$ENCODE(current.ot)+","+$ENCODE(lines.count)
   CALL log(.$temp)
@@ -705,18 +737,6 @@ RMTIN960 1001 1017 1033 1049 1065 1081 1097 1113 1129 1145 1161 1177 1193 1209 1
     FOR .j = 0 TO obj.in.line-1
       POINT ot.put[.i,.j] = ot.frame+TRANS(-.i*lines.shift,-.j*.obj.shift)
     END
-  END
-;
-.END
-.PROGRAM calc.ot()@26/06/25 16:05 #455
-;
-  .$calc.pg = "layout"+$ENCODE(/L,layout)
-  IF EXISTPGM(.$calc.pg) THEN
-    SCALL .$calc.pg
-  ELSE
-    CALL log("Error! Wrong layout. Connect Robowizard")
-    state = 255
-    RETURN
   END
 ;
 .END
@@ -1269,13 +1289,11 @@ RMTIN960 1001 1017 1033 1049 1065 1081 1097 1113 1129 1145 1161 1177 1193 1209 1
   pg7.gripper = 1
 ; Max objects in output tare
   max.tare.count = 147;126
-;
-  spc.tare.count = 50
+  spc.tare.count = 126
 ; Object length
   object.length = 27.5
 ;
-  direction = 1; -1 for reverse
-;
+
 .END
 .PROGRAM id2()@26/06/25 16:05 #26; 0401.17.02.023-02
 ; Object ID
@@ -1286,12 +1304,11 @@ RMTIN960 1001 1017 1033 1049 1065 1081 1097 1113 1129 1145 1161 1177 1193 1209 1
   pg7.gripper = 1
 ; Max objects in output tare
   max.tare.count = 105;84
-  spc.tare.count = 50
+  spc.tare.count = 84
 ; Object length
   object.length = 40
 ;
-  direction = 1; -1 for reverse
-;
+
 .END
 .PROGRAM id3()@26/08/02 13:49 #66; 312.229.001
 ; Object ID
@@ -1301,13 +1318,12 @@ RMTIN960 1001 1017 1033 1049 1065 1081 1097 1113 1129 1145 1161 1177 1193 1209 1
   pg13.gripper = 3
   pg7.gripper = 2
 ; Max objects in output tare
-  max.tare.count = 3;77
+  max.tare.count = 77;77
   spc.tare.count = 77
 ; Object length
   object.length = 40
 ;
-  direction = 1; -1 for reverse
-;
+
 .END
 .PROGRAM id4()@26/08/02 13:49 #52; 440.00.026
 ; Object ID
@@ -1317,13 +1333,12 @@ RMTIN960 1001 1017 1033 1049 1065 1081 1097 1113 1129 1145 1161 1177 1193 1209 1
   pg13.gripper = 1
   pg7.gripper = 1
 ; Max objects in output tare
-  max.tare.count = 3;168 ;147
-  spc.tare.count = 50
+  max.tare.count = 168 ;147
+  spc.tare.count = 147
 ; Object length
   object.length = 23.5
 ;
-  direction = 1; -1 for reverse
-;
+
 .END
 .PROGRAM id5()@26/08/02 13:50 #25; 440.00.111
 ; Object ID
@@ -1333,13 +1348,12 @@ RMTIN960 1001 1017 1033 1049 1065 1081 1097 1113 1129 1145 1161 1177 1193 1209 1
   pg13.gripper = 1
   pg7.gripper = 1
 ; Max objects in output tare
-  max.tare.count = 3;231 ;231
-  spc.tare.count = 50
+  max.tare.count = 231 ;231
+  spc.tare.count = 231
 ; Object length
   object.length = 16
 ;
-  direction = 1; -1 for reverse
-;
+
 .END
 .PROGRAM id6()@26/06/25 16:05 #44; 0401.28.02.063
 ; Object ID
@@ -1350,214 +1364,10 @@ RMTIN960 1001 1017 1033 1049 1065 1081 1097 1113 1129 1145 1161 1177 1193 1209 1
   pg7.gripper = 1
 ; Max objects in output tare
   max.tare.count = 126 ;126
-  spc.tare.count = 50
+  spc.tare.count = 126
 ; Object length
   object.length = 28.5
 ;
-  direction = 1; -1 for reverse
-;
-.END
-.PROGRAM layout0()@26/06/25 16:05 #337
-; Get matrix center
-  .center.col = INT(lines.count/2)
-  .center.row = INT(obj.in.line/2)
-  .cell = 0
-;
-  IF direction==1 THEN
-;
-; Stage 1: Add extreme columns (left and right edges)
-    FOR .row = 0 TO obj.in.line-1
-      ms[.cell] = 0
-      ns[.cell] = .row
-      .cell = .cell+1
-    END
-    IF lines.count>1 THEN
-      FOR .row = 0 TO obj.in.line-1
-        ms[.cell] = lines.count-1
-        ns[.cell] = .row
-        .cell = .cell+1
-      END
-    END
-;
-; Stage 2: Add center column
-    FOR .row = 0 TO obj.in.line-1
-      ms[.cell] = .center.col
-      ns[.cell] = .row
-      .cell = .cell+1
-    END
-;
-; Stage 3: Add from center outward (excluding center and edges)
-    FOR .offset = 1 TO .center.col-1
-      .left = .center.col-.offset
-      .right = .center.col+.offset
-; Left column
-      FOR .row = 0 TO obj.in.line-1
-        ms[.cell] = .left
-        ns[.cell] = .row
-        .cell = .cell+1
-      END
-; Right column
-      IF .right<lines.count AND .right<>.left THEN
-        FOR .row = 0 TO obj.in.line-1
-          ms[.cell] = .right
-          ns[.cell] = .row
-          .cell = .cell+1
-        END
-      END
-    END
-  ELSE
-;
-; Stage 1: Add extreme columns (left and right edges)
-    FOR .row = obj.in.line-1 TO 0 STEP -1
-      ms[.cell] = 0
-      ns[.cell] = .row
-      .cell = .cell+1
-    END
-    IF lines.count>1 THEN
-      FOR .row = obj.in.line-1 TO 0 STEP -1
-        ms[.cell] = lines.count-1
-        ns[.cell] = .row
-        .cell = .cell+1
-      END
-    END
-;
-; Stage 2: Add center column
-    FOR .row = obj.in.line-1 TO 0 STEP -1
-      ms[.cell] = .center.col
-      ns[.cell] = .row
-      .cell = .cell+1
-    END
-;
-; Stage 3: Add from center outward (excluding center and edges)
-    FOR .offset = 1 TO .center.col-1
-      .left = .center.col-.offset
-      .right = .center.col+.offset
-; Left column
-      FOR .row = obj.in.line-1 TO 0 STEP -1
-        ms[.cell] = .left
-        ns[.cell] = .row
-        .cell = .cell+1
-      END
-; Right column
-      IF .right<lines.count AND .right<>.left THEN
-        FOR .row = obj.in.line-1 TO 0 STEP -1
-          ms[.cell] = .right
-          ns[.cell] = .row
-          .cell = .cell+1
-        END
-      END
-    END
-  END
-;
-; Debug print
-;PRINT "ASCII grid"
-;FOR .n = 0 TO obj.in.line-1
-;  .$line = ""        ; буфер строки
-;  FOR .m = 0 TO lines.count-1
-;    .filled = 0
-;    FOR .i = 0 TO hmi.obj.id
-;      IF ms[.i] == .m AND ns[.i] == .n THEN
-;        .filled = 1
-;      END
-;    END
-;    IF .filled == 1 THEN
-;      .$line = .$line + "X "
-;    ELSE
-;      .$line = .$line + ". "
-;    END
-;  END
-;  PRINT .$line    ; печатаем всю строку одним вызовом
-;END
-.END
-.PROGRAM layout1()@26/06/25 16:05 #0
-; Get matrix center
-  .center.col = INT(lines.count/2)
-  .center.row = INT(obj.in.line/2)
-; Get Manhattan distances matrix
-  .cell = 0
-  FOR .i = 0 TO lines.count-1
-    FOR .j = 0 TO obj.in.line-1
-      .dist = ABS(.i-.center.col)+ABS(.j-.center.row)
-      .dists[.cell] = .dist
-      ms[.cell] = .i
-      ns[.cell] = .j
-      .cell = .cell+1
-    END
-  END
-  .array.size = .cell-1
-; Bubble sort distances array
-  FOR .i = 0 TO .array.size-1
-    FOR .j = 0 TO .array.size-.i-1
-; Compare by angular distances
-; I don't want to make it
-      IF .dists[.j]<>.dists[.j+1] THEN
-        .result = .dists[.j]-.dists[.j+1]
-      ELSE
-        .cornera = ABS(ms[.j]-.center.col)
-        IF ABS(ns[.j]-.center.row)>.cornera THEN
-          .cornera = ABS(ns[.j]-.center.row)
-        END
-        .cornerb = ABS(ms[.j+1]-.center.col)
-        IF ABS(ns[.j+1]-.center.row)>.cornerb THEN
-          .cornerb = ABS(ns[.j+1]-.center.row)
-        END
-        IF .cornera<>.cornerb THEN
-          .result = .cornera-.cornerb
-        ELSE
-          IF ms[.j]<>ms[.j+1] THEN
-            .result = ms[.j]-ms[.j+1]
-          ELSE
-            .result = ns[.j]-ns[.j+1]
-          END
-        END
-      END
-; Simple compare. Commented in case of troubles
-;IF .dists[.j] <> .dists[.j + 1]
-;  .result = .dists[.j] - .dists[.j + 1]
-;ELSE
-;  IF ms[.j] <> ms[.j + 1]
-;    .result = ms[.j] - ms[.j + 1]
-;  ELSE
-;    .result = ns[.j] - ns[.j + 1]
-;  END
-;END
-;
-      IF .result>0 THEN
-;
-        .tmp.dist = .dists[.j]
-        .tmp.m = ms[.j]
-        .tmp.n = ns[.j]
-;
-        .dists[.j] = .dists[.j+1]
-        ms[.j] = ms[.j+1]
-        ns[.j] = ns[.j+1]
-;
-        .dists[.j+1] = .tmp.dist
-        ms[.j+1] = .tmp.m
-        ns[.j+1] = .tmp.n
-      END
-    END
-  END
-;
-; Debug print
-;PRINT "ASCII grid"
-;FOR .n = 0 TO obj.in.line-1
-;  .$line = ""        ; буфер строки
-;  FOR .m = 0 TO lines.count-1
-;    .filled = 0
-;    FOR .i = 0 TO .obj.id
-;      IF ms[.i] == .m AND ns[.i] == .n THEN
-;        .filled = 1
-;      END
-;    END
-;    IF .filled == 1 THEN
-;      .$line = .$line + "X "
-;    ELSE
-;      .$line = .$line + ". "
-;    END
-;  END
-;  PRINT .$line    ; печатаем всю строку одним вызовом
-;END
 .END
 .PROGRAM log(.$msg)@26/06/25 16:05 #74362
 ;
@@ -1688,80 +1498,144 @@ RMTIN960 1001 1017 1033 1049 1065 1081 1097 1113 1129 1145 1161 1177 1193 1209 1
 ;JMOVE #safe.machine
 ;JMOVE #homyak
 .END
+.PROGRAM old.layout ()
+  ; Get matrix center
+  .center.col = INT (lines.count / 2)
+  .center.row = INT (obj.in.line / 2)
+  ; Get Manhattan distances matrix
+  .cell = 0
+  ;
+  FOR .i = 0 TO lines.count - 1
+    FOR .j = 0 TO obj.in.line - 1
+      .dist = ABS (.i - .center.col) + ABS (.j - .center.row)
+      .dists[.cell] = .dist
+      ms[.cell] = .i
+      ns[.cell] = .j
+      .cell = .cell + 1
+    END
+  END
+  .array.size = .cell - 1
+  ; Bubble sort distances array
+  FOR .i = 0 TO .array.size - 1
+    FOR .j = 0 TO .array.size - .i - 1
+      ; Compare by angular distances
+      ; I don't want to make it
+      IF .dists[.j] <> .dists[.j + 1] THEN
+        .result = .dists[.j] - .dists[.j + 1]
+      ELSE
+        .cornera = ABS (ms[.j] - .center.col)
+        IF ABS (ns[.j] - .center.row) > .cornera THEN
+          .cornera = ABS (ns[.j] - .center.row)
+        END
+        .cornerb = ABS (ms[.j + 1] - .center.col)
+        IF ABS (ns[.j + 1] - .center.row) > .cornerb THEN
+          .cornerb = ABS (ns[.j + 1] - .center.row)
+        END
+        IF .cornera <> .cornerb THEN
+          .result = .cornera - .cornerb
+        ELSE
+          IF ms[.j] <> ms[.j + 1] THEN
+            .result = ms[.j] - ms[.j + 1]
+          ELSE
+            .result = ns[.j] - ns[.j + 1]
+          END
+        END
+      END
+      ;
+      IF .result > 0 THEN
+        .tmp.dist = .dists[.j]
+        .tmp.m = ms[.j]
+        .tmp.n = ns[.j]
+        .dists[.j] = .dists[.j + 1]
+        ms[.j] = ms[.j + 1]
+        ns[.j] = ns[.j + 1]
+        .dists[.j + 1] = .tmp.dist
+        ms[.j + 1] = .tmp.m
+        ns[.j + 1] = .tmp.n
+      END
+    END
+  END
+  ;
+  
+.END
 .PROGRAM ot.put()@26/07/03 14:19 #2944
-;
+  ;
   SIGNAL rs7.locked.zone
-  IF SIG(rs7.tare.chg) THEN
-    CALL log("Waiting for new OT")
+  IF SIG (rs7.tare.chg) THEN
+    CALL log ("Waiting for new OT")
     SWAIT -rs7.tare.chg
     count.put = 0
   END
-;
-  CALL log("Put to OT detail"+$ENCODE(count.put+1))
-;$action = "PutToTare"
-;
+  ;
+  CALL log ("Put to OT detail" + $ENCODE (count.put + 1))
+  ;$action = "PutToTare"
+  ;
   SPEED 100 ALWAYS
   ACCURACY 100 ALWAYS
   TOOL tool.pick[current.gripper]
-;
-  CALL get.ot.point(count.put)
-;
+  ;
+  CALL get.ot.point (count.put)
+  ;
   .x = grip.xsh[object.id]
   .y = grip.ysh[object.id]
   .z = grip.zsh[object.id]
-  IF object.id<>round.no AND ot.y MOD 2<>0 AND SIG(s.opt.flip) THEN
+  .rz = 0
+  IF object.id <> round.no AND ot.y MOD 2 <> 0 AND SIG (s.ot.flip) THEN
     .x = grip.180xsh[object.id]
     .y = grip.180ysh[object.id]
+    .rz = 180
   END
-;
-  POINT .put = ot.put[ot.x,ot.y]+TRANS(.x,.y,.z)
-;
+  ;
+  POINT .put = ot.put[ot.x, ot.y] + TRANS (.x, .y, .z)
+  POINT .putr = ot.put[ot.x, ot.y]+ RZ (.rz) + TRANS (.x, .y, .z)
+  POINT .putr2 = ot.put[ot.x, ot.y]+ RZ (.rz / 2) + TRANS (.x, .y, .z)
+  ;
   SIGNAL rs7.locked.zone
   BREAK
-  CALL log("Check if positioner is occupied")
+  CALL log ("Check if positioner is occupied")
   SWAIT -rs13.lock.zone
-;
-  JAPPRO .put,-200
-  ACCURACY 5
-  LAPPRO .put,-20
-  ACCURACY 0.02
-  SPEED 100 MM/S
-  LMOVE .put
+  ;
+  LAPPRO .put, -200
   BREAK
-;
+  HERE .#temp
+  LAPPRO .putr2, -100
+  LAPPRO .putr, -50
+  LMOVE .putr
+  ;
   TWAIT 0.1
   PULSE grip.unclamp
   TWAIT 0.3
-  count.put = count.put+1
-  max.count.put = max.count.put+1
+  count.put = count.put + 1
+  max.count.put = max.count.put + 1
   SIGNAL -s.grip.full
   $action = "WaitPosFull"
-;
-  LAPPRO .put,-20
-  LAPPRO .put,-200
-;
-;IF NOT SIG (s.cmd.pick) THEN
-;  JMOVE #homyak
-;  BREAK
-;  SIGNAL -rs7.locked.zone
-;END
-;
-  IF count.put>=chg.tare.count THEN
-    CALL log("OT tare full, request change OT")
+  ;
+  LAPPRO .putr, -50
+  LAPPRO .putr2, -100
+  LMOVE .#temp
+  ;
+  ;IF NOT SIG (s.cmd.pick) THEN
+  ;  JMOVE #homyak
+  ;  BREAK
+  ;  SIGNAL -rs7.locked.zone
+  ;END
+  ;
+  IF count.put >= chg.tare.count THEN
+    CALL log ("OT tare full, request change OT")
     SIGNAL rs7.tare.chg
-    current.ot = current.ot+1
-;
+    current.ot = current.ot + 1
+    ;
     count.put = 0
-;
-    IF object.id==round.no THEN
+    ;
+    CALL select.layout
+    IF object.id == round.no THEN
       CALL calc.grid.rnd
     ELSE
       CALL calc.grid
     END
-;
-    CALL calc.ot
+    CALL sort.grid
   END
-;
+  ;
 .END
 .PROGRAM pg.select()@26/06/25 16:05 #403
   SCASE $pg.name OF
@@ -1969,6 +1843,35 @@ RMTIN960 1001 1017 1033 1049 1065 1081 1097 1113 1129 1145 1161 1177 1193 1209 1
   END
 ;
 .END
+.PROGRAM select.layout ()
+  ;
+  CASE layout OF
+    VALUE 0:
+      SIGNAL -s.ot.flip
+      SIGNAL -s.ot.spacer
+      work.tare.count = max.tare.count
+      CALL log ("Selected layout: no flip, full ot")
+    VALUE 1:
+      SIGNAL s.ot.flip
+      SIGNAL -s.ot.spacer
+      work.tare.count = max.tare.count
+      CALL log ("Selected layout: flip, full ot")
+    VALUE 2:
+      SIGNAL -s.ot.flip
+      SIGNAL s.ot.spacer
+      work.tare.count = spc.tare.count
+      CALL log ("Selected layout: no flip, ot w/ space")
+    VALUE 3:
+      SIGNAL s.ot.flip
+      SIGNAL s.ot.spacer
+      work.tare.count = spc.tare.count
+      CALL log ("Selected layout: flip, ot w/ space")
+    ANY :
+      CALL log ("Error! Wrong layout. Connect Robowizard")
+      state = 255
+  END
+  ;
+.END
 .PROGRAM set.grip.tree(.set)@26/06/25 16:05 #0
 ;
   IF .set==TRUE THEN
@@ -2151,11 +2054,13 @@ RMTIN960 1001 1017 1033 1049 1065 1081 1097 1113 1129 1145 1161 1177 1193 1209 1
 ;s.apply.cv = 2257
   s.pr.tst.ot = 2249
 ;
-  s.opt.spacer = 2270
-  s.opt.flip = 2271
+  s.ot.spacer = 2270
+  s.ot.flip = 2271
   s.etalon.ok = 2272
   s.etalon.ret = 2273
   s.etalon.ng = 2274
+  ;
+  ;
 ;s.hmi.pneum.op = 2258
 ;s.hmi.pneum.cl = 2259
 ;s.hmi.get.cv = 2260
@@ -2302,6 +2207,54 @@ RMTIN960 1001 1017 1033 1049 1065 1081 1097 1113 1129 1145 1161 1177 1193 1209 1
 .PROGRAM ship.pos()@26/06/25 16:05 #0
   JOINT SPEED9 ACCU1 TIMER0 TOOL1 WORK0 CLAMP OX= WX= #[0,10,-157,-90,-125,15] ;
 .END
+.PROGRAM sort.grid ()
+  ; Get matrix center
+  .center.col = INT (lines.count / 2)
+  .center.row = INT (obj.in.line / 2)
+  .cell = 0
+  ;
+  ; Stage 1: Add extreme columns (left and right edges)
+  FOR .row = 0 TO obj.in.line - 1
+    ms[.cell] = 0
+    ns[.cell] = .row
+    .cell = .cell + 1
+  END
+  IF lines.count > 1 THEN
+    FOR .row = 0 TO obj.in.line - 1
+      ms[.cell] = lines.count - 1
+      ns[.cell] = .row
+      .cell = .cell + 1
+    END
+  END
+  ;
+  ; Stage 2: Add center column
+  FOR .row = 0 TO obj.in.line - 1
+    ms[.cell] = .center.col
+    ns[.cell] = .row
+    .cell = .cell + 1
+  END
+  ;
+  ; Stage 3: Add from center outward (excluding center and edges)
+  FOR .offset = 1 TO .center.col - 1
+    .left = .center.col - .offset
+    .right = .center.col + .offset
+    ; Left column
+    FOR .row = 0 TO obj.in.line - 1
+      ms[.cell] = .left
+      ns[.cell] = .row
+      .cell = .cell + 1
+    END
+    ; Right column
+    IF .right < lines.count AND .right <> .left THEN
+      FOR .row = 0 TO obj.in.line - 1
+        ms[.cell] = .right
+        ns[.cell] = .row
+        .cell = .cell + 1
+      END
+    END
+  END
+  ;
+.END
 .PROGRAM state0()@26/07/02 22:07 #287; Initialization of parameters
 ;
   CALL log("State 0: Program reset. Initialization of parameters")
@@ -2314,11 +2267,7 @@ RMTIN960 1001 1017 1033 1049 1065 1081 1097 1113 1129 1145 1161 1177 1193 1209 1
   count.pick = 0
   BITS rs7.det.picked[0],16 = count.pick
   count.put = 0
-;
-  chg.tare.count = max.tare.count
   current.ot = 1
-;max.count.put = 0
-;
   state = 100
 ;
 .END
@@ -2443,13 +2392,15 @@ RMTIN960 1001 1017 1033 1049 1065 1081 1097 1113 1129 1145 1161 1177 1193 1209 1
   CALL log("State 106: Check program")
   IF $pg.name<>"NULL" THEN
     CALL log("Selected program: "+$pg.name)
+    ;
+    CALL select.layout
     IF object.id==round.no THEN
       CALL calc.grid.rnd
     ELSE
       CALL calc.grid
     END
 ;
-    CALL calc.ot
+    CALL sort.grid
     IF state==255 THEN
       RETURN
     END
@@ -2990,6 +2941,11 @@ RMTIN960 1001 1017 1033 1049 1065 1081 1097 1113 1129 1145 1161 1177 1193 1209 1
   END
 ;
 .END
+.PROGRAM test.ot.full ()
+  FOR hmi.ot.k = 0 TO max.tare.count - 1
+    CALL a.test.ot.pick
+  END
+.END
 .PROGRAM watchdog.pc()@26/07/01 14:24 #0
 ;
   HERE .last.pos
@@ -3078,6 +3034,10 @@ RMTIN960 1001 1017 1033 1049 1065 1081 1097 1113 1129 1145 1161 1177 1193 1209 1
 	; rs7.finish.ack
 	; s.force.in[2]
 	; s.force.in[1]
+	; grip.180xsh[1]
+	; grip.180ysh[1]
+	; object.length
+	; work.tare.count
 	; ~Log
 	; $log.entry[100]
 	; $log.entry[101]
@@ -3112,49 +3072,25 @@ RMTIN960 1001 1017 1033 1049 1065 1081 1097 1113 1129 1145 1161 1177 1193 1209 1
 	; 127.0.0.1
 	; 9205
 	; @@@ PROGRAM @@@
-	;   Group:Layouts:1
-	;     1:layout0:F
-	;       .center.col 
-	;       .center.row 
-	;       .cell 
-	;       .row 
-	;       .offset 
-	;       .left 
-	;       .right 
-	;     1:layout1:F
-	;       .center.col 
-	;       .center.row 
-	;       .cell 
-	;       .i 
-	;       .j 
-	;       .dist 
-	;       .dists 
-	;       .array.size 
-	;       .result 
-	;       .cornera 
-	;       .cornerb 
-	;       .tmp.dist 
-	;       .tmp.m 
-	;       .tmp.n 
-	;   Group:Gripper:2
-	;     2:a.test.gripper:F
-	;     2:gripper.pick:F
+	;   Group:Gripper:1
+	;     1:a.test.gripper:F
+	;     1:gripper.pick:F
 	;       .gripper.no 
 	;       .$temp 
 	;       .temp 
-	;     2:gripper.put:F
+	;     1:gripper.put:F
 	;       .gripper.no 
 	;       .$temp 
 	;       .temp 
-	;     2:a.teach.gripper:F
+	;     1:a.teach.gripper:F
 	;       .temp 
-	;   Group:Etalon:3
-	;     3:a.teach.etalon:F
+	;   Group:Etalon:2
+	;     2:a.teach.etalon:F
 	;       .eshift.x 
 	;       .eshift.y 
 	;       .et.pos.point 
 	;       .et.mac.poin 
-	;     3:etalon.measure:F
+	;     2:etalon.measure:F
 	;       .id 
 	;       .etalon.pos.pt 
 	;       .etalon.mac.pt 
@@ -3164,43 +3100,41 @@ RMTIN960 1001 1017 1033 1049 1065 1081 1097 1113 1129 1145 1161 1177 1193 1209 1
 	;       .eshift.x 
 	;       .eshift.y 
 	;       .$temp 
-	;     3:set.grip.tree:F
+	;     2:set.grip.tree:F
 	;       .set 
-	;   Group:OT:4
-	;     4:a.teach.ot:F
+	;   Group:OT:3
+	;     3:a.teach.ot:F
 	;       .ot.down.left 
 	;       .ot.down.right 
 	;       .ot.up.right 
 	;       .ot.orig 
-	;     4:calc.grid:F
+	;     3:calc.grid:F
 	;       .obj.len 
 	;       .obj.len.w.spc 
 	;       .extra.x 
 	;       .$temp 
 	;       .i 
 	;       .j 
-	;     4:calc.grid.rnd:F
+	;     3:calc.grid.rnd:F
 	;       .max 
 	;       .obj.shift 
 	;       .$temp 
 	;       .i 
 	;       .j 
-	;     4:get.ot.point:F
+	;     3:get.ot.point:F
 	;       .obj.id 
-	;     4:a.test.ot:F
+	;     3:a.test.ot:F
 	;       .$pg 
 	;       .x 
 	;       .y 
 	;       .z 
 	;       .put 
-	;     4:ot.put:F
+	;     3:ot.put:F
 	;       .x 
 	;       .y 
 	;       .z 
 	;       .put 
-	;     4:calc.ot:F
-	;       .$calc.pg 
-	;     4:a.test.ot.pick:F
+	;     3:a.test.ot.pick:F
 	;       .shift.x 
 	;       .shift.y 
 	;       .temp 
@@ -3209,39 +3143,43 @@ RMTIN960 1001 1017 1033 1049 1065 1081 1097 1113 1129 1145 1161 1177 1193 1209 1
 	;       .y 
 	;       .z 
 	;       .put 
-	;   Group:MeasureMachine:5
-	;     5:a.teach.machine:F
+	;     3:old.layout:F
+	;     3:sort.grid:F
+	;     3:select.layout:F
+	;     3:test.ot.full:F
+	;   Group:MeasureMachine:4
+	;     4:a.teach.machine:F
 	;       .temp 
-	;     5:measure:F
+	;     4:measure:F
 	;       .pos 
 	;       .shift.y 
 	;       .shift.z 
 	;       .p.idx 
 	;       .machine.pos 
-	;   Group:Objects:6
-	;     6:id1:F
-	;     6:id2:F
-	;     6:id3:F
-	;     6:id4:F
-	;     6:id5:F
-	;     6:id6:F
-	;   Group:Positioner:7
-	;     7:pos.pick:F
+	;   Group:Objects:5
+	;     5:id1:F
+	;     5:id2:F
+	;     5:id3:F
+	;     5:id4:F
+	;     5:id5:F
+	;     5:id6:F
+	;   Group:Positioner:6
+	;     6:pos.pick:F
 	;       .$temp 
 	;       .temp 
 	;       .shift.x 
 	;       .shift.y 
-	;     7:a.teach.pos:F
+	;     6:a.teach.pos:F
 	;       .shift.x 
 	;       .shift.y 
 	;       .temp 
-	;   Group:Defect:8
-	;     8:defect.put:F
+	;   Group:Defect:7
+	;     7:defect.put:F
 	;       .xc 
 	;       .yc 
 	;       .rz 
 	;       .temp 
-	;     8:a.teach.defect:F
+	;     7:a.teach.defect:F
 	;       .x 
 	;       .y 
 	;       .o 
@@ -3252,54 +3190,54 @@ RMTIN960 1001 1017 1033 1049 1065 1081 1097 1113 1129 1145 1161 1177 1193 1209 1
 	;       .yc 
 	;       .rz 
 	;       .defect.pos 
-	;   Group:States:9
-	;     9:state0:F
-	;     9:state1:F
-	;     9:state2:F
-	;     9:state3:F
-	;     9:state4:F
-	;     9:state5:F
-	;     9:state6:F
-	;     9:state7:F
-	;     9:state8:F
-	;     9:state100:F
-	;     9:state101:F
-	;     9:state102:F
-	;     9:state103:F
-	;     9:state104:F
-	;     9:state105:F
-	;     9:state106:F
-	;     9:state255:F
-	;   Group:Utilities:10
-	;     10:ship.pos:F
-	;     10:a.home:F
-	;     10:a.align:F
-	;     10:safe.home:F
+	;   Group:States:8
+	;     8:state0:F
+	;     8:state1:F
+	;     8:state2:F
+	;     8:state3:F
+	;     8:state4:F
+	;     8:state5:F
+	;     8:state6:F
+	;     8:state7:F
+	;     8:state8:F
+	;     8:state100:F
+	;     8:state101:F
+	;     8:state102:F
+	;     8:state103:F
+	;     8:state104:F
+	;     8:state105:F
+	;     8:state106:F
+	;     8:state255:F
+	;   Group:Utilities:9
+	;     9:ship.pos:F
+	;     9:a.home:F
+	;     9:a.align:F
+	;     9:safe.home:F
 	;       .idx 
 	;       .temp 
 	;       .s 
 	;       .c 
 	;       .dz 
-	;     10:log:F
+	;     9:log:F
 	;       .$msg 
 	;       .i 
-	;     10:pg.select:F
+	;     9:pg.select:F
 	;   0:a.main:F
 	;     .$pg.string 
 	;   0:pg0:F
-	;   Group:Logs:11
-	;     11:log.pc1:F
+	;   Group:Logs:10
+	;     10:log.pc1:F
 	;       .$msg 
 	;       .i 
-	;     11:log.pc2:F
+	;     10:log.pc2:F
 	;       .$msg 
 	;       .i 
-	;   Group:Watchdog:12
-	;     12:check.teach.pc:B
-	;     12:check.zone.pc:B
-	;     12:check.disp.pc:B
-	;     12:check.tasks.pc:B
-	;     12:watchdog.pc:B
+	;   Group:Watchdog:11
+	;     11:check.teach.pc:B
+	;     11:check.zone.pc:B
+	;     11:check.disp.pc:B
+	;     11:check.tasks.pc:B
+	;     11:watchdog.pc:B
 	;       .last.pos 
 	;       .current.pos 
 	;       .c1 
@@ -3307,18 +3245,18 @@ RMTIN960 1001 1017 1033 1049 1065 1081 1097 1113 1129 1145 1161 1177 1193 1209 1
 	;       .c3 
 	;       .c4 
 	;       .c5 
-	;   Group:Initialization:13
-	;     13:set.vars.pc:B
+	;   Group:Initialization:12
+	;     12:set.vars.pc:B
 	;       .i 
 	;       .n 
 	;       .$name 
-	;     13:set.io.pc:B
-	;   Group:TCPIP:14
-	;     14:get.state.pc:B
+	;     12:set.io.pc:B
+	;   Group:TCPIP:13
+	;     13:get.state.pc:B
 	;       .$state 
-	;     14:tcp.sender.pc:B
+	;     13:tcp.sender.pc:B
 	;       .$data 
-	;     14:tcp.callback.pc:B
+	;     13:tcp.callback.pc:B
 	;       .$data 
 	;       .data.length 
 	;       .$temp 
@@ -3330,7 +3268,7 @@ RMTIN960 1001 1017 1033 1049 1065 1081 1097 1113 1129 1145 1161 1177 1193 1209 1
 	;       .$measurement.sta 
 	;       .$spd 
 	;       .speed 
-	;     14:tcp.client.pc:B
+	;     13:tcp.client.pc:B
 	;       .tcp.retry.count 
 	;       .tcp.connect.tmo 
 	;       .tcp.receive.tmo 
@@ -3350,14 +3288,14 @@ RMTIN960 1001 1017 1033 1049 1065 1081 1097 1113 1129 1145 1161 1177 1193 1209 1
 	;       .tcp.error.cnt 
 	;       .$tcp.request 
 	;       .request.size 
-	;     14:tcp.send.pc:B
+	;     13:tcp.send.pc:B
 	;       .$data 
 	;       .data.length 
 	;       .tcp.send.tmo 
 	;       .status 
 	;       .$temp 
 	;       .i 
-	;     14:tcp.log.pc:B
+	;     13:tcp.log.pc:B
 	;       .$msg 
 	;       .i 
 	;   0:autostart.pc:B
@@ -3392,6 +3330,7 @@ RMTIN960 1001 1017 1033 1049 1065 1081 1097 1113 1129 1145 1161 1177 1193 1209 1
 	; #safe.etalon Safe point to move to positioner
 	; #tool.point[] Point for pick gripper i
 	; @@@ REALS @@@
+	; work.tare.count Value with which work
 	; count.defect Defect details count
 	; count.pick Picked details counter
 	; count.put Putted details counter
@@ -3514,8 +3453,8 @@ RMTIN960 1001 1017 1033 1049 1065 1081 1097 1113 1129 1145 1161 1177 1193 1209 1
 	; s.apply.obj Apply object shifts
 	; rs13.work[] Robot in workspace 1
 	; s.cmd.pick Pick from positioner command
-	; s.opt.spacer Option for put to OT with spacer
-	; s.opt.flip Option to put to OT with flip
+	; s.ot.spacer Option for put to OT with spacer
+	; s.ot.flip Option to put to OT with flip
 	; rs13.det.put[] Put details count from RS0013N
 	; rs7.det.picked[] Picked details count from RS007L
 	; s.cmd.measured Detail measured
@@ -3925,6 +3864,7 @@ tool.pick[3] 0.000000 10.000000 120.000000 -22.500000 180.000000 0.000000
 #tool.point[3] 12.969141 7.969117 -138.412003 -0.241699 -33.306427 8.894175
 .END
 .REALS
+work.tare.count = 0
 s.pr.tst.ot = 2249
 s.defect.pal.ok = 2223
 s.defect.pal.ng = 2224
@@ -4033,8 +3973,8 @@ tcp.sender.dly = 0.25
 tcp.socket = 34
 tyterm = 0
 s.cmd.pick = 2233
-s.opt.spacer = 2270
-s.opt.flip = 2271
+s.ot.spacer = 2270
+s.ot.flip = 2271
 rs13.det.put[0] = 1040
 rs13.det.put[1] = 1041
 rs13.det.put[2] = 1042
