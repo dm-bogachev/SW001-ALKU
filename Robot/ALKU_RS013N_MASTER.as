@@ -2371,72 +2371,75 @@ N_INT300    "s.debug.mode"
   state = 104
 .END
 .PROGRAM state104()@26/07/02 22:09 #2718148; Ending sequence
-;
-  IF SIG(s.cmd.n.op.stop) AND SIG(s.opt.placed) THEN
+  ;
+  IF SIG (s.cmd.n.op.stop) AND SIG (s.opt.placed) THEN
+    CALL log("Return OPT in state 104")
     state = 6
     RETURN
   END
-;
-  IF SIG(s.cmd.n.op.stop) AND NOT SIG(s.opt.placed) THEN
-    CALL log("Program complete")
+  ;
+  IF SIG (s.cmd.n.op.stop) AND NOT SIG (s.opt.placed) THEN
+    CALL log ("Program complete")
     SIGNAL rs13.no.ot.stop
     state = 255
     RETURN
   END
-;
-  IF SIG(s.ot.placed) AND SIG(s.grip.full) AND BITS(rs7.det.picked[0],16)==count.put THEN
+  ;
+  IF SIG (s.ot.placed) AND SIG (s.grip.full) AND BITS (rs7.det.picked[0], 16) == count.put THEN
     $action = "WaitPosFree"
-    IF NOT SIG(rs7.work[1]) AND SIG(s.cmd.put) AND NOT SIG(rs7.locked.zone) THEN
+    IF NOT SIG (rs7.work[1]) AND SIG (s.cmd.put) AND NOT SIG (rs7.locked.zone) THEN
       state = 4
       RETURN
     END
   END
-;
-  IF NOT SIG(s.grip.full) AND SIG(s.opt.placed) THEN
+  ;
+  IF NOT SIG (s.grip.full) AND SIG (s.opt.placed) THEN
+    CALL log("Return OPT in state 104")
     state = 6
     RETURN
   END
-;
-  .m1 = NOT SIG(s.grip.full) AND SIG(s.ot.placed) AND NOT SIG(rs7.tare.chg)
-  .m2 = count.opt>=max.count.opt OR count.put==detail.count
-  .m3 = SIG(s.cmd.stop) OR SIG(rs7.etalon.stop)
+  ;
+  .m1 = NOT SIG (s.grip.full) AND SIG (s.ot.placed) AND NOT SIG (rs7.tare.chg)
+  .m2 = count.opt >= max.count.opt OR count.put == detail.count
+  .m3 = SIG (s.cmd.stop) OR SIG (rs7.etalon.stop)
   IF .m1 AND (.m2 OR .m3) THEN
     SIGNAL s.cmd.finish
     SIGNAL rs13.finish
-    CALL log("Wait for RS007L finish task")
+    CALL log ("Wait for RS007L finish task")
     SWAIT rs7.finish.ack
     state = 5
     RETURN
   END
-;
-; Priority 5
-  IF SIG(rs7.tare.chg) AND SIG(s.ot.placed) THEN
+  ;
+  ; Priority 5
+  IF SIG (rs7.tare.chg) AND SIG (s.ot.placed) THEN
+    CALL log("Return OT in state 104")
     state = 5
     RETURN
   END
-;
-; Impossible situation
-  IF SIG(rs7.tare.chg) AND NOT SIG(s.ot.placed) THEN
-    PULSE rs13.tare.ack,15
-    RETURN
-  END
-;
-  IF NOT SIG(s.grip.full) AND SIG(s.cmd.finish) THEN
-    CALL log("Program complete")
+  ;
+  IF NOT SIG (s.grip.full) AND SIG (s.cmd.finish) THEN
+    CALL log ("Program complete")
     state = 255
     RETURN
   END
-;
-  IF NOT SIG(s.grip.full) AND count.ot>=max.count.ot AND SIG(rs7.tare.chg) THEN
-    ;CALL log("Unexpected behaviour!")
+  ;
+  IF NOT SIG (s.grip.full) AND count.ot >= max.count.ot AND NOT SIG (s.ot.placed) THEN
+    CALL log("Fix for case 1???!")
     SIGNAL s.cmd.finish
     SIGNAL rs13.finish
-    CALL log("Wait for RS007L finish task")
+    CALL log ("Wait for RS007L finish task")
     SWAIT rs7.finish.ack
     state = 255
     RETURN
   END
-;
+  ; Impossible situation
+  IF SIG (rs7.tare.chg) AND NOT SIG (s.ot.placed) THEN
+    CALL log("How ever you got here???")
+    PULSE rs13.tare.ack, 15
+    RETURN
+  END
+  ;
 .END
 .PROGRAM state105()@26/07/02 09:53 #125; Program paused
   CALL log("State 105: Program paused")
@@ -3192,47 +3195,183 @@ N_INT300    "s.debug.mode"
 	;     1:id6:F
 	;   Group:STZ:2
 	;     2:a.teach.stz:F
+	;       .plb 
+	;       .plt 
+	;       .prt 
+	;       .prb 
+	;       .dx1 
+	;       .dx2 
+	;       .dy1 
+	;       .dy2 
 	;     2:stz.pick:F
+	;       .$temp 
+	;       .x 
+	;       .y 
+	;       .a 
+	;       .xsh 
+	;       .ysh 
+	;       .zsh 
+	;       .xp 
+	;       .xm 
+	;       .yp 
+	;       .ym 
+	;       .pick 
+	;       .c 
+	;       .#pick.in 
 	;     2:a.test.stz:F
+	;       .$temp 
+	;       .x 
+	;       .y 
+	;       .a 
+	;       .xsh 
+	;       .ysh 
+	;       .zsh 
+	;       .xp 
+	;       .xm 
+	;       .yp 
+	;       .ym 
+	;       .pick 
+	;       .c 
+	;       .#pick.in 
 	;   Group:OPT:3
 	;     3:load.opt.data:F
+	;       .id 
+	;       .temp 
 	;     3:opt.table:F
+	;       .id 
+	;       .$temp 
+	;       .$i1 
+	;       .$i2 
+	;       .$i3 
+	;       .$i4 
 	;     3:opt.take:F
+	;       .i 
+	;       .j 
+	;       .$temp 
+	;       .opt.take.safe 
+	;       .ct1 
+	;       .ct2 
+	;       .mid.point 
+	;       .opt.put 
 	;     3:a.teach.opt:F
+	;       .i 
+	;       .j 
 	;     3:a.test.opt:F
+	;       .i 
+	;       .j 
 	;     3:opt.return:F
+	;       .i 
+	;       .j 
+	;       .$temp 
+	;       .post.tare.in 
+	;       .ct1 
+	;       .ct2 
+	;       .mid.point 
+	;       .put.stz 
 	;     3:opt.push:F
 	;   Group:Gripper:4
 	;     4:a.test.gripper:F
 	;     4:gripper.pick:F
+	;       .gripper.no 
+	;       .$temp 
+	;       .temp 
 	;     4:gripper.put:F
+	;       .gripper.no 
+	;       .$temp 
+	;       .temp 
 	;     4:a.teach.gripper:F
+	;       .temp 
 	;   Group:OT:5
 	;     5:a.test.ot:F
+	;       .i 
+	;       .j 
 	;     5:a.teach.ot:F
+	;       .i 
+	;       .j 
 	;     5:load.ot.data:F
+	;       .id 
+	;       .temp 
 	;     5:ot.table:F
+	;       .id 
+	;       .$temp 
+	;       .$i1 
+	;       .$i2 
+	;       .$i3 
+	;       .$i4 
+	;       .$i5 
+	;       .$i6 
 	;     5:ot.take:F
+	;       .i 
+	;       .j 
+	;       .$temp 
+	;       .ot.take.safe 
+	;       .ct1 
+	;       .ct2 
+	;       .mid.point 
+	;       .ot.put 
 	;     5:ot.return:F
+	;       .i 
+	;       .j 
+	;       .$temp 
+	;       .post.tare.out 
+	;       .ct1 
+	;       .ct2 
+	;       .mid.point 
+	;       .put.outpal 
 	;   Group:Positioner:6
 	;     6:a.teach.pos:F
+	;       .temp 
 	;     6:pos.put:F
+	;       .$temp 
+	;       .temp 
 	;   Group:States:7
 	;     7:state0:F
 	;     7:state1:F
+	;       .current.pos 
+	;       .stz.wait 
+	;       .pos.wait 
+	;       .i 
+	;       .j 
 	;     7:state2:F
+	;       .current.pos 
+	;       .stz.wait 
+	;       .pos.wait 
+	;       .i 
+	;       .j 
 	;     7:state3:F
+	;       .current.pos 
+	;       .stz.wait 
+	;       .pos.wait 
 	;     7:state4:F
+	;       .current.pos 
+	;       .stz.wait 
+	;       .pos.wait 
 	;     7:state5:F
+	;       .current.pos 
+	;       .stz.wait 
+	;       .pos.wait 
+	;       .i 
+	;       .j 
 	;     7:state6:F
+	;       .current.pos 
+	;       .stz.wait 
+	;       .pos.wait 
+	;       .i 
+	;       .j 
 	;     7:state7:F
 	;     7:state8:F
 	;     7:state9:F
+	;       .m1 
+	;       .m2 
+	;       .m3 
 	;     7:state100:F
 	;     7:state101:F
 	;     7:state102:F
 	;     7:state103:F
 	;     7:state104:F
+	;       .m1 
+	;       .m2 
+	;       .m3 
 	;     7:state105:F
 	;     7:state106:F
 	;     7:state255:F
@@ -3241,31 +3380,96 @@ N_INT300    "s.debug.mode"
 	;     8:a.home:F
 	;     8:a.align:F
 	;     8:safe.home:F
+	;       .temp 
+	;       .s 
+	;       .c 
+	;       .dz 
 	;     8:log:F
+	;       .$msg 
+	;       .i 
 	;     8:pg.select:F
 	;     8:chk.lock:F
 	;   0:a.main:F
+	;     .$pg.string 
 	;   0:pg0:F
-	;   Group:Logs:12
-	;     12:log.pc2:F
-	;   Group:TCPIP:9
-	;     9:get.state.pc:B
-	;     9:tcp.sender.pc:B
-	;     9:tcp.callback.pc:B
-	;     9:tcp.client.pc:B
-	;     9:tcp.send.pc:B
-	;     9:tcp.log.pc:B
+	;   Group:Logs:9
+	;     9:log.pc2:F
+	;       .$msg 
+	;       .i 
+	;   Group:TCPIP:10
+	;     10:get.state.pc:B
+	;       .$state 
+	;     10:tcp.sender.pc:B
+	;       .$data 
+	;     10:tcp.callback.pc:B
+	;       .$data 
+	;       .data.length 
+	;       .$temp 
+	;       .i 
+	;       .$sensor.name 
+	;       .$sensor.state 
+	;       .$x 
+	;       .$y 
+	;       .$a 
+	;       .$spd 
+	;       .speed 
+	;       .$state 
+	;     10:tcp.client.pc:B
+	;       .tcp.retry.count 
+	;       .tcp.connect.tmo 
+	;       .tcp.receive.tmo 
+	;       .number 
+	;       .ports 
+	;       .sockets 
+	;       .errors 
+	;       .suberrors 
+	;       .$ips 
+	;       .i 
+	;       .$temp 
+	;       .status 
+	;       .$tcp.ip.copy 
+	;       .$ip 
+	;       .ip 
+	;       .connected 
+	;       .tcp.error.cnt 
+	;       .$tcp.request 
+	;       .request.size 
+	;     10:tcp.send.pc:B
+	;       .$data 
+	;       .data.length 
+	;       .tcp.send.tmo 
+	;       .status 
+	;       .$temp 
+	;       .i 
+	;     10:tcp.log.pc:B
+	;       .$msg 
+	;       .i 
 	;   0:autostart.pc:B
+	;     .$rob.name 
+	;     .cont.no 
+	;     .robot.no 
+	;     .$robot.str 
+	;     .$cont.str 
 	;   0:errstart.pc:B
-	;   Group:Initialization:10
-	;     10:set.io.pc:B
-	;     10:set.vars.pc:B
-	;   Group:Watchdog:11
-	;     11:watchdog.pc:B
-	;     11:check.tasks.pc:B
-	;     11:check.disp.pc:B
-	;     11:check.zone.pc:B
-	;     11:check.teach.pc:B
+	;   Group:Initialization:11
+	;     11:set.io.pc:B
+	;     11:set.vars.pc:B
+	;       .i 
+	;       .n 
+	;       .$name 
+	;   Group:Watchdog:12
+	;     12:watchdog.pc:B
+	;       .last.pos 
+	;       .current.pos 
+	;       .c1 
+	;       .c2 
+	;       .c3 
+	;       .c4 
+	;       .c5 
+	;     12:check.tasks.pc:B
+	;     12:check.disp.pc:B
+	;     12:check.zone.pc:B
+	;     12:check.teach.pc:B
 	; @@@ TRANS @@@
 	; ot.point[] OT point i, j
 	; opt.point[] OPT point i, j

@@ -447,7 +447,7 @@ class Background(Thread):
                         self.shake_slow()
                     self.detect_attempts = 2
                     self.redrops += 1
-                    
+                    time.sleep(5)
                 else:
                     command = f"PALLETEMPTY;"
                     logger.warning("Паллета пуста, отправка команды на RS013N")
@@ -455,6 +455,6 @@ class Background(Thread):
                         logger.error(f"Ошибка отправки команды на RS013N: {command}")
                     else:
                         logger.info(f"Команда отправлена на RS013N: {command}")
-                    time.sleep(3)
+                    time.sleep(5)
             self.detect_attempts = self.detect_attempts + 1
             

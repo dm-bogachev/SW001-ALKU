@@ -668,7 +668,7 @@ RMTIN960 1001 1017 1033 1049 1065 1081 1097 1113 1129 1145 1161 1177 1193 1209 1
   ELSE
     chg.tare.count = max.tare.count-obj.in.line
 ; in case of small values, we need at least one line!!!
-    IF chg.tare.count<0 THEN
+    IF chg.tare.count<=0 THEN
       chg.tare.count = max.tare.count
     END
     lines.count = 20
@@ -3114,28 +3114,110 @@ RMTIN960 1001 1017 1033 1049 1065 1081 1097 1113 1129 1145 1161 1177 1193 1209 1
 	; @@@ PROGRAM @@@
 	;   Group:Layouts:1
 	;     1:layout0:F
+	;       .center.col 
+	;       .center.row 
+	;       .cell 
+	;       .row 
+	;       .offset 
+	;       .left 
+	;       .right 
 	;     1:layout1:F
+	;       .center.col 
+	;       .center.row 
+	;       .cell 
+	;       .i 
+	;       .j 
+	;       .dist 
+	;       .dists 
+	;       .array.size 
+	;       .result 
+	;       .cornera 
+	;       .cornerb 
+	;       .tmp.dist 
+	;       .tmp.m 
+	;       .tmp.n 
 	;   Group:Gripper:2
 	;     2:a.test.gripper:F
 	;     2:gripper.pick:F
+	;       .gripper.no 
+	;       .$temp 
+	;       .temp 
 	;     2:gripper.put:F
+	;       .gripper.no 
+	;       .$temp 
+	;       .temp 
 	;     2:a.teach.gripper:F
+	;       .temp 
 	;   Group:Etalon:3
 	;     3:a.teach.etalon:F
+	;       .eshift.x 
+	;       .eshift.y 
+	;       .et.pos.point 
+	;       .et.mac.poin 
 	;     3:etalon.measure:F
+	;       .id 
+	;       .etalon.pos.pt 
+	;       .etalon.mac.pt 
+	;       .shift.y 
+	;       .shift.z 
+	;       .p.idx 
+	;       .eshift.x 
+	;       .eshift.y 
+	;       .$temp 
 	;     3:set.grip.tree:F
+	;       .set 
 	;   Group:OT:4
 	;     4:a.teach.ot:F
+	;       .ot.down.left 
+	;       .ot.down.right 
+	;       .ot.up.right 
+	;       .ot.orig 
 	;     4:calc.grid:F
+	;       .obj.len 
+	;       .obj.len.w.spc 
+	;       .extra.x 
+	;       .$temp 
+	;       .i 
+	;       .j 
 	;     4:calc.grid.rnd:F
+	;       .max 
+	;       .obj.shift 
+	;       .$temp 
+	;       .i 
+	;       .j 
 	;     4:get.ot.point:F
+	;       .obj.id 
 	;     4:a.test.ot:F
+	;       .$pg 
+	;       .x 
+	;       .y 
+	;       .z 
+	;       .put 
 	;     4:ot.put:F
+	;       .x 
+	;       .y 
+	;       .z 
+	;       .put 
 	;     4:calc.ot:F
+	;       .$calc.pg 
 	;     4:a.test.ot.pick:F
+	;       .shift.x 
+	;       .shift.y 
+	;       .temp 
+	;       .$pg 
+	;       .x 
+	;       .y 
+	;       .z 
+	;       .put 
 	;   Group:MeasureMachine:5
 	;     5:a.teach.machine:F
+	;       .temp 
 	;     5:measure:F
+	;       .pos 
+	;       .shift.y 
+	;       .shift.z 
+	;       .p.idx 
+	;       .machine.pos 
 	;   Group:Objects:6
 	;     6:id1:F
 	;     6:id2:F
@@ -3145,10 +3227,31 @@ RMTIN960 1001 1017 1033 1049 1065 1081 1097 1113 1129 1145 1161 1177 1193 1209 1
 	;     6:id6:F
 	;   Group:Positioner:7
 	;     7:pos.pick:F
+	;       .$temp 
+	;       .temp 
+	;       .shift.x 
+	;       .shift.y 
 	;     7:a.teach.pos:F
+	;       .shift.x 
+	;       .shift.y 
+	;       .temp 
 	;   Group:Defect:8
 	;     8:defect.put:F
+	;       .xc 
+	;       .yc 
+	;       .rz 
+	;       .temp 
 	;     8:a.teach.defect:F
+	;       .x 
+	;       .y 
+	;       .o 
+	;       .k 
+	;       .i 
+	;       .j 
+	;       .xc 
+	;       .yc 
+	;       .rz 
+	;       .defect.pos 
 	;   Group:States:9
 	;     9:state0:F
 	;     9:state1:F
@@ -3172,30 +3275,97 @@ RMTIN960 1001 1017 1033 1049 1065 1081 1097 1113 1129 1145 1161 1177 1193 1209 1
 	;     10:a.home:F
 	;     10:a.align:F
 	;     10:safe.home:F
+	;       .idx 
+	;       .temp 
+	;       .s 
+	;       .c 
+	;       .dz 
 	;     10:log:F
+	;       .$msg 
+	;       .i 
 	;     10:pg.select:F
 	;   0:a.main:F
+	;     .$pg.string 
 	;   0:pg0:F
-	;   Group:Logs:14
-	;     14:log.pc1:F
-	;     14:log.pc2:F
-	;   Group:Watchdog:11
-	;     11:check.teach.pc:B
-	;     11:check.zone.pc:B
-	;     11:check.disp.pc:B
-	;     11:check.tasks.pc:B
-	;     11:watchdog.pc:B
-	;   Group:Initialization:12
-	;     12:set.vars.pc:B
-	;     12:set.io.pc:B
-	;   Group:TCPIP:13
-	;     13:get.state.pc:B
-	;     13:tcp.sender.pc:B
-	;     13:tcp.callback.pc:B
-	;     13:tcp.client.pc:B
-	;     13:tcp.send.pc:B
-	;     13:tcp.log.pc:B
+	;   Group:Logs:11
+	;     11:log.pc1:F
+	;       .$msg 
+	;       .i 
+	;     11:log.pc2:F
+	;       .$msg 
+	;       .i 
+	;   Group:Watchdog:12
+	;     12:check.teach.pc:B
+	;     12:check.zone.pc:B
+	;     12:check.disp.pc:B
+	;     12:check.tasks.pc:B
+	;     12:watchdog.pc:B
+	;       .last.pos 
+	;       .current.pos 
+	;       .c1 
+	;       .c2 
+	;       .c3 
+	;       .c4 
+	;       .c5 
+	;   Group:Initialization:13
+	;     13:set.vars.pc:B
+	;       .i 
+	;       .n 
+	;       .$name 
+	;     13:set.io.pc:B
+	;   Group:TCPIP:14
+	;     14:get.state.pc:B
+	;       .$state 
+	;     14:tcp.sender.pc:B
+	;       .$data 
+	;     14:tcp.callback.pc:B
+	;       .$data 
+	;       .data.length 
+	;       .$temp 
+	;       .i 
+	;       .$awave 
+	;       .$sensor.name 
+	;       .$sensor.state 
+	;       .$state 
+	;       .$measurement.sta 
+	;       .$spd 
+	;       .speed 
+	;     14:tcp.client.pc:B
+	;       .tcp.retry.count 
+	;       .tcp.connect.tmo 
+	;       .tcp.receive.tmo 
+	;       .number 
+	;       .ports 
+	;       .sockets 
+	;       .errors 
+	;       .suberrors 
+	;       .$ips 
+	;       .i 
+	;       .$temp 
+	;       .status 
+	;       .$tcp.ip.copy 
+	;       .$ip 
+	;       .ip 
+	;       .connected 
+	;       .tcp.error.cnt 
+	;       .$tcp.request 
+	;       .request.size 
+	;     14:tcp.send.pc:B
+	;       .$data 
+	;       .data.length 
+	;       .tcp.send.tmo 
+	;       .status 
+	;       .$temp 
+	;       .i 
+	;     14:tcp.log.pc:B
+	;       .$msg 
+	;       .i 
 	;   0:autostart.pc:B
+	;     .$rob.name 
+	;     .cont.no 
+	;     .robot.no 
+	;     .$robot.str 
+	;     .$cont.str 
 	;   0:errstart.pc:B
 	; @@@ TRANS @@@
 	; ot.put[] Calculated OT put point
