@@ -65,9 +65,10 @@ def start_process(request: ProcessRequest):
     """ Запуск процесса """
     logger.debug(
         f"Запрос /master/start "
-        f"({request.ProductName}-{request.ProductSpec}: "
-        f"{request.ProductCount}, {request.InTareIDs}, {request.OutTareIDs})"
-        f"{request.Layout},{request.UseAlternateWave}"
+        f"(Product: {request.ProductName}-{request.ProductSpec}: "
+        f"ProductCount: {request.ProductCount}, InTareIDs: {request.InTareIDs}, OutTareIDs: {request.OutTareIDs})"
+        f"Layout: {request.Layout}, UseAlternateWave: {request.UseAlternateWave}"
+        f"GlobalMaxTareCount: {request.GlobalMaxTareCount}, CurrentMaxTareCount: {request.CurrentMaxTareCount})"
     )
     if not master.start_process(request.ProductName, 
                                 request.ProductSpec, 
@@ -75,7 +76,9 @@ def start_process(request: ProcessRequest):
                                 request.InTareIDs, 
                                 request.OutTareIDs, 
                                 request.Layout,
-                                request.UseAlternateWave):
+                                request.UseAlternateWave,
+                                request.GlobalMaxTareCount,
+                                request.CurrentMaxTareCount):
         return {"Status": "Failed",
                 "Code": -1,
                 "Reason": "Error in sending to robot"

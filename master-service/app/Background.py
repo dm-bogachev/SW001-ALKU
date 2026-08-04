@@ -203,7 +203,15 @@ class Background(Thread):
             return False
         return True
 
-    def start_process(self, ProductName: str, ProductSpec: int, ProductCount: int, InTareIDs: list, OutTareIDs: list, Layout: int, UseAlternateWave: bool):
+    def start_process(self, ProductName: str, 
+                      ProductSpec: int, 
+                      ProductCount: int, 
+                      InTareIDs: list, 
+                      OutTareIDs: list, 
+                      Layout: int, 
+                      UseAlternateWave: bool, 
+                      GlobalMaxTareCount: int, 
+                      CurrentMaxTareCount: int):
         
         if not self.change_model(ProductName):
             return False
@@ -227,7 +235,7 @@ class Background(Thread):
         else:
             cmdpart = f"AWOFF;"
 
-        command += f"{Layout};{cmdpart};"
+        command += f"{GlobalMaxTareCount};{CurrentMaxTareCount};{Layout};{cmdpart};"
         
         if not self.send_command_to_robot(command, "RS013N", RS013N_API_URL):
             return False
@@ -329,6 +337,7 @@ class Background(Thread):
             return False
         return True
 
+
     def error_reset(self):
         command = "ERESET;"
         if not self.send_command_to_robot(command, "RS013N", RS013N_API_URL):
@@ -410,7 +419,6 @@ class Background(Thread):
         
     def process_check_positioner(self, ROBOT_API_URL):
 
-        #if os.environ.get("DEBUG", "True").lower() == "True".lower():
         # logger.info("Режим отладки включен, пропуск проверки позиционера")
         # self.send_command_to_robot("POSITIONEREMPTY;", "RS013N", RS013N_API_URL)
         # self.send_command_to_robot("POSITIONERFULL;", "RS007L", RS007L_API_URL)

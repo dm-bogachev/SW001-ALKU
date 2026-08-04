@@ -2435,6 +2435,7 @@ N_INT300    "s.debug.mode"
   END
   ; Impossible situation
   IF SIG (rs7.tare.chg) AND NOT SIG (s.ot.placed) THEN
+    CALL log("How ever you got here???")
     PULSE rs13.tare.ack, 15
     RETURN
   END
@@ -2900,19 +2901,13 @@ N_INT300    "s.debug.mode"
       SIGNAL s.cmd.stop
     END
 ;
-; RESET COMMAND
-; String format:
-; RESET;
-;
-    IF INSTR(.$data[.i] , "RESET") THEN
-      state = 0
-    END
 ;
 ; CYCLEON COMMAND
 ; String format:
 ; CYCLEON;
 ;
     IF INSTR(.$data[.i] , "CYCLEON") AND NOT SWITCH(CS ) THEN
+      CALL log.pc2("Received CYCLE ON command")
       IF SIG(do.automatic) THEN
         MC CONTINUE
       END
@@ -2930,9 +2925,11 @@ N_INT300    "s.debug.mode"
       .$state = $DECODE(.$data[1],";",0)
       IF INSTR(.$state , "TRUE") THEN
         STP_ONCE ON
+        CALL log.pc2("Received SET STEP MODE TRUE command")
       END
       IF INSTR(.$state , "FALSE") THEN
         STP_ONCE OFF
+        CALL log.pc2("Received SET STEP MODE FALSE command")
       END
     END
 ;
@@ -2941,6 +2938,7 @@ N_INT300    "s.debug.mode"
 ; NEXTSTEP;
 ;
     IF INSTR(.$data[.i] , "NEXTSTEP") THEN
+      CALL log.pc2("Received NEXTSTEP command")
       STPNEXT
     END
 ;
@@ -2949,6 +2947,7 @@ N_INT300    "s.debug.mode"
 ; ERESET;
 ;
     IF INSTR(.$data[.i] , "ERESET") THEN
+      CALL log.pc2("Received ERROR RESET command")
       MC ERESET
       .$data[.i] = ""
       RETURN
@@ -2959,7 +2958,11 @@ N_INT300    "s.debug.mode"
 ; RESET;
 ;
     IF INSTR(.$data[.i] , "RESET") THEN
+      CALL log.pc2("Received RESET command")
       state = 0
+      IF NOT SWITCH(CS) THEN
+        MC PRIME a.main
+      END
     END
 ;
     .$data[.i] = ""
@@ -3181,9 +3184,9 @@ N_INT300    "s.debug.mode"
 	; s.ot.placed
 	; ~Log
 	; @@@ CONNECTION @@@
-	; RS013N
-	; 192.168.7.102
-	; 23
+	; KROSET R01
+	; 127.0.0.1
+	; 9105
 	; @@@ PROGRAM @@@
 	;   Group:Objects:1
 	;     1:id1:F

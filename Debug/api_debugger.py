@@ -78,6 +78,27 @@ class APIDebugger(QMainWindow):
         self.out_tare_ids.setPlaceholderText("e.g., 4,5,6")
         self.out_tare_ids.setText("1")
         product_layout.addWidget(self.out_tare_ids)
+
+        product_layout.addWidget(QLabel("Layout (0-3):"))
+        self.layout = QSpinBox()
+        self.layout.setRange(0, 3)
+        self.layout.setValue(0)
+        product_layout.addWidget(self.layout)
+
+        product_layout.addWidget(QLabel("Global Max Tare Count:"))
+        self.global_max_tare_count = QSpinBox()
+        self.global_max_tare_count.setRange(0, 10000)
+        self.global_max_tare_count.setValue(0)
+        product_layout.addWidget(self.global_max_tare_count)
+
+        product_layout.addWidget(QLabel("Current Max Tare Count:"))
+        self.current_max_tare_count = QSpinBox()
+        self.current_max_tare_count.setRange(0, 10000)
+        self.current_max_tare_count.setValue(0)
+        product_layout.addWidget(self.current_max_tare_count)
+
+        self.use_alternate_wave = QCheckBox("Use Alternate Wave")
+        product_layout.addWidget(self.use_alternate_wave)
         
         start_layout.addLayout(product_layout)
         
@@ -351,7 +372,11 @@ class APIDebugger(QMainWindow):
             "ProductSpec": product_spec,
             "ProductCount": product_count,
             "InTareIDs": in_tare_ids,
-            "OutTareIDs": out_tare_ids
+            "OutTareIDs": out_tare_ids,
+            "Layout": self.layout.value(),
+            "GlobalMaxTareCount": self.global_max_tare_count.value(),
+            "CurrentMaxTareCount": self.current_max_tare_count.value(),
+            "UseAlternateWave": self.use_alternate_wave.isChecked()
         }
         
         self.send_request("/master/start", "POST", data)

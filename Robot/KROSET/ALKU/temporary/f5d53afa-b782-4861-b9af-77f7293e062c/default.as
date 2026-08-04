@@ -16,11 +16,11 @@
 .NETCONF     192.168.1.4,"fcon",255.255.255.0,0.0.0.0,0.0.0.0,0.0.0.0,""
 .NETCONF2     192.168.7.103,255.255.255.0,0.0.0.0
 .ROBOTDATA1
-ZROBOT.TYPE    30  10   6 6324      -95551   RS007L-B001 ( 2026-06-23 18:28 )
+ZROBOT.TYPE    30  10   6 6324      -95551   RS007L-B001 ( 2026-08-05 01:59 )
 ZSYSTEM         1   5         -91
 ZLINEAR         0   0   0   0   0   0  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1         179
 CONT_CODE     701      -10516
-ZZERO         268466748 268333916 268159364 268435457 268298794 268427090 268435456 268435456 268435456 268435456 268435456 268435456 268435456 268435456 268435456 268435456 268435456 268435456   544241416
+ZZERO         268758064 268294370 268212325 268291787 268151714 268165940 268435456 268435456 268435456 268435456 268435456 268435456 268435456 268435456 268435456 268435456 268435456 268435456   547948951
 ENDLESS_POS   0 100 1       -1516
 LANGUAGE      2
 ZSIGSPEC      960 960 960      -43201
@@ -56,7 +56,7 @@ ZSETKVFF_SVSPEC5    1.000   1.000   1.000   1.000   1.000   1.000  -1.000  -1.00
 ZSETKVFFACC_SVSPEC5    0.000   0.000   0.000   0.000   0.000   0.000 -11.000 -11.000 -11.000 -11.000 -11.000 -11.000 -11.000 -11.000 -11.000 -11.000 -11.000 -11.000 -1832648705
 ZSETKVFFJRK_SVSPEC5    0.000   0.000   0.000   0.000   0.000   0.000 -11.000 -11.000 -11.000 -11.000 -11.000 -11.000 -11.000 -11.000 -11.000 -11.000 -11.000 -11.000 -1832648705
 ZSETKAFF2_SVSPEC5    1.000   1.000   1.000   1.000   1.000   1.000  -1.000  -1.000  -1.000  -1.000  -1.000  -1.000  -1.000  -1.000  -1.000  -1.000  -1.000  -1.000 -1262485505
-ZSAVEMR                 0           0           0           0           0           0           0           0           0           0           0           0           0           0           0           0           0           0          -1
+ZSAVEMR                29       65530           4       65515       65520       65531           0           0           0           0           0           0           0           0           0           0           0           0    -3931936
 ZRADIUS        1177.645  1177.645   722.645   247.645   247.645   145.674     1.000     1.000     1.000     1.000     1.000     1.000     1.000     1.000     1.000     1.000     1.000     1.000  -287946702
 ZJTSPEED        370.000   310.000   410.000   550.000   550.000  1000.000    10.000    10.000    10.000    10.000    10.000    10.000    10.000    10.000    10.000    10.000    10.000    10.000  -262086657
 ZACCTIME          0.400     0.600     0.400     0.200     0.200     0.200     0.384     0.384     0.384     0.384     0.384     0.384     0.384     0.384     0.384     0.384     0.384     0.384   865872138
@@ -485,7 +485,7 @@ OP_ACCUTYPE2  ON  -3818
 OP_MTN_CHK    OFF -4417
 OP_CHKINCHING  OFF -4345
 OP_COLDET     OFF -4300
-OP_BLTARM OFF -4280
+OP_BLTARM     OFF -4280
 OP_IPKALM     ON  -4144
 OP_KADOUINFO  ON  -4586
 OP_IMON2      OFF -3341
@@ -1333,41 +1333,6 @@ ZSWITCH ZOPTACDC_FTRQ_TN_FIX ON   -529
 ZSWITCH ZFIX_PG_CONTINUE ON   -521
 ZSWITCH ZFIX_CALL_1STEPPG ON   -523
 .END
-.OPE_INFO1
-OPEINFO  30 10 6 6324  1723231961  ;(24/8/10 4:32:41) RS007L-B001 
-CONT_TIM  264.4 
-SERV_TIM  65.1 
-MTON_CNT  1897 
-ESTP_CNT  9 
-BRKE_CNT  1952 
-CON_PWR  18.134 
-SUP_PWR  18.134 
-REG_PWR  0.000 
-MOVE_TJT  16.4 21.4 17.3 11.7 16.9 19.7 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 
-DIST_DJT  1011.099 1087.373 687.678 1389.857 1061.952 2411.955 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 
-DIST_DJT_PLUS  504.526 543.242 344.343 694.895 530.364 1205.219 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 
-OPEINFO TP_BKLIGHT  0 123.4 50000 
-OPEINFO MC  0 0 2000000 
-OPEINFO PARTS1  0 0 0 0 0 0 0 0 0 0 0 
-OPEINFO PARTS2  0 0 0 0 0 0 0 0 0 0 0 
-OPEINFO PARTS3  0 0 0 0 0 0 0 0 0 0 0 
-M_OPEINFO  30 10 6 6324  1713957146  ;(24/4/24 20:12:26) RS007L-B001 
-M_CONT_TIM  324.0 
-M_SERV_TIM  79.4 
-M_MTON_CNT  3025 
-M_ESTP_CNT  13 
-M_BRKE_CNT  3191 
-M_CON_PWR  22.408 
-M_SUP_PWR  22.408 
-M_REG_PWR  0.000 
-M_MOVE_TJT  18.0 24.2 19.6 12.5 18.9 22.7 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 
-M_DIST_DJT  1046.886 1156.835 759.474 1432.486 1122.161 2518.744 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 
-M_DIST_DJT_PLUS  504.526 543.242 344.343 694.895 530.364 1205.219 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 
-M_MOVE_TJT_OVERDRIVE  0.0 0.0 0.0 0.0 0.0 0.0 
-M_DIST_DJT_OVERDRIVE  0.000 0.000 0.000 0.000 0.000 0.000 
-M_WARN_CJT_OVERDRIVE  0 0 0 0 0 0 
-HOUR_MTR  324.0 
-.END
 .SYSDATA
 REG_POINT       0
 ATE_REG_POINT  0
@@ -1575,19 +1540,19 @@ DEFSIG_I EXT_ERR_STOP    OFF
          EXT_ERR_STOP_SIG      0     0
 DEFSIG_O MOTOR_ON        OFF     0
 DEFSIG_O ERROR           OFF     0
-DEFSIG_O AUTOMATIC       OFF     0
+DEFSIG_O AUTOMATIC       ON   2012
          CND_RUN         ON 
          CND_EHOLD       OFF
-         CND_REPEAT      ON 
-         CND_CCONT       ON 
-         CND_SCONT       ON 
+         CND_REPEAT      OFF
+         CND_CCONT       OFF
+         CND_SCONT       OFF
          CND_TLOCK       OFF
          CND_CYCLE       OFF
          CND_RGSO        OFF
          CND_DRYOFF      OFF
          CND_CYC_EXT     OFF
          CND_NOERROR     OFF
-         CND_MOTORON     OFF
+         CND_MOTORON     ON 
 DEFSIG_O CYCLE_START     OFF     0
 DEFSIG_O TEACH_MODE      OFF     0
 DEFSIG_O HOME1           ON   2010
@@ -2456,192 +2421,6 @@ SWITCH REP_SINGULAR    OFF
 SWITCH TCH_SINGULAR    OFF
 SWITCH SLOW_REP_MM     OFF
 .END
-.CONDITION
-AS_VER       ASF_01000001G
-ELOG_NUM            128
-CHK_ONCE      255
-MAN_SPEED     1
-CHK_SPEED     1
-MON_SPEED       100.000
-PRG_ACCEL       100.000
-PRG_SPEED       100.000
-PRG_DECEL       100.000
-PRM_SPEED       100.000
-PRM_ACCEL       100.000
-PRM_DECEL       100.000
-BLK_SPEED       100.000
-PRG_TIME      0
-PRM_TIME      0
-PRG_NOT_SPEED    100.000
-PRM_NOT_SPEED    100.000
-ACCEL_TICK           -1
-DECEL_TICK           -1
-ABS_SPEED         0.000
-SPEED_TYPE2       0.000
-VEL_E             0.000
-EXT_R1            0.000     0.000     0.000     0.000     0.000     0.000     0.000     0.000     0.000     0.000     0.000     0.000
-EXT_R2            0.000     0.000     0.000     0.000     0.000     0.000     0.000     0.000     0.000     0.000     0.000     0.000
-CINT_PRM_SPEED1    100.000
-CINT_PRG_SPEED1    100.000
-CINT_PRM_SPEED2    100.000
-CINT_PRG_SPEED2    100.000
-CINT_PRM_SPEED3    100.000
-CINT_PRG_SPEED3    100.000
-CINT_PRM_ACCEL    100.000
-CINT_PRG_ACCEL    100.000
-CINT_PRM_DECEL    100.000
-CINT_PRG_DECEL    100.000
-PRG_ACCEL_ORG    100.000
-PRG_SPEED_ORG    100.000
-PRG_DECEL_ORG    100.000
-PRG_JT_ACCEL    100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000
-PRG_JT_DECEL    100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000
-PRM_JT_ACCEL    100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000
-PRM_JT_DECEL    100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000   100.000
-STEP1ENV_CALL_PRGNAME a.main
-STEP1ENV_PRG_STEP          1
-STEP2ENV0_CALL_PRGNAME autostart.pc
-STEP2ENV0_PRG_STEP          1
-STEP2ENV1_CALL_PRGNAME tcp.client.pc
-STEP2ENV1_PRG_STEP         43
-STEP2ENV2_CALL_PRGNAME tcp.sender.pc
-STEP2ENV2_PRG_STEP         29
-STEP2ENV4_CALL_PRGNAME errstart.pc
-STEP2ENV4_PRG_STEP          9
-USR_DO1      00000000000000000000000000000000
-USR_DO2      00000000000000000000000000000000
-USR_DO3      00000000000000000000000000000000
-USR_DO4      00000000000000000000000000000000
-USR_DO5      00000000000000000000000000000000
-USR_DO6      00000000000000000000000000000000
-USR_DO7      00000000000000000000000000000000
-USR_DO8      00000000000000000000000000000000
-USR_DO9      00000000000000000000000000000000
-USR_DO10     00000000000000000000000000000000
-USR_DO11     00000000000000000000000000000000
-USR_DO12     00000000000000000000000000000000
-USR_DO13     00000000000000000000000000000000
-USR_DO14     00000000000000000000000000000000
-USR_DO15     00000000000000000000000000000000
-USR_DO16     00000000000000000000000000000000
-USR_DO17     00000000000000000000000000000000
-USR_DO18     00000000000000000000000000000000
-USR_DO19     00000000000000000000000000000000
-USR_DO20     00000000000000000000000000000000
-USR_DO21     00000000000000000000000000000000
-USR_DO22     00000000000000000000000000000000
-USR_DO23     00000000000000000000000000000000
-USR_DO24     00000000000000000000000000000000
-USR_DO25     00000000000000000000000000000000
-USR_DO26     00000000000000000000000000000000
-USR_DO27     00000000000000000000000000000000
-USR_DO28     00000000000000000000000000000000
-USR_DO29     00000000000000000000000000000000
-USR_DO30     00000000000000000000000000000000
-USR_INTERNAL 00000000000000000000000100000000
-USR_INTERNAL1 00000000000000000000000100000000
-USR_INTERNAL2 00000000000000000000000000000000
-USR_INTERNAL3 00000000000000000000000000000000
-USR_INTERNAL4 00000000000000000000000000000000
-USR_INTERNAL5 00000000000000000000000000000000
-USR_INTERNAL6 00000000000000000000000000000000
-USR_INTERNAL7 00110000000000000000000000000000
-USR_INTERNAL8 00000000000000000000000000000000
-USR_INTERNAL9 00000000000000000000000000000000
-USR_INTERNAL10 00000000000000000001000000000000
-USR_INTERNAL11 00000000000000000000000000000000
-USR_INTERNAL12 00000000000000000000000000000000
-USR_INTERNAL13 00000000000000000000000000000000
-USR_INTERNAL14 00000000000000000000000000000000
-USR_INTERNAL15 00000000000000000000000000000000
-USR_INTERNAL16 00000000000000000000000000000000
-USR_INTERNAL17 00000000000000000000000000000000
-USR_INTERNAL18 00000000000000000000000000000000
-USR_INTERNAL19 00000000000000000000000000000000
-USR_INTERNAL20 00000000000000000000000000000000
-USR_INTERNAL21 00000000000000000000000000000000
-USR_INTERNAL22 00000000000000000000000000000000
-USR_INTERNAL23 00000000000000000000000000000000
-USR_INTERNAL24 00000000000000000000000000000000
-USR_INTERNAL25 00000000000000000000000000000000
-USR_INTERNAL26 00000000000000000000000000000000
-USR_INTERNAL27 00000000000000000000000000000000
-USR_INTERNAL28 00000000000000000000000000000000
-USR_INTERNAL29 00000000000000000000000000000000
-USR_INTERNAL30 00000000000000000000000000000000
-USR_AD       00000000000000000000000000000000
-USR_DA                0         0         0         0         0         0         0         0         0         0         0         0         0         0         0         0
-USR_ADO_1          0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0
-USR_ADO_2          0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0
-USR_ADO_3          0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0
-USR_ADO_4          0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0
-USR_ADO_5          0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0
-USR_ADO_6          0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0
-USR_ADO_7          0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0
-USR_ADO_8          0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0
-USR_ADO2_1         0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0
-USR_ADO2_2         0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0
-USR_ADO2_3         0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0
-USR_ADO2_4         0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0
-USR_ADO2_5         0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0
-USR_ADO2_6         0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0
-USR_ADO2_7         0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0
-USR_ADO2_8         0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0      0
-UCINDENT1          0
-UCLINE1            0
-UCFGCOLOR1        11
-UCBGCOLOR1        10
-UCCHARWINSTR1 01:28:59 State 0: Program reset. Initialization of parameters
-01:28:59 State 100: Waiting for start
-01:29:07 START with Name:STRING-11 Count: 11 OT:1 OPT:1
-01:29:07 State 106: Check program
-
-UCINDENT2          0
-UCLINE2            0
-UCFGCOLOR2        11
-UCBGCOLOR2        10
-UCCHARWINSTR2 01:29:08 Wrong program name. Program reset
-01:29:13 State 0: Program reset. Initialization of parameters
-01:29:13 State 100: Waiting for start
-01:29:15 START with Name:STRING-11 Count: 11 OT:1 OPT:1
-
-UCINDENT3          0
-UCLINE3            0
-UCFGCOLOR3        11
-UCBGCOLOR3        10
-UCCHARWINSTR3 01:29:15 State 106: Check program
-01:29:15 Wrong program name. Program reset
-01:29:20 State 0: Program reset. Initialization of parameters
-01:29:20 State 100: Waiting for start
-
-UCINDENT4          0
-UCLINE4            0
-UCFGCOLOR4         0
-UCBGCOLOR4         0
-UCINDENT5          0
-UCLINE5            0
-UCFGCOLOR5         0
-UCBGCOLOR5         0
-UCINDENT6          0
-UCLINE6            0
-UCFGCOLOR6         0
-UCBGCOLOR6         0
-UCINDENT7          0
-UCLINE7            0
-UCFGCOLOR7         0
-UCBGCOLOR7         0
-UCINDENT8          0
-UCLINE8            0
-UCFGCOLOR8        11
-UCBGCOLOR8         6
-UCCHARWINSTR8 Robot: RS007L S/N: C6324
-Controller: F60 S/N: C8174
- 
-Powered by Robowizard Co.Ltd.
-
-SEQEXECUTE            0
-TPHOLDSTAT    ON 
-.END
 .AUXDATA
 ROB_START_LIM      0.000     0.000     0.000     0.000     0.000     0.000     0.000     0.000     0.000     0.000     0.000     0.000     0.000     0.000     0.000     0.000     0.000     0.000
 ROB_START_LIM1      2.000     2.000     2.000     2.000     2.000     2.000     0.100     0.100     0.100     0.100     0.100     0.100     0.100     0.100     0.100     0.100     0.100     0.100
@@ -3430,6 +3209,9 @@ TP_RECINHI      0   0   0
 155,8,"ot.x","    OT","X POSITION",10,3,2,1,0
 156,8,"ot.y","    OT","Y POSITION",10,3,2,1,0
 157,8,"hmi.ot.k","    OT","  PUT ID ",10,3,3,1,0
+158,8,"layout","    OT","  LAYOUT",10,3,3,1,0
+159,8,"max.tare.count","MAX TARE ","COUNT",10,3,3,1,0
+160,8,"spc.tare.count","SPC TARE ","COUNT",10,3,3,1,0
 161,2,"","   MAIN","<---------","",10,4,11,2001,0
 164,2,"","   TEACH","POSITIONER","",10,4,11,2004,0
 165,2,"","   TEACH","  MACHINE","",10,4,11,2005,0
@@ -3476,21 +3258,3983 @@ TP_RECINHI      0   0   0
 .INTER_PANEL_COLOR_D
 182,3,224,244,28,159,252,255,251,255,0,31,2,241,52,255,
 .END
-.SIG_COMMENT
+.ERRLOG
+   1 - [26/08/05 01:58:51 SIGNAL:00 MON.SPEED : 50 REPEAT mode]
+       (E6007)Wrist can't be straightened any more (Singular point 1).
+       OPERATION1:[26/08/05 01:58:49] ( CYCLE START )
+       OPERATION2:[26/08/05 01:58:47] ( Motor power ON )
+       OPERATION3:[26/08/05 01:58:47] ( TEACH->REPEAT )
+       OPERATION4:[26/08/05 01:58:45] ( Motor power ON )
+       OPERATION5:[26/08/05 01:58:41] ( hmi.ot.k = 0 )
+       OPERATION6:[26/08/05 01:58:37] ( layout = 0 )
+       OPERATION7:[26/08/05 01:57:04] ( hmi.g180y = 0.0000 )
+       OPERATION8:[26/08/05 01:56:57] ( REPEAT->TEACH )
+       OPERATION9:[26/08/05 01:55:11] ( Motor power ON )
+       ROBOT1:
+        PROGRAM:a.test.ot Step:26 Cur_Step:27 STATUS:RUN
+        Interpolation Type:LINEAR  S_parameter:0.579800
+       PC1 PROGRAM: check.disp.pc Step No: 19 STATUS: RUN
+       PC2 PROGRAM: tcp.client.pc Step No: 33 STATUS: RUN
+       PC3 PROGRAM: tcp.send.pc Step No: 19 STATUS: WAIT
+       PC5 PROGRAM: errstart.pc Step No: 9 STATUS: STOP
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+        -97.929   -19.636  -137.651  -142.110   -11.039   -32.280
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+        -94.201   -21.892  -138.040  -145.198    -5.684   -32.872
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+        -16.052    14.953   -84.065     0.232   -81.261    39.205
+------------------------------------------------------------------------------
+   2 - [26/08/05 01:32:18 SIGNAL:00 MON.SPEED : 50 REPEAT mode]
+       (W1016)Torque of motor is over limit. JT1
+       OPERATION1:[26/08/05 01:30:45] ( TYPE state )
+       OPERATION2:[26/08/05 01:30:45] ( TYPE spc.tare.coun )
+       OPERATION3:[26/08/05 01:30:45] ( TYPE max.tare.coun )
+       OPERATION4:[26/08/05 01:30:45] ( TYPE state )
+       OPERATION5:[26/08/05 01:30:45] ( TYPE spc.tare.coun )
+       OPERATION6:[26/08/05 01:30:45] ( TYPE max.tare.coun )
+       OPERATION7:[26/08/05 01:30:45] ( TYPE state )
+       OPERATION8:[26/08/05 01:30:45] ( TYPE spc.tare.coun )
+       OPERATION9:[26/08/05 01:30:45] ( TYPE max.tare.coun )
+       ROBOT1:
+        PROGRAM:etalon.measure Step:49 Cur_Step:50 STATUS:RUN
+        Interpolation Type:LINEAR  S_parameter:0.432837
+       PC1 PROGRAM: watchdog.pc Step No: 57 STATUS: WAIT
+       PC2 PROGRAM: tcp.client.pc Step No: 43 STATUS: RUN
+       PC3 PROGRAM: tcp.sender.pc Step No: 29 STATUS: WAIT
+       PC5 PROGRAM: errstart.pc Step No: 9 STATUS: STOP
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+         49.283   -35.161  -125.606    -0.432   -87.834    -2.095
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+         60.008   -31.873  -125.286    -0.238   -84.250    -3.263
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+         88.621    -5.766  -113.633     2.184   -66.820    20.213
+------------------------------------------------------------------------------
+   3 - [26/08/05 01:31:05 SIGNAL:00 MON.SPEED : 50 REPEAT mode]
+       (W1016)Torque of motor is over limit. JT1
+       OPERATION1:[26/08/05 01:30:45] ( TYPE state )
+       OPERATION2:[26/08/05 01:30:45] ( TYPE spc.tare.coun )
+       OPERATION3:[26/08/05 01:30:45] ( TYPE max.tare.coun )
+       OPERATION4:[26/08/05 01:30:45] ( TYPE state )
+       OPERATION5:[26/08/05 01:30:45] ( TYPE spc.tare.coun )
+       OPERATION6:[26/08/05 01:30:45] ( TYPE max.tare.coun )
+       OPERATION7:[26/08/05 01:30:45] ( TYPE state )
+       OPERATION8:[26/08/05 01:30:45] ( TYPE spc.tare.coun )
+       OPERATION9:[26/08/05 01:30:45] ( TYPE max.tare.coun )
+       ROBOT1:
+        PROGRAM:etalon.measure Step:49 Cur_Step:50 STATUS:RUN
+        Interpolation Type:LINEAR  S_parameter:0.563164
+       PC1 PROGRAM: watchdog.pc Step No: 57 STATUS: WAIT
+       PC2 PROGRAM: tcp.client.pc Step No: 43 STATUS: RUN
+       PC3 PROGRAM: tcp.sender.pc Step No: 29 STATUS: WAIT
+       PC5 PROGRAM: errstart.pc Step No: 9 STATUS: STOP
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+         35.422   -37.397  -125.230    -0.447   -91.169     0.995
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+         47.822   -35.706  -125.690    -0.475   -88.430    -2.029
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+         88.621    -5.766  -113.633     2.184   -66.820    20.213
+------------------------------------------------------------------------------
+   4 - [26/08/05 01:08:29 SIGNAL:00 MON.SPEED : 20 REPEAT mode]
+       (W1016)Torque of motor is over limit. JT1
+       OPERATION1:[26/08/05 01:08:03] ( ALLERESET )
+       OPERATION2:[26/08/05 00:52:32] ( PRIME/C 1:a.main,- )
+       OPERATION3:[26/08/05 00:52:30] ( DIRECTORY/N/P/CMT  )
+       OPERATION4:[26/08/05 00:52:30] ( DIRECTORY/SIZ )
+       OPERATION5:[26/08/05 00:52:29] ( ALLERESET )
+       OPERATION6:[26/08/05 00:47:18] ( ALLERESET )
+       OPERATION7:[26/08/05 00:46:12] ( ALLERESET )
+       OPERATION8:[26/08/05 00:46:09] ( $tcp.ip = "127.0.0 )
+       OPERATION9:[26/08/05 00:46:03] ( ZTPXPRINT 2: $tcp. )
+       ROBOT1:
+        PROGRAM:etalon.measure Step:49 Cur_Step:50 STATUS:RUN
+        Interpolation Type:LINEAR  S_parameter:0.413530
+       PC1 PROGRAM: watchdog.pc Step No: 33 STATUS: RUN
+       PC2 PROGRAM: log.pc2 Step No: 10 STATUS: WAIT
+       PC3 PROGRAM: tcp.sender.pc Step No: 29 STATUS: WAIT
+       PC5 PROGRAM: errstart.pc Step No: 9 STATUS: STOP
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+         51.194   -34.670  -125.588    -0.410   -87.253    -2.381
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+         61.584   -31.183  -125.148    -0.187   -83.589    -3.220
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+         88.621    -5.766  -113.633     2.184   -66.820    20.213
+------------------------------------------------------------------------------
+   5 - [26/08/05 01:05:16 SIGNAL:00 MON.SPEED : 20 REPEAT mode]
+       (W1016)Torque of motor is over limit. JT1
+       OPERATION1:[26/08/05 00:52:32] ( PRIME/C 1:a.main,- )
+       OPERATION2:[26/08/05 00:52:30] ( DIRECTORY/N/P/CMT  )
+       OPERATION3:[26/08/05 00:52:30] ( DIRECTORY/SIZ )
+       OPERATION4:[26/08/05 00:52:29] ( ALLERESET )
+       OPERATION5:[26/08/05 00:47:18] ( ALLERESET )
+       OPERATION6:[26/08/05 00:46:12] ( ALLERESET )
+       OPERATION7:[26/08/05 00:46:09] ( $tcp.ip = "127.0.0 )
+       OPERATION8:[26/08/05 00:46:03] ( ZTPXPRINT 2: $tcp. )
+       OPERATION9:[26/08/05 00:45:59] ( $tcp.ip = "" )
+       ROBOT1:
+        PROGRAM:etalon.measure Step:49 Cur_Step:50 STATUS:RUN
+        Interpolation Type:LINEAR  S_parameter:0.543856
+       PC1 PROGRAM: watchdog.pc Step No: 57 STATUS: WAIT
+       PC2 PROGRAM: tcp.client.pc Step No: 43 STATUS: RUN
+       PC3 PROGRAM: tcp.sender.pc Step No: 29 STATUS: WAIT
+       PC5 PROGRAM: errstart.pc Step No: 9 STATUS: STOP
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+         37.521   -37.190  -125.337    -0.461   -90.754     0.439
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+         49.795   -35.241  -125.688    -0.454   -87.854    -2.378
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+         88.621    -5.766  -113.633     2.184   -66.820    20.213
+------------------------------------------------------------------------------
+   6 - [26/08/05 00:46:07 SIGNAL:00 MON.SPEED : 50 REPEAT mode]
+       (E0102)Variable is not defined.
+       OPERATION1:[26/08/05 00:46:03] ( ZTPXPRINT 2: $tcp. )
+       OPERATION2:[26/08/05 00:45:59] ( $tcp.ip = "" )
+       OPERATION3:[26/08/05 00:45:41] ( ZTPXPRINT 2: $tcp. )
+       OPERATION4:[26/08/05 00:27:47] ( AUX3 disconnect )
+       OPERATION5:[26/08/05 00:23:03] ( LOAD using.rcc )
+       OPERATION6:[26/08/05 00:21:43] ( LOAD using.rcc )
+       OPERATION7:[26/08/05 00:21:33] ( LOAD using.rcc )
+       OPERATION8:[26/08/05 00:21:27] ( LOAD using.rcc )
+       OPERATION9:[26/08/05 00:21:27] ( TYPE TASK (1) )
+       PC1 PROGRAM: check.tasks.pc Step No: 4 STATUS: WAIT
+       PC2 PROGRAM: tcp.client.pc Step No: 23 STATUS: RUN
+       PC3 PROGRAM: tcp.send.pc Step No: 19 STATUS: WAIT
+       PC5 PROGRAM: errstart.pc Step No: 7 STATUS: WAIT
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+        -15.276    35.531   -62.789    18.558   -76.801   122.006
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+        -15.276    35.531   -62.789    18.558   -76.801   122.006
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+        -15.276    35.531   -62.789    18.558   -76.801   122.006
+------------------------------------------------------------------------------
+   7 - [26/08/05 00:46:04 SIGNAL:00 MON.SPEED : 50 REPEAT mode]
+       (E0102)Variable is not defined.
+       OPERATION1:[26/08/05 00:46:03] ( ZTPXPRINT 2: $tcp. )
+       OPERATION2:[26/08/05 00:45:59] ( $tcp.ip = "" )
+       OPERATION3:[26/08/05 00:45:41] ( ZTPXPRINT 2: $tcp. )
+       OPERATION4:[26/08/05 00:27:47] ( AUX3 disconnect )
+       OPERATION5:[26/08/05 00:23:03] ( LOAD using.rcc )
+       OPERATION6:[26/08/05 00:21:43] ( LOAD using.rcc )
+       OPERATION7:[26/08/05 00:21:33] ( LOAD using.rcc )
+       OPERATION8:[26/08/05 00:21:27] ( LOAD using.rcc )
+       OPERATION9:[26/08/05 00:21:27] ( TYPE TASK (1) )
+       PC1 PROGRAM: check.tasks.pc Step No: 4 STATUS: WAIT
+       PC2 PROGRAM: tcp.client.pc Step No: 23 STATUS: RUN
+       PC3 PROGRAM: tcp.send.pc Step No: 19 STATUS: WAIT
+       PC5 PROGRAM: errstart.pc Step No: 7 STATUS: WAIT
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+        -15.276    35.531   -62.789    18.558   -76.801   122.006
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+        -15.276    35.531   -62.789    18.558   -76.801   122.006
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+        -15.276    35.531   -62.789    18.558   -76.801   122.006
+------------------------------------------------------------------------------
+   8 - [26/08/05 00:46:01 SIGNAL:00 MON.SPEED : 50 REPEAT mode]
+       (E0102)Variable is not defined.
+       OPERATION1:[26/08/05 00:45:59] ( $tcp.ip = "" )
+       OPERATION2:[26/08/05 00:45:41] ( ZTPXPRINT 2: $tcp. )
+       OPERATION3:[26/08/05 00:27:47] ( AUX3 disconnect )
+       OPERATION4:[26/08/05 00:23:03] ( LOAD using.rcc )
+       OPERATION5:[26/08/05 00:21:43] ( LOAD using.rcc )
+       OPERATION6:[26/08/05 00:21:33] ( LOAD using.rcc )
+       OPERATION7:[26/08/05 00:21:27] ( LOAD using.rcc )
+       OPERATION8:[26/08/05 00:21:27] ( TYPE TASK (1) )
+       OPERATION9:[26/08/05 00:21:25] ( KILL )
+       PC1 PROGRAM: check.tasks.pc Step No: 4 STATUS: WAIT
+       PC2 PROGRAM: tcp.client.pc Step No: 23 STATUS: RUN
+       PC3 PROGRAM: tcp.send.pc Step No: 19 STATUS: WAIT
+       PC5 PROGRAM: errstart.pc Step No: 9 STATUS: STOP
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+        -15.276    35.531   -62.789    18.558   -76.801   122.006
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+        -15.276    35.531   -62.789    18.558   -76.801   122.006
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+        -15.276    35.531   -62.789    18.558   -76.801   122.006
+------------------------------------------------------------------------------
+   9 - [26/08/05 00:46:01 SIGNAL:00 MON.SPEED : 50 REPEAT mode]
+       (E0102)Variable is not defined.
+       OPERATION1:[26/08/05 00:45:59] ( $tcp.ip = "" )
+       OPERATION2:[26/08/05 00:45:41] ( ZTPXPRINT 2: $tcp. )
+       OPERATION3:[26/08/05 00:27:47] ( AUX3 disconnect )
+       OPERATION4:[26/08/05 00:23:03] ( LOAD using.rcc )
+       OPERATION5:[26/08/05 00:21:43] ( LOAD using.rcc )
+       OPERATION6:[26/08/05 00:21:33] ( LOAD using.rcc )
+       OPERATION7:[26/08/05 00:21:27] ( LOAD using.rcc )
+       OPERATION8:[26/08/05 00:21:27] ( TYPE TASK (1) )
+       OPERATION9:[26/08/05 00:21:25] ( KILL )
+       PC1 PROGRAM: watchdog.pc Step No: 57 STATUS: WAIT
+       PC2 PROGRAM: tcp.client.pc Step No: 23 STATUS: RUN
+       PC3 PROGRAM: tcp.send.pc Step No: 19 STATUS: WAIT
+       PC5 PROGRAM: errstart.pc Step No: 9 STATUS: STOP
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+        -15.276    35.531   -62.789    18.558   -76.801   122.006
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+        -15.276    35.531   -62.789    18.558   -76.801   122.006
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+        -15.276    35.531   -62.789    18.558   -76.801   122.006
+------------------------------------------------------------------------------
+  10 - [26/08/04 23:12:56 SIGNAL:00 MON.SPEED : 5 REPEAT mode]
+       (E1128)Uncoincidence error betw destination and current jt 6 pos.
+       OPERATION1:[26/08/04 23:12:54] ( CYCLE START )
+       OPERATION2:[26/08/04 23:12:53] ( ALLERESET )
+       OPERATION3:[26/08/04 23:12:49] ( CYCLE START )
+       OPERATION4:[26/08/04 23:12:48] ( PRIME test.ot.full )
+       OPERATION5:[26/08/04 23:12:41] ( ALLERESET )
+       OPERATION6:[26/08/04 23:12:38] ( CYCLE START )
+       OPERATION7:[26/08/04 23:12:33] ( PRIME test.ot.full )
+       OPERATION8:[26/08/04 23:12:29] ( TEACH->REPEAT )
+       OPERATION9:[26/08/04 23:12:29] ( Motor power ON )
+       ROBOT1:
+        PROGRAM:a.test.ot.pick Step:20 Cur_Step:21 STATUS:RUN
+        Interpolation Type:LINEAR  S_parameter:0.000000
+       PC1 PROGRAM: watchdog.pc Step No: 57 STATUS: WAIT
+       PC2 PROGRAM: tcp.client.pc Step No: 33 STATUS: RUN
+       PC3 PROGRAM: tcp.send.pc Step No: 19 STATUS: WAIT
+       PC5 PROGRAM: errstart.pc Step No: 9 STATUS: STOP
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+        -16.476    37.408   -65.634    18.903   -71.947  -238.414
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+        -16.476    37.409   -65.634    18.901   -71.950  -238.415
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+        -16.476    37.409   -65.634    18.901   -71.950   121.585
+------------------------------------------------------------------------------
+  11 - [26/08/04 23:12:51 SIGNAL:00 MON.SPEED : 5 REPEAT mode]
+       (E1118)Command value for Jt6 suddenly changed.
+       OPERATION1:[26/08/04 23:12:49] ( CYCLE START )
+       OPERATION2:[26/08/04 23:12:48] ( PRIME test.ot.full )
+       OPERATION3:[26/08/04 23:12:41] ( ALLERESET )
+       OPERATION4:[26/08/04 23:12:38] ( CYCLE START )
+       OPERATION5:[26/08/04 23:12:33] ( PRIME test.ot.full )
+       OPERATION6:[26/08/04 23:12:29] ( TEACH->REPEAT )
+       OPERATION7:[26/08/04 23:12:29] ( Motor power ON )
+       OPERATION8:[26/08/04 23:12:26] ( REPEAT->TEACH )
+       OPERATION9:[26/08/04 23:12:22] ( hmi.g180y = 15.000 )
+       ROBOT1:
+        PROGRAM:a.test.ot.pick Step:20 Cur_Step:21 STATUS:RUN
+        Interpolation Type:LINEAR  S_parameter:0.487465
+       PC1 PROGRAM: watchdog.pc Step No: 57 STATUS: WAIT
+       PC2 PROGRAM: tcp.client.pc Step No: 33 STATUS: RUN
+       PC3 PROGRAM: tcp.send.pc Step No: 19 STATUS: WAIT
+       PC5 PROGRAM: errstart.pc Step No: 9 STATUS: STOP
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+        -16.135    38.177   -60.059    18.493   -76.608  -354.377
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+        -16.205    38.227   -60.020    18.487   -76.573  -359.152
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+        -16.476    37.409   -65.634    18.901   -71.950   121.585
+------------------------------------------------------------------------------
+  12 - [26/08/04 23:12:40 SIGNAL:00 MON.SPEED : 5 REPEAT mode]
+       (E1118)Command value for Jt6 suddenly changed.
+       OPERATION1:[26/08/04 23:12:38] ( CYCLE START )
+       OPERATION2:[26/08/04 23:12:33] ( PRIME test.ot.full )
+       OPERATION3:[26/08/04 23:12:29] ( TEACH->REPEAT )
+       OPERATION4:[26/08/04 23:12:29] ( Motor power ON )
+       OPERATION5:[26/08/04 23:12:26] ( REPEAT->TEACH )
+       OPERATION6:[26/08/04 23:12:22] ( hmi.g180y = 15.000 )
+       OPERATION7:[26/08/04 23:12:17] ( ALLERESET )
+       OPERATION8:[26/08/04 23:11:57] ( CYCLE START )
+       OPERATION9:[26/08/04 23:11:56] ( Motor power ON )
+       ROBOT1:
+        PROGRAM:a.test.ot.pick Step:20 Cur_Step:21 STATUS:RUN
+        Interpolation Type:LINEAR  S_parameter:0.487465
+       PC1 PROGRAM: watchdog.pc Step No: 57 STATUS: WAIT
+       PC2 PROGRAM: tcp.client.pc Step No: 70 STATUS: WAIT
+       PC3 PROGRAM: tcp.send.pc Step No: 19 STATUS: WAIT
+       PC5 PROGRAM: errstart.pc Step No: 9 STATUS: STOP
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+        -15.719    37.779   -60.415    18.519   -76.774  -326.149
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+        -16.205    38.227   -60.020    18.487   -76.573  -359.152
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+        -16.476    37.409   -65.634    18.901   -71.950   121.585
+------------------------------------------------------------------------------
+  13 - [26/08/04 23:12:15 SIGNAL:00 MON.SPEED : 5 REPEAT mode]
+       (E1128)Uncoincidence error betw destination and current jt 6 pos.
+       OPERATION1:[26/08/04 23:11:57] ( CYCLE START )
+       OPERATION2:[26/08/04 23:11:56] ( Motor power ON )
+       OPERATION3:[26/08/04 23:11:56] ( Motor power ON )
+       OPERATION4:[26/08/04 23:11:56] ( TEACH->REPEAT )
+       OPERATION5:[26/08/04 23:11:56] ( Motor power ON )
+       OPERATION6:[26/08/04 23:11:54] ( PRIME test.ot.full )
+       OPERATION7:[26/08/04 23:11:48] ( REPEAT->TEACH )
+       OPERATION8:[26/08/04 23:11:12] ( Motor power ON )
+       OPERATION9:[26/08/04 23:11:12] ( EMERGENCY STOP )
+       ROBOT1:
+        PROGRAM:a.test.ot.pick Step:63 Cur_Step:64 STATUS:RUN
+        Interpolation Type:LINEAR  S_parameter:0.000000
+       PC1 PROGRAM: watchdog.pc Step No: 57 STATUS: WAIT
+       PC2 PROGRAM: tcp.client.pc Step No: 33 STATUS: RUN
+       PC3 PROGRAM: tcp.send.pc Step No: 19 STATUS: WAIT
+       PC5 PROGRAM: errstart.pc Step No: 9 STATUS: STOP
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+         15.216    22.484  -100.107    -0.101   -57.741  -171.981
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+         15.216    22.484  -100.107    -0.098   -57.744  -171.976
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+         15.216    22.484  -100.107    -0.098   -57.744   188.024
+------------------------------------------------------------------------------
+  14 - [26/08/04 23:05:43 SIGNAL:00 MON.SPEED : 5 REPEAT mode]
+       (E1118)Command value for Jt6 suddenly changed.
+       OPERATION1:[26/08/04 23:05:38] ( CYCLE START )
+       OPERATION2:[26/08/04 23:05:38] ( Motor power ON )
+       OPERATION3:[26/08/04 23:05:37] ( ALLERESET )
+       OPERATION4:[26/08/04 23:05:32] ( CYCLE START )
+       OPERATION5:[26/08/04 23:05:32] ( ALLERESET )
+       OPERATION6:[26/08/04 23:05:27] ( CYCLE START )
+       OPERATION7:[26/08/04 23:05:22] ( ALLERESET )
+       OPERATION8:[26/08/04 23:05:17] ( STP_ONCE OFF )
+       OPERATION9:[26/08/04 23:05:14] ( CYCLE START )
+       ROBOT1:
+        PROGRAM:a.test.ot.pick Step:18 Cur_Step:19 STATUS:RUN
+        Interpolation Type:JOINT  S_parameter:0.999116
+       PC1 PROGRAM: watchdog.pc Step No: 57 STATUS: WAIT
+       PC2 PROGRAM: tcp.client.pc Step No: 33 STATUS: RUN
+       PC3 PROGRAM: tcp.send.pc Step No: 19 STATUS: WAIT
+       PC5 PROGRAM: errstart.pc Step No: 9 STATUS: STOP
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+        -13.836    25.655   -69.866     0.208   -84.727    36.576
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+        -13.828    25.654   -69.834     0.209   -84.773    36.997
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+        -15.276    35.531   -62.789    18.559   -76.801  -237.999
+------------------------------------------------------------------------------
+  15 - [26/08/04 23:05:35 SIGNAL:00 MON.SPEED : 5 REPEAT mode]
+       (E1128)Uncoincidence error betw destination and current jt 6 pos.
+       OPERATION1:[26/08/04 23:05:32] ( CYCLE START )
+       OPERATION2:[26/08/04 23:05:32] ( ALLERESET )
+       OPERATION3:[26/08/04 23:05:27] ( CYCLE START )
+       OPERATION4:[26/08/04 23:05:22] ( ALLERESET )
+       OPERATION5:[26/08/04 23:05:17] ( STP_ONCE OFF )
+       OPERATION6:[26/08/04 23:05:14] ( CYCLE START )
+       OPERATION7:[26/08/04 23:05:05] ( PRIME test.ot.full )
+       OPERATION8:[26/08/04 23:05:02] ( LOAD using.rcc )
+       OPERATION9:[26/08/04 23:05:02] ( TYPE TASK (1) )
+       ROBOT1:
+        PROGRAM:a.test.ot.pick Step:0 Cur_Step:21 STATUS:STOP
+       PC1 PROGRAM: watchdog.pc Step No: 57 STATUS: WAIT
+       PC2 PROGRAM: tcp.client.pc Step No: 33 STATUS: RUN
+       PC3 PROGRAM: tcp.send.pc Step No: 19 STATUS: WAIT
+       PC5 PROGRAM: errstart.pc Step No: 9 STATUS: STOP
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+        -16.476    37.408   -65.634    18.903   -71.947  -238.412
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+        -16.476    37.409   -65.634    18.901   -71.950  -238.415
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+        -16.476    37.409   -65.634    18.901   -71.950   121.585
+------------------------------------------------------------------------------
+  16 - [26/08/04 23:05:30 SIGNAL:00 MON.SPEED : 5 REPEAT mode]
+       (E1118)Command value for Jt6 suddenly changed.
+       OPERATION1:[26/08/04 23:05:27] ( CYCLE START )
+       OPERATION2:[26/08/04 23:05:22] ( ALLERESET )
+       OPERATION3:[26/08/04 23:05:17] ( STP_ONCE OFF )
+       OPERATION4:[26/08/04 23:05:14] ( CYCLE START )
+       OPERATION5:[26/08/04 23:05:05] ( PRIME test.ot.full )
+       OPERATION6:[26/08/04 23:05:02] ( LOAD using.rcc )
+       OPERATION7:[26/08/04 23:05:02] ( TYPE TASK (1) )
+       OPERATION8:[26/08/04 23:05:00] ( KILL )
+       OPERATION9:[26/08/04 23:05:00] ( ABORT )
+       ROBOT1:
+        PROGRAM:a.test.ot.pick Step:0 Cur_Step:21 STATUS:STOP
+       PC1 PROGRAM: watchdog.pc Step No: 57 STATUS: WAIT
+       PC2 PROGRAM: tcp.client.pc Step No: 33 STATUS: RUN
+       PC3 PROGRAM: tcp.send.pc Step No: 19 STATUS: WAIT
+       PC5 PROGRAM: errstart.pc Step No: 9 STATUS: STOP
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+        -16.200    38.225   -60.023    18.486   -76.575  -358.744
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+        -16.205    38.227   -60.020    18.487   -76.573  -359.152
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+        -16.476    37.409   -65.634    18.901   -71.950   121.585
+------------------------------------------------------------------------------
+  17 - [26/08/04 23:05:20 SIGNAL:00 MON.SPEED : 5 REPEAT mode]
+       (E1118)Command value for Jt6 suddenly changed.
+       OPERATION1:[26/08/04 23:05:17] ( STP_ONCE OFF )
+       OPERATION2:[26/08/04 23:05:14] ( CYCLE START )
+       OPERATION3:[26/08/04 23:05:05] ( PRIME test.ot.full )
+       OPERATION4:[26/08/04 23:05:02] ( LOAD using.rcc )
+       OPERATION5:[26/08/04 23:05:02] ( TYPE TASK (1) )
+       OPERATION6:[26/08/04 23:05:00] ( KILL )
+       OPERATION7:[26/08/04 23:05:00] ( ABORT )
+       OPERATION8:[26/08/04 23:05:00] ( Motor power ON )
+       OPERATION9:[26/08/04 23:05:00] ( ZPOW OFF )
+       ROBOT1:
+        PROGRAM:a.test.ot.pick Step:0 Cur_Step:19 STATUS:STOP
+       PC1 PROGRAM: watchdog.pc Step No: 57 STATUS: WAIT
+       PC2 PROGRAM: tcp.client.pc Step No: 33 STATUS: RUN
+       PC3 PROGRAM: tcp.send.pc Step No: 19 STATUS: WAIT
+       PC5 PROGRAM: errstart.pc Step No: 9 STATUS: STOP
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+        -15.184    18.413   -79.663     0.222   -82.194    38.301
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+        -15.184    18.412   -79.662     0.223   -82.199    38.342
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+        -15.276    35.531   -62.789    18.559   -76.801  -237.999
+------------------------------------------------------------------------------
+  18 - [26/08/04 22:10:46 SIGNAL:00 MON.SPEED : 100 TEACH mode]
+       (E0102)Variable is not defined.
+       OPERATION1:[26/08/04 22:10:36] ( Motor power ON )
+       OPERATION2:[26/08/04 22:10:30] ( layout = 1 )
+       OPERATION3:[26/08/04 22:10:15] ( LOAD using.rcc )
+       OPERATION4:[26/08/04 22:10:00] ( layout = 2 )
+       OPERATION5:[26/08/04 22:09:51] ( layout = 1 )
+       OPERATION6:[26/08/04 22:09:43] ( REPEAT->TEACH )
+       OPERATION7:[26/08/04 22:09:15] ( LOAD using.rcc )
+       OPERATION8:[26/08/04 22:09:15] ( TYPE TASK (1) )
+       OPERATION9:[26/08/04 22:09:14] ( KILL )
+       ROBOT1:
+        PROGRAM:select.layout Step:0 Cur_Step:9 STATUS:STOP
+       PC1 PROGRAM: watchdog.pc Step No: 57 STATUS: WAIT
+       PC2 PROGRAM: tcp.client.pc Step No: 33 STATUS: RUN
+       PC3 PROGRAM: tcp.send.pc Step No: 19 STATUS: WAIT
+       PC5 PROGRAM: errstart.pc Step No: 9 STATUS: STOP
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+         13.751   -37.185  -123.196    -0.001   -93.838     7.314
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+         13.751   -37.185  -123.196    -0.001   -93.838     7.314
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+         13.751   -37.185  -123.196    -0.001   -93.838     7.314
+------------------------------------------------------------------------------
+  19 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (D2082)Failed to recover program automatically.
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  20 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. watchdog.pc
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  21 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (D2082)Failed to recover program automatically.
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  22 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. test
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  23 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (D2082)Failed to recover program automatically.
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  24 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. tcp.sender.pc
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  25 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (D2082)Failed to recover program automatically.
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  26 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. tcp.send.pc
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  27 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (D2082)Failed to recover program automatically.
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  28 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. tcp.log.pc
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  29 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (D2082)Failed to recover program automatically.
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  30 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. tcp.client.pc
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  31 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (D2082)Failed to recover program automatically.
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  32 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. tcp.callback.pc
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  33 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (D2082)Failed to recover program automatically.
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  34 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. state8
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  35 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (D2082)Failed to recover program automatically.
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  36 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. state7
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  37 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (D2082)Failed to recover program automatically.
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  38 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. state6
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  39 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (D2082)Failed to recover program automatically.
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  40 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. state5
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  41 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (D2082)Failed to recover program automatically.
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  42 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. state4
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  43 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (D2082)Failed to recover program automatically.
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  44 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. state3
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  45 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (D2082)Failed to recover program automatically.
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  46 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. state255
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  47 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (D2082)Failed to recover program automatically.
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  48 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. state2
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  49 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (D2082)Failed to recover program automatically.
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  50 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. state106
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  51 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (D2082)Failed to recover program automatically.
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  52 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. state105
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  53 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (D2082)Failed to recover program automatically.
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  54 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. state104
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  55 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (D2082)Failed to recover program automatically.
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  56 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. state103
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  57 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (D2082)Failed to recover program automatically.
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  58 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. state102
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  59 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (D2082)Failed to recover program automatically.
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  60 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. state101
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  61 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (D2082)Failed to recover program automatically.
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  62 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. state100
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  63 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (D2082)Failed to recover program automatically.
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  64 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. state1
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  65 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (D2082)Failed to recover program automatically.
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  66 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. state0
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  67 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (D2082)Failed to recover program automatically.
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  68 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. ship.pos
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  69 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (D2082)Failed to recover program automatically.
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  70 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. set.vars.pc
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  71 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (D2082)Failed to recover program automatically.
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  72 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. set.io.pc
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  73 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (D2082)Failed to recover program automatically.
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  74 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. set.grip.tree
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  75 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (D2082)Failed to recover program automatically.
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  76 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. safe.home
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  77 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (D2082)Failed to recover program automatically.
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  78 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. pos.pick
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  79 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (D2082)Failed to recover program automatically.
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  80 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. pg0
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  81 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (D2082)Failed to recover program automatically.
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  82 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. pg.select
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  83 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (D2082)Failed to recover program automatically.
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  84 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. ot.put
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  85 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (D2082)Failed to recover program automatically.
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  86 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. measure
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  87 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (D2082)Failed to recover program automatically.
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  88 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. log.pc2
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  89 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (D2082)Failed to recover program automatically.
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  90 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. log.pc1
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  91 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (D2082)Failed to recover program automatically.
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  92 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. log
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  93 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (D2082)Failed to recover program automatically.
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  94 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. layout1
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  95 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (D2082)Failed to recover program automatically.
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  96 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. layout0
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  97 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (D2082)Failed to recover program automatically.
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  98 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. id6
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+  99 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (D2082)Failed to recover program automatically.
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+ 100 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. id5
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+ 101 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (D2082)Failed to recover program automatically.
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+ 102 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. id4
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+ 103 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (D2082)Failed to recover program automatically.
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+ 104 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. id3
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+ 105 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (D2082)Failed to recover program automatically.
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+ 106 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. id2
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+ 107 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (D2082)Failed to recover program automatically.
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+ 108 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. id1
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+ 109 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (D2082)Failed to recover program automatically.
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+ 110 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. gripper.put
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+ 111 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (D2082)Failed to recover program automatically.
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+ 112 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. gripper.pick
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+ 113 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (D2082)Failed to recover program automatically.
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+ 114 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. get.state.pc
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+ 115 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (D2082)Failed to recover program automatically.
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+ 116 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. get.ot.point.ol
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+ 117 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (D2082)Failed to recover program automatically.
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+ 118 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. get.ot.point
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+ 119 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (D2082)Failed to recover program automatically.
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+ 120 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. etalon.measure
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+ 121 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (D2082)Failed to recover program automatically.
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+ 122 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. errstart.pc
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+ 123 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (D2082)Failed to recover program automatically.
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+ 124 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. defect.put
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+ 125 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (D2082)Failed to recover program automatically.
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+ 126 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. comment___
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+ 127 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (D2082)Failed to recover program automatically.
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+ 128 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. check.zone.pc
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+ 129 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (D2082)Failed to recover program automatically.
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+ 130 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. check.teach.pc
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+ 131 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (D2082)Failed to recover program automatically.
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+ 132 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. check.tasks.pc
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+ 133 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (D2082)Failed to recover program automatically.
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+ 134 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. check.disp.pc
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+ 135 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (D2082)Failed to recover program automatically.
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+ 136 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. calc.ot.old
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+ 137 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (D2082)Failed to recover program automatically.
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+ 138 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. calc.ot
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+ 139 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (D2082)Failed to recover program automatically.
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+ 140 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. calc.grid.rnd
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+ 141 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (D2082)Failed to recover program automatically.
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+ 142 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. calc.grid
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+ 143 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (D2082)Failed to recover program automatically.
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+ 144 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. autostart.pc
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+ 145 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (D2082)Failed to recover program automatically.
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+ 146 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. a.test.ot.pick
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+ 147 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (D2082)Failed to recover program automatically.
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+ 148 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. a.test.ot
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+ 149 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (D2082)Failed to recover program automatically.
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+ 150 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. a.test.gripper
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+ 151 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (D2082)Failed to recover program automatically.
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+ 152 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. a.teach.pos
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+ 153 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (D2082)Failed to recover program automatically.
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+ 154 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. a.teach.ot
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+ 155 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (D2082)Failed to recover program automatically.
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+ 156 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. a.teach.machine
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+ 157 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (D2082)Failed to recover program automatically.
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+ 158 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. a.teach.gripper
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+ 159 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (D2082)Failed to recover program automatically.
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+ 160 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. a.teach.etalon
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+ 161 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (D2082)Failed to recover program automatically.
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+ 162 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. a.teach.defect
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+ 163 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (D2082)Failed to recover program automatically.
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+ 164 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. a.main
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+ 165 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (D2082)Failed to recover program automatically.
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+ 166 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. a.home
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+ 167 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (D2082)Failed to recover program automatically.
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
+ 168 - [26/08/04 22:07:01 SIGNAL:00 MON.SPEED : 10 TEACH mode]
+       (E0909)Program data file in CFast is broken. a.align
+       OPERATION1:[26/08/04 22:06:59] ( Control Power ON )
+       OPERATION2:[04/01/10 22:37:04] (  )
+       OPERATION3:[04/01/10 22:37:04] (  )
+       OPERATION4:[04/01/10 22:37:04] (  )
+       OPERATION5:[04/08/04 06:13:36] (  )
+       OPERATION6:[04/08/04 06:13:36] (  )
+       Current Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       Command Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+       End Pose
+         JT1       JT2       JT3       JT4       JT5       JT6  
+          0.000     0.000     0.000     0.000     0.000     0.000
+------------------------------------------------------------------------------
 .END
-.PROGRAM a.align()@26/07/30 01:25 #0
+.TP_TASK_SEQ
+COMM  0, 0, 0
+TPMA  0, 3, 3
+MFP_  0, 3, 3
+DTL_  0, 3, 3
+TPFLT  0, 0, 0
+DRAW_LOCK  0
+SEQ_LOCK   0
+ICOM_WRITE[0]  0
+ICOM_WRITE[1]  0
+ICOM_WRITE[2]  0
+ICOM_WRITE[3]  0
+ICOM_WRITE[4]  0
+ICOM_WRITE[5]  0
+ICOM_WRITE[6]  2
+ICOM_READ[0]   0
+ICOM_READ[1]   0
+ICOM_READ[2]   0
+ICOM_READ[3]   2
+ICOM_READ[4]   2
+ICOM_READ[5]   2
+ICOM_READ[6]   2
+TP_RELOAD_CNT    0
+TP_SEM_ERROR_CNT    0
+.END
+.ENCTEMPLOG
+=== MIN(deg C) ===
+  JT1  - [26/08/04 22:07:12]      0.000
+  JT2  - [26/08/04 22:07:12]      0.000
+  JT3  - [26/08/04 22:07:12]      0.000
+  JT4  - [26/08/04 22:07:12]      0.000
+  JT5  - [26/08/04 22:07:12]      0.000
+  JT6  - [26/08/04 22:07:12]      0.000
+=== MAX(deg C) ===
+  JT1  - [26/08/04 22:07:12]      0.000
+  JT2  - [26/08/04 22:07:12]      0.000
+  JT3  - [26/08/04 22:07:12]      0.000
+  JT4  - [26/08/04 22:07:12]      0.000
+  JT5  - [26/08/04 22:07:12]      0.000
+  JT6  - [26/08/04 22:07:12]      0.000
+.END
+.REDUCTIONGEAR_LOG
+SUM_JT1_t01_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t01_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t01_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t01_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t01_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t01_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t01_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t01_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t01_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t01_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t01_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t02_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t02_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t02_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t02_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t02_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t02_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t02_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t02_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t02_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t02_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t02_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t03_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t03_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t03_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t03_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t03_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t03_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t03_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t03_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t03_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t03_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t03_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t04_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t04_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t04_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t04_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t04_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t04_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t04_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t04_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t04_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t04_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t04_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t05_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t05_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t05_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t05_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t05_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t05_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t05_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t05_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t05_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t05_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t05_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t06_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t06_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t06_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t06_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t06_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t06_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t06_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t06_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t06_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t06_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t06_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t07_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t07_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t07_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t07_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t07_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t07_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t07_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t07_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t07_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t07_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t07_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t08_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t08_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t08_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t08_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t08_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t08_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t08_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t08_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t08_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t08_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t08_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t09_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t09_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t09_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t09_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t09_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t09_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t09_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t09_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t09_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t09_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t09_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t10_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t10_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t10_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t10_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t10_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t10_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t10_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t10_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t10_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t10_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t10_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t11_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t11_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t11_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t11_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t11_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t11_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t11_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t11_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t11_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t11_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT1_t11_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t01_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t01_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t01_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t01_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t01_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t01_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t01_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t01_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t01_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t01_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t01_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t02_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t02_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t02_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t02_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t02_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t02_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t02_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t02_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t02_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t02_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t02_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t03_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t03_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t03_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t03_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t03_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t03_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t03_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t03_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t03_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t03_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t03_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t04_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t04_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t04_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t04_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t04_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t04_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t04_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t04_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t04_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t04_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t04_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t05_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t05_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t05_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t05_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t05_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t05_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t05_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t05_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t05_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t05_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t05_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t06_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t06_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t06_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t06_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t06_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t06_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t06_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t06_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t06_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t06_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t06_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t07_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t07_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t07_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t07_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t07_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t07_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t07_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t07_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t07_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t07_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t07_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t08_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t08_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t08_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t08_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t08_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t08_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t08_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t08_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t08_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t08_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t08_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t09_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t09_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t09_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t09_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t09_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t09_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t09_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t09_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t09_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t09_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t09_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t10_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t10_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t10_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t10_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t10_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t10_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t10_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t10_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t10_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t10_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t10_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t11_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t11_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t11_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t11_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t11_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t11_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t11_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t11_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t11_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t11_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT2_t11_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t01_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t01_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t01_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t01_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t01_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t01_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t01_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t01_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t01_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t01_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t01_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t02_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t02_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t02_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t02_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t02_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t02_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t02_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t02_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t02_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t02_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t02_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t03_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t03_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t03_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t03_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t03_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t03_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t03_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t03_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t03_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t03_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t03_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t04_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t04_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t04_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t04_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t04_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t04_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t04_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t04_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t04_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t04_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t04_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t05_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t05_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t05_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t05_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t05_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t05_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t05_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t05_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t05_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t05_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t05_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t06_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t06_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t06_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t06_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t06_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t06_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t06_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t06_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t06_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t06_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t06_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t07_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t07_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t07_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t07_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t07_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t07_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t07_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t07_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t07_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t07_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t07_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t08_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t08_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t08_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t08_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t08_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t08_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t08_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t08_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t08_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t08_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t08_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t09_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t09_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t09_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t09_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t09_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t09_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t09_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t09_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t09_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t09_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t09_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t10_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t10_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t10_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t10_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t10_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t10_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t10_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t10_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t10_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t10_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t10_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t11_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t11_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t11_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t11_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t11_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t11_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t11_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t11_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t11_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t11_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT3_t11_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t01_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t01_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t01_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t01_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t01_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t01_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t01_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t01_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t01_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t01_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t01_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t02_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t02_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t02_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t02_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t02_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t02_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t02_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t02_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t02_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t02_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t02_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t03_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t03_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t03_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t03_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t03_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t03_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t03_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t03_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t03_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t03_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t03_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t04_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t04_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t04_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t04_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t04_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t04_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t04_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t04_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t04_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t04_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t04_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t05_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t05_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t05_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t05_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t05_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t05_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t05_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t05_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t05_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t05_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t05_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t06_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t06_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t06_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t06_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t06_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t06_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t06_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t06_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t06_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t06_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t06_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t07_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t07_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t07_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t07_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t07_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t07_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t07_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t07_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t07_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t07_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t07_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t08_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t08_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t08_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t08_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t08_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t08_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t08_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t08_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t08_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t08_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t08_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t09_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t09_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t09_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t09_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t09_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t09_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t09_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t09_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t09_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t09_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t09_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t10_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t10_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t10_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t10_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t10_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t10_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t10_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t10_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t10_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t10_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t10_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t11_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t11_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t11_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t11_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t11_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t11_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t11_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t11_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t11_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t11_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT4_t11_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t01_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t01_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t01_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t01_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t01_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t01_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t01_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t01_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t01_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t01_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t01_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t02_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t02_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t02_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t02_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t02_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t02_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t02_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t02_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t02_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t02_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t02_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t03_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t03_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t03_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t03_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t03_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t03_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t03_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t03_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t03_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t03_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t03_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t04_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t04_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t04_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t04_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t04_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t04_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t04_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t04_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t04_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t04_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t04_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t05_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t05_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t05_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t05_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t05_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t05_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t05_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t05_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t05_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t05_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t05_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t06_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t06_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t06_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t06_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t06_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t06_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t06_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t06_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t06_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t06_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t06_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t07_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t07_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t07_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t07_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t07_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t07_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t07_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t07_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t07_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t07_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t07_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t08_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t08_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t08_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t08_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t08_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t08_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t08_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t08_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t08_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t08_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t08_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t09_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t09_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t09_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t09_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t09_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t09_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t09_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t09_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t09_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t09_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t09_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t10_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t10_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t10_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t10_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t10_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t10_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t10_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t10_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t10_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t10_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t10_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t11_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t11_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t11_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t11_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t11_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t11_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t11_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t11_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t11_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t11_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT5_t11_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t01_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t01_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t01_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t01_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t01_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t01_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t01_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t01_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t01_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t01_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t01_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t02_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t02_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t02_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t02_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t02_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t02_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t02_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t02_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t02_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t02_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t02_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t03_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t03_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t03_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t03_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t03_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t03_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t03_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t03_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t03_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t03_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t03_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t04_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t04_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t04_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t04_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t04_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t04_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t04_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t04_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t04_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t04_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t04_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t05_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t05_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t05_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t05_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t05_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t05_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t05_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t05_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t05_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t05_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t05_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t06_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t06_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t06_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t06_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t06_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t06_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t06_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t06_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t06_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t06_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t06_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t07_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t07_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t07_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t07_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t07_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t07_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t07_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t07_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t07_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t07_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t07_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t08_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t08_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t08_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t08_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t08_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t08_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t08_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t08_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t08_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t08_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t08_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t09_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t09_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t09_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t09_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t09_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t09_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t09_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t09_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t09_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t09_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t09_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t10_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t10_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t10_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t10_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t10_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t10_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t10_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t10_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t10_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t10_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t10_v11    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t11_v01    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t11_v02    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t11_v03    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t11_v04    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t11_v05    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t11_v06    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t11_v07    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t11_v08    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t11_v09    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t11_v10    0 0 0 0 0 0 0 0 0 0 0 
+SUM_JT6_t11_v11    0 0 0 0 0 0 0 0 0 0 0 
+.END
+.FLTLOG
+=== USERAS FAULT LOG ===
+=== USERTP FAULT LOG ===
+=== ARMAS  FAULT LOG ===
+.END
+.PROGRAM a.align()@26/08/04 22:06 #0
 ;
   SPEED 250 MM/S ALWAYS
   ALIGN
 ;
 .END
-.PROGRAM a.home()@26/07/30 01:25 #0
+.PROGRAM a.home()@26/08/04 22:06 #0
 ;
   SPEED 250 MM/S ALWAYS
   JMOVE #homyak
 ;
 .END
-.PROGRAM a.main()@26/07/30 01:21 #0
+.PROGRAM a.main()@26/08/04 22:06 #0
 ;
   CALL log("Main program executed")
   CALL safe.home
@@ -3510,7 +7254,7 @@ TP_RECINHI      0   0   0
   END
 ;
 .END
-.PROGRAM a.teach.defect()@26/07/30 01:25 #0
+.PROGRAM a.teach.defect()@26/08/04 22:06 #0
   IF FALSE THEN
     SPEED 250 MM/S ALWAYS
     ACCURACY 0 ALWAYS
@@ -3557,7 +7301,7 @@ TP_RECINHI      0   0   0
   LAPPRO .defect.pos,-defect.h.cor
   LAPPRO .defect.pos,-(30+defect.h.cor)
 .END
-.PROGRAM a.teach.etalon()@26/07/30 01:25 #0
+.PROGRAM a.teach.etalon()@26/08/04 22:06 #0
 ;
   TOOL tool.pick[hmi.tool.no]
 ;
@@ -3633,7 +7377,7 @@ TP_RECINHI      0   0   0
   LMOVE #et.pos.point[hmi.etalon.id]
   LMOVE .et.pos.point+TRANS(0,0,50)
 .END
-.PROGRAM a.teach.gripper()@26/07/30 01:25 #0
+.PROGRAM a.teach.gripper()@26/08/04 22:06 #0
 ;
   TOOL tool.pick[hmi.gripper]
 ;
@@ -3666,7 +7410,7 @@ TP_RECINHI      0   0   0
   LMOVE .temp+TRANS(0,0,200)
 ;
 .END
-.PROGRAM a.teach.machine()@26/07/30 01:25 #0
+.PROGRAM a.teach.machine()@26/08/04 22:06 #0
   IF FALSE THEN ; For round details
     TOOL tool.pick[hmi.tool.no]
     JMOVE #safe.machine
@@ -3699,7 +7443,7 @@ TP_RECINHI      0   0   0
     LMOVE #before.machine[1]
   END
 .END
-.PROGRAM a.teach.ot()@26/07/30 01:25 #0
+.PROGRAM a.teach.ot()@26/08/04 22:06 #0
   SPEED 250 MM/S ALWAYS
   ACCURACY 0 ALWAYS
   TOOL tool.pick[hmi.tool.no]
@@ -3720,7 +7464,7 @@ TP_RECINHI      0   0   0
 ;
 ;JMOVE ot.frame + TRANS (grip.xsh[hmi.tool.no], grip.ysh[hmi.tool.no], grip.zsh[hmi.tool.no])
 .END
-.PROGRAM a.teach.pos()@26/07/30 01:25 #0
+.PROGRAM a.teach.pos()@26/08/04 22:06 #0
 ;
   IF hmi.obj.id==round.no THEN
     .shift.x = 0
@@ -3750,38 +7494,50 @@ TP_RECINHI      0   0   0
   TWAIT 0.5
 ;
 .END
-.PROGRAM a.test.gripper()@26/07/30 01:25 #0
+.PROGRAM a.test.gripper()@26/08/04 22:06 #0
 ;
   CALL gripper.pick(hmi.gripper)
   CALL gripper.put(hmi.gripper)
 ; detail.type
 .END
-.PROGRAM a.test.ot()@26/07/30 01:25 #0
+.PROGRAM a.test.ot()@26/08/04 23:49 #0
   IF hmi.ot.k<>-1 THEN
     .$pg = "id"+$ENCODE(/L,hmi.obj.id)
     SCALL .$pg
+    CALL select.layout
     IF hmi.obj.id<>round.no THEN
       CALL calc.grid
     ELSE
       CALL calc.grid.rnd
     END
-    CALL calc.ot
+    CALL sort.grid
     CALL get.ot.point(hmi.ot.k)
   END
   .x = grip.xsh[hmi.obj.id]
   .y = grip.ysh[hmi.obj.id]
   .z = grip.zsh[hmi.obj.id]
-  IF object.id<>round.no AND ot.y MOD 2<>0 AND SIG(s.opt.flip) THEN
+  .rz = 0
+  IF object.id<>round.no AND ot.y MOD 2<>0 AND SIG(s.ot.flip) THEN
     .x = grip.180xsh[hmi.obj.id]
     .y = grip.180ysh[hmi.obj.id]
+    .rz = 180
   END
 ;
   POINT .put = ot.put[ot.x,ot.y]+TRANS(.x,.y,.z)
-  LAPPRO .put,-50
-  LMOVE .put
-  LAPPRO .put,-50
+  POINT .putr = ot.put[ot.x,ot.y]+RZ(.rz)+TRANS(.x,.y,.z)
+  POINT .putr2 = ot.put[ot.x,ot.y]+RZ(.rz/2)+TRANS(.x,.y,.z)
+  LAPPRO .put,-200
+  BREAK
+  HERE .#temp
+  LAPPRO .putr2,-100
+  LAPPRO .putr,-50
+  LMOVE .putr
+  LAPPRO .putr,-50
+  LAPPRO .putr2,-100
+  LMOVE .#temp
+;
 .END
-.PROGRAM a.test.ot.pick()@26/07/30 01:25 #1
+.PROGRAM a.test.ot.pick()@26/08/04 23:14 #176
 ;
   IF hmi.obj.id==round.no THEN
     .shift.x = 0
@@ -3818,32 +7574,43 @@ TP_RECINHI      0   0   0
   IF hmi.ot.k<>-1 THEN
     .$pg = "id"+$ENCODE(/L,hmi.obj.id)
     SCALL .$pg
+    CALL select.layout
     IF hmi.obj.id<>round.no THEN
       CALL calc.grid
     ELSE
       CALL calc.grid.rnd
     END
-    CALL calc.ot
+    CALL sort.grid
     CALL get.ot.point(hmi.ot.k)
   END
   .x = grip.xsh[hmi.obj.id]
   .y = grip.ysh[hmi.obj.id]
   .z = grip.zsh[hmi.obj.id]
-  IF object.id<>round.no AND ot.y MOD 2<>0 AND SIG(s.opt.flip) THEN
+  .rz = 0
+  IF object.id<>round.no AND ot.y MOD 2<>0 AND SIG(s.ot.flip) THEN
     .x = grip.180xsh[hmi.obj.id]
     .y = grip.180ysh[hmi.obj.id]
+    .rz = 180
   END
 ;
   POINT .put = ot.put[ot.x,ot.y]+TRANS(.x,.y,.z)
-  LAPPRO .put,-50
-  LMOVE .put
+  POINT .putr = ot.put[ot.x,ot.y]+RZ(.rz)+TRANS(.x,.y,.z)
+  POINT .putr2 = ot.put[ot.x,ot.y]+RZ(.rz/2)+TRANS(.x,.y,.z)
+  LAPPRO .put,-200
+  BREAK
+  HERE .#temp
+  LAPPRO .putr2,-100
+  LAPPRO .putr,-50
+  LMOVE .putr
   TWAIT 0.1
   PULSE grip.unclamp
   TWAIT 0.3
+  LAPPRO .putr,-50
+  LAPPRO .putr2,-100
+  LMOVE .#temp
 ;
-  LAPPRO .put,-50
 .END
-.PROGRAM autostart.pc()@26/07/30 01:21 #0
+.PROGRAM autostart.pc()@26/08/04 22:06 #0
 ;
 ; System switches
   CP ON
@@ -3868,28 +7635,35 @@ TP_RECINHI      0   0   0
   CALL watchdog.pc
 ;
 .END
-.PROGRAM calc.grid()@26/07/30 01:25 #234
+.PROGRAM calc.grid()@26/08/04 23:54 #403
 ; Constants
   line.width = 210; 210; mm
   lines.count = 21
   lines.shift = 16; mm
   obj.spacer = 1.5; mm
 ;
-;.max = max.tare.count
+  .max = work.tare.count
 ;
-  .obj.len = object.length
-  .obj.len.w.spc = object.length+obj.spacer
-  obj.in.line = INT((line.width-obj.spacer)/.obj.len.w.spc);
+  IF NOT SIG(s.ot.spacer) THEN
+    .obj.len = object.length
+    .obj.len.w.spc = object.length+obj.spacer
+    obj.in.line = INT((line.width-obj.spacer)/.obj.len.w.spc);
+  ELSE
+    obj.in.line = .max/21
+    .obj.len.w.spc = line.width/obj.in.line
+    .$temp = "Detail \'length\':"+$ENCODE(.obj.len.w.spc)
+    CALL log(.$temp)
+  END
 ;
   IF current.ot MOD 2<>0 OR NOT SIG(s.enable.shift) THEN
-    chg.tare.count = max.tare.count
+    chg.tare.count = .max
     lines.count = 21
     .extra.x = 0
   ELSE
-    chg.tare.count = max.tare.count-obj.in.line
+    chg.tare.count = .max-obj.in.line
 ; in case of small values, we need at least one line!!!
-    IF chg.tare.count<0 THEN
-      chg.tare.count = max.tare.count
+    IF chg.tare.count<=0 THEN
+      chg.tare.count = .max
     END
     lines.count = 20
     .extra.x = lines.shift/2
@@ -3897,8 +7671,8 @@ TP_RECINHI      0   0   0
 ;
   .$temp = "Calc grid for"+$ENCODE(current.ot)+","+$ENCODE(lines.count)
   CALL log(.$temp)
-; If you need to put details by max.tare.count
-;obj.in.line = INT(max.tare.count/21);
+; If you need to put details by .max
+;obj.in.line = INT(.max/21);
 ;
   FOR .i = 0 TO lines.count-1
     FOR .j = 0 TO obj.in.line-1
@@ -3907,7 +7681,7 @@ TP_RECINHI      0   0   0
   END
 ;
 .END
-.PROGRAM calc.grid.rnd()@26/07/30 01:25 #41
+.PROGRAM calc.grid.rnd()@26/08/04 22:09 #48
 ; Constants
   lines.count = 11
   obj.in.line = 7
@@ -3916,7 +7690,7 @@ TP_RECINHI      0   0   0
   .max = 77
   .obj.shift = 27 ; mm
 ;
-  chg.tare.count = max.tare.count
+  chg.tare.count = work.tare.count
 ;
   .$temp = "Calc grid for"+$ENCODE(current.ot)+","+$ENCODE(lines.count)
   CALL log(.$temp)
@@ -3928,7 +7702,7 @@ TP_RECINHI      0   0   0
   END
 ;
 .END
-.PROGRAM calc.ot()@26/07/30 01:25 #296
+.PROGRAM calc.ot()@26/08/04 22:06 #296
 ;
   .$calc.pg = "layout"+$ENCODE(/L,layout)
   IF EXISTPGM(.$calc.pg) THEN
@@ -3940,7 +7714,7 @@ TP_RECINHI      0   0   0
   END
 ;
 .END
-.PROGRAM calc.ot.old()@26/07/30 01:21 #0
+.PROGRAM calc.ot.old()@26/08/04 22:06 #0
 ; Get matrix center
   .center.col = INT(lines.count/2)
   .center.row = INT(obj.in.line/2)
@@ -4030,7 +7804,7 @@ TP_RECINHI      0   0   0
 ;  PRINT .$line    ; печатаем всю строку одним вызовом
 ;END
 .END
-.PROGRAM check.disp.pc()@26/07/30 01:25 #100534516
+.PROGRAM check.disp.pc()@26/08/04 22:06 #102190945
 ;
   IF SIG(s.tcp.ena) AND tcp.ena==-1 THEN
     tcp.ena = tyterm
@@ -4054,7 +7828,7 @@ TP_RECINHI      0   0   0
   END
 ;
 .END
-.PROGRAM check.tasks.pc()@26/07/30 01:25 #100534527
+.PROGRAM check.tasks.pc()@26/08/04 22:06 #102190956
 ;
   IF TASK(1002)<>1 THEN
     PCEXECUTE 2: tcp.client.pc
@@ -4066,7 +7840,7 @@ TP_RECINHI      0   0   0
   END
 ;
 .END
-.PROGRAM check.teach.pc()@26/07/30 01:25 #20426132
+.PROGRAM check.teach.pc()@26/08/04 22:06 #20659825
 ;
   IF SIG(s.hmi.res.state) THEN
     state = 0
@@ -4133,7 +7907,7 @@ TP_RECINHI      0   0   0
   END
 ;
 .END
-.PROGRAM check.zone.pc()@26/07/30 01:25 #100534554
+.PROGRAM check.zone.pc()@26/08/04 22:06 #102190983
 ;
 ;do.work[1] = 17
 ;rs13.work[1] = 1017
@@ -4152,7 +7926,7 @@ TP_RECINHI      0   0   0
   SOUT 2009 = NOT (NOT 2209 AND 1017 AND 17)
 ;
 .END
-.PROGRAM comment___()@26/07/30 01:25 #0; Comments for IDE. Do not use.
+.PROGRAM comment___()@26/08/04 22:06 #0; Comments for IDE. Do not use.
 ; @@@ PROJECT @@@
 ; @@@ PROJECTNAME @@@
 ; ALKU_RS007L_MASTER
@@ -4683,7 +8457,7 @@ TP_RECINHI      0   0   0
 ; SIGNAME: sig1 sig2 sig3 sig4
 ; SIGDIM: % % % %
 .END
-.PROGRAM defect.put()@26/07/30 01:25 #921
+.PROGRAM defect.put()@26/08/04 22:06 #927
 ;
   IF count.defect>=max.defect.cnt THEN
     CALL log("Defect tare is full. Waiting for tare clean")
@@ -4735,7 +8509,7 @@ TP_RECINHI      0   0   0
   LMOVE #homyak
 ;
 .END
-.PROGRAM errstart.pc()@26/07/30 01:21 #1550
+.PROGRAM errstart.pc()@26/08/04 22:06 #1603
 ;
   IF ERROR==-34021 OR ERROR==-10100 THEN
     tcp.socket = -1
@@ -4746,7 +8520,7 @@ TP_RECINHI      0   0   0
   ERRSTART.PC ON
 ;
 .END
-.PROGRAM etalon.measure(.id)@26/07/30 01:25 #293
+.PROGRAM etalon.measure(.id)@26/08/04 22:06 #298
   IF FALSE THEN
     .id = hmi.etalon.id
   END
@@ -4913,11 +8687,11 @@ TP_RECINHI      0   0   0
   END
 ;
 .END
-.PROGRAM get.ot.point(.obj.id)@26/07/30 01:25 #3207
+.PROGRAM get.ot.point(.obj.id)@26/08/04 22:06 #3515
   ot.x = ms[.obj.id]
   ot.y = ns[.obj.id]
 .END
-.PROGRAM get.ot.point.ol(.obj.id)@26/07/30 01:21 #0
+.PROGRAM get.ot.point.ol(.obj.id)@26/08/04 22:06 #0
   IF object.id==pawn.no THEN
     ot.x = .obj.id MOD lines.count
     ot.y = INT(.obj.id/lines.count)
@@ -4926,7 +8700,7 @@ TP_RECINHI      0   0   0
   ot.x = ms[.obj.id]
   ot.y = ns[.obj.id]
 .END
-.PROGRAM get.state.pc(.$state)@26/07/30 01:25 #3134784
+.PROGRAM get.state.pc(.$state)@26/08/04 22:06 #3157100
   .$state = "SPEED:"+$ENCODE(/L,MSPEED)+";"
   .$state = .$state+"POWER:"
   IF SWITCH(POWER ) THEN
@@ -5013,7 +8787,7 @@ TP_RECINHI      0   0   0
 ; MAX 12
   .$state = .$state+"\n"
 .END
-.PROGRAM gripper.pick(.gripper.no)@26/07/30 01:25 #109
+.PROGRAM gripper.pick(.gripper.no)@26/08/04 22:06 #109
 ;
 ; Start from step 3 to manual check
   IF FALSE THEN
@@ -5063,7 +8837,7 @@ TP_RECINHI      0   0   0
   CALL log(.$temp)
 ;
 .END
-.PROGRAM gripper.put(.gripper.no)@26/07/30 01:25 #109
+.PROGRAM gripper.put(.gripper.no)@26/08/04 22:06 #109
 ;
 ; Start from step 3 to manual check
   IF FALSE THEN
@@ -5110,7 +8884,7 @@ TP_RECINHI      0   0   0
   BREAK
 ;
 .END
-.PROGRAM id1()@26/07/30 01:25 #187; 312.229.002
+.PROGRAM id1()@26/08/05 00:21 #223; 312.229.002
 ; Object ID
   object.id = 1
   etalon.id = 1 ; Can be object.id <> etalon.id
@@ -5118,16 +8892,13 @@ TP_RECINHI      0   0   0
   pg13.gripper = 2
   pg7.gripper = 1
 ; Max objects in output tare
-  max.tare.count = 147;126
-;
-  spc.tare.count = 50
+;max.tare.count = 147;126
+;spc.tare.count = 126
 ; Object length
   object.length = 27.5
 ;
-  direction = 1; -1 for reverse
-;
 .END
-.PROGRAM id2()@26/07/30 01:25 #26; 0401.17.02.023-02
+.PROGRAM id2()@26/08/05 00:21 #26; 0401.17.02.023-02
 ; Object ID
   object.id = 2
   etalon.id = 2 ; Can be object.id <> etalon.id
@@ -5135,15 +8906,13 @@ TP_RECINHI      0   0   0
   pg13.gripper = 1
   pg7.gripper = 1
 ; Max objects in output tare
-  max.tare.count = 105;84
-  spc.tare.count = 50
+;max.tare.count = 105;84
+;spc.tare.count = 84
 ; Object length
   object.length = 40
 ;
-  direction = 1; -1 for reverse
-;
 .END
-.PROGRAM id3()@26/07/30 01:25 #38; 312.229.001
+.PROGRAM id3()@26/08/05 00:21 #66; 312.229.001
 ; Object ID
   object.id = 3
   etalon.id = 3 ; Can be object.id <> etalon.id
@@ -5151,15 +8920,13 @@ TP_RECINHI      0   0   0
   pg13.gripper = 3
   pg7.gripper = 2
 ; Max objects in output tare
-  max.tare.count = 77
-  spc.tare.count = 77
+;max.tare.count = 77;77
+;spc.tare.count = 77
 ; Object length
   object.length = 40
 ;
-  direction = 1; -1 for reverse
-;
 .END
-.PROGRAM id4()@26/07/30 01:25 #18; 440.00.026
+.PROGRAM id4()@26/08/05 00:21 #52; 440.00.026
 ; Object ID
   object.id = 4
   etalon.id = 4 ; Can be object.id <> etalon.id
@@ -5167,15 +8934,13 @@ TP_RECINHI      0   0   0
   pg13.gripper = 1
   pg7.gripper = 1
 ; Max objects in output tare
-  max.tare.count = 168 ;147
-  spc.tare.count = 50
+;max.tare.count = 168 ;147
+;spc.tare.count = 147
 ; Object length
   object.length = 23.5
 ;
-  direction = 1; -1 for reverse
-;
 .END
-.PROGRAM id5()@26/07/30 01:25 #16; 440.00.111
+.PROGRAM id5()@26/08/05 00:21 #25; 440.00.111
 ; Object ID
   object.id = 5
   etalon.id = 5 ; Can be object.id <> etalon.id
@@ -5183,15 +8948,13 @@ TP_RECINHI      0   0   0
   pg13.gripper = 1
   pg7.gripper = 1
 ; Max objects in output tare
-  max.tare.count = 231 ;231
-  spc.tare.count = 50
+;max.tare.count = 231 ;231
+;spc.tare.count = 231
 ; Object length
   object.length = 16
 ;
-  direction = 1; -1 for reverse
-;
 .END
-.PROGRAM id6()@26/07/30 01:25 #43; 0401.28.02.063
+.PROGRAM id6()@26/08/05 00:21 #44; 0401.28.02.063
 ; Object ID
   object.id = 6
   etalon.id = 6 ; Can be object.id <> etalon.id
@@ -5199,15 +8962,13 @@ TP_RECINHI      0   0   0
   pg13.gripper = 1
   pg7.gripper = 1
 ; Max objects in output tare
-  max.tare.count = 126 ;126
-  spc.tare.count = 50
+;max.tare.count = 126 ;126
+;spc.tare.count = 126
 ; Object length
   object.length = 28.5
 ;
-  direction = 1; -1 for reverse
-;
 .END
-.PROGRAM layout0()@26/07/30 01:25 #178
+.PROGRAM layout0()@26/08/04 22:06 #178
 ; Get matrix center
   .center.col = INT(lines.count/2)
   .center.row = INT(obj.in.line/2)
@@ -5319,7 +9080,7 @@ TP_RECINHI      0   0   0
 ;  PRINT .$line    ; печатаем всю строку одним вызовом
 ;END
 .END
-.PROGRAM layout1()@26/07/30 01:25 #0
+.PROGRAM layout1()@26/08/04 22:06 #0
 ; Get matrix center
   .center.col = INT(lines.count/2)
   .center.row = INT(obj.in.line/2)
@@ -5409,7 +9170,7 @@ TP_RECINHI      0   0   0
 ;  PRINT .$line    ; печатаем всю строку одним вызовом
 ;END
 .END
-.PROGRAM log(.$msg)@26/07/30 01:25 #59960
+.PROGRAM log(.$msg)@26/08/04 22:06 #61234
 ;
 ; 1 line = 55 symbols max
 ;
@@ -5423,7 +9184,7 @@ TP_RECINHI      0   0   0
   IFPWPRINT 3,1,1,9,10=$log.entry[124],$log.entry[125],$log.entry[126],$log.entry[127]
 ;
 .END
-.PROGRAM log.pc1(.$msg)@26/07/30 01:25 #0
+.PROGRAM log.pc1(.$msg)@26/08/04 22:06 #0
 ;
 ; 1 line = 55 symbols max
 ;
@@ -5437,7 +9198,7 @@ TP_RECINHI      0   0   0
   IFPWPRINT 3,1,1,9,10=$log.entry[124],$log.entry[125],$log.entry[126],$log.entry[127]
 ;
 .END
-.PROGRAM log.pc2(.$msg)@26/07/30 01:25 #2018
+.PROGRAM log.pc2(.$msg)@26/08/04 22:06 #4480
 ;
 ; 1 line = 55 symbols max
 ;
@@ -5451,7 +9212,7 @@ TP_RECINHI      0   0   0
   IFPWPRINT 3,1,1,9,10=$log.entry[124],$log.entry[125],$log.entry[126],$log.entry[127]
 ;
 .END
-.PROGRAM measure()@26/07/30 01:25 #3817
+.PROGRAM measure()@26/08/04 22:06 #3861
   IF FALSE THEN
     .pos = hmi.obj.id
   END
@@ -5538,7 +9299,66 @@ TP_RECINHI      0   0   0
 ;JMOVE #safe.machine
 ;JMOVE #homyak
 .END
-.PROGRAM ot.put()@26/07/30 01:25 #2272
+.PROGRAM old.layout()@26/08/04 22:09 #0
+; Get matrix center
+  .center.col = INT(lines.count/2)
+  .center.row = INT(obj.in.line/2)
+; Get Manhattan distances matrix
+  .cell = 0
+;
+  FOR .i = 0 TO lines.count-1
+    FOR .j = 0 TO obj.in.line-1
+      .dist = ABS(.i-.center.col)+ABS(.j-.center.row)
+      .dists[.cell] = .dist
+      ms[.cell] = .i
+      ns[.cell] = .j
+      .cell = .cell+1
+    END
+  END
+  .array.size = .cell-1
+; Bubble sort distances array
+  FOR .i = 0 TO .array.size-1
+    FOR .j = 0 TO .array.size-.i-1
+; Compare by angular distances
+; I don't want to make it
+      IF .dists[.j]<>.dists[.j+1] THEN
+        .result = .dists[.j]-.dists[.j+1]
+      ELSE
+        .cornera = ABS(ms[.j]-.center.col)
+        IF ABS(ns[.j]-.center.row)>.cornera THEN
+          .cornera = ABS(ns[.j]-.center.row)
+        END
+        .cornerb = ABS(ms[.j+1]-.center.col)
+        IF ABS(ns[.j+1]-.center.row)>.cornerb THEN
+          .cornerb = ABS(ns[.j+1]-.center.row)
+        END
+        IF .cornera<>.cornerb THEN
+          .result = .cornera-.cornerb
+        ELSE
+          IF ms[.j]<>ms[.j+1] THEN
+            .result = ms[.j]-ms[.j+1]
+          ELSE
+            .result = ns[.j]-ns[.j+1]
+          END
+        END
+      END
+;
+      IF .result>0 THEN
+        .tmp.dist = .dists[.j]
+        .tmp.m = ms[.j]
+        .tmp.n = ns[.j]
+        .dists[.j] = .dists[.j+1]
+        ms[.j] = ms[.j+1]
+        ns[.j] = ns[.j+1]
+        .dists[.j+1] = .tmp.dist
+        ms[.j+1] = .tmp.m
+        ns[.j+1] = .tmp.n
+      END
+    END
+  END
+;
+.END
+.PROGRAM ot.put()@26/08/04 23:49 #2986
 ;
   SIGNAL rs7.locked.zone
   IF SIG(rs7.tare.chg) THEN
@@ -5559,25 +9379,28 @@ TP_RECINHI      0   0   0
   .x = grip.xsh[object.id]
   .y = grip.ysh[object.id]
   .z = grip.zsh[object.id]
-  IF object.id<>round.no AND ot.y MOD 2<>0 AND SIG(s.opt.flip) THEN
+  .rz = 0
+  IF object.id<>round.no AND ot.y MOD 2<>0 AND SIG(s.ot.flip) THEN
     .x = grip.180xsh[object.id]
     .y = grip.180ysh[object.id]
+    .rz = 180
   END
 ;
   POINT .put = ot.put[ot.x,ot.y]+TRANS(.x,.y,.z)
+  POINT .putr = ot.put[ot.x,ot.y]+RZ(.rz)+TRANS(.x,.y,.z)
+  POINT .putr2 = ot.put[ot.x,ot.y]+RZ(.rz/2)+TRANS(.x,.y,.z)
 ;
   SIGNAL rs7.locked.zone
   BREAK
   CALL log("Check if positioner is occupied")
   SWAIT -rs13.lock.zone
 ;
-  JAPPRO .put,-200
-  ACCURACY 5
-  LAPPRO .put,-20
-  ACCURACY 0.02
-  SPEED 100 MM/S
-  LMOVE .put
+  LAPPRO .put,-200
   BREAK
+  HERE .#temp
+  LAPPRO .putr2,-100
+  LAPPRO .putr,-50
+  LMOVE .putr
 ;
   TWAIT 0.1
   PULSE grip.unclamp
@@ -5587,8 +9410,9 @@ TP_RECINHI      0   0   0
   SIGNAL -s.grip.full
   $action = "WaitPosFull"
 ;
-  LAPPRO .put,-20
-  LAPPRO .put,-200
+  LAPPRO .putr,-50
+  LAPPRO .putr2,-100
+  LMOVE .#temp
 ;
 ;IF NOT SIG (s.cmd.pick) THEN
 ;  JMOVE #homyak
@@ -5603,17 +9427,17 @@ TP_RECINHI      0   0   0
 ;
     count.put = 0
 ;
+    CALL select.layout
     IF object.id==round.no THEN
       CALL calc.grid.rnd
     ELSE
       CALL calc.grid
     END
-;
-    CALL calc.ot
+    CALL sort.grid
   END
 ;
 .END
-.PROGRAM pg.select()@26/07/30 01:25 #305
+.PROGRAM pg.select()@26/08/04 22:06 #311
   SCASE $pg.name OF
    SVALUE "312.229.002":
     CASE detail.spec OF
@@ -5690,11 +9514,11 @@ TP_RECINHI      0   0   0
   END
 ;
 .END
-.PROGRAM pg0()@26/07/30 01:25 #0
+.PROGRAM pg0()@26/08/04 22:06 #0
   state = 0
   CALL a.main
 .END
-.PROGRAM pos.pick()@26/07/30 01:25 #3608
+.PROGRAM pos.pick()@26/08/04 22:06 #3656
 ;
   .$temp = "Pick detail from positioner (ID:"+$ENCODE(object.id)+")"
   CALL log(.$temp)
@@ -5758,7 +9582,7 @@ TP_RECINHI      0   0   0
   SIGNAL -rs7.locked.zone
 ;
 .END
-.PROGRAM safe.home()@26/07/30 01:25 #209
+.PROGRAM safe.home()@26/08/04 22:06 #210
 ;
 ; Safe zones:
 ; 1. OT zone: same as for normal work
@@ -5819,7 +9643,36 @@ TP_RECINHI      0   0   0
   END
 ;
 .END
-.PROGRAM set.grip.tree(.set)@26/07/30 01:25 #0
+.PROGRAM select.layout()@26/08/05 00:21 #7
+;
+  CASE layout OF
+   VALUE 0:
+    SIGNAL -s.ot.flip
+    SIGNAL -s.ot.spacer
+    work.tare.count = max.tare.count
+    CALL log("Selected layout: no flip, full ot")
+   VALUE 1:
+    SIGNAL s.ot.flip
+    SIGNAL -s.ot.spacer
+    work.tare.count = max.tare.count
+    CALL log("Selected layout: flip, full ot")
+   VALUE 2:
+    SIGNAL -s.ot.flip
+    SIGNAL s.ot.spacer
+    work.tare.count = spc.tare.count
+    CALL log("Selected layout: no flip, ot w/ space")
+   VALUE 3:
+    SIGNAL s.ot.flip
+    SIGNAL s.ot.spacer
+    work.tare.count = spc.tare.count
+    CALL log("Selected layout: flip, ot w/ space")
+   ANY :
+    CALL log("Error! Wrong layout. Connect Robowizard")
+    state = 255
+  END
+;
+.END
+.PROGRAM set.grip.tree(.set)@26/08/04 22:06 #0
 ;
   IF .set==TRUE THEN
     IF current.gripper<>tree.gripper THEN
@@ -5850,7 +9703,7 @@ TP_RECINHI      0   0   0
   END
 ;
 .END
-.PROGRAM set.io.pc()@26/07/30 01:25 #93
+.PROGRAM set.io.pc()@26/08/04 22:11 #99
 ; Gripper IO
 ;
 ; Gripper
@@ -6001,11 +9854,13 @@ TP_RECINHI      0   0   0
 ;s.apply.cv = 2257
   s.pr.tst.ot = 2249
 ;
-  s.opt.spacer = 2270
-  s.opt.flip = 2271
+  s.ot.spacer = 2270
+  s.ot.flip = 2271
   s.etalon.ok = 2272
   s.etalon.ret = 2273
   s.etalon.ng = 2274
+;
+;
 ;s.hmi.pneum.op = 2258
 ;s.hmi.pneum.cl = 2259
 ;s.hmi.get.cv = 2260
@@ -6015,7 +9870,7 @@ TP_RECINHI      0   0   0
   s.debug.mode = 2300
   s.enable.shift = 2301
 .END
-.PROGRAM set.vars.pc()@26/07/30 01:25 #44
+.PROGRAM set.vars.pc()@26/08/04 22:06 #45
 ;
 ; Constants
 ;
@@ -6149,10 +10004,58 @@ TP_RECINHI      0   0   0
   END
 ;
 .END
-.PROGRAM ship.pos()@26/07/30 01:25 #0
+.PROGRAM ship.pos()@26/08/04 22:06 #0
   JOINT SPEED9 ACCU1 TIMER0 TOOL1 WORK0 CLAMP OX= WX= #[0,10,-157,-90,-125,15] ;
 .END
-.PROGRAM state0()@26/07/30 01:25 #184; Initialization of parameters
+.PROGRAM sort.grid()@26/08/04 22:09 #272
+; Get matrix center
+  .center.col = INT(lines.count/2)
+  .center.row = INT(obj.in.line/2)
+  .cell = 0
+;
+; Stage 1: Add extreme columns (left and right edges)
+  FOR .row = 0 TO obj.in.line-1
+    ms[.cell] = 0
+    ns[.cell] = .row
+    .cell = .cell+1
+  END
+  IF lines.count>1 THEN
+    FOR .row = 0 TO obj.in.line-1
+      ms[.cell] = lines.count-1
+      ns[.cell] = .row
+      .cell = .cell+1
+    END
+  END
+;
+; Stage 2: Add center column
+  FOR .row = 0 TO obj.in.line-1
+    ms[.cell] = .center.col
+    ns[.cell] = .row
+    .cell = .cell+1
+  END
+;
+; Stage 3: Add from center outward (excluding center and edges)
+  FOR .offset = 1 TO .center.col-1
+    .left = .center.col-.offset
+    .right = .center.col+.offset
+; Left column
+    FOR .row = 0 TO obj.in.line-1
+      ms[.cell] = .left
+      ns[.cell] = .row
+      .cell = .cell+1
+    END
+; Right column
+    IF .right<lines.count AND .right<>.left THEN
+      FOR .row = 0 TO obj.in.line-1
+        ms[.cell] = .right
+        ns[.cell] = .row
+        .cell = .cell+1
+      END
+    END
+  END
+;
+.END
+.PROGRAM state0()@26/08/04 22:09 #292; Initialization of parameters
 ;
   CALL log("State 0: Program reset. Initialization of parameters")
   SIGNAL -s.grip.full,-s.measure.ok,-s.measure.ng,-rs7.tare.chg,-s.cmd.measured
@@ -6164,15 +10067,11 @@ TP_RECINHI      0   0   0
   count.pick = 0
   BITS rs7.det.picked[0],16 = count.pick
   count.put = 0
-;
-  chg.tare.count = max.tare.count
   current.ot = 1
-;max.count.put = 0
-;
   state = 100
 ;
 .END
-.PROGRAM state1()@26/07/30 01:25 #4160; Pick from positioner
+.PROGRAM state1()@26/08/04 22:06 #4208; Pick from positioner
   CALL log("State 1: Pick from positioner")
 ; Check all start positions
 ; Possible do not needed because robot can be only in HOME or near positioner
@@ -6183,7 +10082,7 @@ TP_RECINHI      0   0   0
   state = 101
 ;
 .END
-.PROGRAM state100()@26/07/30 01:25 #256; Waiting for start
+.PROGRAM state100()@26/08/04 22:06 #262; Waiting for start
 ;
   CALL log("State 100: Waiting for start")
   $action = "WaitingForStart"
@@ -6201,11 +10100,11 @@ TP_RECINHI      0   0   0
   CALL pg.select
   state = 106
 .END
-.PROGRAM state101()@26/07/30 01:25 #13447; Auxilary state
+.PROGRAM state101()@26/08/04 22:06 #13592; Auxilary state
   CALL log("State 101: Calculating next step")
   state = 102
 .END
-.PROGRAM state102()@26/07/30 01:25 #674074; Decision making
+.PROGRAM state102()@26/08/04 22:06 #678839; Decision making
 ; Priority 1
   IF SIG(s.cmd.pause) THEN
     state = 105
@@ -6262,12 +10161,12 @@ TP_RECINHI      0   0   0
   END
 ;
 .END
-.PROGRAM state103()@26/07/30 01:25 #248; Auxilary state
+.PROGRAM state103()@26/08/04 22:06 #252; Auxilary state
   CALL log("State 103: Calculating ending sequence step")
   state = 104
 ;
 .END
-.PROGRAM state104()@26/07/30 01:25 #248; Ending sequence
+.PROGRAM state104()@26/08/04 22:06 #252; Ending sequence
 ;
   IF NOT SIG(s.grip.full) THEN; AND NOT SIG (s.cmd.pick) THEN
     JMOVE #homyak
@@ -6279,7 +10178,7 @@ TP_RECINHI      0   0   0
   RETURN
 ;
 .END
-.PROGRAM state105()@26/07/30 01:25 #70; Program paused
+.PROGRAM state105()@26/08/04 22:06 #70; Program paused
   CALL log("State 105: Program paused")
   $action = "Paused"
   SWAIT s.cmd.resume
@@ -6289,17 +10188,19 @@ TP_RECINHI      0   0   0
   SIGNAL -s.cmd.pause
   state = 101
 .END
-.PROGRAM state106()@26/07/30 01:25 #368; Check program
+.PROGRAM state106()@26/08/04 22:09 #472; Check program
   CALL log("State 106: Check program")
   IF $pg.name<>"NULL" THEN
     CALL log("Selected program: "+$pg.name)
+;
+    CALL select.layout
     IF object.id==round.no THEN
       CALL calc.grid.rnd
     ELSE
       CALL calc.grid
     END
 ;
-    CALL calc.ot
+    CALL sort.grid
     IF state==255 THEN
       RETURN
     END
@@ -6315,7 +10216,7 @@ TP_RECINHI      0   0   0
   END
 ;
 .END
-.PROGRAM state2()@26/07/30 01:25 #4103; Measurement process
+.PROGRAM state2()@26/08/04 22:06 #4147; Measurement process
   CALL log("State 2: Measurement process")
 ; Check all start positions
 ; Possible do not needed because robot can be only in HOME or near positioner
@@ -6327,12 +10228,12 @@ TP_RECINHI      0   0   0
   state = 101
 ;
 .END
-.PROGRAM state255()@26/07/30 01:25 #249
+.PROGRAM state255()@26/08/04 22:06 #253
   CALL log("State 255: Program complete")
   state = 0
 ;
 .END
-.PROGRAM state3()@26/07/30 01:25 #3104; Put detail to OT
+.PROGRAM state3()@26/08/04 22:06 #3146; Put detail to OT
   CALL log("State 3: Put detail to OT")
 ; Check all start positions
 ; Possible do not needed because robot can be only in HOME or near positioner
@@ -6344,7 +10245,7 @@ TP_RECINHI      0   0   0
   state = 101
 ;
 .END
-.PROGRAM state4()@26/07/30 01:25 #1027; State 4: Put detail to defect tare
+.PROGRAM state4()@26/08/04 22:06 #1033; State 4: Put detail to defect tare
   CALL log("State 4: Put detail to defect tare")
 ; Check all start positions
 ; Possible do not needed because robot can be only in HOME or near positioner
@@ -6356,7 +10257,7 @@ TP_RECINHI      0   0   0
   state = 101
 ;
 .END
-.PROGRAM state5()@26/07/30 01:25 #827; Check etalon
+.PROGRAM state5()@26/08/04 22:06 #832; Check etalon
   CALL log("State 5: Check etalon")
 ; TEMPORARY!!!!!!!!
 ;  state = 101
@@ -6396,10 +10297,10 @@ TP_RECINHI      0   0   0
   SIGNAL -s.cmd.chk.etal
 ;
 .END
-.PROGRAM state6()@26/07/30 01:25 #0; Deprecated
+.PROGRAM state6()@26/08/04 22:06 #0; Deprecated
   state = 103
 .END
-.PROGRAM state7()@26/07/30 01:25 #287; Deprecated
+.PROGRAM state7()@26/08/04 22:06 #293; Deprecated
   CALL log("State 7: Check if gripper change is required")
 ; We are at home at this point. No cases without home!
   IF current.gripper<>pg7.gripper THEN
@@ -6418,12 +10319,12 @@ TP_RECINHI      0   0   0
   SIGNAL s.cmd.chk.etal
   state = 5
 .END
-.PROGRAM state8()@26/07/30 01:25 #0; Check etalon by command
+.PROGRAM state8()@26/08/04 22:06 #0; Check etalon by command
   CALL log("State 8: Check etalon by command")
   CALL etalon.measure(etalon.id)
   state = 105
 .END
-.PROGRAM tcp.callback.pc(.$data[],.data.length)@26/07/30 01:25 #90134
+.PROGRAM tcp.callback.pc(.$data[],.data.length)@26/08/05 01:35 #106668
   .$temp = "Received "+$ENCODE(.data.length)+" strings:"
   PRINT tcp.recv.ena: .$temp
   FOR .i = 1 TO .data.length
@@ -6454,6 +10355,12 @@ TP_RECINHI      0   0   0
       .$temp = $DECODE(.$data[1],";",1)
       $opt.data = $DECODE(.$data[1],";",0)
 ; Decode layout
+      .$temp = $DECODE(.$data[1],";",1)
+      max.tare.count = VAL($DECODE(.$data[1],";",0))
+;
+      .$temp = $DECODE(.$data[1],";",1)
+      spc.tare.count = VAL($DECODE(.$data[1],";",0))
+;
       .$temp = $DECODE(.$data[1],";",1)
       layout = VAL($DECODE(.$data[1],";",0))
 ;
@@ -6689,12 +10596,15 @@ TP_RECINHI      0   0   0
     IF INSTR(.$data[.i] , "RESET") THEN
       CALL log.pc2("Received RESET command")
       state = 0
+      IF NOT SWITCH(CS ) THEN
+        MC PRIME a.main
+      END
     END
 ;
     .$data[.i] = ""
   END
 .END
-.PROGRAM tcp.client.pc()@26/07/30 01:21 #0
+.PROGRAM tcp.client.pc()@26/08/04 22:06 #0
 ;
   tcp.socket = -1
   .tcp.retry.count = 10
@@ -6767,7 +10677,7 @@ TP_RECINHI      0   0   0
     TWAIT 0.05
   END
 .END
-.PROGRAM tcp.log.pc(.$msg)@26/07/30 01:25 #172091
+.PROGRAM tcp.log.pc(.$msg)@26/08/04 22:06 #179353
   IF NOT SIG(s.tcp.log) THEN
     RETURN
   END
@@ -6784,7 +10694,7 @@ TP_RECINHI      0   0   0
   IFPWPRINT 3,1,1,9,10=$log.entry[124],$log.entry[125],$log.entry[126],$log.entry[127]
 ;
 .END
-.PROGRAM tcp.send.pc(.$data[],.data.length)@26/07/30 01:21 #1912736
+.PROGRAM tcp.send.pc(.$data[],.data.length)@26/08/04 22:06 #1935051
 ;
   .tcp.send.tmo = 5
 ;
@@ -6807,7 +10717,7 @@ TP_RECINHI      0   0   0
   END
 ;
 .END
-.PROGRAM tcp.sender.pc()@26/07/30 01:21 #0
+.PROGRAM tcp.sender.pc()@26/08/04 22:06 #0
 ;
   WHILE TRUE DO
 ;
@@ -6840,7 +10750,7 @@ TP_RECINHI      0   0   0
   END
 ;
 .END
-.PROGRAM test()@26/07/30 01:21 #1
+.PROGRAM test()@26/08/04 22:06 #1
   CALL id2
   CALL calc.grid
   FOR .i = 0 TO 100
@@ -6851,7 +10761,12 @@ TP_RECINHI      0   0   0
     TWAIT 5
   END
 .END
-.PROGRAM watchdog.pc()@26/07/30 01:21 #0
+.PROGRAM test.ot.full()@26/08/04 23:05 #0
+  FOR hmi.ot.k = 0 TO max.tare.count-1
+    CALL a.test.ot.pick
+  END
+.END
+.PROGRAM watchdog.pc()@26/08/04 22:06 #0
 ;
   HERE .last.pos
   TIMER 1 = 0
@@ -6915,273 +10830,273 @@ TP_RECINHI      0   0   0
 .TRANS
 defect.frame 523.098572 -93.507027 -30.269958 -15.047692 0.014620 14.013137
 ot.frame -165.784698 536.418274 9.970322 83.412979 0.593704 95.884521
-ot.put[0,0] -157.785309 536.320129 9.961823 83.412979 0.593704 95.884521
-ot.put[0,1] -157.276733 577.814819 9.534070 83.412979 0.593704 95.884521
-ot.put[0,2] -156.768158 619.309509 9.106317 83.412979 0.593704 95.884521
-ot.put[0,3] -156.259583 660.804199 8.678564 83.412979 0.593704 95.884521
-ot.put[0,4] -155.751022 702.298828 8.250811 83.412979 0.593704 95.884521
-ot.put[0,5] -164.007767 681.399658 8.475763 83.412979 0.593704 95.884521
-ot.put[0,6] -163.652374 710.395996 8.176851 83.412979 0.593704 95.884521
+ot.put[0,0] -165.784698 536.418274 9.970322 83.412979 0.593704 95.884521
+ot.put[0,1] -165.355789 571.413818 9.609566 83.412979 0.593704 95.884521
+ot.put[0,2] -164.926880 606.409302 9.248811 83.412979 0.593704 95.884521
+ot.put[0,3] -164.497955 641.404785 8.888055 83.412979 0.593704 95.884521
+ot.put[0,4] -164.069046 676.400330 8.527299 83.412979 0.593704 95.884521
+ot.put[0,5] -163.640137 711.395874 8.166544 83.412979 0.593704 95.884521
+ot.put[0,6] -163.652390 710.395996 8.176851 83.412979 0.593704 95.884521
 ot.put[0,7] -164.283493 658.902588 8.707677 83.412979 0.593704 95.884521
 ot.put[0,8] -164.069031 676.400330 8.527300 83.412979 0.593704 95.884521
 ot.put[0,9] -163.854584 693.898071 8.346922 83.412979 0.593704 95.884521
 ot.put[0,10] -163.640121 711.395874 8.166544 83.412979 0.593704 95.884521
 ot.put[0,11] -144.721466 721.021729 -0.056760 -84.510582 1.748546 -95.627472
 ot.put[0,12] -144.725143 719.522400 -0.102309 -84.510582 1.748546 -95.627472
-ot.put[1,0] -141.786514 536.123901 9.944825 83.412979 0.593704 95.884521
-ot.put[1,1] -141.277939 577.618530 9.517073 83.412979 0.593704 95.884521
-ot.put[1,2] -140.769379 619.113220 9.089319 83.412979 0.593704 95.884521
-ot.put[1,3] -140.260803 660.607910 8.661567 83.412979 0.593704 95.884521
-ot.put[1,4] -139.752228 702.102600 8.233813 83.412979 0.593704 95.884521
-ot.put[1,5] -148.008972 681.203430 8.458766 83.412979 0.593704 95.884521
-ot.put[1,6] -147.653580 710.199707 8.159854 83.412979 0.593704 95.884521
+ot.put[1,0] -149.785904 536.221985 9.953324 83.412979 0.593704 95.884521
+ot.put[1,1] -149.356995 571.217529 9.592568 83.412979 0.593704 95.884521
+ot.put[1,2] -148.928085 606.213013 9.231813 83.412979 0.593704 95.884521
+ot.put[1,3] -148.499176 641.208557 8.871058 83.412979 0.593704 95.884521
+ot.put[1,4] -148.070267 676.204102 8.510302 83.412979 0.593704 95.884521
+ot.put[1,5] -147.641357 711.199585 8.149546 83.412979 0.593704 95.884521
+ot.put[1,6] -147.653610 710.199707 8.159853 83.412979 0.593704 95.884521
 ot.put[1,7] -148.284698 658.706299 8.690680 83.412979 0.593704 95.884521
 ot.put[1,8] -148.070251 676.204102 8.510302 83.412979 0.593704 95.884521
 ot.put[1,9] -147.855789 693.701843 8.329925 83.412979 0.593704 95.884521
 ot.put[1,10] -147.641327 711.199585 8.149547 83.412979 0.593704 95.884521
 ot.put[1,11] -128.721573 720.983887 -0.104634 -84.510582 1.748546 -95.627472
 ot.put[1,12] -128.725250 719.484619 -0.150183 -84.510582 1.748546 -95.627472
-ot.put[2,0] -125.787727 535.927612 9.927828 83.412979 0.593704 95.884521
-ot.put[2,1] -125.279160 577.422302 9.500075 83.412979 0.593704 95.884521
-ot.put[2,2] -124.770584 618.916992 9.072322 83.412979 0.593704 95.884521
-ot.put[2,3] -124.262009 660.411682 8.644569 83.412979 0.593704 95.884521
-ot.put[2,4] -123.753441 701.906372 8.216816 83.412979 0.593704 95.884521
-ot.put[2,5] -132.010193 681.007202 8.441769 83.412979 0.593704 95.884521
-ot.put[2,6] -131.654800 710.003418 8.142857 83.412979 0.593704 95.884521
+ot.put[2,0] -133.787125 536.025757 9.936327 83.412979 0.593704 95.884521
+ot.put[2,1] -133.358215 571.021240 9.575571 83.412979 0.593704 95.884521
+ot.put[2,2] -132.929291 606.016785 9.214815 83.412979 0.593704 95.884521
+ot.put[2,3] -132.500381 641.012329 8.854060 83.412979 0.593704 95.884521
+ot.put[2,4] -132.071472 676.007813 8.493304 83.412979 0.593704 95.884521
+ot.put[2,5] -131.642563 711.003296 8.132548 83.412979 0.593704 95.884521
+ot.put[2,6] -131.654816 710.003479 8.142856 83.412979 0.593704 95.884521
 ot.put[2,7] -132.285919 658.510010 8.673682 83.412979 0.593704 95.884521
 ot.put[2,8] -132.071457 676.007813 8.493305 83.412979 0.593704 95.884521
 ot.put[2,9] -131.856995 693.505554 8.312927 83.412979 0.593704 95.884521
 ot.put[2,10] -131.642548 711.003296 8.132549 83.412979 0.593704 95.884521
 ot.put[2,11] -112.721695 720.946045 -0.152508 -84.510582 1.748546 -95.627472
 ot.put[2,12] -112.725372 719.446777 -0.198057 -84.510582 1.748546 -95.627472
-ot.put[3,0] -109.788940 535.731384 9.910830 83.412979 0.593704 95.884521
-ot.put[3,1] -109.280365 577.226013 9.483078 83.412979 0.593704 95.884521
-ot.put[3,2] -108.771797 618.720703 9.055325 83.412979 0.593704 95.884521
-ot.put[3,3] -108.263229 660.215393 8.627572 83.412979 0.593704 95.884521
-ot.put[3,4] -107.754654 701.710083 8.199819 83.412979 0.593704 95.884521
-ot.put[3,5] -116.011398 680.810913 8.424770 83.412979 0.593704 95.884521
-ot.put[3,6] -115.656006 709.807190 8.125859 83.412979 0.593704 95.884521
+ot.put[3,0] -117.788330 535.829468 9.919330 83.412979 0.593704 95.884521
+ot.put[3,1] -117.359421 570.825012 9.558574 83.412979 0.593704 95.884521
+ot.put[3,2] -116.930511 605.820557 9.197818 83.412979 0.593704 95.884521
+ot.put[3,3] -116.501602 640.816040 8.837063 83.412979 0.593704 95.884521
+ot.put[3,4] -116.072685 675.811523 8.476307 83.412979 0.593704 95.884521
+ot.put[3,5] -115.643768 710.807068 8.115551 83.412979 0.593704 95.884521
+ot.put[3,6] -115.656029 709.807190 8.125858 83.412979 0.593704 95.884521
 ot.put[3,7] -116.287125 658.313782 8.656685 83.412979 0.593704 95.884521
 ot.put[3,8] -116.072670 675.811523 8.476307 83.412979 0.593704 95.884521
 ot.put[3,9] -115.858215 693.309326 8.295930 83.412979 0.593704 95.884521
 ot.put[3,10] -115.643753 710.807068 8.115552 83.412979 0.593704 95.884521
 ot.put[3,11] -96.721809 720.908264 -0.200382 -84.510582 1.748546 -95.627472
 ot.put[3,12] -96.725494 719.408936 -0.245931 -84.510582 1.748546 -95.627472
-ot.put[4,0] -93.790154 535.535095 9.893833 83.412979 0.593704 95.884521
-ot.put[4,1] -93.281578 577.029785 9.466081 83.412979 0.593704 95.884521
-ot.put[4,2] -92.773010 618.524475 9.038327 83.412979 0.593704 95.884521
-ot.put[4,3] -92.264435 660.019165 8.610575 83.412979 0.593704 95.884521
-ot.put[4,4] -91.755867 701.513794 8.182821 83.412979 0.593704 95.884521
-ot.put[4,5] -100.012611 680.614624 8.407773 83.412979 0.593704 95.884521
-ot.put[4,6] -99.657219 709.610901 8.108862 83.412979 0.593704 95.884521
+ot.put[4,0] -101.789551 535.633240 9.902332 83.412979 0.593704 95.884521
+ot.put[4,1] -101.360634 570.628723 9.541576 83.412979 0.593704 95.884521
+ot.put[4,2] -100.931725 605.624268 9.180820 83.412979 0.593704 95.884521
+ot.put[4,3] -100.502808 640.619751 8.820065 83.412979 0.593704 95.884521
+ot.put[4,4] -100.073898 675.615295 8.459310 83.412979 0.593704 95.884521
+ot.put[4,5] -99.644989 710.610840 8.098554 83.412979 0.593704 95.884521
+ot.put[4,6] -99.657242 709.610962 8.108861 83.412979 0.593704 95.884521
 ot.put[4,7] -100.288338 658.117554 8.639688 83.412979 0.593704 95.884521
 ot.put[4,8] -100.073883 675.615295 8.459310 83.412979 0.593704 95.884521
 ot.put[4,9] -99.859428 693.113037 8.278933 83.412979 0.593704 95.884521
 ot.put[4,10] -99.644966 710.610779 8.098555 83.412979 0.593704 95.884521
 ot.put[4,11] -80.721924 720.870422 -0.248256 -84.510582 1.748546 -95.627472
 ot.put[4,12] -80.725601 719.371094 -0.293805 -84.510582 1.748546 -95.627472
-ot.put[5,0] -77.791367 535.338806 9.876836 83.412979 0.593704 95.884521
-ot.put[5,1] -77.282791 576.833496 9.449083 83.412979 0.593704 95.884521
-ot.put[5,2] -76.774223 618.328186 9.021330 83.412979 0.593704 95.884521
-ot.put[5,3] -76.265648 659.822876 8.593576 83.412979 0.593704 95.884521
-ot.put[5,4] -75.757080 701.317566 8.165824 83.412979 0.593704 95.884521
-ot.put[5,5] -84.013817 680.418396 8.390776 83.412979 0.593704 95.884521
-ot.put[5,6] -83.658432 709.414673 8.091865 83.412979 0.593704 95.884521
+ot.put[5,0] -85.790756 535.436951 9.885334 83.412979 0.593704 95.884521
+ot.put[5,1] -85.361847 570.432495 9.524579 83.412979 0.593704 95.884521
+ot.put[5,2] -84.932930 605.427979 9.163823 83.412979 0.593704 95.884521
+ot.put[5,3] -84.504021 640.423523 8.803067 83.412979 0.593704 95.884521
+ot.put[5,4] -84.075104 675.419067 8.442312 83.412979 0.593704 95.884521
+ot.put[5,5] -83.646194 710.414551 8.081556 83.412979 0.593704 95.884521
+ot.put[5,6] -83.658447 709.414673 8.091864 83.412979 0.593704 95.884521
 ot.put[5,7] -84.289551 657.921265 8.622690 83.412979 0.593704 95.884521
 ot.put[5,8] -84.075089 675.419006 8.442312 83.412979 0.593704 95.884521
 ot.put[5,9] -83.860634 692.916748 8.261934 83.412979 0.593704 95.884521
 ot.put[5,10] -83.646179 710.414551 8.081557 83.412979 0.593704 95.884521
 ot.put[5,11] -64.722038 720.832581 -0.296130 -84.510582 1.748546 -95.627472
 ot.put[5,12] -64.725723 719.333313 -0.341679 -84.510582 1.748546 -95.627472
-ot.put[6,0] -61.792580 535.142578 9.859838 83.412979 0.593704 95.884521
-ot.put[6,1] -61.284004 576.637268 9.432085 83.412979 0.593704 95.884521
-ot.put[6,2] -60.775436 618.131958 9.004333 83.412979 0.593704 95.884521
-ot.put[6,3] -60.266861 659.626587 8.576580 83.412979 0.593704 95.884521
-ot.put[6,4] -59.758293 701.121277 8.148827 83.412979 0.593704 95.884521
-ot.put[6,5] -68.015030 680.222107 8.373778 83.412979 0.593704 95.884521
-ot.put[6,6] -67.659645 709.218384 8.074867 83.412979 0.593704 95.884521
+ot.put[6,0] -69.791969 535.240723 9.868337 83.412979 0.593704 95.884521
+ot.put[6,1] -69.363060 570.236206 9.507582 83.412979 0.593704 95.884521
+ot.put[6,2] -68.934143 605.231750 9.146826 83.412979 0.593704 95.884521
+ot.put[6,3] -68.505234 640.227234 8.786070 83.412979 0.593704 95.884521
+ot.put[6,4] -68.076324 675.222778 8.425315 83.412979 0.593704 95.884521
+ot.put[6,5] -67.647408 710.218262 8.064559 83.412979 0.593704 95.884521
+ot.put[6,6] -67.659660 709.218445 8.074866 83.412979 0.593704 95.884521
 ot.put[6,7] -68.290764 657.724976 8.605693 83.412979 0.593704 95.884521
 ot.put[6,8] -68.076302 675.222778 8.425315 83.412979 0.593704 95.884521
 ot.put[6,9] -67.861847 692.720520 8.244937 83.412979 0.593704 95.884521
 ot.put[6,10] -67.647392 710.218262 8.064560 83.412979 0.593704 95.884521
 ot.put[6,11] -48.722153 720.794800 -0.344004 -84.510582 1.748546 -95.627472
 ot.put[6,12] -48.725838 719.295471 -0.389552 -84.510582 1.748546 -95.627472
-ot.put[7,0] -45.793793 534.946289 9.842841 83.412979 0.593704 95.884521
-ot.put[7,1] -45.285217 576.440979 9.415088 83.412979 0.593704 95.884521
-ot.put[7,2] -44.776649 617.935669 8.987335 83.412979 0.593704 95.884521
-ot.put[7,3] -44.268074 659.430359 8.559582 83.412979 0.593704 95.884521
-ot.put[7,4] -43.759506 700.925049 8.131829 83.412979 0.593704 95.884521
-ot.put[7,5] -52.016243 680.025879 8.356781 83.412979 0.593704 95.884521
-ot.put[7,6] -51.660858 709.022156 8.057869 83.412979 0.593704 95.884521
+ot.put[7,0] -53.793182 535.044434 9.851339 83.412979 0.593704 95.884521
+ot.put[7,1] -53.364273 570.039978 9.490584 83.412979 0.593704 95.884521
+ot.put[7,2] -52.935356 605.035461 9.129828 83.412979 0.593704 95.884521
+ot.put[7,3] -52.506447 640.031006 8.769073 83.412979 0.593704 95.884521
+ot.put[7,4] -52.077530 675.026489 8.408318 83.412979 0.593704 95.884521
+ot.put[7,5] -51.648621 710.022034 8.047562 83.412979 0.593704 95.884521
+ot.put[7,6] -51.660873 709.022156 8.057869 83.412979 0.593704 95.884521
 ot.put[7,7] -52.291977 657.528748 8.588696 83.412979 0.593704 95.884521
 ot.put[7,8] -52.077515 675.026489 8.408318 83.412979 0.593704 95.884521
 ot.put[7,9] -51.863060 692.524292 8.227940 83.412979 0.593704 95.884521
 ot.put[7,10] -51.648605 710.022034 8.047562 83.412979 0.593704 95.884521
 ot.put[7,11] -32.722267 720.756958 -0.391877 -84.510582 1.748546 -95.627472
 ot.put[7,12] -32.725952 719.257690 -0.437426 -84.510582 1.748546 -95.627472
-ot.put[8,0] -29.794998 534.750061 9.825844 83.412979 0.593704 95.884521
-ot.put[8,1] -29.286423 576.244751 9.398090 83.412979 0.593704 95.884521
-ot.put[8,2] -28.777847 617.739380 8.970338 83.412979 0.593704 95.884521
-ot.put[8,3] -28.269287 659.234070 8.542584 83.412979 0.593704 95.884521
-ot.put[8,4] -27.760712 700.728760 8.114832 83.412979 0.593704 95.884521
-ot.put[8,5] -36.017456 679.829590 8.339784 83.412979 0.593704 95.884521
-ot.put[8,6] -35.662064 708.825867 8.040872 83.412979 0.593704 95.884521
+ot.put[8,0] -37.794395 534.848206 9.834342 83.412979 0.593704 95.884521
+ot.put[8,1] -37.365479 569.843689 9.473586 83.412979 0.593704 95.884521
+ot.put[8,2] -36.936569 604.839233 9.112831 83.412979 0.593704 95.884521
+ot.put[8,3] -36.507660 639.834717 8.752075 83.412979 0.593704 95.884521
+ot.put[8,4] -36.078751 674.830261 8.391319 83.412979 0.593704 95.884521
+ot.put[8,5] -35.649841 709.825745 8.030564 83.412979 0.593704 95.884521
+ot.put[8,6] -35.662094 708.825928 8.040872 83.412979 0.593704 95.884521
 ot.put[8,7] -36.293182 657.332458 8.571698 83.412979 0.593704 95.884521
 ot.put[8,8] -36.078735 674.830200 8.391320 83.412979 0.593704 95.884521
 ot.put[8,9] -35.864273 692.328003 8.210942 83.412979 0.593704 95.884521
 ot.put[8,10] -35.649811 709.825745 8.030564 83.412979 0.593704 95.884521
 ot.put[8,11] -16.722382 720.719116 -0.439751 -84.510582 1.748546 -95.627472
 ot.put[8,12] -16.726059 719.219849 -0.485300 -84.510582 1.748546 -95.627472
-ot.put[9,0] -13.796219 534.553772 9.808846 83.412979 0.593704 95.884521
-ot.put[9,1] -13.287643 576.048462 9.381093 83.412979 0.593704 95.884521
-ot.put[9,2] -12.779068 617.543152 8.953341 83.412979 0.593704 95.884521
-ot.put[9,3] -12.270508 659.037842 8.525587 83.412979 0.593704 95.884521
-ot.put[9,4] -11.761932 700.532471 8.097835 83.412979 0.593704 95.884521
-ot.put[9,5] -20.018677 679.633301 8.322786 83.412979 0.593704 95.884521
-ot.put[9,6] -19.663284 708.629639 8.023874 83.412979 0.593704 95.884521
+ot.put[9,0] -21.795609 534.651917 9.817345 83.412979 0.593704 95.884521
+ot.put[9,1] -21.366699 569.647461 9.456589 83.412979 0.593704 95.884521
+ot.put[9,2] -20.937790 604.642944 9.095834 83.412979 0.593704 95.884521
+ot.put[9,3] -20.508865 639.638489 8.735078 83.412979 0.593704 95.884521
+ot.put[9,4] -20.079956 674.633972 8.374322 83.412979 0.593704 95.884521
+ot.put[9,5] -19.651047 709.629517 8.013567 83.412979 0.593704 95.884521
+ot.put[9,6] -19.663300 708.629639 8.023874 83.412979 0.593704 95.884521
 ot.put[9,7] -20.294403 657.136230 8.554701 83.412979 0.593704 95.884521
 ot.put[9,8] -20.079941 674.633972 8.374323 83.412979 0.593704 95.884521
 ot.put[9,9] -19.865494 692.131714 8.193945 83.412979 0.593704 95.884521
 ot.put[9,10] -19.651031 709.629517 8.013567 83.412979 0.593704 95.884521
 ot.put[9,11] -0.722504 720.681274 -0.487625 -84.510582 1.748546 -95.627472
 ot.put[9,12] -0.726181 719.182007 -0.533174 -84.510582 1.748546 -95.627472
-ot.put[10,0] 2.202576 534.357544 9.791849 83.412979 0.593704 95.884521
-ot.put[10,1] 2.711151 575.852234 9.364096 83.412979 0.593704 95.884521
-ot.put[10,2] 3.219727 617.346863 8.936343 83.412979 0.593704 95.884521
-ot.put[10,3] 3.728287 658.841553 8.508590 83.412979 0.593704 95.884521
-ot.put[10,4] 4.236862 700.336243 8.080837 83.412979 0.593704 95.884521
-ot.put[10,5] -4.019882 679.437073 8.305789 83.412979 0.593704 95.884521
-ot.put[10,6] -3.664490 708.433350 8.006877 83.412979 0.593704 95.884521
+ot.put[10,0] -5.796814 534.455688 9.800347 83.412979 0.593704 95.884521
+ot.put[10,1] -5.367905 569.451172 9.439591 83.412979 0.593704 95.884521
+ot.put[10,2] -4.938995 604.446716 9.078836 83.412979 0.593704 95.884521
+ot.put[10,3] -4.510071 639.442200 8.718081 83.412979 0.593704 95.884521
+ot.put[10,4] -4.081161 674.437744 8.357325 83.412979 0.593704 95.884521
+ot.put[10,5] -3.652252 709.433228 7.996569 83.412979 0.593704 95.884521
+ot.put[10,6] -3.664505 708.433350 8.006876 83.412979 0.593704 95.884521
 ot.put[10,7] -4.295609 656.939941 8.537703 83.412979 0.593704 95.884521
 ot.put[10,8] -4.081146 674.437744 8.357326 83.412979 0.593704 95.884521
 ot.put[10,9] -3.866699 691.935486 8.176948 83.412979 0.593704 95.884521
 ot.put[10,10] -3.652237 709.433228 7.996570 83.412979 0.593704 95.884521
 ot.put[10,11] 15.277374 720.643494 -0.535499 -84.510582 1.748546 -95.627472
 ot.put[10,12] 15.273697 719.144165 -0.581048 -84.510582 1.748546 -95.627472
-ot.put[11,0] 18.201355 534.161255 9.774852 83.412979 0.593704 95.884521
-ot.put[11,1] 18.709930 575.655945 9.347098 83.412979 0.593704 95.884521
-ot.put[11,2] 19.218506 617.150635 8.919346 83.412979 0.593704 95.884521
-ot.put[11,3] 19.727066 658.645325 8.491592 83.412979 0.593704 95.884521
-ot.put[11,4] 20.235641 700.140015 8.063839 83.412979 0.593704 95.884521
-ot.put[11,5] 11.978897 679.240845 8.288792 83.412979 0.593704 95.884521
-ot.put[11,6] 12.334290 708.237061 7.989880 83.412979 0.593704 95.884521
+ot.put[11,0] 10.201965 534.259399 9.783350 83.412979 0.593704 95.884521
+ot.put[11,1] 10.630875 569.254944 9.422594 83.412979 0.593704 95.884521
+ot.put[11,2] 11.059784 604.250427 9.061838 83.412979 0.593704 95.884521
+ot.put[11,3] 11.488708 639.245972 8.701083 83.412979 0.593704 95.884521
+ot.put[11,4] 11.917618 674.241455 8.340327 83.412979 0.593704 95.884521
+ot.put[11,5] 12.346527 709.237000 7.979571 83.412979 0.593704 95.884521
+ot.put[11,6] 12.334274 708.237122 7.989879 83.412979 0.593704 95.884521
 ot.put[11,7] 11.703171 656.743713 8.520706 83.412979 0.593704 95.884521
 ot.put[11,8] 11.917633 674.241455 8.340328 83.412979 0.593704 95.884521
 ot.put[11,9] 12.132080 691.739197 8.159950 83.412979 0.593704 95.884521
 ot.put[11,10] 12.346542 709.236938 7.979572 83.412979 0.593704 95.884521
 ot.put[11,11] 31.277267 720.605652 -0.583373 -84.510582 1.748546 -95.627472
 ot.put[11,12] 31.273590 719.106384 -0.628922 -84.510582 1.748546 -95.627472
-ot.put[12,0] 34.200150 533.965027 9.757854 83.412979 0.593704 95.884521
-ot.put[12,1] 34.708725 575.459717 9.330101 83.412979 0.593704 95.884521
-ot.put[12,2] 35.217300 616.954346 8.902348 83.412979 0.593704 95.884521
-ot.put[12,3] 35.725861 658.449036 8.474595 83.412979 0.593704 95.884521
-ot.put[12,4] 36.234436 699.943726 8.046842 83.412979 0.593704 95.884521
-ot.put[12,5] 27.977692 679.044556 8.271794 83.412979 0.593704 95.884521
-ot.put[12,6] 28.333084 708.040833 7.972882 83.412979 0.593704 95.884521
+ot.put[12,0] 26.200760 534.063171 9.766353 83.412979 0.593704 95.884521
+ot.put[12,1] 26.629669 569.058655 9.405597 83.412979 0.593704 95.884521
+ot.put[12,2] 27.058578 604.054199 9.044841 83.412979 0.593704 95.884521
+ot.put[12,3] 27.487503 639.049683 8.684086 83.412979 0.593704 95.884521
+ot.put[12,4] 27.916412 674.045227 8.323330 83.412979 0.593704 95.884521
+ot.put[12,5] 28.345322 709.040710 7.962574 83.412979 0.593704 95.884521
+ot.put[12,6] 28.333069 708.040894 7.972881 83.412979 0.593704 95.884521
 ot.put[12,7] 27.701965 656.547424 8.503708 83.412979 0.593704 95.884521
 ot.put[12,8] 27.916428 674.045166 8.323331 83.412979 0.593704 95.884521
 ot.put[12,9] 28.130875 691.542969 8.142953 83.412979 0.593704 95.884521
 ot.put[12,10] 28.345337 709.040710 7.962575 83.412979 0.593704 95.884521
 ot.put[12,11] 47.277145 720.567871 -0.631247 -84.510582 1.748546 -95.627472
 ot.put[12,12] 47.273468 719.068542 -0.676795 -84.510582 1.748546 -95.627472
-ot.put[13,0] 50.198944 533.768738 9.740856 83.412979 0.593704 95.884521
-ot.put[13,1] 50.707520 575.263428 9.313104 83.412979 0.593704 95.884521
-ot.put[13,2] 51.216095 616.758118 8.885350 83.412979 0.593704 95.884521
-ot.put[13,3] 51.724655 658.252808 8.457598 83.412979 0.593704 95.884521
-ot.put[13,4] 52.233231 699.747437 8.029844 83.412979 0.593704 95.884521
-ot.put[13,5] 43.976471 678.848267 8.254797 83.412979 0.593704 95.884521
-ot.put[13,6] 44.331863 707.844604 7.955885 83.412979 0.593704 95.884521
+ot.put[13,0] 42.199539 533.866882 9.749355 83.412979 0.593704 95.884521
+ot.put[13,1] 42.628448 568.862427 9.388599 83.412979 0.593704 95.884521
+ot.put[13,2] 43.057358 603.857910 9.027843 83.412979 0.593704 95.884521
+ot.put[13,3] 43.486282 638.853455 8.667088 83.412979 0.593704 95.884521
+ot.put[13,4] 43.915192 673.848938 8.306333 83.412979 0.593704 95.884521
+ot.put[13,5] 44.344101 708.844482 7.945577 83.412979 0.593704 95.884521
+ot.put[13,6] 44.331848 707.844604 7.955884 83.412979 0.593704 95.884521
 ot.put[13,7] 43.700745 656.351196 8.486711 83.412979 0.593704 95.884521
 ot.put[13,8] 43.915207 673.848938 8.306334 83.412979 0.593704 95.884521
 ot.put[13,9] 44.129654 691.346680 8.125956 83.412979 0.593704 95.884521
 ot.put[13,10] 44.344116 708.844482 7.945578 83.412979 0.593704 95.884521
 ot.put[13,11] 63.277039 720.530029 -0.679121 -84.510582 1.748546 -95.627472
 ot.put[13,12] 63.273361 719.030701 -0.724669 -84.510582 1.748546 -95.627472
-ot.put[14,0] 66.197723 533.572510 9.723859 83.412979 0.593704 95.884521
-ot.put[14,1] 66.706299 575.067139 9.296106 83.412979 0.593704 95.884521
-ot.put[14,2] 67.214874 616.561829 8.868353 83.412979 0.593704 95.884521
-ot.put[14,3] 67.723434 658.056519 8.440600 83.412979 0.593704 95.884521
-ot.put[14,4] 68.232010 699.551208 8.012847 83.412979 0.593704 95.884521
-ot.put[14,5] 59.975266 678.652039 8.237799 83.412979 0.593704 95.884521
-ot.put[14,6] 60.330658 707.648315 7.938888 83.412979 0.593704 95.884521
+ot.put[14,0] 58.198334 533.670654 9.732357 83.412979 0.593704 95.884521
+ot.put[14,1] 58.627243 568.666138 9.371602 83.412979 0.593704 95.884521
+ot.put[14,2] 59.056152 603.661682 9.010846 83.412979 0.593704 95.884521
+ot.put[14,3] 59.485077 638.657166 8.650090 83.412979 0.593704 95.884521
+ot.put[14,4] 59.913986 673.652710 8.289335 83.412979 0.593704 95.884521
+ot.put[14,5] 60.342896 708.648193 7.928579 83.412979 0.593704 95.884521
+ot.put[14,6] 60.330643 707.648315 7.938887 83.412979 0.593704 95.884521
 ot.put[14,7] 59.699539 656.154907 8.469713 83.412979 0.593704 95.884521
 ot.put[14,8] 59.914001 673.652649 8.289335 83.412979 0.593704 95.884521
 ot.put[14,9] 60.128448 691.150391 8.108958 83.412979 0.593704 95.884521
 ot.put[14,10] 60.342911 708.648193 7.928580 83.412979 0.593704 95.884521
 ot.put[14,11] 79.276917 720.492188 -0.726995 -84.510582 1.748546 -95.627472
 ot.put[14,12] 79.273239 718.992920 -0.772543 -84.510582 1.748546 -95.627472
-ot.put[15,0] 82.196518 533.376221 9.706861 83.412979 0.593704 95.884521
-ot.put[15,1] 82.705093 574.870911 9.279109 83.412979 0.593704 95.884521
-ot.put[15,2] 83.213669 616.365601 8.851356 83.412979 0.593704 95.884521
-ot.put[15,3] 83.722229 657.860229 8.423603 83.412979 0.593704 95.884521
-ot.put[15,4] 84.230804 699.354919 7.995850 83.412979 0.593704 95.884521
-ot.put[15,5] 75.974045 678.455750 8.220802 83.412979 0.593704 95.884521
-ot.put[15,6] 76.329437 707.452026 7.921890 83.412979 0.593704 95.884521
+ot.put[15,0] 74.197113 533.474365 9.715360 83.412979 0.593704 95.884521
+ot.put[15,1] 74.626022 568.469910 9.354605 83.412979 0.593704 95.884521
+ot.put[15,2] 75.054932 603.465393 8.993849 83.412979 0.593704 95.884521
+ot.put[15,3] 75.483856 638.460938 8.633093 83.412979 0.593704 95.884521
+ot.put[15,4] 75.912766 673.456421 8.272338 83.412979 0.593704 95.884521
+ot.put[15,5] 76.341675 708.451965 7.911582 83.412979 0.593704 95.884521
+ot.put[15,6] 76.329422 707.452087 7.921889 83.412979 0.593704 95.884521
 ot.put[15,7] 75.698318 655.958618 8.452716 83.412979 0.593704 95.884521
 ot.put[15,8] 75.912781 673.456421 8.272338 83.412979 0.593704 95.884521
 ot.put[15,9] 76.127228 690.954163 8.091961 83.412979 0.593704 95.884521
 ot.put[15,10] 76.341690 708.451904 7.911583 83.412979 0.593704 95.884521
 ot.put[15,11] 95.276810 720.454346 -0.774868 -84.510582 1.748546 -95.627472
 ot.put[15,12] 95.273132 718.955078 -0.820417 -84.510582 1.748546 -95.627472
-ot.put[16,0] 98.195312 533.179932 9.689864 83.412979 0.593704 95.884521
-ot.put[16,1] 98.703888 574.674622 9.262112 83.412979 0.593704 95.884521
-ot.put[16,2] 99.212463 616.169312 8.834358 83.412979 0.593704 95.884521
-ot.put[16,3] 99.721039 657.664001 8.406606 83.412979 0.593704 95.884521
-ot.put[16,4] 100.229614 699.158691 7.978852 83.412979 0.593704 95.884521
-ot.put[16,5] 91.972839 678.259521 8.203804 83.412979 0.593704 95.884521
-ot.put[16,6] 92.328247 707.255798 7.904892 83.412979 0.593704 95.884521
+ot.put[16,0] 90.195908 533.278137 9.698362 83.412979 0.593704 95.884521
+ot.put[16,1] 90.624817 568.273621 9.337607 83.412979 0.593704 95.884521
+ot.put[16,2] 91.053741 603.269165 8.976851 83.412979 0.593704 95.884521
+ot.put[16,3] 91.482635 638.264648 8.616096 83.412979 0.593704 95.884521
+ot.put[16,4] 91.911560 673.260193 8.255341 83.412979 0.593704 95.884521
+ot.put[16,5] 92.340454 708.255676 7.894585 83.412979 0.593704 95.884521
+ot.put[16,6] 92.328217 707.255859 7.904892 83.412979 0.593704 95.884521
 ot.put[16,7] 91.697113 655.762390 8.435719 83.412979 0.593704 95.884521
 ot.put[16,8] 91.911560 673.260132 8.255341 83.412979 0.593704 95.884521
 ot.put[16,9] 92.126038 690.757935 8.074963 83.412979 0.593704 95.884521
 ot.put[16,10] 92.340485 708.255676 7.894585 83.412979 0.593704 95.884521
 ot.put[16,11] 111.276703 720.416565 -0.822742 -84.510582 1.748546 -95.627472
 ot.put[16,12] 111.273010 718.917236 -0.868291 -84.510582 1.748546 -95.627472
-ot.put[17,0] 114.194092 532.983704 9.672867 83.412979 0.593704 95.884521
-ot.put[17,1] 114.702667 574.478394 9.245113 83.412979 0.593704 95.884521
-ot.put[17,2] 115.211243 615.973022 8.817361 83.412979 0.593704 95.884521
-ot.put[17,3] 115.719818 657.467712 8.389608 83.412979 0.593704 95.884521
-ot.put[17,4] 116.228394 698.962402 7.961855 83.412979 0.593704 95.884521
-ot.put[17,5] 107.971649 678.063232 8.186807 83.412979 0.593704 95.884521
-ot.put[17,6] 108.327026 707.059509 7.887895 83.412979 0.593704 95.884521
+ot.put[17,0] 106.194702 533.081848 9.681365 83.412979 0.593704 95.884521
+ot.put[17,1] 106.623627 568.077393 9.320609 83.412979 0.593704 95.884521
+ot.put[17,2] 107.052521 603.072876 8.959854 83.412979 0.593704 95.884521
+ot.put[17,3] 107.481445 638.068420 8.599098 83.412979 0.593704 95.884521
+ot.put[17,4] 107.910339 673.063904 8.238342 83.412979 0.593704 95.884521
+ot.put[17,5] 108.339264 708.059448 7.877587 83.412979 0.593704 95.884521
+ot.put[17,6] 108.326996 707.059570 7.887894 83.412979 0.593704 95.884521
 ot.put[17,7] 107.695923 655.566101 8.418721 83.412979 0.593704 95.884521
 ot.put[17,8] 107.910370 673.063904 8.238343 83.412979 0.593704 95.884521
 ot.put[17,9] 108.124817 690.561646 8.057965 83.412979 0.593704 95.884521
 ot.put[17,10] 108.339294 708.059387 7.877588 83.412979 0.593704 95.884521
 ot.put[17,11] 127.276581 720.378723 -0.870616 -84.510582 1.748546 -95.627472
 ot.put[17,12] 127.272919 718.879395 -0.916165 -84.510582 1.748546 -95.627472
-ot.put[18,0] 130.192871 532.787415 9.655869 83.412979 0.593704 95.884521
-ot.put[18,1] 130.701447 574.282104 9.228116 83.412979 0.593704 95.884521
-ot.put[18,2] 131.210022 615.776794 8.800364 83.412979 0.593704 95.884521
-ot.put[18,3] 131.718597 657.271484 8.372610 83.412979 0.593704 95.884521
-ot.put[18,4] 132.227173 698.766174 7.944858 83.412979 0.593704 95.884521
-ot.put[18,5] 123.970428 677.867004 8.169809 83.412979 0.593704 95.884521
-ot.put[18,6] 124.325806 706.863281 7.870898 83.412979 0.593704 95.884521
+ot.put[18,0] 122.193481 532.885620 9.664368 83.412979 0.593704 95.884521
+ot.put[18,1] 122.622406 567.881104 9.303612 83.412979 0.593704 95.884521
+ot.put[18,2] 123.051300 602.876648 8.942857 83.412979 0.593704 95.884521
+ot.put[18,3] 123.480225 637.872131 8.582101 83.412979 0.593704 95.884521
+ot.put[18,4] 123.909119 672.867676 8.221345 83.412979 0.593704 95.884521
+ot.put[18,5] 124.338043 707.863159 7.860590 83.412979 0.593704 95.884521
+ot.put[18,6] 124.325775 706.863281 7.870897 83.412979 0.593704 95.884521
 ot.put[18,7] 123.694702 655.369873 8.401724 83.412979 0.593704 95.884521
 ot.put[18,8] 123.909149 672.867615 8.221346 83.412979 0.593704 95.884521
 ot.put[18,9] 124.123596 690.365356 8.040968 83.412979 0.593704 95.884521
 ot.put[18,10] 124.338074 707.863159 7.860590 83.412979 0.593704 95.884521
 ot.put[18,11] 143.276459 720.340881 -0.918489 -84.510582 1.748546 -95.627472
 ot.put[18,12] 143.272797 718.841614 -0.964039 -84.510582 1.748546 -95.627472
-ot.put[19,0] 146.191650 532.591187 9.638872 83.412979 0.593704 95.884521
-ot.put[19,1] 146.700226 574.085876 9.211119 83.412979 0.593704 95.884521
-ot.put[19,2] 147.208801 615.580566 8.783366 83.412979 0.593704 95.884521
-ot.put[19,3] 147.717377 657.075195 8.355613 83.412979 0.593704 95.884521
-ot.put[19,4] 148.225952 698.569885 7.927860 83.412979 0.593704 95.884521
-ot.put[19,5] 139.969208 677.670715 8.152812 83.412979 0.593704 95.884521
-ot.put[19,6] 140.324585 706.666992 7.853900 83.412979 0.593704 95.884521
+ot.put[19,0] 138.192261 532.689331 9.647370 83.412979 0.593704 95.884521
+ot.put[19,1] 138.621185 567.684875 9.286614 83.412979 0.593704 95.884521
+ot.put[19,2] 139.050079 602.680359 8.925859 83.412979 0.593704 95.884521
+ot.put[19,3] 139.479004 637.675903 8.565104 83.412979 0.593704 95.884521
+ot.put[19,4] 139.907898 672.671387 8.204348 83.412979 0.593704 95.884521
+ot.put[19,5] 140.336823 707.666931 7.843592 83.412979 0.593704 95.884521
+ot.put[19,6] 140.324554 706.667053 7.853899 83.412979 0.593704 95.884521
 ot.put[19,7] 139.693481 655.173584 8.384727 83.412979 0.593704 95.884521
 ot.put[19,8] 139.907928 672.671387 8.204349 83.412979 0.593704 95.884521
 ot.put[19,9] 140.122375 690.169128 8.023971 83.412979 0.593704 95.884521
 ot.put[19,10] 140.336853 707.666870 7.843593 83.412979 0.593704 95.884521
 ot.put[19,11] 159.276337 720.303101 -0.966363 -84.510582 1.748546 -95.627472
 ot.put[19,12] 159.272675 718.803772 -1.011912 -84.510582 1.748546 -95.627472
-ot.put[20,0] 154.191071 532.493042 9.630373 83.412979 0.593704 95.884521
-ot.put[20,1] 154.699646 573.987732 9.202621 83.412979 0.593704 95.884521
-ot.put[20,2] 155.208221 615.482422 8.774867 83.412979 0.593704 95.884521
-ot.put[20,3] 155.716797 656.977051 8.347115 83.412979 0.593704 95.884521
-ot.put[20,4] 156.225372 698.471741 7.919361 83.412979 0.593704 95.884521
-ot.put[20,5] 155.968018 677.474487 8.135815 83.412979 0.593704 95.884521
-ot.put[20,6] 156.323395 706.470703 7.836903 83.412979 0.593704 95.884521
+ot.put[20,0] 154.191071 532.493103 9.630373 83.412979 0.593704 95.884521
+ot.put[20,1] 154.619995 567.488586 9.269617 83.412979 0.593704 95.884521
+ot.put[20,2] 155.048889 602.484131 8.908861 83.412979 0.593704 95.884521
+ot.put[20,3] 155.477814 637.479614 8.548106 83.412979 0.593704 95.884521
+ot.put[20,4] 155.906708 672.475159 8.187350 83.412979 0.593704 95.884521
+ot.put[20,5] 156.335632 707.470642 7.826594 83.412979 0.593704 95.884521
+ot.put[20,6] 156.323364 706.470825 7.836902 83.412979 0.593704 95.884521
 ot.put[20,7] 155.692291 654.977356 8.367729 83.412979 0.593704 95.884521
 ot.put[20,8] 155.906738 672.475098 8.187351 83.412979 0.593704 95.884521
 ot.put[20,9] 156.121185 689.972839 8.006973 83.412979 0.593704 95.884521
@@ -7253,39 +11168,39 @@ tool.pick[3] 0.000000 10.000000 120.000000 -22.500000 180.000000 0.000000
 #defect.point[50] 81.518196 46.263771 -61.294930 0.010912 -72.129105 121.996773
 #defect.safe 109.729698 -37.185059 -123.196548 -0.002640 -93.839722 38.109039
 #et.mac.point[0] -108.433304 29.966311 -85.653885 1.241895 -66.569603 -142.593597
-#et.mac.point[1] -121.047813 34.543579 -127.340530 -147.692291 -74.207161 11.476429
-#et.mac.point[2] -121.232826 31.659304 -127.600677 -146.384476 -71.496277 10.339728
+#et.mac.point[1] -121.065392 34.572144 -127.414597 -147.686142 -74.292984 11.523052
+#et.mac.point[2] -121.289505 31.777224 -127.705536 -146.361618 -71.680305 10.441516
 #et.mac.point[3] -108.902641 30.147949 -88.569901 0.005273 -61.016697 -141.625610
-#et.mac.point[4] -121.097900 33.639042 -127.386047 -147.213303 -72.406776 9.342637
-#et.mac.point[5] -120.973541 34.547245 -127.275833 -147.621094 -73.182686 10.946504
-#et.mac.point[6] -120.972229 32.729736 -127.642616 -147.447083 -71.959763 10.596328
+#et.mac.point[4] -121.136574 33.662479 -127.481987 -147.189560 -72.507713 9.394450
+#et.mac.point[5] -121.006500 34.553837 -127.396309 -147.611435 -73.282928 11.000528
+#et.mac.point[6] -120.939705 33.258549 -127.571228 -147.551666 -72.331932 10.853655
 #et.mac.point[99] -116.219101 48.973022 -118.426521 -153.258408 -78.901749 15.482635
 #et.pos.point[0] 37.050297 36.205811 -75.294144 22.318947 -90.716179 159.953873
 #et.pos.point[1] 29.992680 49.125366 -54.712074 24.419533 -89.511795 78.813164
-#et.pos.point[2] 26.791262 60.016483 -34.489216 25.817873 -96.277313 85.110344
+#et.pos.point[2] 26.901564 60.305790 -34.121532 26.130764 -96.571892 85.080276
 #et.pos.point[3] 41.332767 27.028564 -91.933907 19.748144 -84.132622 153.718948
-#et.pos.point[4] 32.001419 44.617680 -62.942940 25.914553 -87.718285 72.947174
-#et.pos.point[5] 33.545654 40.135624 -70.390251 26.009476 -86.086121 70.057457
-#et.pos.point[6] 28.927002 54.719242 -45.052437 26.716114 -93.363876 81.004791
+#et.pos.point[4] 31.973732 44.624271 -63.047798 25.923342 -87.616653 72.926132
+#et.pos.point[5] 33.506985 40.224609 -70.308144 26.020901 -86.070328 72.478058
+#et.pos.point[6] 29.072903 55.053959 -44.660213 26.678322 -93.486107 80.901276
 #et.pos.point[99] 42.590481 27.213867 -85.643173 19.667286 -94.327240 -118.745911
 #etalon.safe 89.266121 -4.592290 -112.841698 2.308890 -66.337509 21.642370
 #homyak 13.751370 -37.185059 -123.196098 -0.000880 -93.838348 7.315490
-#machine.pos[1] -121.517143 33.971558 -127.057190 -145.803528 -73.030930 10.960525
-#machine.pos[2] -120.745026 32.672611 -127.697502 -148.550995 -73.745728 10.434266
+#machine.pos[1] -121.606354 34.106323 -127.157143 -145.743759 -73.230057 11.054320
+#machine.pos[2] -120.776665 32.760864 -127.888474 -148.539551 -73.957901 10.543181
 #machine.pos[3] -108.903084 30.275391 -88.616745 0.005273 -60.840916 -141.625381
-#machine.pos[4] -120.840828 32.580322 -127.676086 -147.579788 -70.629730 10.203251
-#machine.pos[5] -121.426178 34.182129 -127.102707 -146.050491 -72.360077 11.022281
-#machine.pos[6] -120.754700 33.494755 -127.656456 -148.358505 -72.682114 10.164401
+#machine.pos[4] -120.814026 32.817627 -127.690361 -147.636917 -70.812386 10.331434
+#machine.pos[5] -121.452988 34.244022 -127.190155 -146.037308 -72.478188 11.085837
+#machine.pos[6] -120.720413 33.512329 -127.660912 -148.390152 -72.688988 10.180743
 #ot.down.left -17.689749 20.772585 -105.342628 -0.239063 -51.968082 39.405712
 #ot.down.right 18.406055 20.475588 -105.814728 0.920215 -51.655655 1.787077
 #ot.orig -16.572218 19.049194 -98.532074 -0.043066 -62.219013 38.147099
 #ot.up.right 15.881397 46.346195 -64.607315 1.356152 -65.874710 5.134777
-#pos.point[1] -16.471584 37.398560 -65.611298 19.012501 -71.961136 121.560417
-#pos.point[2] -18.329151 29.088503 -78.304298 20.549709 -67.096947 123.560524
+#pos.point[1] -16.475977 37.409184 -65.633606 18.900881 -71.950150 121.584816
+#pos.point[2] -18.567335 29.215942 -78.127151 19.655861 -67.243202 124.145370
 #pos.point[3] -14.677297 45.082397 -53.032078 18.119532 -76.528015 32.755573
-#pos.point[4] -21.434767 20.303833 -90.270416 17.369825 -61.947788 123.277893
-#pos.point[5] -26.703371 5.122925 -109.586571 19.423828 -56.150440 127.326950
-#pos.point[6] -23.679495 12.764648 -100.526642 18.781349 -58.613434 127.133766
+#pos.point[4] -21.533205 20.275635 -90.676476 17.283693 -61.102524 127.683846
+#pos.point[5] -27.443850 5.478149 -109.042641 17.425196 -56.603626 131.510269
+#pos.point[6] -23.674660 12.883301 -100.481575 18.791018 -58.554386 126.950378
 #safe.defect 88.187698 -1.084717 -109.968079 -0.777832 -70.491028 113.980682
 #safe.etalon 89.266121 -4.592290 -112.841698 2.308890 -66.337509 21.642370
 #safe.machine -95.088432 -19.149536 -113.268288 -0.002637 -85.693367 -155.432388
@@ -7295,17 +11210,19 @@ tool.pick[3] 0.000000 10.000000 120.000000 -22.500000 180.000000 0.000000
 .END
 .REALS
 capture.grip = 2
-chg.tare.count = 147
-count.defect = 0
+chg.tare.count = 126
+count.defect = 8
 count.pick = 0
 count.put = 0
 current.gripper = 1
 current.ot = 1
-defect.h.cor = -16
-defect.x.cor = 0
+defect.h.cor = -10
+defect.x.cor = 1
+defect.x.cor.r = -21
 defect.y.cor = 7
-detail.count = 11
-detail.spec = 11
+defect.y.cor.r = -15
+detail.count = 14
+detail.spec = 0
 di.hold = 2009
 di.ifp.page[1] = 2001
 di.ifp.page[2] = 2002
@@ -7393,7 +11310,7 @@ grip.180xsh[61] = 0
 grip.180xsh[62] = 0
 grip.180xsh[63] = 0
 grip.180xsh[64] = 0
-grip.180ysh[1] = 0
+grip.180ysh[1] = 15
 grip.180ysh[2] = 0
 grip.180ysh[3] = 0
 grip.180ysh[4] = 0
@@ -7525,12 +11442,12 @@ grip.midysh[63] = 0
 grip.midysh[64] = 0
 grip.unclamp = 3
 grip.unclamped = 1001
-grip.xsh[1] = 1.5
-grip.xsh[2] = 1.7
+grip.xsh[1] = 1
+grip.xsh[2] = 1
 grip.xsh[3] = -24
-grip.xsh[4] = 1.5
-grip.xsh[5] = 1.5
-grip.xsh[6] = 1.5
+grip.xsh[4] = 1
+grip.xsh[5] = 1
+grip.xsh[6] = 1
 grip.xsh[7] = 0
 grip.xsh[8] = 0
 grip.xsh[9] = 0
@@ -7653,12 +11570,12 @@ grip.ysh[61] = 0
 grip.ysh[62] = 0
 grip.ysh[63] = 0
 grip.ysh[64] = 0
-grip.zsh[1] = -46
-grip.zsh[2] = -47
+grip.zsh[1] = -45
+grip.zsh[2] = -45
 grip.zsh[3] = -45
-grip.zsh[4] = -47
-grip.zsh[5] = -47
-grip.zsh[6] = -47
+grip.zsh[4] = -45
+grip.zsh[5] = -45
+grip.zsh[6] = -45
 grip.zsh[7] = 0
 grip.zsh[8] = 0
 grip.zsh[9] = 0
@@ -7717,22 +11634,22 @@ grip.zsh[61] = 0
 grip.zsh[62] = 0
 grip.zsh[63] = 0
 grip.zsh[64] = 0
-hmi.defect.pos = 49
-hmi.etalon.id = 5
+hmi.defect.pos = 1
+hmi.etalon.id = 6
 hmi.g180x = 0
-hmi.g180y = 0
+hmi.g180y = 15
 hmi.gmidy = 0
 hmi.gripper = 1
-hmi.gx = 1.5
-hmi.gy = -12
-hmi.gz = -47
-hmi.obj.id = 4
-hmi.ot.k = 0
+hmi.gx = 1
+hmi.gy = -15
+hmi.gz = -45
+hmi.obj.id = 1
+hmi.ot.k = 5
 hmi.tool.no = 1
-keep.object = 4
-layout = 0
+keep.object = 1
+layout = 3
 line.width = 210
-lines.count = 20
+lines.count = 21
 lines.shift = 16
 max.count.put = 0
 max.defect.cnt = 50
@@ -7743,126 +11660,126 @@ ms[2] = 0
 ms[3] = 0
 ms[4] = 0
 ms[5] = 0
-ms[6] = 0
-ms[7] = 19
-ms[8] = 19
-ms[9] = 19
-ms[10] = 19
-ms[11] = 19
-ms[12] = 19
-ms[13] = 19
+ms[6] = 20
+ms[7] = 20
+ms[8] = 20
+ms[9] = 20
+ms[10] = 20
+ms[11] = 20
+ms[12] = 10
+ms[13] = 10
 ms[14] = 10
 ms[15] = 10
 ms[16] = 10
 ms[17] = 10
-ms[18] = 10
-ms[19] = 10
-ms[20] = 10
+ms[18] = 9
+ms[19] = 9
+ms[20] = 9
 ms[21] = 9
 ms[22] = 9
 ms[23] = 9
-ms[24] = 9
-ms[25] = 9
-ms[26] = 9
-ms[27] = 9
+ms[24] = 11
+ms[25] = 11
+ms[26] = 11
+ms[27] = 11
 ms[28] = 11
 ms[29] = 11
-ms[30] = 11
-ms[31] = 11
-ms[32] = 11
-ms[33] = 11
-ms[34] = 11
+ms[30] = 8
+ms[31] = 8
+ms[32] = 8
+ms[33] = 8
+ms[34] = 8
 ms[35] = 8
-ms[36] = 8
-ms[37] = 8
-ms[38] = 8
-ms[39] = 8
-ms[40] = 8
-ms[41] = 8
-ms[42] = 12
-ms[43] = 12
-ms[44] = 12
-ms[45] = 12
-ms[46] = 12
-ms[47] = 12
-ms[48] = 12
-ms[49] = 7
-ms[50] = 7
-ms[51] = 7
-ms[52] = 7
-ms[53] = 7
-ms[54] = 7
-ms[55] = 7
-ms[56] = 13
-ms[57] = 13
-ms[58] = 13
-ms[59] = 13
-ms[60] = 13
-ms[61] = 13
-ms[62] = 13
-ms[63] = 6
-ms[64] = 6
-ms[65] = 6
-ms[66] = 6
-ms[67] = 6
-ms[68] = 6
-ms[69] = 6
-ms[70] = 14
-ms[71] = 14
-ms[72] = 14
-ms[73] = 14
-ms[74] = 14
-ms[75] = 14
-ms[76] = 14
-ms[77] = 5
-ms[78] = 5
-ms[79] = 5
-ms[80] = 5
-ms[81] = 5
-ms[82] = 5
-ms[83] = 5
-ms[84] = 15
-ms[85] = 15
-ms[86] = 15
-ms[87] = 15
-ms[88] = 15
-ms[89] = 15
-ms[90] = 15
-ms[91] = 4
-ms[92] = 4
-ms[93] = 4
-ms[94] = 4
-ms[95] = 4
-ms[96] = 4
-ms[97] = 4
-ms[98] = 16
-ms[99] = 16
-ms[100] = 16
-ms[101] = 16
-ms[102] = 16
-ms[103] = 16
-ms[104] = 16
-ms[105] = 3
-ms[106] = 3
-ms[107] = 3
-ms[108] = 3
-ms[109] = 3
-ms[110] = 3
-ms[111] = 3
-ms[112] = 17
-ms[113] = 17
-ms[114] = 17
-ms[115] = 17
-ms[116] = 17
-ms[117] = 17
-ms[118] = 17
-ms[119] = 2
-ms[120] = 2
-ms[121] = 2
-ms[122] = 2
-ms[123] = 2
-ms[124] = 2
-ms[125] = 2
+ms[36] = 12
+ms[37] = 12
+ms[38] = 12
+ms[39] = 12
+ms[40] = 12
+ms[41] = 12
+ms[42] = 7
+ms[43] = 7
+ms[44] = 7
+ms[45] = 7
+ms[46] = 7
+ms[47] = 7
+ms[48] = 13
+ms[49] = 13
+ms[50] = 13
+ms[51] = 13
+ms[52] = 13
+ms[53] = 13
+ms[54] = 6
+ms[55] = 6
+ms[56] = 6
+ms[57] = 6
+ms[58] = 6
+ms[59] = 6
+ms[60] = 14
+ms[61] = 14
+ms[62] = 14
+ms[63] = 14
+ms[64] = 14
+ms[65] = 14
+ms[66] = 5
+ms[67] = 5
+ms[68] = 5
+ms[69] = 5
+ms[70] = 5
+ms[71] = 5
+ms[72] = 15
+ms[73] = 15
+ms[74] = 15
+ms[75] = 15
+ms[76] = 15
+ms[77] = 15
+ms[78] = 4
+ms[79] = 4
+ms[80] = 4
+ms[81] = 4
+ms[82] = 4
+ms[83] = 4
+ms[84] = 16
+ms[85] = 16
+ms[86] = 16
+ms[87] = 16
+ms[88] = 16
+ms[89] = 16
+ms[90] = 3
+ms[91] = 3
+ms[92] = 3
+ms[93] = 3
+ms[94] = 3
+ms[95] = 3
+ms[96] = 17
+ms[97] = 17
+ms[98] = 17
+ms[99] = 17
+ms[100] = 17
+ms[101] = 17
+ms[102] = 2
+ms[103] = 2
+ms[104] = 2
+ms[105] = 2
+ms[106] = 2
+ms[107] = 2
+ms[108] = 18
+ms[109] = 18
+ms[110] = 18
+ms[111] = 18
+ms[112] = 18
+ms[113] = 18
+ms[114] = 1
+ms[115] = 1
+ms[116] = 1
+ms[117] = 1
+ms[118] = 1
+ms[119] = 1
+ms[120] = 19
+ms[121] = 19
+ms[122] = 19
+ms[123] = 19
+ms[124] = 19
+ms[125] = 19
 ms[126] = 18
 ms[127] = 18
 ms[128] = 18
@@ -8016,126 +11933,126 @@ ns[2] = 2
 ns[3] = 3
 ns[4] = 4
 ns[5] = 5
-ns[6] = 6
-ns[7] = 0
-ns[8] = 1
-ns[9] = 2
-ns[10] = 3
-ns[11] = 4
-ns[12] = 5
-ns[13] = 6
-ns[14] = 0
-ns[15] = 1
-ns[16] = 2
-ns[17] = 3
-ns[18] = 4
-ns[19] = 5
-ns[20] = 6
-ns[21] = 0
-ns[22] = 1
-ns[23] = 2
-ns[24] = 3
-ns[25] = 4
-ns[26] = 5
-ns[27] = 6
-ns[28] = 0
-ns[29] = 1
-ns[30] = 2
-ns[31] = 3
-ns[32] = 4
-ns[33] = 5
-ns[34] = 6
-ns[35] = 0
-ns[36] = 1
-ns[37] = 2
-ns[38] = 3
-ns[39] = 4
-ns[40] = 5
-ns[41] = 6
+ns[6] = 0
+ns[7] = 1
+ns[8] = 2
+ns[9] = 3
+ns[10] = 4
+ns[11] = 5
+ns[12] = 0
+ns[13] = 1
+ns[14] = 2
+ns[15] = 3
+ns[16] = 4
+ns[17] = 5
+ns[18] = 0
+ns[19] = 1
+ns[20] = 2
+ns[21] = 3
+ns[22] = 4
+ns[23] = 5
+ns[24] = 0
+ns[25] = 1
+ns[26] = 2
+ns[27] = 3
+ns[28] = 4
+ns[29] = 5
+ns[30] = 0
+ns[31] = 1
+ns[32] = 2
+ns[33] = 3
+ns[34] = 4
+ns[35] = 5
+ns[36] = 0
+ns[37] = 1
+ns[38] = 2
+ns[39] = 3
+ns[40] = 4
+ns[41] = 5
 ns[42] = 0
 ns[43] = 1
 ns[44] = 2
 ns[45] = 3
 ns[46] = 4
 ns[47] = 5
-ns[48] = 6
-ns[49] = 0
-ns[50] = 1
-ns[51] = 2
-ns[52] = 3
-ns[53] = 4
-ns[54] = 5
-ns[55] = 6
-ns[56] = 0
-ns[57] = 1
-ns[58] = 2
-ns[59] = 3
-ns[60] = 4
-ns[61] = 5
-ns[62] = 6
-ns[63] = 0
-ns[64] = 1
-ns[65] = 2
-ns[66] = 3
-ns[67] = 4
-ns[68] = 5
-ns[69] = 6
-ns[70] = 0
-ns[71] = 1
-ns[72] = 2
-ns[73] = 3
-ns[74] = 4
-ns[75] = 5
-ns[76] = 6
-ns[77] = 0
-ns[78] = 1
-ns[79] = 2
-ns[80] = 3
-ns[81] = 4
-ns[82] = 5
-ns[83] = 6
+ns[48] = 0
+ns[49] = 1
+ns[50] = 2
+ns[51] = 3
+ns[52] = 4
+ns[53] = 5
+ns[54] = 0
+ns[55] = 1
+ns[56] = 2
+ns[57] = 3
+ns[58] = 4
+ns[59] = 5
+ns[60] = 0
+ns[61] = 1
+ns[62] = 2
+ns[63] = 3
+ns[64] = 4
+ns[65] = 5
+ns[66] = 0
+ns[67] = 1
+ns[68] = 2
+ns[69] = 3
+ns[70] = 4
+ns[71] = 5
+ns[72] = 0
+ns[73] = 1
+ns[74] = 2
+ns[75] = 3
+ns[76] = 4
+ns[77] = 5
+ns[78] = 0
+ns[79] = 1
+ns[80] = 2
+ns[81] = 3
+ns[82] = 4
+ns[83] = 5
 ns[84] = 0
 ns[85] = 1
 ns[86] = 2
 ns[87] = 3
 ns[88] = 4
 ns[89] = 5
-ns[90] = 6
-ns[91] = 0
-ns[92] = 1
-ns[93] = 2
-ns[94] = 3
-ns[95] = 4
-ns[96] = 5
-ns[97] = 6
-ns[98] = 0
-ns[99] = 1
-ns[100] = 2
-ns[101] = 3
-ns[102] = 4
-ns[103] = 5
-ns[104] = 6
-ns[105] = 0
-ns[106] = 1
-ns[107] = 2
-ns[108] = 3
-ns[109] = 4
-ns[110] = 5
-ns[111] = 6
-ns[112] = 0
-ns[113] = 1
-ns[114] = 2
-ns[115] = 3
-ns[116] = 4
-ns[117] = 5
-ns[118] = 6
-ns[119] = 0
-ns[120] = 1
-ns[121] = 2
-ns[122] = 3
-ns[123] = 4
-ns[124] = 5
-ns[125] = 6
+ns[90] = 0
+ns[91] = 1
+ns[92] = 2
+ns[93] = 3
+ns[94] = 4
+ns[95] = 5
+ns[96] = 0
+ns[97] = 1
+ns[98] = 2
+ns[99] = 3
+ns[100] = 4
+ns[101] = 5
+ns[102] = 0
+ns[103] = 1
+ns[104] = 2
+ns[105] = 3
+ns[106] = 4
+ns[107] = 5
+ns[108] = 0
+ns[109] = 1
+ns[110] = 2
+ns[111] = 3
+ns[112] = 4
+ns[113] = 5
+ns[114] = 0
+ns[115] = 1
+ns[116] = 2
+ns[117] = 3
+ns[118] = 4
+ns[119] = 5
+ns[120] = 0
+ns[121] = 1
+ns[122] = 2
+ns[123] = 3
+ns[124] = 4
+ns[125] = 5
 ns[126] = 0
 ns[127] = 1
 ns[128] = 2
@@ -8283,12 +12200,12 @@ ns[269] = 0
 ns[270] = 12
 ns[271] = 0
 ns[272] = 12
-obj.in.line = 7
+obj.in.line = 6
 obj.spacer = 1.5
 object.id = 1
 object.length = 27.5
-ot.x = 11
-ot.y = 2
+ot.x = 0
+ot.y = 5
 pawn.no = 5
 pg.gripper = 2
 pg13.gripper = 2
@@ -8365,6 +12282,8 @@ s.measure.ng = 2226
 s.measure.ok = 2225
 s.opt.flip = 2271
 s.opt.spacer = 2270
+s.ot.flip = 2271
+s.ot.spacer = 2270
 s.pr.home = 2250
 s.pr.tch.defect = 2252
 s.pr.tch.etal = 2254
@@ -8379,556 +12298,152 @@ s.tcp.log = 2204
 s.tcp.recv.ena = 2202
 s.tcp.send.ena = 2201
 s.zone.blocked = 2209
-spc.tare.count = 50
-state = 100
+spc.tare.count = 126
+state = 0
 tcp.ena = -1
 tcp.port = 9007
 tcp.recv.ena = -1
 tcp.send.ena = -1
 tcp.sender.dly = 0.25
-tcp.socket = 508
+tcp.socket = -34024
 tree.gripper = 2
 tyterm = 0
-wdog.tmr = 180
+wdog.tmr = 30
+work.tare.count = 126
 .END
 .STRINGS
-$action = "WaitingForStart"
-$log.entry[0] = "11:54:28 State 5: Check etalon"
-$log.entry[1] = "11:54:29 Pick detail from etalon (ID: 2)"
-$log.entry[2] = "11:54:35 Measure etalon (ID: 2)"
-$log.entry[3] = "11:54:39 Waiting for measurement result"
-$log.entry[4] = "11:56:33 Measurement etalon: OK"
-$log.entry[5] = "11:56:34 Return etalon to positioner (ID: 2)"
-$log.entry[6] = "11:56:41 Etalon measurement result OK (0)"
-$log.entry[7] = "11:56:41 State 101: Calculating next step"
-$log.entry[8] = "11:56:41 State 1: Pick from positioner"
-$log.entry[9] = "11:56:41 Pick detail from positioner (ID: 2)"
-$log.entry[10] = "11:56:42 Check if positioner is occupied"
-$log.entry[11] = "11:56:44 State 101: Calculating next step"
-$log.entry[12] = "11:56:44 State 2: Measurement process"
-$log.entry[13] = "11:56:45 Move to measure machine"
-$log.entry[14] = "11:56:48 Waiting for measurement result"
-$log.entry[15] = "11:57:05 Received MEASUREMENT command: FALSE"
-$log.entry[16] = "11:57:06 Measurement result: DEFECT"
-$log.entry[17] = "11:57:07 State 101: Calculating next step"
-$log.entry[18] = "11:57:08 State 4: Put detail to defect tare"
-$log.entry[19] = "11:57:09 Putting to defect tare with No: 10"
-$log.entry[20] = "11:57:11 State 101: Calculating next step"
-$log.entry[21] = "11:57:11 State 1: Pick from positioner"
-$log.entry[22] = "11:57:11 Pick detail from positioner (ID: 2)"
-$log.entry[23] = "11:57:12 Check if positioner is occupied"
-$log.entry[24] = "11:57:14 State 101: Calculating next step"
-$log.entry[25] = "11:57:14 State 2: Measurement process"
-$log.entry[26] = "11:57:15 Move to measure machine"
-$log.entry[27] = "11:57:18 Waiting for measurement result"
-$log.entry[28] = "11:57:35 Received MEASUREMENT command: FALSE"
-$log.entry[29] = "11:57:35 Measurement result: DEFECT"
-$log.entry[30] = "11:57:37 State 101: Calculating next step"
-$log.entry[31] = "11:57:37 State 4: Put detail to defect tare"
-$log.entry[32] = "11:57:38 Putting to defect tare with No: 11"
-$log.entry[33] = "11:57:40 State 101: Calculating next step"
-$log.entry[34] = "11:57:40 State 1: Pick from positioner"
-$log.entry[35] = "11:57:40 Pick detail from positioner (ID: 2)"
-$log.entry[36] = "11:57:41 Check if positioner is occupied"
-$log.entry[37] = "11:57:44 State 101: Calculating next step"
-$log.entry[38] = "11:57:44 State 2: Measurement process"
-$log.entry[39] = "11:57:44 Move to measure machine"
-$log.entry[40] = "11:57:47 Waiting for measurement result"
-$log.entry[41] = "11:58:04 Received MEASUREMENT command: FALSE"
-$log.entry[42] = "11:58:05 Measurement result: DEFECT"
-$log.entry[43] = "11:58:07 State 101: Calculating next step"
-$log.entry[44] = "11:58:07 State 4: Put detail to defect tare"
-$log.entry[45] = "11:58:08 Putting to defect tare with No: 12"
-$log.entry[46] = "11:58:10 State 101: Calculating next step"
-$log.entry[47] = "11:58:10 State 5: Check etalon"
-$log.entry[48] = "11:58:11 Pick detail from etalon (ID: 2)"
-$log.entry[49] = "11:58:16 Measure etalon (ID: 2)"
-$log.entry[50] = "11:58:21 Waiting for measurement result"
-$log.entry[51] = "12:00:02 Measurement etalon: OK"
-$log.entry[52] = "12:00:04 Return etalon to positioner (ID: 2)"
-$log.entry[53] = "12:00:10 Etalon measurement result OK (0)"
-$log.entry[54] = "12:00:10 State 101: Calculating next step"
-$log.entry[55] = "12:00:11 State 1: Pick from positioner"
-$log.entry[56] = "12:00:11 Pick detail from positioner (ID: 2)"
-$log.entry[57] = "12:00:11 Check if positioner is occupied"
-$log.entry[58] = "12:00:14 State 101: Calculating next step"
-$log.entry[59] = "12:00:14 State 2: Measurement process"
-$log.entry[60] = "12:00:14 Move to measure machine"
-$log.entry[61] = "12:00:17 Waiting for measurement result"
-$log.entry[62] = "12:00:35 Received MEASUREMENT command: FALSE"
-$log.entry[63] = "12:00:35 Measurement result: DEFECT"
-$log.entry[64] = "12:00:37 State 101: Calculating next step"
-$log.entry[65] = "12:00:37 State 4: Put detail to defect tare"
-$log.entry[66] = "12:00:38 Putting to defect tare with No: 13"
-$log.entry[67] = "12:00:40 State 101: Calculating next step"
-$log.entry[68] = "12:00:41 State 1: Pick from positioner"
-$log.entry[69] = "12:00:41 Pick detail from positioner (ID: 2)"
-$log.entry[70] = "12:00:41 Check if positioner is occupied"
-$log.entry[71] = "12:00:44 State 101: Calculating next step"
-$log.entry[72] = "12:00:44 State 2: Measurement process"
-$log.entry[73] = "12:00:44 Move to measure machine"
-$log.entry[74] = "12:00:48 Waiting for measurement result"
-$log.entry[75] = "12:01:04 Received MEASUREMENT command: FALSE"
-$log.entry[76] = "12:01:04 Measurement result: DEFECT"
-$log.entry[77] = "12:01:06 State 101: Calculating next step"
-$log.entry[78] = "12:01:06 State 4: Put detail to defect tare"
-$log.entry[79] = "12:01:08 Putting to defect tare with No: 14"
-$log.entry[80] = "12:01:10 State 101: Calculating next step"
-$log.entry[81] = "12:01:10 State 1: Pick from positioner"
-$log.entry[82] = "12:01:10 Pick detail from positioner (ID: 2)"
-$log.entry[83] = "12:01:11 Check if positioner is occupied"
-$log.entry[84] = "12:01:13 State 101: Calculating next step"
-$log.entry[85] = "12:01:13 State 2: Measurement process"
-$log.entry[86] = "12:01:14 Move to measure machine"
-$log.entry[87] = "12:01:14 Received STOP command"
-$log.entry[88] = "12:01:17 Waiting for measurement result"
-$log.entry[89] = "12:02:59 Received MEASUREMENT command: TRUE"
-$log.entry[90] = "12:02:59 Measurement result: OK"
-$log.entry[91] = "12:03:01 State 101: Calculating next step"
-$log.entry[92] = "12:03:02 State 3: Put detail to OT"
-$log.entry[93] = "12:03:03 Put to OT detail 1"
-$log.entry[94] = "12:03:03 Check if positioner is occupied"
-$log.entry[95] = "12:03:04 State 101: Calculating next step"
-$log.entry[96] = "12:03:04 State 1: Pick from positioner"
-$log.entry[97] = "12:03:05 Pick detail from positioner (ID: 2)"
-$log.entry[98] = "12:03:07 State 101: Calculating next step"
-$log.entry[99] = "12:03:07 State 2: Measurement process"
-$log.entry[100] = "12:03:07 Move to measure machine"
-$log.entry[101] = "12:03:11 Waiting for measurement result"
-$log.entry[102] = "12:03:16 Received MEASUREMENT command: TRUE"
-$log.entry[103] = "12:03:16 Measurement result: OK"
-$log.entry[104] = "12:03:18 State 101: Calculating next step"
-$log.entry[105] = "12:03:18 State 3: Put detail to OT"
-$log.entry[106] = "12:03:19 Put to OT detail 2"
-$log.entry[107] = "12:03:19 Check if positioner is occupied"
-$log.entry[108] = "12:03:21 State 101: Calculating next step"
-$log.entry[109] = "01:27:38 Main program executed"
-$log.entry[110] = "01:27:38 Performing safe motion to home position"
-$log.entry[111] = "01:27:39 Robot in home position"
-$log.entry[112] = "01:27:39 State 100: Waiting for start"
-$log.entry[113] = "01:28:54 START with Name:STRING-11 Count: 11 OT:1 OPT:1"
-$log.entry[114] = "01:28:54 State 106: Check program"
-$log.entry[115] = "01:28:54 Wrong program name. Program reset"
-$log.entry[116] = "01:28:59 State 0: Program reset. Initialization of parameters"
-$log.entry[117] = "01:28:59 State 100: Waiting for start"
-$log.entry[118] = "01:29:07 START with Name:STRING-11 Count: 11 OT:1 OPT:1"
-$log.entry[119] = "01:29:07 State 106: Check program"
-$log.entry[120] = "01:29:08 Wrong program name. Program reset"
-$log.entry[121] = "01:29:13 State 0: Program reset. Initialization of parameters"
-$log.entry[122] = "01:29:13 State 100: Waiting for start"
-$log.entry[123] = "01:29:15 START with Name:STRING-11 Count: 11 OT:1 OPT:1"
-$log.entry[124] = "01:29:15 State 106: Check program"
-$log.entry[125] = "01:29:15 Wrong program name. Program reset"
-$log.entry[126] = "01:29:20 State 0: Program reset. Initialization of parameters"
-$log.entry[127] = "01:29:20 State 100: Waiting for start"
+$action = "WaitingCalibrationResult"
+$log.entry[0] = "01:45:47 Received MEASUREMENT command: TRUE"
+$log.entry[1] = "01:45:48 Received MEASUREMENT command: TRUE"
+$log.entry[2] = "01:45:49 Received MEASUREMENT command: TRUE"
+$log.entry[3] = "01:45:50 Received MEASUREMENT command: TRUE"
+$log.entry[4] = "01:45:51 Received MEASUREMENT command: TRUE"
+$log.entry[5] = "01:45:52 Received MEASUREMENT command: TRUE"
+$log.entry[6] = "01:45:53 Received MEASUREMENT command: TRUE"
+$log.entry[7] = "01:45:54 Received MEASUREMENT command: TRUE"
+$log.entry[8] = "01:45:55 Received MEASUREMENT command: TRUE"
+$log.entry[9] = "01:45:56 Received MEASUREMENT command: TRUE"
+$log.entry[10] = "01:45:57 Received MEASUREMENT command: TRUE"
+$log.entry[11] = "01:45:58 Received MEASUREMENT command: TRUE"
+$log.entry[12] = "01:45:59 Received MEASUREMENT command: TRUE"
+$log.entry[13] = "01:46:00 Received MEASUREMENT command: TRUE"
+$log.entry[14] = "01:46:01 Received MEASUREMENT command: TRUE"
+$log.entry[15] = "01:46:02 Received MEASUREMENT command: TRUE"
+$log.entry[16] = "01:46:03 Received MEASUREMENT command: TRUE"
+$log.entry[17] = "01:46:04 Received MEASUREMENT command: TRUE"
+$log.entry[18] = "01:46:05 Received MEASUREMENT command: TRUE"
+$log.entry[19] = "01:46:06 Received MEASUREMENT command: TRUE"
+$log.entry[20] = "01:46:07 Received MEASUREMENT command: TRUE"
+$log.entry[21] = "01:46:08 Received MEASUREMENT command: TRUE"
+$log.entry[22] = "01:46:09 Received MEASUREMENT command: TRUE"
+$log.entry[23] = "01:46:10 Received MEASUREMENT command: TRUE"
+$log.entry[24] = "01:46:11 Received MEASUREMENT command: TRUE"
+$log.entry[25] = "01:46:12 Received MEASUREMENT command: TRUE"
+$log.entry[26] = "01:46:13 Received MEASUREMENT command: TRUE"
+$log.entry[27] = "01:46:14 Received MEASUREMENT command: TRUE"
+$log.entry[28] = "01:58:51 Selected layout: no flip, full ot"
+$log.entry[29] = "01:58:51 Calc grid for 1, 21"
+$log.entry[30] = "01:59:50 Selected layout: no flip, full ot"
+$log.entry[31] = "01:59:50 Calc grid for 1, 21"
+$log.entry[32] = "02:03:41 Selected layout: no flip, full ot"
+$log.entry[33] = "02:03:41 Calc grid for 1, 21"
+$log.entry[34] = "02:04:03 Selected layout: no flip, full ot"
+$log.entry[35] = "02:04:03 Calc grid for 1, 21"
+$log.entry[36] = "02:04:08 Selected layout: no flip, full ot"
+$log.entry[37] = "02:04:08 Calc grid for 1, 21"
+$log.entry[38] = "02:04:25 Selected layout: no flip, full ot"
+$log.entry[39] = "02:04:25 Calc grid for 1, 21"
+$log.entry[40] = "02:04:35 Selected layout: no flip, full ot"
+$log.entry[41] = "02:04:35 Calc grid for 1, 21"
+$log.entry[42] = "02:04:43 Selected layout: no flip, full ot"
+$log.entry[43] = "02:04:43 Calc grid for 1, 21"
+$log.entry[44] = "02:04:52 Selected layout: no flip, full ot"
+$log.entry[45] = "02:04:52 Calc grid for 1, 21"
+$log.entry[46] = "02:05:16 Selected layout: no flip, full ot"
+$log.entry[47] = "02:05:16 Calc grid for 1, 21"
+$log.entry[48] = "02:05:43 Selected layout: no flip, full ot"
+$log.entry[49] = "02:05:43 Calc grid for 1, 21"
+$log.entry[50] = "02:05:54 Selected layout: no flip, full ot"
+$log.entry[51] = "02:05:54 Calc grid for 1, 21"
+$log.entry[52] = "02:06:07 Selected layout: flip, full ot"
+$log.entry[53] = "02:06:07 Calc grid for 1, 21"
+$log.entry[54] = "02:06:16 Selected layout: flip, full ot"
+$log.entry[55] = "02:06:16 Calc grid for 1, 21"
+$log.entry[56] = "02:06:37 Selected layout: flip, full ot"
+$log.entry[57] = "02:06:37 Calc grid for 1, 21"
+$log.entry[58] = "02:07:28 Selected layout: no flip, full ot"
+$log.entry[59] = "02:07:28 Calc grid for 1, 21"
+$log.entry[60] = "02:07:38 Selected layout: no flip, full ot"
+$log.entry[61] = "02:07:38 Calc grid for 1, 21"
+$log.entry[62] = "02:07:48 Selected layout: no flip, full ot"
+$log.entry[63] = "02:07:48 Calc grid for 1, 21"
+$log.entry[64] = "02:07:59 Selected layout: no flip, full ot"
+$log.entry[65] = "02:07:59 Calc grid for 1, 21"
+$log.entry[66] = "02:08:13 Selected layout: no flip, full ot"
+$log.entry[67] = "02:08:13 Calc grid for 1, 21"
+$log.entry[68] = "02:08:22 Selected layout: no flip, full ot"
+$log.entry[69] = "02:08:22 Calc grid for 1, 21"
+$log.entry[70] = "02:08:43 Selected layout: no flip, ot w/ space"
+$log.entry[71] = "02:08:43 Detail \'length\': 57.27272"
+$log.entry[72] = "02:08:43 Calc grid for 1, 21"
+$log.entry[73] = "02:08:55 Selected layout: no flip, ot w/ space"
+$log.entry[74] = "02:08:55 Detail \'length\': 57.27272"
+$log.entry[75] = "02:08:55 Calc grid for 1, 21"
+$log.entry[76] = "02:09:06 Selected layout: no flip, ot w/ space"
+$log.entry[77] = "02:09:06 Detail \'length\': 57.27272"
+$log.entry[78] = "02:09:06 Calc grid for 1, 21"
+$log.entry[79] = "02:12:16 Selected layout: no flip, full ot"
+$log.entry[80] = "02:12:16 Calc grid for 1, 21"
+$log.entry[81] = "02:12:25 Selected layout: no flip, full ot"
+$log.entry[82] = "02:12:25 Calc grid for 1, 21"
+$log.entry[83] = "02:12:32 Selected layout: no flip, full ot"
+$log.entry[84] = "02:12:32 Calc grid for 1, 21"
+$log.entry[85] = "02:12:49 Selected layout: no flip, full ot"
+$log.entry[86] = "02:12:49 Calc grid for 1, 21"
+$log.entry[87] = "02:12:59 Selected layout: no flip, full ot"
+$log.entry[88] = "02:12:59 Calc grid for 1, 21"
+$log.entry[89] = "02:13:18 Selected layout: no flip, ot w/ space"
+$log.entry[90] = "02:13:18 Detail \'length\': 35"
+$log.entry[91] = "02:13:18 Calc grid for 1, 21"
+$log.entry[92] = "02:13:31 Selected layout: no flip, ot w/ space"
+$log.entry[93] = "02:13:31 Detail \'length\': 35"
+$log.entry[94] = "02:13:31 Calc grid for 1, 21"
+$log.entry[95] = "02:13:44 Selected layout: no flip, ot w/ space"
+$log.entry[96] = "02:13:44 Detail \'length\': 35"
+$log.entry[97] = "02:13:44 Calc grid for 1, 21"
+$log.entry[98] = "02:13:57 Selected layout: no flip, ot w/ space"
+$log.entry[99] = "02:13:57 Detail \'length\': 35"
+$log.entry[100] = "02:13:57 Calc grid for 1, 21"
+$log.entry[101] = "02:14:35 Selected layout: no flip, full ot"
+$log.entry[102] = "02:14:35 Calc grid for 1, 21"
+$log.entry[103] = "02:14:43 Selected layout: no flip, full ot"
+$log.entry[104] = "02:14:43 Calc grid for 1, 21"
+$log.entry[105] = "02:14:55 Selected layout: flip, full ot"
+$log.entry[106] = "02:14:55 Calc grid for 1, 21"
+$log.entry[107] = "02:15:04 Selected layout: flip, full ot"
+$log.entry[108] = "02:15:04 Calc grid for 1, 21"
+$log.entry[109] = "02:15:31 Selected layout: flip, full ot"
+$log.entry[110] = "02:15:31 Calc grid for 1, 21"
+$log.entry[111] = "02:15:58 Selected layout: flip, full ot"
+$log.entry[112] = "02:15:58 Calc grid for 1, 21"
+$log.entry[113] = "02:16:20 Selected layout: flip, full ot"
+$log.entry[114] = "02:16:20 Calc grid for 1, 21"
+$log.entry[115] = "02:16:28 Selected layout: flip, full ot"
+$log.entry[116] = "02:16:28 Calc grid for 1, 21"
+$log.entry[117] = "02:16:44 Selected layout: flip, full ot"
+$log.entry[118] = "02:16:44 Calc grid for 1, 21"
+$log.entry[119] = "02:17:05 Selected layout: flip, ot w/ space"
+$log.entry[120] = "02:17:05 Detail \'length\': 35"
+$log.entry[121] = "02:17:05 Calc grid for 1, 21"
+$log.entry[122] = "02:17:15 Selected layout: flip, ot w/ space"
+$log.entry[123] = "02:17:15 Detail \'length\': 35"
+$log.entry[124] = "02:17:15 Calc grid for 1, 21"
+$log.entry[125] = "02:17:29 Selected layout: flip, ot w/ space"
+$log.entry[126] = "02:17:29 Detail \'length\': 35"
+$log.entry[127] = "02:17:29 Calc grid for 1, 21"
 $opt.data = "1"
 $ot.data = "1"
-$pg.name = "NULL"
+$pg.name = "312.229.002"
 $tcp.ip = "127.0.0.1"
-$wdog.state = "TRUE"
-.END
-.IDE_CMT
-@@@ PROJECT @@@
-@@@ PROJECTNAME @@@
-ALKU_RS007L_MASTER
-@@@ HISTORY @@@
-@@@ INSPECTION @@@
-count.pick
-max.count.put
-count.defect
-@@@ CONNECTION @@@
-KROSET R02
-127.0.0.1
-9205
-@@@ PROGRAM @@@
-Group:Etalon:1
-1:a.teach.etalon:F
-.eshift.x 
-.eshift.y 
-.et.pos.point 
-.et.mac.poin 
-1:etalon.measure:F
-.id 
-.etalon.pos.pt 
-.etalon.mac.pt 
-.shift.y 
-.shift.z 
-.p.idx 
-.eshift.x 
-.eshift.y 
-.$temp 
-.work 
-Group:OT:2
-2:a.teach.ot:F
-.ot.down.left 
-.ot.down.right 
-.ot.up.right 
-.ot.orig 
-2:calc.grid:F
-.max 
-.obj.len 
-.obj.len.w.spc 
-.i 
-.j 
-2:calc.grid.rnd:F
-.max 
-.obj.shift 
-.i 
-.j 
-2:get.ot.point:F
-.obj.id 
-.i 
-.x 
-.y 
-2:a.test.ot:F
-.$pg 
-.x 
-.y 
-.z 
-.put 
-2:get.ot.point.ol:F
-.obj.id 
-2:ot.put:F
-.x 
-.y 
-.z 
-.put 
-.tare.chg 
-.locked.zone 
-.lock.zone 
-2:calc.ot.old:F
-.center.col 
-.center.row 
-.cell 
-.i 
-.j 
-.dist 
-.dists 
-.array.size 
-.result 
-.cornerA 
-.cornerB 
-.tmp.dist 
-.tmp.m 
-.tmp.n 
-2:calc.ot:F
-.center.col 
-.center.row 
-.cell 
-.offset 
-.left 
-.right 
-.row 
-.i 
-.n 
-.m 
-.filled 
-.obj.id 
-Group:MeasureMachine:3
-3:a.teach.machine:F
-.temp 
-3:measure:F
-.pos 
-.shift.y 
-.shift.z 
-.p.idx 
-.machine.pos 
-Group:Objects:4
-4:id1:F
-4:id2:F
-4:id3:F
-4:id4:F
-4:id5:F
-4:id6:F
-Group:Positioner:5
-5:pos.pick:F
-.$temp 
-.temp 
-.shift.x 
-.shift.y 
-.locked.zone 
-.det.picked 
-.lock.zone 
-5:a.teach.pos:F
-.shift.x 
-.shift.y 
-.temp 
-Group:Defect:6
-6:defect.put:F
-.temp 
-6:a.teach.defect:F
-.x 
-.y 
-.o 
-.k 
-.i 
-.j 
-.defect.pos 
-Group:States:7
-7:state0:F
-.tare.chg 
-.locked.zone 
-.det.picked 
-.etalon.stop 
-7:state1:F
-7:state2:F
-7:state3:F
-7:state4:F
-7:state5:F
-.etalon.stop 
-7:state6:F
-7:state7:F
-7:state8:F
-7:state100:F
-.finish.ack 
-7:state101:F
-7:state102:F
-.work 
-.det.put 
-.finish 
-.tare.chg 
-.locked.zone 
-.etalon.stop 
-7:state103:F
-7:state104:F
-.finish.ack 
-7:state105:F
-7:state106:F
-7:state255:F
-Group:Utilities:8
-8:a.home:F
-8:a.align:F
-8:safe.home:F
-.idx 
-.temp 
-.s 
-.c 
-.dz 
-8:log:F
-.$msg 
-.i 
-8:pg.select:F
-0:a.main:F
-.$pg.string 
-0:pg0:F
-Group:Watchdog:9
-9:check.teach.pc:B
-9:check.zone.pc:B
-9:check.disp.pc:B
-9:check.tasks.pc:B
-9:watchdog.pc:B
-.tare.ack 
-.tare.chg 
-Group:Initialization:10
-10:set.vars.pc:B
-.i 
-.n 
-.$name 
-10:set.io.pc:B
-.work 
-.tare.ack 
-.detail.put 
-.finish 
-.tare.chg 
-.locked.zone 
-.finish.ack 
-.put.ack 
-.det.put 
-.det.picked 
-.lock.zone 
-.etalon.stop 
-Group:TCPIP:11
-11:get.state.pc:B
-.$state 
-11:tcp.sender.pc:B
-.$data 
-11:tcp.callback.pc:B
-.$data 
-.data.length 
-.$temp 
-.i 
-.$sensor.name 
-.$sensor.state 
-.$state 
-.$measurement.sta 
-.$spd 
-.speed 
-.$measurement.state 
-11:tcp.client.pc:B
-.tcp.retry.count 
-.tcp.connect.tmo 
-.tcp.receive.tmo 
-.number 
-.ports 
-.sockets 
-.errors 
-.suberrors 
-.$ips 
-.i 
-.$temp 
-.status 
-.$tcp.ip.copy 
-.$ip 
-.ip 
-.connected 
-.tcp.error.cnt 
-.$tcp.request 
-.request.size 
-11:tcp.send.pc:B
-.$data 
-.data.length 
-.tcp.send.tmo 
-.status 
-.$temp 
-.i 
-11:tcp.log.pc:B
-.$msg 
-.i 
-0:autostart.pc:B
-0:errstart.pc:B
-@@@ TRANS @@@
-ot.put[] Calculated OT put point
-@@@ JOINTS @@@
-#homyak Home point
-#pos.point[] Positioner point for object i
-#def.up.right Defect tare up right teach point
-#def.up.left Defect tare up left teach point
-#def.down.right Defect tare down right teach point
-#before.machine[] Point before machine
-#defect.point[] Defect point for cell i
-#safe.machine Safe point on machine side
-#ot.up.right OT up.right point
-#ot.orig OT up right point
-#ot.down.right OT down right point
-#ot.down.left OT down left point
-#machine.pos[] Point in measure machine for object i
-#safe.defect Safe point before defect tare
-#safe.etalon Safe point to move to positioner
-@@@ REALS @@@
-count.defect Defect details count
-count.pick Picked details counter
-count.put Putted details counter
-current.gripper Current gripper in robot (1)
-detail.count Count of details in tares
-grip.180xsh[] X shift for gripper i in 180
-grip.180ysh[] Y shift for gripper i in 180
-grip.xsh[] X shift for gripper i
-grip.ysh[] Y shift for gripper i
-grip.zsh[] Z shift for gripper i
-hmi.defect.pos HMI position of defect cell
-hmi.etalon.id HMI etalon ID
-hmi.g180x HMI rotated gripper X shift for object N
-hmi.g180y HMI rotated gripper Y shift for object N
-hmi.gx HMI gripper X shift for object N
-hmi.gy HMI gripper Y shift for object N
-hmi.gz HMI gripper Z shift for object N
-hmi.obj.id HMI Object ID
-hmi.tool.no HMI Tool no
-keep.object HMI aux variable
-line.width OT width
-lines.count OT lines count
-lines.shift Distance between OT lines
-max.tare.count Object data: Max details in tare
-obj.in.line Max objects in line (calculated)
-obj.spacer Space between objects
-object.length Object data: detail length
-pg.gripper Object data: Gripper in current program
-state State variable
-tcp.ena Enable TCP connect display
-tcp.port TCP port
-tcp.recv.ena Enable TCP receive display
-tcp.send.ena Enable TCP send display
-tcp.sender.dly Delay between TCP send
-tcp.socket TCP socket ID
-tyterm Display destination terminal
-hmi.gripper HMI gripper No
-object.id Object data: object id
-ot.x OT put coordinate X
-ot.y OT put coordinate Y
-round.no ID for round detail
-spc.tare.count Object data: Max details in tare with spacer
-detail.spec Detail specification
-recv.etalon Received etalon id
-max.defect.cnt Maximum value of defect cell
-pawn.no Number of pawn detail
-hmi.gmidy HMI panel mid y shift
-max.count.put Maximum number of put details per count
-@@@ STRINGS @@@
-$log.entry[] Log entry
-$action Current robot action to send
-$pg.name Program name (same as in machine)
-$tcp.ip Server PC IP address
-@@@ INTEGER @@@
-@@@ SIGNALS @@@
-s.pr.tst.ot Prime test OT program
-s.defect.pal.ok Defect pallet sensor OK
-s.defect.pal.ng Defect pallet sensor NG
-s.measure.ok Measurement result OK
-s.measure.ng Measurement result NG
-s.cmd.chk.etal Check etalon command
-release.grip !Release gripper!
-capture.grip Capture gripper
-grip.unclamp Unclamp gripper
-grip.clamp Clamp gripper
-do.work[] Robot in workspace i
-rs13.tare.ack Acknowledge of tare change
-rs13.detail.put RS013N put detail to positioner
-rs13.finish RS013N finish process
-rs7.tare.chg Request tare change
-rs7.locked.zone RS007L Blocked positioner zone
-rs7.finish.ack RS007L finished work
-rs7.put.ack RS007L picked detail
-di.ifp.page[] Open IFP page i
-di.hold Set hold mode
-do.home Robot in home position
-do.bat.alm Battery low alarm
-s.tcp.send.ena Display TCP send prints
-s.tcp.recv.ena Display TCP receive prints
-s.tcp.ena Display TCP connect prints
-s.zone.blocked RS007L first in common zone
-s.force.in[] Force input signal i
-s.grip.full Gripper is full
-s.cmd.start Start command
-s.cmd.finish Finish program
-s.cmd.pause Pause program command
-s.cmd.resume Resume program command
-s.cmd.stop Stop program command
-s.pr.home Prime a.home
-s.hmi.res.state Reset state from HMI
-s.hmi.res.act Reset action from hmi
-s.debug.mode Debug mode
-grip.unclamped Gripper unclamped
-grip.clamped Gripper clamped
-s.pr.tch.pos Prime teach positioner
-s.pr.tch.ot Prime teach OT
-s.pr.tch.defect Prime teach defect
-s.pr.tch.meas Prime teach measure machine
-s.pr.tch.etal Prime teach Etalon
-s.apply.obj Apply object shifts
-rs13.work[] Robot in workspace 1
-s.cmd.pick Pick from positioner command
-s.opt.spacer Option for put to OT with spacer
-s.opt.flip Option to put to OT with flip
-rs13.det.put[] Put details count from RS0013N
-rs7.det.picked[] Picked details count from RS007L
-s.cmd.measured Detail measured
-s.tcp.log Add log record for tcp.log
-s.force.defect Force measure defect
-s.etalon.ok Etalon result: OK
-s.etalon.ret Etalon result: RETRY
-s.etalon.ng Etalon result: NG
-rs7.etalon.stop Etalon measurement was bad, need to stop
-do.automatic Robot in automatic mode
-@@@ TOOLS @@@
-tool.pick[] Gripper tool
-@@@ BASE @@@
-@@@ FRAME @@@
-ot.frame OT base frame
-@@@ BOOL @@@
-@@@ DEFAULTS @@@
-BASE: NULL
-TOOL: NULL
-@@@ WCD @@@
-SIGNAME: sig1 sig2 sig3 sig4
-SIGDIM: % % % %
+$wdog.state = "FALSE"
 .END
