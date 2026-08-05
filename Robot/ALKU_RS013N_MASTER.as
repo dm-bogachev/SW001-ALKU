@@ -10,6 +10,14 @@ N_OX18    "rs13.tare.ack"
 N_OX20    "rs13.finish"
 N_OX21    "rs13.detail.put"
 N_OX22    "rs13.lock.zone"
+N_OX25    "rs13.ot.number[0]"
+N_OX26    "rs13.ot.number[1]"
+N_OX27    "rs13.ot.number[2]"
+N_OX28    "rs13.ot.number[3]"
+N_OX29    "rs13.ot.number[4]"
+N_OX30    "rs13.ot.number[5]"
+N_OX31    "rs13.ot.number[6]"
+N_OX32    "rs13.ot.number[7]"
 N_OX33    "rs13.opt.chg"
 N_OX34    "rs13.no.ot.stop"
 N_OX40    "rs13.det.put[0]"
@@ -157,6 +165,7 @@ N_INT300    "s.debug.mode"
 73,1," POS FREE","","","",10,15,4,10,2234,0
 76,4,1,"OFF     ON","","","  DEBUG",10,4,4,0,2300,0
 77,2,"","   MAIN","<---------","",10,4,11,2001,0
+78,7,"  RS013N"," COUNT OT",10,15,2,0,0,25,8,1
 79,7,"  RS013N"," COUNT PUT",10,15,4,0,0,40,16,1
 80,7,"  RS007L","COUNT PICK",10,15,4,0,0,1040,16,1
 82,2,"","   OPEN","PNEUMATICS","",10,4,8,2258,0
@@ -1719,6 +1728,7 @@ N_INT300    "s.debug.mode"
   PULSE capture.tare
   TWAIT 0.5
   count.ot = count.ot+1
+  BITS rs13.ot.number[0], 8 = count.ot
 ; Move up
   ACCURACY 0.02
   SPEED 50 MM/S
@@ -1995,6 +2005,15 @@ N_INT300    "s.debug.mode"
   rs13.finish = 20
   rs13.detail.put = 21
   rs13.lock.zone = 22
+  ;
+  rs13.ot.number[0] = 25
+  rs13.ot.number[1] = 26
+  rs13.ot.number[2] = 27
+  rs13.ot.number[3] = 28
+  rs13.ot.number[4] = 29
+  rs13.ot.number[5] = 30
+  rs13.ot.number[6] = 31
+  rs13.ot.number[7] = 32
 ;
   rs13.det.put[0] = 40
   rs13.det.put[1] = 41
@@ -2298,6 +2317,8 @@ N_INT300    "s.debug.mode"
     TWAIT 0.5
   END
   count.ot = 0
+  BITS rs13.ot.number[0], 8 = count.ot
+  ;
   count.opt = 0
   SIGNAL -s.cmd.stop
   SIGNAL -s.cmd.start
@@ -3636,6 +3657,7 @@ N_INT300    "s.debug.mode"
 	; rs13.opt.chg RS013 is in change OPT
 	; rs13.no.ot.stop 
 	; s.cmd.n.op.stop 
+	; rs13.ot.number[] RS13 current OT number
 	; @@@ TOOLS @@@
 	; tool.pin Tool for calibration pin and tare
 	; tool.pick[] Gripper 3 tool
@@ -4223,6 +4245,14 @@ rs7.det.picked[12] = 1052
 rs7.det.picked[13] = 1053
 rs7.det.picked[14] = 1054
 rs7.det.picked[15] = 1055
+rs13.ot.number[0] = 25
+rs13.ot.number[1] = 26
+rs13.ot.number[2] = 27
+rs13.ot.number[3] = 28
+rs13.ot.number[4] = 29
+rs13.ot.number[5] = 30
+rs13.ot.number[6] = 31
+rs13.ot.number[7] = 32
 .END
 .STRINGS
 $tcp.ip = "192.168.7.100"

@@ -32,6 +32,14 @@ N_WX18    "rs13.tare.ack"
 N_WX19    "rs13.detail.put"
 N_WX20    "rs13.finish"
 N_WX22    "rs13.lock.zone"
+N_WX25    "rs13.ot.number[0]"
+N_WX26    "rs13.ot.number[1]"
+N_WX27    "rs13.ot.number[2]"
+N_WX28    "rs13.ot.number[3]"
+N_WX29    "rs13.ot.number[4]"
+N_WX30    "rs13.ot.number[5]"
+N_WX31    "rs13.ot.number[6]"
+N_WX32    "rs13.ot.number[7]"
 N_WX33    "rs13.no.ot.stop"
 N_WX40    "rs13.det.put[0]"
 N_WX41    "rs13.det.put[1]"
@@ -154,6 +162,7 @@ RMTIN960 1001 1017 1033 1049 1065 1081 1097 1113 1129 1145 1161 1177 1193 1209 1
 75,8,"current.ot","Current OT","  count",10,15,2,1,0
 76,4,1,"OFF     ON","","","  DEBUG",10,4,4,0,2300,0
 77,2,"","   MAIN","<---------","",10,4,11,2001,0
+78,7,"  RS013N"," COUNT OT",10,15,2,0,0,1025,8,1
 79,7,"  RS007L","COUNT PICK",10,15,4,0,0,40,16,1
 80,7,"  RS013N","COUNT PUT",10,15,4,0,0,1040,16,1
 81,8,"count.defect","Current","defect",10,15,2,1,0
@@ -199,7 +208,9 @@ RMTIN960 1001 1017 1033 1049 1065 1081 1097 1113 1129 1145 1161 1177 1193 1209 1
 155,8,"ot.x","    OT","X POSITION",10,3,2,1,0
 156,8,"ot.y","    OT","Y POSITION",10,3,2,1,0
 157,8,"hmi.ot.k","    OT","  PUT ID ",10,3,3,1,0
-160,8,"layout","    OT","  LAYOUT",10,3,3,1,0
+158,8,"layout","    OT","  LAYOUT",10,3,3,1,0
+159,8,"max.tare.count","MAX TARE ","COUNT",10,3,3,1,0
+160,8,"spc.tare.count","SPC TARE ","COUNT",10,3,3,1,0
 161,2,"","   MAIN","<---------","",10,4,11,2001,0
 164,2,"","   TEACH","POSITIONER","",10,4,11,2004,0
 165,2,"","   TEACH","  MACHINE","",10,4,11,2005,0
@@ -533,115 +544,103 @@ RMTIN960 1001 1017 1033 1049 1065 1081 1097 1113 1129 1145 1161 1177 1193 1209 1
 	; detail.type
 .END
 .PROGRAM a.test.ot()@26/06/25 16:05 #0
-	IF hmi.ot.k <> -1 THEN
-		.$pg = "id" + $ENCODE (/L, hmi.obj.id)
-		SCALL .$pg
-		CALL select.layout
-		IF hmi.obj.id <> round.no THEN
-			CALL calc.grid
-		ELSE
-			CALL calc.grid.rnd
-		END
-		CALL sort.grid
-		CALL get.ot.point (hmi.ot.k)
-	END
-	.x = grip.xsh[hmi.obj.id]
-	.y = grip.ysh[hmi.obj.id]
-	.z = grip.zsh[hmi.obj.id]
-	.rz = 0
-	IF object.id <> round.no AND ot.y MOD 2 <> 0 AND SIG (s.ot.flip) THEN
-		.x = grip.180xsh[hmi.obj.id]
-		.y = grip.180ysh[hmi.obj.id]
-		.rz = 180
-	END
-	;
-	POINT .put = ot.put[ot.x, ot.y] + TRANS (.x, .y, .z)
-	POINT .putr = ot.put[ot.x, ot.y]+ RZ (.rz) + TRANS (.x, .y, .z)
-	POINT .putr2 = ot.put[ot.x, ot.y]+ RZ (.rz / 2) + TRANS (.x, .y, .z)
-	LAPPRO .put, -200
-	BREAK
-	HERE .#temp
-	LAPPRO .putr2, -100
-	LAPPRO .putr, -50
-	LMOVE .putr
-	LAPPRO .putr, -50
-	LAPPRO .putr2, -100
-	LMOVE .#temp
-	;
-	
+  IF hmi.ot.k <> -1 THEN
+    .$pg = "id" + $ENCODE (/L, hmi.obj.id)
+    SCALL .$pg
+    CALL ot.calc(TRUE)
+    CALL get.ot.point (hmi.ot.k)
+  END
+  .x = grip.xsh[hmi.obj.id]
+  .y = grip.ysh[hmi.obj.id]
+  .z = grip.zsh[hmi.obj.id]
+  .rz = 0
+  IF object.id <> round.no AND ot.y MOD 2 <> 0 AND SIG (s.ot.flip) THEN
+    .x = grip.180xsh[hmi.obj.id]
+    .y = grip.180ysh[hmi.obj.id]
+    .rz = 180
+  END
+  ;
+  POINT .put = ot.put[ot.x, ot.y] + TRANS (.x, .y, .z)
+  POINT .putr = ot.put[ot.x, ot.y]+ RZ (.rz) + TRANS (.x, .y, .z)
+  POINT .putr2 = ot.put[ot.x, ot.y]+ RZ (.rz / 2) + TRANS (.x, .y, .z)
+  LAPPRO .put, -200
+  BREAK
+  HERE .#temp
+  LAPPRO .putr2, -100
+  LAPPRO .putr, -50
+  LMOVE .putr
+  LAPPRO .putr, -50
+  LAPPRO .putr2, -100
+  LMOVE .#temp
+  ;
+  
 .END
 .PROGRAM a.test.ot.pick()@26/06/25 16:05 #1
-	;
-	IF hmi.obj.id == round.no THEN
-		.shift.x = 0
-		.shift.y = 0
-	ELSE
-		IF hmi.obj.id == pawn.no THEN
-			.shift.x = 0
-			.shift.y = 0
-		ELSE
-			.shift.x = 0
-			.shift.y = 5
-		END
-	END
-	;
-	TOOL tool.pick[hmi.tool.no]
-	;
-	POINT .temp = #pos.point[hmi.obj.id]
-	JMOVE .temp + TRANS (0, 0, 50)
-	BREAK
-	LMOVE #pos.point[hmi.obj.id]
-	BREAK
-	TWAIT 0.1
-	PULSE grip.clamp
-	TWAIT 0.3
-	;
-	POINT .temp = #pos.point[hmi.obj.id]
-	BREAK
-	TWAIT 0.5
-	LMOVE .temp + TRANS (.shift.x, .shift.y, 10)
-	LMOVE .temp + TRANS (0, 0, 50)
-	BREAK
-	TWAIT 0.5
-	;
-	IF hmi.ot.k <> -1 THEN
-		.$pg = "id" + $ENCODE (/L, hmi.obj.id)
-		SCALL .$pg
-		CALL select.layout
-		IF hmi.obj.id <> round.no THEN
-			CALL calc.grid
-		ELSE
-			CALL calc.grid.rnd
-		END
-		CALL sort.grid
-		CALL get.ot.point (hmi.ot.k)
-	END
-	.x = grip.xsh[hmi.obj.id]
-	.y = grip.ysh[hmi.obj.id]
-	.z = grip.zsh[hmi.obj.id]
-	.rz = 0
-	IF object.id <> round.no AND ot.y MOD 2 <> 0 AND SIG (s.ot.flip) THEN
-		.x = grip.180xsh[hmi.obj.id]
-		.y = grip.180ysh[hmi.obj.id]
-		.rz = 180
-	END
-	;
-	POINT .put = ot.put[ot.x, ot.y] + TRANS (.x, .y, .z)
-	POINT .putr = ot.put[ot.x, ot.y]+ RZ (.rz) + TRANS (.x, .y, .z)
-	POINT .putr2 = ot.put[ot.x, ot.y]+ RZ (.rz / 2) + TRANS (.x, .y, .z)
-	LAPPRO .put, -200
-	BREAK
-	HERE .#temp
-	LAPPRO .putr2, -100
-	LAPPRO .putr, -50
-	LMOVE .putr
-	TWAIT 0.1
-	PULSE grip.unclamp
-	TWAIT 0.3
-	LAPPRO .putr, -50
-	LAPPRO .putr2, -100
-	LMOVE .#temp
-	;
+  ;
+  IF hmi.obj.id == round.no THEN
+    .shift.x = 0
+    .shift.y = 0
+  ELSE
+    IF hmi.obj.id == pawn.no THEN
+      .shift.x = 0
+      .shift.y = 0
+    ELSE
+      .shift.x = 0
+      .shift.y = 5
+    END
+  END
+  ;
+  TOOL tool.pick[hmi.tool.no]
+  ;
+  POINT .temp = #pos.point[hmi.obj.id]
+  JMOVE .temp + TRANS (0, 0, 50)
+  BREAK
+  LMOVE #pos.point[hmi.obj.id]
+  BREAK
+  TWAIT 0.1
+  PULSE grip.clamp
+  TWAIT 0.3
+  ;
+  POINT .temp = #pos.point[hmi.obj.id]
+  BREAK
+  TWAIT 0.5
+  LMOVE .temp + TRANS (.shift.x, .shift.y, 10)
+  LMOVE .temp + TRANS (0, 0, 50)
+  BREAK
+  TWAIT 0.5
+  ;
+  IF hmi.ot.k <> -1 THEN
+    .$pg = "id" + $ENCODE (/L, hmi.obj.id)
+    SCALL .$pg
+    CALL ot.calc(TRUE)
+    CALL get.ot.point (hmi.ot.k)
+  END
+  .x = grip.xsh[hmi.obj.id]
+  .y = grip.ysh[hmi.obj.id]
+  .z = grip.zsh[hmi.obj.id]
+  .rz = 0
+  IF object.id <> round.no AND ot.y MOD 2 <> 0 AND SIG (s.ot.flip) THEN
+    .x = grip.180xsh[hmi.obj.id]
+    .y = grip.180ysh[hmi.obj.id]
+    .rz = 180
+  END
+  ;
+  POINT .put = ot.put[ot.x, ot.y] + TRANS (.x, .y, .z)
+  POINT .putr = ot.put[ot.x, ot.y]+ RZ (.rz) + TRANS (.x, .y, .z)
+  POINT .putr2 = ot.put[ot.x, ot.y]+ RZ (.rz / 2) + TRANS (.x, .y, .z)
+  LAPPRO .put, -200
+  BREAK
+  HERE .#temp
+  LAPPRO .putr2, -100
+  LAPPRO .putr, -50
+  LMOVE .putr
+  TWAIT 0.1
+  PULSE grip.unclamp
+  TWAIT 0.3
+  LAPPRO .putr, -50
+  LAPPRO .putr2, -100
+  LMOVE .#temp
+  ;
 .END
 .PROGRAM autostart.pc()@26/06/25 16:05 #0
 	;
@@ -673,72 +672,85 @@ RMTIN960 1001 1017 1033 1049 1065 1081 1097 1113 1129 1145 1161 1177 1193 1209 1
 	CALL watchdog.pc
 	;
 .END
-.PROGRAM calc.grid()@26/07/01 14:04 #341
-	; Constants
-	line.width = 210; 210; mm
-	lines.count = 21
-	lines.shift = 16; mm
-	obj.spacer = 1.5; mm
-	;
-	.max = work.tare.count
-	;
-	IF NOT SIG (s.ot.spacer) THEN
-		.obj.len = object.length
-		.obj.len.w.spc = object.length + obj.spacer
-		obj.in.line = INT ((line.width - obj.spacer) / .obj.len.w.spc);
-	ELSE
-		obj.in.line = .max / 21
-		.obj.len.w.spc = line.width / obj.in.line
-		.$temp = "Detail 'length':" + $ENCODE (.obj.len.w.spc)
-		CALL log (.$temp)
-	END
-	;
-	IF current.ot MOD 2 <> 0 OR NOT SIG (s.enable.shift) THEN
-		chg.tare.count = .max
-		lines.count = 21
-		.extra.x = 0
-	ELSE
-		chg.tare.count = .max - obj.in.line
-		; in case of small values, we need at least one line!!!
-		IF chg.tare.count <= 0 THEN
-			chg.tare.count = .max
-		END
-		lines.count = 20
-		.extra.x = lines.shift / 2
-	END
-	;
-	.$temp = "Calc grid for" + $ENCODE (current.ot) + "," + $ENCODE (lines.count)
-	CALL log (.$temp)
-	; If you need to put details by .max
-	;obj.in.line = INT(.max/21);
-	;
-	FOR .i = 0 TO lines.count - 1
-		FOR .j = 0 TO obj.in.line - 1
-			POINT ot.put[.i, .j] = ot.frame + TRANS (-.i * lines.shift - .extra.x, -.j * .obj.len.w.spc)
-		END
-	END
-	;
+.PROGRAM calc.grid (.teach)
+  ; Constants
+  line.width = 210; 210; mm
+  lines.count = 21
+  lines.shift = 16; mm
+  obj.spacer = 1.5; mm
+  ;
+  .max = work.tare.count
+  ;
+  IF NOT SIG (s.ot.spacer) THEN
+    .obj.len = object.length
+    .obj.len.w.spc = object.length + obj.spacer
+    obj.in.line = INT ((line.width - obj.spacer) / .obj.len.w.spc);
+  ELSE
+    obj.in.line = .max / 21
+    .obj.len.w.spc = line.width / obj.in.line
+    .$temp = "Detail 'length':" + $ENCODE (.obj.len.w.spc)
+    CALL log (.$temp)
+  END
+  ;
+  .current.ot = BITS(rs13.ot.number[0], 8)
+  ;
+  IF .teach THEN
+    .current.ot = 1
+  END
+  ;
+  IF .current.ot MOD 2 <> 0 OR NOT SIG (s.enable.shift) THEN
+    chg.tare.count = .max
+    lines.count = 21
+    .extra.x = 0
+  ELSE
+    chg.tare.count = .max - obj.in.line
+    ; in case of small values, we need at least one line!!!
+    IF chg.tare.count <= 0 THEN
+      chg.tare.count = .max
+    END
+    lines.count = 20
+    .extra.x = lines.shift / 2
+  END
+  ;
+  .$temp = "Calc grid for" + $ENCODE (.current.ot) + "," + $ENCODE (lines.count)
+  CALL log (.$temp)
+  ; If you need to put details by .max
+  ;obj.in.line = INT(.max/21);
+  ;
+  FOR .i = 0 TO lines.count - 1
+    FOR .j = 0 TO obj.in.line - 1
+      POINT ot.put[.i, .j] = ot.frame + TRANS (-.i * lines.shift - .extra.x, -.j * .obj.len.w.spc)
+    END
+  END
+  ;
 .END
-.PROGRAM calc.grid.rnd()@26/08/01 15:09 #48
-	; Constants
-	lines.count = 11
-	obj.in.line = 7
-	lines.shift = 27; mm
-	;
-	.max = 77
-	.obj.shift = 27 ; mm
-	;
-	chg.tare.count = work.tare.count
-	;
-	.$temp = "Calc grid for" + $ENCODE (current.ot) + "," + $ENCODE (lines.count)
-	CALL log (.$temp)
-	;
-	FOR .i = 0 TO lines.count - 1
-		FOR .j = 0 TO obj.in.line - 1
-			POINT ot.put[.i, .j] = ot.frame + TRANS (-.i * lines.shift, -.j * .obj.shift)
-		END
-	END
-	;
+.PROGRAM calc.grid.rnd (.teach)
+  ; Constants
+  lines.count = 11
+  obj.in.line = 7
+  lines.shift = 27; mm
+  ;
+  .max = 77
+  .obj.shift = 27 ; mm
+  ;
+  chg.tare.count = work.tare.count
+  ;
+  .current.ot = BITS(rs13.ot.number[0], 8)
+  ;
+  IF .teach THEN
+    .current.ot = 1
+  END
+  ;
+  .$temp = "Calc grid for" + $ENCODE (.current.ot) + "," + $ENCODE (lines.count)
+  CALL log (.$temp)
+  
+  ;
+  FOR .i = 0 TO lines.count - 1
+    FOR .j = 0 TO obj.in.line - 1
+      POINT ot.put[.i, .j] = ot.frame + TRANS (-.i * lines.shift, -.j * .obj.shift)
+    END
+  END
+  ;
 .END
 .PROGRAM check.disp.pc()@26/06/25 16:05 #130311453
 	;
@@ -1558,84 +1570,89 @@ RMTIN960 1001 1017 1033 1049 1065 1081 1097 1113 1129 1145 1161 1177 1193 1209 1
 	;
 	
 .END
+.PROGRAM ot.calc (.teach)
+  CALL select.layout
+  IF object.id == round.no THEN
+    CALL calc.grid.rnd(.teach)
+  ELSE
+    CALL calc.grid(.teach)
+  END
+  CALL sort.grid
+.END
 .PROGRAM ot.put()@26/07/03 14:19 #2944
-	;
-	SIGNAL rs7.locked.zone
-	IF SIG (rs7.tare.chg) THEN
-		CALL log ("Waiting for new OT")
-		SWAIT -rs7.tare.chg
-		count.put = 0
-	END
-	;
-	CALL log ("Put to OT detail" + $ENCODE (count.put + 1))
-	;$action = "PutToTare"
-	;
-	SPEED 100 ALWAYS
-	ACCURACY 100 ALWAYS
-	TOOL tool.pick[current.gripper]
-	;
-	CALL get.ot.point (count.put)
-	;
-	.x = grip.xsh[object.id]
-	.y = grip.ysh[object.id]
-	.z = grip.zsh[object.id]
-	.rz = 0
-	IF object.id <> round.no AND ot.y MOD 2 <> 0 AND SIG (s.ot.flip) THEN
-		.x = grip.180xsh[object.id]
-		.y = grip.180ysh[object.id]
-		.rz = 180
-	END
-	;
-	POINT .put = ot.put[ot.x, ot.y] + TRANS (.x, .y, .z)
-	POINT .putr = ot.put[ot.x, ot.y]+ RZ (.rz) + TRANS (.x, .y, .z)
-	POINT .putr2 = ot.put[ot.x, ot.y]+ RZ (.rz / 2) + TRANS (.x, .y, .z)
-	;
-	SIGNAL rs7.locked.zone
-	BREAK
-	CALL log ("Check if positioner is occupied")
-	SWAIT -rs13.lock.zone
-	;
-	LAPPRO .put, -200
-	BREAK
-	HERE .#temp
-	LAPPRO .putr2, -100
-	LAPPRO .putr, -50
-	LMOVE .putr
-	;
-	TWAIT 0.1
-	PULSE grip.unclamp
-	TWAIT 0.3
-	count.put = count.put + 1
-	max.count.put = max.count.put + 1
-	SIGNAL -s.grip.full
-	$action = "WaitPosFull"
-	;
-	LAPPRO .putr, -50
-	LAPPRO .putr2, -100
-	LMOVE .#temp
-	;
-	;IF NOT SIG (s.cmd.pick) THEN
-	;  JMOVE #homyak
-	;  BREAK
-	;  SIGNAL -rs7.locked.zone
-	;END
-	;
-	IF count.put >= chg.tare.count THEN
-		CALL log ("OT tare full, request change OT")
-		SIGNAL rs7.tare.chg
-		current.ot = current.ot + 1
-		;
-		count.put = 0
-		;
-		CALL select.layout
-		IF object.id == round.no THEN
-			CALL calc.grid.rnd
-		ELSE
-			CALL calc.grid
-		END
-		CALL sort.grid
-	END
-	;
+  ;
+  SIGNAL rs7.locked.zone
+  IF SIG (rs7.tare.chg) THEN
+    CALL log ("Waiting for new OT")
+    SWAIT -rs7.tare.chg
+    count.put = 0
+  END
+  ;
+  CALL log ("Put to OT detail" + $ENCODE (count.put + 1))
+  ;$action = "PutToTare"
+  ;
+  SPEED 100 ALWAYS
+  ACCURACY 100 ALWAYS
+  TOOL tool.pick[current.gripper]
+  ;
+  CALL ot.calc(FALSE)
+  ;
+  CALL get.ot.point (count.put)
+  ;
+  .x = grip.xsh[object.id]
+  .y = grip.ysh[object.id]
+  .z = grip.zsh[object.id]
+  .rz = 0
+  IF object.id <> round.no AND ot.y MOD 2 <> 0 AND SIG (s.ot.flip) THEN
+    .x = grip.180xsh[object.id]
+    .y = grip.180ysh[object.id]
+    .rz = 180
+  END
+  ;
+  POINT .put = ot.put[ot.x, ot.y] + TRANS (.x, .y, .z)
+  POINT .putr = ot.put[ot.x, ot.y]+ RZ (.rz) + TRANS (.x, .y, .z)
+  POINT .putr2 = ot.put[ot.x, ot.y]+ RZ (.rz / 2) + TRANS (.x, .y, .z)
+  ;
+  SIGNAL rs7.locked.zone
+  BREAK
+  CALL log ("Check if positioner is occupied")
+  SWAIT -rs13.lock.zone
+  ;
+  LAPPRO .put, -200
+  BREAK
+  HERE .#temp
+  LAPPRO .putr2, -100
+  LAPPRO .putr, -50
+  LMOVE .putr
+  ;
+  TWAIT 0.1
+  PULSE grip.unclamp
+  TWAIT 0.3
+  count.put = count.put + 1
+  max.count.put = max.count.put + 1
+  SIGNAL -s.grip.full
+  $action = "WaitPosFull"
+  ;
+  LAPPRO .putr, -50
+  LAPPRO .putr2, -100
+  LMOVE .#temp
+  ;
+  ;IF NOT SIG (s.cmd.pick) THEN
+  ;  JMOVE #homyak
+  ;  BREAK
+  ;  SIGNAL -rs7.locked.zone
+  ;END
+  ;
+  IF count.put >= chg.tare.count THEN
+    CALL log ("OT tare full, request change OT")
+    SIGNAL rs7.tare.chg
+    current.ot = current.ot + 1
+    ;
+    count.put = 0
+    ;
+    CALL ot.calc(FALSE)
+  END
+  ;
 .END
 .PROGRAM pg.select()@26/06/25 16:05 #403
 	SCASE $pg.name OF
@@ -1904,171 +1921,180 @@ RMTIN960 1001 1017 1033 1049 1065 1081 1097 1113 1129 1145 1161 1177 1193 1209 1
 	;
 .END
 .PROGRAM set.io.pc()@26/08/01 15:10 #99
-	; Gripper IO
-	;
-	; Gripper
-	release.grip = 1
-	capture.grip = 2
-	; Clamp
-	grip.unclamped = 1001
-	grip.clamped = 1002
-	grip.unclamp = 3
-	grip.clamp = 4
-	;
-	; Ethernet I/P IO (17-32)
-	;
-	; Inputs
-	;
-	rs13.work[1] = 1017
-	rs13.tare.ack = 1018
-	rs13.detail.put = 1019
-	rs13.finish = 1020
-	rs13.lock.zone = 1022
-	;rs13.put.ack = 1021
-	rs13.det.put[0] = 1040
-	rs13.det.put[1] = 1041
-	rs13.det.put[2] = 1042
-	rs13.det.put[3] = 1043
-	rs13.det.put[4] = 1044
-	rs13.det.put[5] = 1045
-	rs13.det.put[6] = 1046
-	rs13.det.put[7] = 1047
-	rs13.det.put[8] = 1048
-	rs13.det.put[9] = 1049
-	rs13.det.put[10] = 1050
-	rs13.det.put[11] = 1051
-	rs13.det.put[12] = 1052
-	rs13.det.put[13] = 1053
-	rs13.det.put[14] = 1054
-	rs13.det.put[15] = 1055
-	;
-	rs13.no.ot.stop = 1033
-	;
-	; Outputs
-	;
-	do.work[1] = 17
-	rs7.tare.chg = 18
-	rs7.locked.zone = 19
-	rs7.finish.ack = 20
-	;rs7.put.ack = 21
-	;rs13.detail.put = 21
-	rs7.det.picked[0] = 40
-	rs7.det.picked[1] = 41
-	rs7.det.picked[2] = 42
-	rs7.det.picked[3] = 43
-	rs7.det.picked[4] = 44
-	rs7.det.picked[5] = 45
-	rs7.det.picked[6] = 46
-	rs7.det.picked[7] = 47
-	rs7.det.picked[8] = 48
-	rs7.det.picked[9] = 49
-	rs7.det.picked[10] = 50
-	rs7.det.picked[11] = 51
-	rs7.det.picked[12] = 52
-	rs7.det.picked[13] = 53
-	rs7.det.picked[14] = 54
-	rs7.det.picked[15] = 55
-	;
-	rs7.etalon.stop = 33
-	;
-	; Internal IO
-	;
-	; Dedicated inputs 2001 - 2064
-	;
-	; IFP page change 2001-2008
-	di.ifp.page[1] = 2001
-	di.ifp.page[2] = 2002
-	di.ifp.page[3] = 2003
-	di.ifp.page[4] = 2004
-	di.ifp.page[5] = 2005
-	di.ifp.page[6] = 2006
-	di.ifp.page[7] = 2007
-	di.ifp.page[8] = 2008
-	;
-	di.hold = 2009
-	;
-	; Dedicated outputs 2101-2164
-	;
-	do.home = 2010
-	do.bat.alm = 2011
-	do.automatic = 2012
-	;
-	;
-	; Internal logic 2201 - 2960
-	;
-	; TCP/IP display flags
-	s.tcp.send.ena = 2201
-	s.tcp.recv.ena = 2202
-	s.tcp.ena = 2203
-	s.tcp.log = 2204
-	;
-	s.zone.blocked = 2209
-	;
-	; Workspaces
-	do.work[2] = 2212
-	do.work[3] = 2213
-	do.work[4] = 2214
-	do.work[5] = 2215
-	do.work[6] = 2216
-	do.work[7] = 2217
-	do.work[8] = 2218
-	;
-	s.force.in[1] = 2221
-	s.force.in[2] = 2222
-	;
-	s.defect.pal.ok = 2223
-	s.defect.pal.ng = 2224
-	s.measure.ok = 2225
-	s.measure.ng = 2226
-	;s.force.defect = 2227
-	;
-	;s.stock.opt.ng = 2226
-	;s.ot.pos.ok = 2227
-	;s.ot.pos.ng = 2228
-	;
-	;s.ot.placed = 2229
-	;s.opt.placed = 2230
-	;
-	s.grip.full = 2231
-	;
-	s.cmd.start = 2232
-	s.cmd.pick = 2233
-	s.cmd.measured = 2234
-	;s.cmd.pneum.op = 2235
-	;s.cmd.pneum.cl = 2236
-	s.cmd.chk.etal = 2237
-	s.cmd.finish = 2238
-	s.cmd.pause = 2239
-	s.cmd.resume = 2240
-	s.cmd.stop = 2241
-	;
-	s.pr.home = 2250
-	s.pr.tch.ot = 2251
-	s.pr.tch.defect = 2252
-	s.pr.tch.meas = 2253
-	s.pr.tch.etal = 2254
-	s.pr.tch.pos = 2255
-	s.pr.tch.grip = 2260
-	;
-	s.apply.obj = 2256
-	;s.apply.cv = 2257
-	s.pr.tst.ot = 2249
-	;
-	s.ot.spacer = 2270
-	s.ot.flip = 2271
-	s.etalon.ok = 2272
-	s.etalon.ret = 2273
-	s.etalon.ng = 2274
-	;
-	;
-	;s.hmi.pneum.op = 2258
-	;s.hmi.pneum.cl = 2259
-	;s.hmi.get.cv = 2260
-	s.hmi.res.state = 2261
-	s.hmi.res.act = 2262
-	;
-	s.debug.mode = 2300
-	s.enable.shift = 2301
+  ; Gripper IO
+  ;
+  ; Gripper
+  release.grip = 1
+  capture.grip = 2
+  ; Clamp
+  grip.unclamped = 1001
+  grip.clamped = 1002
+  grip.unclamp = 3
+  grip.clamp = 4
+  ;
+  ; Ethernet I/P IO (17-32)
+  ;
+  ; Inputs
+  ;
+  rs13.work[1] = 1017
+  rs13.tare.ack = 1018
+  rs13.detail.put = 1019
+  rs13.finish = 1020
+  rs13.lock.zone = 1022
+  ;rs13.put.ack = 1021
+  rs13.ot.number[0] = 1025
+  rs13.ot.number[1] = 1026
+  rs13.ot.number[2] = 1027
+  rs13.ot.number[3] = 1028
+  rs13.ot.number[4] = 1029
+  rs13.ot.number[5] = 1030
+  rs13.ot.number[6] = 1031
+  rs13.ot.number[7] = 1032
+  ;
+  rs13.det.put[0] = 1040
+  rs13.det.put[1] = 1041
+  rs13.det.put[2] = 1042
+  rs13.det.put[3] = 1043
+  rs13.det.put[4] = 1044
+  rs13.det.put[5] = 1045
+  rs13.det.put[6] = 1046
+  rs13.det.put[7] = 1047
+  rs13.det.put[8] = 1048
+  rs13.det.put[9] = 1049
+  rs13.det.put[10] = 1050
+  rs13.det.put[11] = 1051
+  rs13.det.put[12] = 1052
+  rs13.det.put[13] = 1053
+  rs13.det.put[14] = 1054
+  rs13.det.put[15] = 1055
+  ;
+  rs13.no.ot.stop = 1033
+  ;
+  ; Outputs
+  ;
+  do.work[1] = 17
+  rs7.tare.chg = 18
+  rs7.locked.zone = 19
+  rs7.finish.ack = 20
+  ;rs7.put.ack = 21
+  ;rs13.detail.put = 21
+  rs7.det.picked[0] = 40
+  rs7.det.picked[1] = 41
+  rs7.det.picked[2] = 42
+  rs7.det.picked[3] = 43
+  rs7.det.picked[4] = 44
+  rs7.det.picked[5] = 45
+  rs7.det.picked[6] = 46
+  rs7.det.picked[7] = 47
+  rs7.det.picked[8] = 48
+  rs7.det.picked[9] = 49
+  rs7.det.picked[10] = 50
+  rs7.det.picked[11] = 51
+  rs7.det.picked[12] = 52
+  rs7.det.picked[13] = 53
+  rs7.det.picked[14] = 54
+  rs7.det.picked[15] = 55
+  ;
+  rs7.etalon.stop = 33
+  ;
+  ; Internal IO
+  ;
+  ; Dedicated inputs 2001 - 2064
+  ;
+  ; IFP page change 2001-2008
+  di.ifp.page[1] = 2001
+  di.ifp.page[2] = 2002
+  di.ifp.page[3] = 2003
+  di.ifp.page[4] = 2004
+  di.ifp.page[5] = 2005
+  di.ifp.page[6] = 2006
+  di.ifp.page[7] = 2007
+  di.ifp.page[8] = 2008
+  ;
+  di.hold = 2009
+  ;
+  ; Dedicated outputs 2101-2164
+  ;
+  do.home = 2010
+  do.bat.alm = 2011
+  do.automatic = 2012
+  ;
+  ;
+  ; Internal logic 2201 - 2960
+  ;
+  ; TCP/IP display flags
+  s.tcp.send.ena = 2201
+  s.tcp.recv.ena = 2202
+  s.tcp.ena = 2203
+  s.tcp.log = 2204
+  ;
+  s.zone.blocked = 2209
+  ;
+  ; Workspaces
+  do.work[2] = 2212
+  do.work[3] = 2213
+  do.work[4] = 2214
+  do.work[5] = 2215
+  do.work[6] = 2216
+  do.work[7] = 2217
+  do.work[8] = 2218
+  ;
+  s.force.in[1] = 2221
+  s.force.in[2] = 2222
+  ;
+  s.defect.pal.ok = 2223
+  s.defect.pal.ng = 2224
+  s.measure.ok = 2225
+  s.measure.ng = 2226
+  ;s.force.defect = 2227
+  ;
+  ;s.stock.opt.ng = 2226
+  ;s.ot.pos.ok = 2227
+  ;s.ot.pos.ng = 2228
+  ;
+  ;s.ot.placed = 2229
+  ;s.opt.placed = 2230
+  ;
+  s.grip.full = 2231
+  ;
+  s.cmd.start = 2232
+  s.cmd.pick = 2233
+  s.cmd.measured = 2234
+  ;s.cmd.pneum.op = 2235
+  ;s.cmd.pneum.cl = 2236
+  s.cmd.chk.etal = 2237
+  s.cmd.finish = 2238
+  s.cmd.pause = 2239
+  s.cmd.resume = 2240
+  s.cmd.stop = 2241
+  ;
+  s.pr.home = 2250
+  s.pr.tch.ot = 2251
+  s.pr.tch.defect = 2252
+  s.pr.tch.meas = 2253
+  s.pr.tch.etal = 2254
+  s.pr.tch.pos = 2255
+  s.pr.tch.grip = 2260
+  ;
+  s.apply.obj = 2256
+  ;s.apply.cv = 2257
+  s.pr.tst.ot = 2249
+  ;
+  s.ot.spacer = 2270
+  s.ot.flip = 2271
+  s.etalon.ok = 2272
+  s.etalon.ret = 2273
+  s.etalon.ng = 2274
+  ;
+  ;
+  ;s.hmi.pneum.op = 2258
+  ;s.hmi.pneum.cl = 2259
+  ;s.hmi.get.cv = 2260
+  s.hmi.res.state = 2261
+  s.hmi.res.act = 2262
+  ;
+  s.debug.mode = 2300
+  s.enable.shift = 2301
 .END
 .PROGRAM set.vars.pc()@26/06/25 16:05 #82
 	;
@@ -2389,32 +2415,26 @@ RMTIN960 1001 1017 1033 1049 1065 1081 1097 1113 1129 1145 1161 1177 1193 1209 1
 	state = 101
 .END
 .PROGRAM state106()@26/06/25 16:05 #466; Check program
-	CALL log ("State 106: Check program")
-	IF $pg.name <> "NULL" THEN
-		CALL log ("Selected program: " + $pg.name)
-		;
-		CALL select.layout
-		IF object.id == round.no THEN
-			CALL calc.grid.rnd
-		ELSE
-			CALL calc.grid
-		END
-		;
-		CALL sort.grid
-		IF state == 255 THEN
-			RETURN
-		END
-		;
-		state = 7
-	ELSE
-		CALL log ("Wrong program name. Program reset")
-		BREAK
-		$action = "WrongProgramName"
-		TWAIT 10
-		BREAK
-		state = 0
-	END
-	;
+  CALL log ("State 106: Check program")
+  IF $pg.name <> "NULL" THEN
+    CALL log ("Selected program: " + $pg.name)
+    ;
+    CALL ot.calc(FALSE)
+    ;
+    IF state == 255 THEN
+      RETURN
+    END
+    ;
+    state = 7
+  ELSE
+    CALL log ("Wrong program name. Program reset")
+    BREAK
+    $action = "WrongProgramName"
+    TWAIT 10
+    BREAK
+    state = 0
+  END
+  ;
 .END
 .PROGRAM state2()@26/06/25 16:05 #5033; Measurement process
 	CALL log ("State 2: Measurement process")
@@ -3101,18 +3121,21 @@ RMTIN960 1001 1017 1033 1049 1065 1081 1097 1113 1129 1145 1161 1177 1193 1209 1
 	;       .ot.up.right 
 	;       .ot.orig 
 	;     3:calc.grid:F
+	;       .max 
 	;       .obj.len 
 	;       .obj.len.w.spc 
-	;       .extra.x 
 	;       .$temp 
+	;       .extra.x 
 	;       .i 
 	;       .j 
+	;       .teach 
 	;     3:calc.grid.rnd:F
 	;       .max 
 	;       .obj.shift 
 	;       .$temp 
 	;       .i 
 	;       .j 
+	;       .teach 
 	;     3:get.ot.point:F
 	;       .obj.id 
 	;     3:a.test.ot:F
@@ -3120,12 +3143,20 @@ RMTIN960 1001 1017 1033 1049 1065 1081 1097 1113 1129 1145 1161 1177 1193 1209 1
 	;       .x 
 	;       .y 
 	;       .z 
+	;       .rz 
 	;       .put 
+	;       .putr 
+	;       .putr2 
+	;       .#temp 
 	;     3:ot.put:F
 	;       .x 
 	;       .y 
 	;       .z 
+	;       .rz 
 	;       .put 
+	;       .putr 
+	;       .putr2 
+	;       .#temp 
 	;     3:a.test.ot.pick:F
 	;       .shift.x 
 	;       .shift.y 
@@ -3134,11 +3165,38 @@ RMTIN960 1001 1017 1033 1049 1065 1081 1097 1113 1129 1145 1161 1177 1193 1209 1
 	;       .x 
 	;       .y 
 	;       .z 
+	;       .rz 
 	;       .put 
+	;       .putr 
+	;       .putr2 
+	;       .#temp 
 	;     3:old.layout:F
+	;       .center.col 
+	;       .center.row 
+	;       .cell 
+	;       .i 
+	;       .j 
+	;       .dist 
+	;       .dists 
+	;       .array.size 
+	;       .result 
+	;       .cornera 
+	;       .cornerb 
+	;       .tmp.dist 
+	;       .tmp.m 
+	;       .tmp.n 
 	;     3:sort.grid:F
+	;       .center.col 
+	;       .center.row 
+	;       .cell 
+	;       .row 
+	;       .offset 
+	;       .left 
+	;       .right 
 	;     3:select.layout:F
 	;     3:test.ot.full:F
+	;     3:ot.calc:F
+	;       .teach 
 	;   Group:MeasureMachine:4
 	;     4:a.teach.machine:F
 	;       .temp 
@@ -3462,6 +3520,7 @@ RMTIN960 1001 1017 1033 1049 1065 1081 1097 1113 1129 1145 1161 1177 1193 1209 1
 	; s.enable.shift Enable shift for even layers
 	; rs13.lock.zone 
 	; rs13.no.ot.stop 
+	; rs13.ot.number[] RS013 OT Number
 	; @@@ TOOLS @@@
 	; tool.pick[] Gripper tool
 	; @@@ BASE @@@
@@ -4953,6 +5012,14 @@ rs13.det.put[12] = 1052
 rs13.det.put[13] = 1053
 rs13.det.put[14] = 1054
 rs13.det.put[15] = 1055
+rs13.ot.number[0] = 1025
+rs13.ot.number[1] = 1026
+rs13.ot.number[2] = 1027
+rs13.ot.number[3] = 1028
+rs13.ot.number[4] = 1029
+rs13.ot.number[5] = 1030
+rs13.ot.number[6] = 1031
+rs13.ot.number[7] = 1032
 .END
 .STRINGS
 $log.entry[2] = "11:54:08 State 101: Calculating next step"
