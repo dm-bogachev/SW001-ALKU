@@ -11,7 +11,7 @@ import requests
 from api import *  # This imports RS013N_API_URL
 # from configuration import Config
 
-logger = config_logger("master-service/Master.py")
+logger = config_logger("master-service/Background.py")
 
 
 class Background(Thread):
@@ -337,7 +337,6 @@ class Background(Thread):
             return False
         return True
 
-
     def error_reset(self):
         command = "ERESET;"
         if not self.send_command_to_robot(command, "RS013N", RS013N_API_URL):
@@ -388,8 +387,8 @@ class Background(Thread):
                 if rs7_action.lower() == "waitposfull":
                     self.process_check_positioner(RS007L_API_URL)
 
-                if rs13_action.lower() == "waitforpick":   
-                    self.process_waitforpick()
+                # if rs13_action.lower() == "waitforpick":   
+                #     self.process_waitforpick()
 
             except Exception as e:
                 logger.error("Исключение в потоке Master: ", e)
@@ -436,33 +435,33 @@ class Background(Thread):
                 command = "POSITIONEREMPTY;"
                 self.send_command_to_robot(command, "RS013N", RS013N_API_URL)
 
-    def process_waitforpick(self):
-        x, y, angle = self.get_object_coordinates() or (None, None, None)
-        if x is not None and y is not None and angle is not None: 
-            logger.info(f"Отправка данных захвата на RS013N: x={x}, y={y}, angle={angle}")
-            self.send_coordinates_to_robot(x, y, angle)
-            self.detect_attempts = 0
-            self.redrops = 0
-            time.sleep(2)
-        else:
-            logger.error("Объект не обнаружен, повтор через 2 секунды")
-            if self.detect_attempts <= 5:
-                if self.redrops < 4:
-                    if self.redrops == 1 or self.redrops == 3:
-                    #if self.current_product == "312.229.001":
-                        self.shake_fast()
-                    else:
-                        self.shake_slow()
-                    self.detect_attempts = 2
-                    self.redrops += 1
-                    time.sleep(5)
-                else:
-                    command = f"PALLETEMPTY;"
-                    logger.warning("Паллета пуста, отправка команды на RS013N")
-                    if not self.send_command_to_robot(f"send_command?command={command}", "RS013N", RS013N_API_URL):
-                        logger.error(f"Ошибка отправки команды на RS013N: {command}")
-                    else:
-                        logger.info(f"Команда отправлена на RS013N: {command}")
-                    time.sleep(5)
-            self.detect_attempts = self.detect_attempts + 1
+    # def process_waitforpick(self):
+    #     x, y, angle = self.get_object_coordinates() or (None, None, None)
+    #     if x is not None and y is not None and angle is not None: 
+    #         logger.info(f"Отправка данных захвата на RS013N: x={x}, y={y}, angle={angle}")
+    #         self.send_coordinates_to_robot(x, y, angle)
+    #         self.detect_attempts = 0
+    #         self.redrops = 0
+    #         time.sleep(2)
+    #     else:
+    #         logger.error("Объект не обнаружен, повтор через 2 секунды")
+    #         if self.detect_attempts <= 5:
+    #             if self.redrops < 4:
+    #                 if self.redrops == 1 or self.redrops == 3:
+    #                 #if self.current_product == "312.229.001":
+    #                     self.shake_fast()
+    #                 else:
+    #                     self.shake_slow()
+    #                 self.detect_attempts = 2
+    #                 self.redrops += 1
+    #                 time.sleep(5)
+    #             else:
+    #                 command = f"PALLETEMPTY;"
+    #                 logger.warning("Паллета пуста, отправка команды на RS013N")
+    #                 if not self.send_command_to_robot(f"send_command?command={command}", "RS013N", RS013N_API_URL):
+    #                     logger.error(f"Ошибка отправки команды на RS013N: {command}")
+    #                 else:
+    #                     logger.info(f"Команда отправлена на RS013N: {command}")
+    #                 time.sleep(5)
+    #         self.detect_attempts = self.detect_attempts + 1
             

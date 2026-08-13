@@ -1167,6 +1167,7 @@ N_INT300    "s.debug.mode"
   LMOVE #opt.put.safe
   LMOVE #ot.put.safe
   SWAIT -rs7.locked.zone
+  LMOVE #opt.take.safe
   LMOVE .mid.point
   LMOVE opt.point[.i,.j]+TRANS(20,0,500)
 ;
@@ -1326,8 +1327,8 @@ N_INT300    "s.debug.mode"
 .END
 .PROGRAM opt.take(.i,.j)@26/08/02 14:55 #544
   IF FALSE THEN
-    .i = hmi.st.in.i
-    .j = hmi.st.in.j
+    .i = hmi.opt.i
+    .j = hmi.opt.j
   END
   .$temp = "Take OPT from (i: "+$ENCODE(/L,.i)+", j: "+$ENCODE(/L,.j)+")"
   CALL log(.$temp)

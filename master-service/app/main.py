@@ -11,6 +11,7 @@ from fastapi.concurrency import asynccontextmanager
 # Внутренние модули
 from common.Logger import config_logger
 from Background import Background
+from CVBackground import CVBackground
 from DataCollector import DataCollector
 
 from models import ProcessRequest, SensorState
@@ -22,6 +23,9 @@ data_collector.start()
 
 master = Background(data_collector)
 master.start()
+
+master_cv = CVBackground(data_collector)
+master_cv.start()
 
 @asynccontextmanager
 async def lifespan(app: FastAPIOffline):
