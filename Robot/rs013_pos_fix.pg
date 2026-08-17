@@ -1,0 +1,53 @@
+.PROGRAM pos.put()@26/07/03 11:05 #4236
+  ;
+  .$temp = "Put detail to positioner (ID:" + $ENCODE (object.id) + ")"
+  CALL log (.$temp)
+  ;
+  SPEED 30 ALWAYS
+  ACCURACY 100 ALWAYS
+  TOOL tool.pick[current.gripper]
+  ;
+  POINT .temp = #pos.point[object.id]
+  ACCURACY 20
+  ;SIGNAL rs13.lock.zone ; TEST
+  LMOVE #pos.wait
+  BREAK
+  SIGNAL rs13.lock.zone
+  CALL log ("Check if positioner is occupied")
+  SWAIT -rs7.locked.zone
+  ;
+  LMOVE .temp + TRANS (10, 0, 50)
+  ACCURACY 5
+  LMOVE .temp + TRANS (10, 0, 20)
+  ACCURACY 0.02
+  IF object.id == 2 THEN
+    LMOVE .temp + TRANS (5, 0, 5)
+  ELSE
+    LMOVE .temp + TRANS (10, 0, 3)
+  END
+  BREAK
+  ;
+  SPEED 20 MM/S
+  ACCURACY 0.02
+  LMOVE #pos.point[object.id]
+  BREAK
+  STABLE 0.2
+  TWAIT 0.3
+  PULSE grip.unclamp
+  TWAIT 0.5
+  SIGNAL -s.grip.full
+  $action = "WaitForPick"
+  ;
+  LMOVE .temp + TRANS (0, 0, 50)
+  LMOVE .temp + TRANS (0, 0, 100)
+  count.put = count.put + 1
+  BITS rs13.det.put[0], 16 = count.put
+  CALL log ("Detail counter:" + $ENCODE (count.put))  
+  LMOVE .temp + TRANS (0, 0, 200)
+  ;
+  ;SIGNAL rs13.det.put
+  LMOVE #pos.wait
+  BREAK
+  SIGNAL -rs13.lock.zone
+  ;LMOVE #stz.wait
+.END

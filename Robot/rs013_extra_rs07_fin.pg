@@ -1,0 +1,9 @@
+.PROGRAM state255()@26/06/25 16:09 #356; Program complete
+  CALL log ("State 255: Program complete")
+  state = 0
+  ;
+  SIGNAL rs13.finish
+  CALL log ("Send extra RS007L finish command")
+  SWAIT rs7.finish.ack
+  ;
+.END
