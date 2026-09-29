@@ -3360,9 +3360,9 @@ N_INT300    "s.debug.mode"
 	; s.ot.placed
 	; ~Log
 	; @@@ CONNECTION @@@
-	; KROSET R01
-	; 127.0.0.1
-	; 9105
+	; RS013N
+	; 192.168.7.102
+	; 23
 	; @@@ PROGRAM @@@
 	;   Group:Objects:1
 	;     1:id1:F

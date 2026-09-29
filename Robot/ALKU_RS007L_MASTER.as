@@ -3080,9 +3080,9 @@ RMTIN960 1001 1017 1033 1049 1065 1081 1097 1113 1129 1145 1161 1177 1193 1209 1
 	; $log.entry[126]
 	; $log.entry[127]
 	; @@@ CONNECTION @@@
-	; KROSET R02
-	; 127.0.0.1
-	; 9205
+	; RS007L
+	; 192.168.7.103
+	; 23
 	; @@@ PROGRAM @@@
 	;   Group:Gripper:1
 	;     1:a.test.gripper:F
@@ -3121,21 +3121,23 @@ RMTIN960 1001 1017 1033 1049 1065 1081 1097 1113 1129 1145 1161 1177 1193 1209 1
 	;       .ot.up.right 
 	;       .ot.orig 
 	;     3:calc.grid:F
+	;       .teach 
 	;       .max 
 	;       .obj.len 
 	;       .obj.len.w.spc 
 	;       .$temp 
+	;       .current.ot 
 	;       .extra.x 
 	;       .i 
 	;       .j 
-	;       .teach 
 	;     3:calc.grid.rnd:F
+	;       .teach 
 	;       .max 
 	;       .obj.shift 
+	;       .current.ot 
 	;       .$temp 
 	;       .i 
 	;       .j 
-	;       .teach 
 	;     3:get.ot.point:F
 	;       .obj.id 
 	;     3:a.test.ot:F

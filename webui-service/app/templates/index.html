@@ -82,11 +82,25 @@
                                 onclick="changeModel()">Применить</button>
                         </div>
                         <div class="confidence-group">
-                            <label for="confidence-input">Confidence:</label>
+                            <label for="confidence-input">Вероятность:</label>
                             <input type="number" id="confidence-input" class="confidence-input" min="0" max="1"
                                 step="0.1" value="0.5">
                             <button id="set-confidence-btn" class="set-confidence-btn"
                                 onclick="setConfidence()">Установить</button>
+                        </div>
+                        <div class="area-group">
+                            <label for="area-input">Площадь:</label>
+                            <input type="number" id="area-input" class="area-input" min="0" max="1000000"
+                                step=100" value="50000">
+                            <button id="set-area-btn" class="set-area-btn"
+                                onclick="setArea()">Установить</button>
+                        </div>
+                        <div class="deviation-group">
+                            <label for="deviation-input">Отклонение по площади:</label>
+                            <input type="number" id="deviation-input" class="deviation-input" min="0" max="1000000"
+                                step=100" value="50000">
+                            <button id="set-deviation-btn" class="set-deviation-btn"
+                                onclick="setDeviation()">Установить</button>
                         </div>
                     </div>
                     <div class="vertical-panels">
@@ -154,6 +168,14 @@
                                         <span class="slider"></span>
                                     </label>
                                     <div class="display-label">Точки захвата</div>
+                                </div>
+                                <div class="display-setting-item">
+                                    <label class="switch">
+                                        <input type="checkbox" id="display-area"
+                                            onchange="changeDisplaySetting('area', this.checked)">
+                                        <span class="slider"></span>
+                                    </label>
+                                    <div class="display-label">Площадь</div>
                                 </div>
                                 <div class="display-setting-item">
                                     <label class="switch">

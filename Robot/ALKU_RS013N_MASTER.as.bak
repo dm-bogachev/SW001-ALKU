@@ -2672,7 +2672,7 @@ N_INT300    "s.debug.mode"
   state = 0
   ;
   SIGNAL rs13.finish
-  CALL log ("Wait for RS007L finish task")
+  CALL log ("Send extra RS007L finish command")
   SWAIT rs7.finish.ack
   ;
 .END
@@ -3360,9 +3360,9 @@ N_INT300    "s.debug.mode"
 	; s.ot.placed
 	; ~Log
 	; @@@ CONNECTION @@@
-	; KROSET R01
-	; 127.0.0.1
-	; 9105
+	; RS013N
+	; 192.168.7.102
+	; 23
 	; @@@ PROGRAM @@@
 	;   Group:Objects:1
 	;     1:id1:F

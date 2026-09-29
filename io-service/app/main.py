@@ -270,7 +270,7 @@ def shake_fast():
     io.set_output(3, False)
     time.sleep(1)
     io.set_output(2, False)
-    time.sleep(5)
+    time.sleep(2)
     io.set_output(2, True)
     
 @app.post("/shake_slow")
@@ -284,7 +284,7 @@ def shake_slow():
     io.set_output(3, True)
     time.sleep(1)
     io.set_output(2, False)
-    time.sleep(5)
+    time.sleep(2)
     io.set_output(2, True)
     
 @app.post("/check_stz")

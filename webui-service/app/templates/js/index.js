@@ -289,7 +289,7 @@ function loadDisplaySettings(displayConfig) {
     console.log('Загружаем настройки отображения:', displayConfig);
 
     // Устанавливаем значения переключателей отображения
-    const settings = ['bbox', 'coordinates', 'keypoints', 'labels', 'scores', 'points', 'pick_angle'];
+    const settings = ['bbox', 'coordinates', 'keypoints', 'labels', 'scores', 'points', 'pick_angle', 'grid', 'area'];
     settings.forEach(setting => {
         const checkbox = document.getElementById(`display-${setting}`);
         if (checkbox) {
@@ -320,12 +320,26 @@ function loadModelSettings(modelsConfig, processConfig) {
             modelSelect.value = processConfig.LastModel;
         }
 
-        // Устанавливаем confidence для текущей модели
+        // Устанавливаем параметры для текущей модели
         const currentModel = processConfig.LastModel || modelSelect.value;
         if (modelsConfig[currentModel]) {
             const confidenceInput = document.getElementById('confidence-input');
             if (confidenceInput) {
                 confidenceInput.value = modelsConfig[currentModel].ConfidenceThreshold || 0.5;
+            }
+
+            //
+
+            const areaInput = document.getElementById('area-input');
+            if (areaInput) {
+                areaInput.value = modelsConfig[currentModel].ModelDefaultArea || 0.5;
+            }
+            
+            //
+
+            const deviationInput = document.getElementById('deviation-input');
+            if (deviationInput) {
+                deviationInput.value = modelsConfig[currentModel].ModelAllowedAreaDeviation || 0.5;
             }
         }
     }
@@ -416,6 +430,61 @@ function setConfidence() {
             alert(`Ошибка при установке confidence`);
         });
 }
+
+function setArea() {
+    const modelSelect = document.getElementById('model-select');
+    const areaInput = document.getElementById('area-input');
+    const selectedModel = modelSelect.value;
+    const area = parseFloat(areaInput.value);
+
+    console.log(`Устанавливаем area ${area} для модели ${selectedModel}`);
+
+    fetch(`${CV_API_URL}/set_model_area?model_name=${selectedModel}&new_area=${area}`, {
+        method: 'POST'
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.Status === "OK") {
+                console.log(`Area успешно установленa для модели ${selectedModel}`);
+                alert(`Area успешно установленa: ${area}`);
+            } else {
+                console.error(`Ошибка при установке Area:`, data);
+                alert(`Ошибка при установке Area: ${data.Status}`);
+            }
+        })
+        .catch(error => {
+            console.error(`Ошибка при установке Area:`, error);
+            alert(`Ошибка при установке Area`);
+        });
+}
+
+function setDeviation() {
+    const modelSelect = document.getElementById('model-select');
+    const deviationInput = document.getElementById('deviation-input');
+    const selectedModel = modelSelect.value;
+    const deviation = parseFloat(deviationInput.value);
+
+    console.log(`Устанавливаем deviation ${deviation} для модели ${selectedModel}`);
+
+    fetch(`${CV_API_URL}/set_model_deviation?model_name=${selectedModel}&new_deviation=${deviation}`, {
+        method: 'POST'
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.Status === "OK") {
+                console.log(`Area успешно установленa для модели ${selectedModel}`);
+                alert(`Area успешно установленa: ${deviation}`);
+            } else {
+                console.error(`Ошибка при установке Area:`, data);
+                alert(`Ошибка при установке Area: ${data.Status}`);
+            }
+        })
+        .catch(error => {
+            console.error(`Ошибка при установке Area:`, error);
+            alert(`Ошибка при установке Area`);
+        });
+}
+
 
 function changeDisplayMode() {
     displayModeSelect = (displayModeSelect + 1) % DISPLAY_MODES.length;
@@ -553,9 +622,10 @@ async function fetchObjects() {
     }
 }
 
+const objectsList = document.getElementById('objects-list');
 // Функция для отображения объектов в списке
 function renderObjects(objectsData) {
-    const objectsList = document.getElementById('objects-list');
+    
 
     if (!objectsList) {
         console.error('Элемент objects-list не найден');
@@ -592,8 +662,9 @@ function renderObjects(objectsData) {
                 <span class="object-class">${object.class_name || 'Unknown'}</span>
                 <span class="object-confidence">${confidencePercent}%</span>
             </div>
-            <div class="object-pick-point">Pick: ${pickPointStr}</div>
-            <div class="object-pick-angle">Angle: ${pickAngleStr}</div>
+            <div class="object-pick-point">Точка захвата: ${pickPointStr}</div>
+            <div class="object-pick-angle">Угол: ${pickAngleStr}</div>
+            
         `;
 
         // Добавляем обработчик клика для отладки
@@ -701,11 +772,13 @@ function showEasterEgg() {
 document.addEventListener('DOMContentLoaded', () => {
     setStreamImage();
     loadSettings();
-    const sel = document.getElementById('model-select');
-    if (sel) sel.addEventListener('change', updateConfidenceInputFromSelect);
+    const sel6 = document.getElementById('model-select');
+    if (sel6) sel6.addEventListener('change', updateFields);
+
     document.querySelectorAll('.tab').forEach(tab => {
         tab.addEventListener('click', () => switchTab(tab.getAttribute('data-tab')));
     });
+
 
     // Add click event listener to the logo for Easter egg
     const logoDiv = document.querySelector('.header-logo');
@@ -811,30 +884,41 @@ async function sendRobotCommand(robotType, command) {
     }
 }
 
+async function updateFields()
+{
+    console.log("Update fields");
+    updateConfidenceInputFromSelect();
+    updateAreaInputFromSelect();
+    updateDeviationInputFromSelect();
+}
+
 async function updateConfidenceInputFromSelect() {
-    const sel = document.getElementById('model-select');
-    const input = document.getElementById('confidence-input');
+    sel = document.getElementById('model-select');
+    input = document.getElementById('confidence-input');
     if (!sel || !input) return;
 
-    const opt = sel.options[sel.selectedIndex];
-    const selectedModel = sel.value;
+    opt = sel.options[sel.selectedIndex];
+    selectedModel = sel.value;
 
+    console.log("sdasdasd");
     // If option has data-threshold, prefer it (fast)
-    if (opt && opt.dataset && opt.dataset.threshold) {
-        input.value = parseFloat(opt.dataset.threshold);
-        return;
-    }
+    // if (opt && opt.dataset && opt.dataset.threshold) {
+    //     input.value = parseFloat(opt.dataset.threshold);
+    //     return;
+    // }
 
     // Otherwise try to load from config endpoint
     try {
-        const response = await fetch(`${WEBUI_API_URL}/config`);
+        response = await fetch(`${WEBUI_API_URL}/config`);
         if (response.ok) {
-            const config = await response.json();
+            config = await response.json();
             if (config.Models && config.Models[selectedModel] && typeof config.Models[selectedModel].ConfidenceThreshold !== 'undefined') {
-                const threshold = parseFloat(config.Models[selectedModel].ConfidenceThreshold);
+                threshold = parseFloat(config.Models[selectedModel].ConfidenceThreshold);
                 input.value = threshold;
+                
+                console.log("Confidence: ",  threshold)
                 // cache on option for faster future selection changes
-                if (opt) opt.dataset.threshold = threshold;
+                //if (opt) opt.dataset.threshold = threshold;
                 return;
             }
         } else {
@@ -842,6 +926,76 @@ async function updateConfidenceInputFromSelect() {
         }
     } catch (err) {
         console.error('Error loading config for confidence:', err);
+    }
+
+    // Fallback default
+    input.value = '0.5';
+}
+
+async function updateAreaInputFromSelect() {
+    sel1 = document.getElementById('model-select');
+    input1 = document.getElementById('area-input');
+    if (!sel1 || !input1) return;
+
+    opt1 = sel1.options[sel1.selectedIndex];
+    selectedModel1 = sel1.value;
+
+    // If option has data-threshold, prefer it (fast)
+    // if (opt && opt.dataset && opt.dataset.threshold) {
+    //     input.value = parseInt(opt.dataset.threshold);
+    //     return;
+    // }
+
+    // Otherwise try to load from config endpoint
+    try {
+        response = await fetch(`${WEBUI_API_URL}/config`);
+        if (response.ok) {
+            config = await response.json();
+            if (config.Models && config.Models[selectedModel1] && typeof config.Models[selectedModel1].ModelDefaultArea !== 'undefined') {
+                threshold = parseInt(config.Models[selectedModel1].ModelDefaultArea);
+                input1.value = threshold;
+                // cache on option for faster future selection changes
+                //if (opt) opt.dataset.threshold = threshold;
+                console.log("Area: ",  threshold)
+                return;
+            }
+        } else {
+            console.error('Failed to fetch config:', response.status);
+        }
+    } catch (err) {
+        console.error('Error loading config for area:', err);
+    }
+
+    // Fallback default
+    input.value = '0.5';
+}
+
+async function updateDeviationInputFromSelect() {
+    sel3 = document.getElementById('model-select');
+    input3 = document.getElementById('deviation-input');
+    if (!sel3 || !input3) return;
+
+    opt3 = sel3.options[sel.selectedIndex];
+    selectedModel3 = sel.value;
+
+    // Otherwise try to load from config endpoint
+    try {
+        response = await fetch(`${WEBUI_API_URL}/config`);
+        if (response.ok) {
+            config = await response.json();
+            if (config.Models && config.Models[selectedModel3] && typeof config.Models[selectedModel3].ModelAllowedAreaDeviation !== 'undefined') {
+                threshold = parseInt(config.Models[selectedModel3].ModelAllowedAreaDeviation);
+                input3.value = threshold;
+                // cache on option for faster future selection changes
+                console.log("Deviation: ",  threshold)
+                //if (opt) opt.dataset.threshold = threshold;
+                return;
+            }
+        } else {
+            console.error('Failed to fetch config:', response.status);
+        }
+    } catch (err) {
+        console.error('Error loading config for area:', err);
     }
 
     // Fallback default

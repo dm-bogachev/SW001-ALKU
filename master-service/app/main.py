@@ -74,6 +74,7 @@ def start_process(request: ProcessRequest):
         f"Layout: {request.Layout}, UseAlternateWave: {request.UseAlternateWave}"
         f"GlobalMaxTareCount: {request.GlobalMaxTareCount}, CurrentMaxTareCount: {request.CurrentMaxTareCount})"
     )
+    master_cv.set_product_name(request.ProductName)
     if not master.start_process(request.ProductName, 
                                 request.ProductSpec, 
                                 request.ProductCount, 

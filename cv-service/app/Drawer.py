@@ -15,6 +15,7 @@ logger = config_logger("cv-service/Drawer.py")
 class Drawer:
 
     def __init__(self):
+        self.__area = Config.get("Display.AREA", True)
         self.__bbox = Config.get("Display.BBOX", True)
         self.__labels = Config.get("Display.LABELS", True)
         self.__scores = Config.get("Display.SCORES", True)
@@ -27,6 +28,7 @@ class Drawer:
         self.__itershift = -5
 
         self.__colors = [
+            COLOR_GREEN,
             COLOR_RED,
             COLOR_YELLOW,
             COLOR_BLUE,
@@ -36,10 +38,31 @@ class Drawer:
             COLOR_RED,
         ]
 
+    def __draw_area(self, frame, data):
+        if self.__area:
+            x1, y1, x2, y2 = data.xyxy
+            id = int(data.class_id)
+            color = self.__colors[id % len(self.__colors)]
+            area = abs(x2-x1)*abs(y2-y1)
+            cv2.putText(
+                frame,
+                f"Area: {int(area)}",
+                (int(x1), int(y1) + self.__itershift),
+                cv2.FONT_HERSHEY_SIMPLEX,
+                1,
+                color,
+                2,
+            )
+            self.__itershift -= 30
+
     def __draw_bbox(self, frame, data):
         if self.__bbox:
             x1, y1, x2, y2 = data.xyxy
             id = int(data.class_id)
+            if data.model_name == "312.229.001":
+                id = id + 1
+                if id == 2:
+                    id = 0
             color = self.__colors[id % len(self.__colors)]
             cv2.rectangle(frame, (int(x1), int(y1)), (int(x2), int(y2)), color, 2)
 
@@ -154,22 +177,46 @@ class Drawer:
                 cv2.line(frame, (x, 0), (x, frame.shape[0]), (0, 255, 0), 1)
             for y in range(0, frame.shape[0], 100):
                 cv2.line(frame, (0, y), (frame.shape[1], y), (0, 255, 0), 1)
+                #
+            cv2.line(frame, (275, 0), (275, frame.shape[0]), (0, 0, 255), 3)
+            #
+            cv2.line(frame, (1550, 0), (1550, frame.shape[0]), (0, 0, 255), 3)
+            cv2.line(frame, (1725, 0), (1725, frame.shape[0]), (0, 0, 255), 3)
+            #
+            cv2.line(frame, (3200, 0), (3200, frame.shape[0]), (0, 0, 255), 3)
+            cv2.line(frame, (3375, 0), (3375, frame.shape[0]), (0, 0, 255), 3)
+            #
+            cv2.line(frame, (4675, 0), (4675, frame.shape[0]), (0, 0, 255), 3)
 
     def draw(self, frame, data_list):
-        if data_list is None:
+        #logger.debug(data_list)
+        self.__area = Config.get("Display.AREA", True)
+        self.__bbox = Config.get("Display.BBOX", True)
+        self.__labels = Config.get("Display.LABELS", True)
+        self.__scores = Config.get("Display.SCORES", True)
+        self.__points = Config.get("Display.POINTS", True)
+        self.__keypoints = Config.get("Display.KEYPOINTS", True)
+        self.__coordinates = Config.get("Display.COORDINATES", True)
+        self.__pick_angle = Config.get("Display.PICK_ANGLE", True)
+        self.__grid = Config.get("Display.GRID", True)
+        try:
+            if data_list is None:
+                self.__draw_grid(frame)
+                return frame
+            for data in data_list:
+                self.__itershift = -5
+                self.__draw_bbox(frame, data)
+                self.__draw_area(frame, data)
+                self.__draw_points(frame, data)
+                self.__draw_keypoints(frame, data)
+                self.__draw_scores(frame, data)
+                self.__draw_coordinates(frame, data)
+                self.__draw_pick_angle(frame, data)
+                self.__draw_labels(frame, data)
             self.__draw_grid(frame)
-            return frame
-        for data in data_list:
-            self.__itershift = -5
-            self.__draw_bbox(frame, data)
-            self.__draw_points(frame, data)
-            self.__draw_keypoints(frame, data)
-            self.__draw_scores(frame, data)
-            self.__draw_coordinates(frame, data)
-            self.__draw_pick_angle(frame, data)
-            self.__draw_labels(frame, data)
-        self.__draw_grid(frame)
-            
+        except Exception as e:
+            logger.error(e)
+        logger.debug("Draw complete")
         return frame
 
     def change_setting(self, setting, value):

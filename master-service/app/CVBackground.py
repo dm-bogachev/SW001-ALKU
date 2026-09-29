@@ -8,7 +8,9 @@ from common.Logger import config_logger
 from DataCollector import DataCollector
 import requests
 from api import *  # This imports RS013N_API_URL
-# from configuration import Config
+
+from common.Config import Config
+Config.init()
 
 logger = config_logger("master-service/CVBackground.py")
 
@@ -24,9 +26,17 @@ class CVBackground(Thread):
         self.redrops = 0
         self.in_process = False
         self.current_product = ""
+        self.shake_sequence = []
         self.pneumatic_state_opened = True
         #
         self.cycle_delay = 0.25  # Задержка между циклами основного потока в секундах
+
+    def set_product_name(self, ProductName: str):
+        Config.init()
+        self.current_product = ProductName
+        self.model_config = Config.get("Models").copy().get(ProductName)
+        self.shake_sequence = self.model_config.get("ShakeSequence")
+        logger.debug(self.shake_sequence)
 
     def stop(self):
         """Корректно остановить поток из внешнего кода."""
@@ -63,17 +73,23 @@ class CVBackground(Thread):
             self.redrops = 0
             time.sleep(2)
         else:
-            logger.error("Объект не обнаружен, повтор через 2 секунды")
-            if self.detect_attempts <= 5:
-                if self.redrops < 4:
-                    if self.redrops == 1 or self.redrops == 3:
-                    #if self.current_product == "312.229.001":
-                        self.shake_fast()
-                    else:
-                        self.shake_slow()
-                    self.detect_attempts = 2
+            if self.detect_attempts >= 3:
+                logger.error("Деталь не найдена 3 раза")
+                if self.redrops < len(self.shake_sequence):
+                    logger.debug(f"Подброс {self.redrops + 1} из {len(self.shake_sequence)}")
+                    try:
+                        if self.shake_sequence[self.redrops] and self.shake_sequence[self.redrops] == "FAST":
+                            logger.debug(f"Мощный подброс")
+                            self.shake_fast()
+                        else:
+                            logger.debug(f"Слабый подброс")
+                            self.shake_slow()
+                    except Exception as e:
+                        logger.error(e)
+
+                    self.detect_attempts = 0
                     self.redrops += 1
-                    time.sleep(5)
+                    time.sleep(1)
                 else:
                     command = f"PALLETEMPTY;"
                     logger.warning("Паллета пуста, отправка команды на RS013N")
@@ -81,8 +97,11 @@ class CVBackground(Thread):
                         logger.error(f"Ошибка отправки команды на RS013N: {command}")
                     else:
                         logger.info(f"Команда отправлена на RS013N: {command}")
-                    time.sleep(5)
-            self.detect_attempts = self.detect_attempts + 1
+                    time.sleep(1)
+            else:
+                logger.error("Объект не обнаружен, повтор через 2 секунды")
+                self.detect_attempts = self.detect_attempts + 1
+                time.sleep(2)
 
 
     def get_object_coordinates(self):

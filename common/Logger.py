@@ -31,16 +31,21 @@ class ColorFormatter(logging.Formatter):
         message = f"{color}{record.levelname:<8} - [{timestamp}] ({record.name}: {pathname}, {line}): {record.getMessage()}{self.RESET}"
         return message
 
-
 def config_logger(name: str) -> logging.Logger:
     """Конфигурирует и возвращает логгер с заданным именем, уровнем и форматом логирования."""
 
     handler = logging.StreamHandler()
     handler.setFormatter(ColorFormatter())
+    handler.set_name(name)
 
     logger = logging.getLogger(name)
     logger.setLevel(__LOGGING_LEVEL)
+
+    if len(logger.handlers)  > 0 and logger.handlers[0].get_name() == name:
+        return logger
+
     logger.addHandler(handler)
+
     return logger
 
 

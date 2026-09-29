@@ -123,11 +123,28 @@ def set_model_threshold(model_name: str, new_threshold: float):
     else:
         return {"Status": "Failed", "ModelName": model_name}
 
+@app.post("/set_model_area")
+def set_model_area(model_name: str, new_area: int):
+    """Изменение порога уверенности модели."""
+    if processor.detector.set_model_area(model_name, new_area):
+        return {"Status": "OK", "ModelName": model_name, "NewArea": new_area}
+    else:
+        return {"Status": "Failed", "ModelName": model_name}
+
+@app.post("/set_model_deviation")
+def set_model_deviation(model_name: str, new_deviation: int):
+    """Изменение порога уверенности модели."""
+    if processor.detector.set_model_deviation(model_name, new_deviation):
+        return {"Status": "OK", "ModelName": model_name, "NewDeviation": new_deviation}
+    else:
+        return {"Status": "Failed", "ModelName": model_name}
+
+
 @app.post("/change_display_setting")
 def change_display_setting(setting: str, value: bool):
     """Изменение настроек отображения."""
     
-    valid_settings = ['bbox', 'coordinates', 'keypoints', 'labels', 'scores', 'points', 'pick_angle', 'grid']
+    valid_settings = ['bbox', 'coordinates', 'keypoints', 'labels', 'scores', 'points', 'pick_angle', 'grid', 'area']
     if setting.lower() not in valid_settings:
         return {"Status": "Failed", "Setting": setting, "Value": value, "Valid Settings": valid_settings}
 

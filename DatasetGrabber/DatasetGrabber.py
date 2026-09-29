@@ -2,7 +2,7 @@ import os
 import cv2
 import numpy as np
 from flask import Flask, render_template, Response, request, jsonify
-from HikCamera import HikCamera
+#from HikCamera import HikCamera
 import json
 from pathlib import Path
 import logging
@@ -37,8 +37,8 @@ def undistort(frame):
     return undistorted
 
 # Initialize camera
-camera = HikCamera()
-camera.open()
+#camera = HikCamera()
+#camera.open()
 # Load calibration data if exists
 try:
     script_dir = Path(__file__).resolve().parent

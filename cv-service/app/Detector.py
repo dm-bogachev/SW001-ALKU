@@ -140,6 +140,7 @@ class Detector:
         result = []
 
         model_name = self.__current_model
+    #
         for data in predictions:
             conf = data.boxes.conf.cpu().tolist()[0]
             class_id = data.boxes.cls.cpu().tolist()[0]
@@ -272,6 +273,41 @@ class Detector:
         Config.set("Models", models_cfg)
         Config.save()
         logger.info(f"Порог уверенности модели {model_name} изменен на {new_threshold}")
+        return True
+
+    def set_model_area(self, model_name,  model_area):
+        
+        if model_name not in self.__models:
+            logger.error(f"Модель {model_name} не найдена в списке доступных моделей")
+            return False
+
+        # Обновляем конфигурацию безопасно, не разбивая имя модели по точкам.
+        models_cfg = Config.get("Models") or {}
+        if model_name not in models_cfg:
+            models_cfg[model_name] = {}
+        # Сохраняем значение как строку, чтобы формат вроде "x.y.z" не ломал структуру
+        models_cfg[model_name]["ModelDefaultArea"] = model_area
+
+        Config.set("Models", models_cfg)
+        Config.save()
+        logger.info(f"Базовая площадь модели {model_name} изменена на {model_area}")
+        return True
+
+    def set_model_deviation(self, model_name,  deviation):
+        if model_name not in self.__models:
+            logger.error(f"Модель {model_name} не найдена в списке доступных моделей")
+            return False
+
+        # Обновляем конфигурацию безопасно, не разбивая имя модели по точкам.
+        models_cfg = Config.get("Models") or {}
+        if model_name not in models_cfg:
+            models_cfg[model_name] = {}
+        # Сохраняем значение как строку, чтобы формат вроде "x.y.z" не ломал структуру
+        models_cfg[model_name]["ModelAllowedAreaDeviation"] = deviation
+
+        Config.set("Models", models_cfg)
+        Config.save()
+        logger.info(f"Отклонение площади модели {model_name} изменено на {deviation}")
         return True
 
 if __name__ == "__main__":
