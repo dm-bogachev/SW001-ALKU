@@ -2543,6 +2543,12 @@ N_INT300    "s.debug.mode"
 .END
 .PROGRAM state104()@26/07/02 22:09 #2718148; Ending sequence
   ;
+  IF SIG (s.grip.full) AND SIG (s.cmd.n.op.stop) AND SIG (s.opt.placed) THEN
+    CALL log("Put detail to RS007L pos")
+    state = 4
+    RETURN
+  END
+  ;
   IF SIG (s.cmd.n.op.stop) AND SIG (s.opt.placed) THEN
     CALL log("Return OPT in state 104")
     state = 6
@@ -2643,7 +2649,7 @@ N_INT300    "s.debug.mode"
   IF count.opt>=max.count.opt THEN
     CALL log("Reached out of maximum tare count")
     LMOVE #homyak
-    state = 103 ;!!!
+    state = 103 ;
     RETURN
   END
 ; Check all start positions
@@ -2717,7 +2723,7 @@ N_INT300    "s.debug.mode"
 ;
 ;POINT #current.pos = #pos.wait JMOVE
 ;
-  IF SIG(s.cmd.stop) OR SIG(rs7.etalon.stop) THEN
+  IF SIG(s.cmd.stop) OR SIG(rs7.etalon.stop) OR SIG (s.cmd.n.op.stop) THEN
     state = 103
   ELSE
     state = 101
@@ -3286,59 +3292,64 @@ N_INT300    "s.debug.mode"
 ;
 .END
 .PROGRAM watchdog.pc()@26/06/25 16:09 #0
-;
+  ;
   HERE .last.pos
   TIMER 1 = 0
-;
+  ;
   WHILE TRUE DO
-;
+    ;
     CALL check.tasks.pc
     CALL check.disp.pc
     CALL check.zone.pc
-;
+    ;
     HERE .current.pos
-    .c1 = SWITCH(CS )
-    .c2 = $action=="Paused"
-    .c3 = DISTANCE(.current.pos,.last.pos)>5
-    .c4 = state<>0 OR state<>100
-    .c5 = TIMER(1)>wdog.tmr
-;
+    .c1 = SWITCH (CS )
+    .c2 = $action == "Paused"
+    .c3 = DISTANCE (.current.pos, .last.pos)>5
+    .c4 = state <> 0 OR state <> 100
+    .c5 = TIMER (1) > wdog.tmr
+    ;
     IF NOT .c1 OR .c2 OR .c3 OR NOT .c4 THEN
       TIMER 1 = 0
     END
-;
+    ;
     IF .c3 THEN
       HERE .last.pos
     END
-;
+    ;
     IF .c5 THEN
-      IF $wdog.state<>"TRUE" THEN
+      IF $wdog.state <> "TRUE" THEN
         $wdog.state = "TRUE"
       END
     ELSE
-      IF $wdog.state<>"FALSE" THEN
+      IF $wdog.state <> "FALSE" THEN
         $wdog.state = "FALSE"
       END
     END
-;
-;
-    IF NOT SIG(s.debug.mode) THEN
-      IF SWITCH(REPEAT ) AND NOT SWITCH(TEACH_LOCK ) AND NOT SWITCH(EMERGENCY ) AND NOT SWITCH(CS ) AND NOT SWITCH(ERROR ) THEN
+    ;
+    ;
+    IF NOT SIG (s.debug.mode) THEN
+      IF SWITCH (REPEAT ) AND NOT SWITCH (TEACH_LOCK ) AND NOT SWITCH (EMERGENCY ) AND NOT SWITCH (CS ) AND NOT SWITCH (ERROR ) THEN
         MC ZPOWER ON
-;MC PRIME a.main
-;WHILE NOT SWITCH(POWER)
-;  TWAIT 0.01
-;  MC CONTINUE
-;END
+        ;MC PRIME a.main
+        ;WHILE NOT SWITCH(POWER)
+        ;  TWAIT 0.01
+        ;  MC CONTINUE
+        ;END
       END
     END
-;
-    IF NOT SWITCH(REPEAT ) THEN
+    ;
+    ;
+    IF SIG (rs7.locked.zone) AND SIG (rs13.lock.zone) THEN
+      SIGNAL -rs13.lock.zone
+    END
+    ;
+    IF NOT SWITCH (REPEAT ) THEN
       CALL check.teach.pc
     END
     TWAIT 0.01
   END
-;
+  ;
 .END
 .PROGRAM Comment___ () ; Comments for IDE. Do not use.
 	; @@@ PROJECT @@@

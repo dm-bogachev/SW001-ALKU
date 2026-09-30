@@ -2298,15 +2298,15 @@ RMTIN960 1001 1017 1033 1049 1065 1081 1097 1113 1129 1145 1161 1177 1193 1209 1
 	;
 .END
 .PROGRAM state1()@26/06/25 16:05 #5133; Pick from positioner
-	CALL log ("State 1: Pick from positioner")
-	; Check all start positions
-	; Possible do not needed because robot can be only in HOME or near positioner
-	;JMOVE #homyak
-	;
-	CALL pos.pick
-	;
-	state = 101
-	;
+  CALL log ("State 1: Pick from positioner")
+  ; Check all start positions
+  ; Possible do not needed because robot can be only in HOME or near positioner
+  ;JMOVE #homyak
+  ;
+  CALL pos.pick
+  ;
+  state = 101
+  ;
 .END
 .PROGRAM state100()@26/06/25 16:05 #354; Waiting for start
 	;
@@ -2331,61 +2331,61 @@ RMTIN960 1001 1017 1033 1049 1065 1081 1097 1113 1129 1145 1161 1177 1193 1209 1
 	state = 102
 .END
 .PROGRAM state102()@26/07/03 15:16 #1141326; Decision making
-	; Priority 1
-	IF SIG (s.cmd.pause) THEN
-		state = 105
-		RETURN
-	END
-	IF SIG (s.cmd.chk.etal) AND NOT SIG (s.grip.full) THEN
-		state = 5
-		RETURN
-	END
-	; Priority 2
-	;IF SIG (s.cmd.stop) AND BITS (rs13.det.put[0], 16) <= count.pick THEN
-	;  state = 6
-	;  RETURN
-	;END
-	; Priority 3
-	IF NOT SIG (s.grip.full) THEN
-		$action = "WaitPosFull"
-		IF SIG (s.cmd.pick) AND NOT SIG (rs13.work[1]) AND BITS (rs13.det.put[0], 16) > count.pick THEN
-			state = 1
-			RETURN
-		END
-	END
-	; Priority 4
-	IF SIG (s.grip.full) AND NOT SIG (s.cmd.measured) AND NOT SIG (rs7.etalon.stop) THEN
-		state = 2
-		RETURN
-	END
-	; Priority 5
-	IF SIG (s.grip.full) AND SIG (s.measure.ok) AND NOT SIG (rs7.tare.chg) AND NOT SIG (rs7.etalon.stop) THEN
-		state = 3
-		RETURN
-	END
-	; Priority 6
-	IF SIG (s.grip.full) AND (SIG (s.measure.ng) OR SIG (rs7.etalon.stop)) THEN
-		state = 4
-		RETURN
-	END
-	; Priority 7
-	IF NOT SIG (s.grip.full) THEN; AND NOT SIG (s.cmd.pick) THEN
-		JMOVE #homyak
-		BREAK
-		SIGNAL -rs7.locked.zone
-	END
-	;
-	; Priority 8
-	IF SIG (rs13.finish) AND NOT SIG (s.grip.full) AND NOT (BITS (rs13.det.put[0], 16) > count.pick) THEN
-		state = 103
-		RETURN
-	END
-	;
-	IF SIG (rs13.no.ot.stop) THEN
-		state = 103
-		RETURN
-	END
-	;
+  ; Priority 1
+  IF SIG (s.cmd.pause) THEN
+    state = 105
+    RETURN
+  END
+  IF SIG (s.cmd.chk.etal) AND NOT SIG (s.grip.full) THEN
+    state = 5
+    RETURN
+  END
+  ; Priority 2
+  ;IF SIG (s.cmd.stop) AND BITS (rs13.det.put[0], 16) <= count.pick THEN
+  ;  state = 6
+  ;  RETURN
+  ;END
+  ; Priority 3
+  IF NOT SIG (s.grip.full) THEN
+    $action = "WaitPosFull"
+    IF SIG (s.cmd.pick) AND NOT SIG (rs13.work[1]) AND BITS (rs13.det.put[0], 16) > count.pick THEN
+      state = 1
+      RETURN
+    END
+  END
+  ; Priority 4
+  IF SIG (s.grip.full) AND NOT SIG (s.cmd.measured) AND NOT SIG (rs7.etalon.stop) THEN
+    state = 2
+    RETURN
+  END
+  ; Priority 5
+  IF SIG (s.grip.full) AND SIG (s.measure.ok) AND NOT SIG (rs7.tare.chg) AND NOT SIG (rs7.etalon.stop) THEN
+    state = 3
+    RETURN
+  END
+  ; Priority 6
+  IF SIG (s.grip.full) AND (SIG (s.measure.ng) OR SIG (rs7.etalon.stop)) THEN
+    state = 4
+    RETURN
+  END
+  ; Priority 7
+  IF NOT SIG (s.grip.full) THEN; AND NOT SIG (s.cmd.pick) THEN
+    JMOVE #homyak
+    BREAK
+    SIGNAL -rs7.locked.zone
+  END
+  ;
+  ; Priority 8
+  IF SIG (rs13.finish) AND NOT SIG (s.grip.full) AND NOT (BITS (rs13.det.put[0], 16) > count.pick) THEN
+    state = 103
+    RETURN
+  END
+  ;
+  IF SIG (rs13.no.ot.stop) THEN
+    state = 9
+    RETURN
+  END
+  ;
 .END
 .PROGRAM state103()@26/07/02 08:12 #334; Auxilary state
 	CALL log ("State 103: Calculating ending sequence step")
@@ -2393,16 +2393,16 @@ RMTIN960 1001 1017 1033 1049 1065 1081 1097 1113 1129 1145 1161 1177 1193 1209 1
 	;
 .END
 .PROGRAM state104()@26/07/03 15:16 #331; Ending sequence
-	;
-	IF NOT SIG (s.grip.full) THEN; AND NOT SIG (s.cmd.pick) THEN
-		JMOVE #homyak
-		BREAK
-		SIGNAL -rs7.locked.zone
-	END
-	SIGNAL rs7.finish.ack
-	state = 255
-	RETURN
-	;
+  ;
+  IF NOT SIG (s.grip.full) THEN; AND NOT SIG (s.cmd.pick) THEN
+    JMOVE #homyak
+    BREAK
+    SIGNAL -rs7.locked.zone
+  END
+  SIGNAL rs7.finish.ack
+  state = 255
+  RETURN
+  ;
 .END
 .PROGRAM state105()@26/06/26 14:27 #133; Program paused
 	CALL log ("State 105: Program paused")
@@ -2543,6 +2543,14 @@ RMTIN960 1001 1017 1033 1049 1065 1081 1097 1113 1129 1145 1161 1177 1193 1209 1
 	CALL log ("State 8: Check etalon by command")
 	CALL etalon.measure (etalon.id)
 	state = 105
+.END
+.PROGRAM state9 () ; No OP stop
+  ;
+  CALL log ("State 9: No OP stop")
+  CALL pos.pick
+  CALL defect.put
+  state = 103
+  ;
 .END
 .PROGRAM tcp.callback.pc(.$data[],.data.length)@26/08/01 15:10 #104704
 	.$temp = "Received " + $ENCODE (.data.length) + " strings:"
@@ -2976,68 +2984,67 @@ RMTIN960 1001 1017 1033 1049 1065 1081 1097 1113 1129 1145 1161 1177 1193 1209 1
 	END
 .END
 .PROGRAM watchdog.pc()@26/07/01 14:24 #0
-	;
-	HERE .last.pos
-	TIMER 1 = 0
-	;
-	WHILE TRUE DO
-		;
-		CALL check.tasks.pc
-		CALL check.disp.pc
-		CALL check.zone.pc
-		;
-		HERE .current.pos
-		.c1 = SWITCH (CS )
-		.c2 = $action == "Paused"
-		.c3 = DISTANCE (.current.pos, .last.pos)>5
-		.c4 = state <> 0 OR state <> 100
-		.c5 = TIMER (1) > wdog.tmr
-		;
-		IF NOT .c1 OR .c2 OR .c3 OR NOT .c4 THEN
-			TIMER 1 = 0
-		END
-		;
-		IF .c3 THEN
-			HERE .last.pos
-		END
-		;
-		IF .c5 THEN
-			IF $wdog.state <> "TRUE" THEN
-				$wdog.state = "TRUE"
-			END
-		ELSE
-			IF $wdog.state <> "FALSE" THEN
-				$wdog.state = "FALSE"
-			END
-		END
-		;
-		;
-		IF SIG (rs13.tare.ack) THEN
-			;CALL log.pc1("Received OT change ACK")
-			;IF count.put >= chg.tare.count THEN
-			;  count.put = 0
-			;END
-			;count.put = 0
-			SIGNAL -rs7.tare.chg
-		END
-		;
-		IF NOT SIG (s.debug.mode) THEN
-			IF SWITCH (REPEAT ) AND NOT SWITCH (TEACH_LOCK ) AND NOT SWITCH (EMERGENCY ) AND NOT SWITCH (CS ) AND NOT SWITCH (ERROR ) THEN
-				MC ZPOWER ON
-				;MC PRIME a.main
-				;WHILE NOT SWITCH(POWER)
-				;  TWAIT 0.01
-				;  MC CONTINUE
-				;END
-			END
-		END
-		;
-		IF NOT SWITCH (REPEAT ) THEN
-			CALL check.teach.pc
-		END
-		TWAIT 0.01
-	END
-	;
+  ;
+  HERE .last.pos
+  TIMER 1 = 0
+  ;
+  WHILE TRUE DO
+    ;
+    CALL check.tasks.pc
+    CALL check.disp.pc
+    CALL check.zone.pc
+    ;
+    HERE .current.pos
+    .c1 = SWITCH (CS )
+    .c2 = $action == "Paused"
+    .c3 = DISTANCE (.current.pos, .last.pos)>5
+    .c4 = state <> 0 OR state <> 100
+    .c5 = TIMER (1) > wdog.tmr
+    ;
+    IF NOT .c1 OR .c2 OR .c3 OR NOT .c4 THEN
+      TIMER 1 = 0
+    END
+    ;
+    IF .c3 THEN
+      HERE .last.pos
+    END
+    ;
+    IF .c5 THEN
+      IF $wdog.state <> "TRUE" THEN
+        $wdog.state = "TRUE"
+      END
+    ELSE
+      IF $wdog.state <> "FALSE" THEN
+        $wdog.state = "FALSE"
+      END
+    END
+    ;
+    IF SIG (rs13.tare.ack) THEN
+      ;CALL log.pc1("Received OT change ACK")
+      ;IF count.put >= chg.tare.count THEN
+      ;  count.put = 0
+      ;END
+      ;count.put = 0
+      SIGNAL -rs7.tare.chg
+    END
+    ;
+    IF NOT SIG (s.debug.mode) THEN
+      IF SWITCH (REPEAT ) AND NOT SWITCH (TEACH_LOCK ) AND NOT SWITCH (EMERGENCY ) AND NOT SWITCH (CS ) AND NOT SWITCH (ERROR ) THEN
+        MC ZPOWER ON
+        ;MC PRIME a.main
+        ;WHILE NOT SWITCH(POWER)
+        ;  TWAIT 0.01
+        ;  MC CONTINUE
+        ;END
+      END
+    END
+    ;
+    IF NOT SWITCH (REPEAT ) THEN
+      CALL check.teach.pc
+    END
+    TWAIT 0.01
+  END
+  ;
 .END
 .PROGRAM Comment___ () ; Comments for IDE. Do not use.
 	; @@@ PROJECT @@@
@@ -3080,9 +3087,9 @@ RMTIN960 1001 1017 1033 1049 1065 1081 1097 1113 1129 1145 1161 1177 1193 1209 1
 	; $log.entry[126]
 	; $log.entry[127]
 	; @@@ CONNECTION @@@
-	; KROSET R02
-	; 127.0.0.1
-	; 9205
+	; RS007L
+	; 192.168.7.103
+	; 23
 	; @@@ PROGRAM @@@
 	;   Group:Gripper:1
 	;     1:a.test.gripper:F
@@ -3121,21 +3128,23 @@ RMTIN960 1001 1017 1033 1049 1065 1081 1097 1113 1129 1145 1161 1177 1193 1209 1
 	;       .ot.up.right 
 	;       .ot.orig 
 	;     3:calc.grid:F
+	;       .teach 
 	;       .max 
 	;       .obj.len 
 	;       .obj.len.w.spc 
 	;       .$temp 
+	;       .current.ot 
 	;       .extra.x 
 	;       .i 
 	;       .j 
-	;       .teach 
 	;     3:calc.grid.rnd:F
+	;       .teach 
 	;       .max 
 	;       .obj.shift 
+	;       .current.ot 
 	;       .$temp 
 	;       .i 
 	;       .j 
-	;       .teach 
 	;     3:get.ot.point:F
 	;       .obj.id 
 	;     3:a.test.ot:F
@@ -3250,6 +3259,7 @@ RMTIN960 1001 1017 1033 1049 1065 1081 1097 1113 1129 1145 1161 1177 1193 1209 1
 	;     8:state6:F
 	;     8:state7:F
 	;     8:state8:F
+	;     8:state9:F
 	;     8:state100:F
 	;     8:state101:F
 	;     8:state102:F
