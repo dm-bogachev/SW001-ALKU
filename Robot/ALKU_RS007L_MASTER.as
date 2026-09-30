@@ -2547,6 +2547,9 @@ RMTIN960 1001 1017 1033 1049 1065 1081 1097 1113 1129 1145 1161 1177 1193 1209 1
 .PROGRAM state9 () ; No OP stop
   ;
   CALL log ("State 9: No OP stop")
+  IF SIG(s.grip.full) THEN
+    CALL defect.put
+  END
   CALL pos.pick
   CALL defect.put
   state = 103
