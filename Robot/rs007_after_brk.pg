@@ -1,0 +1,183 @@
+.PROGRAM measure()@26/07/03 14:20 #4728
+  IF FALSE THEN
+    .pos = hmi.obj.id
+  END
+  .pos = object.id
+  ;
+  IF object.id == round.no THEN
+    .shift.y = 0
+    .shift.z = 50
+    .p.idx = 2
+  ELSE
+    .shift.y = 50
+    .shift.z = 0
+    .p.idx = 1
+  END
+  ;
+  CALL log ("Move to measure machine")
+  ;$action = "TakingToMM"
+  ;
+  SPEED 100 ALWAYS
+  ACCURACY 100 ALWAYS
+  TOOL tool.pick[current.gripper]
+  ;
+  POINT .machine.pos = #machine.pos[.pos]
+  ; Go to machine
+  JMOVE #safe.machine
+  JMOVE #before.machine[.p.idx]
+  ACCURACY 10
+  LMOVE .machine.pos + TRANS (0, .shift.y, .shift.z)
+  ACCURACY 5
+  LMOVE .machine.pos + TRANS (0, .shift.y * 0.2, .shift.z * 0.2)
+  STABLE 0.2
+  SPEED 20 MM/S
+  ACCURACY 0.2
+  LMOVE #machine.pos[.pos]
+  STABLE 0.2
+  BREAK
+  ;CALL log ("Send command to enable vacuum")
+  ;$action = "WaitingMMVacuum"
+  PULSE grip.unclamp
+  TWAIT 0.3
+  ;
+  ACCURACY 5
+  LMOVE .machine.pos + TRANS (0, .shift.y * 0.2, .shift.z * 0.2)
+  ACCURACY 10
+  LMOVE .machine.pos + TRANS (0, .shift.y, .shift.z)
+  ;
+  LMOVE #before.machine[.p.idx]
+  BREAK
+  ; Wait result
+  CALL log ("Waiting for measurement result")
+  $action = "WaitingMMResult"
+  WAIT SIG (s.measure.ok) OR SIG (s.measure.ng)
+  SIGNAL s.cmd.measured
+  ;
+  IF SIG (s.measure.ok) THEN
+    CALL log ("Measurement result: OK")
+  ELSE
+    CALL log ("Measurement result: DEFECT")
+  END
+  $action = ""
+  ;
+  ; Pick from machine
+  ACCURACY 10
+  LMOVE .machine.pos + TRANS (0, .shift.y, .shift.z)
+  ACCURACY 5
+  LMOVE .machine.pos + TRANS (0, .shift.y * 0.2, .shift.z * 0.2)
+  SPEED 100 MM/S
+  ACCURACY 0.5
+  LMOVE #machine.pos[.pos]
+  BREAK
+  STABLE 0.2
+  PULSE grip.clamp
+  TWAIT 0.3
+  ; Go home
+  ACCURACY 5
+  LMOVE .machine.pos + TRANS (0, .shift.y * 0.2, .shift.z * 0.2)
+  ACCURACY 10
+  LMOVE .machine.pos + TRANS (0, .shift.y, .shift.z)
+  ;
+  LMOVE #before.machine[.p.idx]
+  SWAIT -rs13.lock.zone
+  JMOVE #safe.machine
+  SWAIT -rs13.lock.zone
+  JMOVE #homyak
+  SWAIT -rs13.lock.zone
+  BREAK
+  ;JMOVE #safe.machine
+  ;JMOVE #homyak
+.END
+.PROGRAM watchdog.pc()@26/07/01 14:24 #0
+  ;
+  HERE .last.pos
+  TIMER 1 = 0
+  ;
+  ;
+  MC NUMABORT
+  TWAIT 0.5
+  MC NUMEXECUTE
+  ;
+  ;
+  WHILE TRUE DO
+    ;
+    CALL check.tasks.pc
+    CALL check.disp.pc
+    ;
+    HERE .current.pos
+    .c1 = SWITCH (CS )
+    .c2 = $action == "Paused"
+    .c3 = DISTANCE (.current.pos, .last.pos)>5
+    .c4 = state <> 0 OR state <> 100
+    .c5 = TIMER (1) > wdog.tmr
+    ;
+    IF NOT .c1 OR .c2 OR .c3 OR NOT .c4 THEN
+      TIMER 1 = 0
+    END
+    ;
+    IF .c3 THEN
+      HERE .last.pos
+    END
+    ;
+    IF .c5 THEN
+      IF $wdog.state <> "TRUE" THEN
+        $wdog.state = "TRUE"
+      END
+    ELSE
+      IF $wdog.state <> "FALSE" THEN
+        $wdog.state = "FALSE"
+      END
+    END
+    ;
+    IF SIG (rs13.tare.ack) THEN
+      ;CALL log.pc1("Received OT change ACK")
+      ;IF count.put >= chg.tare.count THEN
+      ;  count.put = 0
+      ;END
+      ;count.put = 0
+      SIGNAL -rs7.tare.chg
+    END
+    ;
+    IF NOT SIG (s.debug.mode) THEN
+      IF SWITCH (REPEAT ) AND NOT SWITCH (TEACH_LOCK ) AND NOT SWITCH (EMERGENCY ) AND NOT SWITCH (CS ) AND NOT SWITCH (ERROR ) THEN
+        MC ZPOWER ON
+        ;MC PRIME a.main
+        ;WHILE NOT SWITCH(POWER)
+        ;  TWAIT 0.01
+        ;  MC CONTINUE
+        ;END
+      END
+    END
+    ;
+    IF NOT SWITCH (REPEAT ) THEN
+      CALL check.teach.pc
+    END
+    TWAIT 0.01
+  END
+  ;
+.END
+.PROGRAM numpg ()
+  ;
+  ;do.work[1] = 17
+  ;rs13.work[1] = 1017
+  ;di.hold = 2009
+  ;s.zone.blocked = 2209
+  ; do.work[1]     rs13.work[1]             s.zone.blocked
+  ;----| |-------------| |----------------------( )
+  ;            |                |
+  ;            | s.zone.blocked |
+  ;            --------|/|-------
+  ;
+  ; s.zone.blocked   rs13.work[1]  do.work[1]   di.hold
+  ;------|/|------------| |---------|  |--------(/)
+  ;
+  SOUT 2209 = 17 AND (NOT 1017 OR 2209)
+  SOUT 2009 = NOT (NOT 2209 AND 1017 AND 17)
+  ;
+.END
+.* IDE Comments
+
+
+
+
+

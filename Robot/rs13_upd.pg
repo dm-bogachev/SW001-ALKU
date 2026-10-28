@@ -1,0 +1,199 @@
+.PROGRAM ot.take(.i,.j)@26/08/02 14:55 #621
+; Start from step 3 to manual check
+  IF FALSE THEN
+    .i = hmi.st.out.i
+    .j = hmi.st.out.j
+  END
+; Log info
+  .$temp = "Take OT from (i: "+$ENCODE(/L,.i)+", j: "+$ENCODE(/L,.j)+")"
+  CALL log(.$temp)
+; Set default motion parameters
+  TOOL tool.pin
+  SPEED 10 ALWAYS
+  ACCURACY 100 ALWAYS
+  ACCEL 5 ALWAYS
+  DECEL 5 ALWAYS
+; Calculate points
+  POINT .ot.take.safe = #ot.take.safe
+  DECOMPOSE .ct1[1] = .ot.take.safe
+  IF .i==3 AND .j>=10 THEN
+    DECOMPOSE .ct2[1] = ot.point[.i,9]
+  ELSE
+    DECOMPOSE .ct2[1] = ot.point[.i,.j]
+  END
+;DECOMPOSE .ct2[1] = ot.point[.i, .j]
+  POINT .mid.point = TRANS(.ct1[1],.ct2[2],.ct2[3],.ct1[4],.ct1[5],.ct1[6])
+  POINT .ot.put = #ot.put
+; Release tare
+  PULSE release.tare
+; Motion
+; Ensure that we are in home position!!!
+;
+; Move before OT
+  LMOVE ot.point[.i,.j]+TRANS(0,0,200)
+  ACCURACY 5
+  LMOVE ot.point[.i,.j]+TRANS(0,0,50)
+; Move to OT
+  ACCURACY 0.02
+  SPEED 50 MM/S
+  LMOVE ot.point[.i,.j]
+  BREAK
+  PULSE capture.tare
+  TWAIT 0.5
+  count.ot = count.ot+1
+  BITS rs13.ot.number[0], 8 = count.ot
+; Move up
+  ACCURACY 0.02
+  SPEED 50 MM/S
+  LMOVE ot.point[.i,.j]+TRANS(20)
+; Move to sensor position
+  ACCURACY 0.02
+  SPEED 100 MM/S
+  LMOVE ot.point[.i,.j]+TRANS(20,0,100)
+  BREAK
+; Wait sensor
+  CALL log("Wait OT sensor state")
+  WHILE NOT SIG(s.stock.ot.ok) AND NOT SIG(s.stock.ot.ng) DO
+    $action = "WaitOutStockerSensor"
+    TWAIT 0.5
+  END
+  CALL log(.$temp)
+; Check if OK
+  IF SIG(s.stock.ot.ok) THEN
+    CALL log("OT exists, continue")
+    SIGNAL -s.stock.ot.ok
+    LMOVE ot.point[.i,.j]+TRANS(20,0,400)
+    LMOVE .mid.point
+    LMOVE #ot.take.safe
+; Move to aux point
+    LMOVE #ot.put.safe
+; Move before put point
+    ACCURACY 20
+    LMOVE .ot.put+TRANS(100)
+; Move to put point
+    ACCURACY 0.02
+    SPEED 20 MM/S
+    LMOVE #ot.put
+    BREAK
+    PULSE release.tare
+    TWAIT 0.5
+    SIGNAL s.ot.placed
+; Move out of put point
+    ACCURACY 30
+    LMOVE .ot.put+TRANS(,,100)
+;LMOVE #ot.put.safe
+    LMOVE #pos.wait
+    BREAK
+    WHILE SIG(rs7.tare.chg) DO
+      PULSE rs13.tare.ack,5
+      TWAIT 5
+    END
+;  POINT #current.pos = #pos.wait
+  ELSE
+    CALL log("OT do not exists, move to next")
+    SIGNAL -s.stock.ot.ng
+    ACCURACY 0.02
+    SPEED 50 MM/S
+    LMOVE ot.point[.i,.j]+TRANS(20)
+    ACCURACY 0.02
+    SPEED 50 MM/S
+    LMOVE ot.point[.i,.j]
+    BREAK
+    PULSE release.tare
+    TWAIT 0.5
+    ACCURACY 5
+    LMOVE ot.point[.i,.j]+TRANS(0,0,50)
+    LMOVE ot.point[.i,.j]+TRANS(0,0,200)
+;  POINT #current.pos = #HERE
+  END
+;
+  ACCEL 100 ALWAYS
+  DECEL 100 ALWAYS
+;
+.END
+.PROGRAM state104()@26/10/01 13:33 #2903165; Ending sequence
+  ;
+  IF SIG (s.grip.full) AND SIG (s.cmd.n.op.stop) AND SIG (s.opt.placed) THEN
+    CALL log ("Put detail to RS007L pos")
+    SIGNAL rs13.no.ot.stop
+    state = 4
+    RETURN
+  END
+  ;
+  IF SIG (s.cmd.n.op.stop) AND SIG (s.opt.placed) THEN
+    CALL log ("Return OPT in state 104")
+    SIGNAL rs13.no.ot.stop
+    state = 6
+    RETURN
+  END
+  ;
+  IF SIG (s.cmd.n.op.stop) AND NOT SIG (s.opt.placed) THEN
+    CALL log ("Program complete")
+    state = 255
+    RETURN
+  END
+  ;
+  IF SIG (s.ot.placed) AND SIG (s.grip.full) AND BITS (rs7.det.picked[0], 16) == count.put THEN
+    $action = "WaitPosFree"
+    IF NOT SIG (rs7.work[1]) AND SIG (s.cmd.put) AND NOT SIG (rs7.locked.zone) THEN
+      state = 4
+      RETURN
+    END
+  END
+  ;
+  IF NOT SIG (s.grip.full) AND SIG (s.opt.placed) THEN
+    CALL log ("Return OPT in state 104")
+    state = 6
+    RETURN
+  END
+  ;
+  .m1 = NOT SIG (s.grip.full) AND SIG (s.ot.placed) AND NOT SIG (rs7.tare.chg)
+  .m2 = count.opt >= max.count.opt OR count.put == detail.count
+  .m3 = SIG (s.cmd.stop) OR SIG (rs7.etalon.stop)
+  IF .m1 AND (.m2 OR .m3) THEN
+    SIGNAL s.cmd.finish
+    SIGNAL rs13.finish
+    CALL log ("Wait for RS007L finish task")
+    SWAIT rs7.finish.ack
+    state = 5
+    RETURN
+  END
+  ;
+  ; Priority 5
+  IF SIG (rs7.tare.chg) AND SIG (s.ot.placed) THEN
+    CALL log ("Return OT in state 104")
+    state = 5
+    RETURN
+  END
+  ;
+  IF NOT SIG (s.grip.full) AND SIG (s.cmd.finish) THEN
+    CALL log ("Program complete")
+    state = 255
+    RETURN
+  END
+  ;
+  IF NOT SIG (s.grip.full) AND count.ot >= max.count.ot AND NOT SIG (s.ot.placed) THEN
+    CALL log ("Fix for case 1???!")
+    SIGNAL s.cmd.finish
+    SIGNAL rs13.finish
+    CALL log ("Wait for RS007L finish task")
+    SWAIT rs7.finish.ack
+    state = 255
+    RETURN
+  END
+  ; Impossible situation
+  IF SIG (rs7.tare.chg) AND NOT SIG (s.ot.placed) THEN
+    CALL log ("How ever you got here???")
+    WHILE SIG(rs7.tare.chg) DO
+      PULSE rs13.tare.ack,5
+      TWAIT 5
+    END
+    RETURN
+  END
+  ;
+.END
+.* IDE Comments
+
+
+.* 7:state104
+

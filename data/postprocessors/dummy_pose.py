@@ -7,9 +7,29 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 # Внутренние модули
 from common.Logger import config_logger
-logger = config_logger("DummyPose.py")
+logger = config_logger("DummyPose")
+from common.Config import Config
+Config.init()
+
+def __check_allowance(point):
+    x = point[0]
+    if x < 275 or 1550 < x < 1725 or 3200 < x < 3375 or x > 4675:
+        return False
+    return True
+
+def __get_allowed_area():
+    model_config = Config.get("Models").copy().get("DummyPose")
+    #
+    defaultArea = model_config.get("ModelDefaultArea")
+    areaDeviation = model_config.get("ModelAllowedAreaDeviation")
+    minArea = defaultArea - areaDeviation
+    maxArea = defaultArea + areaDeviation
+    #
+    return minArea, maxArea
+
 
 def process(frame, yolo_data):
+    minArea, maxArea = __get_allowed_area()
     process_frame = frame.copy()
     draw_frame = frame.copy()
     process_frame = cv2.cvtColor(process_frame, cv2.COLOR_BGR2GRAY)
@@ -18,19 +38,47 @@ def process(frame, yolo_data):
         x1, y1, x2, y2 = data.xyxy
         center = (x1 + x2) / 2, (y1 + y2) / 2
         data.pick_point = center
-        result.append(data)
-        data.pick_angle = 0
-        # draw_frame = cv2.circle(draw_frame, (int(center[0]), int(center[1])), int(abs(x1-x2)), (0, 255, 0), 2)
+        area = abs(x2-x1)*abs(y2-y1)
+        width = (x2 - x1) / 2
+        height = (y2 - y1) / 2
+        rect_left = int(x1)
+        rect_right = int(x2)
+        rect_top = int(y1+0.2*height)
+        rect_bottom = int(y2-0.2*height)
         
+        has_intersection = False
+        for other_data in yolo_data:
+            if other_data is data:
+                continue
+            other_x1, other_y1, other_x2, other_y2 = other_data.xyxy
+            if not (other_x2 < rect_left or other_x1 > rect_right or 
+                    other_y2 < rect_top or other_y1 > rect_bottom):
+                has_intersection = True
         
+        if not has_intersection:
+            cv2.rectangle(draw_frame, (rect_left, rect_top), 
+                        (rect_right, rect_bottom), (255, 255, 0), 2)
+        else:
+            cv2.rectangle(draw_frame, (rect_left, rect_top), 
+                        (rect_right, rect_bottom), (255, 255, 0), 2)
+            continue
 
-        # # найди все контуры
-        # contours, _ = cv2.findContours(process_frame, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
-        # # нарисуй все контуры
-        # logger.debug(f"Количество контуров: {len(contours)}")
-        # for contour in contours:
-        #     cv2.drawContours(draw_frame, [contour], -1, (0, 255, 0), 2)
+        if not (minArea <= area <= maxArea):
+            logger.debug(f"Area is out of bounds")
+            cv2.rectangle(draw_frame, (int(x1), int(y1)), 
+                        (int(x2), int(y2)), (255, 0, 255), 2)
+            continue
+
+        if not __check_allowance(data.pick_point):
+            continue
         
-        
-        
+        if data.keypoints[0][1] > data.keypoints[1][1]:
+            data.pick_angle = 0
+            data.pick_point = (data.pick_point[0], data.pick_point[1] - 0.5*abs(data.keypoints[0][1] - data.keypoints[1][1]))
+        else:
+            data.pick_angle = 180
+            data.pick_point = (data.pick_point[0], data.pick_point[1] + 0.5*abs(data.keypoints[0][1] - data.keypoints[1][1]))
+        logger.debug(f"Угол забора: {data.pick_angle}")
+        result.append(data)
+                
     return draw_frame, result

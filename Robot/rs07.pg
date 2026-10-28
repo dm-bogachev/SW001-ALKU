@@ -1,0 +1,85 @@
+.PROGRAM ot.put()@26/07/03 14:19 #2944
+  ;
+  SIGNAL rs7.locked.zone
+  IF SIG (rs7.tare.chg) THEN
+    CALL log ("Waiting for new OT")
+    SWAIT -rs7.tare.chg
+    count.put = 0
+    TWAIT 1
+    WHILE count.put <> 0
+      count.put = 0
+    END
+  END
+  ;
+  CALL log ("Put to OT detail" + $ENCODE (count.put + 1))
+  ;$action = "PutToTare"
+  ;
+  SPEED 100 ALWAYS
+  ACCURACY 100 ALWAYS
+  TOOL tool.pick[current.gripper]
+  ;
+  CALL ot.calc(FALSE)
+  ;
+  CALL get.ot.point (count.put)
+  ;
+  .x = grip.xsh[object.id]
+  .y = grip.ysh[object.id]
+  .z = grip.zsh[object.id]
+  .rz = 0
+  IF object.id <> round.no AND ot.y MOD 2 <> 0 AND SIG (s.ot.flip) THEN
+    .x = grip.180xsh[object.id]
+    .y = grip.180ysh[object.id]
+    .rz = 180
+  END
+  ;
+  POINT .put = ot.put[ot.x, ot.y] + TRANS (.x, .y, .z)
+  POINT .putr = ot.put[ot.x, ot.y]+ RZ (.rz) + TRANS (.x, .y, .z)
+  POINT .putr2 = ot.put[ot.x, ot.y]+ RZ (.rz / 2) + TRANS (.x, .y, .z)
+  ;
+  SIGNAL rs7.locked.zone
+  BREAK
+  CALL log ("Check if positioner is occupied")
+  SWAIT -rs13.lock.zone
+  ;
+  LAPPRO .put, -200
+  BREAK
+  HERE .#temp
+  LAPPRO .putr2, -100
+  LAPPRO .putr, -50
+  LMOVE .putr
+  BREAK
+  ;
+  TWAIT 0.1
+  PULSE grip.unclamp
+  TWAIT 0.3
+  count.put = count.put + 1
+  max.count.put = max.count.put + 1
+  SIGNAL -s.grip.full
+  $action = "WaitPosFull"
+  ;
+  LAPPRO .putr, -50
+  LAPPRO .putr2, -100
+  LMOVE .#temp
+  ;
+  ;IF NOT SIG (s.cmd.pick) THEN
+  ;  JMOVE #homyak
+  ;  BREAK
+  ;  SIGNAL -rs7.locked.zone
+  ;END
+  ;
+  IF count.put >= chg.tare.count THEN
+    CALL log ("OT tare full, request change OT")
+    SIGNAL rs7.tare.chg
+    current.ot = current.ot + 1
+    ;
+    count.put = 0
+    TWAIT 1
+    ;
+    WHILE count.put <> 0
+      count.put = 0
+    END
+    ;
+    CALL ot.calc(FALSE)
+  END
+  ;
+.END

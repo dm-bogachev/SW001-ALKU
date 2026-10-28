@@ -12,10 +12,10 @@ RUNS_DIR = os.path.join(PROJECT_DIR, "runs")
 WEIGHTS_DIR = os.path.join(PROJECT_DIR, "weights")
 
 EPOCHS = 2000
-BATCH = 0.9999
+BATCH = 0.50
 
 MODEL_SIZES = ["n", "s", "m"]
-
+MODEL_SIZES = ["m"]
 
 def extract_zip(zip_path):
     """

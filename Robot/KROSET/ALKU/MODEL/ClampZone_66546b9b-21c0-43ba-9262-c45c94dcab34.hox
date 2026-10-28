@@ -2,6 +2,6 @@
 <objects main="1">
   <object name="1" type="KHI.Fortuna.HisuiViewer.StlExtendedData" ver="0">
     <Color>00 00 ff</Color>
-    <Transparency>64</Transparency>
+    <Transparency>0</Transparency>
   </object>
 </objects>

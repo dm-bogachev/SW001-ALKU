@@ -11,7 +11,7 @@ class APIDebugger(QMainWindow):
         super().__init__()
         self.setWindowTitle("API Debugger")
         self.setMinimumSize(1400, 900)  # Увеличена минимальная ширина
-        self.base_url = "http://127.0.0.1/api"
+        self.base_url = "http://192.168.7.100/api"
         self.setup_ui()
         
     def setup_ui(self):

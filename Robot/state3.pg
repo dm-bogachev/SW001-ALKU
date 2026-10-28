@@ -1,0 +1,15 @@
+.PROGRAM state3()@26/06/25 16:05 #3787; Put detail to OT
+  CALL log ("State 3: Put detail to OT")
+  ; Check all start positions
+  ; Possible do not needed because robot can be only in HOME or near positioner
+  ;JMOVE #homyak
+  ;
+  SIGNAL -s.measure.ok, -s.measure.ng
+  BREAK
+  SIGNAL rs7.locked.zone
+  SWAIT -rs13.lock.zone
+  CALL ot.put
+  ;
+  state = 101
+  ;
+.END

@@ -124,152 +124,6 @@ N_INT261    "s.hmi.res.state"
 N_INT262    "s.hmi.res.act"
 N_INT300    "s.debug.mode"
 .END
-.INTER_PANEL_LANG2_D
-0,9,1,6,15
-6,10,"","","","",10,4,6,1,"PCEXECUTE autostart.pc",0
-7,9,2,6,15
-13,2,"","","","",10,4,11,2003,0
-14,9,3,6,15
-20,2,"","","","",10,4,11,2002,0
-21,9,8,6,15
-27,2,"","","","",10,4,11,2004,0
-28,1,"","","","",10,15,4,10,1001,0
-29,1,"","","","",10,15,4,10,1002,0
-30,8,"current.gripper","","",10,2,2,1,0
-31,8,"hmi.gripper","","",10,2,2,1,0
-33,2,"","","","",10,4,6,5,-1
-34,2,"","","","",10,4,6,6,0
-35,2,"","","","",10,4,5,3,0
-36,2,"","","","",10,4,5,4,0
-40,2,"","","","",10,4,6,1,-1
-41,2,"","","","",10,4,6,2,0
-42,4,1,"","","","",10,4,4,0,2221,0
-43,4,1,"","","","",10,4,4,0,2222,0
-49,2,"","","","",10,4,11,2001,0
-56,14,"tcp.ip","","",10,15,0
-57,8,"tcp.port","","",10,15,5,1,0
-58,8,"tcp.sender.dly","","",10,15,2,2,0
-60,8,"object.id","","",10,15,2,1,0
-61,8,"state","","",10,15,3,1,0
-62,2,"","","","",10,4,15,2261,0
-63,4,1,"","","","",10,4,4,0,2203,0
-64,4,1,"","","","",10,4,4,0,2201,0
-65,4,1,"","","","",10,4,4,0,2202,0
-66,4,1,"","","","",10,4,4,0,2204,0
-67,8,"wdog.tmr","","",10,15,3,1,0
-68,14,"action","","",10,15,0
-69,2,"","","","",10,4,15,2262,0
-70,1,"","","","",10,15,4,10,2229,0
-71,1,"","","","",10,15,4,10,2230,0
-72,1,"","","","",10,15,4,10,2231,0
-73,1,"","","","",10,15,4,10,2234,0
-76,4,1,"","","","",10,4,4,0,2300,0
-77,2,"","","","",10,4,11,2001,0
-78,7,"","",10,15,2,0,0,25,8,1
-79,7,"","",10,15,4,0,0,40,16,1
-80,7,"","",10,15,4,0,0,1040,16,1
-82,2,"","","","",10,4,8,2258,0
-83,2,"","","","",10,4,8,2259,0
-84,2,"","","","",10,4,11,2250,0
-85,8,"hmi.obj.id","","",10,2,2,1,0
-86,8,"hmi.gripper","","",10,2,2,1,0
-88,8,"hmi.x.plus","","",10,3,4,2,0
-89,8,"hmi.y.plus","","",10,3,4,2,0
-91,2,"","","","",10,4,11,2253,0
-92,8,"center.x","","",10,3,4,2,0
-93,8,"center.y","","",10,3,4,2,0
-95,8,"hmi.x.minus","","",10,3,4,2,0
-96,8,"hmi.y.minus","","",10,3,4,2,0
-97,2,"","","","",10,4,14,2257,0
-98,2,"","","","",10,4,11,2248,0
-99,8,"stz.x","","",10,3,4,2,0
-100,8,"stz.y","","",10,3,4,2,0
-101,8,"stz.a","","",10,3,4,2,0
-104,2,"","","","",10,4,8,2260,0
-105,2,"","","","",10,4,11,2001,0
-108,2,"","","","",10,4,11,2005,0
-109,2,"","","","",10,4,11,2006,0
-110,2,"","","","",10,4,11,2007,0
-111,2,"","","","",10,4,11,2008,0
-112,2,"","","","",10,4,11,2250,0
-113,2,"","","","",10,4,11,2251,0
-114,8,"hmi.ot.i","","",10,2,2,1,0
-115,2,"","","","",10,4,11,2252,0
-116,8,"hmi.opt.i","","",10,2,2,1,0
-118,2,"","","","",10,4,6,1,-1
-120,2,"","","","",10,4,11,2249,0
-121,8,"hmi.ot.j","","",10,2,2,1,0
-122,2,"","","","",10,4,11,2247,0
-123,8,"hmi.opt.j","","",10,2,2,1,0
-125,2,"","","","",10,4,6,2,0
-133,2,"","","","",10,4,11,2001,0
-136,2,"","","","",10,4,11,2004,0
-137,2,"","","","",10,4,11,2006,0
-138,2,"","","","",10,4,11,2007,0
-139,2,"","","","",10,4,11,2008,0
-140,2,"","","","",10,4,11,2250,0
-141,8,"hmi.obj.id","","",10,2,2,1,0
-142,8,"hmi.gripper","","",10,2,2,1,0
-146,2,"","","","",10,4,5,3,0
-147,2,"","","","",10,4,11,2255,0
-153,2,"","","","",10,4,5,4,0
-161,2,"","","","",10,4,11,2001,0
-164,2,"","","","",10,4,11,2004,0
-165,2,"","","","",10,4,11,2005,0
-166,2,"","","","",10,4,11,2007,0
-167,2,"","","","",10,4,11,2008,0
-168,2,"","","","",10,4,11,2250,0
-169,8,"hmi.obj.id","","",10,2,2,1,0
-170,8,"hmi.gripper","","",10,2,2,1,0
-172,8,"hmi.gx","","",10,3,4,2,0
-173,8,"hmi.gy","","",10,3,4,2,0
-174,8,"hmi.gz","","",10,3,4,2,0
-175,2,"","","","",10,4,11,2253,0
-176,8,"center.x","","",10,3,4,2,0
-177,8,"center.y","","",10,3,4,2,0
-179,8,"hmi.g180x","","",10,3,4,2,0
-180,8,"hmi.g180y","","",10,3,4,2,0
-181,2,"","","","",10,4,14,2256,0
-182,2,"","","","",10,4,11,2248,0
-183,8,"stz.x","","",10,3,4,2,0
-184,8,"stz.y","","",10,3,4,2,0
-185,8,"stz.a","","",10,3,4,2,0
-188,2,"","","","",10,4,8,2260,0
-189,2,"","","","",10,4,11,2001,0
-192,2,"","","","",10,4,11,2004,0
-193,2,"","","","",10,4,11,2005,0
-194,2,"","","","",10,4,11,2006,0
-195,2,"","","","",10,4,11,2008,0
-196,2,"","","","",10,4,11,2250,0
-199,8,"current.gripper","","",10,2,2,1,0
-200,8,"hmi.gripper","","",10,2,2,1,0
-202,2,"","","","",10,4,6,6,0
-203,2,"","","","",10,4,11,2254,0
-209,2,"","","","",10,4,6,5,-1
-217,2,"","","","",10,4,11,2001,0
-220,2,"","","","",10,4,11,2004,0
-221,2,"","","","",10,4,11,2005,0
-222,2,"","","","",10,4,11,2006,0
-223,2,"","","","",10,4,11,2007,0
-.END
-.INTER_PANEL_TITLE_LANG2
-"",0
-"",0
-"",0
-"",0
-"",0
-"",0
-"",0
-"",0
-"",0
-"",0
-"",0
-"",0
-"",0
-"",0
-"",0
-"",0
-.END
 .INTER_PANEL_D
 0,9,1,6,15
 6,10,"","PCEXECUTE","AUTOSTART","",10,4,6,1,"PCEXECUTE autostart.pc",0
@@ -860,25 +714,6 @@ N_INT300    "s.debug.mode"
     cv.y.minus[hmi.obj.id] = hmi.y.minus
   END
 .END
-.PROGRAM check.zone.pc()@26/06/25 16:09 #140014941
-;
-;do.work[1] = 17
-;rs7.work[1] = 1017
-;di.hold = 2009
-;s.zone.blocked = 2209
-; do.work[1]     rs7.work[1]             s.zone.blocked
-;----| |-------------| |----------------------( )
-;            |                |
-;            | s.zone.blocked |
-;            --------|/|-------
-;
-; s.zone.blocked   rs7.work[1]  do.work[1]   di.hold
-;------|/|------------| |---------|  |--------(/)
-;
-  SOUT 2209 = 17 AND (NOT 1017 OR 2209)
-  SOUT 2009 = NOT (NOT 2209 AND 1017 AND 17)
-;
-.END
 .PROGRAM chk.lock()@26/06/25 16:09 #0
   SWAIT -rs7.locked.zone,-rs7.work[1]
 .END
@@ -1236,6 +1071,25 @@ N_INT300    "s.debug.mode"
   IFPWPRINT 3,1,1,9,10=$log.entry[124],$log.entry[125],$log.entry[126],$log.entry[127]
 ;
 .END
+.PROGRAM numpg ()
+  ;
+  ;do.work[1] = 17
+  ;rs7.work[1] = 1017
+  ;di.hold = 2009
+  ;s.zone.blocked = 2209
+  ; do.work[1]     rs7.work[1]             s.zone.blocked
+  ;----| |-------------| |----------------------( )
+  ;            |                |
+  ;            | s.zone.blocked |
+  ;            --------|/|-------
+  ;
+  ; s.zone.blocked   rs7.work[1]  do.work[1]   di.hold
+  ;------|/|------------| |---------|  |--------(/)
+  ;
+  SOUT 2209 = 17 AND (NOT 1017 OR 2209)
+  SOUT 2009 = NOT (NOT 2209 AND 1017 AND 17)
+  ;
+.END
 .PROGRAM opt.push()@26/07/03 11:04 #231
 ;
   ACCURACY 0.02 ALWAYS
@@ -1265,76 +1119,82 @@ N_INT300    "s.debug.mode"
     .i = hmi.opt.i
     .j = hmi.opt.j
   END
-  .$temp = "Return OPT with (i: "+$ENCODE(/L,.i)+", j: "+$ENCODE(/L,.j)+")"
-  CALL log(.$temp)
-;
+  .$temp = "Return OPT with (i: " + $ENCODE (/L, .i) + ", j: " + $ENCODE (/L, .j) + ")"
+  CALL log (.$temp)
+  ;
   ACCURACY 100 ALWAYS
   SPEED 10 ALWAYS
   ACCEL 5 ALWAYS
   DECEL 5 ALWAYS
-;
+  ;
   PULSE release.tare
-;
+  ;
   TOOL tool.pin
-;
+  ;
   POINT .post.tare.in = #opt.take.safe
   DECOMPOSE .ct1[1] = .post.tare.in
-  IF .i==3 AND .j>=9 THEN
-    DECOMPOSE .ct2[1] = opt.point[.i,9]
+  IF .i == 3 AND .j >= 9 THEN
+    DECOMPOSE .ct2[1] = opt.point[.i, 9]
   ELSE
-    DECOMPOSE .ct2[1] = opt.point[.i,.j]
+    DECOMPOSE .ct2[1] = opt.point[.i, .j]
   END
-  POINT .mid.point = TRANS(.ct2[1],.ct1[2],.ct2[3],.ct1[4],.ct1[5],.ct1[6])
+  POINT .mid.point = TRANS (.ct2[1], .ct1[2], .ct2[3], .ct1[4], .ct1[5], .ct1[6])
   POINT .put.stz = #opt.put
-;
+  ;
   ACCURACY 20
-  LMOVE .put.stz+TRANS(,,50)
-;
-  CALL log("Wait pneumatics open")
-  WHILE NOT SIG(s.cmd.pneum.op) DO
+  BREAK
+  IF SIG (do.home) THEN
+    LMOVE #opt.take.safe
+    LMOVE #opt.put.safe
+    LMOVE #stz.wait
+  END
+  LMOVE .put.stz + TRANS (, , 50)
+  ;
+  CALL log ("Wait pneumatics open")
+  WHILE NOT SIG (s.cmd.pneum.op) DO
     $action = "WaitPneumaticOpen"
     TWAIT 0.5
   END
   SIGNAL -s.cmd.pneum.op
-;
+  ;
   ACCURACY 0.02
   SPEED 50 MM/S
   LMOVE #opt.put
   BREAK
   PULSE capture.tare
   TWAIT 0.5
-;
+  ;
   ACCURACY 0.02
   SPEED 50 MM/S
-  LMOVE .put.stz+TRANS(50)
-;
-;SPEED 80 ALWAYS
-;ACCURACY 5
+  LMOVE .put.stz + TRANS (50)
+  ;
+  ;SPEED 80 ALWAYS
+  ;ACCURACY 5
   LMOVE #opt.put.safe
   LMOVE #ot.put.safe
   SWAIT -rs7.locked.zone
   LMOVE #opt.take.safe
   LMOVE .mid.point
-  LMOVE opt.point[.i,.j]+TRANS(20,0,500)
-;
+  LMOVE opt.point[.i, .j] + TRANS (20, 0, 500)
+  ;
   ACCURACY 0.02
   SPEED 100 MM/S
-  LMOVE opt.point[.i,.j]+TRANS(20)
+  LMOVE opt.point[.i, .j] + TRANS (20)
   BREAK
-;
+  ;
   ACCURACY 0.02
   SPEED 20 MM/S
-  LMOVE opt.point[.i,.j]
+  LMOVE opt.point[.i, .j]
   BREAK
   PULSE release.tare
   TWAIT 0.5
   SIGNAL -s.opt.placed
-;
+  ;
   ACCURACY 30
-  LMOVE opt.point[.i,.j]+TRANS(0,0,50)
-  LMOVE opt.point[.i,.j]+TRANS(0,0,200)
-;LMOVE .mid.point
-;
+  LMOVE opt.point[.i, .j] + TRANS (0, 0, 50)
+  LMOVE opt.point[.i, .j] + TRANS (0, 0, 200)
+  ;LMOVE .mid.point
+  ;
   ACCEL 100 ALWAYS
   DECEL 100 ALWAYS
 .END
@@ -2541,23 +2401,24 @@ N_INT300    "s.debug.mode"
   CALL log("State 103: Calculating ending sequence step")
   state = 104
 .END
-.PROGRAM state104()@26/07/02 22:09 #2718148; Ending sequence
+.PROGRAM state104()@26/10/01 13:33 #2903165; Ending sequence
   ;
   IF SIG (s.grip.full) AND SIG (s.cmd.n.op.stop) AND SIG (s.opt.placed) THEN
-    CALL log("Put detail to RS007L pos")
+    CALL log ("Put detail to RS007L pos")
+    SIGNAL rs13.no.ot.stop
     state = 4
     RETURN
   END
   ;
   IF SIG (s.cmd.n.op.stop) AND SIG (s.opt.placed) THEN
-    CALL log("Return OPT in state 104")
+    CALL log ("Return OPT in state 104")
+    SIGNAL rs13.no.ot.stop
     state = 6
     RETURN
   END
   ;
   IF SIG (s.cmd.n.op.stop) AND NOT SIG (s.opt.placed) THEN
     CALL log ("Program complete")
-    SIGNAL rs13.no.ot.stop
     state = 255
     RETURN
   END
@@ -2571,7 +2432,7 @@ N_INT300    "s.debug.mode"
   END
   ;
   IF NOT SIG (s.grip.full) AND SIG (s.opt.placed) THEN
-    CALL log("Return OPT in state 104")
+    CALL log ("Return OPT in state 104")
     state = 6
     RETURN
   END
@@ -2590,7 +2451,7 @@ N_INT300    "s.debug.mode"
   ;
   ; Priority 5
   IF SIG (rs7.tare.chg) AND SIG (s.ot.placed) THEN
-    CALL log("Return OT in state 104")
+    CALL log ("Return OT in state 104")
     state = 5
     RETURN
   END
@@ -2602,7 +2463,7 @@ N_INT300    "s.debug.mode"
   END
   ;
   IF NOT SIG (s.grip.full) AND count.ot >= max.count.ot AND NOT SIG (s.ot.placed) THEN
-    CALL log("Fix for case 1???!")
+    CALL log ("Fix for case 1???!")
     SIGNAL s.cmd.finish
     SIGNAL rs13.finish
     CALL log ("Wait for RS007L finish task")
@@ -2612,7 +2473,7 @@ N_INT300    "s.debug.mode"
   END
   ; Impossible situation
   IF SIG (rs7.tare.chg) AND NOT SIG (s.ot.placed) THEN
-    CALL log("How ever you got here???")
+    CALL log ("How ever you got here???")
     PULSE rs13.tare.ack, 15
     RETURN
   END
@@ -3300,7 +3161,6 @@ N_INT300    "s.debug.mode"
     ;
     CALL check.tasks.pc
     CALL check.disp.pc
-    CALL check.zone.pc
     ;
     HERE .current.pos
     .c1 = SWITCH (CS )
@@ -3341,7 +3201,10 @@ N_INT300    "s.debug.mode"
     ;
     ;
     IF SIG (rs7.locked.zone) AND SIG (rs13.lock.zone) THEN
-      SIGNAL -rs13.lock.zone
+      TWAIT 2
+      IF SIG (rs7.locked.zone) AND SIG (rs13.lock.zone) THEN
+        SIGNAL -rs13.lock.zone
+      END
     END
     ;
     IF NOT SWITCH (REPEAT ) THEN
@@ -3357,18 +3220,12 @@ N_INT300    "s.debug.mode"
 	; ALKU_RS013N_MASTER
 	; @@@ HISTORY @@@
 	; @@@ INSPECTION @@@
-	; count.opt
-	; count.ot
-	; count.put
-	; rs7.finish.ack
-	; s.cmd.finish
-	; s.force.in[1]
-	; s.force.in[2]
-	; detail.count
-	; $action
-	; s.grip.full
 	; s.opt.placed
-	; s.ot.placed
+	; s.cmd.n.op.stop
+	; rs7.etalon.stop
+	; $action
+	; rs13.no.ot.stop
+	; s.grip.full
 	; ~Log
 	; @@@ CONNECTION @@@
 	; RS013N
@@ -3657,8 +3514,8 @@ N_INT300    "s.debug.mode"
 	;       .c5 
 	;     12:check.tasks.pc:B
 	;     12:check.disp.pc:B
-	;     12:check.zone.pc:B
 	;     12:check.teach.pc:B
+	;   0:numpg:N
 	; @@@ TRANS @@@
 	; ot.point[] OT point i, j
 	; opt.point[] OPT point i, j

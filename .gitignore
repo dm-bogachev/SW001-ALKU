@@ -42,3 +42,5 @@ DatasetGrabber/images.tar
 log.txt
 logs.txt
 camera-service/app/core
+/yolo-trainer/old/datasets
+/yolo-trainer/old

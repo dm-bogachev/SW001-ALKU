@@ -59,6 +59,9 @@ class CVBackground(Thread):
 
                 if rs13_action.lower() == "waitforpick":   
                     self.process_waitforpick()
+                else:
+                    if self.detect_attempts == 0:
+                        self.detect_attempts = 0
 
             except Exception as e:
                 logger.error("Исключение в потоке Master: ", e)
@@ -97,6 +100,7 @@ class CVBackground(Thread):
                         logger.error(f"Ошибка отправки команды на RS013N: {command}")
                     else:
                         logger.info(f"Команда отправлена на RS013N: {command}")
+                    self.detect_attempts = 0
                     time.sleep(1)
             else:
                 logger.error("Объект не обнаружен, повтор через 2 секунды")
