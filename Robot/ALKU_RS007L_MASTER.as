@@ -778,16 +778,20 @@ RMTIN960 1001 1017 1033 1049 1065 1081 1097 1113 1129 1145 1161 1177 1193 1209 1
 	;
 .END
 .PROGRAM check.tasks.pc()@26/06/25 16:05 #130311465
-	;
-	IF TASK (1002) <> 1 THEN
-		PCEXECUTE 2: tcp.client.pc
-		TWAIT 3
-	END
-	IF TASK (1003) <> 1 THEN
-		PCEXECUTE 3: tcp.sender.pc
-		TWAIT 3
-	END
-	;
+  ;
+  IF TASK (6002) <> 1 THEN
+    MC NUMEXECUTE
+    TWAIT 3
+  END
+  IF TASK (1002) <> 1 THEN
+    PCEXECUTE 2: tcp.client.pc
+    TWAIT 3
+  END
+  IF TASK (1003) <> 1 THEN
+    PCEXECUTE 3: tcp.sender.pc
+    TWAIT 3
+  END
+  ;
 .END
 .PROGRAM check.teach.pc()@26/06/25 16:05 #25933040
 	;
@@ -857,56 +861,58 @@ RMTIN960 1001 1017 1033 1049 1065 1081 1097 1113 1129 1145 1161 1177 1193 1209 1
 	;
 .END
 .PROGRAM defect.put()@26/07/03 09:07 #1211
-	;
-	IF count.defect >= max.defect.cnt THEN
-		CALL log ("Defect tare is full. Waiting for tare clean")
-		$action = "Paused"
-		WAIT count.defect == 0
-		$action = " "
-	END
-	;
-	SPEED 100 ALWAYS
-	ACCURACY 100 ALWAYS
-	TOOL tool.pick[current.gripper]
-	;
-	IF object.id == round.no THEN
-		.xc = defect.x.cor.r
-		.yc = defect.y.cor.r
-		.rz = 90
-	ELSE
-		.xc = defect.x.cor
-		.yc = defect.y.cor
-		.rz = 0
-	END
-	;
-	POINT .temp = #defect.point[count.defect + 1]
-	POINT .temp = SHIFT (.temp BY .xc, .yc) + RZ (.rz)
-	;
-	;
-	JMOVE #safe.defect
-	;
-	CALL log ("Putting to defect tare with No:" + $ENCODE (count.defect + 1))
-	;
-	ACCURACY 10
-	LAPPRO .temp, - (30 + defect.h.cor)
-	BREAK
-	;
-	SPEED 150 MM/S
-	ACCURACY 0.02
-	LAPPRO .temp, -defect.h.cor
-	;LMOVE #defect.point[count.defect+1]
-	BREAK
-	TWAIT 0.3
-	PULSE grip.unclamp
-	TWAIT 0.3
-	count.defect = count.defect + 1
-	SIGNAL -s.grip.full
-	;
-	ACCURACY 10
-	LAPPRO .temp, - (30 + defect.h.cor)
-	JMOVE #safe.defect
-	LMOVE #homyak
-	;
+  ;
+  IF count.defect >= max.defect.cnt THEN
+    CALL log ("Defect tare is full. Waiting for tare clean")
+    $action = "Paused"
+    WAIT count.defect == 0
+    $action = " "
+  END
+  ;
+  SPEED 100 ALWAYS
+  ACCURACY 100 ALWAYS
+  TOOL tool.pick[current.gripper]
+  ;
+  IF object.id == round.no THEN
+    .xc = defect.x.cor.r
+    .yc = defect.y.cor.r
+    .rz = 90
+  ELSE
+    .xc = defect.x.cor
+    .yc = defect.y.cor
+    .rz = 0
+  END
+  ;
+  POINT .temp = #defect.point[count.defect + 1]
+  POINT .temp = SHIFT (.temp BY .xc, .yc) + RZ (.rz)
+  ;
+  ;
+  JMOVE #safe.defect
+  ;
+  CALL log ("Putting to defect tare with No:" + $ENCODE (count.defect + 1))
+  ;
+  ACCURACY 10
+  LAPPRO .temp, - (30 + defect.h.cor)
+  BREAK
+  ;
+  SPEED 150 MM/S
+  ACCURACY 0.02
+  LAPPRO .temp, -defect.h.cor
+  ;LMOVE #defect.point[count.defect+1]
+  BREAK
+  TWAIT 0.3
+  PULSE grip.unclamp
+  TWAIT 0.3
+  count.defect = count.defect + 1
+  SIGNAL -s.grip.full
+  ;
+  ACCURACY 10
+  LAPPRO .temp, - (30 + defect.h.cor)
+  JMOVE #safe.defect
+  ;
+  SIGNAL -rs7.locked.zone
+  LMOVE #homyak
+  ;
 .END
 .PROGRAM errstart.pc()@26/06/25 16:05 #685
 	;
@@ -1486,11 +1492,15 @@ RMTIN960 1001 1017 1033 1049 1065 1081 1097 1113 1129 1145 1161 1177 1193 1209 1
   LMOVE .machine.pos + TRANS (0, .shift.y, .shift.z)
   ;
   LMOVE #before.machine[.p.idx]
-  SWAIT -rs13.lock.zone
   JMOVE #safe.machine
-  SWAIT -rs13.lock.zone
+  BREAK
+  IF NOT rs13.lock.zone THEN
+    SIGNAL rs7.locked.zone
+  ELSE
+    SWAIT -rs13.lock.zone
+    SIGNAL rs7.locked.zone
+  END
   JMOVE #homyak
-  SWAIT -rs13.lock.zone
   ;BREAK
   ;JMOVE #safe.machine
   ;JMOVE #homyak
@@ -1502,15 +1512,15 @@ RMTIN960 1001 1017 1033 1049 1065 1081 1097 1113 1129 1145 1161 1177 1193 1209 1
   ;di.hold = 2009
   ;s.zone.blocked = 2209
   ; do.work[1]     rs13.work[1]             s.zone.blocked
-  ;----| |-------------| |----------------------( )
-  ;            |                |
-  ;            | s.zone.blocked |
-  ;            --------|/|-------
+  ;----| |-------------|/|----------------------( )
+  ;                             |
+  ; do.work[1]   s.zone.blocked |
+  ;----| |-------------| |------
   ;
-  ; s.zone.blocked   rs13.work[1]  do.work[1]   di.hold
-  ;------|/|------------| |---------|  |--------(/)
+  ; s.zone.blocked  rs13.work[1]   do.work[1]  di.hold
+  ;------|/|-----------| |----------| |---------(/)
   ;
-  SOUT 2209 = 17 AND (NOT 1017 OR 2209)
+  SOUT 2209 = 17 AND NOT 1017 OR 17 AND 2209
   SOUT 2009 = NOT (NOT 2209 AND 1017 AND 17)
   ;
 .END
@@ -1585,7 +1595,6 @@ RMTIN960 1001 1017 1033 1049 1065 1081 1097 1113 1129 1145 1161 1177 1193 1209 1
 .END
 .PROGRAM ot.put()@26/07/03 14:19 #2944
   ;
-  SIGNAL rs7.locked.zone
   IF SIG (rs7.tare.chg) THEN
     CALL log ("Waiting for new OT")
     SWAIT -rs7.tare.chg
@@ -1593,13 +1602,20 @@ RMTIN960 1001 1017 1033 1049 1065 1081 1097 1113 1129 1145 1161 1177 1193 1209 1
   END
   ;
   CALL log ("Put to OT detail" + $ENCODE (count.put + 1))
+  ;
+  IF NOT rs13.lock.zone THEN
+    SIGNAL rs7.locked.zone
+  ELSE
+    SWAIT -rs13.lock.zone
+    SIGNAL rs7.locked.zone
+  END
   ;$action = "PutToTare"
   ;
   SPEED 100 ALWAYS
   ACCURACY 100 ALWAYS
   TOOL tool.pick[current.gripper]
   ;
-  CALL ot.calc(FALSE)
+  CALL ot.calc (FALSE)
   ;
   CALL get.ot.point (count.put)
   ;
@@ -1655,7 +1671,7 @@ RMTIN960 1001 1017 1033 1049 1065 1081 1097 1113 1129 1145 1161 1177 1193 1209 1
     ;
     count.put = 0
     ;
-    CALL ot.calc(FALSE)
+    CALL ot.calc (FALSE)
   END
   ;
 .END
@@ -1741,68 +1757,73 @@ RMTIN960 1001 1017 1033 1049 1065 1081 1097 1113 1129 1145 1161 1177 1193 1209 1
 	CALL a.main
 .END
 .PROGRAM pos.pick()@26/07/03 14:17 #4569
-	;
-	.$temp = "Pick detail from positioner (ID:" + $ENCODE (object.id) + ")"
-	CALL log (.$temp)
-	;
-	TOOL tool.pick[current.gripper]
-	;
-	SPEED 100 ALWAYS
-	ACCURACY 10 ALWAYS
-	;
-	POINT .temp = #pos.point[object.id]
-	;
-	IF object.id == round.no THEN
-		.shift.x = 0
-		.shift.y = 0
-	ELSE
-		IF object.id == pawn.no THEN
-			.shift.x = 0
-			.shift.y = 0
-		ELSE
-			.shift.x = 0
-			.shift.y = 5
-		END
-	END
-	;
-	SIGNAL rs7.locked.zone
-	;
-	IF SIG (do.home) THEN
-		CALL log ("Check if positioner is occupied")
-		SWAIT -rs13.lock.zone
-	END
-	;
-	JMOVE .temp + TRANS (0, 0, 30)
-	BREAK
-	IF NOT SIG (grip.unclamped) THEN
-		PULSE grip.unclamp
-		TWAIT 0.5
-		CALL log ("Wait for unclamp gripper. State: WaitingGripUnclamped")
-		$action = "WaitingGripUnclamped"
-		WAIT SIG (grip.unclamped) OR SIG (s.force.in[1])
-	END
-	;
-	SPEED 100 MM/S
-	ACCURACY 0.02
-	LMOVE #pos.point[object.id]
-	BREAK
-	TWAIT 0.1
-	PULSE grip.clamp
-	TWAIT 0.3
-	SIGNAL s.grip.full
-	SIGNAL -s.cmd.measured
-	count.pick = count.pick + 1
-	BITS rs7.det.picked[0], 16 = count.pick
-	;
-	LMOVE .temp + TRANS (.shift.x, .shift.y, 10)
-	ACCURACY 100
-	LMOVE .temp + TRANS (0, 0, 200)
-	ACCURACY 100
-	LMOVE #homyak
-	;
-	BREAK
-	SIGNAL -rs7.locked.zone
-	;
+  ;
+  .$temp = "Pick detail from positioner (ID:" + $ENCODE (object.id) + ")"
+  CALL log (.$temp)
+  ;
+  TOOL tool.pick[current.gripper]
+  ;
+  SPEED 100 ALWAYS
+  ACCURACY 10 ALWAYS
+  ;
+  POINT .temp = #pos.point[object.id]
+  ;
+  IF object.id == round.no THEN
+    .shift.x = 0
+    .shift.y = 0
+  ELSE
+    IF object.id == pawn.no THEN
+      .shift.x = 0
+      .shift.y = 0
+    ELSE
+      .shift.x = 0
+      .shift.y = 5
+    END
+  END
+  ;
+  IF NOT rs13.lock.zone THEN
+    SIGNAL rs7.locked.zone
+  ELSE
+    SWAIT -rs13.lock.zone
+    SIGNAL rs7.locked.zone
+  END
+  ;
+  IF SIG (do.home) THEN
+    CALL log ("Check if positioner is occupied")
+    SWAIT -rs13.lock.zone
+  END
+  ;
+  JMOVE .temp + TRANS (0, 0, 30)
+  BREAK
+  IF NOT SIG (grip.unclamped) THEN
+    PULSE grip.unclamp
+    TWAIT 0.5
+    CALL log ("Wait for unclamp gripper. State: WaitingGripUnclamped")
+    $action = "WaitingGripUnclamped"
+    WAIT SIG (grip.unclamped) OR SIG (s.force.in[1])
+  END
+  ;
+  SPEED 100 MM/S
+  ACCURACY 0.02
+  LMOVE #pos.point[object.id]
+  BREAK
+  TWAIT 0.1
+  PULSE grip.clamp
+  TWAIT 0.3
+  SIGNAL s.grip.full
+  SIGNAL -s.cmd.measured
+  count.pick = count.pick + 1
+  BITS rs7.det.picked[0], 16 = count.pick
+  ;
+  LMOVE .temp + TRANS (.shift.x, .shift.y, 10)
+  ACCURACY 100
+  LMOVE .temp + TRANS (0, 0, 200)
+  ACCURACY 100
+  LMOVE #homyak
+  ;
+  BREAK
+  SIGNAL -rs7.locked.zone
+  ;
 .END
 .PROGRAM safe.home()@26/06/25 16:05 #250
 	;
@@ -2359,7 +2380,7 @@ RMTIN960 1001 1017 1033 1049 1065 1081 1097 1113 1129 1145 1161 1177 1193 1209 1
   ; Priority 3
   IF NOT SIG (s.grip.full) THEN
     $action = "WaitPosFull"
-    IF SIG (s.cmd.pick) AND NOT SIG (rs13.work[1]) AND BITS (rs13.det.put[0], 16) > count.pick THEN
+    IF SIG (s.cmd.pick) AND NOT SIG(rs13.lock.zone) AND NOT SIG (rs13.work[1]) AND BITS (rs13.det.put[0], 16) > count.pick THEN
       state = 1
       RETURN
     END
@@ -2370,7 +2391,7 @@ RMTIN960 1001 1017 1033 1049 1065 1081 1097 1113 1129 1145 1161 1177 1193 1209 1
     RETURN
   END
   ; Priority 5
-  IF SIG (s.grip.full) AND SIG (s.measure.ok) AND NOT SIG (rs7.tare.chg) AND NOT SIG (rs7.etalon.stop) THEN
+  IF SIG (s.grip.full) AND NOT SIG(rs13.lock.zone) AND SIG (s.measure.ok) AND NOT SIG (rs7.tare.chg) AND NOT SIG (rs7.etalon.stop) THEN
     state = 3
     RETURN
   END
@@ -3016,12 +3037,6 @@ RMTIN960 1001 1017 1033 1049 1065 1081 1097 1113 1129 1145 1161 1177 1193 1209 1
   HERE .last.pos
   TIMER 1 = 0
   ;
-  ;
-  MC NUMABORT
-  TWAIT 0.5
-  MC NUMEXECUTE
-  ;
-  ;
   WHILE TRUE DO
     ;
     CALL check.tasks.pc
@@ -3053,22 +3068,12 @@ RMTIN960 1001 1017 1033 1049 1065 1081 1097 1113 1129 1145 1161 1177 1193 1209 1
     END
     ;
     IF SIG (rs13.tare.ack) THEN
-      ;CALL log.pc1("Received OT change ACK")
-      ;IF count.put >= chg.tare.count THEN
-      ;  count.put = 0
-      ;END
-      ;count.put = 0
       SIGNAL -rs7.tare.chg
     END
     ;
     IF NOT SIG (s.debug.mode) THEN
       IF SWITCH (REPEAT ) AND NOT SWITCH (TEACH_LOCK ) AND NOT SWITCH (EMERGENCY ) AND NOT SWITCH (CS ) AND NOT SWITCH (ERROR ) THEN
         MC ZPOWER ON
-        ;MC PRIME a.main
-        ;WHILE NOT SWITCH(POWER)
-        ;  TWAIT 0.01
-        ;  MC CONTINUE
-        ;END
       END
     END
     ;

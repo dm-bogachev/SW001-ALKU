@@ -604,16 +604,20 @@ N_INT300    "s.debug.mode"
 ;
 .END
 .PROGRAM check.tasks.pc()@26/06/25 16:09 #140014904
-;
-  IF TASK(1002)<>1 THEN
+  ;
+  IF TASK (6002) <> 1 THEN
+    MC NUMEXECUTE
+    TWAIT 3
+  END
+  IF TASK (1002) <> 1 THEN
     PCEXECUTE 2: tcp.client.pc
     TWAIT 3
   END
-  IF TASK(1003)<>1 THEN
+  IF TASK (1003) <> 1 THEN
     PCEXECUTE 3: tcp.sender.pc
     TWAIT 3
   END
-;
+  ;
 .END
 .PROGRAM check.teach.pc()@26/06/25 16:09 #47339817
 ;
@@ -713,9 +717,6 @@ N_INT300    "s.debug.mode"
     cv.x.minus[hmi.obj.id] = hmi.x.minus
     cv.y.minus[hmi.obj.id] = hmi.y.minus
   END
-.END
-.PROGRAM chk.lock()@26/06/25 16:09 #0
-  SWAIT -rs7.locked.zone,-rs7.work[1]
 .END
 .PROGRAM errstart.pc()@26/06/25 16:09 #347
 ;
@@ -1073,20 +1074,20 @@ N_INT300    "s.debug.mode"
 .END
 .PROGRAM numpg ()
   ;
-  ;do.work[1] = 17
-  ;rs7.work[1] = 1017
-  ;di.hold = 2009
+  ;do.work[1] = 17 ; RS013N in danger zone
+  ;rs7.work[1] = 1017 ; Rs007L in danger zone
+  ;di.hold = 2009 ; HOLD
   ;s.zone.blocked = 2209
   ; do.work[1]     rs7.work[1]             s.zone.blocked
-  ;----| |-------------| |----------------------( )
-  ;            |                |
-  ;            | s.zone.blocked |
-  ;            --------|/|-------
+  ;----| |-------------|/|----------------------( )
+  ;                             |
+  ; do.work[1]   s.zone.blocked |
+  ;----| |-------------| |------
   ;
-  ; s.zone.blocked   rs7.work[1]  do.work[1]   di.hold
-  ;------|/|------------| |---------|  |--------(/)
+  ; s.zone.blocked  rs7.work[1]   do.work[1]  di.hold
+  ;------|/|-----------| |----------| |---------(/)
   ;
-  SOUT 2209 = 17 AND (NOT 1017 OR 2209)
+  SOUT 2209 = 17 AND NOT 1017 OR 17 AND 2209
   SOUT 2009 = NOT (NOT 2209 AND 1017 AND 17)
   ;
 .END
@@ -3157,12 +3158,6 @@ N_INT300    "s.debug.mode"
   HERE .last.pos
   TIMER 1 = 0
   ;
-  ;
-  MC NUMABORT
-  TWAIT 0.5
-  MC NUMEXECUTE
-  ;
-  ;
   WHILE TRUE DO
     ;
     CALL check.tasks.pc
@@ -3197,21 +3192,9 @@ N_INT300    "s.debug.mode"
     IF NOT SIG (s.debug.mode) THEN
       IF SWITCH (REPEAT ) AND NOT SWITCH (TEACH_LOCK ) AND NOT SWITCH (EMERGENCY ) AND NOT SWITCH (CS ) AND NOT SWITCH (ERROR ) THEN
         MC ZPOWER ON
-        ;MC PRIME a.main
-        ;WHILE NOT SWITCH(POWER)
-        ;  TWAIT 0.01
-        ;  MC CONTINUE
-        ;END
       END
     END
     ;
-    ;
-    IF SIG (rs7.locked.zone) AND SIG (rs13.lock.zone) THEN
-      TWAIT 2
-      IF SIG (rs7.locked.zone) AND SIG (rs13.lock.zone) THEN
-        SIGNAL -rs13.lock.zone
-      END
-    END
     ;
     IF NOT SWITCH (REPEAT ) THEN
       CALL check.teach.pc
@@ -3440,7 +3423,6 @@ N_INT300    "s.debug.mode"
 	;       .$msg 
 	;       .i 
 	;     8:pg.select:F
-	;     8:chk.lock:F
 	;   0:a.main:F
 	;     .$pg.string 
 	;   0:pg0:F
