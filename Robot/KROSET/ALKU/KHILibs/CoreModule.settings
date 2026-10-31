@@ -34,17 +34,17 @@
 </a1:ModuleConfig>
 <a1:EntityCollection id="ref-4" xmlns:a1="http://schemas.microsoft.com/clr/nsassem/KHI.Fortuna.Core/CoreModule%2C%20Version%3D1.0.0.0%2C%20Culture%3Dneutral%2C%20PublicKeyToken%3Dnull">
 <_parent>
-<_a>1234451127</_a>
-<_b>21527</_b>
-<_c>16917</_c>
-<_d>138</_d>
-<_e>229</_e>
-<_f>147</_f>
-<_g>90</_g>
-<_h>192</_h>
-<_i>176</_i>
-<_j>186</_j>
-<_k>244</_k>
+<_a>-1235037984</_a>
+<_b>-6239</_b>
+<_c>19817</_c>
+<_d>174</_d>
+<_e>193</_e>
+<_f>102</_f>
+<_g>14</_g>
+<_h>21</_h>
+<_i>215</_i>
+<_j>215</_j>
+<_k>185</_k>
 </_parent>
 <List_x0060_1_x002B__items href="#ref-6"/>
 <List_x0060_1_x002B__size>32</List_x0060_1_x002B__size>
@@ -757,7 +757,7 @@
 </Entity_x002B__parent>
 </a1:ModuleConfigValue>
 <a1:ModuleConfigValue id="ref-28" xmlns:a1="http://schemas.microsoft.com/clr/nsassem/KHI.Fortuna.Core/CoreModule%2C%20Version%3D1.0.0.0%2C%20Culture%3Dneutral%2C%20PublicKeyToken%3Dnull">
-<_value id="ref-99">C:\Kawasaki\K-ROSET\Logs\20260818.log</_value>
+<_value id="ref-99">C:\Kawasaki\K-ROSET\Logs\20261021.log</_value>
 <Entity_x002B__type>ModuleConfigValue</Entity_x002B__type>
 <Entity_x002B__guid>
 <_a>0</_a>
@@ -949,7 +949,7 @@
 </Entity_x002B__parent>
 </a1:ModuleConfigValue>
 <a1:ModuleConfigValue id="ref-34" xmlns:a1="http://schemas.microsoft.com/clr/nsassem/KHI.Fortuna.Core/CoreModule%2C%20Version%3D1.0.0.0%2C%20Culture%3Dneutral%2C%20PublicKeyToken%3Dnull">
-<_value id="ref-117">RS013N-AC01</_value>
+<_value id="ref-117">RS007L-AC01</_value>
 <Entity_x002B__type>ModuleConfigValue</Entity_x002B__type>
 <Entity_x002B__guid>
 <_a>0</_a>
@@ -1050,17 +1050,17 @@
 </a1:ModuleConfigFlash>
 <a1:EntityCollection id="ref-40" xmlns:a1="http://schemas.microsoft.com/clr/nsassem/KHI.Fortuna.Core/CoreModule%2C%20Version%3D1.0.0.0%2C%20Culture%3Dneutral%2C%20PublicKeyToken%3Dnull">
 <_parent>
-<_a>-2132469708</_a>
-<_b>30888</_b>
-<_c>19295</_c>
-<_d>156</_d>
-<_e>193</_e>
-<_f>142</_f>
-<_g>13</_g>
-<_h>116</_h>
-<_i>66</_i>
-<_j>125</_j>
-<_k>113</_k>
+<_a>1874952742</_a>
+<_b>-18381</_b>
+<_c>16686</_c>
+<_d>164</_d>
+<_e>43</_e>
+<_f>46</_f>
+<_g>210</_g>
+<_h>169</_h>
+<_i>251</_i>
+<_j>177</_j>
+<_k>40</_k>
 </_parent>
 <List_x0060_1_x002B__items href="#ref-126"/>
 <List_x0060_1_x002B__size>0</List_x0060_1_x002B__size>
@@ -1068,17 +1068,17 @@
 </a1:EntityCollection>
 <a1:EntityCollection id="ref-43" xmlns:a1="http://schemas.microsoft.com/clr/nsassem/KHI.Fortuna.Core/CoreModule%2C%20Version%3D1.0.0.0%2C%20Culture%3Dneutral%2C%20PublicKeyToken%3Dnull">
 <_parent>
-<_a>-227284502</_a>
-<_b>-15295</_b>
-<_c>17585</_c>
-<_d>154</_d>
-<_e>173</_e>
-<_f>22</_f>
-<_g>167</_g>
-<_h>160</_h>
-<_i>185</_i>
-<_j>197</_j>
-<_k>88</_k>
+<_a>1271615197</_a>
+<_b>-30301</_b>
+<_c>19951</_c>
+<_d>191</_d>
+<_e>223</_e>
+<_f>205</_f>
+<_g>216</_g>
+<_h>112</_h>
+<_i>94</_i>
+<_j>244</_j>
+<_k>24</_k>
 </_parent>
 <List_x0060_1_x002B__items href="#ref-126"/>
 <List_x0060_1_x002B__size>0</List_x0060_1_x002B__size>
@@ -1086,17 +1086,17 @@
 </a1:EntityCollection>
 <a1:EntityCollection id="ref-46" xmlns:a1="http://schemas.microsoft.com/clr/nsassem/KHI.Fortuna.Core/CoreModule%2C%20Version%3D1.0.0.0%2C%20Culture%3Dneutral%2C%20PublicKeyToken%3Dnull">
 <_parent>
-<_a>-1531076743</_a>
-<_b>2586</_b>
-<_c>19287</_c>
-<_d>157</_d>
-<_e>176</_e>
-<_f>201</_f>
-<_g>118</_g>
-<_h>128</_h>
-<_i>206</_i>
-<_j>181</_j>
-<_k>133</_k>
+<_a>1906698332</_a>
+<_b>7010</_b>
+<_c>16990</_c>
+<_d>158</_d>
+<_e>220</_e>
+<_f>80</_f>
+<_g>201</_g>
+<_h>77</_h>
+<_i>197</_i>
+<_j>49</_j>
+<_k>90</_k>
 </_parent>
 <List_x0060_1_x002B__items href="#ref-126"/>
 <List_x0060_1_x002B__size>0</List_x0060_1_x002B__size>
@@ -1104,17 +1104,17 @@
 </a1:EntityCollection>
 <a1:EntityCollection id="ref-49" xmlns:a1="http://schemas.microsoft.com/clr/nsassem/KHI.Fortuna.Core/CoreModule%2C%20Version%3D1.0.0.0%2C%20Culture%3Dneutral%2C%20PublicKeyToken%3Dnull">
 <_parent>
-<_a>1965487015</_a>
-<_b>-5940</_b>
-<_c>20469</_c>
-<_d>147</_d>
-<_e>5</_e>
-<_f>221</_f>
-<_g>16</_g>
-<_h>134</_h>
-<_i>40</_i>
-<_j>101</_j>
-<_k>31</_k>
+<_a>-1829767856</_a>
+<_b>-17888</_b>
+<_c>19194</_c>
+<_d>153</_d>
+<_e>237</_e>
+<_f>21</_f>
+<_g>53</_g>
+<_h>88</_h>
+<_i>182</_i>
+<_j>129</_j>
+<_k>153</_k>
 </_parent>
 <List_x0060_1_x002B__items href="#ref-126"/>
 <List_x0060_1_x002B__size>0</List_x0060_1_x002B__size>
@@ -1122,17 +1122,17 @@
 </a1:EntityCollection>
 <a1:EntityCollection id="ref-52" xmlns:a1="http://schemas.microsoft.com/clr/nsassem/KHI.Fortuna.Core/CoreModule%2C%20Version%3D1.0.0.0%2C%20Culture%3Dneutral%2C%20PublicKeyToken%3Dnull">
 <_parent>
-<_a>-1969466759</_a>
-<_b>4760</_b>
-<_c>20011</_c>
-<_d>135</_d>
-<_e>115</_e>
-<_f>220</_f>
-<_g>43</_g>
-<_h>49</_h>
-<_i>137</_i>
-<_j>133</_j>
-<_k>207</_k>
+<_a>-29979046</_a>
+<_b>-30109</_b>
+<_c>18955</_c>
+<_d>173</_d>
+<_e>83</_e>
+<_f>88</_f>
+<_g>128</_g>
+<_h>101</_h>
+<_i>3</_i>
+<_j>172</_j>
+<_k>79</_k>
 </_parent>
 <List_x0060_1_x002B__items href="#ref-126"/>
 <List_x0060_1_x002B__size>0</List_x0060_1_x002B__size>
@@ -1140,17 +1140,17 @@
 </a1:EntityCollection>
 <a1:EntityCollection id="ref-55" xmlns:a1="http://schemas.microsoft.com/clr/nsassem/KHI.Fortuna.Core/CoreModule%2C%20Version%3D1.0.0.0%2C%20Culture%3Dneutral%2C%20PublicKeyToken%3Dnull">
 <_parent>
-<_a>-779904027</_a>
-<_b>11341</_b>
-<_c>19012</_c>
-<_d>162</_d>
-<_e>101</_e>
-<_f>30</_f>
-<_g>129</_g>
-<_h>245</_h>
-<_i>224</_i>
-<_j>141</_j>
-<_k>157</_k>
+<_a>696435122</_a>
+<_b>-18735</_b>
+<_c>17134</_c>
+<_d>175</_d>
+<_e>224</_e>
+<_f>238</_f>
+<_g>53</_g>
+<_h>83</_h>
+<_i>169</_i>
+<_j>26</_j>
+<_k>14</_k>
 </_parent>
 <List_x0060_1_x002B__items href="#ref-126"/>
 <List_x0060_1_x002B__size>0</List_x0060_1_x002B__size>
@@ -1158,17 +1158,17 @@
 </a1:EntityCollection>
 <a1:EntityCollection id="ref-58" xmlns:a1="http://schemas.microsoft.com/clr/nsassem/KHI.Fortuna.Core/CoreModule%2C%20Version%3D1.0.0.0%2C%20Culture%3Dneutral%2C%20PublicKeyToken%3Dnull">
 <_parent>
-<_a>333992373</_a>
-<_b>-10431</_b>
-<_c>20006</_c>
-<_d>128</_d>
-<_e>7</_e>
-<_f>82</_f>
-<_g>99</_g>
-<_h>87</_h>
-<_i>177</_i>
-<_j>79</_j>
-<_k>148</_k>
+<_a>2102612725</_a>
+<_b>15874</_b>
+<_c>18820</_c>
+<_d>143</_d>
+<_e>251</_e>
+<_f>253</_f>
+<_g>192</_g>
+<_h>128</_h>
+<_i>146</_i>
+<_j>156</_j>
+<_k>10</_k>
 </_parent>
 <List_x0060_1_x002B__items href="#ref-126"/>
 <List_x0060_1_x002B__size>0</List_x0060_1_x002B__size>
@@ -1176,17 +1176,17 @@
 </a1:EntityCollection>
 <a1:EntityCollection id="ref-61" xmlns:a1="http://schemas.microsoft.com/clr/nsassem/KHI.Fortuna.Core/CoreModule%2C%20Version%3D1.0.0.0%2C%20Culture%3Dneutral%2C%20PublicKeyToken%3Dnull">
 <_parent>
-<_a>663276682</_a>
-<_b>-19093</_b>
-<_c>20134</_c>
-<_d>190</_d>
-<_e>109</_e>
-<_f>92</_f>
-<_g>176</_g>
-<_h>70</_h>
-<_i>254</_i>
-<_j>34</_j>
-<_k>6</_k>
+<_a>-1149975528</_a>
+<_b>-27728</_b>
+<_c>19967</_c>
+<_d>173</_d>
+<_e>227</_e>
+<_f>179</_f>
+<_g>93</_g>
+<_h>67</_h>
+<_i>106</_i>
+<_j>76</_j>
+<_k>118</_k>
 </_parent>
 <List_x0060_1_x002B__items href="#ref-126"/>
 <List_x0060_1_x002B__size>0</List_x0060_1_x002B__size>
@@ -1194,17 +1194,17 @@
 </a1:EntityCollection>
 <a1:EntityCollection id="ref-64" xmlns:a1="http://schemas.microsoft.com/clr/nsassem/KHI.Fortuna.Core/CoreModule%2C%20Version%3D1.0.0.0%2C%20Culture%3Dneutral%2C%20PublicKeyToken%3Dnull">
 <_parent>
-<_a>375418513</_a>
-<_b>-3959</_b>
-<_c>17747</_c>
-<_d>132</_d>
-<_e>168</_e>
-<_f>109</_f>
-<_g>7</_g>
-<_h>19</_h>
-<_i>196</_i>
-<_j>190</_j>
-<_k>221</_k>
+<_a>-112623984</_a>
+<_b>-27543</_b>
+<_c>16446</_c>
+<_d>174</_d>
+<_e>170</_e>
+<_f>90</_f>
+<_g>170</_g>
+<_h>247</_h>
+<_i>97</_i>
+<_j>195</_j>
+<_k>87</_k>
 </_parent>
 <List_x0060_1_x002B__items href="#ref-126"/>
 <List_x0060_1_x002B__size>0</List_x0060_1_x002B__size>
@@ -1212,17 +1212,17 @@
 </a1:EntityCollection>
 <a1:EntityCollection id="ref-67" xmlns:a1="http://schemas.microsoft.com/clr/nsassem/KHI.Fortuna.Core/CoreModule%2C%20Version%3D1.0.0.0%2C%20Culture%3Dneutral%2C%20PublicKeyToken%3Dnull">
 <_parent>
-<_a>-1044407911</_a>
-<_b>29610</_b>
-<_c>19969</_c>
-<_d>145</_d>
-<_e>114</_e>
-<_f>148</_f>
-<_g>105</_g>
-<_h>57</_h>
-<_i>149</_i>
-<_j>115</_j>
-<_k>150</_k>
+<_a>1955015107</_a>
+<_b>-20063</_b>
+<_c>18681</_c>
+<_d>131</_d>
+<_e>202</_e>
+<_f>153</_f>
+<_g>181</_g>
+<_h>254</_h>
+<_i>95</_i>
+<_j>217</_j>
+<_k>156</_k>
 </_parent>
 <List_x0060_1_x002B__items href="#ref-126"/>
 <List_x0060_1_x002B__size>0</List_x0060_1_x002B__size>
@@ -1230,17 +1230,17 @@
 </a1:EntityCollection>
 <a1:EntityCollection id="ref-70" xmlns:a1="http://schemas.microsoft.com/clr/nsassem/KHI.Fortuna.Core/CoreModule%2C%20Version%3D1.0.0.0%2C%20Culture%3Dneutral%2C%20PublicKeyToken%3Dnull">
 <_parent>
-<_a>86381929</_a>
-<_b>2774</_b>
-<_c>17538</_c>
-<_d>159</_d>
-<_e>228</_e>
-<_f>201</_f>
-<_g>131</_g>
-<_h>57</_h>
-<_i>41</_i>
-<_j>191</_j>
-<_k>4</_k>
+<_a>-1126956741</_a>
+<_b>-5606</_b>
+<_c>17409</_c>
+<_d>180</_d>
+<_e>215</_e>
+<_f>52</_f>
+<_g>211</_g>
+<_h>96</_h>
+<_i>146</_i>
+<_j>125</_j>
+<_k>15</_k>
 </_parent>
 <List_x0060_1_x002B__items href="#ref-126"/>
 <List_x0060_1_x002B__size>0</List_x0060_1_x002B__size>
@@ -1248,17 +1248,17 @@
 </a1:EntityCollection>
 <a1:EntityCollection id="ref-73" xmlns:a1="http://schemas.microsoft.com/clr/nsassem/KHI.Fortuna.Core/CoreModule%2C%20Version%3D1.0.0.0%2C%20Culture%3Dneutral%2C%20PublicKeyToken%3Dnull">
 <_parent>
-<_a>-197656476</_a>
-<_b>11849</_b>
-<_c>16819</_c>
-<_d>161</_d>
-<_e>91</_e>
-<_f>70</_f>
-<_g>200</_g>
-<_h>95</_h>
-<_i>193</_i>
-<_j>210</_j>
-<_k>190</_k>
+<_a>955778439</_a>
+<_b>-13318</_b>
+<_c>20127</_c>
+<_d>150</_d>
+<_e>234</_e>
+<_f>147</_f>
+<_g>104</_g>
+<_h>96</_h>
+<_i>135</_i>
+<_j>115</_j>
+<_k>35</_k>
 </_parent>
 <List_x0060_1_x002B__items href="#ref-126"/>
 <List_x0060_1_x002B__size>0</List_x0060_1_x002B__size>
@@ -1266,17 +1266,17 @@
 </a1:EntityCollection>
 <a1:EntityCollection id="ref-75" xmlns:a1="http://schemas.microsoft.com/clr/nsassem/KHI.Fortuna.Core/CoreModule%2C%20Version%3D1.0.0.0%2C%20Culture%3Dneutral%2C%20PublicKeyToken%3Dnull">
 <_parent>
-<_a>-1121335104</_a>
-<_b>-7396</_b>
-<_c>20058</_c>
-<_d>187</_d>
-<_e>175</_e>
-<_f>168</_f>
-<_g>175</_g>
-<_h>124</_h>
-<_i>193</_i>
-<_j>239</_j>
-<_k>177</_k>
+<_a>-1879039454</_a>
+<_b>17863</_b>
+<_c>16802</_c>
+<_d>150</_d>
+<_e>120</_e>
+<_f>82</_f>
+<_g>32</_g>
+<_h>114</_h>
+<_i>51</_i>
+<_j>68</_j>
+<_k>2</_k>
 </_parent>
 <List_x0060_1_x002B__items href="#ref-126"/>
 <List_x0060_1_x002B__size>0</List_x0060_1_x002B__size>
@@ -1284,17 +1284,17 @@
 </a1:EntityCollection>
 <a1:EntityCollection id="ref-77" xmlns:a1="http://schemas.microsoft.com/clr/nsassem/KHI.Fortuna.Core/CoreModule%2C%20Version%3D1.0.0.0%2C%20Culture%3Dneutral%2C%20PublicKeyToken%3Dnull">
 <_parent>
-<_a>-1550566850</_a>
-<_b>-28863</_b>
-<_c>17263</_c>
-<_d>158</_d>
-<_e>224</_e>
-<_f>67</_f>
-<_g>103</_g>
-<_h>32</_h>
-<_i>220</_i>
-<_j>112</_j>
-<_k>216</_k>
+<_a>-1340535807</_a>
+<_b>-4814</_b>
+<_c>16426</_c>
+<_d>162</_d>
+<_e>221</_e>
+<_f>186</_f>
+<_g>218</_g>
+<_h>255</_h>
+<_i>125</_i>
+<_j>132</_j>
+<_k>93</_k>
 </_parent>
 <List_x0060_1_x002B__items href="#ref-126"/>
 <List_x0060_1_x002B__size>0</List_x0060_1_x002B__size>
@@ -1302,17 +1302,17 @@
 </a1:EntityCollection>
 <a1:EntityCollection id="ref-80" xmlns:a1="http://schemas.microsoft.com/clr/nsassem/KHI.Fortuna.Core/CoreModule%2C%20Version%3D1.0.0.0%2C%20Culture%3Dneutral%2C%20PublicKeyToken%3Dnull">
 <_parent>
-<_a>-840165779</_a>
-<_b>18436</_b>
-<_c>16708</_c>
-<_d>180</_d>
-<_e>207</_e>
-<_f>160</_f>
-<_g>219</_g>
-<_h>111</_h>
-<_i>76</_i>
-<_j>23</_j>
-<_k>53</_k>
+<_a>-348457408</_a>
+<_b>3988</_b>
+<_c>16679</_c>
+<_d>173</_d>
+<_e>155</_e>
+<_f>44</_f>
+<_g>33</_g>
+<_h>91</_h>
+<_i>112</_i>
+<_j>198</_j>
+<_k>230</_k>
 </_parent>
 <List_x0060_1_x002B__items href="#ref-126"/>
 <List_x0060_1_x002B__size>0</List_x0060_1_x002B__size>
@@ -1320,17 +1320,17 @@
 </a1:EntityCollection>
 <a1:EntityCollection id="ref-83" xmlns:a1="http://schemas.microsoft.com/clr/nsassem/KHI.Fortuna.Core/CoreModule%2C%20Version%3D1.0.0.0%2C%20Culture%3Dneutral%2C%20PublicKeyToken%3Dnull">
 <_parent>
-<_a>1377781444</_a>
-<_b>3976</_b>
-<_c>19590</_c>
-<_d>148</_d>
-<_e>146</_e>
-<_f>57</_f>
-<_g>142</_g>
-<_h>142</_h>
-<_i>95</_i>
-<_j>189</_j>
-<_k>49</_k>
+<_a>-17264712</_a>
+<_b>-17618</_b>
+<_c>19801</_c>
+<_d>178</_d>
+<_e>203</_e>
+<_f>156</_f>
+<_g>179</_g>
+<_h>107</_h>
+<_i>253</_i>
+<_j>128</_j>
+<_k>154</_k>
 </_parent>
 <List_x0060_1_x002B__items href="#ref-126"/>
 <List_x0060_1_x002B__size>0</List_x0060_1_x002B__size>
@@ -1338,17 +1338,17 @@
 </a1:EntityCollection>
 <a1:EntityCollection id="ref-85" xmlns:a1="http://schemas.microsoft.com/clr/nsassem/KHI.Fortuna.Core/CoreModule%2C%20Version%3D1.0.0.0%2C%20Culture%3Dneutral%2C%20PublicKeyToken%3Dnull">
 <_parent>
-<_a>-1222304762</_a>
-<_b>-23454</_b>
-<_c>18789</_c>
-<_d>175</_d>
-<_e>168</_e>
-<_f>2</_f>
-<_g>154</_g>
-<_h>105</_h>
-<_i>83</_i>
-<_j>149</_j>
-<_k>228</_k>
+<_a>335887334</_a>
+<_b>14674</_b>
+<_c>16725</_c>
+<_d>183</_d>
+<_e>249</_e>
+<_f>97</_f>
+<_g>177</_g>
+<_h>61</_h>
+<_i>3</_i>
+<_j>85</_j>
+<_k>186</_k>
 </_parent>
 <List_x0060_1_x002B__items href="#ref-126"/>
 <List_x0060_1_x002B__size>0</List_x0060_1_x002B__size>
@@ -1356,17 +1356,17 @@
 </a1:EntityCollection>
 <a1:EntityCollection id="ref-88" xmlns:a1="http://schemas.microsoft.com/clr/nsassem/KHI.Fortuna.Core/CoreModule%2C%20Version%3D1.0.0.0%2C%20Culture%3Dneutral%2C%20PublicKeyToken%3Dnull">
 <_parent>
-<_a>603635881</_a>
-<_b>-26514</_b>
-<_c>19267</_c>
-<_d>132</_d>
-<_e>250</_e>
-<_f>225</_f>
-<_g>105</_g>
-<_h>215</_h>
-<_i>211</_i>
-<_j>211</_j>
-<_k>130</_k>
+<_a>461719612</_a>
+<_b>12874</_b>
+<_c>16683</_c>
+<_d>160</_d>
+<_e>117</_e>
+<_f>75</_f>
+<_g>193</_g>
+<_h>241</_h>
+<_i>93</_i>
+<_j>169</_j>
+<_k>38</_k>
 </_parent>
 <List_x0060_1_x002B__items href="#ref-126"/>
 <List_x0060_1_x002B__size>0</List_x0060_1_x002B__size>
@@ -1374,17 +1374,17 @@
 </a1:EntityCollection>
 <a1:EntityCollection id="ref-91" xmlns:a1="http://schemas.microsoft.com/clr/nsassem/KHI.Fortuna.Core/CoreModule%2C%20Version%3D1.0.0.0%2C%20Culture%3Dneutral%2C%20PublicKeyToken%3Dnull">
 <_parent>
-<_a>-524252678</_a>
-<_b>3662</_b>
-<_c>19365</_c>
-<_d>183</_d>
-<_e>73</_e>
-<_f>204</_f>
-<_g>1</_g>
-<_h>220</_h>
-<_i>168</_i>
-<_j>109</_j>
-<_k>104</_k>
+<_a>385971157</_a>
+<_b>3745</_b>
+<_c>17274</_c>
+<_d>161</_d>
+<_e>154</_e>
+<_f>141</_f>
+<_g>54</_g>
+<_h>156</_h>
+<_i>29</_i>
+<_j>210</_j>
+<_k>247</_k>
 </_parent>
 <List_x0060_1_x002B__items href="#ref-126"/>
 <List_x0060_1_x002B__size>0</List_x0060_1_x002B__size>
@@ -1392,17 +1392,17 @@
 </a1:EntityCollection>
 <a1:EntityCollection id="ref-94" xmlns:a1="http://schemas.microsoft.com/clr/nsassem/KHI.Fortuna.Core/CoreModule%2C%20Version%3D1.0.0.0%2C%20Culture%3Dneutral%2C%20PublicKeyToken%3Dnull">
 <_parent>
-<_a>1737449727</_a>
-<_b>-9228</_b>
-<_c>17135</_c>
-<_d>182</_d>
-<_e>195</_e>
-<_f>184</_f>
-<_g>207</_g>
-<_h>244</_h>
-<_i>170</_i>
-<_j>181</_j>
-<_k>181</_k>
+<_a>1702502400</_a>
+<_b>29110</_b>
+<_c>16663</_c>
+<_d>171</_d>
+<_e>184</_e>
+<_f>229</_f>
+<_g>33</_g>
+<_h>180</_h>
+<_i>200</_i>
+<_j>45</_j>
+<_k>80</_k>
 </_parent>
 <List_x0060_1_x002B__items href="#ref-126"/>
 <List_x0060_1_x002B__size>0</List_x0060_1_x002B__size>
@@ -1410,17 +1410,17 @@
 </a1:EntityCollection>
 <a1:EntityCollection id="ref-97" xmlns:a1="http://schemas.microsoft.com/clr/nsassem/KHI.Fortuna.Core/CoreModule%2C%20Version%3D1.0.0.0%2C%20Culture%3Dneutral%2C%20PublicKeyToken%3Dnull">
 <_parent>
-<_a>821452339</_a>
-<_b>2262</_b>
-<_c>17207</_c>
-<_d>188</_d>
-<_e>210</_e>
-<_f>178</_f>
-<_g>150</_g>
-<_h>93</_h>
-<_i>15</_i>
-<_j>187</_j>
-<_k>30</_k>
+<_a>822340149</_a>
+<_b>15737</_b>
+<_c>18990</_c>
+<_d>177</_d>
+<_e>246</_e>
+<_f>248</_f>
+<_g>47</_g>
+<_h>37</_h>
+<_i>6</_i>
+<_j>48</_j>
+<_k>7</_k>
 </_parent>
 <List_x0060_1_x002B__items href="#ref-126"/>
 <List_x0060_1_x002B__size>0</List_x0060_1_x002B__size>
@@ -1428,17 +1428,17 @@
 </a1:EntityCollection>
 <a1:EntityCollection id="ref-100" xmlns:a1="http://schemas.microsoft.com/clr/nsassem/KHI.Fortuna.Core/CoreModule%2C%20Version%3D1.0.0.0%2C%20Culture%3Dneutral%2C%20PublicKeyToken%3Dnull">
 <_parent>
-<_a>-2124780737</_a>
-<_b>16013</_b>
-<_c>16988</_c>
-<_d>154</_d>
-<_e>73</_e>
-<_f>147</_f>
-<_g>166</_g>
-<_h>150</_h>
-<_i>167</_i>
-<_j>215</_j>
-<_k>208</_k>
+<_a>-420317053</_a>
+<_b>-19958</_b>
+<_c>19392</_c>
+<_d>163</_d>
+<_e>207</_e>
+<_f>94</_f>
+<_g>223</_g>
+<_h>36</_h>
+<_i>179</_i>
+<_j>106</_j>
+<_k>129</_k>
 </_parent>
 <List_x0060_1_x002B__items href="#ref-126"/>
 <List_x0060_1_x002B__size>0</List_x0060_1_x002B__size>
@@ -1446,17 +1446,17 @@
 </a1:EntityCollection>
 <a1:EntityCollection id="ref-103" xmlns:a1="http://schemas.microsoft.com/clr/nsassem/KHI.Fortuna.Core/CoreModule%2C%20Version%3D1.0.0.0%2C%20Culture%3Dneutral%2C%20PublicKeyToken%3Dnull">
 <_parent>
-<_a>-850114750</_a>
-<_b>-14410</_b>
-<_c>16741</_c>
-<_d>146</_d>
-<_e>4</_e>
-<_f>214</_f>
-<_g>146</_g>
-<_h>183</_h>
-<_i>201</_i>
-<_j>228</_j>
-<_k>83</_k>
+<_a>1395952589</_a>
+<_b>20309</_b>
+<_c>20120</_c>
+<_d>176</_d>
+<_e>135</_e>
+<_f>239</_f>
+<_g>81</_g>
+<_h>244</_h>
+<_i>169</_i>
+<_j>251</_j>
+<_k>101</_k>
 </_parent>
 <List_x0060_1_x002B__items href="#ref-126"/>
 <List_x0060_1_x002B__size>0</List_x0060_1_x002B__size>
@@ -1464,17 +1464,17 @@
 </a1:EntityCollection>
 <a1:EntityCollection id="ref-106" xmlns:a1="http://schemas.microsoft.com/clr/nsassem/KHI.Fortuna.Core/CoreModule%2C%20Version%3D1.0.0.0%2C%20Culture%3Dneutral%2C%20PublicKeyToken%3Dnull">
 <_parent>
-<_a>-240605040</_a>
-<_b>5134</_b>
-<_c>19484</_c>
-<_d>141</_d>
-<_e>28</_e>
-<_f>53</_f>
-<_g>183</_g>
-<_h>106</_h>
-<_i>108</_i>
-<_j>93</_j>
-<_k>117</_k>
+<_a>1309131152</_a>
+<_b>22745</_b>
+<_c>17588</_c>
+<_d>169</_d>
+<_e>25</_e>
+<_f>106</_f>
+<_g>78</_g>
+<_h>203</_h>
+<_i>226</_i>
+<_j>34</_j>
+<_k>37</_k>
 </_parent>
 <List_x0060_1_x002B__items href="#ref-126"/>
 <List_x0060_1_x002B__size>0</List_x0060_1_x002B__size>
@@ -1482,17 +1482,17 @@
 </a1:EntityCollection>
 <a1:EntityCollection id="ref-109" xmlns:a1="http://schemas.microsoft.com/clr/nsassem/KHI.Fortuna.Core/CoreModule%2C%20Version%3D1.0.0.0%2C%20Culture%3Dneutral%2C%20PublicKeyToken%3Dnull">
 <_parent>
-<_a>2052881835</_a>
-<_b>30667</_b>
-<_c>17166</_c>
-<_d>134</_d>
-<_e>67</_e>
-<_f>174</_f>
-<_g>199</_g>
-<_h>43</_h>
-<_i>232</_i>
-<_j>11</_j>
-<_k>53</_k>
+<_a>-1310113076</_a>
+<_b>21339</_b>
+<_c>19152</_c>
+<_d>146</_d>
+<_e>154</_e>
+<_f>109</_f>
+<_g>195</_g>
+<_h>99</_h>
+<_i>41</_i>
+<_j>99</_j>
+<_k>74</_k>
 </_parent>
 <List_x0060_1_x002B__items href="#ref-126"/>
 <List_x0060_1_x002B__size>0</List_x0060_1_x002B__size>
@@ -1500,17 +1500,17 @@
 </a1:EntityCollection>
 <a1:EntityCollection id="ref-112" xmlns:a1="http://schemas.microsoft.com/clr/nsassem/KHI.Fortuna.Core/CoreModule%2C%20Version%3D1.0.0.0%2C%20Culture%3Dneutral%2C%20PublicKeyToken%3Dnull">
 <_parent>
-<_a>462274095</_a>
-<_b>24599</_b>
-<_c>18753</_c>
-<_d>138</_d>
-<_e>35</_e>
-<_f>138</_f>
-<_g>115</_g>
-<_h>144</_h>
-<_i>21</_i>
-<_j>131</_j>
-<_k>239</_k>
+<_a>1149823077</_a>
+<_b>19502</_b>
+<_c>17298</_c>
+<_d>177</_d>
+<_e>94</_e>
+<_f>135</_f>
+<_g>156</_g>
+<_h>66</_h>
+<_i>232</_i>
+<_j>163</_j>
+<_k>69</_k>
 </_parent>
 <List_x0060_1_x002B__items href="#ref-126"/>
 <List_x0060_1_x002B__size>0</List_x0060_1_x002B__size>
@@ -1518,17 +1518,17 @@
 </a1:EntityCollection>
 <a1:EntityCollection id="ref-115" xmlns:a1="http://schemas.microsoft.com/clr/nsassem/KHI.Fortuna.Core/CoreModule%2C%20Version%3D1.0.0.0%2C%20Culture%3Dneutral%2C%20PublicKeyToken%3Dnull">
 <_parent>
-<_a>-406047672</_a>
-<_b>-2694</_b>
-<_c>17136</_c>
-<_d>148</_d>
-<_e>134</_e>
-<_f>222</_f>
-<_g>85</_g>
-<_h>239</_h>
-<_i>239</_i>
-<_j>195</_j>
-<_k>171</_k>
+<_a>1924337844</_a>
+<_b>14305</_b>
+<_c>19347</_c>
+<_d>139</_d>
+<_e>8</_e>
+<_f>2</_f>
+<_g>101</_g>
+<_h>5</_h>
+<_i>91</_i>
+<_j>246</_j>
+<_k>206</_k>
 </_parent>
 <List_x0060_1_x002B__items href="#ref-126"/>
 <List_x0060_1_x002B__size>0</List_x0060_1_x002B__size>
@@ -1536,17 +1536,17 @@
 </a1:EntityCollection>
 <a1:EntityCollection id="ref-118" xmlns:a1="http://schemas.microsoft.com/clr/nsassem/KHI.Fortuna.Core/CoreModule%2C%20Version%3D1.0.0.0%2C%20Culture%3Dneutral%2C%20PublicKeyToken%3Dnull">
 <_parent>
-<_a>-248851824</_a>
-<_b>5931</_b>
-<_c>16403</_c>
-<_d>156</_d>
-<_e>217</_e>
-<_f>58</_f>
-<_g>40</_g>
-<_h>182</_h>
-<_i>120</_i>
-<_j>181</_j>
-<_k>138</_k>
+<_a>494528133</_a>
+<_b>16821</_b>
+<_c>18660</_c>
+<_d>150</_d>
+<_e>12</_e>
+<_f>136</_f>
+<_g>255</_g>
+<_h>152</_h>
+<_i>169</_i>
+<_j>133</_j>
+<_k>75</_k>
 </_parent>
 <List_x0060_1_x002B__items href="#ref-126"/>
 <List_x0060_1_x002B__size>0</List_x0060_1_x002B__size>
@@ -1554,17 +1554,17 @@
 </a1:EntityCollection>
 <a1:EntityCollection id="ref-121" xmlns:a1="http://schemas.microsoft.com/clr/nsassem/KHI.Fortuna.Core/CoreModule%2C%20Version%3D1.0.0.0%2C%20Culture%3Dneutral%2C%20PublicKeyToken%3Dnull">
 <_parent>
-<_a>-1781163457</_a>
-<_b>-18164</_b>
-<_c>19959</_c>
-<_d>139</_d>
-<_e>18</_e>
-<_f>21</_f>
-<_g>201</_g>
-<_h>104</_h>
-<_i>23</_i>
-<_j>77</_j>
-<_k>42</_k>
+<_a>-54318080</_a>
+<_b>-5426</_b>
+<_c>18685</_c>
+<_d>186</_d>
+<_e>194</_e>
+<_f>53</_f>
+<_g>206</_g>
+<_h>201</_h>
+<_i>92</_i>
+<_j>227</_j>
+<_k>230</_k>
 </_parent>
 <List_x0060_1_x002B__items href="#ref-126"/>
 <List_x0060_1_x002B__size>0</List_x0060_1_x002B__size>
@@ -1572,17 +1572,17 @@
 </a1:EntityCollection>
 <a1:EntityCollection id="ref-124" xmlns:a1="http://schemas.microsoft.com/clr/nsassem/KHI.Fortuna.Core/CoreModule%2C%20Version%3D1.0.0.0%2C%20Culture%3Dneutral%2C%20PublicKeyToken%3Dnull">
 <_parent>
-<_a>1894002522</_a>
-<_b>23081</_b>
-<_c>18937</_c>
-<_d>185</_d>
-<_e>99</_e>
-<_f>111</_f>
-<_g>232</_g>
-<_h>89</_h>
-<_i>55</_i>
-<_j>248</_j>
-<_k>140</_k>
+<_a>144910685</_a>
+<_b>-7489</_b>
+<_c>18941</_c>
+<_d>157</_d>
+<_e>150</_e>
+<_f>175</_f>
+<_g>32</_g>
+<_h>134</_h>
+<_i>179</_i>
+<_j>183</_j>
+<_k>133</_k>
 </_parent>
 <List_x0060_1_x002B__items href="#ref-126"/>
 <List_x0060_1_x002B__size>0</List_x0060_1_x002B__size>
