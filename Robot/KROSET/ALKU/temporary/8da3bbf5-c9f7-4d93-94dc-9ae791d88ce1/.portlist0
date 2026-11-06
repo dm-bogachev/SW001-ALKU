@@ -5,8 +5,8 @@ nolog		10600
 webml		10500
 khidl		10300
 as		10000
-as		9205
-auxapi		9200
+as		9305
+auxapi		9300
 auxapi		10200
-asapi		9202
-asapi		9201
+asapi		9302
+asapi		9301

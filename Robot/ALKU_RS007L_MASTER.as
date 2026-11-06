@@ -776,22 +776,22 @@ RMTIN960 1001 1017 1033 1049 1065 1081 1097 1113 1129 1145 1161 1177 1193 1209 1
 	;
 .END
 .PROGRAM check.tasks.pc()@26/10/01 13:00 #153239404
-  ;
-  IF TASK (6002) <> 1 THEN
-    MC NUMEXECUTE
-    TWAIT 3
-  END
-  ;
-  IF TASK (1002) <> 1 THEN
-    PCEXECUTE 2: tcp.client.pc
-    TWAIT 3
-  END
-  ;
-  IF TASK (1003) <> 1 THEN
-    PCEXECUTE 3: tcp.sender.pc
-    TWAIT 3
-  END
-  ;
+	;
+	IF TASK (6002) <> 1 THEN
+		MC NUMEXECUTE
+		TWAIT 3
+	END
+	;
+	IF TASK (1002) <> 1 THEN
+		PCEXECUTE 2: tcp.client.pc
+		TWAIT 3
+	END
+	;
+	IF TASK (1003) <> 1 THEN
+		PCEXECUTE 3: tcp.sender.pc
+		TWAIT 3
+	END
+	;
 .END
 .PROGRAM check.teach.pc()@26/10/01 13:00 #27924466
 	;
@@ -924,6 +924,13 @@ RMTIN960 1001 1017 1033 1049 1065 1081 1097 1113 1129 1145 1161 1177 1193 1209 1
 	;
 .END
 .PROGRAM etalon.measure(.id)@26/10/01 13:00 #499
+	;
+	BREAK
+	CALL log ("Check if zone is occupied")
+	SWAIT -rs13.lock.zone
+	CALL log ("Zone is free")
+	SIGNAL rs7.locked.zone
+	;
 	IF FALSE THEN
 		.id = hmi.etalon.id
 	END
@@ -1084,6 +1091,8 @@ RMTIN960 1001 1017 1033 1049 1065 1081 1097 1113 1129 1145 1161 1177 1193 1209 1
 	LMOVE #safe.etalon
 	ACCURACY 100
 	LMOVE #homyak
+	BREAK
+	SIGNAL -rs7.locked.zone
 	;
 	IF .id == etalon.tree.id THEN
 		CALL set.grip.tree (FALSE)
@@ -1405,105 +1414,105 @@ RMTIN960 1001 1017 1033 1049 1065 1081 1097 1113 1129 1145 1161 1177 1193 1209 1
 	;
 .END
 .PROGRAM measure()@26/10/01 13:00 #9508
-  IF FALSE THEN
-    .pos = hmi.obj.id
-  END
-  .pos = object.id
-  ;
-  IF object.id == round.no THEN
-    .shift.y = 0
-    .shift.z = 50
-    .p.idx = 2
-  ELSE
-    .shift.y = 50
-    .shift.z = 0
-    .p.idx = 1
-  END
-  ;
-  CALL log ("Move to measure machine")
-  ;$action = "TakingToMM"
-  ;
-  SPEED 100 ALWAYS
-  ACCURACY 100 ALWAYS
-  TOOL tool.pick[current.gripper]
-  ;
-  POINT .machine.pos = #machine.pos[.pos]
-  ; Go to machine
-  JMOVE #safe.machine
-  JMOVE #before.machine[.p.idx]
-  ACCURACY 10
-  LMOVE .machine.pos + TRANS (0, .shift.y, .shift.z)
-  ACCURACY 5
-  LMOVE .machine.pos + TRANS (0, .shift.y * 0.2, .shift.z * 0.2)
-  STABLE 0.2
-  SPEED 20 MM/S
-  ACCURACY 0.2
-  LMOVE #machine.pos[.pos]
-  STABLE 0.2
-  BREAK
-  ;CALL log ("Send command to enable vacuum")
-  ;$action = "WaitingMMVacuum"
-  PULSE grip.unclamp
-  TWAIT 0.3
-  ;
-  ACCURACY 5
-  LMOVE .machine.pos + TRANS (0, .shift.y * 0.2, .shift.z * 0.2)
-  ACCURACY 10
-  LMOVE .machine.pos + TRANS (0, .shift.y, .shift.z)
-  ;
-  LMOVE #before.machine[.p.idx]
-  BREAK
-  ; Wait result
-  CALL log ("Waiting for measurement result")
-  $action = "WaitingMMResult"
-  WAIT SIG (s.measure.ok) OR SIG (s.measure.ng)
-  SIGNAL s.cmd.measured
-  ;
-  IF SIG (s.measure.ok) THEN
-    CALL log ("Measurement result: OK")
-  ELSE
-    CALL log ("Measurement result: DEFECT")
-  END
-  $action = ""
-  ;
-  ; Pick from machine
-  ACCURACY 10
-  LMOVE .machine.pos + TRANS (0, .shift.y, .shift.z)
-  ACCURACY 5
-  LMOVE .machine.pos + TRANS (0, .shift.y * 0.2, .shift.z * 0.2)
-  SPEED 100 MM/S
-  ACCURACY 0.5
-  LMOVE #machine.pos[.pos]
-  BREAK
-  STABLE 0.2
-  PULSE grip.clamp
-  TWAIT 0.3
-  ; Go home
-  ACCURACY 5
-  LMOVE .machine.pos + TRANS (0, .shift.y * 0.2, .shift.z * 0.2)
-  ACCURACY 10
-  LMOVE .machine.pos + TRANS (0, .shift.y, .shift.z)
-  ;
-  LMOVE #before.machine[.p.idx]
-  JMOVE #safe.machine
-  BREAK
-  SWAIT -rs13.lock.zone
-  JMOVE #homyak
-  ;
+	IF FALSE THEN
+		.pos = hmi.obj.id
+	END
+	.pos = object.id
+	;
+	IF object.id == round.no THEN
+		.shift.y = 0
+		.shift.z = 50
+		.p.idx = 2
+	ELSE
+		.shift.y = 50
+		.shift.z = 0
+		.p.idx = 1
+	END
+	;
+	CALL log ("Move to measure machine")
+	;$action = "TakingToMM"
+	;
+	SPEED 100 ALWAYS
+	ACCURACY 100 ALWAYS
+	TOOL tool.pick[current.gripper]
+	;
+	POINT .machine.pos = #machine.pos[.pos]
+	; Go to machine
+	JMOVE #safe.machine
+	JMOVE #before.machine[.p.idx]
+	ACCURACY 10
+	LMOVE .machine.pos + TRANS (0, .shift.y, .shift.z)
+	ACCURACY 5
+	LMOVE .machine.pos + TRANS (0, .shift.y * 0.2, .shift.z * 0.2)
+	STABLE 0.2
+	SPEED 20 MM/S
+	ACCURACY 0.2
+	LMOVE #machine.pos[.pos]
+	STABLE 0.2
+	BREAK
+	;CALL log ("Send command to enable vacuum")
+	;$action = "WaitingMMVacuum"
+	PULSE grip.unclamp
+	TWAIT 0.3
+	;
+	ACCURACY 5
+	LMOVE .machine.pos + TRANS (0, .shift.y * 0.2, .shift.z * 0.2)
+	ACCURACY 10
+	LMOVE .machine.pos + TRANS (0, .shift.y, .shift.z)
+	;
+	LMOVE #before.machine[.p.idx]
+	BREAK
+	; Wait result
+	CALL log ("Waiting for measurement result")
+	$action = "WaitingMMResult"
+	WAIT SIG (s.measure.ok) OR SIG (s.measure.ng)
+	SIGNAL s.cmd.measured
+	;
+	IF SIG (s.measure.ok) THEN
+		CALL log ("Measurement result: OK")
+	ELSE
+		CALL log ("Measurement result: DEFECT")
+	END
+	$action = ""
+	;
+	; Pick from machine
+	ACCURACY 10
+	LMOVE .machine.pos + TRANS (0, .shift.y, .shift.z)
+	ACCURACY 5
+	LMOVE .machine.pos + TRANS (0, .shift.y * 0.2, .shift.z * 0.2)
+	SPEED 100 MM/S
+	ACCURACY 0.5
+	LMOVE #machine.pos[.pos]
+	BREAK
+	STABLE 0.2
+	PULSE grip.clamp
+	TWAIT 0.3
+	; Go home
+	ACCURACY 5
+	LMOVE .machine.pos + TRANS (0, .shift.y * 0.2, .shift.z * 0.2)
+	ACCURACY 10
+	LMOVE .machine.pos + TRANS (0, .shift.y, .shift.z)
+	;
+	LMOVE #before.machine[.p.idx]
+	JMOVE #safe.machine
+	BREAK
+	SWAIT -rs13.lock.zone
+	JMOVE #homyak
+	;
 .END
 .PROGRAM numpg ()
-  ;
-  ; Program for emergency case
-  ;
-  ;do.work[1] = 17 ; RS007L is in danger area
-  ;rs13.work[1] = 1017 ; RS013N is in danger area
-  ;di.hold = 2009 ; Robot HOLD command
-  ;
-  ; rs13.work[1]   do.work[1]  di.hold
-  ;-----| |-----------| |---------(/)
-  ;
-  SOUT 2009 = NOT (1017 AND 17)
-  ;
+	;
+	; Program for emergency case
+	;
+	;do.work[1] = 17 ; RS007L is in danger area
+	;rs13.work[1] = 1017 ; RS013N is in danger area
+	;di.hold = 2009 ; Robot HOLD command
+	;
+	; rs13.work[1]   do.work[1]  di.hold
+	;-----| |-----------| |---------(/)
+	;
+	SOUT 2009 = NOT (1017 AND 17)
+	;
 .END
 .PROGRAM old.layout()@26/10/01 13:00 #0
 	; Get matrix center
@@ -1574,81 +1583,81 @@ RMTIN960 1001 1017 1033 1049 1065 1081 1097 1113 1129 1145 1161 1177 1193 1209 1
 	CALL sort.grid
 .END
 .PROGRAM ot.put()@26/10/01 13:27 #6817
-  ;
-  BREAK
-  CALL log ("Check if zone is occupied")
-  SWAIT -rs13.lock.zone
-  CALL log ("Zone is free")
-  SIGNAL rs7.locked.zone
-  ;
-  ;
-  IF SIG (rs7.tare.chg) THEN
-    CALL log ("Waiting for new OT")
-    SWAIT -rs7.tare.chg
-    count.put = 0
-  END
-  ;
-  CALL log ("Put to OT detail" + $ENCODE (count.put + 1))
-  ;$action = "PutToTare"
-  ;
-  SPEED 100 ALWAYS
-  ACCURACY 100 ALWAYS
-  TOOL tool.pick[current.gripper]
-  ;
-  CALL ot.calc (FALSE)
-  ;
-  CALL get.ot.point (count.put)
-  ;
-  .x = grip.xsh[object.id]
-  .y = grip.ysh[object.id]
-  .z = grip.zsh[object.id]
-  .rz = 0
-  IF object.id <> round.no AND ot.y MOD 2 <> 0 AND SIG (s.ot.flip) THEN
-    .x = grip.180xsh[object.id]
-    .y = grip.180ysh[object.id]
-    .rz = 180
-  END
-  ;
-  POINT .put = ot.put[ot.x, ot.y] + TRANS (.x, .y, .z)
-  POINT .putr = ot.put[ot.x, ot.y] + RZ (.rz) + TRANS (.x, .y, .z)
-  POINT .putr2 = ot.put[ot.x, ot.y] + RZ (.rz / 2) + TRANS (.x, .y, .z)
-  ;
-  LAPPRO .put, -200
-  BREAK
-  HERE .#temp
-  LAPPRO .putr2, -100
-  LAPPRO .putr, -50
-  LMOVE .putr
-  BREAK
-  ;
-  TWAIT 0.1
-  PULSE grip.unclamp
-  TWAIT 0.3
-  count.put = count.put + 1
-  max.count.put = max.count.put + 1
-  SIGNAL -s.grip.full
-  $action = "WaitPosFull"
-  ;
-  LAPPRO .putr, -50
-  LAPPRO .putr2, -100
-  LMOVE .#temp
-  ;
-  ;IF NOT SIG (s.cmd.pick) THEN
-  ;  JMOVE #homyak
-  ;  BREAK
-  ;  SIGNAL -rs7.locked.zone
-  ;END
-  ;
-  IF count.put >= chg.tare.count THEN
-    CALL log ("OT tare full, request change OT")
-    SIGNAL rs7.tare.chg
-    current.ot = current.ot + 1
-    ;
-    count.put = 0
-    ;
-    CALL ot.calc (FALSE)
-  END
-  ;
+	;
+	BREAK
+	CALL log ("Check if zone is occupied")
+	SWAIT -rs13.lock.zone
+	CALL log ("Zone is free")
+	SIGNAL rs7.locked.zone
+	;
+	;
+	IF SIG (rs7.tare.chg) THEN
+		CALL log ("Waiting for new OT")
+		SWAIT -rs7.tare.chg
+		count.put = 0
+	END
+	;
+	CALL log ("Put to OT detail" + $ENCODE (count.put + 1))
+	;$action = "PutToTare"
+	;
+	SPEED 100 ALWAYS
+	ACCURACY 100 ALWAYS
+	TOOL tool.pick[current.gripper]
+	;
+	CALL ot.calc (FALSE)
+	;
+	CALL get.ot.point (count.put)
+	;
+	.x = grip.xsh[object.id]
+	.y = grip.ysh[object.id]
+	.z = grip.zsh[object.id]
+	.rz = 0
+	IF object.id <> round.no AND ot.y MOD 2 <> 0 AND SIG (s.ot.flip) THEN
+		.x = grip.180xsh[object.id]
+		.y = grip.180ysh[object.id]
+		.rz = 180
+	END
+	;
+	POINT .put = ot.put[ot.x, ot.y] + TRANS (.x, .y, .z)
+	POINT .putr = ot.put[ot.x, ot.y] + RZ (.rz) + TRANS (.x, .y, .z)
+	POINT .putr2 = ot.put[ot.x, ot.y] + RZ (.rz / 2) + TRANS (.x, .y, .z)
+	;
+	LAPPRO .put, -200
+	BREAK
+	HERE .#temp
+	LAPPRO .putr2, -100
+	LAPPRO .putr, -50
+	LMOVE .putr
+	BREAK
+	;
+	TWAIT 0.1
+	PULSE grip.unclamp
+	TWAIT 0.3
+	count.put = count.put + 1
+	max.count.put = max.count.put + 1
+	SIGNAL -s.grip.full
+	$action = "WaitPosFull"
+	;
+	LAPPRO .putr, -50
+	LAPPRO .putr2, -100
+	LMOVE .#temp
+	;
+	;IF NOT SIG (s.cmd.pick) THEN
+	;  JMOVE #homyak
+	;  BREAK
+	;  SIGNAL -rs7.locked.zone
+	;END
+	;
+	IF count.put >= chg.tare.count THEN
+		CALL log ("OT tare full, request change OT")
+		SIGNAL rs7.tare.chg
+		current.ot = current.ot + 1
+		;
+		count.put = 0
+		;
+		CALL ot.calc (FALSE)
+	END
+	;
 .END
 .PROGRAM pg.select()@26/10/01 13:00 #476
 	SCASE $pg.name OF
@@ -1732,67 +1741,67 @@ RMTIN960 1001 1017 1033 1049 1065 1081 1097 1113 1129 1145 1161 1177 1193 1209 1
 	CALL a.main
 .END
 .PROGRAM pos.pick()@26/10/01 13:00 #9363
-  ;
-  BREAK
-  CALL log ("Check if zone is occupied")
-  SWAIT -rs13.lock.zone
-  CALL log ("Zone is free")
-  SIGNAL rs7.locked.zone
-  ;
-  .$temp = "Pick detail from positioner (ID:" + $ENCODE (object.id) + ")"
-  CALL log (.$temp)
-  ;
-  TOOL tool.pick[current.gripper]
-  ;
-  SPEED 100 ALWAYS
-  ACCURACY 10 ALWAYS
-  ;
-  POINT .temp = #pos.point[object.id]
-  ;
-  IF object.id == round.no THEN
-    .shift.x = 0
-    .shift.y = 0
-  ELSE
-    IF object.id == pawn.no THEN
-      .shift.x = 0
-      .shift.y = 0
-    ELSE
-      .shift.x = 0
-      .shift.y = 5
-    END
-  END
-  ;
-  JMOVE .temp + TRANS (0, 0, 30)
-  BREAK
-  IF NOT SIG (grip.unclamped) THEN
-    PULSE grip.unclamp
-    TWAIT 0.5
-    CALL log ("Wait for unclamp gripper. State: WaitingGripUnclamped")
-    $action = "WaitingGripUnclamped"
-    WAIT SIG (grip.unclamped) OR SIG (s.force.in[1])
-  END
-  ;
-  SPEED 100 MM/S
-  ACCURACY 0.02
-  LMOVE #pos.point[object.id]
-  BREAK
-  TWAIT 0.1
-  PULSE grip.clamp
-  TWAIT 0.3
-  SIGNAL s.grip.full
-  SIGNAL -s.cmd.measured
-  count.pick = count.pick + 1
-  BITS rs7.det.picked[0], 16 = count.pick
-  ;
-  LMOVE .temp + TRANS (.shift.x, .shift.y, 10)
-  ACCURACY 100
-  LMOVE .temp + TRANS (0, 0, 200)
-  ACCURACY 100
-  LMOVE #homyak
-  ;
-  BREAK
-  SIGNAL -rs7.locked.zone
-  ;
+	;
+	BREAK
+	CALL log ("Check if zone is occupied")
+	SWAIT -rs13.lock.zone
+	CALL log ("Zone is free")
+	SIGNAL rs7.locked.zone
+	;
+	.$temp = "Pick detail from positioner (ID:" + $ENCODE (object.id) + ")"
+	CALL log (.$temp)
+	;
+	TOOL tool.pick[current.gripper]
+	;
+	SPEED 100 ALWAYS
+	ACCURACY 10 ALWAYS
+	;
+	POINT .temp = #pos.point[object.id]
+	;
+	IF object.id == round.no THEN
+		.shift.x = 0
+		.shift.y = 0
+	ELSE
+		IF object.id == pawn.no THEN
+			.shift.x = 0
+			.shift.y = 0
+		ELSE
+			.shift.x = 0
+			.shift.y = 5
+		END
+	END
+	;
+	JMOVE .temp + TRANS (0, 0, 30)
+	BREAK
+	IF NOT SIG (grip.unclamped) THEN
+		PULSE grip.unclamp
+		TWAIT 0.5
+		CALL log ("Wait for unclamp gripper. State: WaitingGripUnclamped")
+		$action = "WaitingGripUnclamped"
+		WAIT SIG (grip.unclamped) OR SIG (s.force.in[1])
+	END
+	;
+	SPEED 100 MM/S
+	ACCURACY 0.02
+	LMOVE #pos.point[object.id]
+	BREAK
+	TWAIT 0.1
+	PULSE grip.clamp
+	TWAIT 0.3
+	SIGNAL s.grip.full
+	SIGNAL -s.cmd.measured
+	count.pick = count.pick + 1
+	BITS rs7.det.picked[0], 16 = count.pick
+	;
+	LMOVE .temp + TRANS (.shift.x, .shift.y, 10)
+	ACCURACY 100
+	LMOVE .temp + TRANS (0, 0, 200)
+	ACCURACY 100
+	LMOVE #homyak
+	;
+	BREAK
+	SIGNAL -rs7.locked.zone
+	;
 .END
 .PROGRAM safe.home()@26/10/01 13:00 #266
 	;
@@ -1916,180 +1925,180 @@ RMTIN960 1001 1017 1033 1049 1065 1081 1097 1113 1129 1145 1161 1177 1193 1209 1
 	;
 .END
 .PROGRAM set.io.pc()@26/10/02 12:47 #106
-  ; Gripper IO
-  ;
-  ; Gripper
-  release.grip = 1
-  capture.grip = 2
-  ; Clamp
-  grip.unclamped = 1001
-  grip.clamped = 1002
-  grip.unclamp = 3
-  grip.clamp = 4
-  ;
-  ; Ethernet I/P IO (17-32)
-  ;
-  ; Inputs
-  ;
-  rs13.work[1] = 1017
-  rs13.tare.ack = 1018
-  rs13.detail.put = 1019
-  rs13.finish = 1020
-  rs13.lock.zone = 1022
-  ;rs13.put.ack = 1021
-  rs13.ot.number[0] = 1025
-  rs13.ot.number[1] = 1026
-  rs13.ot.number[2] = 1027
-  rs13.ot.number[3] = 1028
-  rs13.ot.number[4] = 1029
-  rs13.ot.number[5] = 1030
-  rs13.ot.number[6] = 1031
-  rs13.ot.number[7] = 1032
-  ;
-  rs13.det.put[0] = 1040
-  rs13.det.put[1] = 1041
-  rs13.det.put[2] = 1042
-  rs13.det.put[3] = 1043
-  rs13.det.put[4] = 1044
-  rs13.det.put[5] = 1045
-  rs13.det.put[6] = 1046
-  rs13.det.put[7] = 1047
-  rs13.det.put[8] = 1048
-  rs13.det.put[9] = 1049
-  rs13.det.put[10] = 1050
-  rs13.det.put[11] = 1051
-  rs13.det.put[12] = 1052
-  rs13.det.put[13] = 1053
-  rs13.det.put[14] = 1054
-  rs13.det.put[15] = 1055
-  ;
-  rs13.no.ot.stop = 1034
-  ;
-  ; Outputs
-  ;
-  do.work[1] = 17
-  rs7.tare.chg = 18
-  rs7.locked.zone = 19
-  rs7.finish.ack = 20
-  do.home = 36
-  ;rs7.put.ack = 21
-  ;rs13.detail.put = 21
-  rs7.det.picked[0] = 40
-  rs7.det.picked[1] = 41
-  rs7.det.picked[2] = 42
-  rs7.det.picked[3] = 43
-  rs7.det.picked[4] = 44
-  rs7.det.picked[5] = 45
-  rs7.det.picked[6] = 46
-  rs7.det.picked[7] = 47
-  rs7.det.picked[8] = 48
-  rs7.det.picked[9] = 49
-  rs7.det.picked[10] = 50
-  rs7.det.picked[11] = 51
-  rs7.det.picked[12] = 52
-  rs7.det.picked[13] = 53
-  rs7.det.picked[14] = 54
-  rs7.det.picked[15] = 55
-  ;
-  rs7.etalon.stop = 33
-  ;
-  ; Internal IO
-  ;
-  ; Dedicated inputs 2001 - 2064
-  ;
-  ; IFP page change 2001-2008
-  di.ifp.page[1] = 2001
-  di.ifp.page[2] = 2002
-  di.ifp.page[3] = 2003
-  di.ifp.page[4] = 2004
-  di.ifp.page[5] = 2005
-  di.ifp.page[6] = 2006
-  di.ifp.page[7] = 2007
-  di.ifp.page[8] = 2008
-  ;
-  di.hold = 2009
-  ;
-  ; Dedicated outputs 2101-2164
-  ;
-  do.bat.alm = 2011
-  do.automatic = 2012
-  ;
-  ;
-  ; Internal logic 2201 - 2960
-  ;
-  ; TCP/IP display flags
-  s.tcp.send.ena = 2201
-  s.tcp.recv.ena = 2202
-  s.tcp.ena = 2203
-  s.tcp.log = 2204
-  ;
-  s.zone.blocked = 2209
-  ;
-  ; Workspaces
-  do.work[2] = 2212
-  do.work[3] = 2213
-  do.work[4] = 2214
-  do.work[5] = 2215
-  do.work[6] = 2216
-  do.work[7] = 2217
-  do.work[8] = 2218
-  ;
-  s.force.in[1] = 2221
-  s.force.in[2] = 2222
-  ;
-  s.defect.pal.ok = 2223
-  s.defect.pal.ng = 2224
-  s.measure.ok = 2225
-  s.measure.ng = 2226
-  ;s.force.defect = 2227
-  ;
-  ;s.stock.opt.ng = 2226
-  ;s.ot.pos.ok = 2227
-  ;s.ot.pos.ng = 2228
-  ;
-  ;s.ot.placed = 2229
-  ;s.opt.placed = 2230
-  ;
-  s.grip.full = 2231
-  ;
-  s.cmd.start = 2232
-  s.cmd.pick = 2233
-  s.cmd.measured = 2234
-  ;s.cmd.pneum.op = 2235
-  ;s.cmd.pneum.cl = 2236
-  s.cmd.chk.etal = 2237
-  s.cmd.finish = 2238
-  s.cmd.pause = 2239
-  s.cmd.resume = 2240
-  s.cmd.stop = 2241
-  ;
-  s.pr.home = 2250
-  s.pr.tch.ot = 2251
-  s.pr.tch.defect = 2252
-  s.pr.tch.meas = 2253
-  s.pr.tch.etal = 2254
-  s.pr.tch.pos = 2255
-  s.pr.tch.grip = 2260
-  ;
-  s.apply.obj = 2256
-  ;s.apply.cv = 2257
-  s.pr.tst.ot = 2249
-  ;
-  s.ot.spacer = 2270
-  s.ot.flip = 2271
-  s.etalon.ok = 2272
-  s.etalon.ret = 2273
-  s.etalon.ng = 2274
-  ;
-  ;
-  ;s.hmi.pneum.op = 2258
-  ;s.hmi.pneum.cl = 2259
-  ;s.hmi.get.cv = 2260
-  s.hmi.res.state = 2261
-  s.hmi.res.act = 2262
-  ;
-  s.debug.mode = 2300
-  s.enable.shift = 2301
+	; Gripper IO
+	;
+	; Gripper
+	release.grip = 1
+	capture.grip = 2
+	; Clamp
+	grip.unclamped = 1001
+	grip.clamped = 1002
+	grip.unclamp = 3
+	grip.clamp = 4
+	;
+	; Ethernet I/P IO (17-32)
+	;
+	; Inputs
+	;
+	rs13.work[1] = 1017
+	rs13.tare.ack = 1018
+	rs13.detail.put = 1019
+	rs13.finish = 1020
+	rs13.lock.zone = 1022
+	;rs13.put.ack = 1021
+	rs13.ot.number[0] = 1025
+	rs13.ot.number[1] = 1026
+	rs13.ot.number[2] = 1027
+	rs13.ot.number[3] = 1028
+	rs13.ot.number[4] = 1029
+	rs13.ot.number[5] = 1030
+	rs13.ot.number[6] = 1031
+	rs13.ot.number[7] = 1032
+	;
+	rs13.det.put[0] = 1040
+	rs13.det.put[1] = 1041
+	rs13.det.put[2] = 1042
+	rs13.det.put[3] = 1043
+	rs13.det.put[4] = 1044
+	rs13.det.put[5] = 1045
+	rs13.det.put[6] = 1046
+	rs13.det.put[7] = 1047
+	rs13.det.put[8] = 1048
+	rs13.det.put[9] = 1049
+	rs13.det.put[10] = 1050
+	rs13.det.put[11] = 1051
+	rs13.det.put[12] = 1052
+	rs13.det.put[13] = 1053
+	rs13.det.put[14] = 1054
+	rs13.det.put[15] = 1055
+	;
+	rs13.no.ot.stop = 1034
+	;
+	; Outputs
+	;
+	do.work[1] = 17
+	rs7.tare.chg = 18
+	rs7.locked.zone = 19
+	rs7.finish.ack = 20
+	do.home = 36
+	;rs7.put.ack = 21
+	;rs13.detail.put = 21
+	rs7.det.picked[0] = 40
+	rs7.det.picked[1] = 41
+	rs7.det.picked[2] = 42
+	rs7.det.picked[3] = 43
+	rs7.det.picked[4] = 44
+	rs7.det.picked[5] = 45
+	rs7.det.picked[6] = 46
+	rs7.det.picked[7] = 47
+	rs7.det.picked[8] = 48
+	rs7.det.picked[9] = 49
+	rs7.det.picked[10] = 50
+	rs7.det.picked[11] = 51
+	rs7.det.picked[12] = 52
+	rs7.det.picked[13] = 53
+	rs7.det.picked[14] = 54
+	rs7.det.picked[15] = 55
+	;
+	rs7.etalon.stop = 33
+	;
+	; Internal IO
+	;
+	; Dedicated inputs 2001 - 2064
+	;
+	; IFP page change 2001-2008
+	di.ifp.page[1] = 2001
+	di.ifp.page[2] = 2002
+	di.ifp.page[3] = 2003
+	di.ifp.page[4] = 2004
+	di.ifp.page[5] = 2005
+	di.ifp.page[6] = 2006
+	di.ifp.page[7] = 2007
+	di.ifp.page[8] = 2008
+	;
+	di.hold = 2009
+	;
+	; Dedicated outputs 2101-2164
+	;
+	do.bat.alm = 2011
+	do.automatic = 2012
+	;
+	;
+	; Internal logic 2201 - 2960
+	;
+	; TCP/IP display flags
+	s.tcp.send.ena = 2201
+	s.tcp.recv.ena = 2202
+	s.tcp.ena = 2203
+	s.tcp.log = 2204
+	;
+	s.zone.blocked = 2209
+	;
+	; Workspaces
+	do.work[2] = 2212
+	do.work[3] = 2213
+	do.work[4] = 2214
+	do.work[5] = 2215
+	do.work[6] = 2216
+	do.work[7] = 2217
+	do.work[8] = 2218
+	;
+	s.force.in[1] = 2221
+	s.force.in[2] = 2222
+	;
+	s.defect.pal.ok = 2223
+	s.defect.pal.ng = 2224
+	s.measure.ok = 2225
+	s.measure.ng = 2226
+	;s.force.defect = 2227
+	;
+	;s.stock.opt.ng = 2226
+	;s.ot.pos.ok = 2227
+	;s.ot.pos.ng = 2228
+	;
+	;s.ot.placed = 2229
+	;s.opt.placed = 2230
+	;
+	s.grip.full = 2231
+	;
+	s.cmd.start = 2232
+	s.cmd.pick = 2233
+	s.cmd.measured = 2234
+	;s.cmd.pneum.op = 2235
+	;s.cmd.pneum.cl = 2236
+	s.cmd.chk.etal = 2237
+	s.cmd.finish = 2238
+	s.cmd.pause = 2239
+	s.cmd.resume = 2240
+	s.cmd.stop = 2241
+	;
+	s.pr.home = 2250
+	s.pr.tch.ot = 2251
+	s.pr.tch.defect = 2252
+	s.pr.tch.meas = 2253
+	s.pr.tch.etal = 2254
+	s.pr.tch.pos = 2255
+	s.pr.tch.grip = 2260
+	;
+	s.apply.obj = 2256
+	;s.apply.cv = 2257
+	s.pr.tst.ot = 2249
+	;
+	s.ot.spacer = 2270
+	s.ot.flip = 2271
+	s.etalon.ok = 2272
+	s.etalon.ret = 2273
+	s.etalon.ng = 2274
+	;
+	;
+	;s.hmi.pneum.op = 2258
+	;s.hmi.pneum.cl = 2259
+	;s.hmi.get.cv = 2260
+	s.hmi.res.state = 2261
+	s.hmi.res.act = 2262
+	;
+	s.debug.mode = 2300
+	s.enable.shift = 2301
 .END
 .PROGRAM set.vars.pc()@26/10/01 13:00 #92
 	;
@@ -2327,61 +2336,61 @@ RMTIN960 1001 1017 1033 1049 1065 1081 1097 1113 1129 1145 1161 1177 1193 1209 1
 	state = 102
 .END
 .PROGRAM state102()@26/10/02 12:44 #1379808; Decision making
-  ; Priority 1
-  IF SIG (s.cmd.pause) THEN
-    state = 105
-    RETURN
-  END
-  IF SIG (s.cmd.chk.etal) AND NOT SIG (s.grip.full) THEN
-    state = 5
-    RETURN
-  END
-  ;
-  IF SIG (rs13.no.ot.stop) THEN
-    state = 9
-    RETURN
-  END
-  ; Priority 2
-  ;IF SIG (s.cmd.stop) AND BITS (rs13.det.put[0], 16) <= count.pick THEN
-  ;  state = 6
-  ;  RETURN
-  ;END
-  ; Priority 3
-  IF NOT SIG (s.grip.full) THEN
-    $action = "WaitPosFull"
-    IF SIG (s.cmd.pick) AND NOT SIG(rs13.lock.zone) AND NOT SIG (rs13.work[1]) AND BITS (rs13.det.put[0], 16) > count.pick THEN
-      state = 1
-      RETURN
-    END
-  END
-  ; Priority 4
-  IF SIG (s.grip.full) AND NOT SIG (s.cmd.measured) AND NOT SIG (rs7.etalon.stop) THEN
-    state = 2
-    RETURN
-  END
-  ; Priority 5
-  IF SIG (s.grip.full) AND NOT SIG(rs13.lock.zone) AND SIG (s.measure.ok) AND NOT SIG (rs7.tare.chg) AND NOT SIG (rs7.etalon.stop) THEN
-    state = 3
-    RETURN
-  END
-  ; Priority 6
-  IF SIG (s.grip.full) AND (SIG (s.measure.ng) OR SIG (rs7.etalon.stop)) THEN
-    state = 4
-    RETURN
-  END
-  ; Priority 7
-  IF NOT SIG (s.grip.full) THEN; AND NOT SIG (s.cmd.pick) THEN
-    JMOVE #homyak
-    BREAK
-    SIGNAL -rs7.locked.zone
-  END
-  ;
-  ; Priority 8
-  IF SIG (rs13.finish) AND NOT SIG (s.grip.full) AND NOT (BITS (rs13.det.put[0], 16) > count.pick) THEN
-    state = 103
-    RETURN
-  END
-  ;
+	; Priority 1
+	IF SIG (s.cmd.pause) THEN
+		state = 105
+		RETURN
+	END
+	IF SIG (s.cmd.chk.etal) AND NOT SIG (s.grip.full) THEN
+		state = 5
+		RETURN
+	END
+	;
+	IF SIG (rs13.no.ot.stop) THEN
+		state = 9
+		RETURN
+	END
+	; Priority 2
+	;IF SIG (s.cmd.stop) AND BITS (rs13.det.put[0], 16) <= count.pick THEN
+	;  state = 6
+	;  RETURN
+	;END
+	; Priority 3
+	IF NOT SIG (s.grip.full) THEN
+		$action = "WaitPosFull"
+		IF SIG (s.cmd.pick) AND NOT SIG (rs13.lock.zone) AND NOT SIG (rs13.work[1]) AND BITS (rs13.det.put[0], 16) > count.pick THEN
+			state = 1
+			RETURN
+		END
+	END
+	; Priority 4
+	IF SIG (s.grip.full) AND NOT SIG (s.cmd.measured) AND NOT SIG (rs7.etalon.stop) THEN
+		state = 2
+		RETURN
+	END
+	; Priority 5
+	IF SIG (s.grip.full) AND NOT SIG (rs13.lock.zone) AND SIG (s.measure.ok) AND NOT SIG (rs7.tare.chg) AND NOT SIG (rs7.etalon.stop) THEN
+		state = 3
+		RETURN
+	END
+	; Priority 6
+	IF SIG (s.grip.full) AND (SIG (s.measure.ng) OR SIG (rs7.etalon.stop)) THEN
+		state = 4
+		RETURN
+	END
+	; Priority 7
+	IF NOT SIG (s.grip.full) THEN; AND NOT SIG (s.cmd.pick) THEN
+		JMOVE #homyak
+		BREAK
+		SIGNAL -rs7.locked.zone
+	END
+	;
+	; Priority 8
+	IF SIG (rs13.finish) AND NOT SIG (s.grip.full) AND NOT (BITS (rs13.det.put[0], 16) > count.pick) THEN
+		state = 103
+		RETURN
+	END
+	;
 .END
 .PROGRAM state103()@26/10/01 13:00 #404; Auxilary state
 	CALL log ("State 103: Calculating ending sequence step")
@@ -3002,66 +3011,66 @@ RMTIN960 1001 1017 1033 1049 1065 1081 1097 1113 1129 1145 1161 1177 1193 1209 1
 	END
 .END
 .PROGRAM watchdog.pc()@26/10/01 13:00 #0
-  ;
-  HERE .last.pos
-  TIMER 1 = 0
-  ;
-  WHILE TRUE DO
-    ;
-    CALL check.tasks.pc
-    CALL check.disp.pc
-    ;
-    HERE .current.pos
-    .c1 = SWITCH (CS )
-    .c2 = $action == "Paused"
-    .c3 = DISTANCE (.current.pos, .last.pos)>5
-    .c4 = state <> 0 OR state <> 100
-    .c5 = TIMER (1) > wdog.tmr
-    ;
-    IF NOT .c1 OR .c2 OR .c3 OR NOT .c4 THEN
-      TIMER 1 = 0
-    END
-    ;
-    IF .c3 THEN
-      HERE .last.pos
-    END
-    ;
-    IF .c5 THEN
-      IF $wdog.state <> "TRUE" THEN
-        $wdog.state = "TRUE"
-      END
-    ELSE
-      IF $wdog.state <> "FALSE" THEN
-        $wdog.state = "FALSE"
-      END
-    END
-    ;
-    IF SIG (rs13.tare.ack) THEN
-      ;CALL log.pc1("Received OT change ACK")
-      ;IF count.put >= chg.tare.count THEN
-      ;  count.put = 0
-      ;END
-      ;count.put = 0
-      SIGNAL -rs7.tare.chg
-    END
-    ;
-    IF NOT SIG (s.debug.mode) THEN
-      IF SWITCH (REPEAT ) AND NOT SWITCH (TEACH_LOCK ) AND NOT SWITCH (EMERGENCY ) AND NOT SWITCH (CS ) AND NOT SWITCH (ERROR ) THEN
-        MC ZPOWER ON
-        ;MC PRIME a.main
-        ;WHILE NOT SWITCH(POWER)
-        ;  TWAIT 0.01
-        ;  MC CONTINUE
-        ;END
-      END
-    END
-    ;
-    IF NOT SWITCH (REPEAT ) THEN
-      CALL check.teach.pc
-    END
-    TWAIT 0.01
-  END
-  ;
+	;
+	HERE .last.pos
+	TIMER 1 = 0
+	;
+	WHILE TRUE DO
+		;
+		CALL check.tasks.pc
+		CALL check.disp.pc
+		;
+		HERE .current.pos
+		.c1 = SWITCH (CS )
+		.c2 = $action == "Paused"
+		.c3 = DISTANCE (.current.pos, .last.pos)>5
+		.c4 = state <> 0 OR state <> 100
+		.c5 = TIMER (1) > wdog.tmr
+		;
+		IF NOT .c1 OR .c2 OR .c3 OR NOT .c4 THEN
+			TIMER 1 = 0
+		END
+		;
+		IF .c3 THEN
+			HERE .last.pos
+		END
+		;
+		IF .c5 THEN
+			IF $wdog.state <> "TRUE" THEN
+				$wdog.state = "TRUE"
+			END
+		ELSE
+			IF $wdog.state <> "FALSE" THEN
+				$wdog.state = "FALSE"
+			END
+		END
+		;
+		IF SIG (rs13.tare.ack) THEN
+			;CALL log.pc1("Received OT change ACK")
+			;IF count.put >= chg.tare.count THEN
+			;  count.put = 0
+			;END
+			;count.put = 0
+			SIGNAL -rs7.tare.chg
+		END
+		;
+		IF NOT SIG (s.debug.mode) THEN
+			IF SWITCH (REPEAT ) AND NOT SWITCH (TEACH_LOCK ) AND NOT SWITCH (EMERGENCY ) AND NOT SWITCH (CS ) AND NOT SWITCH (ERROR ) THEN
+				MC ZPOWER ON
+				;MC PRIME a.main
+				;WHILE NOT SWITCH(POWER)
+				;  TWAIT 0.01
+				;  MC CONTINUE
+				;END
+			END
+		END
+		;
+		IF NOT SWITCH (REPEAT ) THEN
+			CALL check.teach.pc
+		END
+		TWAIT 0.01
+	END
+	;
 .END
 .PROGRAM Comment___ () ; Comments for IDE. Do not use.
 	; @@@ PROJECT @@@
@@ -3111,28 +3120,127 @@ RMTIN960 1001 1017 1033 1049 1065 1081 1097 1113 1129 1145 1161 1177 1193 1209 1
 	;   Group:Gripper:1
 	;     1:a.test.gripper:F
 	;     1:gripper.pick:F
+	;       .gripper.no 
+	;       .$temp 
+	;       .temp 
 	;     1:gripper.put:F
+	;       .gripper.no 
+	;       .$temp 
+	;       .temp 
 	;     1:a.teach.gripper:F
+	;       .temp 
 	;   Group:Etalon:2
 	;     2:a.teach.etalon:F
+	;       .eshift.x 
+	;       .eshift.y 
+	;       .et.pos.point 
+	;       .et.mac.poin 
 	;     2:etalon.measure:F
+	;       .id 
+	;       .etalon.pos.pt 
+	;       .etalon.mac.pt 
+	;       .shift.y 
+	;       .shift.z 
+	;       .p.idx 
+	;       .eshift.x 
+	;       .eshift.y 
+	;       .$temp 
 	;     2:set.grip.tree:F
+	;       .set 
 	;   Group:OT:3
 	;     3:a.teach.ot:F
+	;       .ot.down.left 
+	;       .ot.down.right 
+	;       .ot.up.right 
+	;       .ot.orig 
 	;     3:calc.grid:F
+	;       .teach 
+	;       .max 
+	;       .obj.len 
+	;       .obj.len.w.spc 
+	;       .$temp 
+	;       .current.ot 
+	;       .extra.x 
+	;       .i 
+	;       .j 
 	;     3:calc.grid.rnd:F
+	;       .teach 
+	;       .max 
+	;       .obj.shift 
+	;       .current.ot 
+	;       .$temp 
+	;       .i 
+	;       .j 
 	;     3:get.ot.point:F
+	;       .obj.id 
 	;     3:a.test.ot:F
+	;       .$pg 
+	;       .x 
+	;       .y 
+	;       .z 
+	;       .rz 
+	;       .put 
+	;       .putr 
+	;       .putr2 
+	;       .#temp 
 	;     3:ot.put:F
+	;       .x 
+	;       .y 
+	;       .z 
+	;       .rz 
+	;       .put 
+	;       .putr 
+	;       .putr2 
+	;       .#temp 
 	;     3:a.test.ot.pick:F
+	;       .shift.x 
+	;       .shift.y 
+	;       .temp 
+	;       .$pg 
+	;       .x 
+	;       .y 
+	;       .z 
+	;       .rz 
+	;       .put 
+	;       .putr 
+	;       .putr2 
+	;       .#temp 
 	;     3:old.layout:F
+	;       .center.col 
+	;       .center.row 
+	;       .cell 
+	;       .i 
+	;       .j 
+	;       .dist 
+	;       .dists 
+	;       .array.size 
+	;       .result 
+	;       .cornera 
+	;       .cornerb 
+	;       .tmp.dist 
+	;       .tmp.m 
+	;       .tmp.n 
 	;     3:sort.grid:F
+	;       .center.col 
+	;       .center.row 
+	;       .cell 
+	;       .row 
+	;       .offset 
+	;       .left 
+	;       .right 
 	;     3:select.layout:F
 	;     3:test.ot.full:F
 	;     3:ot.calc:F
+	;       .teach 
 	;   Group:MeasureMachine:4
 	;     4:a.teach.machine:F
+	;       .temp 
 	;     4:measure:F
+	;       .pos 
+	;       .shift.y 
+	;       .shift.z 
+	;       .p.idx 
+	;       .machine.pos 
 	;   Group:Objects:5
 	;     5:id1:F
 	;     5:id2:F
@@ -3142,10 +3250,31 @@ RMTIN960 1001 1017 1033 1049 1065 1081 1097 1113 1129 1145 1161 1177 1193 1209 1
 	;     5:id6:F
 	;   Group:Positioner:6
 	;     6:pos.pick:F
+	;       .$temp 
+	;       .temp 
+	;       .shift.x 
+	;       .shift.y 
 	;     6:a.teach.pos:F
+	;       .shift.x 
+	;       .shift.y 
+	;       .temp 
 	;   Group:Defect:7
 	;     7:defect.put:F
+	;       .xc 
+	;       .yc 
+	;       .rz 
+	;       .temp 
 	;     7:a.teach.defect:F
+	;       .x 
+	;       .y 
+	;       .o 
+	;       .k 
+	;       .i 
+	;       .j 
+	;       .xc 
+	;       .yc 
+	;       .rz 
+	;       .defect.pos 
 	;   Group:States:8
 	;     8:state0:F
 	;     8:state1:F
@@ -3157,6 +3286,7 @@ RMTIN960 1001 1017 1033 1049 1065 1081 1097 1113 1129 1145 1161 1177 1193 1209 1
 	;     8:state7:F
 	;     8:state8:F
 	;     8:state9:F
+	;       .stop.wait 
 	;     8:state100:F
 	;     8:state101:F
 	;     8:state102:F
@@ -3170,29 +3300,96 @@ RMTIN960 1001 1017 1033 1049 1065 1081 1097 1113 1129 1145 1161 1177 1193 1209 1
 	;     9:a.home:F
 	;     9:a.align:F
 	;     9:safe.home:F
+	;       .idx 
+	;       .temp 
+	;       .s 
+	;       .c 
+	;       .dz 
 	;     9:log:F
+	;       .$msg 
+	;       .i 
 	;     9:pg.select:F
 	;   0:a.main:F
+	;     .$pg.string 
 	;   0:pg0:F
 	;   Group:Logs:10
 	;     10:log.pc1:F
+	;       .$msg 
+	;       .i 
 	;     10:log.pc2:F
+	;       .$msg 
+	;       .i 
 	;   Group:Watchdog:11
 	;     11:check.teach.pc:B
 	;     11:check.disp.pc:B
 	;     11:check.tasks.pc:B
 	;     11:watchdog.pc:B
+	;       .last.pos 
+	;       .current.pos 
+	;       .c1 
+	;       .c2 
+	;       .c3 
+	;       .c4 
+	;       .c5 
 	;   Group:Initialization:12
 	;     12:set.vars.pc:B
+	;       .i 
+	;       .n 
+	;       .$name 
 	;     12:set.io.pc:B
 	;   Group:TCPIP:13
 	;     13:get.state.pc:B
+	;       .$state 
 	;     13:tcp.sender.pc:B
+	;       .$data 
 	;     13:tcp.callback.pc:B
+	;       .$data 
+	;       .data.length 
+	;       .$temp 
+	;       .i 
+	;       .$awave 
+	;       .$sensor.name 
+	;       .$sensor.state 
+	;       .$state 
+	;       .$measurement.sta 
+	;       .$spd 
+	;       .speed 
 	;     13:tcp.client.pc:B
+	;       .tcp.retry.count 
+	;       .tcp.connect.tmo 
+	;       .tcp.receive.tmo 
+	;       .number 
+	;       .ports 
+	;       .sockets 
+	;       .errors 
+	;       .suberrors 
+	;       .$ips 
+	;       .i 
+	;       .$temp 
+	;       .status 
+	;       .$tcp.ip.copy 
+	;       .$ip 
+	;       .ip 
+	;       .connected 
+	;       .tcp.error.cnt 
+	;       .$tcp.request 
+	;       .request.size 
 	;     13:tcp.send.pc:B
+	;       .$data 
+	;       .data.length 
+	;       .tcp.send.tmo 
+	;       .status 
+	;       .$temp 
+	;       .i 
 	;     13:tcp.log.pc:B
+	;       .$msg 
+	;       .i 
 	;   0:autostart.pc:B
+	;     .$rob.name 
+	;     .cont.no 
+	;     .robot.no 
+	;     .$robot.str 
+	;     .$cont.str 
 	;   0:errstart.pc:B
 	;   0:numpg:N
 	; @@@ TRANS @@@
