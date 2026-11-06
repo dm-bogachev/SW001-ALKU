@@ -274,19 +274,19 @@ N_INT300    "s.debug.mode"
 .INTER_PANEL_COLOR_D
 182,3,225,244,28,159,252,255,251,255,0,31,2,241,52,255,
 .END
-.PROGRAM a.align()@26/10/01 13:02 #0
+.PROGRAM a.align()@26/11/05 12:17 #0
 	;
 	SPEED 250 MM/S ALWAYS
 	ALIGN
 	;
 .END
-.PROGRAM a.home()@26/10/01 13:02 #1
+.PROGRAM a.home()@26/11/05 12:17 #3
 	;
 	SPEED 250 MM/S ALWAYS
 	JMOVE #homyak
 	;
 .END
-.PROGRAM a.main()@26/10/01 13:02 #0
+.PROGRAM a.main()@26/11/05 12:17 #0
 	;
 	CALL log ("Main program executed")
 	CALL safe.home
@@ -302,7 +302,7 @@ N_INT300    "s.debug.mode"
 	END
 	;
 .END
-.PROGRAM a.teach.gripper()@26/10/01 13:02 #0
+.PROGRAM a.teach.gripper()@26/11/05 14:40 #0
 	;
 	TOOL tool.pick[hmi.gripper]
 	;
@@ -333,7 +333,7 @@ N_INT300    "s.debug.mode"
 	LMOVE .temp + TRANS (0, 0, 200)
 	;
 .END
-.PROGRAM a.teach.opt()@26/10/01 13:02 #0
+.PROGRAM a.teach.opt()@26/11/05 12:17 #0
 	; Use this for first teach
 	IF FALSE THEN
 		TOOL tool.pin
@@ -357,7 +357,7 @@ N_INT300    "s.debug.mode"
 	LMOVE opt.point[.i, .j] + TRANS (0, 0, 50)
 	;
 .END
-.PROGRAM a.teach.ot()@26/10/01 13:02 #0
+.PROGRAM a.teach.ot()@26/11/05 12:17 #0
 	; Use this for first teach
 	IF FALSE THEN
 		TOOL tool.pin
@@ -381,7 +381,7 @@ N_INT300    "s.debug.mode"
 	LMOVE ot.point[.i, .j] + TRANS (0, 0, 50)
 	;
 .END
-.PROGRAM a.teach.pos()@26/10/16 14:55 #0
+.PROGRAM a.teach.pos()@26/11/05 15:39 #0
 	;
 	TOOL tool.pick[hmi.gripper]
 	;
@@ -407,7 +407,7 @@ N_INT300    "s.debug.mode"
 	JMOVE #pos.wait
 	;
 .END
-.PROGRAM a.teach.stz()@26/10/01 13:02 #0
+.PROGRAM a.teach.stz()@26/11/05 12:17 #0
 	;
 	TOOL tool.teach.stz
 	IF FALSE THEN
@@ -456,13 +456,13 @@ N_INT300    "s.debug.mode"
 	LMOVE stz.frame + TRANS (stz.x, stz.y, 10)
 	;
 .END
-.PROGRAM a.test.gripper()@26/10/01 13:02 #0
+.PROGRAM a.test.gripper()@26/11/05 12:17 #0
 	;
 	CALL gripper.pick (hmi.gripper)
 	CALL gripper.put (hmi.gripper)
 	; detail.type
 .END
-.PROGRAM a.test.opt()@26/10/01 13:02 #0
+.PROGRAM a.test.opt()@26/11/05 12:17 #0
 	;
 	.i = hmi.opt.i
 	.j = hmi.opt.j
@@ -470,7 +470,7 @@ N_INT300    "s.debug.mode"
 	CALL opt.return (.i, .j)
 	;
 .END
-.PROGRAM a.test.ot()@26/10/01 13:02 #0
+.PROGRAM a.test.ot()@26/11/05 12:17 #0
 	;
 	.i = hmi.ot.i
 	.j = hmi.ot.j
@@ -550,7 +550,7 @@ N_INT300    "s.debug.mode"
 	LMOVE #pos.wait
 	;
 .END
-.PROGRAM autostart.pc()@26/10/01 13:02 #0
+.PROGRAM autostart.pc()@26/11/05 12:17 #0
 	;
 	; System switches
 	CP ON
@@ -580,7 +580,7 @@ N_INT300    "s.debug.mode"
 	CALL watchdog.pc
 	;
 .END
-.PROGRAM check.disp.pc()@26/10/01 13:02 #163724481
+.PROGRAM check.disp.pc()@26/11/05 12:17 #168337430
 	;
 	IF SIG (s.tcp.ena) AND tcp.ena == -1 THEN
 		tcp.ena = tyterm
@@ -604,7 +604,7 @@ N_INT300    "s.debug.mode"
 	END
 	;
 .END
-.PROGRAM check.tasks.pc()@26/10/01 13:02 #163724488
+.PROGRAM check.tasks.pc()@26/11/05 12:17 #168337439
 	;
 	IF TASK (6002) <> 1 THEN
 		MC NUMEXECUTE
@@ -622,7 +622,7 @@ N_INT300    "s.debug.mode"
 	END
 	;
 .END
-.PROGRAM check.teach.pc()@26/10/01 13:02 #50643704
+.PROGRAM check.teach.pc()@26/11/05 12:17 #52450029
 	;
 	IF SIG (s.hmi.res.state) THEN
 		state = 0
@@ -721,7 +721,7 @@ N_INT300    "s.debug.mode"
 		cv.y.minus[hmi.obj.id] = hmi.y.minus
 	END
 .END
-.PROGRAM errstart.pc()@26/10/01 13:02 #568
+.PROGRAM errstart.pc()@26/11/05 12:17 #569
 	;
 	IF ERROR == -34021 OR ERROR == -10100 THEN
 		tcp.socket = -1
@@ -732,7 +732,7 @@ N_INT300    "s.debug.mode"
 	errstart.pc ON
 	;
 .END
-.PROGRAM get.state.pc(.$state)@26/10/01 13:02 #885508
+.PROGRAM get.state.pc(.$state)@26/11/05 12:17 #915746
 	.$state = "SPEED:" + $ENCODE (/L, MSPEED) + ";"
 	.$state = .$state + "POWER:"
 	IF SWITCH (POWER ) THEN
@@ -819,7 +819,7 @@ N_INT300    "s.debug.mode"
 	; MAX 12
 	.$state = .$state + "\n"
 .END
-.PROGRAM gripper.pick(.gripper.no)@26/10/01 13:02 #188
+.PROGRAM gripper.pick(.gripper.no)@26/11/05 12:17 #308
 	;
 	; Start from step 3 to manual check
 	IF FALSE THEN
@@ -869,7 +869,7 @@ N_INT300    "s.debug.mode"
 	CALL log (.$temp)
 	;
 .END
-.PROGRAM gripper.put(.gripper.no)@26/10/01 13:02 #187
+.PROGRAM gripper.put(.gripper.no)@26/11/05 12:17 #287
 	;
 	; Start from step 3 to manual check
 	IF FALSE THEN
@@ -916,7 +916,7 @@ N_INT300    "s.debug.mode"
 	BREAK
 	;
 .END
-.PROGRAM id1()@26/10/01 13:02 #283; 312.229.002
+.PROGRAM id1()@26/11/05 12:17 #290; 312.229.002
 	; Object ID
 	object.id = 1
 	etalon.id = 1
@@ -932,7 +932,7 @@ N_INT300    "s.debug.mode"
 	direction = 1; -1 for reverse
 	;
 .END
-.PROGRAM id2()@26/10/01 13:02 #32; 0401.17.02.023-02
+.PROGRAM id2()@26/11/05 12:17 #37; 0401.17.02.023-02
 	; Object ID
 	object.id = 2
 	etalon.id = 2
@@ -948,7 +948,7 @@ N_INT300    "s.debug.mode"
 	direction = 1; -1 for reverse
 	;
 .END
-.PROGRAM id3()@26/10/01 13:02 #68; 312.229.001
+.PROGRAM id3()@26/11/05 12:17 #73; 312.229.001
 	; Object ID
 	object.id = 3
 	etalon.id = 3
@@ -964,7 +964,7 @@ N_INT300    "s.debug.mode"
 	direction = 1; -1 for reverse
 	;
 .END
-.PROGRAM id4()@26/10/01 13:02 #61; 440.00.026
+.PROGRAM id4()@26/11/05 12:17 #63; 440.00.026
 	; Object ID
 	object.id = 4
 	etalon.id = 4
@@ -980,12 +980,12 @@ N_INT300    "s.debug.mode"
 	direction = 1; -1 for reverse
 	;
 .END
-.PROGRAM id5()@26/10/01 13:02 #39; 440.00.111
+.PROGRAM id5()@26/11/05 12:33 #43; 440.00.111
 	; Object ID
 	object.id = 5
 	etalon.id = 5
 	; Working gripper
-	pg13.gripper = 1
+	pg13.gripper = 2
 	pg7.gripper = 1
 	; Max objects in output tare
 	max.tare.count = 231 ;231
@@ -996,7 +996,7 @@ N_INT300    "s.debug.mode"
 	direction = 1; -1 for reverse
 	;
 .END
-.PROGRAM id6()@26/10/01 13:02 #56; 0401.28.02.063
+.PROGRAM id6()@26/11/05 12:17 #109; 0401.28.02.063
 	; Object ID
 	object.id = 6
 	etalon.id = 6
@@ -1012,7 +1012,7 @@ N_INT300    "s.debug.mode"
 	direction = 1; -1 for reverse
 	;
 .END
-.PROGRAM load.opt.data()@26/10/01 13:02 #561
+.PROGRAM load.opt.data()@26/11/05 12:17 #637
 	;
 	CALL log ("Load OPT IDs from string: " + $opt.data)
 	max.count.opt = 0
@@ -1030,7 +1030,7 @@ N_INT300    "s.debug.mode"
 	END
 	;
 .END
-.PROGRAM load.ot.data()@26/10/01 13:02 #559
+.PROGRAM load.ot.data()@26/11/05 12:17 #635
 	;
 	max.count.ot = 0
 	WHILE TRUE DO
@@ -1047,7 +1047,7 @@ N_INT300    "s.debug.mode"
 	END
 	;
 .END
-.PROGRAM log(.$msg)@26/10/01 13:02 #116307
+.PROGRAM log(.$msg)@26/11/05 12:17 #127090
 	;
 	; 1 line = 55 symbols max
 	;
@@ -1061,7 +1061,7 @@ N_INT300    "s.debug.mode"
 	IFPWPRINT 3, 1, 1, 9, 10 = $log.entry[124], $log.entry[125], $log.entry[126], $log.entry[127]
 	;
 .END
-.PROGRAM log.pc2(.$msg)@26/10/01 13:02 #481
+.PROGRAM log.pc2(.$msg)@26/11/05 12:17 #537
 	;
 	; 1 line = 55 symbols max
 	;
@@ -1075,7 +1075,7 @@ N_INT300    "s.debug.mode"
 	IFPWPRINT 3, 1, 1, 9, 10 = $log.entry[124], $log.entry[125], $log.entry[126], $log.entry[127]
 	;
 .END
-.PROGRAM numpg ()
+.PROGRAM numpg()@26/11/05 12:17 #2147483647
 	;
 	; Program for emergency case
 	;
@@ -1089,7 +1089,7 @@ N_INT300    "s.debug.mode"
 	SOUT 2009 = NOT (1017 AND 17)
 	;
 .END
-.PROGRAM opt.push()@26/10/01 13:02 #332
+.PROGRAM opt.push()@26/11/05 12:17 #791
 	;
 	ACCURACY 0.02 ALWAYS
 	SPEED 500 MM/S ALWAYS
@@ -1113,7 +1113,7 @@ N_INT300    "s.debug.mode"
 	LMOVE #opt.put.safe
 	;
 .END
-.PROGRAM opt.return(.i,.j)@26/10/01 13:32 #505
+.PROGRAM opt.return(.i,.j)@26/11/06 08:26 #1129
 	IF FALSE THEN
 		.i = hmi.opt.i
 		.j = hmi.opt.j
@@ -1167,6 +1167,12 @@ N_INT300    "s.debug.mode"
 	SPEED 50 MM/S
 	LMOVE .put.stz + TRANS (50)
 	;
+	BREAK
+	CALL log ("Check if zone is occupied")
+	SWAIT -rs7.locked.zone
+	CALL log ("Zone is free")
+	SIGNAL rs13.lock.zone
+	;
 	;SPEED 80 ALWAYS
 	;ACCURACY 5
 	LMOVE #opt.put.safe
@@ -1192,12 +1198,16 @@ N_INT300    "s.debug.mode"
 	ACCURACY 30
 	LMOVE opt.point[.i, .j] + TRANS (0, 0, 50)
 	LMOVE opt.point[.i, .j] + TRANS (0, 0, 200)
+	;
+	BREAK
+	SIGNAL -rs13.lock.zone
+	;
 	;LMOVE .mid.point
 	;
 	ACCEL 100 ALWAYS
 	DECEL 100 ALWAYS
 .END
-.PROGRAM opt.table(.id)@26/10/01 13:02 #561
+.PROGRAM opt.table(.id)@26/11/05 12:17 #637
 	;
 	.$temp = "Processing OPT with ID: " + $ENCODE (/L, .id)
 	CALL log (.$temp)
@@ -1330,7 +1340,14 @@ N_INT300    "s.debug.mode"
 	CALL log (.$temp)
 	;
 .END
-.PROGRAM opt.take(.i,.j)@26/10/01 13:02 #649
+.PROGRAM opt.take(.i,.j)@26/11/06 09:24 #2312
+	;
+	BREAK
+	CALL log ("Check if zone is occupied")
+	SWAIT -rs7.locked.zone
+	CALL log ("Zone is free")
+	SIGNAL rs13.lock.zone
+	;
 	IF FALSE THEN
 		.i = hmi.opt.i
 		.j = hmi.opt.j
@@ -1395,6 +1412,10 @@ N_INT300    "s.debug.mode"
 		LMOVE .mid.point
 		LMOVE #opt.take.safe
 		LMOVE #opt.put.safe
+		;
+		BREAK
+		SIGNAL -rs13.lock.zone
+		;
 		; Move before put point
 		ACCURACY 20
 		LMOVE .opt.put + TRANS (50)
@@ -1447,7 +1468,7 @@ N_INT300    "s.debug.mode"
 	ACCEL 100 ALWAYS
 	DECEL 100 ALWAYS
 .END
-.PROGRAM ot.return(.i,.j)@26/10/01 13:02 #564
+.PROGRAM ot.return(.i,.j)@26/11/05 19:21 #1234
 	IF FALSE THEN
 		.i = hmi.ot.i
 		.j = hmi.ot.j
@@ -1476,6 +1497,13 @@ N_INT300    "s.debug.mode"
 	;
 	LMOVE #pos.wait
 	ACCURACY 20
+	;
+	BREAK
+	CALL log ("Check if zone is occupied")
+	SWAIT -rs7.locked.zone
+	CALL log ("Zone is free")
+	SIGNAL rs13.lock.zone
+	;
 	LMOVE .put.outpal + TRANS (, , 50)
 	BREAK
 	;
@@ -1492,6 +1520,10 @@ N_INT300    "s.debug.mode"
 	LMOVE .put.outpal + TRANS (150)
 	;
 	LMOVE #ot.take.safe
+	;
+	BREAK
+	SIGNAL -rs13.lock.zone
+	;
 	LMOVE ot.point[.i, .j] + TRANS (20, 0, 400)
 	;
 	ACCURACY 0.02
@@ -1513,7 +1545,7 @@ N_INT300    "s.debug.mode"
 	ACCEL 100 ALWAYS
 	DECEL 100 ALWAYS
 .END
-.PROGRAM ot.table(.id)@26/10/01 13:02 #559
+.PROGRAM ot.table(.id)@26/11/05 12:17 #635
 	;
 	.$temp = "Processing OT with ID: " + $ENCODE (/L, .id)
 	CALL log (.$temp)
@@ -1691,7 +1723,7 @@ N_INT300    "s.debug.mode"
 	CALL log (.$temp)
 	;
 .END
-.PROGRAM ot.take(.i,.j)@26/10/14 14:25 #770
+.PROGRAM ot.take(.i,.j)@26/11/06 09:23 #2143
 	; Start from step 3 to manual check
 	IF FALSE THEN
 		.i = hmi.st.out.i
@@ -1758,6 +1790,13 @@ N_INT300    "s.debug.mode"
 		LMOVE ot.point[.i, .j] + TRANS (20, 0, 400)
 		LMOVE .mid.point
 		LMOVE #ot.take.safe
+		;
+		BREAK
+		CALL log ("Check if zone is occupied")
+		SWAIT -rs7.locked.zone
+		CALL log ("Zone is free")
+		SIGNAL rs13.lock.zone
+		;
 		; Move to aux point
 		LMOVE #ot.put.safe
 		; Move before put point
@@ -1776,11 +1815,18 @@ N_INT300    "s.debug.mode"
 		LMOVE .ot.put + TRANS (, , 100)
 		;LMOVE #ot.put.safe
 		LMOVE #pos.wait
+		;
+		BREAK
+		SIGNAL -rs13.lock.zone
+		;
 		BREAK
 		WHILE SIG (rs7.tare.chg) DO
 			PULSE rs13.tare.ack, 5
 			TWAIT 1
 		END
+		BREAK
+		DELAY 5
+		BREAK
 		;
 		;  POINT #current.pos = #pos.wait
 	ELSE
@@ -1805,7 +1851,7 @@ N_INT300    "s.debug.mode"
 	DECEL 100 ALWAYS
 	;
 .END
-.PROGRAM pg.select()@26/10/01 13:02 #469
+.PROGRAM pg.select()@26/11/05 12:17 #545
 	SCASE $pg.name OF
 		SVALUE "312.229.002":
 			CASE detail.spec OF
@@ -1882,11 +1928,11 @@ N_INT300    "s.debug.mode"
 	END
 	;
 .END
-.PROGRAM pg0()@26/10/01 13:02 #0
+.PROGRAM pg0()@26/11/05 12:17 #0
 	state = 0
 	CALL a.main
 .END
-.PROGRAM pos.put()@26/10/16 14:39 #9029
+.PROGRAM pos.put()@26/11/05 19:21 #16055
 	;
 	.$temp = "Put detail to positioner (ID:" + $ENCODE (object.id) + ")"
 	CALL log (.$temp)
@@ -1936,11 +1982,13 @@ N_INT300    "s.debug.mode"
 	;
 	;SIGNAL rs13.det.put
 	LMOVE #pos.wait
+	;
 	BREAK
 	SIGNAL -rs13.lock.zone
+	;
 	;LMOVE #stz.wait
 .END
-.PROGRAM safe.home()@26/10/01 13:02 #259
+.PROGRAM safe.home()@26/11/05 12:17 #269
 	;
 	IF SIG (do.home) THEN
 		CALL log ("Robot already in home position")
@@ -1968,7 +2016,7 @@ N_INT300    "s.debug.mode"
 	CALL log ("Robot in home position")
 	;
 .END
-.PROGRAM set.io.pc()@26/10/01 13:02 #129
+.PROGRAM set.io.pc()@26/11/05 12:17 #131
 	; Gripper IO
 	;
 	; Tare
@@ -2138,7 +2186,7 @@ N_INT300    "s.debug.mode"
 	;
 	s.debug.mode = 2300
 .END
-.PROGRAM set.vars.pc()@26/10/01 13:02 #110
+.PROGRAM set.vars.pc()@26/11/05 12:17 #112
 	;
 	; Constants
 	;
@@ -2266,10 +2314,10 @@ N_INT300    "s.debug.mode"
 	END
 	;
 .END
-.PROGRAM ship.pos()@26/10/01 13:02 #0
+.PROGRAM ship.pos()@26/11/05 12:17 #0
 	JOINT SPEED9 ACCU1 TIMER0 TOOL1 WORK0 CLAMP1 (OFF,0,0,O) OX= WX= #[-0.0011916,0,-159,0,-108,15] ;
 .END
-.PROGRAM state0()@26/10/01 13:02 #360; Initialization of parameters
+.PROGRAM state0()@26/11/05 12:17 #440; Initialization of parameters
 	;
 	CALL log ("State 0: Program reset. Initialization of parameters")
 	SIGNAL -s.opt.placed, -s.ot.placed, -s.grip.full
@@ -2288,7 +2336,7 @@ N_INT300    "s.debug.mode"
 	state = 100
 	;
 .END
-.PROGRAM state1()@26/10/01 13:02 #797; Pick OT from stocker
+.PROGRAM state1()@26/11/05 12:17 #983; Pick OT from stocker
 	;
 	CALL log ("State 1: Pick OT")
 	IF count.ot >= max.count.ot THEN
@@ -2323,7 +2371,7 @@ N_INT300    "s.debug.mode"
 	state = 101
 	;
 .END
-.PROGRAM state100()@26/10/01 13:02 #419; Waiting for start
+.PROGRAM state100()@26/11/05 12:17 #495; Waiting for start
 	;
 	CALL log ("State 100: Waiting for start")
 	$action = "WaitingForStart"
@@ -2345,11 +2393,11 @@ N_INT300    "s.debug.mode"
 	state = 106
 	;
 .END
-.PROGRAM state101()@26/10/01 13:02 #21738; Auxilary state
+.PROGRAM state101()@26/11/05 12:17 #23311; Auxilary state
 	CALL log ("State 101: Calculating next step")
 	state = 102
 .END
-.PROGRAM state102()@26/10/02 12:42 #43751620; Decision making
+.PROGRAM state102()@26/11/05 12:17 #46518200; Decision making
 	; Priority 1
 	IF SIG (s.cmd.pause) THEN
 		state = 105
@@ -2402,11 +2450,11 @@ N_INT300    "s.debug.mode"
 		RETURN
 	END
 .END
-.PROGRAM state103()@26/10/01 13:02 #462; Auxilary state
+.PROGRAM state103()@26/11/05 12:17 #604; Auxilary state
 	CALL log ("State 103: Calculating ending sequence step")
 	state = 104
 .END
-.PROGRAM state104()@26/10/14 14:25 #2920870; Ending sequence
+.PROGRAM state104()@26/11/05 12:17 #2921010; Ending sequence
 	;
 	IF SIG (s.grip.full) AND SIG (s.cmd.n.op.stop) AND SIG (s.opt.placed) THEN
 		CALL log ("Put detail to RS007L pos")
@@ -2487,7 +2535,7 @@ N_INT300    "s.debug.mode"
 	END
 	;
 .END
-.PROGRAM state105()@26/10/01 13:02 #176; Program paused
+.PROGRAM state105()@26/11/05 12:17 #187; Program paused
 	CALL log ("State 105: Program paused")
 	$action = "Paused"
 	SWAIT s.cmd.resume
@@ -2498,7 +2546,7 @@ N_INT300    "s.debug.mode"
 	SIGNAL -s.cmd.pause
 	state = 101
 .END
-.PROGRAM state106()@26/10/01 13:02 #550; Check program
+.PROGRAM state106()@26/11/05 12:17 #626; Check program
 	CALL log ("State 106: Check program")
 	IF $pg.name <> "NULL" THEN
 		CALL log ("Selected program: " + $pg.name)
@@ -2512,12 +2560,16 @@ N_INT300    "s.debug.mode"
 		state = 0
 	END
 .END
-.PROGRAM state2()@26/10/01 13:02 #588; Pick OPT from stocker
+.PROGRAM state2()@26/11/06 09:36 #820; Pick OPT from stocker
 	;
 	CALL log ("State 2: Pick OPT")
 	IF count.opt >= max.count.opt THEN
 		CALL log ("Reached out of maximum tare count")
 		LMOVE #homyak
+		;
+		BREAK
+		SIGNAL -rs13.lock.zone
+		;
 		state = 103 ;
 		RETURN
 	END
@@ -2542,7 +2594,7 @@ N_INT300    "s.debug.mode"
 	state = 101
 	;
 .END
-.PROGRAM state255()@26/10/01 13:02 #426; Program complete
+.PROGRAM state255()@26/11/05 12:17 #496; Program complete
 	CALL log ("State 255: Program complete")
 	state = 0
 	;
@@ -2551,7 +2603,7 @@ N_INT300    "s.debug.mode"
 	SWAIT rs7.finish.ack
 	;
 .END
-.PROGRAM state3()@26/10/01 13:02 #10111; Pick from STZ
+.PROGRAM state3()@26/11/05 12:17 #11361; Pick from STZ
 	;
 	CALL log ("State 3: Pick from STZ")
 	; Check all start positions
@@ -2574,7 +2626,7 @@ N_INT300    "s.debug.mode"
 	state = 101
 	;
 .END
-.PROGRAM state4()@26/10/01 13:02 #10048; Put detail to positioner
+.PROGRAM state4()@26/11/05 12:17 #10689; Put detail to positioner
 	CALL log ("State 4: Put detail to positioner")
 	; Check all start positions
 	POINT .current.pos = #HERE
@@ -2599,7 +2651,7 @@ N_INT300    "s.debug.mode"
 	END
 	;
 .END
-.PROGRAM state5()@26/10/01 13:02 #578; Return OT
+.PROGRAM state5()@26/11/05 12:17 #649; Return OT
 	CALL log ("State 5: Return OT")
 	; Check all start positions
 	POINT .current.pos = #HERE
@@ -2619,7 +2671,7 @@ N_INT300    "s.debug.mode"
 	state = 8
 	;
 .END
-.PROGRAM state6()@26/10/01 13:02 #348; Return OPT
+.PROGRAM state6()@26/11/05 12:17 #430; Return OPT
 	;
 	CALL log ("State 6: Return OPT")
 	;
@@ -2652,7 +2704,7 @@ N_INT300    "s.debug.mode"
 	state = 9
 	;
 .END
-.PROGRAM state7()@26/10/01 13:02 #540; Check grippers
+.PROGRAM state7()@26/11/05 12:17 #696; Check grippers
 	CALL log ("State 7: Check if gripper change is required")
 	; We are at home at this point. No cases without home!
 	IF current.gripper <> pg13.gripper THEN
@@ -2670,7 +2722,7 @@ N_INT300    "s.debug.mode"
 	END
 	state = 1
 .END
-.PROGRAM state8()@26/10/01 13:02 #578; Decide if pick next OT
+.PROGRAM state8()@26/11/05 12:17 #789; Decide if pick next OT
 	CALL log ("State 8: Decide if pick next OT")
 	IF count.ot >= max.count.ot OR SIG (s.cmd.finish) THEN
 		;SIGNAL s.cmd.n.op.stop
@@ -2686,7 +2738,7 @@ N_INT300    "s.debug.mode"
 		state = 1
 	END
 .END
-.PROGRAM state9()@26/10/01 13:02 #525; Decide if pick next OPT
+.PROGRAM state9()@26/11/06 09:23 #601; Decide if pick next OPT
 	CALL log ("State 9: Decide if pick next OPT")
 	;
 	.m1 = count.opt >= max.count.opt OR count.put == detail.count
@@ -2695,13 +2747,17 @@ N_INT300    "s.debug.mode"
 	IF .m1 OR .m2 OR .m3 THEN
 		LMOVE #homyak
 		;
+		BREAK
+		SIGNAL -rs13.lock.zone
+		;
+		;
 		;POINT #current.pos = #homyak
 		state = 103
 	ELSE
 		state = 2
 	END
 .END
-.PROGRAM stz.pick()@26/10/01 13:02 #10161
+.PROGRAM stz.pick()@26/11/05 12:17 #15952
 	;
 	.$temp = "Pick detail from stz (" + $ENCODE (/L, stz.x) + ", " + $ENCODE (/L, stz.y) + ", " + $ENCODE (/L, stz.a) + ")"
 	CALL log (.$temp)
@@ -2782,7 +2838,7 @@ N_INT300    "s.debug.mode"
 	LMOVE #pos.wait
 	;
 .END
-.PROGRAM tcp.callback.pc(.$data[],.data.length)@26/10/01 13:02 #286291
+.PROGRAM tcp.callback.pc(.$data[],.data.length)@26/11/05 12:17 #301675
 	.$temp = "Received " + $ENCODE (.data.length) + " strings:"
 	PRINT tcp.recv.ena: .$temp
 	FOR .i = 1 TO .data.length
@@ -3023,7 +3079,7 @@ N_INT300    "s.debug.mode"
 		.$data[.i] = ""
 	END
 .END
-.PROGRAM tcp.client.pc()@26/10/01 13:02 #0
+.PROGRAM tcp.client.pc()@26/11/05 12:17 #0
 	;
 	tcp.socket = -1
 	.tcp.retry.count = 10
@@ -3096,7 +3152,7 @@ N_INT300    "s.debug.mode"
 		TWAIT 0.05
 	END
 .END
-.PROGRAM tcp.log.pc(.$msg)@26/10/01 13:02 #380864
+.PROGRAM tcp.log.pc(.$msg)@26/11/05 12:17 #396248
 	IF NOT SIG (s.tcp.log) THEN
 		RETURN
 	END
@@ -3113,7 +3169,7 @@ N_INT300    "s.debug.mode"
 	IFPWPRINT 3, 1, 1, 9, 10 = $log.entry[124], $log.entry[125], $log.entry[126], $log.entry[127]
 	;
 .END
-.PROGRAM tcp.send.pc(.$data[],.data.length)@26/10/01 13:02 #802499
+.PROGRAM tcp.send.pc(.$data[],.data.length)@26/11/05 12:17 #832740
 	;
 	.tcp.send.tmo = 5
 	;
@@ -3136,7 +3192,7 @@ N_INT300    "s.debug.mode"
 	END
 	;
 .END
-.PROGRAM tcp.sender.pc()@26/10/01 13:02 #0
+.PROGRAM tcp.sender.pc()@26/11/05 12:17 #0
 	;
 	WHILE TRUE DO
 		;
@@ -3164,7 +3220,7 @@ N_INT300    "s.debug.mode"
 	END
 	;
 .END
-.PROGRAM watchdog.pc()@26/10/01 13:02 #0
+.PROGRAM watchdog.pc()@26/11/05 12:17 #0
 	;
 	HERE .last.pos
 	POINT .pos.wait = #pos.wait
@@ -3250,11 +3306,17 @@ N_INT300    "s.debug.mode"
 	; @@@ PROGRAM @@@
 	;   Group:Objects:1
 	;     1:id1:F
+	;       .gripper 
 	;     1:id2:F
+	;       .gripper 
 	;     1:id3:F
+	;       .gripper 
 	;     1:id4:F
+	;       .gripper 
 	;     1:id5:F
+	;       .gripper 
 	;     1:id6:F
+	;       .gripper 
 	;   Group:STZ:2
 	;     2:a.teach.stz:F
 	;       .plb 
@@ -3315,6 +3377,8 @@ N_INT300    "s.debug.mode"
 	;       .ct2 
 	;       .mid.point 
 	;       .opt.put 
+	;       .locked.zone 
+	;       .lock.zone 
 	;     3:a.teach.opt:F
 	;       .i 
 	;       .j 
@@ -3330,6 +3394,8 @@ N_INT300    "s.debug.mode"
 	;       .ct2 
 	;       .mid.point 
 	;       .put.stz 
+	;       .locked.zone 
+	;       .lock.zone 
 	;     3:opt.push:F
 	;   Group:Gripper:4
 	;     4:a.test.gripper:F
@@ -3371,6 +3437,11 @@ N_INT300    "s.debug.mode"
 	;       .ct2 
 	;       .mid.point 
 	;       .ot.put 
+	;       .tare.ack 
+	;       .ot.number 
+	;       .locked.zone 
+	;       .lock.zone 
+	;       .tare.chg 
 	;     5:ot.return:F
 	;       .i 
 	;       .j 
@@ -3380,14 +3451,22 @@ N_INT300    "s.debug.mode"
 	;       .ct2 
 	;       .mid.point 
 	;       .put.outpal 
+	;       .locked.zone 
+	;       .lock.zone 
 	;   Group:Positioner:6
 	;     6:a.teach.pos:F
 	;       .temp 
 	;     6:pos.put:F
 	;       .$temp 
 	;       .temp 
+	;       .lock.zone 
+	;       .locked.zone 
+	;       .det.put 
 	;   Group:States:7
 	;     7:state0:F
+	;       .finish 
+	;       .no.ot.stop 
+	;       .det.put 
 	;     7:state1:F
 	;       .current.pos 
 	;       .stz.wait 
@@ -3400,6 +3479,7 @@ N_INT300    "s.debug.mode"
 	;       .pos.wait 
 	;       .i 
 	;       .j 
+	;       .lock.zone 
 	;     7:state3:F
 	;       .current.pos 
 	;       .stz.wait 
@@ -3408,12 +3488,14 @@ N_INT300    "s.debug.mode"
 	;       .current.pos 
 	;       .stz.wait 
 	;       .pos.wait 
+	;       .etalon.stop 
 	;     7:state5:F
 	;       .current.pos 
 	;       .stz.wait 
 	;       .pos.wait 
 	;       .i 
 	;       .j 
+	;       .work 
 	;     7:state6:F
 	;       .current.pos 
 	;       .stz.wait 
@@ -3421,22 +3503,42 @@ N_INT300    "s.debug.mode"
 	;       .i 
 	;       .j 
 	;     7:state7:F
+	;       .gripper 
 	;     7:state8:F
 	;     7:state9:F
 	;       .m1 
 	;       .m2 
 	;       .m3 
+	;       .etalon.stop 
+	;       .lock.zone 
 	;     7:state100:F
+	;       .ot.number 
 	;     7:state101:F
 	;     7:state102:F
+	;       .etalon.stop 
+	;       .tare.chg 
+	;       .det.picked 
+	;       .work 
+	;       .locked.zone 
 	;     7:state103:F
 	;     7:state104:F
 	;       .m1 
 	;       .m2 
 	;       .m3 
+	;       .no.ot.stop 
+	;       .det.picked 
+	;       .work 
+	;       .locked.zone 
+	;       .tare.chg 
+	;       .etalon.stop 
+	;       .finish 
+	;       .finish.ack 
+	;       .tare.ack 
 	;     7:state105:F
 	;     7:state106:F
 	;     7:state255:F
+	;       .finish 
+	;       .finish.ack 
 	;   Group:Utilities:8
 	;     8:ship.pos:F
 	;     8:a.home:F
@@ -3514,10 +3616,26 @@ N_INT300    "s.debug.mode"
 	;   0:errstart.pc:B
 	;   Group:Initialization:11
 	;     11:set.io.pc:B
+	;       .work 
+	;       .tare.chg 
+	;       .locked.zone 
+	;       .finish.ack 
+	;       .put.ack 
+	;       .det.picked 
+	;       .etalon.stop 
+	;       .tare.ack 
+	;       .finish 
+	;       .detail.put 
+	;       .lock.zone 
+	;       .det.put 
+	;       .no.ot.stop 
+	;       .home 
+	;       .ot.number 
 	;     11:set.vars.pc:B
 	;       .i 
 	;       .n 
 	;       .$name 
+	;       .gripper 
 	;   Group:Watchdog:12
 	;     12:watchdog.pc:B
 	;       .last.pos 
@@ -3530,6 +3648,9 @@ N_INT300    "s.debug.mode"
 	;       .c5 
 	;       .mutual.lock 
 	;       .robots.wait 
+	;       .locked.zone 
+	;       .lock.zone 
+	;       .home 
 	;     12:check.tasks.pc:B
 	;     12:check.disp.pc:B
 	;     12:check.teach.pc:B
