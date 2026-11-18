@@ -333,19 +333,7 @@ N_INT300    "s.debug.mode"
 	LMOVE .temp + TRANS (0, 0, 200)
 	;
 .END
-.PROGRAM a.teach.opt()@26/11/07 17:30 #0
-	; Use this for first teach
-	IF FALSE THEN
-		TOOL tool.pin
-		JMOVE opt.point[1, 1] + TRANS (0, 0, 50)
-		LMOVE opt.point[1, 1]
-		FOR .i = 0 TO 2
-			FOR .j = 0 TO 9
-				PRINT 0: .i, .j
-				POINT opt.point[.i + 1, .j + 1] = opt.point[1, 1] + TRANS (-80 * .j, -610 * .i)
-			END
-		END
-	END
+.PROGRAM a.teach.opt()@26/11/12 18:44 #0
 	; Correct point
 	TOOL tool.pin
 	.i = hmi.opt.i
@@ -357,19 +345,7 @@ N_INT300    "s.debug.mode"
 	LMOVE opt.point[.i, .j] + TRANS (0, 0, 50)
 	;
 .END
-.PROGRAM a.teach.ot()@26/11/07 17:30 #0
-	; Use this for first teach
-	IF FALSE THEN
-		TOOL tool.pin
-		JMOVE ot.point[1, 1] + TRANS (0, 0, 50)
-		LMOVE ot.point[1, 1]
-		FOR .i = 0 TO 3
-			FOR .j = 0 TO 11
-				PRINT 0: .i, .j
-				POINT ot.point[.i + 1, .j + 1] = ot.point[1, 1] + TRANS (-100 * .j, -490 * .i)
-			END
-		END
-	END
+.PROGRAM a.teach.ot()@26/11/12 18:44 #0
 	TOOL tool.pin
 	; Correct point
 	.i = hmi.ot.i
@@ -381,7 +357,7 @@ N_INT300    "s.debug.mode"
 	LMOVE ot.point[.i, .j] + TRANS (0, 0, 50)
 	;
 .END
-.PROGRAM a.teach.pos()@26/11/07 17:30 #0
+.PROGRAM a.teach.pos()@26/11/12 17:54 #2
 	;
 	TOOL tool.pick[hmi.gripper]
 	;
@@ -580,7 +556,7 @@ N_INT300    "s.debug.mode"
 	CALL watchdog.pc
 	;
 .END
-.PROGRAM check.disp.pc()@26/11/07 17:30 #171859713
+.PROGRAM check.disp.pc()@26/11/07 17:30 #185889717
 	;
 	IF SIG (s.tcp.ena) AND tcp.ena == -1 THEN
 		tcp.ena = tyterm
@@ -604,7 +580,7 @@ N_INT300    "s.debug.mode"
 	END
 	;
 .END
-.PROGRAM check.tasks.pc()@26/11/07 17:30 #171859721
+.PROGRAM check.tasks.pc()@26/11/07 17:30 #185889726
 	;
 	IF TASK (6002) <> 1 THEN
 		MC NUMEXECUTE
@@ -622,7 +598,7 @@ N_INT300    "s.debug.mode"
 	END
 	;
 .END
-.PROGRAM check.teach.pc()@26/11/07 17:30 #53644475
+.PROGRAM check.teach.pc()@26/11/07 17:30 #55303395
 	;
 	IF SIG (s.hmi.res.state) THEN
 		state = 0
@@ -721,18 +697,7 @@ N_INT300    "s.debug.mode"
 		cv.y.minus[hmi.obj.id] = hmi.y.minus
 	END
 .END
-.PROGRAM errstart.pc()@26/11/07 17:30 #573
-	;
-	IF ERROR == -34021 OR ERROR == -10100 THEN
-		tcp.socket = -1
-		MC ERESET
-		TWAIT 1
-	END
-	TWAIT 5
-	errstart.pc ON
-	;
-.END
-.PROGRAM get.state.pc(.$state)@26/11/07 17:30 #939395
+.PROGRAM get.state.pc(.$state)@26/11/07 17:30 #1088302
 	.$state = "SPEED:" + $ENCODE (/L, MSPEED) + ";"
 	.$state = .$state + "POWER:"
 	IF SWITCH (POWER ) THEN
@@ -819,7 +784,7 @@ N_INT300    "s.debug.mode"
 	; MAX 12
 	.$state = .$state + "\n"
 .END
-.PROGRAM gripper.pick(.gripper.no)@26/11/07 17:30 #332
+.PROGRAM gripper.pick(.gripper.no)@26/11/07 17:30 #524
 	;
 	; Start from step 3 to manual check
 	IF FALSE THEN
@@ -869,7 +834,7 @@ N_INT300    "s.debug.mode"
 	CALL log (.$temp)
 	;
 .END
-.PROGRAM gripper.put(.gripper.no)@26/11/07 17:30 #307
+.PROGRAM gripper.put(.gripper.no)@26/11/07 17:30 #467
 	;
 	; Start from step 3 to manual check
 	IF FALSE THEN
@@ -916,7 +881,7 @@ N_INT300    "s.debug.mode"
 	BREAK
 	;
 .END
-.PROGRAM id1()@26/11/07 17:30 #291; 312.229.002
+.PROGRAM id1()@26/11/07 17:30 #297; 312.229.002
 	; Object ID
 	object.id = 1
 	etalon.id = 1
@@ -932,7 +897,7 @@ N_INT300    "s.debug.mode"
 	direction = 1; -1 for reverse
 	;
 .END
-.PROGRAM id2()@26/11/07 17:30 #41; 0401.17.02.023-02
+.PROGRAM id2()@26/11/07 17:30 #54; 0401.17.02.023-02
 	; Object ID
 	object.id = 2
 	etalon.id = 2
@@ -948,7 +913,7 @@ N_INT300    "s.debug.mode"
 	direction = 1; -1 for reverse
 	;
 .END
-.PROGRAM id3()@26/11/07 17:30 #74; 312.229.001
+.PROGRAM id3()@26/11/07 17:30 #84; 312.229.001
 	; Object ID
 	object.id = 3
 	etalon.id = 3
@@ -964,7 +929,7 @@ N_INT300    "s.debug.mode"
 	direction = 1; -1 for reverse
 	;
 .END
-.PROGRAM id4()@26/11/07 17:30 #63; 440.00.026
+.PROGRAM id4()@26/11/07 17:30 #70; 440.00.026
 	; Object ID
 	object.id = 4
 	etalon.id = 4
@@ -980,7 +945,7 @@ N_INT300    "s.debug.mode"
 	direction = 1; -1 for reverse
 	;
 .END
-.PROGRAM id5()@26/11/07 17:30 #43; 440.00.111
+.PROGRAM id5()@26/11/07 17:30 #58; 440.00.111
 	; Object ID
 	object.id = 5
 	etalon.id = 5
@@ -996,7 +961,7 @@ N_INT300    "s.debug.mode"
 	direction = 1; -1 for reverse
 	;
 .END
-.PROGRAM id6()@26/11/07 17:30 #109; 0401.28.02.063
+.PROGRAM id6()@26/11/07 17:30 #118; 0401.28.02.063
 	; Object ID
 	object.id = 6
 	etalon.id = 6
@@ -1012,7 +977,7 @@ N_INT300    "s.debug.mode"
 	direction = 1; -1 for reverse
 	;
 .END
-.PROGRAM load.opt.data()@26/11/07 17:30 #643
+.PROGRAM load.opt.data()@26/11/07 17:30 #703
 	;
 	CALL log ("Load OPT IDs from string: " + $opt.data)
 	max.count.opt = 0
@@ -1030,7 +995,7 @@ N_INT300    "s.debug.mode"
 	END
 	;
 .END
-.PROGRAM load.ot.data()@26/11/07 17:30 #641
+.PROGRAM load.ot.data()@26/11/07 17:30 #701
 	;
 	max.count.ot = 0
 	WHILE TRUE DO
@@ -1047,7 +1012,7 @@ N_INT300    "s.debug.mode"
 	END
 	;
 .END
-.PROGRAM log(.$msg)@26/11/07 17:30 #138380
+.PROGRAM log(.$msg)@26/11/07 17:30 #292978
 	;
 	; 1 line = 55 symbols max
 	;
@@ -1061,7 +1026,7 @@ N_INT300    "s.debug.mode"
 	IFPWPRINT 3, 1, 1, 9, 10 = $log.entry[124], $log.entry[125], $log.entry[126], $log.entry[127]
 	;
 .END
-.PROGRAM log.pc2(.$msg)@26/11/07 17:30 #573
+.PROGRAM log.pc2(.$msg)@26/11/07 17:30 #850
 	;
 	; 1 line = 55 symbols max
 	;
@@ -1089,7 +1054,7 @@ N_INT300    "s.debug.mode"
 	SOUT 2009 = NOT (1017 AND 17)
 	;
 .END
-.PROGRAM opt.push()@26/11/07 17:30 #854
+.PROGRAM opt.push()@26/11/07 17:30 #1673
 	;
 	ACCURACY 0.02 ALWAYS
 	SPEED 500 MM/S ALWAYS
@@ -1113,7 +1078,7 @@ N_INT300    "s.debug.mode"
 	LMOVE #opt.put.safe
 	;
 .END
-.PROGRAM opt.return(.i,.j)@26/11/07 17:30 #1199
+.PROGRAM opt.return(.i,.j)@26/11/07 17:30 #2431
 	IF FALSE THEN
 		.i = hmi.opt.i
 		.j = hmi.opt.j
@@ -1205,7 +1170,7 @@ N_INT300    "s.debug.mode"
 	ACCEL 100 ALWAYS
 	DECEL 100 ALWAYS
 .END
-.PROGRAM opt.table(.id)@26/11/07 17:30 #643
+.PROGRAM opt.table(.id)@26/11/07 17:30 #703
 	;
 	.$temp = "Processing OPT with ID: " + $ENCODE (/L, .id)
 	CALL log (.$temp)
@@ -1338,7 +1303,7 @@ N_INT300    "s.debug.mode"
 	CALL log (.$temp)
 	;
 .END
-.PROGRAM opt.take(.i,.j)@26/11/07 17:30 #2402
+.PROGRAM opt.take(.i,.j)@26/11/07 17:30 #4077
 	;
 	BREAK
 	SIGNAL rs13.lock.zone
@@ -1468,7 +1433,7 @@ N_INT300    "s.debug.mode"
 	ACCEL 100 ALWAYS
 	DECEL 100 ALWAYS
 .END
-.PROGRAM ot.return(.i,.j)@26/11/07 17:30 #1300
+.PROGRAM ot.return(.i,.j)@26/11/07 17:30 #2620
 	IF FALSE THEN
 		.i = hmi.ot.i
 		.j = hmi.ot.j
@@ -1547,7 +1512,7 @@ N_INT300    "s.debug.mode"
 	ACCEL 100 ALWAYS
 	DECEL 100 ALWAYS
 .END
-.PROGRAM ot.table(.id)@26/11/07 17:30 #641
+.PROGRAM ot.table(.id)@26/11/07 17:30 #701
 	;
 	.$temp = "Processing OT with ID: " + $ENCODE (/L, .id)
 	CALL log (.$temp)
@@ -1725,7 +1690,7 @@ N_INT300    "s.debug.mode"
 	CALL log (.$temp)
 	;
 .END
-.PROGRAM ot.take(.i,.j)@26/11/07 17:30 #2249
+.PROGRAM ot.take(.i,.j)@26/11/08 12:31 #4233
 	; Start from step 3 to manual check
 	IF FALSE THEN
 		.i = hmi.st.out.i
@@ -1854,7 +1819,7 @@ N_INT300    "s.debug.mode"
 	DECEL 100 ALWAYS
 	;
 .END
-.PROGRAM pg.select()@26/11/07 17:30 #551
+.PROGRAM pg.select()@26/11/07 17:30 #611
 	SCASE $pg.name OF
 		SVALUE "312.229.002":
 			CASE detail.spec OF
@@ -1935,7 +1900,7 @@ N_INT300    "s.debug.mode"
 	state = 0
 	CALL a.main
 .END
-.PROGRAM pos.put()@26/11/07 21:18 #19439
+.PROGRAM pos.put()@26/11/07 21:18 #199439
 	;
 	.$temp = "Put detail to positioner (ID:" + $ENCODE (object.id) + ")"
 	CALL log (.$temp)
@@ -2005,7 +1970,7 @@ N_INT300    "s.debug.mode"
 	;
 	;LMOVE #stz.wait
 .END
-.PROGRAM safe.home()@26/11/07 17:30 #273
+.PROGRAM safe.home()@26/11/07 17:30 #283
 	;
 	IF SIG (do.home) THEN
 		CALL log ("Robot already in home position")
@@ -2033,7 +1998,7 @@ N_INT300    "s.debug.mode"
 	CALL log ("Robot in home position")
 	;
 .END
-.PROGRAM set.io.pc()@26/11/07 17:30 #133
+.PROGRAM set.io.pc()@26/11/07 17:30 #135
 	; Gripper IO
 	;
 	; Tare
@@ -2204,7 +2169,7 @@ N_INT300    "s.debug.mode"
 	;
 	s.debug.mode = 2300
 .END
-.PROGRAM set.vars.pc()@26/11/07 17:30 #115
+.PROGRAM set.vars.pc()@26/11/07 17:30 #117
 	;
 	; Constants
 	;
@@ -2335,7 +2300,7 @@ N_INT300    "s.debug.mode"
 .PROGRAM ship.pos()@26/11/07 17:30 #0
 	JOINT SPEED9 ACCU1 TIMER0 TOOL1 WORK0 CLAMP1 (OFF,0,0,O) OX= WX= #[-0.0011916,0,-159,0,-108,15] ;
 .END
-.PROGRAM state0()@26/11/07 19:07 #445; Initialization of parameters
+.PROGRAM state0()@26/11/07 19:07 #508; Initialization of parameters
 	;
 	CALL log ("State 0: Program reset. Initialization of parameters")
 	SIGNAL -s.opt.placed, -s.ot.placed, -s.grip.full
@@ -2355,7 +2320,7 @@ N_INT300    "s.debug.mode"
 	state = 100
 	;
 .END
-.PROGRAM state1()@26/11/07 17:30 #996; Pick OT from stocker
+.PROGRAM state1()@26/11/07 17:30 #1148; Pick OT from stocker
 	;
 	CALL log ("State 1: Pick OT")
 	IF count.ot >= max.count.ot THEN
@@ -2390,7 +2355,7 @@ N_INT300    "s.debug.mode"
 	state = 101
 	;
 .END
-.PROGRAM state100()@26/11/07 17:30 #501; Waiting for start
+.PROGRAM state100()@26/11/07 17:30 #561; Waiting for start
 	;
 	CALL log ("State 100: Waiting for start")
 	$action = "WaitingForStart"
@@ -2412,11 +2377,11 @@ N_INT300    "s.debug.mode"
 	state = 106
 	;
 .END
-.PROGRAM state101()@26/11/07 17:30 #25510; Auxilary state
+.PROGRAM state101()@26/11/07 17:30 #55830; Auxilary state
 	CALL log ("State 101: Calculating next step")
 	state = 102
 .END
-.PROGRAM state102()@26/11/07 17:30 #47333635; Decision making
+.PROGRAM state102()@26/11/07 17:30 #80419219; Decision making
 	; Priority 1
 	IF SIG (s.cmd.pause) THEN
 		state = 105
@@ -2469,11 +2434,11 @@ N_INT300    "s.debug.mode"
 		RETURN
 	END
 .END
-.PROGRAM state103()@26/11/07 17:30 #615; Auxilary state
+.PROGRAM state103()@26/11/07 17:30 #735; Auxilary state
 	CALL log ("State 103: Calculating ending sequence step")
 	state = 104
 .END
-.PROGRAM state104()@26/11/07 17:30 #2921021; Ending sequence
+.PROGRAM state104()@26/11/07 17:30 #2941685; Ending sequence
 	;
 	IF SIG (s.grip.full) AND SIG (s.cmd.n.op.stop) AND SIG (s.opt.placed) THEN
 		CALL log ("Put detail to RS007L pos")
@@ -2554,7 +2519,7 @@ N_INT300    "s.debug.mode"
 	END
 	;
 .END
-.PROGRAM state105()@26/11/07 17:30 #196; Program paused
+.PROGRAM state105()@26/11/07 17:30 #301; Program paused
 	CALL log ("State 105: Program paused")
 	$action = "Paused"
 	SWAIT s.cmd.resume
@@ -2565,7 +2530,7 @@ N_INT300    "s.debug.mode"
 	SIGNAL -s.cmd.pause
 	state = 101
 .END
-.PROGRAM state106()@26/11/07 17:30 #632; Check program
+.PROGRAM state106()@26/11/07 17:30 #692; Check program
 	CALL log ("State 106: Check program")
 	IF $pg.name <> "NULL" THEN
 		CALL log ("Selected program: " + $pg.name)
@@ -2579,7 +2544,7 @@ N_INT300    "s.debug.mode"
 		state = 0
 	END
 .END
-.PROGRAM state2()@26/11/07 17:30 #827; Pick OPT from stocker
+.PROGRAM state2()@26/11/07 17:30 #927; Pick OPT from stocker
 	;
 	CALL log ("State 2: Pick OPT")
 	IF count.opt >= max.count.opt THEN
@@ -2613,7 +2578,7 @@ N_INT300    "s.debug.mode"
 	state = 101
 	;
 .END
-.PROGRAM state255()@26/11/07 17:30 #501; Program complete
+.PROGRAM state255()@26/11/07 17:30 #557; Program complete
 	CALL log ("State 255: Program complete")
 	state = 0
 	;
@@ -2622,7 +2587,7 @@ N_INT300    "s.debug.mode"
 	SWAIT rs7.finish.ack
 	;
 .END
-.PROGRAM state3()@26/11/07 17:30 #13527; Pick from STZ
+.PROGRAM state3()@26/11/07 17:30 #43439; Pick from STZ
 	;
 	CALL log ("State 3: Pick from STZ")
 	; Check all start positions
@@ -2645,7 +2610,7 @@ N_INT300    "s.debug.mode"
 	state = 101
 	;
 .END
-.PROGRAM state4()@26/11/07 17:30 #11775; Put detail to positioner
+.PROGRAM state4()@26/11/07 17:30 #26775; Put detail to positioner
 	CALL log ("State 4: Put detail to positioner")
 	; Check all start positions
 	POINT .current.pos = #HERE
@@ -2670,7 +2635,7 @@ N_INT300    "s.debug.mode"
 	END
 	;
 .END
-.PROGRAM state5()@26/11/07 17:30 #660; Return OT
+.PROGRAM state5()@26/11/07 17:30 #780; Return OT
 	CALL log ("State 5: Return OT")
 	; Check all start positions
 	POINT .current.pos = #HERE
@@ -2690,7 +2655,7 @@ N_INT300    "s.debug.mode"
 	state = 8
 	;
 .END
-.PROGRAM state6()@26/11/07 17:30 #444; Return OPT
+.PROGRAM state6()@26/11/07 17:30 #620; Return OPT
 	;
 	CALL log ("State 6: Return OPT")
 	;
@@ -2723,7 +2688,7 @@ N_INT300    "s.debug.mode"
 	state = 9
 	;
 .END
-.PROGRAM state7()@26/11/07 17:30 #718; Check grippers
+.PROGRAM state7()@26/11/07 17:30 #906; Check grippers
 	CALL log ("State 7: Check if gripper change is required")
 	; We are at home at this point. No cases without home!
 	IF current.gripper <> pg13.gripper THEN
@@ -2741,7 +2706,7 @@ N_INT300    "s.debug.mode"
 	END
 	state = 1
 .END
-.PROGRAM state8()@26/11/07 17:30 #810; Decide if pick next OT
+.PROGRAM state8()@26/11/07 17:30 #1042; Decide if pick next OT
 	CALL log ("State 8: Decide if pick next OT")
 	IF count.ot >= max.count.ot OR SIG (s.cmd.finish) THEN
 		;SIGNAL s.cmd.n.op.stop
@@ -2757,7 +2722,7 @@ N_INT300    "s.debug.mode"
 		state = 1
 	END
 .END
-.PROGRAM state9()@26/11/07 17:30 #613; Decide if pick next OPT
+.PROGRAM state9()@26/11/07 17:30 #754; Decide if pick next OPT
 	CALL log ("State 9: Decide if pick next OPT")
 	;
 	.m1 = count.opt >= max.count.opt OR count.put == detail.count
@@ -2776,7 +2741,7 @@ N_INT300    "s.debug.mode"
 		state = 2
 	END
 .END
-.PROGRAM stz.pick()@26/11/07 17:30 #25730
+.PROGRAM stz.pick()@26/11/07 17:30 #160743
 	;
 	.$temp = "Pick detail from stz (" + $ENCODE (/L, stz.x) + ", " + $ENCODE (/L, stz.y) + ", " + $ENCODE (/L, stz.a) + ")"
 	CALL log (.$temp)
@@ -2857,7 +2822,7 @@ N_INT300    "s.debug.mode"
 	LMOVE #pos.wait
 	;
 .END
-.PROGRAM tcp.callback.pc(.$data[],.data.length)@26/11/07 17:30 #409394
+.PROGRAM tcp.callback.pc(.$data[],.data.length)@26/11/07 17:30 #721431
 	.$temp = "Received " + $ENCODE (.data.length) + " strings:"
 	PRINT tcp.recv.ena: .$temp
 	FOR .i = 1 TO .data.length
@@ -3171,7 +3136,7 @@ N_INT300    "s.debug.mode"
 		TWAIT 0.05
 	END
 .END
-.PROGRAM tcp.log.pc(.$msg)@26/11/07 17:30 #503967
+.PROGRAM tcp.log.pc(.$msg)@26/11/07 17:30 #816006
 	IF NOT SIG (s.tcp.log) THEN
 		RETURN
 	END
@@ -3188,7 +3153,7 @@ N_INT300    "s.debug.mode"
 	IFPWPRINT 3, 1, 1, 9, 10 = $log.entry[124], $log.entry[125], $log.entry[126], $log.entry[127]
 	;
 .END
-.PROGRAM tcp.send.pc(.$data[],.data.length)@26/11/07 17:30 #856386
+.PROGRAM tcp.send.pc(.$data[],.data.length)@26/11/07 17:30 #1005292
 	;
 	.tcp.send.tmo = 5
 	;
@@ -3588,7 +3553,6 @@ N_INT300    "s.debug.mode"
 	;     .robot.no 
 	;     .$robot.str 
 	;     .$cont.str 
-	;   0:errstart.pc:B
 	;   Group:Initialization:11
 	;     11:set.io.pc:B
 	;     11:set.vars.pc:B

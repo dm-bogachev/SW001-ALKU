@@ -501,13 +501,13 @@ input:checked + .slider:before {
     font-size: 14px;
 }
 
-.model-selector-group, .area-group {
+.model-selector-group, .width-group {
     display: flex;
     align-items: center;
     gap: 10px;
 }
 
-.model-selector-group label, .area-group label {
+.model-selector-group label, .width-group label {
     font-weight: 500;
     color: #495057;
     font-size: 14px;
@@ -648,7 +648,7 @@ input:checked + .slider:before {
     box-shadow: 0 2px 8px rgba(255, 179, 71, 0.3);
 }
 
-.area-input {
+.width-input {
     padding: 8px 12px;
     border: 1px solid #ced4da;
     border-radius: 6px;
@@ -658,13 +658,13 @@ input:checked + .slider:before {
     width: 80px;
 }
 
-.area-input:focus {
+.width-input:focus {
     outline: none;
     border-color: #ffb347;
     box-shadow: 0 0 0 3px rgba(255, 179, 71, 0.1);
 }
 
-.change-model-btn, .set-area-btn {
+.change-model-btn, .set-width-btn {
     padding: 8px 16px;
     background: #ffb347;
     color: white;
@@ -676,7 +676,7 @@ input:checked + .slider:before {
     transition: all 0.3s ease;
 }
 
-.change-model-btn:hover, .set-area-btn:hover {
+.change-model-btn:hover, .set-width-btn:hover {
     background: #ff9f1a;
     transform: translateY(-1px);
     box-shadow: 0 2px 8px rgba(255, 179, 71, 0.3);
@@ -777,7 +777,7 @@ input:checked + .slider:before {
     font-weight: 500;
 }
 
-.object-area {
+.object-width {
     background: #28a745;
     color: white;
     padding: 2px 8px;

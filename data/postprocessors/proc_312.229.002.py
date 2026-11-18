@@ -17,77 +17,85 @@ def __check_allowance(point):
         return False
     return True
 
-def __get_allowed_area():
+def __get_allowed_width():
     model_config = Config.get("Models").copy().get("312.229.002")
     #
-    defaultArea = model_config.get("ModelDefaultArea")
-    areaDeviation = model_config.get("ModelAllowedAreaDeviation")
-    minArea = defaultArea - areaDeviation
-    maxArea = defaultArea + areaDeviation
+    defaultWidth = model_config.get("ModelDefaultWidth")
+    widthDeviation = model_config.get("ModelAllowedWidthDeviation")
+    minWidth = defaultWidth - widthDeviation
+    maxWidth = defaultWidth + widthDeviation
     #
-    return minArea, maxArea
-
+    return minWidth, maxWidth
 
 def process(frame, yolo_data):
-    minArea, maxArea = __get_allowed_area()
+    minWidth, maxWidth = __get_allowed_width()
+    allowedWidth = (minWidth + maxWidth)/2
     process_frame = frame.copy()
     draw_frame = frame.copy()
     process_frame = cv2.cvtColor(process_frame, cv2.COLOR_BGR2GRAY)
     result = []
     for data in yolo_data:
+        valid_data = True
+        # BBox data
         x1, y1, x2, y2 = data.xyxy
+        width = abs(x2 - x1)
+        height = abs(y2 - y1)
         center = (x1 + x2) / 2, (y1 + y2) / 2
+        area = width*height
+        
+        # Pick point data
         data.pick_point = center
-        
-        area = abs(x2-x1)*abs(y2-y1)
-
-        # Определяем расширенный прямоугольник для текущей детали (уменьшенный на половину)
-        width = (x2 - x1) / 2
-        height = (y2 - y1) / 2
-        rect_left = int(x1)# - 1.0*width)
-        rect_right = int(x2)# + 1.0*width)
-        rect_top = int(y1+0.2*height)#+0.0*height)
-        rect_bottom = int(y2-0.2*height)#-0.0*height)
-        
-        # Проверяем, есть ли другие детали в этом прямоугольнике
-        has_intersection = False
-        for other_data in yolo_data:
-            if other_data is data:  # Пропускаем саму деталь
-                continue
-            other_x1, other_y1, other_x2, other_y2 = other_data.xyxy
-            # Проверяем пересечение: является ли центр или часть другой детали в нашем прямоугольнике
-            other_center_x = (other_x1 + other_x2) / 2
-            other_center_y = (other_y1 + other_y2) / 2
-            # Проверяем пересечение прямоугольников
-            if not (other_x2 < rect_left or other_x1 > rect_right or 
-                    other_y2 < rect_top or other_y1 > rect_bottom):
-                has_intersection = True
-
-                # Если нет пересечений, добавляем в результат
-        if not has_intersection:
-            cv2.rectangle(draw_frame, (rect_left, rect_top), 
-                        (rect_right, rect_bottom), (255, 255, 0), 2)
-        else:
-            cv2.rectangle(draw_frame, (rect_left, rect_top), 
-                        (rect_right, rect_bottom), (255, 255, 0), 2)
-            continue
-        if not (minArea <= area <= maxArea):
-            logger.debug(f"Area is out of bounds")
-            cv2.rectangle(draw_frame, (int(x1), int(y1)), 
-                        (int(x2), int(y2)), (255, 0, 255), 2)
-            continue
-
-        if not __check_allowance(data.pick_point):
-            continue
-        logger.debug(f"X:{data.pick_point[0]} Y:{data.pick_point[1]} Area: {area}")
-        
         if data.keypoints[0][1] > data.keypoints[1][1]:
             data.pick_angle = 0
             data.pick_point = (data.pick_point[0], data.pick_point[1] - 0.5*abs(data.keypoints[0][1] - data.keypoints[1][1]))
         else:
             data.pick_angle = 180
-            data.pick_point = (data.pick_point[0], data.pick_point[1] + 0.5*abs(data.keypoints[0][1] - data.keypoints[1][1]))
-        logger.debug(f"Угол забора: {data.pick_angle}")
-        result.append(data)
+            data.pick_point = (data.pick_point[0], data.pick_point[1] + 0.4*abs(data.keypoints[0][1] - data.keypoints[1][1]))
+        pp = data.pick_point
+
+        # Pick zone
+        pz_x1 = int(pp[0] - 1.2*width/2)
+        pz_x2 = int(pp[0] + 1.2*width/2)
+        pz_y1 = int(pp[1] - 0.4*height/2)
+        pz_y2 = int(pp[1] + 0.4*height/2)
+
+        # Draw pick zone
+        cv2.rectangle(draw_frame, (pz_x1, pz_y1), 
+                        (pz_x2, pz_y2), (255, 255, 0), 2)
+        
+        # Check intersection
+        intersection = False
+        for _data in yolo_data:
+            if _data is data:  
+                continue
+            _x1, _y1, _x2, _y2 = _data.xyxy
+            if not (_x2 < pz_x1 or _x1 > pz_x2 or 
+                    _y2 < pz_y1 or _y1 > pz_y2):
+                intersection = True
+
+        if intersection:
+            valid_data = False
+            logger.debug(f"В зоне захвата объекта с координатами X:{center[0]} Y:{center[1]} находится другой объект")
+            cv2.rectangle(draw_frame, (int(x1), int(y1)), 
+                        (int(x2), int(y2)), (0, 255, 255), 2)
+
+        if not (minWidth <= width <= maxWidth):
+            logger.debug(f"{minWidth},{width},{maxWidth}, {allowedWidth}")
+            logger.debug(f"Размер объекта с координатами X:{center[0]} Y:{center[1]} за границей диапазона размеров")
+            cv2.rectangle(draw_frame, (int(x1), int(y1)), 
+                        (int(x2), int(y2)), (255, 0, 255), 2)
+            cv2.line(draw_frame, (int(center[0] - allowedWidth/2), int(y2)), 
+                        (int(center[0] + allowedWidth/2), int(y2)), (255, 255, 255), 4)
+            valid_data = False
+        
+        if not __check_allowance(center):
+            logger.debug(f"Объект с координатами X:{center[0]} Y:{center[1]} находится в запрещённой для взятия зоне")
+            cv2.rectangle(draw_frame, (int(x1), int(y1)), 
+                        (int(x2), int(y2)), (0, 255, 255), 2)
+            valid_data = False
+
+        if valid_data:
+            logger.debug(f"Объект с координатами X:{center[0]} Y:{center[1]} A:{data.pick_angle} является кандидатом для захвата")
+            result.append(data)
                 
     return draw_frame, result

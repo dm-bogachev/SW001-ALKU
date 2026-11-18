@@ -289,7 +289,7 @@ function loadDisplaySettings(displayConfig) {
     console.log('Загружаем настройки отображения:', displayConfig);
 
     // Устанавливаем значения переключателей отображения
-    const settings = ['bbox', 'coordinates', 'keypoints', 'labels', 'scores', 'points', 'pick_angle', 'grid', 'area'];
+    const settings = ['bbox', 'coordinates', 'keypoints', 'labels', 'scores', 'points', 'pick_angle', 'grid', 'width'];
     settings.forEach(setting => {
         const checkbox = document.getElementById(`display-${setting}`);
         if (checkbox) {
@@ -330,16 +330,16 @@ function loadModelSettings(modelsConfig, processConfig) {
 
             //
 
-            const areaInput = document.getElementById('area-input');
-            if (areaInput) {
-                areaInput.value = modelsConfig[currentModel].ModelDefaultArea || 0.5;
+            const widthInput = document.getElementById('width-input');
+            if (widthInput) {
+                widthInput.value = modelsConfig[currentModel].ModelDefaultWidth || 0.5;
             }
             
             //
 
             const deviationInput = document.getElementById('deviation-input');
             if (deviationInput) {
-                deviationInput.value = modelsConfig[currentModel].ModelAllowedAreaDeviation || 0.5;
+                deviationInput.value = modelsConfig[currentModel].ModelAllowedWidthDeviation || 0.5;
             }
         }
     }
@@ -431,30 +431,30 @@ function setConfidence() {
         });
 }
 
-function setArea() {
+function setWidth() {
     const modelSelect = document.getElementById('model-select');
-    const areaInput = document.getElementById('area-input');
+    const widthInput = document.getElementById('width-input');
     const selectedModel = modelSelect.value;
-    const area = parseFloat(areaInput.value);
+    const width = parseFloat(widthInput.value);
 
-    console.log(`Устанавливаем area ${area} для модели ${selectedModel}`);
+    console.log(`Устанавливаем значение ширины детали ${width} для модели ${selectedModel}`);
 
-    fetch(`${CV_API_URL}/set_model_area?model_name=${selectedModel}&new_area=${area}`, {
+    fetch(`${CV_API_URL}/set_model_width?model_name=${selectedModel}&new_width=${width}`, {
         method: 'POST'
     })
         .then(response => response.json())
         .then(data => {
             if (data.Status === "OK") {
-                console.log(`Area успешно установленa для модели ${selectedModel}`);
-                alert(`Area успешно установленa: ${area}`);
+                console.log(`Значение ширины детали успешно установлено для модели ${selectedModel}`);
+                alert(`Значение ширины детали успешно установлено: ${width}`);
             } else {
-                console.error(`Ошибка при установке Area:`, data);
-                alert(`Ошибка при установке Area: ${data.Status}`);
+                console.error(`Ошибка при установке значения ширины детали:`, data);
+                alert(`Ошибка при установке значения ширины детали: ${data.Status}`);
             }
         })
         .catch(error => {
-            console.error(`Ошибка при установке Area:`, error);
-            alert(`Ошибка при установке Area`);
+            console.error(`Ошибка при установке значения ширины детали:`, error);
+            alert(`Ошибка при установке значения ширины детали`);
         });
 }
 
@@ -464,7 +464,7 @@ function setDeviation() {
     const selectedModel = modelSelect.value;
     const deviation = parseFloat(deviationInput.value);
 
-    console.log(`Устанавливаем deviation ${deviation} для модели ${selectedModel}`);
+    console.log(`Устанавливаем допустимое отклонение ширины ${deviation} для модели ${selectedModel}`);
 
     fetch(`${CV_API_URL}/set_model_deviation?model_name=${selectedModel}&new_deviation=${deviation}`, {
         method: 'POST'
@@ -472,16 +472,16 @@ function setDeviation() {
         .then(response => response.json())
         .then(data => {
             if (data.Status === "OK") {
-                console.log(`Area успешно установленa для модели ${selectedModel}`);
-                alert(`Area успешно установленa: ${deviation}`);
+                console.log(`Допустимое отклонение ширины успешно установлено для модели ${selectedModel}`);
+                alert(`Допустимое отклонение ширины успешно установлено: ${deviation}`);
             } else {
-                console.error(`Ошибка при установке Area:`, data);
-                alert(`Ошибка при установке Area: ${data.Status}`);
+                console.error(`Ошибка при установке Width:`, data);
+                alert(`Ошибка при установке Width: ${data.Status}`);
             }
         })
         .catch(error => {
-            console.error(`Ошибка при установке Area:`, error);
-            alert(`Ошибка при установке Area`);
+            console.error(`Ошибка при установке допустимого отклонения ширины:`, error);
+            alert(`Ошибка при установке допустимого отклонения ширины`);
         });
 }
 
@@ -888,7 +888,7 @@ async function updateFields()
 {
     console.log("Update fields");
     updateConfidenceInputFromSelect();
-    updateAreaInputFromSelect();
+    updateWidthInputFromSelect();
     updateDeviationInputFromSelect();
 }
 
@@ -932,9 +932,9 @@ async function updateConfidenceInputFromSelect() {
     input.value = '0.5';
 }
 
-async function updateAreaInputFromSelect() {
+async function updateWidthInputFromSelect() {
     sel1 = document.getElementById('model-select');
-    input1 = document.getElementById('area-input');
+    input1 = document.getElementById('width-input');
     if (!sel1 || !input1) return;
 
     opt1 = sel1.options[sel1.selectedIndex];
@@ -951,19 +951,19 @@ async function updateAreaInputFromSelect() {
         response = await fetch(`${WEBUI_API_URL}/config`);
         if (response.ok) {
             config = await response.json();
-            if (config.Models && config.Models[selectedModel1] && typeof config.Models[selectedModel1].ModelDefaultArea !== 'undefined') {
-                threshold = parseInt(config.Models[selectedModel1].ModelDefaultArea);
+            if (config.Models && config.Models[selectedModel1] && typeof config.Models[selectedModel1].ModelDefaultWidth !== 'undefined') {
+                threshold = parseInt(config.Models[selectedModel1].ModelDefaultWidth);
                 input1.value = threshold;
                 // cache on option for faster future selection changes
                 //if (opt) opt.dataset.threshold = threshold;
-                console.log("Area: ",  threshold)
+                console.log("Width: ",  threshold)
                 return;
             }
         } else {
             console.error('Failed to fetch config:', response.status);
         }
     } catch (err) {
-        console.error('Error loading config for area:', err);
+        console.error('Error loading config for width:', err);
     }
 
     // Fallback default
@@ -983,8 +983,8 @@ async function updateDeviationInputFromSelect() {
         response = await fetch(`${WEBUI_API_URL}/config`);
         if (response.ok) {
             config = await response.json();
-            if (config.Models && config.Models[selectedModel3] && typeof config.Models[selectedModel3].ModelAllowedAreaDeviation !== 'undefined') {
-                threshold = parseInt(config.Models[selectedModel3].ModelAllowedAreaDeviation);
+            if (config.Models && config.Models[selectedModel3] && typeof config.Models[selectedModel3].ModelAllowedWidthDeviation !== 'undefined') {
+                threshold = parseInt(config.Models[selectedModel3].ModelAllowedWidthDeviation);
                 input3.value = threshold;
                 // cache on option for faster future selection changes
                 console.log("Deviation: ",  threshold)
@@ -995,7 +995,7 @@ async function updateDeviationInputFromSelect() {
             console.error('Failed to fetch config:', response.status);
         }
     } catch (err) {
-        console.error('Error loading config for area:', err);
+        console.error('Error loading config for width:', err);
     }
 
     // Fallback default

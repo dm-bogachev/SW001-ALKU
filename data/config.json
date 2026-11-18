@@ -6,88 +6,108 @@
     "Models": {
         "440.00.026": {
             "ModelName": "440.00.026",
-            "ModelFileName": "440.00.026.v2i.yolov8_m.pt",
-            "ConfidenceThreshold": "0.86",
+            "ModelFileName": "440.00.026.v3i.yolov8_m.pt",
+            "ConfidenceThreshold": "0.4",
             "ModelType": "yolo-pose",
             "ModelProcessor": "proc_440.00.026.py",
-            "ModelDefaultArea": 25000,
-            "ModelAllowedAreaDeviation": 4000,
+            "ModelDefaultWidth": 100,
+            "ModelAllowedWidthDeviation": 15,
+            "StartSpeed": "SLOW",
             "ShakeSequence": [
                 "SLOW",
+                "SLOW",
                 "FAST",
-                "FAST"
+                "DRIBBLE_FAST",
+                "SLOW",
+                "DRIBBLE_FAST",
+                "SLOW"
             ]
         },
         "312.229.002": {
             "ModelName": "312.229.002",
-            "ModelFileName": "model_312.229.002.pt",
-            "ConfidenceThreshold": "0.8",
+            "ModelFileName": "312.229.002.v2i.yolov8_m.pt",
+            "ConfidenceThreshold": "0.7",
             "ModelType": "yolo-pose",
             "ModelProcessor": "proc_312.229.002.py",
-            "ModelDefaultArea": 39000,
-            "ModelAllowedAreaDeviation": 10000,
+            "ModelDefaultWidth": 160,
+            "ModelAllowedWidthDeviation": 30,
+            "StartSpeed": "SLOW",
             "ShakeSequence": [
                 "SLOW",
                 "FAST",
                 "FAST",
-                "FAST",
-                "FAST"
+                "DRIBBLE_FAST",
+                "SLOW"
             ]
         },
         "312.229.001": {
             "ModelName": "312.229.001",
             "ModelFileName": "312.229.001.v6i.yolov11_m.pt",
-            "ConfidenceThreshold": "0.6",
+            "ConfidenceThreshold": "0.7",
             "ModelType": "yolo-detect",
             "ModelProcessor": "proc_312.229.001.py",
-            "ModelDefaultArea": 20000,
-            "ModelAllowedAreaDeviation": 4000,
+            "ModelDefaultWidth": 130,
+            "ModelAllowedWidthDeviation": 30,
+            "StartSpeed": "SLOW",
             "ShakeSequence": [
                 "SLOW",
                 "FAST",
-                "FAST"
+                "FAST",
+                "DRIBBLE_FAST",
+                "SLOW"
             ]
         },
         "0401.17.02.023": {
             "ModelName": "0401.17.02.023",
-            "ModelFileName": "0401.17.02.023.v5i.yolov8_m.pt",
-            "ConfidenceThreshold": "0.76",
+            "ModelFileName": "0401.17.02.023.v6i.yolov8_m.pt",
+            "ConfidenceThreshold": "0.5",
             "ModelType": "yolo-pose",
             "ModelProcessor": "proc_0401.17.02.023.py",
-            "ModelDefaultArea": 48000,
-            "ModelAllowedAreaDeviation": 8000,
+            "ModelDefaultWidth": 120,
+            "ModelAllowedWidthDeviation": 24,
+            "StartSpeed": "SLOW",
             "ShakeSequence": [
                 "SLOW",
+                "SLOW",
                 "FAST",
-                "FAST"
+                "DRIBBLE_FAST",
+                "SLOW",
+                "DRIBBLE_FAST",
+                "SLOW"
             ]
         },
         "0401.28.02.063": {
             "ModelName": "0401.28.02.063",
-            "ModelFileName": "0401.28.02.063.v2i.yolov8_m.pt",
-            "ConfidenceThreshold": "0.75",
+            "ModelFileName": "0401.28.02.063.v3i.yolov8_m.pt",
+            "ConfidenceThreshold": "0.6",
             "ModelType": "yolo-pose",
             "ModelProcessor": "proc_0401.28.02.063.py",
-            "ModelDefaultArea": 40000,
-            "ModelAllowedAreaDeviation": 12000,
+            "ModelDefaultWidth": 110,
+            "ModelAllowedWidthDeviation": 20,
+            "StartSpeed": "SLOW",
             "ShakeSequence": [
                 "SLOW",
+                "SLOW",
                 "FAST",
-                "FAST"
+                "DRIBBLE_FAST",
+                "SLOW",
+                "DRIBBLE_FAST",
+                "SLOW"
             ]
         },
         "440.00.111": {
             "ModelName": "440.00.111",
-            "ModelFileName": "440.00.111.v2i.yolov8_m.pt",
-            "ConfidenceThreshold": "0.7",
+            "ModelFileName": "440.00.111.v3i.yolov8_m.pt",
+            "ConfidenceThreshold": "0.3",
             "ModelType": "yolo-pose",
             "ModelProcessor": "proc_440.00.111.py",
-            "ModelDefaultArea": 17000,
-            "ModelAllowedAreaDeviation": 3000,
+            "ModelDefaultWidth": 115,
+            "ModelAllowedWidthDeviation": 15,
+            "StartSpeed": "SLOW",
             "ShakeSequence": [
                 "SLOW",
                 "SLOW",
-                "SLOW",
+                "FAST",
                 "SLOW",
                 "SLOW"
             ]
@@ -100,9 +120,9 @@
         "LABELS": false,
         "SCORES": true,
         "POINTS": true,
-        "PICK_ANGLE": true,
+        "PICK_ANGLE": false,
         "GRID": false,
-        "AREA": true
+        "WIDTH": true
     },
     "Markers": {
         "MarkersXDistance": 489.5,
@@ -120,11 +140,11 @@
         "IPAddress": "192.168.7.101",
         "DeviceName": "MV-CH120-20GM",
         "FrameInterval": 0.0,
-        "ExposureValue": 4000
+        "ExposureValue": 3500
     },
     "Process": {
         "ProcessingDelay": 0.0,
-        "LastModel": "312.229.002",
+        "LastModel": "312.229.001",
         "FirstObjectCriteria": "Probability"
     },
     "IO": {

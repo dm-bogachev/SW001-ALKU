@@ -1114,96 +1114,96 @@ N_INT300    "s.debug.mode"
 	;
 .END
 .PROGRAM opt.return(.i,.j)@26/11/07 17:30 #1199
-	IF FALSE THEN
-		.i = hmi.opt.i
-		.j = hmi.opt.j
-	END
-	.$temp = "Return OPT with (i: " + $ENCODE (/L, .i) + ", j: " + $ENCODE (/L, .j) + ")"
-	CALL log (.$temp)
-	;
-	ACCURACY 100 ALWAYS
-	SPEED 10 ALWAYS
-	ACCEL 5 ALWAYS
-	DECEL 5 ALWAYS
-	;
-	PULSE release.tare
-	;
-	TOOL tool.pin
-	;
-	POINT .post.tare.in = #opt.take.safe
-	DECOMPOSE .ct1[1] = .post.tare.in
-	IF .i == 3 AND .j >= 9 THEN
-		DECOMPOSE .ct2[1] = opt.point[.i, 9]
-	ELSE
-		DECOMPOSE .ct2[1] = opt.point[.i, .j]
-	END
-	POINT .mid.point = TRANS (.ct2[1], .ct1[2], .ct2[3], .ct1[4], .ct1[5], .ct1[6])
-	POINT .put.stz = #opt.put
-	;
-	ACCURACY 20
-	BREAK
-	IF SIG (do.home) THEN
-		LMOVE #opt.take.safe
-		LMOVE #opt.put.safe
-		LMOVE #stz.wait
-	END
-	LMOVE .put.stz + TRANS (, , 50)
-	;
-	CALL log ("Wait pneumatics open")
-	WHILE NOT SIG (s.cmd.pneum.op) DO
-		$action = "WaitPneumaticOpen"
-		TWAIT 0.5
-	END
-	SIGNAL -s.cmd.pneum.op
-	;
-	ACCURACY 0.02
-	SPEED 50 MM/S
-	LMOVE #opt.put
-	BREAK
-	PULSE capture.tare
-	TWAIT 0.5
-	;
-	ACCURACY 0.02
-	SPEED 50 MM/S
-	LMOVE .put.stz + TRANS (50)
-	;SPEED 80 ALWAYS
-	;ACCURACY 5
-	LMOVE #opt.put.safe
-	LMOVE #ot.put.safe
-	;
-	BREAK
-	SIGNAL rs13.lock.zone
-	DELAY 0.2
-	BREAK
-	CALL log ("Check if zone is occupied")
-	SWAIT -rs7.locked.zone
-	CALL log ("Zone is free")
-	;
-	SWAIT -rs7.locked.zone
-	LMOVE #opt.take.safe
-	LMOVE .mid.point
-	LMOVE opt.point[.i, .j] + TRANS (20, 0, 500)
-	;
-	ACCURACY 0.02
-	SPEED 100 MM/S
-	LMOVE opt.point[.i, .j] + TRANS (20)
-	BREAK
-	;
-	ACCURACY 0.02
-	SPEED 20 MM/S
-	LMOVE opt.point[.i, .j]
-	BREAK
-	PULSE release.tare
-	TWAIT 0.5
-	SIGNAL -s.opt.placed
-	;
-	ACCURACY 30
-	LMOVE opt.point[.i, .j] + TRANS (0, 0, 50)
-	LMOVE opt.point[.i, .j] + TRANS (0, 0, 200)
-	;LMOVE .mid.point
-	;
-	ACCEL 100 ALWAYS
-	DECEL 100 ALWAYS
+  IF FALSE THEN
+    .i = hmi.opt.i
+    .j = hmi.opt.j
+  END
+  .$temp = "Return OPT with (i: " + $ENCODE (/L, .i) + ", j: " + $ENCODE (/L, .j) + ")"
+  CALL log (.$temp)
+  ;
+  ACCURACY 100 ALWAYS
+  SPEED 10 ALWAYS
+  ACCEL 5 ALWAYS
+  DECEL 5 ALWAYS
+  ;
+  PULSE release.tare
+  ;
+  TOOL tool.pin
+  ;
+  POINT .post.tare.in = #opt.take.safe
+  DECOMPOSE .ct1[1] = .post.tare.in
+  IF .i == 3 AND .j >= 9 THEN
+    DECOMPOSE .ct2[1] = opt.point[.i, 9]
+  ELSE
+    DECOMPOSE .ct2[1] = opt.point[.i, .j]
+  END
+  POINT .mid.point = TRANS (.ct2[1], .ct1[2], .ct2[3], .ct1[4], .ct1[5], .ct1[6])
+  POINT .put.stz = #opt.put[.i, .j]
+  ;
+  ACCURACY 20
+  BREAK
+  IF SIG (do.home) THEN
+    LMOVE #opt.take.safe
+    LMOVE #opt.put.safe
+    LMOVE #stz.wait
+  END
+  LMOVE .put.stz + TRANS (, , 50)
+  ;
+  CALL log ("Wait pneumatics open")
+  WHILE NOT SIG (s.cmd.pneum.op) DO
+    $action = "WaitPneumaticOpen"
+    TWAIT 0.5
+  END
+  SIGNAL -s.cmd.pneum.op
+  ;
+  ACCURACY 0.02
+  SPEED 50 MM/S
+  LMOVE #opt.put[.i, .j]
+  BREAK
+  PULSE capture.tare
+  TWAIT 0.5
+  ;
+  ACCURACY 0.02
+  SPEED 50 MM/S
+  LMOVE .put.stz + TRANS (50)
+  ;SPEED 80 ALWAYS
+  ;ACCURACY 5
+  LMOVE #opt.put.safe
+  LMOVE #ot.put.safe
+  ;
+  BREAK
+  SIGNAL rs13.lock.zone
+  DELAY 0.2
+  BREAK
+  CALL log ("Check if zone is occupied")
+  SWAIT -rs7.locked.zone
+  CALL log ("Zone is free")
+  ;
+  SWAIT -rs7.locked.zone
+  LMOVE #opt.take.safe
+  LMOVE .mid.point
+  LMOVE opt.point[.i, .j] + TRANS (20, 0, 500)
+  ;
+  ACCURACY 0.02
+  SPEED 100 MM/S
+  LMOVE opt.point[.i, .j] + TRANS (20)
+  BREAK
+  ;
+  ACCURACY 0.02
+  SPEED 20 MM/S
+  LMOVE opt.point[.i, .j]
+  BREAK
+  PULSE release.tare
+  TWAIT 0.5
+  SIGNAL -s.opt.placed
+  ;
+  ACCURACY 30
+  LMOVE opt.point[.i, .j] + TRANS (0, 0, 50)
+  LMOVE opt.point[.i, .j] + TRANS (0, 0, 200)
+  ;LMOVE .mid.point
+  ;
+  ACCEL 100 ALWAYS
+  DECEL 100 ALWAYS
 .END
 .PROGRAM opt.table(.id)@26/11/07 17:30 #643
 	;
@@ -1339,213 +1339,213 @@ N_INT300    "s.debug.mode"
 	;
 .END
 .PROGRAM opt.take(.i,.j)@26/11/07 17:30 #2402
-	;
-	BREAK
-	SIGNAL rs13.lock.zone
-	DELAY 0.2
-	BREAK
-	CALL log ("Check if zone is occupied")
-	SWAIT -rs7.locked.zone
-	CALL log ("Zone is free")
-	;
-	IF FALSE THEN
-		.i = hmi.opt.i
-		.j = hmi.opt.j
-	END
-	.$temp = "Take OPT from (i: " + $ENCODE (/L, .i) + ", j: " + $ENCODE (/L, .j) + ")"
-	CALL log (.$temp)
-	; Set default motion parameters
-	TOOL tool.pin
-	SPEED 10 ALWAYS
-	ACCURACY 100 ALWAYS
-	ACCEL 5 ALWAYS
-	DECEL 5 ALWAYS
-	; Calculate points
-	POINT .opt.take.safe = #opt.take.safe
-	DECOMPOSE .ct1[1] = .opt.take.safe
-	IF .i == 3 AND .j >= 9 THEN
-		DECOMPOSE .ct2[1] = opt.point[.i, 8]
-	ELSE
-		DECOMPOSE .ct2[1] = opt.point[.i, .j]
-	END
-	POINT .mid.point = TRANS (.ct2[1], .ct1[2], .ct2[3], .ct1[4], .ct1[5], .ct1[6])
-	POINT .opt.put = #opt.put
-	; Release tare
-	PULSE release.tare
-	; Motion
-	;
-	; Move before OPT
-	LMOVE opt.point[.i, .j] + TRANS (0, 0, 200)
-	ACCURACY 5
-	LMOVE opt.point[.i, .j] + TRANS (0, 0, 50)
-	; Move to OPT
-	ACCURACY 0.02
-	SPEED 50 MM/S
-	LMOVE opt.point[.i, .j]
-	BREAK
-	PULSE capture.tare
-	count.opt = count.opt + 1
-	TWAIT 0.5
-	; Move up
-	ACCURACY 0.02
-	SPEED 50 MM/S
-	ACCEL 50
-	LMOVE opt.point[.i, .j] + TRANS (20)
-	; Move to sensor position
-	SPEED 50 MM/S
-	ACCURACY 0
-	LMOVE opt.point[.i, .j] + TRANS (20, 0, 100)
-	BREAK
-	; Wait sensor
-	CALL log ("Wait OPT sensor state")
-	WHILE NOT SIG (s.stock.opt.ok) AND NOT SIG (s.stock.opt.ng) DO
-		$action = "WaitInStockerSensor"
-		TWAIT 0.5
-	END
-	CALL log (.$temp)
-	;SWAIT -rs7.locked.zone
-	IF SIG (s.stock.opt.ok) THEN
-		CALL log ("OPT exists, continue")
-		SIGNAL -s.stock.opt.ok
-		LMOVE opt.point[.i, .j] + TRANS (20, 0, 500)
-		; Move to aux point
-		LMOVE .mid.point
-		LMOVE #opt.take.safe
-		LMOVE #opt.put.safe
-		;
-		BREAK
-		SIGNAL -rs13.lock.zone
-		;
-		; Move before put point
-		ACCURACY 20
-		LMOVE .opt.put + TRANS (50)
-		ACCURACY 1
-		LMOVE .opt.put + TRANS (20)
-		BREAK
-		; Move to put point
-		ACCURACY 0.02
-		SPEED 20 MM/S
-		LMOVE #opt.put
-		BREAK
-		PULSE release.tare
-		TWAIT 0.5
-		SIGNAL s.opt.placed
-		; Move out of put point
-		ACCURACY 30
-		LMOVE .opt.put + TRANS (, , 50)
-		BREAK
-		; Wait pneumatics
-		CALL log ("Wait pneumatics close")
-		WHILE NOT SIG (s.cmd.pneum.cl) DO
-			$action = "WaitPneumaticClose"
-			TWAIT 0.5
-		END
-		CALL log (.$temp)
-		; Move out of put point
-		LMOVE #opt.put.safe
-		CALL opt.push
-		LMOVE #opt.put.safe
-		SPEED 500 MM/S
-		LMOVE #stz.wait
-		;POINT #current.pos = #stz.wait
-	ELSE
-		CALL log ("OPT do not exists, move to next")
-		SIGNAL -s.stock.opt.ng
-		ACCURACY 0.02
-		SPEED 50 MM/S
-		LMOVE opt.point[.i, .j] + TRANS (20)
-		ACCURACY 0.02
-		SPEED 50 MM/S
-		LMOVE opt.point[.i, .j]
-		BREAK
-		PULSE release.tare
-		TWAIT 0.5
-		ACCURACY 5
-		LMOVE opt.point[.i, .j] + TRANS (0, 0, 50)
-		LMOVE opt.point[.i, .j] + TRANS (0, 0, 200)
-		;  POINT #current.pos = #HERE
-	END
-	ACCEL 100 ALWAYS
-	DECEL 100 ALWAYS
+  ;
+  BREAK
+  SIGNAL rs13.lock.zone
+  DELAY 0.2
+  BREAK
+  CALL log ("Check if zone is occupied")
+  SWAIT -rs7.locked.zone
+  CALL log ("Zone is free")
+  ;
+  IF FALSE THEN
+    .i = hmi.opt.i
+    .j = hmi.opt.j
+  END
+  .$temp = "Take OPT from (i: " + $ENCODE (/L, .i) + ", j: " + $ENCODE (/L, .j) + ")"
+  CALL log (.$temp)
+  ; Set default motion parameters
+  TOOL tool.pin
+  SPEED 10 ALWAYS
+  ACCURACY 100 ALWAYS
+  ACCEL 5 ALWAYS
+  DECEL 5 ALWAYS
+  ; Calculate points
+  POINT .opt.take.safe = #opt.take.safe
+  DECOMPOSE .ct1[1] = .opt.take.safe
+  IF .i == 3 AND .j >= 9 THEN
+    DECOMPOSE .ct2[1] = opt.point[.i, 8]
+  ELSE
+    DECOMPOSE .ct2[1] = opt.point[.i, .j]
+  END
+  POINT .mid.point = TRANS (.ct2[1], .ct1[2], .ct2[3], .ct1[4], .ct1[5], .ct1[6])
+  POINT .opt.put = #opt.put
+  ; Release tare
+  PULSE release.tare
+  ; Motion
+  ;
+  ; Move before OPT
+  LMOVE opt.point[.i, .j] + TRANS (0, 0, 200)
+  ACCURACY 5
+  LMOVE opt.point[.i, .j] + TRANS (0, 0, 50)
+  ; Move to OPT
+  ACCURACY 0.02
+  SPEED 50 MM/S
+  LMOVE opt.point[.i, .j]
+  BREAK
+  PULSE capture.tare
+  count.opt = count.opt + 1
+  TWAIT 0.5
+  ; Move up
+  ACCURACY 0.02
+  SPEED 50 MM/S
+  ACCEL 50
+  LMOVE opt.point[.i, .j] + TRANS (20)
+  ; Move to sensor position
+  SPEED 50 MM/S
+  ACCURACY 0
+  LMOVE opt.point[.i, .j] + TRANS (20, 0, 100)
+  BREAK
+  ; Wait sensor
+  CALL log ("Wait OPT sensor state")
+  WHILE NOT SIG (s.stock.opt.ok) AND NOT SIG (s.stock.opt.ng) DO
+    $action = "WaitInStockerSensor"
+    TWAIT 0.5
+  END
+  CALL log (.$temp)
+  ;SWAIT -rs7.locked.zone
+  IF SIG (s.stock.opt.ok) THEN
+    CALL log ("OPT exists, continue")
+    SIGNAL -s.stock.opt.ok
+    LMOVE opt.point[.i, .j] + TRANS (20, 0, 500)
+    ; Move to aux point
+    LMOVE .mid.point
+    LMOVE #opt.take.safe
+    LMOVE #opt.put.safe
+    ;
+    BREAK
+    SIGNAL -rs13.lock.zone
+    ;
+    ; Move before put point
+    ACCURACY 20
+    LMOVE .opt.put + TRANS (50)
+    ACCURACY 1
+    LMOVE .opt.put + TRANS (20)
+    BREAK
+    ; Move to put point
+    ACCURACY 0.02
+    SPEED 20 MM/S
+    LMOVE #opt.put[.i, .j]
+    BREAK
+    PULSE release.tare
+    TWAIT 0.5
+    SIGNAL s.opt.placed
+    ; Move out of put point
+    ACCURACY 30
+    LMOVE .opt.put + TRANS (, , 50)
+    BREAK
+    ; Wait pneumatics
+    CALL log ("Wait pneumatics close")
+    WHILE NOT SIG (s.cmd.pneum.cl) DO
+      $action = "WaitPneumaticClose"
+      TWAIT 0.5
+    END
+    CALL log (.$temp)
+    ; Move out of put point
+    LMOVE #opt.put.safe
+    CALL opt.push
+    LMOVE #opt.put.safe
+    SPEED 500 MM/S
+    LMOVE #stz.wait
+    ;POINT #current.pos = #stz.wait
+  ELSE
+    CALL log ("OPT do not exists, move to next")
+    SIGNAL -s.stock.opt.ng
+    ACCURACY 0.02
+    SPEED 50 MM/S
+    LMOVE opt.point[.i, .j] + TRANS (20)
+    ACCURACY 0.02
+    SPEED 50 MM/S
+    LMOVE opt.point[.i, .j]
+    BREAK
+    PULSE release.tare
+    TWAIT 0.5
+    ACCURACY 5
+    LMOVE opt.point[.i, .j] + TRANS (0, 0, 50)
+    LMOVE opt.point[.i, .j] + TRANS (0, 0, 200)
+    ;  POINT #current.pos = #HERE
+  END
+  ACCEL 100 ALWAYS
+  DECEL 100 ALWAYS
 .END
 .PROGRAM ot.return(.i,.j)@26/11/07 17:30 #1300
-	IF FALSE THEN
-		.i = hmi.ot.i
-		.j = hmi.ot.j
-	END
-	.$temp = "Return OT with (i: " + $ENCODE (/L, .i) + ", j: " + $ENCODE (/L, .j) + ")"
-	CALL log (.$temp)
-	;
-	ACCURACY 100 ALWAYS
-	ACCEL 5 ALWAYS
-	DECEL 5 ALWAYS
-	SPEED 10 ALWAYS
-	;
-	PULSE release.tare
-	;
-	TOOL tool.pin
-	;
-	POINT .post.tare.out = #ot.take.safe
-	DECOMPOSE .ct1[1] = .post.tare.out
-	IF .i == 3 AND .j >= 10 THEN
-		DECOMPOSE .ct2[1] = ot.point[.i, 9]
-	ELSE
-		DECOMPOSE .ct2[1] = ot.point[.i, .j]
-	END
-	POINT .mid.point = TRANS (.ct2[1], .ct1[2], .ct2[3], .ct1[4], .ct1[5], .ct1[6])
-	POINT .put.outpal = #ot.put
-	;
-	LMOVE #pos.wait
-	ACCURACY 20
-	;
-	BREAK
-	SIGNAL rs13.lock.zone
-	DELAY 0.2
-	BREAK
-	CALL log ("Check if zone is occupied")
-	SWAIT -rs7.locked.zone
-	CALL log ("Zone is free")
-	;
-	LMOVE .put.outpal + TRANS (, , 50)
-	BREAK
-	;
-	ACCURACY 0.02
-	SPEED 50 MM/S
-	LMOVE #ot.put
-	BREAK
-	;
-	PULSE capture.tare
-	TWAIT 0.5
-	;
-	ACCURACY 0.02
-	SPEED 100 MM/S
-	LMOVE .put.outpal + TRANS (150)
-	;
-	LMOVE #ot.take.safe
-	;
-	BREAK
-	SIGNAL -rs13.lock.zone
-	;
-	LMOVE ot.point[.i, .j] + TRANS (20, 0, 400)
-	;
-	ACCURACY 0.02
-	SPEED 50 MM/S
-	LMOVE ot.point[.i, .j] + TRANS (20)
-	BREAK
-	;
-	ACCURACY 0.02
-	SPEED 20 MM/S
-	LMOVE ot.point[.i, .j]
-	BREAK
-	PULSE release.tare
-	TWAIT 0.5
-	SIGNAL -s.ot.placed
-	;
-	ACCURACY 10
-	LMOVE ot.point[.i, .j] + TRANS (0, 0, 50)
-	;
-	ACCEL 100 ALWAYS
-	DECEL 100 ALWAYS
+  IF FALSE THEN
+    .i = hmi.ot.i
+    .j = hmi.ot.j
+  END
+  .$temp = "Return OT with (i: " + $ENCODE (/L, .i) + ", j: " + $ENCODE (/L, .j) + ")"
+  CALL log (.$temp)
+  ;
+  ACCURACY 100 ALWAYS
+  ACCEL 5 ALWAYS
+  DECEL 5 ALWAYS
+  SPEED 10 ALWAYS
+  ;
+  PULSE release.tare
+  ;
+  TOOL tool.pin
+  ;
+  POINT .post.tare.out = #ot.take.safe
+  DECOMPOSE .ct1[1] = .post.tare.out
+  IF .i == 3 AND .j >= 10 THEN
+    DECOMPOSE .ct2[1] = ot.point[.i, 9]
+  ELSE
+    DECOMPOSE .ct2[1] = ot.point[.i, .j]
+  END
+  POINT .mid.point = TRANS (.ct2[1], .ct1[2], .ct2[3], .ct1[4], .ct1[5], .ct1[6])
+  POINT .put.outpal = #ot.put[.i, .j]
+  ;
+  LMOVE #pos.wait
+  ACCURACY 20
+  ;
+  BREAK
+  SIGNAL rs13.lock.zone
+  DELAY 0.2
+  BREAK
+  CALL log ("Check if zone is occupied")
+  SWAIT -rs7.locked.zone
+  CALL log ("Zone is free")
+  ;
+  LMOVE .put.outpal + TRANS (, , 50)
+  BREAK
+  ;
+  ACCURACY 0.02
+  SPEED 50 MM/S
+  LMOVE #ot.put[.i, .j]
+  BREAK
+  ;
+  PULSE capture.tare
+  TWAIT 0.5
+  ;
+  ACCURACY 0.02
+  SPEED 100 MM/S
+  LMOVE .put.outpal + TRANS (150)
+  ;
+  LMOVE #ot.take.safe
+  ;
+  BREAK
+  SIGNAL -rs13.lock.zone
+  ;
+  LMOVE ot.point[.i, .j] + TRANS (20, 0, 400)
+  ;
+  ACCURACY 0.02
+  SPEED 50 MM/S
+  LMOVE ot.point[.i, .j] + TRANS (20)
+  BREAK
+  ;
+  ACCURACY 0.02
+  SPEED 20 MM/S
+  LMOVE ot.point[.i, .j]
+  BREAK
+  PULSE release.tare
+  TWAIT 0.5
+  SIGNAL -s.ot.placed
+  ;
+  ACCURACY 10
+  LMOVE ot.point[.i, .j] + TRANS (0, 0, 50)
+  ;
+  ACCEL 100 ALWAYS
+  DECEL 100 ALWAYS
 .END
 .PROGRAM ot.table(.id)@26/11/07 17:30 #641
 	;
@@ -1726,133 +1726,133 @@ N_INT300    "s.debug.mode"
 	;
 .END
 .PROGRAM ot.take(.i,.j)@26/11/07 17:30 #2249
-	; Start from step 3 to manual check
-	IF FALSE THEN
-		.i = hmi.st.out.i
-		.j = hmi.st.out.j
-	END
-	; Log info
-	.$temp = "Take OT from (i: " + $ENCODE (/L, .i) + ", j: " + $ENCODE (/L, .j) + ")"
-	CALL log (.$temp)
-	; Set default motion parameters
-	TOOL tool.pin
-	SPEED 10 ALWAYS
-	ACCURACY 100 ALWAYS
-	ACCEL 5 ALWAYS
-	DECEL 5 ALWAYS
-	; Calculate points
-	POINT .ot.take.safe = #ot.take.safe
-	DECOMPOSE .ct1[1] = .ot.take.safe
-	IF .i == 3 AND .j >= 10 THEN
-		DECOMPOSE .ct2[1] = ot.point[.i, 9]
-	ELSE
-		DECOMPOSE .ct2[1] = ot.point[.i, .j]
-	END
-	;DECOMPOSE .ct2[1] = ot.point[.i, .j]
-	POINT .mid.point = TRANS (.ct1[1], .ct2[2], .ct2[3], .ct1[4], .ct1[5], .ct1[6])
-	POINT .ot.put = #ot.put
-	; Release tare
-	PULSE release.tare
-	; Motion
-	; Ensure that we are in home position!!!
-	;
-	; Move before OT
-	LMOVE ot.point[.i, .j] + TRANS (0, 0, 200)
-	ACCURACY 5
-	LMOVE ot.point[.i, .j] + TRANS (0, 0, 50)
-	; Move to OT
-	ACCURACY 0.02
-	SPEED 50 MM/S
-	LMOVE ot.point[.i, .j]
-	BREAK
-	PULSE capture.tare
-	TWAIT 0.5
-	count.ot = count.ot + 1
-	BITS rs13.ot.number[0], 8 = count.ot
-	; Move up
-	ACCURACY 0.02
-	SPEED 50 MM/S
-	LMOVE ot.point[.i, .j] + TRANS (20)
-	; Move to sensor position
-	ACCURACY 0.02
-	SPEED 100 MM/S
-	LMOVE ot.point[.i, .j] + TRANS (20, 0, 100)
-	BREAK
-	; Wait sensor
-	CALL log ("Wait OT sensor state")
-	WHILE NOT SIG (s.stock.ot.ok) AND NOT SIG (s.stock.ot.ng) DO
-		$action = "WaitOutStockerSensor"
-		TWAIT 0.5
-	END
-	CALL log (.$temp)
-	; Check if OK
-	IF SIG (s.stock.ot.ok) THEN
-		CALL log ("OT exists, continue")
-		SIGNAL -s.stock.ot.ok
-		LMOVE ot.point[.i, .j] + TRANS (20, 0, 400)
-		LMOVE .mid.point
-		LMOVE #ot.take.safe
-		; Move to aux point
-		LMOVE #ot.put.safe
-		;
-		BREAK
-		SIGNAL rs13.lock.zone
-		DELAY 0.2
-		BREAK
-		CALL log ("Check if zone is occupied")
-		SWAIT -rs7.locked.zone
-		CALL log ("Zone is free")
-		; Move before put point
-		ACCURACY 20
-		LMOVE .ot.put + TRANS (100)
-		; Move to put point
-		ACCURACY 0.02
-		SPEED 20 MM/S
-		LMOVE #ot.put
-		BREAK
-		PULSE release.tare
-		TWAIT 0.5
-		SIGNAL s.ot.placed
-		; Move out of put point
-		ACCURACY 30
-		LMOVE .ot.put + TRANS (, , 100)
-		;LMOVE #ot.put.safe
-		LMOVE #pos.wait
-		;
-		BREAK
-		SIGNAL -rs13.lock.zone
-		;
-		BREAK
-		WHILE SIG (rs7.tare.chg) DO
-			PULSE rs13.tare.ack, 5
-			TWAIT 1
-		END
-		BREAK
-		DELAY 5
-		BREAK
-		;
-		;  POINT #current.pos = #pos.wait
-	ELSE
-		CALL log ("OT do not exists, move to next")
-		SIGNAL -s.stock.ot.ng
-		ACCURACY 0.02
-		SPEED 50 MM/S
-		LMOVE ot.point[.i, .j] + TRANS (20)
-		ACCURACY 0.02
-		SPEED 50 MM/S
-		LMOVE ot.point[.i, .j]
-		BREAK
-		PULSE release.tare
-		TWAIT 0.5
-		ACCURACY 5
-		LMOVE ot.point[.i, .j] + TRANS (0, 0, 50)
-		LMOVE ot.point[.i, .j] + TRANS (0, 0, 200)
-		;  POINT #current.pos = #HERE
-	END
-	;
-	ACCEL 100 ALWAYS
-	DECEL 100 ALWAYS
-	;
+  ; Start from step 3 to manual check
+  IF FALSE THEN
+    .i = hmi.st.out.i
+    .j = hmi.st.out.j
+  END
+  ; Log info
+  .$temp = "Take OT from (i: " + $ENCODE (/L, .i) + ", j: " + $ENCODE (/L, .j) + ")"
+  CALL log (.$temp)
+  ; Set default motion parameters
+  TOOL tool.pin
+  SPEED 10 ALWAYS
+  ACCURACY 100 ALWAYS
+  ACCEL 5 ALWAYS
+  DECEL 5 ALWAYS
+  ; Calculate points
+  POINT .ot.take.safe = #ot.take.safe
+  DECOMPOSE .ct1[1] = .ot.take.safe
+  IF .i == 3 AND .j >= 10 THEN
+    DECOMPOSE .ct2[1] = ot.point[.i, 9]
+  ELSE
+    DECOMPOSE .ct2[1] = ot.point[.i, .j]
+  END
+  ;DECOMPOSE .ct2[1] = ot.point[.i, .j]
+  POINT .mid.point = TRANS (.ct1[1], .ct2[2], .ct2[3], .ct1[4], .ct1[5], .ct1[6])
+  POINT .ot.put = #ot.put[.i, .j]
+  ; Release tare
+  PULSE release.tare
+  ; Motion
+  ; Ensure that we are in home position!!!
+  ;
+  ; Move before OT
+  LMOVE ot.point[.i, .j] + TRANS (0, 0, 200)
+  ACCURACY 5
+  LMOVE ot.point[.i, .j] + TRANS (0, 0, 50)
+  ; Move to OT
+  ACCURACY 0.02
+  SPEED 50 MM/S
+  LMOVE ot.point[.i, .j]
+  BREAK
+  PULSE capture.tare
+  TWAIT 0.5
+  count.ot = count.ot + 1
+  BITS rs13.ot.number[0], 8 = count.ot
+  ; Move up
+  ACCURACY 0.02
+  SPEED 50 MM/S
+  LMOVE ot.point[.i, .j] + TRANS (20)
+  ; Move to sensor position
+  ACCURACY 0.02
+  SPEED 100 MM/S
+  LMOVE ot.point[.i, .j] + TRANS (20, 0, 100)
+  BREAK
+  ; Wait sensor
+  CALL log ("Wait OT sensor state")
+  WHILE NOT SIG (s.stock.ot.ok) AND NOT SIG (s.stock.ot.ng) DO
+    $action = "WaitOutStockerSensor"
+    TWAIT 0.5
+  END
+  CALL log (.$temp)
+  ; Check if OK
+  IF SIG (s.stock.ot.ok) THEN
+    CALL log ("OT exists, continue")
+    SIGNAL -s.stock.ot.ok
+    LMOVE ot.point[.i, .j] + TRANS (20, 0, 400)
+    LMOVE .mid.point
+    LMOVE #ot.take.safe
+    ; Move to aux point
+    LMOVE #ot.put.safe
+    ;
+    BREAK
+    SIGNAL rs13.lock.zone
+    DELAY 0.2
+    BREAK
+    CALL log ("Check if zone is occupied")
+    SWAIT -rs7.locked.zone
+    CALL log ("Zone is free")
+    ; Move before put point
+    ACCURACY 20
+    LMOVE .ot.put + TRANS (100)
+    ; Move to put point
+    ACCURACY 0.02
+    SPEED 20 MM/S
+    LMOVE #ot.put[.i, .j]
+    BREAK
+    PULSE release.tare
+    TWAIT 0.5
+    SIGNAL s.ot.placed
+    ; Move out of put point
+    ACCURACY 30
+    LMOVE .ot.put + TRANS (, , 100)
+    ;LMOVE #ot.put.safe
+    LMOVE #pos.wait
+    ;
+    BREAK
+    SIGNAL -rs13.lock.zone
+    ;
+    BREAK
+    WHILE SIG (rs7.tare.chg) DO
+      PULSE rs13.tare.ack, 5
+      TWAIT 1
+    END
+    BREAK
+    DELAY 5
+    BREAK
+    ;
+    ;  POINT #current.pos = #pos.wait
+  ELSE
+    CALL log ("OT do not exists, move to next")
+    SIGNAL -s.stock.ot.ng
+    ACCURACY 0.02
+    SPEED 50 MM/S
+    LMOVE ot.point[.i, .j] + TRANS (20)
+    ACCURACY 0.02
+    SPEED 50 MM/S
+    LMOVE ot.point[.i, .j]
+    BREAK
+    PULSE release.tare
+    TWAIT 0.5
+    ACCURACY 5
+    LMOVE ot.point[.i, .j] + TRANS (0, 0, 50)
+    LMOVE ot.point[.i, .j] + TRANS (0, 0, 200)
+    ;  POINT #current.pos = #HERE
+  END
+  ;
+  ACCEL 100 ALWAYS
+  DECEL 100 ALWAYS
+  ;
 .END
 .PROGRAM pg.select()@26/11/07 17:30 #551
 	SCASE $pg.name OF

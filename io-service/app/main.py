@@ -242,6 +242,37 @@ def tare_on():
     # io.set_output(2, True)
     return {"Status": "OK"}
 
+@app.post("/tare_up_fast")
+def tare_up_fast():
+    logger.debug("Запрос /tare_up_fast")
+    if io is None or not io.is_connected():
+        logger.error("Модуль I/O не подключен")
+        return {"Status": "ERROR",
+                "Reason": "Not connected"}, 503
+    io.set_output(4, True)
+    io.set_output(3, False)
+    io.set_output(0, True)
+    time.sleep(1)
+    io.set_output(1, True)
+    time.sleep(1)
+    io.set_output(2, True)
+    return {"Status": "OK"}
+
+@app.post("/tare_up_slow")
+def tare_up_slow():
+    logger.debug("Запрос /tare_up_slow")
+    if io is None or not io.is_connected():
+        logger.error("Модуль I/O не подключен")
+        return {"Status": "ERROR",
+                "Reason": "Not connected"}, 503
+    io.set_output(4, False)
+    io.set_output(3, True)
+    io.set_output(0, True)
+    time.sleep(1)
+    io.set_output(1, True)
+    time.sleep(1)
+    io.set_output(2, True)
+    return {"Status": "OK"}
 
 @app.post("/tare_off")
 def tare_off():
@@ -258,6 +289,39 @@ def tare_off():
     time.sleep(1)
     io.set_output(0, False)
     return {"Status": "OK"}
+
+@app.post("/dribble_fast")
+def dribble_fast():
+    logger.debug("Запрос /dribble_fast")  
+    if io is None or not io.is_connected():
+        logger.error("Модуль I/O не подключен")
+        return {"Status": "ERROR",
+                "Reason": "Not connected"}, 503
+    io.set_output(4, True)
+    io.set_output(3, False)
+    time.sleep(1)
+    for i in range(5):
+        io.set_output(2, False)
+        time.sleep(0.3)
+        io.set_output(2, True)
+        time.sleep(0.3)
+
+@app.post("/dribble_slow")
+def dribble_slow():
+    logger.debug("Запрос /dribble_slow")  
+    if io is None or not io.is_connected():
+        logger.error("Модуль I/O не подключен")
+        return {"Status": "ERROR",
+                "Reason": "Not connected"}, 503
+    io.set_output(4, False)
+    io.set_output(3, True)
+    time.sleep(1)
+    for i in range(5):
+        io.set_output(2, False)
+        time.sleep(0.5)
+        io.set_output(2, True)
+        time.sleep(0.5)
+
 
 @app.post("/shake_fast")
 def shake_fast():

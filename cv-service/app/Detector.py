@@ -275,7 +275,7 @@ class Detector:
         logger.info(f"Порог уверенности модели {model_name} изменен на {new_threshold}")
         return True
 
-    def set_model_area(self, model_name,  model_area):
+    def set_model_width(self, model_name,  model_width):
         
         if model_name not in self.__models:
             logger.error(f"Модель {model_name} не найдена в списке доступных моделей")
@@ -286,11 +286,11 @@ class Detector:
         if model_name not in models_cfg:
             models_cfg[model_name] = {}
         # Сохраняем значение как строку, чтобы формат вроде "x.y.z" не ломал структуру
-        models_cfg[model_name]["ModelDefaultArea"] = model_area
+        models_cfg[model_name]["ModelDefaultWidth"] = model_width
 
         Config.set("Models", models_cfg)
         Config.save()
-        logger.info(f"Базовая площадь модели {model_name} изменена на {model_area}")
+        logger.info(f"Базовая ширина модели {model_name} изменена на {model_width}")
         return True
 
     def set_model_deviation(self, model_name,  deviation):
@@ -303,7 +303,7 @@ class Detector:
         if model_name not in models_cfg:
             models_cfg[model_name] = {}
         # Сохраняем значение как строку, чтобы формат вроде "x.y.z" не ломал структуру
-        models_cfg[model_name]["ModelAllowedAreaDeviation"] = deviation
+        models_cfg[model_name]["ModelAllowedWidthDeviation"] = deviation
 
         Config.set("Models", models_cfg)
         Config.save()

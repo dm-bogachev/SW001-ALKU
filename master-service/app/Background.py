@@ -12,7 +12,8 @@ from api import *  # This imports RS013N_API_URL
 # from configuration import Config
 
 logger = config_logger("master-service/Background.py")
-
+from common.Config import Config
+Config.init()
 
 class Background(Thread):
 
@@ -36,6 +37,7 @@ class Background(Thread):
         self.redrops = 0
         self.in_process = False
         self.current_product = ""
+        self.start_speed = ""
         self.pneumatic_state_opened = True
         #
         self.cycle_delay = 0.25  # Задержка между циклами основного потока в секундах
@@ -162,6 +164,8 @@ class Background(Thread):
 
     def open_pneumatic(self):
         self.redrops = 0
+        #
+        #
         resp = requests.post(f"{IO_API_URL}/tare_off", timeout=8)
         if resp.status_code == 200:
             logger.info("Команда на открытие пневматики отправлена на IO-сервис")
@@ -186,7 +190,10 @@ class Background(Thread):
             logger.warning("Не удалось отправить команду на а пересброс тары")
 
     def close_pneumatic(self):
-        resp = requests.post(f"{IO_API_URL}/tare_on", timeout=8)
+        if self.start_speed == "FAST":
+            resp = requests.post(f"{IO_API_URL}/tare_up_fast", timeout=8)
+        else:
+            resp = requests.post(f"{IO_API_URL}/tare_up_slow", timeout=8)
         if resp.status_code == 200:
             logger.info("Команда на закрытие пневматики отправлена на IO-сервис")
             self.in_process = True
@@ -215,6 +222,10 @@ class Background(Thread):
         
         if not self.change_model(ProductName):
             return False
+        logger.debug("Set start speed" )
+        self.model_config = Config.get("Models").copy().get(ProductName)
+        self.start_speed = self.model_config.get("StartSpeed")
+        logger.debug("Set start speed" + self.start_speed )
         
         command = f"START;{ProductName};{ProductSpec};{ProductCount};"
         # 

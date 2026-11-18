@@ -60,9 +60,9 @@ class CVBackground(Thread):
                 if rs13_action.lower() == "waitforpick":   
                     self.process_waitforpick()
                 else:
-                    if self.detect_attempts == 0:
+                    if self.detect_attempts != 0:
                         self.detect_attempts = 0
-
+                        
             except Exception as e:
                 logger.error("Исключение в потоке Master: ", e)
             time.sleep(self.cycle_delay)
@@ -84,15 +84,21 @@ class CVBackground(Thread):
                         if self.shake_sequence[self.redrops] and self.shake_sequence[self.redrops] == "FAST":
                             logger.debug(f"Мощный подброс")
                             self.shake_fast()
-                        else:
+                        if self.shake_sequence[self.redrops] and self.shake_sequence[self.redrops] == "SLOW":
                             logger.debug(f"Слабый подброс")
                             self.shake_slow()
+                        if self.shake_sequence[self.redrops] and self.shake_sequence[self.redrops] == "DRIBBLE_FAST":
+                            logger.debug(f"Дрибблинг сильный")
+                            self.dribble_fast()
+                        if self.shake_sequence[self.redrops] and self.shake_sequence[self.redrops] == "DRIBBLE_SLOW":
+                            logger.debug(f"Дрибблинг слабый")
+                            self.dribble_slow()
                     except Exception as e:
                         logger.error(e)
 
                     self.detect_attempts = 0
                     self.redrops += 1
-                    time.sleep(1)
+                    time.sleep(3)
                 else:
                     command = f"PALLETEMPTY;"
                     logger.warning("Паллета пуста, отправка команды на RS013N")
@@ -103,9 +109,9 @@ class CVBackground(Thread):
                     self.detect_attempts = 0
                     time.sleep(1)
             else:
-                logger.error("Объект не обнаружен, повтор через 2 секунды")
+                logger.error("Объект не обнаружен, повтор через 0.5 секунды")
                 self.detect_attempts = self.detect_attempts + 1
-                time.sleep(2)
+                time.sleep(0.5)
 
 
     def get_object_coordinates(self):
@@ -163,3 +169,19 @@ class CVBackground(Thread):
             self.in_process = True
         else:
             logger.warning("Не удалось отправить команду на а пересброс тары")
+
+    def dribble_fast(self):
+        resp = requests.post(f"{IO_API_URL}/dribble_fast", timeout=8)
+        if resp.status_code == 200:
+            logger.info("Отправлена команда на дрибблинг тары")
+            self.in_process = True
+        else:
+            logger.warning("Не удалось отправить команду на дрибблинг тары")
+
+    def dribble_slow(self):
+        resp = requests.post(f"{IO_API_URL}/dribble_slow", timeout=8)
+        if resp.status_code == 200:
+            logger.info("Отправлена команда на дрибблинг тары")
+            self.in_process = True
+        else:
+            logger.warning("Не удалось отправить команду на дрибблинг тары")

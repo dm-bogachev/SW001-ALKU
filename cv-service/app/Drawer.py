@@ -15,7 +15,7 @@ logger = config_logger("cv-service/Drawer.py")
 class Drawer:
 
     def __init__(self):
-        self.__area = Config.get("Display.AREA", True)
+        self.__width = Config.get("Display.WIDTH", True)
         self.__bbox = Config.get("Display.BBOX", True)
         self.__labels = Config.get("Display.LABELS", True)
         self.__scores = Config.get("Display.SCORES", True)
@@ -38,15 +38,19 @@ class Drawer:
             COLOR_RED,
         ]
 
-    def __draw_area(self, frame, data):
-        if self.__area:
+    def __draw_width(self, frame, data):
+        if self.__width:
             x1, y1, x2, y2 = data.xyxy
             id = int(data.class_id)
+            if data.model_name == "312.229.001":
+                id = id + 1
+                if id == 2:
+                    id = 0
             color = self.__colors[id % len(self.__colors)]
-            area = abs(x2-x1)*abs(y2-y1)
+            width = abs(x2 - x1)
             cv2.putText(
                 frame,
-                f"Area: {int(area)}",
+                f"W: {int(width)}",
                 (int(x1), int(y1) + self.__itershift),
                 cv2.FONT_HERSHEY_SIMPLEX,
                 1,
@@ -70,6 +74,10 @@ class Drawer:
         if self.__scores:
             x1, y1, x2, y2 = data.xyxy
             id = int(data.class_id)
+            if data.model_name == "312.229.001":
+                id = id + 1
+                if id == 2:
+                    id = 0
             color = self.__colors[id % len(self.__colors)]
             cv2.putText(
                 frame,
@@ -86,6 +94,10 @@ class Drawer:
         if self.__labels:
             x1, y1, x2, y2 = data.xyxy
             id = int(data.class_id)
+            if data.model_name == "312.229.001":
+                id = id + 1
+                if id == 2:
+                    id = 0
             color = self.__colors[id % len(self.__colors)]
             cv2.putText(
                 frame,
@@ -101,6 +113,10 @@ class Drawer:
     def __draw_points(self, frame, data):
         if self.__points:
             id = int(data.class_id)
+            if data.model_name == "312.229.001":
+                id = id + 1
+                if id == 2:
+                    id = 0
             if data.pick_point:
                 cv2.circle(
                     frame,
@@ -128,6 +144,10 @@ class Drawer:
         if self.__pick_angle:
             x1, y1, x2, y2 = data.xyxy
             id = int(data.class_id)
+            if data.model_name == "312.229.001":
+                id = id + 1
+                if id == 2:
+                    id = 0
             if data.pick_angle is not None:
                 cv2.putText(
                     frame,
@@ -135,7 +155,7 @@ class Drawer:
                     (int(x1), int(y1) + self.__itershift),
                     cv2.FONT_HERSHEY_SIMPLEX,
                     1,
-                    self.__colors[int(data.class_id) % len(self.__colors)],
+                    self.__colors[id % len(self.__colors)],
                     2,
                 )
                 self.__itershift -= 30
@@ -145,6 +165,10 @@ class Drawer:
 
             x1, y1, x2, y2 = data.xyxy
             id = int(data.class_id)
+            if data.model_name == "312.229.001":
+                id = id + 1
+                if id == 2:
+                    id = 0
             if data.pick_point:
                 cv2.putText(
                     frame,
@@ -190,7 +214,7 @@ class Drawer:
 
     def draw(self, frame, data_list):
         #logger.debug(data_list)
-        self.__area = Config.get("Display.AREA", True)
+        self.__width = Config.get("Display.WIDTH", True)
         self.__bbox = Config.get("Display.BBOX", True)
         self.__labels = Config.get("Display.LABELS", True)
         self.__scores = Config.get("Display.SCORES", True)
@@ -206,7 +230,7 @@ class Drawer:
             for data in data_list:
                 self.__itershift = -5
                 self.__draw_bbox(frame, data)
-                self.__draw_area(frame, data)
+                self.__draw_width(frame, data)
                 self.__draw_points(frame, data)
                 self.__draw_keypoints(frame, data)
                 self.__draw_scores(frame, data)

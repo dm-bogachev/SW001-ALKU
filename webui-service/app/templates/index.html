@@ -88,15 +88,15 @@
                             <button id="set-confidence-btn" class="set-confidence-btn"
                                 onclick="setConfidence()">Установить</button>
                         </div>
-                        <div class="area-group">
-                            <label for="area-input">Площадь:</label>
-                            <input type="number" id="area-input" class="area-input" min="0" max="1000000"
+                        <div class="width-group">
+                            <label for="width-input">Ширина:</label>
+                            <input type="number" id="width-input" class="width-input" min="0" max="1000000"
                                 step=100" value="50000">
-                            <button id="set-area-btn" class="set-area-btn"
-                                onclick="setArea()">Установить</button>
+                            <button id="set-width-btn" class="set-width-btn"
+                                onclick="setWidth()">Установить</button>
                         </div>
                         <div class="deviation-group">
-                            <label for="deviation-input">Отклонение по площади:</label>
+                            <label for="deviation-input">Отклонение по ширине:</label>
                             <input type="number" id="deviation-input" class="deviation-input" min="0" max="1000000"
                                 step=100" value="50000">
                             <button id="set-deviation-btn" class="set-deviation-btn"
@@ -171,11 +171,11 @@
                                 </div>
                                 <div class="display-setting-item">
                                     <label class="switch">
-                                        <input type="checkbox" id="display-area"
-                                            onchange="changeDisplaySetting('area', this.checked)">
+                                        <input type="checkbox" id="display-width"
+                                            onchange="changeDisplaySetting('width', this.checked)">
                                         <span class="slider"></span>
                                     </label>
-                                    <div class="display-label">Площадь</div>
+                                    <div class="display-label">Ширина</div>
                                 </div>
                                 <div class="display-setting-item">
                                     <label class="switch">

@@ -38,10 +38,7 @@ DatasetGrabber/images/**/*
 DatasetGrabber/imagesold/**/*
 DatasetGrabber/images.tar.xz
 DatasetGrabber.tar.xz
-DatasetGrabber/images.tar
-log.txt
-logs.txt
-camera-service/app/core
-/yolo-trainer/old/datasets
-/yolo-trainer/old
+/Train/datasets
+/Train/runs
 /Robot/old
+camera-service/app/core

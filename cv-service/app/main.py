@@ -123,11 +123,11 @@ def set_model_threshold(model_name: str, new_threshold: float):
     else:
         return {"Status": "Failed", "ModelName": model_name}
 
-@app.post("/set_model_area")
-def set_model_area(model_name: str, new_area: int):
+@app.post("/set_model_width")
+def set_model_width(model_name: str, new_width: int):
     """Изменение порога уверенности модели."""
-    if processor.detector.set_model_area(model_name, new_area):
-        return {"Status": "OK", "ModelName": model_name, "NewArea": new_area}
+    if processor.detector.set_model_width(model_name, new_width):
+        return {"Status": "OK", "ModelName": model_name, "NewWidth": new_width}
     else:
         return {"Status": "Failed", "ModelName": model_name}
 
@@ -144,7 +144,7 @@ def set_model_deviation(model_name: str, new_deviation: int):
 def change_display_setting(setting: str, value: bool):
     """Изменение настроек отображения."""
     
-    valid_settings = ['bbox', 'coordinates', 'keypoints', 'labels', 'scores', 'points', 'pick_angle', 'grid', 'area']
+    valid_settings = ['bbox', 'coordinates', 'keypoints', 'labels', 'scores', 'points', 'pick_angle', 'grid', 'width']
     if setting.lower() not in valid_settings:
         return {"Status": "Failed", "Setting": setting, "Value": value, "Valid Settings": valid_settings}
 
